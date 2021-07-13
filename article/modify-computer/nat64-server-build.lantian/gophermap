@@ -1,0 +1,70 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "NAT64 服务器搭建"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [NAT64]		{{server_addr}}	{{server_port}}
+idate: 2018-03-10 20:21:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNAT64 是 IPv4 向 IPv6 过渡时出现的一项技术。它通过将 IPv4 的地址映射到		{{server_addr}}	{{server_port}}
+i一个 IPv6 地址段上，来让仅支持 IPv6 的设备同样能够访问 IPv4 网络。但由		{{server_addr}}	{{server_port}}
+i于仅支持 IPv6 的设备并不多，目前它在国内的应用主要是两个方面：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 对于 IPv4 收费/限速/限流量而 IPv6 免费/不限速/不限流量的教育网用户		{{server_addr}}	{{server_port}}
+i   ，可以使用公共 NAT64 服务来省钱。		{{server_addr}}	{{server_port}}
+i2. 对于 iOS 应用开发者，用于搭建测试环境以通过 App Store 的审核。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我们也可以在自己的同时拥有 IPv4 和 IPv6 连接的路由器上安装相应的软件，		{{server_addr}}	{{server_port}}
+i来搭建 NAT64 服务器。常用的软件是 Tayga 和 Jool。其中 Tayga 年久失修，		{{server_addr}}	{{server_port}}
+i上次更新已经是 2011 年的事了，而 Jool 一直在活跃地更新，因此本文采用		{{server_addr}}	{{server_port}}
+iJool 来搭建。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 安装 Jool		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i第一步是安装 Jool。Arch Linux 的 AUR 上有 Jool，而 Jool 在 Debian 和		{{server_addr}}	{{server_port}}
+iUbuntu 的官方源中都找不到，因此在这两个系统下需要手动编译安装。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于 Arch Linux，直接 `yaourt -S jool-dkms-git` 即可。对于树莓派，需要		{{server_addr}}	{{server_port}}
+i修改 PKGBUILD，将 `arch=('i686' 'x86_64')` 修改成		{{server_addr}}	{{server_port}}
+i`arch=('i686' 'x86_64' 'armv7h')`，即添加树莓派的架构信息，否则会提示		{{server_addr}}	{{server_port}}
+i没有对应的可以安装的架构。安装完成后，从下面的“设置内核模块开机自动加		{{server_addr}}	{{server_port}}
+i载”这一步开始做。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于 Debian 和 Ubuntu，执行如下指令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# 安装依赖		{{server_addr}}	{{server_port}}
+iapt-get install build-essential dkms autoconf automake linux-headers		{{server_addr}}	{{server_port}}
+i# 下载 Jool（本文写成时最新版本为 3.5.6）		{{server_addr}}	{{server_port}}
+iwget https://github.com/NICMx/releases/raw/master/Jool/Jool-3.5.6.zip		{{server_addr}}	{{server_port}}
+iunzip Jool-3.5.6.zip		{{server_addr}}	{{server_port}}
+icd Jool-3.5.6		{{server_addr}}	{{server_port}}
+i# 安装内核模块		{{server_addr}}	{{server_port}}
+idkms install .		{{server_addr}}	{{server_port}}
+i# 安装管理软件（可选）		{{server_addr}}	{{server_port}}
+icd usr		{{server_addr}}	{{server_port}}
+i./configure && make && make install		{{server_addr}}	{{server_port}}
+i# 设置内核模块开机自动加载		{{server_addr}}	{{server_port}}
+icat >/etc/modprobe.d/jool.conf <<EOF		{{server_addr}}	{{server_port}}
+ioptions jool pool6=64:ff9b::/96		{{server_addr}}	{{server_port}}
+iEOF		{{server_addr}}	{{server_port}}
+iecho jool > /etc/modules-load.d/jool.conf		{{server_addr}}	{{server_port}}
+i# 加载内核模块		{{server_addr}}	{{server_port}}
+imodprobe -v jool pool6=64:ff9b::/96		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i安装完成后执行 jool，如果看到类似 Status: Enabled 的字样，就说明安装成		{{server_addr}}	{{server_port}}
+i功了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 测试 NAT64		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIPv6 地址中专门给 NAT64 划了一个地址池，就是上文的 64:ff9b::/96。使用		{{server_addr}}	{{server_port}}
+i64:ff9b:: 加上 IPv4 地址就可以通过 NAT64 访问了，例如如果我们的原 IP		{{server_addr}}	{{server_port}}
+i是 8.8.8.8，那么使用 64:ff9b::8.8.8.8 就能访问。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是在安装 Jool 的本机上直接访问这个地址是不通的，必须让本机作为路由器		{{server_addr}}	{{server_port}}
+i，让其它机器通过它才能访问 NAT64 的地址。我将树莓派作为路由器并打开		{{server_addr}}	{{server_port}}
+iWiFi 热点，并用自己的电脑连接，可以 ping 通相应的地址就是成功了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+Iping 通 NAT64 地址	/usr/uploads/2018/03/1745244524.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

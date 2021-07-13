@@ -1,0 +1,104 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "在 Macbook Pro 上安装 Ubuntu 操作系统"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [Mac, Linux]		{{server_addr}}	{{server_port}}
+idate: 2014-10-04 19:27:05		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMac 系统的确非常漂亮，非常流畅。但是 VirtualBox 虚拟机在上面的运行速度		{{server_addr}}	{{server_port}}
+i惨不忍睹，而且一大堆在 Windows 或者 Ubuntu 上可以非常简单实现的功能在		{{server_addr}}	{{server_port}}
+iMac 上就要大费周折。再加上我看到网上的文章，Ubuntu 系统的 UnixBench 分		{{server_addr}}	{{server_port}}
+i数比 Mac 要高得多。因此我决定在 Macbook 上安装 Ubuntu。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i经过查询，我的 Macbook 是 2012 年中款，即 Macbook 9-2，在 Ubuntu 的官		{{server_addr}}	{{server_port}}
+i方维基上标明，在这款 Macbook 上 Ubuntu 只能和 Mac 共存，不能单独存在，		{{server_addr}}	{{server_port}}
+i否则引导会出现问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i拜托，Mac 的引导和系统是分开的好不好？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Ubuntu 演示环境中的 GParted 上显示，Mac 系统共创建了三个分区：一个		{{server_addr}}	{{server_port}}
+i200M 的 FAT32 分区，作为 EFI 启动分区，一个 HFS 格式系统区，还有一个		{{server_addr}}	{{server_port}}
+i600M 左右，HFS 格式的恢复区。我们要干的事情，就是把 Mac 系统区和恢复区		{{server_addr}}	{{server_port}}
+i干掉，换成 Ubuntu 的分区就可以了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 一。安装引导工具		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因为 Macbook 默认的引导可能无法启动 Ubuntu（不过我测试可以直接启动），		{{server_addr}}	{{server_port}}
+i我们需要安装第三方引导工具，rEFInd。rEFInd 是让使用 EFI 启动的电脑能够		{{server_addr}}	{{server_port}}
+i启动各类操作系统的一个引导工具，说白了就是给 Macbook 设计的，因为其它		{{server_addr}}	{{server_port}}
+i电脑的 EFI 大都可以关闭，如果碰到无法关闭 EFI 的电脑也可以安装		{{server_addr}}	{{server_port}}
+iUbuntu，只有 Macbook 比较奇葩。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- （在 Mac 下）下载 rEFInd，解压		{{server_addr}}	{{server_port}}
+i  。<http://sourceforge.net/projects/refind/files/0.8.3/refind-bin-0.8.3.zip/download>		{{server_addr}}	{{server_port}}
+i- 打开 Launchpad - 实用工具 - 终端，输入“cd "”，也就是 cd 然后一个空格		{{server_addr}}	{{server_port}}
+i  然后一个英文双引号。不要回车。		{{server_addr}}	{{server_port}}
+i- 把刚才解压出的文件夹窗口上面的那个文件夹图标拖进终端，此时终端上就出		{{server_addr}}	{{server_port}}
+i  现了你解压开的 rEFInd 文件夹路径。		{{server_addr}}	{{server_port}}
+i- 再输入一个英文双引号，回车。		{{server_addr}}	{{server_port}}
+i- 输入：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+isudo ./install.sh --esp		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 输入你的密码，回车。输入密码时屏幕上不会有显示。		{{server_addr}}	{{server_port}}
+i- 重启电脑，应该可以看到一个选择器，上面有着 rEFInd 字样。安装成功。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 二。创建 Ubuntu 启动盘		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i你可以把 Ubuntu 的 iso 刻盘，也可以在 Windows 电脑上或者在虚拟机里用		{{server_addr}}	{{server_port}}
+iUltraISO 把 iso 写入 U 盘。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 三。修复分区表		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 在 Mac 的磁盘工具里，把你当前的 Mac 分区缩小，把剩下区域划成一个新分		{{server_addr}}	{{server_port}}
+i  区。		{{server_addr}}	{{server_port}}
+i- 插入你的 U 盘或光盘，重启电脑，开机时按住 Alt（Option），选择		{{server_addr}}	{{server_port}}
+i  “Windows”回车。		{{server_addr}}	{{server_port}}
+i- 此时将会自动进入 Ubuntu 安装向导，选择试用 Ubuntu 。		{{server_addr}}	{{server_port}}
+i- 在 Unity 里搜索 GParted 并启动，把新的分区格式化成 ext4 ，应用。		{{server_addr}}	{{server_port}}
+i- 关闭电脑，拔掉 U 盘，进入 Mac。		{{server_addr}}	{{server_port}}
+i- 下载 GPT Fdisk <http://sourceforge.net/projects/gptfdisk/> 并安装。		{{server_addr}}	{{server_port}}
+i- 打开终端，输入：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+isudo gdisk /dev/disk0		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 输入 r 回车，再输入 p 回车，此时屏幕上会列出你的分区表，一般第二个是		{{server_addr}}	{{server_port}}
+i  你的 Mac ，第四个是准备给 Ubuntu 的分区。		{{server_addr}}	{{server_port}}
+i- 输入 h 回车。然后输入 2 4（也就是 Mac 和 Ubuntu 的分区号）回车。		{{server_addr}}	{{server_port}}
+i- 输入 y 回车，然后输入 AF 回车。这是设置分区类型。然后输入 n，表示不		{{server_addr}}	{{server_port}}
+i  设置成启动分区。		{{server_addr}}	{{server_port}}
+i- 输入 y 回车，然后输入 83 回车，然后输入 n 回车。		{{server_addr}}	{{server_port}}
+i- rEFInd 的启动不依赖启动分区的设置，所以没必要设置启动分区。		{{server_addr}}	{{server_port}}
+i- 输入 w 回车，此时 gdisk 应该自动退出。		{{server_addr}}	{{server_port}}
+i- 重启电脑，按住 Alt（Option），选择 Windows，开始安装 Ubuntu 操作系统		{{server_addr}}	{{server_port}}
+i  。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 四。开始安装		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 进入 Ubuntu 安装向导时，再次选择试用，然后启动 GParted。		{{server_addr}}	{{server_port}}
+i- 把除了第一个 200M EFI 分区以外的所有分区删除，然后按照你的喜好设置分		{{server_addr}}	{{server_port}}
+i  区。		{{server_addr}}	{{server_port}}
+i- 启动 Ubuntu 安装程序，按照正常步骤安装。注意不要选择清除整台电脑的数		{{server_addr}}	{{server_port}}
+i  据，选择自定义分区设置。		{{server_addr}}	{{server_port}}
+i- 安装完成后，就可以正常进入 Ubuntu 了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 五。rEFInd 设置		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 进入 Ubuntu 后，输入：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+isudo mkdir /media/efi		{{server_addr}}	{{server_port}}
+isudo mount /dev/sda1 /media/efi		{{server_addr}}	{{server_port}}
+icd /media/efi/EFI/refind		{{server_addr}}	{{server_port}}
+isudo nano refind.conf		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 把 timeout 改成 -1，这样就不用在启动菜单处等 20 秒进入系统了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以上，整个安装完成。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

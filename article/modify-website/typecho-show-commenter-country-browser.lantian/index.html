@@ -1,0 +1,872 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" itemscope itemtype="https://schema.org/Article"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="theme-color" content="#bbdefb"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><title>Typecho 显示评论者国家和浏览器 | Lan Tian @ Blog</title><meta name="title" content="Typecho 显示评论者国家和浏览器 | Lan Tian @ Blog"><meta name="keywords" content="Lan,Tian"><meta name="description" content="Lan Tian @ Blog"><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/article/modify-website/typecho-show-commenter-country-browser.lantian"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-website/typecho-show-commenter-country-browser.lantian" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-website/typecho-show-commenter-country-browser.lantian" hreflang="en"><script>function addLoadEvent(o){var n=window.onload;"function"!=typeof window.onload?window.onload=o:window.onload=function(){n&&n(),o()}}</script><link rel="stylesheet" href="/assets/style.css?v=63f60c5"><script defer src="/assets/script.main.bundle.js?v=63f60c5"></script><meta name="copyright" content="Copyright 2012-2021 Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><meta name="application-name" content="Lan Tian @ Blog"><meta name="msapplication-TileColor" content="#03a9f4"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-navbutton-color" content="#03a9f4"><meta content="name=Lan Tian @ Blog;action-uri=/;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=文章们;action-uri=/page/archive;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=俯瞰地球;action-uri=/page/himawari;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=DN42;action-uri=/page/dn42;icon-uri=/favicon.png" name="msapplication-task"><meta name="theme-color" content="#03a9f4"><meta name="mobile-web-app-capable" content="yes"><meta property="og:url" content="https://lantian.pub/article/modify-website/typecho-show-commenter-country-browser.lantian"><meta property="og:type" content="website"><meta property="og:title" content="Typecho 显示评论者国家和浏览器 | Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/apple-touch-icon.png"><meta property="og:description" content="Typecho 由于插件稀少，一直没有找到显示评论者国家和浏览器的插件，所以只好自力更生了。代码修改自 WordPress 插件 Show UserAgent，下载页面：https://wordpress...."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="zh"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/article/modify-website/typecho-show-commenter-country-browser.lantian"><meta name="twitter:title" content="Typecho 显示评论者国家和浏览器 | Lan Tian @ Blog"><meta name="twitter:image" content="https://lantian.pub/apple-touch-icon.png"><meta name="twitter:description" content="Typecho 由于插件稀少，一直没有找到显示评论者国家和浏览器的插件，所以只好自力更生了。代码修改自 WordPress 插件 Show UserAgent，下载页面：https://wordpress...."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="Typecho 显示评论者国家和浏览器 | Lan Tian @ Blog"><meta itemprop="image" content="https://lantian.pub/apple-touch-icon.png"><meta itemprop="description" content="Typecho 由于插件稀少，一直没有找到显示评论者国家和浏览器的插件，所以只好自力更生了。代码修改自 WordPress 插件 Show UserAgent，下载页面：https://wordpress...."><style>.spoiler{display:inline-flex}p.spoiler{display:flex}.spoiler a{pointer-events:none}.spoiler-blur,.spoiler-blur>*{transition:text-shadow .5s ease}.spoiler .spoiler-blur,.spoiler .spoiler-blur>*{color:transparent;background-color:rgba(0,0,0,0);text-shadow:0 0 10px grey;cursor:pointer}.spoiler .spoiler-blur:hover,.spoiler .spoiler-blur:hover>*{text-shadow:0 0 5px grey}.spoiler-box,.spoiler-box>*{transition:color .5s ease,background-color .5s ease}.spoiler .spoiler-box,.spoiler .spoiler-box>*{color:#000;background-color:#000;text-shadow:none}</style><meta name="generator" content="Hexo 5.4.0"></head><body><div id="bg"></div><div id="container"><header class="lantian navbar navbar-expand-lg"><a class="navbar-brand" href="/">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="lantian-navbar"><ul class="navbar-nav nav-pills navbar-spacer"><li class="nav-item d-none d-md-block"><a class="nav-link" href="/page/archive">文章们</a></li><li class="nav-item d-none d-md-block"><a class="nav-link" href="/page/himawari">俯瞰地球</a></li><li class="nav-item d-none d-md-block"><a class="nav-link" href="/page/dn42">DN42</a></li><li class="nav-item dropdown d-block d-md-none"><a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-file"></i> 页面 <span class="caret"></span></a><div class="dropdown-menu"><a class="dropdown-item" href="/page/archive">文章们</a> <a class="dropdown-item" href="/page/himawari">俯瞰地球</a> <a class="dropdown-item" href="/page/dn42">DN42</a></div></li><li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-language"></i> Language <span class="caret"></span></a><div class="dropdown-menu"><a href="/article/modify-website/typecho-show-commenter-country-browser.lantian" class="dropdown-item"><span class="flag-icon flag-icon-cn"></span> Chinese </a><a href="/en/article/modify-website/typecho-show-commenter-country-browser.lantian" class="dropdown-item"><span class="flag-icon flag-icon-us"></span> English</a><div class="dropdown-divider"></div><a class="dropdown-item disabled" href="#">Not all pages have translations.</a> <a class="dropdown-item disabled" href="#">You may see 404 - this is normal.</a></div></li></ul><ul class="navbar-nav nav-pills"><li class="nav-item position-relative"><a class="nav-link" id="dark-mode" href="#"><i class="fas fa-fw fa-adjust"></i> 深色/浅色</a></li></ul></div></header><section class="text-center lantian">I'm starting to provide Chinese / English versions of some articles, switch with the Language menu above. 我开始提供部分文章的中文、英文翻译，请使用顶部语言菜单切换。</section><div class="d-flex"><div id="content"><article><div class="d-flex"><div class="post-info-wrap"><div class="post-info"><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-clock"></span><br><small>07-30</small></p><div class="post-meta-value">2014-07-30 21:09 &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-file-alt"></span><br><small>网站与服务端</small></p><div class="post-meta-value"><a href="/category/modify-website">网站与服务端</a> &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-tag"></span><br><small>2 标签</small></p><div class="post-meta-value"><a href="/tag/Typecho">Typecho</a> <a href="/tag/IP">IP</a> &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-qrcode"></span><br><small>二维码</small></p><div class="post-meta-value"><img class="qrcode" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADK0lEQVR42u3awXIaQQwEUP7/p8k1qcTQLUGKHd6eXNgs84Yqa6We2y2+7r9dj1+/P7z+fu9Pd2vfdXvHhY2NjX0RdrLQe3A9vn/780/33KwTGxsb+2x2vty2eOTF7/EWvHid2NjY2F/PnhWwTRPSFkhsbGxs7OR2ecmZNSF5gcTGxsbGToY1ObVF5sFAcv8Xz9KwsbGxP569edz/tJ/fkm9jY2NjfzD7Xl6bLUuC22TkNCuEf9wBGxsb+yD2PqxtI9tZtDA73PNkhdjY2NhHsNuyMYtv2yYnH2zldx4m2NjY2NgXYeelZdZOJJhXlbQoSMDGxsY+iD2bpbevt/Ft+2VsDhthY2Njn8Ru/90/XlyeriZjqVcd0HlyXgkbGxv74uzNvOVVTchsRNWWNGxsbOyT2LOH+1kbMAt9Zy1NFPRiY2NjH8RuC9h+oP/uzXry6djY2NgHsV/bVOQh66YstfcfjpOwsbGxL8sePtzHr7eh7L5NiqZo2NjY2Eew37Ho9uhPe4ToZVuAjY2NfXH2Y2Ty6J/w2mKZRAXt69jY2Njfxs7bgGSgM1tc+66iTGJjY2MfxN7g85KTl7G2pN02FzY2NvbF2fkIaRa1tqOl/IvJP+sfUmxsbOyD2Mnt8g9Lot/2b2ZXkYRgY2NjX5zdthmzgrdvPJIvJtkCbGxs7FPZyWB905BsNnc/VPqxCcHGxsY+gr2Jb/O60E7m22amjYGxsbGxT2XPbrp/zp9FC216i42NjX02ezO+iXZ0ETbMWpeocGJjY2Mfx54ttz0oM4tsi8HQ/ggmNjY29mXZrxr6J7/N11P0Um1EjY2NjX0cOy8bsyHRrF2ZpRxRw4ONjY39New8JMjx+0FS22vc8nqIjY2NfSn2bMRTPO6Xwe1swFScRcLGxsY+jj2LEBJYHhi3pa497rPaFGxsbOyLsPOy0e5ie8RnFvG2hRYbGxv7VPZslLNpWmaAvAI/WT82Njb2F7PbVmGzue3RnKTcYmNjY2Pvi9CspZkFvU+GStjY2NgHsd8Rr85ez8Pm/zRLw8bGxv54dl4MklYkbxLaxqNltDEDNjY29gXZvwDS9FPvbl6WlwAAAABJRU5ErkJggg==" alt="二维码"></div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-list"></span><br><small>目录</small></p><div class="post-meta-value"><ol id="quicklink"></ol></div></div></div></div></div><div class="post-wrap"><h1 class="post-title"><a href="/article/modify-website/typecho-show-commenter-country-browser.lantian" rel="bookmark" title="Typecho 显示评论者国家和浏览器">Typecho 显示评论者国家和浏览器</a></h1><div class="post-text"><p>Typecho 由于插件稀少，一直没有找到显示评论者国家和浏览器的插件，所以只好自力更生了。</p><p>代码修改自 WordPress 插件 Show UserAgent，下载页面：<a target="_blank" rel="noopener" href="https://wordpress.org/plugins/show-useragent/">https://wordpress.org/plugins/show-useragent/</a></p><p>前提是你的主题使用了自定义评论代码而不是 Typecho 默认的评论显示代码，一般符合要求的主题的 comments.php 或者 functions.php 中会有如下代码：</p><pre><code class="hljs language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">threadedComments</span>(<span class="hljs-params"><span class="hljs-variable">$comments</span>, <span class="hljs-variable">$options</span></span>) </span>{
+    <span class="hljs-comment">//blablabla</span>
+<span class="hljs-meta">?&gt;</span>
+</code></pre><p>下载 Show UserAgent 插件解压，把里面的 flags 文件夹改名成 country，browsers 文件夹改名成 browser，ip2c 文件夹改名成 lib，上传到服务器上你的主题文件夹。（其实不改也可以，但是我是按照个人习惯这么改的，你也可以修改下面代码的路径）</p><p>在主题的 functions.php 中插入这么长一串代码：</p><pre><code class="hljs language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-comment">/* 地理位置判断 */</span> <span class="hljs-meta">?&gt;</span>
+<span class="hljs-meta">&lt;?php</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CID_get_country</span>(<span class="hljs-params"><span class="hljs-variable">$ip</span></span>) </span>{
+    <span class="hljs-keyword">require_once</span>(dirname(<span class="hljs-keyword">__FILE__</span>).<span class="hljs-string">'/lib/ip2c.php'</span>);
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">'ip2c'</span>])) {
+        <span class="hljs-keyword">global</span> <span class="hljs-variable">$ip2c</span>;
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-variable">$ip2c</span> = <span class="hljs-keyword">new</span> ip2country(dirname(<span class="hljs-keyword">__FILE__</span>).<span class="hljs-string">'/lib/ip-to-country.bin'</span>);
+        <span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">'ip2c'</span>] = <span class="hljs-variable">$ip2c</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-variable">$ip2c</span>-&gt;get_country(<span class="hljs-variable">$ip</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CID_get_flag</span>(<span class="hljs-params"><span class="hljs-variable">$ip</span>, <span class="hljs-variable">$show_image</span> = <span class="hljs-literal">true</span>, <span class="hljs-variable">$show_text</span> = <span class="hljs-literal">false</span>, <span class="hljs-variable">$before</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$after</span> = <span class="hljs-string">''</span></span>) </span>{
+    <span class="hljs-keyword">if</span>(<span class="hljs-variable">$ip</span> == <span class="hljs-string">'127.0.0.1'</span>){
+        <span class="hljs-variable">$code</span> = <span class="hljs-string">'wordpress'</span>;
+        <span class="hljs-variable">$name</span> = <span class="hljs-string">'Localhost'</span>;
+    }<span class="hljs-keyword">else</span>{
+
+    <span class="hljs-variable">$country</span> = CID_get_country(<span class="hljs-variable">$ip</span>);
+    <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$country</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;
+
+    <span class="hljs-variable">$code</span> = strtolower(<span class="hljs-variable">$country</span>[<span class="hljs-string">'id2'</span>]);
+    <span class="hljs-variable">$name</span> = <span class="hljs-variable">$country</span>[<span class="hljs-string">'name'</span>];
+    }
+    <span class="hljs-keyword">global</span> <span class="hljs-variable">$CID_options</span>;
+
+    <span class="hljs-variable">$output</span> = <span class="hljs-string">''</span>;
+
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_image</span>)
+        <span class="hljs-variable">$output</span> = <span class="hljs-string">' &lt;img src="http://cdn.lantian.lt/usr/themes/hybridside/lib/country/'</span> . <span class="hljs-variable">$code</span> . <span class="hljs-string">'.png" title="'</span> . <span class="hljs-variable">$name</span> . <span class="hljs-string">'" alt="'</span> . <span class="hljs-variable">$name</span> . <span class="hljs-string">'" class="country-flag" /&gt;'</span>;
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_text</span>)
+        <span class="hljs-variable">$output</span> .= <span class="hljs-string">' '</span> . <span class="hljs-variable">$name</span>;
+
+    <span class="hljs-keyword">return</span> <span class="hljs-variable">$before</span> . <span class="hljs-variable">$output</span> . <span class="hljs-variable">$after</span>;
+}
+<span class="hljs-meta">?&gt;</span>
+
+<span class="hljs-meta">&lt;?php</span> <span class="hljs-comment">/* 浏览器判断 */</span> <span class="hljs-meta">?&gt;</span>
+<span class="hljs-meta">&lt;?php</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CID_windows_detect_os</span>(<span class="hljs-params"><span class="hljs-variable">$ua</span></span>) </span>{
+    <span class="hljs-variable">$os_name</span> = <span class="hljs-variable">$os_code</span> = <span class="hljs-variable">$os_ver</span> = <span class="hljs-variable">$pda_name</span> = <span class="hljs-variable">$pda_code</span> = <span class="hljs-variable">$pda_ver</span> = <span class="hljs-literal">null</span>;
+
+    <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows 95/i'</span>, <span class="hljs-variable">$ua</span>) || preg_match(<span class="hljs-string">'/Win95/'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"95"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows NT 5.0/i'</span>, <span class="hljs-variable">$ua</span>) || preg_match(<span class="hljs-string">'/Windows 2000/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"2000"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Win 9x 4.90/i'</span>, <span class="hljs-variable">$ua</span>) || preg_match(<span class="hljs-string">'/Windows ME/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"ME"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows.98/i'</span>, <span class="hljs-variable">$ua</span>) || preg_match(<span class="hljs-string">'/Win98/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"98"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows NT 6.0/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows_vista"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"Vista"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows NT 6.1/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows_win7"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"7"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows NT 6.2/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows_win8"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"8"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows NT 5.1/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"XP"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows NT 5.2/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Win64/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"XP 64 bit"</span>;
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"Server 2003"</span>;
+        }
+    }
+    <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Mac_PowerPC/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Mac OS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"macos"</span>;
+    }<span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows Phone/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$matches</span> = explode(<span class="hljs-string">';'</span>,<span class="hljs-variable">$ua</span>);
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>];
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows_phone7"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows NT 4.0/i'</span>, <span class="hljs-variable">$ua</span>) || preg_match(<span class="hljs-string">'/WinNT4.0/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"NT 4.0"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows NT/i'</span>, <span class="hljs-variable">$ua</span>) || preg_match(<span class="hljs-string">'/WinNT/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"NT"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Windows CE/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>, <span class="hljs-variable">$pda_name</span>, <span class="hljs-variable">$pda_code</span>, <span class="hljs-variable">$pda_ver</span>) = CID_pda_detect_os(<span class="hljs-variable">$ua</span>);
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"CE"</span>;
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/PPC/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Microsoft PocketPC"</span>;
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+            <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">''</span>;
+        }
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/smartphone/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Microsoft Smartphone"</span>;
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+            <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">''</span>;
+        }
+    } <span class="hljs-keyword">else</span>{
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">'Unknow Os'</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">'other'</span>;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">array</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>, <span class="hljs-variable">$pda_name</span>, <span class="hljs-variable">$pda_code</span>, <span class="hljs-variable">$pda_ver</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CID_unix_detect_os</span>(<span class="hljs-params"><span class="hljs-variable">$ua</span></span>) </span>{
+    <span class="hljs-variable">$os_name</span> = <span class="hljs-variable">$os_ver</span> = <span class="hljs-variable">$os_code</span> = <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Linux/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Linux"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"linux"</span>;
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'#Debian#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"debian"</span>;
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Debian GNU/Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Mandrake#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"mandrake"</span>;
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Mandrake Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Kindle Fire#i'</span>,<span class="hljs-variable">$ua</span>)) {<span class="hljs-comment">//for Kindle Fire</span>
+            <span class="hljs-variable">$matches</span> = explode(<span class="hljs-string">';'</span>,<span class="hljs-variable">$ua</span>);
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"kindle"</span>;
+            <span class="hljs-variable">$matches2</span> = explode(<span class="hljs-string">')'</span>,<span class="hljs-variable">$matches</span>[<span class="hljs-number">4</span>]);
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>].<span class="hljs-variable">$matches2</span>[<span class="hljs-number">0</span>];
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Android#i'</span>,<span class="hljs-variable">$ua</span>)) {<span class="hljs-comment">//Android</span>
+            <span class="hljs-variable">$matches</span> = explode(<span class="hljs-string">';'</span>,<span class="hljs-variable">$ua</span>);
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"android"</span>;
+            <span class="hljs-variable">$matches2</span> = explode(<span class="hljs-string">')'</span>,<span class="hljs-variable">$matches</span>[<span class="hljs-number">4</span>]);
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>].<span class="hljs-variable">$matches2</span>[<span class="hljs-number">0</span>];
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#SuSE#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"suse"</span>;
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"SuSE Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Novell#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"novell"</span>;
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Novell Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Ubuntu#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"ubuntu"</span>;
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Ubuntu Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Red ?Hat#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"redhat"</span>;
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"RedHat Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Gentoo#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"gentoo"</span>;
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Gentoo Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Fedora#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"fedora"</span>;
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Fedora Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#MEPIS#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"MEPIS Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Knoppix#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Knoppix Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Slackware#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"slackware"</span>;
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Slackware Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Xandros#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Xandros Linux"</span>;
+        } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Kanotix#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Kanotix Linux"</span>;
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/FreeBSD/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"FreeBSD"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"freebsd"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/NetBSD/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"NetBSD"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"netbsd"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/OpenBSD/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"OpenBSD"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"openbsd"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/IRIX/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"SGI IRIX"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"sgi"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/SunOS/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Solaris"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"sun"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#iPod.*.CPU.([a-zA-Z0-9.( _)]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"iPod"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"iphone"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#iPhone.*.CPU.([a-zA-Z0-9.( _)]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"iPhone"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"iphone"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#iPad.*.CPU.([a-zA-Z0-9.( _)]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"iPad"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"ipad"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Mac OS X.([0-9. _]+)/i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Mac OS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"macos"</span>;
+        <span class="hljs-keyword">if</span>(count(explode(<span class="hljs-number">7</span>,<span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>]))&gt;<span class="hljs-number">1</span>) <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>] = <span class="hljs-string">'Lion '</span>.<span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">elseif</span>(count(explode(<span class="hljs-number">8</span>,<span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>]))&gt;<span class="hljs-number">1</span>) <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>] = <span class="hljs-string">'Mountain Lion '</span>.<span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"X "</span>.<span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Macintosh/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Mac OS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"macos"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Unix/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"UNIX"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"unix"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/CrOS/i'</span>, <span class="hljs-variable">$ua</span>)){
+        <span class="hljs-variable">$os_name</span>=<span class="hljs-string">"Google Chrome OS"</span>;
+        <span class="hljs-variable">$os_code</span>=<span class="hljs-string">"chromeos"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/Fedor.([0-9. _]+)/i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)){
+        <span class="hljs-variable">$os_name</span>=<span class="hljs-string">"Fedora"</span>;
+        <span class="hljs-variable">$os_code</span>=<span class="hljs-string">"fedora"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">else</span>{
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">'Unknow Os'</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">'other'</span>;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">array</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CID_pda_detect_os</span>(<span class="hljs-params"><span class="hljs-variable">$ua</span></span>) </span>{
+    <span class="hljs-variable">$os_name</span> = <span class="hljs-variable">$os_code</span> = <span class="hljs-variable">$os_ver</span> = <span class="hljs-variable">$pda_name</span> = <span class="hljs-variable">$pda_code</span> = <span class="hljs-variable">$pda_ver</span> = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'#PalmOS#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Palm OS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"palm"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Windows CE#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Windows CE"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"windows"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#QtEmbedded#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Qtopia"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"linux"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Zaurus#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Linux"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"linux"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Symbian#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Symbian OS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"symbian"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#PalmOS/sony/model#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Sony Clie"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"sony"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Zaurus ([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Sharp Zaurus "</span> . <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"zaurus"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Series ([0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Series"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"nokia"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Nokia ([0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Nokia"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"nokia"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#SIE-([a-zA-Z0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Siemens"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"siemens"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#dopod([a-zA-Z0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Dopod"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"dopod"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#o2 xda ([a-zA-Z0-9 ]+);#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"O2 XDA"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"o2"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#SEC-([a-zA-Z0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Samsung"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"samsung"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#SonyEricsson ?([a-zA-Z0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"SonyEricsson"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"sonyericsson"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Kindle\/([a-zA-Z0-9. ×\(.\)]+)#i'</span>,<span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {<span class="hljs-comment">//for Kindle</span>
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"kindle"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"kindle"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">'Unknow Os'</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">'other'</span>;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">array</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>, <span class="hljs-variable">$pda_name</span>, <span class="hljs-variable">$pda_code</span>, <span class="hljs-variable">$pda_ver</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CID_detect_browser</span>(<span class="hljs-params"><span class="hljs-variable">$ua</span></span>) </span>{
+    <span class="hljs-variable">$browser_name</span> = <span class="hljs-variable">$browser_code</span> = <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$os_name</span> = <span class="hljs-variable">$os_code</span> = <span class="hljs-variable">$os_ver</span> = <span class="hljs-variable">$pda_name</span> = <span class="hljs-variable">$pda_code</span> = <span class="hljs-variable">$pda_ver</span> = <span class="hljs-literal">null</span>;
+    <span class="hljs-variable">$ua</span> = preg_replace(<span class="hljs-string">"/FunWebProducts/i"</span>, <span class="hljs-string">""</span>, <span class="hljs-variable">$ua</span>);
+    <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'#MovableType[ /]([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'MovableType'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'mt'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#WordPress[ /]([a-zA-Z0-9.]*)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'WordPress'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'wp'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#typepad[ /]([a-zA-Z0-9.]*)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'TypePad'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'typepad'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#drupal#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Drupal'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'drupal'</span>;
+        <span class="hljs-variable">$browser_ver</span> = count(<span class="hljs-variable">$matches</span>) &gt; <span class="hljs-number">0</span> ? <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>] : <span class="hljs-string">""</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#symbianos/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"SymbianOS"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">'symbian'</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#avantbrowser.com#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Avant Browser'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'avantbrowser'</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#(Camino|Chimera)[ /]([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Camino'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'camino'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>];
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Mac OS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"macos"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"X"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#anonymouse#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Anonymouse'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'anonymouse'</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#PHP#'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'PHP'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'php'</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#danger hiptop#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Danger HipTop'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'danger'</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#w3m/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'W3M'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'w3m'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Shiira[/]([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Shiira'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'shiira'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Mac OS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"macos"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"X"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Dillo[ /]([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Dillo'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'dillo'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Epiphany/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Epiphany'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'epiphany'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#UP.Browser/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Openwave UP.Browser'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'openwave'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#DoCoMo/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'DoCoMo'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'docomo'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$browser_ver</span> == <span class="hljs-string">'1.0'</span>) {
+            preg_match(<span class="hljs-string">'#DoCoMo/([a-zA-Z0-9.]+)/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>);
+            <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>];
+        } <span class="hljs-keyword">elseif</span> (<span class="hljs-variable">$browser_ver</span> == <span class="hljs-string">'2.0'</span>) {
+            preg_match(<span class="hljs-string">'#DoCoMo/([a-zA-Z0-9.]+) ([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>);
+            <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>];
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#(SeaMonkey)/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Mozilla SeaMonkey'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'seamonkey'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Kazehakase/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Kazehakase'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'kazehakase'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Flock/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Flock'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'flock'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#(Firefox|Phoenix|Firebird|BonEcho|GranParadiso|Minefield|Iceweasel)/4([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Mozilla Firefox'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'firefox'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-string">'4'</span>.<span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#(Firefox|Phoenix|Firebird|BonEcho|GranParadiso|Minefield|Iceweasel)/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Mozilla Firefox'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'firefox'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Minimo/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Minimo'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'mozilla'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#MultiZilla/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'MultiZilla'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'mozilla'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#SE 2([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'SouGou Browser'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'sogou'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-string">'2'</span>.<span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#baidubrowser ([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'BaiDu Browser'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'baidubrowser'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#360([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'360 Browser'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'360se'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+                <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#QQBrowser/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'QQ Browser'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'qqbrowser'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/PSP \(PlayStation Portable\)\; ([a-zA-Z0-9.]+)/'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Sony PSP"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"sony-psp"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Galeon/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Galeon'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'galeon'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#iCab/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'iCab'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'icab'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Mac OS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"macos"</span>;
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'#Mac OS X#i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"X"</span>;
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#K-Meleon/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'K-Meleon'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'kmeleon'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Lynx/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Lynx'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'lynx'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Links \\(([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Links'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'lynx'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#ELinks[/ ]([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'ELinks'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'lynx'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#ELinks \\(([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'ELinks'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'lynx'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Konqueror/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Konqueror'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'konqueror'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$os_name</span>) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_pda_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#NetPositive/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'NetPositive'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'netpositive'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"BeOS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"beos"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#OmniWeb#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'OmniWeb'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'omniweb'</span>;
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Mac OS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"macos"</span>;
+        <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">"X"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Chrome/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+    <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Google Chrome'</span>; <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'chrome'</span>; <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+    <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+    } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+    }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Arora/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Arora'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'arora'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Maxthon( |\/)([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>,<span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Maxthon'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'maxthon'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Win/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#CriOS/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Chrome for iOS'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'crios'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+             <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Safari/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Safari'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'safari'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+             <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#opera mini#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Opera Mini'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'opera'</span>;
+        preg_match(<span class="hljs-string">'#Opera/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>);
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Opera.(.*)Version[ /]([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Opera'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'opera'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$os_name</span>) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$os_name</span>) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>, <span class="hljs-variable">$pda_name</span>, <span class="hljs-variable">$pda_code</span>, <span class="hljs-variable">$pda_ver</span>) = CID_pda_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$os_name</span>) {
+            <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Wii/i'</span>, <span class="hljs-variable">$ua</span>)) {
+                <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Nintendo Wii"</span>;
+                <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"nintendo-wii"</span>;
+            }
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Opera/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Opera Mini'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'opera'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#WebPro/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'WebPro'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'webpro'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"PalmOS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"palmos"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#WebPro#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'WebPro'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'webpro'</span>;
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"PalmOS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"palmos"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Netfront/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Netfront'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'netfront'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>, <span class="hljs-variable">$pda_name</span>, <span class="hljs-variable">$pda_code</span>, <span class="hljs-variable">$pda_ver</span>) = CID_pda_detect_os(<span class="hljs-variable">$ua</span>);
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Xiino/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Xiino'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'xiino'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/wp-blackberry\/([a-zA-Z0-9.]*)/i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">"WordPress for BlackBerry"</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">"wordpress"</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"BlackBerry"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"blackberry"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Blackberry([0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Blackberry"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"blackberry"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Blackberry#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Blackberry"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"blackberry"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#SPV ([0-9a-zA-Z.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Orange SPV"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"orange"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#LGE-([a-zA-Z0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"LG"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">'lg'</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#MOT-([a-zA-Z0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Motorola"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">'motorola'</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Nokia ?([0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Nokia"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"nokia"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#NokiaN-Gage#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Nokia"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"nokia"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-string">"N-Gage"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Blazer[ /]?([a-zA-Z0-9.]*)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">"Blazer"</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">"blazer"</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">"Palm OS"</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">"palm"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#SIE-([a-zA-Z0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Siemens"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"siemens"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#SEC-([a-zA-Z0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Samsung"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"samsung"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/wp-iphone\/([a-zA-Z0-9.]*)/i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">"WordPress for iOS"</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">"wordpress"</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"iPhone &amp; iPad"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"ipad"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/wp-android\/([a-zA-Z0-9.]*)/i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">"WordPress for Android"</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">"wordpress"</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Android"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"android"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/wp-windowsphone\/([a-zA-Z0-9.]*)/i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">"WordPress for Windows Phone 7"</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">"wordpress"</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Windows Phone 7"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"windows_phone7"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/wp-nokia\/([a-zA-Z0-9.]*)/i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">"WordPress for Nokia"</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">"wordpress"</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Nokia"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"nokia"</span>;
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#SAMSUNG-(S.H-[a-zA-Z0-9_/.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"Samsung"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"samsung"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'#(j2me|midp)#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">"J2ME/MIDP Browser"</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">"j2me"</span>;
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#SonyEricsson ?([a-zA-Z0-9]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">"SonyEricsson"</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">"sonyericsson"</span>;
+        <span class="hljs-variable">$pda_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#(j2me|midp)#i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">"J2ME/MIDP Browser"</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">"j2me"</span>;
+    <span class="hljs-comment">// mice</span>
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'/GreenBrowser/i'</span>, <span class="hljs-variable">$ua</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'GreenBrowser'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'greenbrowser'</span>;
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Win/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#TencentTraveler ([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'腾讯TT浏览器'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'tencenttraveler'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#UCWEB([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'UCWEB'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'ucweb'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#MSIE ([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Internet Explorer'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> ( strpos(<span class="hljs-variable">$browser_ver</span>, <span class="hljs-string">'7'</span>) !== <span class="hljs-literal">false</span> || strpos(<span class="hljs-variable">$browser_ver</span>, <span class="hljs-string">'8'</span>) !== <span class="hljs-literal">false</span>)
+            <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'ie8'</span>;
+        <span class="hljs-keyword">elseif</span> ( strpos(<span class="hljs-variable">$browser_ver</span>, <span class="hljs-string">'9'</span>) !== <span class="hljs-literal">false</span>)
+            <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'ie9'</span>;
+        <span class="hljs-keyword">elseif</span> ( strpos(<span class="hljs-variable">$browser_ver</span>, <span class="hljs-string">'10'</span>) !== <span class="hljs-literal">false</span>)
+            <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'ie10'</span>;
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'ie'</span>;
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>, <span class="hljs-variable">$pda_name</span>, <span class="hljs-variable">$pda_code</span>, <span class="hljs-variable">$pda_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Universe/([0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Universe'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'universe'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>, <span class="hljs-variable">$pda_name</span>, <span class="hljs-variable">$pda_code</span>, <span class="hljs-variable">$pda_ver</span>) = CID_pda_detect_os(<span class="hljs-variable">$ua</span>);
+    }<span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#Netscape[0-9]?/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Netscape'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'netscape'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#^Mozilla/5.0#i'</span>, <span class="hljs-variable">$ua</span>) &amp;&amp; preg_match(<span class="hljs-string">'#rv:([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Mozilla'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'mozilla'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Windows/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    } <span class="hljs-keyword">elseif</span> (preg_match(<span class="hljs-string">'#^Mozilla/([a-zA-Z0-9.]+)#i'</span>, <span class="hljs-variable">$ua</span>, <span class="hljs-variable">$matches</span>)) {
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Netscape Navigator'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'netscape'</span>;
+        <span class="hljs-variable">$browser_ver</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">'/Win/i'</span>, <span class="hljs-variable">$ua</span>)) {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_windows_detect_os(<span class="hljs-variable">$ua</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">list</span>(<span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>) = CID_unix_detect_os(<span class="hljs-variable">$ua</span>);
+        }
+    }<span class="hljs-keyword">else</span>{
+        <span class="hljs-variable">$browser_name</span> = <span class="hljs-string">'Unknow Browser'</span>;
+        <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">'null'</span>;
+      }
+      <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$pda_name</span> &amp;&amp; !<span class="hljs-variable">$os_name</span>){
+        <span class="hljs-variable">$pda_name</span> = <span class="hljs-string">'Unknow Os'</span>;
+        <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">'other'</span>;
+        <span class="hljs-variable">$os_name</span> = <span class="hljs-string">'Unknow Os'</span>;
+        <span class="hljs-variable">$os_code</span> = <span class="hljs-string">'other'</span>;
+      }
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">array</span>(<span class="hljs-variable">$browser_name</span>, <span class="hljs-variable">$browser_code</span>, <span class="hljs-variable">$browser_ver</span>, <span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>, <span class="hljs-variable">$pda_name</span>, <span class="hljs-variable">$pda_code</span>, <span class="hljs-variable">$pda_ver</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CID_friendly_string</span>(<span class="hljs-params"><span class="hljs-variable">$browser_name</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$browser_code</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$browser_ver</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$os_name</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$os_code</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$os_ver</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$pda_name</span>= <span class="hljs-string">''</span>, <span class="hljs-variable">$pda_code</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$pda_ver</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$show_image</span> = <span class="hljs-literal">true</span>, <span class="hljs-variable">$show_text</span> = <span class="hljs-literal">false</span>, <span class="hljs-variable">$between</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$before</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$after</span> = <span class="hljs-string">''</span></span>) </span>{
+    <span class="hljs-keyword">global</span> <span class="hljs-variable">$CID_width_height</span>, <span class="hljs-variable">$CID_image_url</span>;
+
+    <span class="hljs-variable">$browser_name</span> = htmlspecialchars(<span class="hljs-variable">$browser_name</span>);
+    <span class="hljs-variable">$browser_code</span> = htmlspecialchars(<span class="hljs-variable">$browser_code</span>);
+    <span class="hljs-variable">$browser_ver</span> = htmlspecialchars(<span class="hljs-variable">$browser_ver</span>);
+    <span class="hljs-variable">$os_name</span> = htmlspecialchars(<span class="hljs-variable">$os_name</span>);
+    <span class="hljs-variable">$os_code</span> = htmlspecialchars(<span class="hljs-variable">$os_code</span>);
+    <span class="hljs-variable">$os_ver</span> = htmlspecialchars(<span class="hljs-variable">$os_ver</span>);
+    <span class="hljs-variable">$pda_name</span> = htmlspecialchars(<span class="hljs-variable">$pda_name</span>);
+    <span class="hljs-variable">$pda_code</span> = htmlspecialchars(<span class="hljs-variable">$pda_code</span>);
+    <span class="hljs-variable">$pda_ver</span> = htmlspecialchars(<span class="hljs-variable">$pda_ver</span>);
+    <span class="hljs-variable">$between</span> = htmlspecialchars(<span class="hljs-variable">$between</span>);
+
+    <span class="hljs-variable">$text1</span> = <span class="hljs-string">''</span>; <span class="hljs-variable">$text2</span> = <span class="hljs-string">''</span>; <span class="hljs-variable">$image1</span> = <span class="hljs-string">''</span>; <span class="hljs-variable">$image2</span> = <span class="hljs-string">''</span>;
+
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$browser_name</span> &amp;&amp; <span class="hljs-variable">$pda_name</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_image</span>) {
+            <span class="hljs-variable">$image1</span> = <span class="hljs-string">" &lt;img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/<span class="hljs-subst">$browser_code</span>.png' title='<span class="hljs-subst">$browser_name</span> <span class="hljs-subst">$browser_ver</span>' alt='<span class="hljs-subst">$browser_name</span>' width='<span class="hljs-subst">$CID_width_height</span>' height='<span class="hljs-subst">$CID_width_height</span>' class='browser-icon' /&gt;"</span>;
+            <span class="hljs-variable">$image2</span> = <span class="hljs-string">" &lt;img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/<span class="hljs-subst">$pda_code</span>.png' title='<span class="hljs-subst">$pda_name</span> <span class="hljs-subst">$pda_ver</span>' alt='<span class="hljs-subst">$pda_name</span>' width='<span class="hljs-subst">$CID_width_height</span>' height='<span class="hljs-subst">$CID_width_height</span>' class='os-icon' /&gt;"</span>;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_text</span>) {
+            <span class="hljs-variable">$text1</span> = <span class="hljs-string">"<span class="hljs-subst">$browser_name</span> <span class="hljs-subst">$browser_ver</span> <span class="hljs-subst">$between</span> "</span>;
+            <span class="hljs-variable">$text2</span> = <span class="hljs-string">"<span class="hljs-subst">$pda_name</span> <span class="hljs-subst">$pda_ver</span>"</span>;
+        }
+    } <span class="hljs-keyword">elseif</span> (<span class="hljs-variable">$browser_name</span> &amp;&amp; <span class="hljs-variable">$os_name</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_image</span>) {
+            <span class="hljs-variable">$image1</span> = <span class="hljs-string">" &lt;img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/<span class="hljs-subst">$browser_code</span>.png' title='<span class="hljs-subst">$browser_name</span> <span class="hljs-subst">$browser_ver</span>' alt='<span class="hljs-subst">$browser_name</span>' width='<span class="hljs-subst">$CID_width_height</span>' height='<span class="hljs-subst">$CID_width_height</span>' class='browser-icon' /&gt; "</span>;
+            <span class="hljs-variable">$image2</span> = <span class="hljs-string">" &lt;img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/<span class="hljs-subst">$os_code</span>.png' title='<span class="hljs-subst">$os_name</span> <span class="hljs-subst">$os_ver</span>' alt='<span class="hljs-subst">$os_name</span>' width='<span class="hljs-subst">$CID_width_height</span>' height='<span class="hljs-subst">$CID_width_height</span>' class='os-icon' /&gt; "</span>;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_text</span>) {
+            <span class="hljs-variable">$text1</span> = <span class="hljs-string">"<span class="hljs-subst">$browser_name</span> <span class="hljs-subst">$browser_ver</span> <span class="hljs-subst">$between</span> "</span>;
+            <span class="hljs-variable">$text2</span> = <span class="hljs-string">"<span class="hljs-subst">$os_name</span> <span class="hljs-subst">$os_ver</span>"</span>;
+        }
+    } <span class="hljs-keyword">elseif</span> (<span class="hljs-variable">$browser_name</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_image</span>)
+            <span class="hljs-variable">$image1</span> = <span class="hljs-string">" &lt;img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/<span class="hljs-subst">$browser_code</span>.png' title='<span class="hljs-subst">$browser_name</span> <span class="hljs-subst">$browser_ver</span>' alt='<span class="hljs-subst">$browser_name</span>' width='<span class="hljs-subst">$CID_width_height</span>' height='<span class="hljs-subst">$CID_width_height</span>' class='browser-icon' /&gt;"</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_text</span>)
+            <span class="hljs-variable">$text1</span> = <span class="hljs-string">"<span class="hljs-subst">$browser_name</span> <span class="hljs-subst">$browser_ver</span>"</span>;
+    } <span class="hljs-keyword">elseif</span> (<span class="hljs-variable">$os_name</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_image</span>)
+            <span class="hljs-variable">$image1</span> = <span class="hljs-string">" &lt;img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/<span class="hljs-subst">$os_code</span>.png' title='<span class="hljs-subst">$os_name</span> <span class="hljs-subst">$os_ver</span>' alt='<span class="hljs-subst">$os_name</span>' width='<span class="hljs-subst">$CID_width_height</span>' height='<span class="hljs-subst">$CID_width_height</span>' class='os-icon' /&gt; "</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_text</span>)
+            <span class="hljs-variable">$text1</span> = <span class="hljs-string">"<span class="hljs-subst">$os_name</span> <span class="hljs-subst">$os_ver</span>"</span>;
+    } <span class="hljs-keyword">elseif</span> (<span class="hljs-variable">$pda_name</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_image</span>)
+            <span class="hljs-variable">$image1</span> = <span class="hljs-string">" &lt;img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/<span class="hljs-subst">$pda_code</span>.png' title='<span class="hljs-subst">$pda_name</span> <span class="hljs-subst">$pda_ver</span>' alt='<span class="hljs-subst">$pda_name</span>' width='<span class="hljs-subst">$CID_width_height</span>' height='<span class="hljs-subst">$CID_width_height</span>' class='os-icon' /&gt;"</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$show_text</span>)
+            <span class="hljs-variable">$text1</span> = <span class="hljs-string">"<span class="hljs-subst">$pda_name</span> <span class="hljs-subst">$pda_ver</span>"</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-variable">$before</span> . <span class="hljs-variable">$image1</span> . <span class="hljs-string">' '</span> . <span class="hljs-variable">$text1</span> . <span class="hljs-string">' '</span> . <span class="hljs-variable">$image2</span> . <span class="hljs-string">' '</span> . <span class="hljs-variable">$text2</span> . <span class="hljs-variable">$after</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CID_browser_string</span>(<span class="hljs-params"><span class="hljs-variable">$ua</span>, <span class="hljs-variable">$show_image</span> = <span class="hljs-literal">true</span>, <span class="hljs-variable">$show_text</span> = <span class="hljs-literal">false</span>, <span class="hljs-variable">$between</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$before</span> = <span class="hljs-string">''</span>, <span class="hljs-variable">$after</span> = <span class="hljs-string">''</span></span>) </span>{
+    <span class="hljs-keyword">list</span> (<span class="hljs-variable">$browser_name</span>, <span class="hljs-variable">$browser_code</span>, <span class="hljs-variable">$browser_ver</span>, <span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>, <span class="hljs-variable">$pda_name</span>, <span class="hljs-variable">$pda_code</span>, <span class="hljs-variable">$pda_ver</span>) = CID_detect_browser(<span class="hljs-variable">$ua</span>);
+    <span class="hljs-variable">$string</span> = CID_friendly_string(<span class="hljs-variable">$browser_name</span>, <span class="hljs-variable">$browser_code</span>, <span class="hljs-variable">$browser_ver</span>, <span class="hljs-variable">$os_name</span>, <span class="hljs-variable">$os_code</span>, <span class="hljs-variable">$os_ver</span>, <span class="hljs-variable">$pda_name</span>, <span class="hljs-variable">$pda_code</span>, <span class="hljs-variable">$pda_ver</span>, <span class="hljs-variable">$show_image</span>, <span class="hljs-variable">$show_text</span>, <span class="hljs-variable">$between</span>, <span class="hljs-variable">$before</span>, <span class="hljs-variable">$after</span>);
+    <span class="hljs-comment">/*if (!$string) {
+        $string = "Unknown browser";
+    }*/</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-variable">$string</span>;
+} <span class="hljs-meta">?&gt;</span>
+</code></pre><p>把里面的 <code>http:<span class="hljs-regexp">//</span>cdn.lantian.lt<span class="hljs-regexp">/usr/</span>themes/hybridside</code> 这个网址全部改成你的主题文件夹的网址。</p><p>在主题的自定义评论代码里你想显示评论者国家的地方插入：</p><pre><code class="hljs language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> CID_get_flag(<span class="hljs-variable">$comments</span>-&gt;ip);<span class="hljs-meta">?&gt;</span>
+</code></pre><p>在你想显示系统和浏览器的地方插入：</p><pre><code class="hljs language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> CID_browser_string(<span class="hljs-variable">$comments</span>-&gt;agent);<span class="hljs-meta">?&gt;</span>
+</code></pre><p>修改完成，测试效果。</p></div><div class="clearfix" id="post-navi"><div class="float-right text-right"><a href="/article/chat/sae-domain-expire-godaddy.lantian" title="【已辟谣】SAE 域名忘记续费，被 GoDaddy 抢购">【已辟谣】SAE 域名忘记续费，被 GoDaddy 抢购</a><br>下一篇文章 &raquo;</div><div class="float-left text-left position-absolute">&laquo; 上一篇文章<br><a href="/article/modify-website/debian-vps-smtp-sendmail.lantian" title="Debian VPS 设置 SMTP 发信">Debian VPS 设置 SMTP 发信</a></div></div><p class="text-center">本站使用 Disqus 评论系统，中国大陆访问可能不稳定。</p><div id="disqus_thread"></div><script>var disqus_config=function(){this.page.url="https://lantian.pub/article/modify-website/typecho-show-commenter-country-browser.lantian",this.page.identifier="/article/modify-website/typecho-show-commenter-country-browser.lantian"}</script><noscript>请启用 JavaScript 以查看 <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">Disqus</a> 评论区。</noscript></div></div></article></div><aside class="d-none d-lg-block"><section class="widget"><h3>最新文章</h3><ul class="list-unstyled"><li>05-02 <a href="/article/modify-website/dn42-experimental-network-2020.lantian">DN42 实验网络介绍及注册教程（2021-05-02 更新）</a></li><li>04-19 <a href="/article/modify-website/serve-dn42-whois-with-nginx.lantian">将 nginx 用作 DN42 WHOIS 服务器</a></li><li>03-21 <a href="/article/modify-website/serve-gopher-with-nginx.lantian">用 nginx 建立 Gopher 网站</a></li><li>12-27 <a href="/article/modify-website/4kb-infinite-sleep-docker-image.lantian">制作只有 4KB 大小的永久挂起程序</a></li><li>11-29 <a href="/article/modify-website/static-build-tiny-docker-images.lantian">静态编译制作微型 Docker 镜像</a></li><li>10-11 <a href="/article/creations/traceroute-chain.lantian">优雅地在 Traceroute 里膜 拜大佬</a></li><li>10-03 <a href="/article/random-notes/youhua-pt926g-disable-tr069.lantian">友华 PT926G 关闭 TR069</a></li><li>09-23 <a href="/article/modify-website/post-quantum-encryption.lantian">未雨绸缪：使用后量子时代的加密算法</a></li><li>09-05 <a href="/article/modify-website/selfhost-dns-root-server.lantian">自建 DNS 根服务器</a></li><li>08-28 <a href="/article/modify-website/how-to-kill-the-dn42-network.lantian">如何引爆 DN42 网络（2020-08-28 更新）</a></li><li>08-13 <a href="/article/random-notes/youhua-pt926g-fiber-modem-crack.lantian">友华 PT926G 光猫破解</a></li><li>08-01 <a href="/article/modify-website/an-elegant-scripture-of-safety-generator.lantian">制作一个优雅的平安经生成器</a></li><li>06-25 <a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus MUXless 下的 Intel 和 NVIDIA 虚拟机显卡直通</a></li><li>06-17 <a href="/article/one-pic/if-you-wanna-take-the-bite.lantian">愿者上钩（指美国签证）</a></li><li>06-08 <a href="/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian">毕业设计 - 传感器网络开发踩坑记录</a></li></ul></section><section class="widget"><h3>最新评论</h3><ul class="dsq-widget-list"><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">这一步我当时没遇到这个问题，可能是后面 QEMU 等版本有了更新。因为此时虚拟机的主显卡还是 QXL，Intel 显卡还没被正常驱动。你具体是遇到了什么错误？</span><p class="dsq-widget-meta"><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus 下的 Intel 和 NVIDIA 虚拟机显卡直通</a><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5434808981">2 weeks ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/EdenJohnson_atDisqus/">EdenJohnson</a> <span class="dsq-widget-comment">博主，关于Intel GVT-g“修改虚拟机配置，让虚拟显卡对虚拟机可见”这一节应该先把后面的qemu:commandline 写上 否则会因为POSTed名称不正确拒绝启动的说</span><p class="dsq-widget-meta"><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus 下的 Intel 和 NVIDIA 虚拟机显卡直通</a><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5433712806">2 weeks ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">i-83.net（即 QuadHost）但是不要买 不要买 不要买，我已经扔了，太不稳定了根本没法用，工单一个月不回</span><p class="dsq-widget-meta"><a href="/article/random-notes/debian-10-on-openvz-6.lantian">在 OpenVZ 6 上安装/升级到 Debian 10</a><a href="/article/random-notes/debian-10-on-openvz-6.lantian#comment-5398922977">1 month ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/maylihe/">Yo</a> <span class="dsq-widget-comment">大佬你1刀一年的openvz哪里买的？</span><p class="dsq-widget-meta"><a href="/article/random-notes/debian-10-on-openvz-6.lantian">在 OpenVZ 6 上安装/升级到 Debian 10</a><a href="/article/random-notes/debian-10-on-openvz-6.lantian#comment-5394222113">1 month ago</a></p></li><li class="dsq-widget-item">butdown <span class="dsq-widget-comment">rp_filter 一定要设置成0，刚刚跟kioubit解决完dns问题后的惨痛教训……</span><p class="dsq-widget-meta"><a href="/article/modify-website/dn42-experimental-network-2020.lantian">DN42 实验网络介绍及注册教程（2020 版）</a><a href="/article/modify-website/dn42-experimental-network-2020.lantian#comment-5366564019">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/disqus_lq2m2HGaPo/">Rangel Alvarado</a> <span class="dsq-widget-comment">I just follow the guide even the compilations things (vBiosFinder,OVMF_VARS.fd and the...</span><p class="dsq-widget-meta"><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">Intel and NVIDIA GPU Passthrough on a Optimus MUXless Laptop</a><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5364964743">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/kanzakitsukasa/">Kanzaki Tsukasa</a> <span class="dsq-widget-comment">感谢回复~ 无法 ping 通可能是因为 Linux 默认禁止普通用户 ping，可以用下面一行命令解决： sudo sysctl -w...</span><p class="dsq-widget-meta"><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian">（怀旧）ATduck 虚拟 Modem 拨号上网</a><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian#comment-5363079969">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/ttnb/">TTNB</a> <span class="dsq-widget-comment">@disqus_lq2m2HGaPo:disqus could you please elaborate how you resolved your problem? What did you...</span><p class="dsq-widget-meta"><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">Intel and NVIDIA GPU Passthrough on a Optimus MUXless Laptop</a><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5362718819">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">抱歉回复晚了，Disqus 把你的评论判为 Spam 了，没给我发通知邮件。 在有显卡直出的机器上，把显卡直通进虚拟机的实用性会高很多，因为你可以接个外接屏，或者用“假显示器”+steam...</span><p class="dsq-widget-meta"><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus 下的 Intel 和 NVIDIA 虚拟机显卡直通</a><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5361950865">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">抱歉回复晚了，你的评论被 Disqus 判为 Spam，没有给我发通知邮件。 无法 ping 通可能是因为 Linux 默认禁止普通用户 ping，可以用下面一行命令解决： sudo...</span><p class="dsq-widget-meta"><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian">（怀旧）ATduck 虚拟 Modem 拨号上网</a><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian#comment-5361944929">2 months ago</a></p></li></ul></section><section class="widget"><h3>其它功能</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-rss"></i> <a href="/rss2.xml" target="_blank">RSS 订阅</a> | <a href="/feed.xml" target="_blank">Atom</a> | <a href="/feed.json" target="_blank">JSON</a></li><li><i class="fas fa-fw fa-globe"></i> <a href="https://stats.uptimerobot.com/BLK6VsRkR" target="_blank">服务器状态</a></li><li><i class="fas fa-fw fa-sitemap"></i> <a href="https://lg.lantian.pub" target="_blank">DN42 节点状态</a></li></ul></section><section class="widget"><h3>友情链接</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://0x7f.cc">0x7f Blog 🐑</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://alanyhq.com">Alanyhq</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://blog.cas7.moe">Blog of Moecast</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://jerryxiao.cc">JerryXiao</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://lsc.moe">LSC.MOE</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://sangsir.com">SangSir | 艺术界的一朵奇葩</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://yuetau.net">YuetAu&#39;s Spot</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="http://foreverblog.cn">十年之约</a></li></ul></section></aside></div><footer class="lantian clearfix"><div id="copyright" class="float-right text-right"><i class="fas fa-copyright"></i> 2012-2021 Lan Tian @ Blog<br><small>基于 <a href="https://hexo.io/" target="_blank">Hexo</a> 构建 @ 2021-07-13 09:41</small></div></footer></div></body></html>

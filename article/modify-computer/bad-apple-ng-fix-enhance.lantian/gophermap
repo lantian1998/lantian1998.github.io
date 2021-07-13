@@ -1,0 +1,136 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Bad Apple NG 修正增强版本"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [Pascal, Bad Apple]		{{server_addr}}	{{server_port}}
+idate: 2013-03-23 21:34:44		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这次更新修正了几个错误。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1.帧率统计功能实际上是错误的（我脑抽写出的代码），全片过程中帧率一般维		{{server_addr}}	{{server_port}}
+i持在 20FPS 不变。现已将 FPS 统计改成处理延时。（PS：对于处理延时，程序		{{server_addr}}	{{server_port}}
+i自动调节）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2.有 TX 反馈说 64 位 OS 下运行不正常，八成是 int64 的问题，现在已经全		{{server_addr}}	{{server_port}}
+i部改成 longint，问题应该解决。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3.加了个统计功能（把第三行 stat=true 改成 stat=false 可以关掉）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i数据文件下载		{{server_addr}}	{{server_port}}
+：		{{server_addr}}	{{server_port}}
+1/usr/uploads/2013/03/badapple.7z	/usr/uploads/2013/03/badapple.7z	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i源码：（自己用 FPC 2.6 编译）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iuses crt,dos;		{{server_addr}}	{{server_port}}
+iconst		{{server_addr}}	{{server_port}}
+i    stat=true;		{{server_addr}}	{{server_port}}
+i    inx=79;		{{server_addr}}	{{server_port}}
+i    iny=24;		{{server_addr}}	{{server_port}}
+i    yanchi=50;		{{server_addr}}	{{server_port}}
+i    yanchitj=800;		{{server_addr}}	{{server_port}}
+itype		{{server_addr}}	{{server_port}}
+i    pic=array[1..inx,1..iny]of char;		{{server_addr}}	{{server_port}}
+ivar		{{server_addr}}	{{server_port}}
+i    fin:text;		{{server_addr}}	{{server_port}}
+i    i,j,diff:longint;		{{server_addr}}	{{server_port}}
+i    ct,dt,dtt,pt:longint;		{{server_addr}}	{{server_port}}
+i    s:string;		{{server_addr}}	{{server_port}}
+i    a,b:pic;		{{server_addr}}	{{server_port}}
+i// 来自 WotorDho <http://user.qzone.qq.com/1320719107> 的时间校准代码（有修改）		{{server_addr}}	{{server_port}}
+ifunction currtime:longint;		{{server_addr}}	{{server_port}}
+i    var		{{server_addr}}	{{server_port}}
+i        a,b,c,d:word;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        gettime(a,b,c,d);		{{server_addr}}	{{server_port}}
+i        currtime:=3600000*a+60000*b+1000*c+10*d;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+ifunction deltatime(a,b:longint):longint;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        deltatime:=a-b;		{{server_addr}}	{{server_port}}
+i        if(a-b<0)then deltatime:=deltatime+3600000*iny;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+i// 读取下一张图片		{{server_addr}}	{{server_port}}
+ifunction currpic:pic;		{{server_addr}}	{{server_port}}
+i    var		{{server_addr}}	{{server_port}}
+i        i,j:longint;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        for i:=1 to iny do begin		{{server_addr}}	{{server_port}}
+i            readln(fin,s);		{{server_addr}}	{{server_port}}
+i            for j:=1 to length(s) do currpic[j,i]:=s[j];		{{server_addr}}	{{server_port}}
+i        end;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+i// 只显示和上幅图不同的部分，减小 Telnet 方式观看时网络压力		{{server_addr}}	{{server_port}}
+i// 本过程直接显示图片		{{server_addr}}	{{server_port}}
+ifunction deltapic(a,b:pic):longint;		{{server_addr}}	{{server_port}}
+i    var		{{server_addr}}	{{server_port}}
+i        i,j:longint;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        deltapic:=0;		{{server_addr}}	{{server_port}}
+i        for i:=1 to inx do for j:=1 to iny do begin		{{server_addr}}	{{server_port}}
+i            if(a[i,j]<>b[i,j])then begin		{{server_addr}}	{{server_port}}
+i                gotoxy(i,j);		{{server_addr}}	{{server_port}}
+i                write(b[i,j]);		{{server_addr}}	{{server_port}}
+i                deltapic:=deltapic+1;		{{server_addr}}	{{server_port}}
+i            end;		{{server_addr}}	{{server_port}}
+i        end;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+ibegin		{{server_addr}}	{{server_port}}
+i    cursoroff;    // 禁掉光标，Linux下不管用，Windows下可以，感谢 WotorDho		{{server_addr}}	{{server_port}}
+i    // 挂入资源文件开始读取		{{server_addr}}	{{server_port}}
+i    assign(fin,'badapple.txt');		{{server_addr}}	{{server_port}}
+i    reset(fin);		{{server_addr}}	{{server_port}}
+i    dtt:=0;		{{server_addr}}	{{server_port}}
+i    pt:=0;		{{server_addr}}	{{server_port}}
+i    for i:=1 to inx do for j:=1 to iny do a[i,j]:=' ';		{{server_addr}}	{{server_port}}
+i    while(not(eof(fin)))do begin		{{server_addr}}	{{server_port}}
+i        ct:=currtime();		{{server_addr}}	{{server_port}}
+i        b:=currpic;		{{server_addr}}	{{server_port}}
+i        diff:=deltapic(a,b);		{{server_addr}}	{{server_port}}
+i        a:=b;		{{server_addr}}	{{server_port}}
+i        dt:=deltatime(currtime(),ct);		{{server_addr}}	{{server_port}}
+i        dtt:=dtt+dt;		{{server_addr}}	{{server_port}}
+i        pt:=pt+1;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        // 版权 & 统计		{{server_addr}}	{{server_port}}
+i        gotoxy(1,25);		{{server_addr}}	{{server_port}}
+i        write('Bad Apple NG - Lan Tian - https://lantian.pub - Delay ',dt,'ms, Diff ',diff);		{{server_addr}}	{{server_port}}
+i        clreol;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        // 延时 & 微调		{{server_addr}}	{{server_port}}
+i        dt:=deltatime(currtime(),ct);		{{server_addr}}	{{server_port}}
+i        if(dt<yanchi)then delay(yanchi-dt);		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+i    // 统计信息		{{server_addr}}	{{server_port}}
+i    clrscr;		{{server_addr}}	{{server_port}}
+i    if(stat)then begin		{{server_addr}}	{{server_port}}
+i        writeln('Bad Apple NG - Lan Tian - https://lantian.pub');		{{server_addr}}	{{server_port}}
+i        delay(yanchitj);		{{server_addr}}	{{server_port}}
+i        writeln('- ',pt,' frames drawn total');		{{server_addr}}	{{server_port}}
+i        writeln('- ',pt,' 帧已绘制');		{{server_addr}}	{{server_port}}
+i        delay(yanchitj);		{{server_addr}}	{{server_port}}
+i        writeln('- ',pt*inx*iny,' ASCII characters total');		{{server_addr}}	{{server_port}}
+i        writeln('- ',pt*inx*iny,' 个 ASCII 字符已绘制');		{{server_addr}}	{{server_port}}
+i        delay(yanchitj);		{{server_addr}}	{{server_port}}
+i        writeln('- ',dtt,' characters different from previous frame');		{{server_addr}}	{{server_port}}
+i        writeln('- ',dtt,' 个差异与上一帧（全片过程中）');		{{server_addr}}	{{server_port}}
+i        delay(yanchitj);		{{server_addr}}	{{server_port}}
+i        writeln('Please remember you can watch this show by entering');		{{server_addr}}	{{server_port}}
+i        writeln('请注意，你可以在线观看这个字符动画，只要输入以下命令');		{{server_addr}}	{{server_port}}
+i        delay(yanchitj);		{{server_addr}}	{{server_port}}
+i        writeln('   following command into your cmd(Windows) or terminal(Linux)');		{{server_addr}}	{{server_port}}
+i        writeln('   到你的命令提示符（对于Windows）或者终端（对于Linux）');		{{server_addr}}	{{server_port}}
+i        delay(yanchitj);		{{server_addr}}	{{server_port}}
+i        writeln('telnet 5.175.156.249 OR telnet xuyh0120.tk');		{{server_addr}}	{{server_port}}
+i        delay(yanchitj);		{{server_addr}}	{{server_port}}
+i        writeln('Thanks for watching. See you next time!');		{{server_addr}}	{{server_port}}
+i        writeln('感谢观赏。下次再见！');		{{server_addr}}	{{server_port}}
+i        delay(yanchitj*10);		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+i    close(fin);		{{server_addr}}	{{server_port}}
+i    cursoron;		{{server_addr}}	{{server_port}}
+iend.		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

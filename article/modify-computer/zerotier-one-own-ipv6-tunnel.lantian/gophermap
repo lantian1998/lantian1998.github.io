@@ -1,0 +1,128 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "使用 ZeroTier One 建立自己的 IPv6 隧道"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [IPv6, ZeroTier One]		{{server_addr}}	{{server_port}}
+idate: 2017-07-06 16:10:15		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 前言		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i天朝绝大多数 ISP 均不为用户提供 IPv6 地址，除了教育网。但是教育网的		{{server_addr}}	{{server_port}}
+iIPv6 很不稳定（可能和我的学校有关），而且一旦离开学校就没有 IPv6 了，		{{server_addr}}	{{server_port}}
+i很不爽。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i有一种方法是使用 [HE.NET 的隧道服务](https://tunnelbroker.net)。在		{{server_addr}}	{{server_port}}
+iSixXS 关闭之后，他们是目前仅存的最大的 IPv6 隧道提供者，而且他们的服务		{{server_addr}}	{{server_port}}
+i完全免费。但是他们的服务并不适用于天朝的家庭网络环境，因为家庭网络普遍		{{server_addr}}	{{server_port}}
+i是动态 IP，并且部分运营商为了节省成本已经开始使用大内网，用户无法获取		{{server_addr}}	{{server_port}}
+i独立 IP，在同一内网就会产生冲突。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i好消息是，我有好几台 VPS，均由 VPS 提供商或者 HE.NET 的隧道服务提供了		{{server_addr}}	{{server_port}}
+iIPv6。这意味着我可以使用 VPN 方案。但是 Open^\_^VPN 早就无法正常跨境使		{{server_addr}}	{{server_port}}
+i用了，其它 VPN 方案或多或少都有一些问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i之前我拿来 Docker 组网的 ZeroTier One VPN 倒是能很好的解决这个问题。有		{{server_addr}}	{{server_port}}
+i中心管理面板，配置简单；跨境使用目前没有问题；官方甚至提供了详细的教程		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 准备		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iZeroTier One 的注册安装和加入网络，请参		{{server_addr}}	{{server_port}}
+见		{{server_addr}}	{{server_port}}
+1这篇文章	/article/modify-website/zerotier-one-connect-docker-containers-dualstack.lantian	{{server_addr}}	{{server_port}}
+i。i本文假定 VPS 已经有了一个 IPv6 地址块，并且已经和你需要 IPv6 的设备加		{{server_addr}}	{{server_port}}
+i入了同一个网络，已经能够互通。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你之前有		{{server_addr}}	{{server_port}}
+像		{{server_addr}}	{{server_port}}
+1这篇文章	/article/modify-computer/openvz-he-ipv6-use-whole-block-along-native-ipv6.lantian	{{server_addr}}	{{server_port}}
+i一i样开启了整个地址块，必须把它先关闭。你应该在 `/etc/rc.local` 之类的地		{{server_addr}}	{{server_port}}
+i方添加过这样的指令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iip -6 route add local 2333:3333:3333:3333:3333::/80 dev lo		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i把它删了并重启 VPS。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 设置转发		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i本文假定 IPv6 地址池是 2333:3333:3333:3333:3333::/80 ，并且 ZeroTier		{{server_addr}}	{{server_port}}
+iOne 生成的虚拟网卡是 zt0，请注意替换。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i登陆你的 VPS，向 `/etc/sysctl.conf` 添加如下指令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```ini		{{server_addr}}	{{server_port}}
+inet.ipv6.conf.default.forwarding=1		{{server_addr}}	{{server_port}}
+inet.ipv6.conf.all.forwarding=1		{{server_addr}}	{{server_port}}
+inet.ipv6.conf.all.proxy_ndp=1		{{server_addr}}	{{server_port}}
+inet.ipv6.conf.all.accept_ra=2		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存后运行 `sysctl -p` 生效。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你有配置 iptables 防火墙，向配置中添加如下两行，并保存生效：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iip6tables -A FORWARD -i zt0 -s 2333:3333:3333:3333:3333::/80 -j ACCEPT		{{server_addr}}	{{server_port}}
+iip6tables -A FORWARD -i henet -d 2333:3333:3333:3333:3333::/80 -j ACCEPT		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## ZeroTier 管理页面设置		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i登陆 ZeroTier 管理界面，点击进入你已经创建好的网络，找到 IPv6 Auto		{{server_addr}}	{{server_port}}
+iAssign（应该在屏幕右下角）：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IIPv6 Auto Assign	/usr/uploads/2017/05/4005783584.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i勾上 Auto Assign from Range（从地址池中自动分配）选项。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IAuto Assign from Range	/usr/uploads/2017/07/4075241417.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i它会要求输入你的地址池的开始与结束地址。对于我们用做演示的		{{server_addr}}	{{server_port}}
+i2333:3333:3333:3333:3333::/80，其配置如图所示：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I输入地址之后	/usr/uploads/2017/07/1687451490.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i你会发现 ZeroTier One 还没有给网络内的设备在这个地址池内分配 IPv6 地址		{{server_addr}}	{{server_port}}
+i，因为你还没有设置这个地址池的路由。看到屏幕右上角的 Managed Routes 选		{{server_addr}}	{{server_port}}
+i项，在第一个框输入要用的地址池 `2333:3333:3333:3333:3333::/80`，第二个		{{server_addr}}	{{server_port}}
+i框留空，如图。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I添加地址池	/usr/uploads/2017/07/4958991.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后，我们要告诉设备，将 ZeroTier 的虚拟网卡默认用于 IPv6 连接。继续添		{{server_addr}}	{{server_port}}
+i加，在第一个框输入 `::0/0`，第二个输入你的 VPS 的内网 IPv6 地址，就是		{{server_addr}}	{{server_port}}
+iZeroTier RFC4193 分配的地址，类似如图：（记得替换地址）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I添加默认路由	/usr/uploads/2017/07/2880366477.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存。这时页面下方应该已经显示你的设备拥有了一个公网 IPv6 地址。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## ZeroTier 客户端设置		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是当你到你的电脑上查看，会发现看不到分配的公网 IPv6。这是由于		{{server_addr}}	{{server_port}}
+iZeroTier 的安全策略所致。为了防止用户不知情地将所有流量转发到一个		{{server_addr}}	{{server_port}}
+iZeroTier 网络上（即不知情地将 ZeroTier 作为全局 VPN 使用），并允许该网		{{server_addr}}	{{server_port}}
+i络的管理员为所欲为，你必须手动在每台设备上允许该功能。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Windows 和 Mac 设备上，通过 GUI 界面就能打开。打开 Network Details		{{server_addr}}	{{server_port}}
+i界面：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IZeroTier 菜单	/usr/uploads/2017/07/4067377253.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i找到你的网络，打开 Allow Global 和 Allow Default 选项即可，立即生效。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I打开两个选项	/usr/uploads/2017/07/626155356.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Linux 设备上，假设你的网络 ID 是 2333333333333333，运行如下命令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+izerotier-cli set 2333333333333333 allowGlobal=true		{{server_addr}}	{{server_port}}
+izerotier-cli set 2333333333333333 allowDefault=true		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i立即生效。如此配置后，你就建好了自己的、在动态 IP 下也可方便使用的		{{server_addr}}	{{server_port}}
+iIPv6 隧道了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

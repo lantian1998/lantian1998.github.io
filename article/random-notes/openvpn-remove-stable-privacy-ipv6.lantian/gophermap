@@ -1,0 +1,27 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: 去除 OpenVPN 的 Stable-privacy IPv6 地址		{{server_addr}}	{{server_port}}
+icategories: 随手记		{{server_addr}}	{{server_port}}
+itags: [OpenVPN, DN42]		{{server_addr}}	{{server_port}}
+idate: 2020-03-21 12:28:40		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在我的 VPS 上，OpenVPN 创建的 TAP 网络界面/虚拟网卡会带有一个随机生成		{{server_addr}}	{{server_port}}
+i的 IPv6 地址，scope 为 `stable-privacy`。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个地址本身是随机生成、用于防止根据 IPv6 地址追踪用户的，但在 DN42 组		{{server_addr}}	{{server_port}}
+i网时，BGP 握手可能会从这个地址发出（而非设置的 Link-local 地址），然后		{{server_addr}}	{{server_port}}
+i因为来源地址不符而握手失败。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i解决方法是对这些 TAP 网络界面通过 sysctl 设置，关闭可能会自动产生地址		{{server_addr}}	{{server_port}}
+i的几项。可以设置 OpenVPN 让它在创建网络界面时自动运行 sysctl：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# 在 OpenVPN 的 conf 文件里加上		{{server_addr}}	{{server_port}}
+iscript-security 2		{{server_addr}}	{{server_port}}
+iup "/bin/sh -c '/sbin/sysctl -w net.ipv6.conf.$dev.autoconf=0 && /sbin/sysctl -w net.ipv6.conf.$dev.accept_ra=0 && /sbin/sysctl -w net.ipv6.conf.$dev.addr_gen_mode=1'"		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i根据你的 Linux 发行版不同，可能需要调整 `/bin/sh` 和 `/sbin/sysctl` 的		{{server_addr}}	{{server_port}}
+i路径。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

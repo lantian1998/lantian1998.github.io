@@ -1,0 +1,307 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" itemscope itemtype="https://schema.org/Article"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="theme-color" content="#bbdefb"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><title>如何引爆 DN42 网络（2020-08-28 更新） | Lan Tian @ Blog</title><meta name="title" content="如何引爆 DN42 网络（2020-08-28 更新） | Lan Tian @ Blog"><meta name="keywords" content="Lan,Tian"><meta name="description" content="Lan Tian @ Blog"><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/article/modify-website/how-to-kill-the-dn42-network.lantian"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-website/how-to-kill-the-dn42-network.lantian" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-website/how-to-kill-the-dn42-network.lantian" hreflang="en"><script>function addLoadEvent(o){var n=window.onload;"function"!=typeof window.onload?window.onload=o:window.onload=function(){n&&n(),o()}}</script><link rel="stylesheet" href="/assets/style.css?v=63f60c5"><script defer src="/assets/script.main.bundle.js?v=63f60c5"></script><meta name="copyright" content="Copyright 2012-2021 Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><meta name="application-name" content="Lan Tian @ Blog"><meta name="msapplication-TileColor" content="#03a9f4"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-navbutton-color" content="#03a9f4"><meta content="name=Lan Tian @ Blog;action-uri=/;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=文章们;action-uri=/page/archive;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=俯瞰地球;action-uri=/page/himawari;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=DN42;action-uri=/page/dn42;icon-uri=/favicon.png" name="msapplication-task"><meta name="theme-color" content="#03a9f4"><meta name="mobile-web-app-capable" content="yes"><meta property="og:url" content="https://lantian.pub/article/modify-website/how-to-kill-the-dn42-network.lantian"><meta property="og:type" content="website"><meta property="og:title" content="如何引爆 DN42 网络（2020-08-28 更新） | Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/usr/uploads/202008/i-love-niantic-network.png"><meta property="og:description" content="DN42 是一个测试网络，所有人都在帮助所有人。即使你不小心搞砸了，也没有人会指责你。你可以在 DN42 的 IRC 频道，邮件列表或者非官方 Telegram 群组寻求帮助。由于 DN42 是一个实验用网络，其中也有很多新手、小白参与，因此时不时会有新手配置出现错误，..."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="zh"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/article/modify-website/how-to-kill-the-dn42-network.lantian"><meta name="twitter:title" content="如何引爆 DN42 网络（2020-08-28 更新） | Lan Tian @ Blog"><meta name="twitter:image" content="https://lantian.pub/usr/uploads/202008/i-love-niantic-network.png"><meta name="twitter:description" content="DN42 是一个测试网络，所有人都在帮助所有人。即使你不小心搞砸了，也没有人会指责你。你可以在 DN42 的 IRC 频道，邮件列表或者非官方 Telegram 群组寻求帮助。由于 DN42 是一个实验用网络，其中也有很多新手、小白参与，因此时不时会有新手配置出现错误，..."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="如何引爆 DN42 网络（2020-08-28 更新） | Lan Tian @ Blog"><meta itemprop="image" content="https://lantian.pub/usr/uploads/202008/i-love-niantic-network.png"><meta itemprop="description" content="DN42 是一个测试网络，所有人都在帮助所有人。即使你不小心搞砸了，也没有人会指责你。你可以在 DN42 的 IRC 频道，邮件列表或者非官方 Telegram 群组寻求帮助。由于 DN42 是一个实验用网络，其中也有很多新手、小白参与，因此时不时会有新手配置出现错误，..."><style>.spoiler{display:inline-flex}p.spoiler{display:flex}.spoiler a{pointer-events:none}.spoiler-blur,.spoiler-blur>*{transition:text-shadow .5s ease}.spoiler .spoiler-blur,.spoiler .spoiler-blur>*{color:transparent;background-color:rgba(0,0,0,0);text-shadow:0 0 10px grey;cursor:pointer}.spoiler .spoiler-blur:hover,.spoiler .spoiler-blur:hover>*{text-shadow:0 0 5px grey}.spoiler-box,.spoiler-box>*{transition:color .5s ease,background-color .5s ease}.spoiler .spoiler-box,.spoiler .spoiler-box>*{color:#000;background-color:#000;text-shadow:none}</style><meta name="generator" content="Hexo 5.4.0"></head><body><div id="bg"></div><div id="container"><header class="lantian navbar navbar-expand-lg"><a class="navbar-brand" href="/">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="lantian-navbar"><ul class="navbar-nav nav-pills navbar-spacer"><li class="nav-item d-none d-md-block"><a class="nav-link" href="/page/archive">文章们</a></li><li class="nav-item d-none d-md-block"><a class="nav-link" href="/page/himawari">俯瞰地球</a></li><li class="nav-item d-none d-md-block"><a class="nav-link" href="/page/dn42">DN42</a></li><li class="nav-item dropdown d-block d-md-none"><a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-file"></i> 页面 <span class="caret"></span></a><div class="dropdown-menu"><a class="dropdown-item" href="/page/archive">文章们</a> <a class="dropdown-item" href="/page/himawari">俯瞰地球</a> <a class="dropdown-item" href="/page/dn42">DN42</a></div></li><li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-language"></i> Language <span class="caret"></span></a><div class="dropdown-menu"><a href="/article/modify-website/how-to-kill-the-dn42-network.lantian" class="dropdown-item"><span class="flag-icon flag-icon-cn"></span> Chinese </a><a href="/en/article/modify-website/how-to-kill-the-dn42-network.lantian" class="dropdown-item"><span class="flag-icon flag-icon-us"></span> English</a><div class="dropdown-divider"></div><a class="dropdown-item disabled" href="#">Not all pages have translations.</a> <a class="dropdown-item disabled" href="#">You may see 404 - this is normal.</a></div></li></ul><ul class="navbar-nav nav-pills"><li class="nav-item position-relative"><a class="nav-link" id="dark-mode" href="#"><i class="fas fa-fw fa-adjust"></i> 深色/浅色</a></li></ul></div></header><section class="text-center lantian">I'm starting to provide Chinese / English versions of some articles, switch with the Language menu above. 我开始提供部分文章的中文、英文翻译，请使用顶部语言菜单切换。</section><div class="d-flex"><div id="content"><article><div class="d-flex"><div class="post-info-wrap"><div class="post-info"><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-clock"></span><br><small>08-28</small></p><div class="post-meta-value">2020-08-28 01:11 &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-file-alt"></span><br><small>网站与服务端</small></p><div class="post-meta-value"><a href="/category/modify-website">网站与服务端</a> &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-tag"></span><br><small>2 标签</small></p><div class="post-meta-value"><a href="/tag/DN42">DN42</a> <a href="/tag/BGP">BGP</a> &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-qrcode"></span><br><small>二维码</small></p><div class="post-meta-value"><img class="qrcode" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACq0lEQVR42u3aQY7jMAwEQP//09kXrLeblGYzQPmUQyCrHMBimnye+Pq8Xu/fae9yarUHDw8P7xrvxtbbdZKtD9fBw8PDu8ZLlnvfenLj93slK+d7xsPDw/seXvvizh9Zcszg4eHh/UZeUihvHkpemuPh4eH9X14SRkTLjcrxvEy/mLXg4eHhzfPSp93uz3++0t/Dw8PDW3fVk5f4qcZ/zit2i4eHh3eB10YGs+CgXSFfM9knHh4e3lleewC8b7GNcdvRrvqIwsPDw7vA24w05UHq/jvtcVL32fDw8PBiXvvybZ9cUhDP4o9oh3h4eHgXeLNYdlNwt8V3vrcmfsHDw8Ob8z6LK4lfky3uw45j/T08PDy8ODHIC982wmiPitkhUR8PeHh4eEd5m3K2jRtmMW798+Dh4eEd5UWdsXjR9kG0gHplPDw8vAu8nHFq4GDzyPLmHB4eHt49XjvMtG9xnQo1omMADw8P7wJvs+nN63sW1OaHCh4eHt5t3qYN1g4TzOLaZP3iN8TDw8Nb8DbDUvmm87Bjc8D8daYMDw8P7wJvFhC0Re0nuDaxcjETgYeHh7fm7fPPPLrdhMX5v4RoMgIPDw9vwWtnDfKQN09T2+ZW9Mjw8PDwLvDaUKAti2cv9LPtNzw8PLwbvE2rvm3qtwMHmyYcHh4e3m3eJmbNm1JtyJuPKRQzEXh4eHiHeO2oU77p/VDCbPgADw8P7wZvFjTMCt82jGgPgH8MXeHh4eEd4rXRQx6zzjCbxtsmWMHDw8NreacOgzZcaIv15GBYpch4eHh4JW8WJczmFPLQ9kArDg8PD+8LeEm5nK/fBrV14IuHh4f3BbzZIZG3vmZRLx4eHt7P8/LiOCmdN8lxewitZsrw8PDwRrz2lu9bnw1UzUjPqQsPDw8v5f0BXwUDJ9v+id0AAAAASUVORK5CYII=" alt="二维码"></div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-list"></span><br><small>目录</small></p><div class="post-meta-value"><ol id="quicklink"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E8%AE%B0%E5%BD%95"><span class="toc-text">更新记录</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ospf-%E7%9C%9F%E5%A5%BD%E7%8E%A9"><span class="toc-text">OSPF 真好玩</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-text">发生了什么</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#babel-%E4%B9%9F%E5%BE%88%E5%A5%BD%E7%8E%A9"><span class="toc-text">Babel 也很好玩</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88-1"><span class="toc-text">发生了什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">正确的操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1"><span class="toc-text">如何防御</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B7%A6%E5%8F%B3%E6%A8%AA%E8%B7%B3"><span class="toc-text">左右横跳</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E6%83%85%E5%9B%9E%E9%A1%BE"><span class="toc-text">案情回顾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1-1"><span class="toc-text">如何防御</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%99%E6%AE%B5%E5%9C%B0%E5%9D%80%E5%88%B0%E5%BA%95%E5%A4%9A%E9%95%BF"><span class="toc-text">这段地址到底多长</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88-2"><span class="toc-text">发生了什么</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%8D-%E6%94%BE-%E9%80%81"><span class="toc-text">再 放 送</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%93%8D%E4%BD%9C-1"><span class="toc-text">正确的操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1-2"><span class="toc-text">如何防御</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#bird-%E5%B7%A6%E5%8F%B3%E4%BA%92%E6%90%8F"><span class="toc-text">Bird 左右互搏</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88-3"><span class="toc-text">发生了什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%93%8D%E4%BD%9C-2"><span class="toc-text">正确的操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%98%9F%E9%99%85%E7%8E%A9%E5%AE%B6"><span class="toc-text">星际玩家</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1-3"><span class="toc-text">如何防御</span></a></li></ol></li></ol></ol></div></div></div></div></div><div class="post-wrap"><h1 class="post-title"><a href="/article/modify-website/how-to-kill-the-dn42-network.lantian" rel="bookmark" title="如何引爆 DN42 网络（2020-08-28 更新）">如何引爆 DN42 网络（2020-08-28 更新）</a></h1><div class="post-text"><blockquote><p>DN42 是一个<strong>测试网络</strong>，所有人都在帮助所有人。即使你不小心搞砸了，也没有人会指责你。你可以在 DN42 的 <a target="_blank" rel="noopener" href="https://wiki.dn42.us/services/IRC">IRC 频道</a>，<a target="_blank" rel="noopener" href="https://wiki.dn42.us/contact#contact_mailing-list">邮件列表</a>或者<a target="_blank" rel="noopener" href="https://t.me/Dn42Chat">非官方 Telegram 群组</a>寻求帮助。</p></blockquote><p>由于 DN42 是一个实验用网络，其中也有很多新手、小白参与，因此时不时会有新手配置出现错误，而对整个 DN42 网络造成影响，甚至炸掉整个网络。</p><p>现在，作为一名长者（x），我将教各位小白如何操作才能炸掉 DN42，以及如果你作为小白的邻居（指 Peer 关系），应该如何防止他炸到你。</p><blockquote><p>注意：你不应该在 DN42 网络中实际执行这些操作，你应该更加注重对破坏的防御。</p><p>恶意破坏会导致你被踢出 DN42 网络。</p></blockquote><p>本文信息根据 Telegram 群及 IRC 中的<strong>真实惨案</strong>改编。</p><h1 id="%E6%9B%B4%E6%96%B0%E8%AE%B0%E5%BD%95" tabindex="-1">更新记录 <a class="header-anchor" href="#%E6%9B%B4%E6%96%B0%E8%AE%B0%E5%BD%95">¶</a></h1><ul><li>2020-08-27：格式修改，添加完整 IRC 日志，部分内容的中文翻译，添加另一段地址掩码填错的内容，以及 ASN 少了一位的内容。</li><li>2020-07-13：添加 Registry IPv6 地址段掩码填错的内容，和 Bird 不同协议左右互博的内容。</li><li>2020-05-30：第一版，包含 OSPF、Babel、左右横跳。</li></ul><h1 id="ospf-%E7%9C%9F%E5%A5%BD%E7%8E%A9" tabindex="-1">OSPF 真好玩 <a class="header-anchor" href="#ospf-%E7%9C%9F%E5%A5%BD%E7%8E%A9">¶</a></h1><p>你刚刚加入 DN42，并且准备把你手上的几台服务器都连接进去。你通过邮件，IRC 或者 Telegram 找了几个人分别和你的几台服务器 Peer，但是你还没有配置好你的内部路由分发。</p><p>于是你准备配置 OSPF，并打开 Bird 的配置文件加了一个 protocol：</p><pre><code class="hljs language-bash">protocol ospf {
+  ipv4 {
+    import all;
+    <span class="hljs-built_in">export</span> all;
+  };
+  area 0.0.0.0 {
+    interface zt0 {
+      <span class="hljs-built_in">type</span> broadcast;
+      <span class="hljs-comment"># 略掉一些不重要的参数</span>
+    };
+  };
+};
+</code></pre><p>你心满意足地把配置文件复制到每台服务器上，然后 <code><span class="hljs-attribute">bird configure</span></code>，看到你的各台服务器都通过 OSPF 获取到了其它服务器的路由。</p><p>突然，你的 IRC / Telegram 弹出了一个提示框，你点开来一看：</p><pre><code class="hljs language-html">&lt;mc**&gt; shit.... as424242**** is hijacking my prefixes, for example 172.23.*.*/27
+       草…… AS424242**** 在劫持我的地址前缀（即地址块），例如 172.23.*.*/27
+&lt;he**&gt; yup, I see some roa fails for them as well
+       对，我也看到 ROA 验证失败了
+</code></pre><p>恭喜你，你成功劫持了 DN42 网络（的一部分）。</p><h2 id="%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88" tabindex="-1">发生了什么 <a class="header-anchor" href="#%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88">¶</a></h2><p>当你的服务器通过 BGP 协议和其他人 Peer 时，每一条路由都包含了路径信息，包括它从哪里来，经过了哪些节点到达你这里。例如 <code><span class="hljs-number">172.22.76.184</span>/<span class="hljs-number">29</span></code> 这条路由可能就带有 <code><span class="hljs-symbol">4242422547 </span>-&gt; <span class="hljs-number">4242422601</span> -&gt; <span class="hljs-number">424242</span>****</code> 这条路径，其中 <code><span class="hljs-number">4242422547</span></code> 是路由来源（就是我），而 <code><span class="hljs-number">4242422601</span></code> 是你的邻居（此处以 Burble 举例）。</p><p>但是，你的内网在传递路由时使用的是 OSPF 协议，而 OSPF 在传递路由信息时不会保留 BGP 的路径，因为它并不认识这些东西。此时你的另一台服务器通过 OSPF 获取到了 <code><span class="hljs-number">172.22.76.184</span>/<span class="hljs-number">29</span></code> 这条路由，但是不包含任何路径信息，它在与邻居的 BGP 宣告中就会将这条路由使用你自己的 ASN 播出去，造成劫持效果。</p><p>画成图大概是这样的：</p><pre><code class="hljs language-bash">[2547] -&gt; [2601] -&gt; [你的 A 节点] -&gt; [你的 B 节点] -&gt; [你的 B 节点的邻居]
+ 2547      2547      2547           没了！           你的 ASN（BOOM）
+           2601      2601
+                     你的 ASN
+</code></pre><h1 id="babel-%E4%B9%9F%E5%BE%88%E5%A5%BD%E7%8E%A9" tabindex="-1">Babel 也很好玩 <a class="header-anchor" href="#babel-%E4%B9%9F%E5%BE%88%E5%A5%BD%E7%8E%A9">¶</a></h1><p>Telegram 里的老哥说话很好听，一边帮助你修上面那个 Bug，一边向你推荐 Babel：</p><ul><li>Babel 可以自动根据延迟选择最短路线；</li><li>Babel 配置非常简单。</li></ul><p>但是，群友不推荐你使用 Bird 自带的 Babel 协议支持，因为 Bird 的 Babel 不能根据延迟选路。</p><p>你心动了，删掉了 OSPF 的配置文件，并装了一个 Babeld。很快你的每台机器上都出现了其它节点通过 Babel 发来的路由。你等了几分钟，似乎没有爆炸。</p><p>但是你注意到，你的 Bird 没有把这些路由通过 BGP 发出去。老哥们怂恿你开启 Bird Kernel Protocol 的 Learn：</p><pre><code class="hljs language-bash">protocol kernel sys_kernel_v4 {
+  scan time 20;
+  <span class="hljs-comment"># 群友怂恿你添加这一行</span>
+  learn;
+  <span class="hljs-comment"># 不重要的略过</span>
+};
+</code></pre><p>你照做了。几分钟后，你被 IRC 和 Telegram 里的人疯狂艾特。是的，你又把其他人的网络劫持了。</p><h2 id="%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88-1" tabindex="-1">发生了什么 <a class="header-anchor" href="#%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88-1">¶</a></h2><p>这和上面 OSPF 一段其实是相同的问题，Babel 在传递路由时丢弃了 BGP 的路径信息。只不过默认情况下，Bird 会忽略其它路由软件写入内核路由表的路由信息，除非你开了 learn。</p><h2 id="%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%93%8D%E4%BD%9C" tabindex="-1">正确的操作 <a class="header-anchor" href="#%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%93%8D%E4%BD%9C">¶</a></h2><ul><li>永远记住一点原则：OSPF，Babel 等 IGP（内部路由协议）不应处理 BGP 路由信息，BGP 路由就应该让 BGP 协议自己处理。<ul><li>在网络内部配置 BGP 有多种方案，可以参考《<a href="/article/modify-website/bird-confederation.lantian/">Bird 配置 BGP Confederation</a>》这篇文章。</li></ul></li><li>同时，内部路由协议的路由也不应漏到 BGP 中，除非内部路由协议中处理的所有 IP 段都是你自己所有。</li><li>所以你应该把 BGP 的 <code><span class="hljs-builtin-name">export</span> filter</code> 写成这样：</li></ul><pre><code class="hljs language-bash"><span class="hljs-built_in">export</span> filter {
+  <span class="hljs-comment"># 只允许向外发送来自 STATIC（手动配置）和 BGP 协议的路由</span>
+  <span class="hljs-keyword">if</span> <span class="hljs-built_in">source</span> ~ [RTS_STATIC, RTS_BGP] <span class="hljs-keyword">then</span> accept;
+  <span class="hljs-comment"># 拒绝掉其它路由协议的路由</span>
+  reject;
+}
+</code></pre><h2 id="%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1" tabindex="-1">如何防御 <a class="header-anchor" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1">¶</a></h2><ul><li>最佳的方法是 ROA，即路由来源验证（<code><span class="hljs-attribute">Route Origin Authorization</span></code>），限制每条路由的来源 ASN。<ul><li>对于 DN42，ROA 配置文件根据 Registry 的信息自动生成，可以在 <a target="_blank" rel="noopener" href="https://wiki.dn42.us/howto/Bird#route-origin-authorization">DN42 Wiki 的 Bird 配置页面</a>下载，并且可以设置 Cron 定时任务自动更新。</li></ul></li><li>如果你不想配置 ROA，你可以尝试与尽量多的人 Peer。<ul><li>由于 BGP 默认选择经过的 AS 最少的路径，如果你和很多人直连，即使有人在劫持路由，你的网络仍然会优先选择这些直连路径。</li><li>但注意这样<strong>不能保证</strong>防住路由劫持，例如以下情况：<ul><li>真实 AS 到你路径比劫持者的长；</li><li>劫持者与真实 AS 到你的 AS 路径等长，此时会选择哪个看脸；</li><li>你有配置 DN42 Community Filter，导致劫持者的路由优先级比较高。</li></ul></li></ul></li></ul><h1 id="%E5%B7%A6%E5%8F%B3%E6%A8%AA%E8%B7%B3" tabindex="-1">左右横跳 <a class="header-anchor" href="#%E5%B7%A6%E5%8F%B3%E6%A8%AA%E8%B7%B3">¶</a></h1><p>左右横跳是多种错误的总称，它们会造成 BGP 路由程序频繁切换获得的最优路径。由于最优路径会通过 Peering 传递给别的节点，这个切换过程会造成连锁反应，相连的多个节点都会因为一个节点的故障而一起切换，最终故障扩散到全网。</p><p>这一过程会造成大量的流量消耗，而由于 DN42 内多数人用的是便宜的 VPS 做节点，因此长期下来结果只有以下两种：</p><ol><li>你的邻居发现了流量消耗异常，主动切断了和你的 Peering；</li><li>你的主机商（可能还有你的邻居的主机商）发现你长期占用带宽（或者用完了流量），停掉了你的 VPS。</li></ol><p>而且左右横跳错误可能会造成严重的影响：</p><ul><li>如果出错的 AS 和其它多个 AS 建立了 Peering，即使你断开了和他的直接连接，路由切换仍然可能从其它 AS 传递到你的 AS。<ul><li>为了解决一个 AS 的问题，可能需要断开好几个 AS。</li></ul></li></ul><p>例如，某 Telegram 群友从 Fullmesh + Direct 转向 Multihop 时出现事故，造成了非常大量的路由切换。</p><p><img src="../../../../usr/uploads/202008/i-love-niantic-network.png" alt="我永远喜欢 Niantic Network"></p><p>他在切换过程中没有断开 BGP，而 Babel 的配置错误导致大量路由被传递及撤销。</p><p>由于上述路由切换的连锁传递，并且该群友接了较多的 Peering，多个较大的 AS 被迫断开之间的连接，以（在该群友睡醒之前）控制住问题规模。</p><p>另外，该群友先前还有多次类似的路由切换事故，但这里地方太小了写不下。（滑稽）</p><h2 id="%E6%A1%88%E6%83%85%E5%9B%9E%E9%A1%BE" tabindex="-1">案情回顾 <a class="header-anchor" href="#%E6%A1%88%E6%83%85%E5%9B%9E%E9%A1%BE">¶</a></h2><pre><code class="hljs language-html">&lt;bur*&gt; is someone awake who is on telegram ?
+       有用 Telegram 的人醒着吗？
+&lt;bur*&gt; Kio*, sun*, ie**, lantian perhaps ?
+       可能是 Kio*，sun*，ie**，Lan Tian？
+&lt;Kio*&gt; Kio* is here
+       Kio* 在
+&lt;fox*&gt; I am in that dn42 telegram chat too but I do not understand moon runes
+       我也在 DN42 的 Telegram 群，但我不懂月相
+&lt;fox*&gt; also its midnight for china?
+       另外现在是中国的半夜？
+&lt;bur*&gt; yes, I'm going to be nuking a lot of peerings if they are all asleep
+       对，如果他们全在睡觉，我就要炸掉一大堆 Peering 了
+&lt;bur*&gt; I think its originating from NIA*, but a lovely multi mb/s flap going on for the past hour
+       我觉得问题来自 NIA*，一个小时前开始有一个好几 MB/s 的“可爱”的左右横跳
+&lt;bur*&gt; and its like whack-a-mole, if I disable one peering the traffic just pops up on a different one
+       而且像打地鼠，如果我关掉一个 Peering，它又会从另一个 Peering 上跳出来
+&lt;fox*&gt; petition for bur* network to stop accepting new peers to help save dn42 network health
+       建议 Bur* 的网络不要再接受新的 Peer 了，以保证“42 号去中心网络”的健康发展
+&lt;Kio*&gt; NIA* is awake now
+       NIA* 现在醒了
+&lt;bur*&gt; NIA* certainly has ipv4 next hop problems, they are advertising routes with next hops in other networks
+       NIA* 的 IPv4 Nexthop 肯定有问题，他们广播的路由的 Nexthop 都在其它网络
+&lt;Kio*&gt; He says he is adjusting his "network from full-mesh to rr and multihops"
+       他说他在“把网络从 Full-mesh 调整成 Route Reflector 和 Multihop”
+&lt;bur*&gt; well its not working ;)
+       唔姆，这没有正常工作 ;)
+&lt;stv*&gt; bur*: I also took down our peering
+       bur*：我也把我们的 Peering 断了
+&lt;bur*&gt; stv*, too much traffic from the grc?
+       stv*, 来自 GRC（全球路由收集节点）的流量太多了？
+&lt;stv*&gt; I added a new peer around 1hr ago. Just to check that this hasnt be the cause..
+       我一小时前接了一个新的 Peer，只是为了确认这不是原因……
+&lt;stv*&gt; bur*: no the grc is still up and running
+       bur*：不，GRC 还在正常工作
+&lt;bur*&gt; ah, if you are getting a lot of route updates its cos of NIA*
+       啊，如果你收到很多路由更新，它们是来自 NIA* 的
+&lt;bur*&gt; grc is currently pumping about 4mb/s to downstram peers
+       GRC 现在正在向下游发送 4 MB/s 的更新
+&lt;sun*&gt; bur*: what happen?
+       bur*：发生了什么？
+&lt;bur*&gt; NIA* is having issues
+       NIA* 出了问题
+&lt;bur*&gt; sun* anyway, you are up late!
+       sun* 不管怎么说，你睡得好晚！
+&lt;sun*&gt; I just came back from the bar:)
+       我刚从酒吧回来 :)
+&lt;do**&gt; don't drink and root
+       酒后不要 root（指用管理员权限修改系统）
+&lt;bur*&gt; nice :)
+       不错 :)
+&lt;sun*&gt; l like drink ;)
+       我喜欢喝酒 ;)
+&lt;bur*&gt; ok, I'm bored of this now, if you are currently sending me more than 1mb/s of bgp traffic your peering is about to get disabled.
+       行吧，我现在累了，如果你正在向我发送超过 1MB/s 的 BGP 流量，那你的 Peering 会被我禁用。
+&lt;bur*&gt; Kio*, sun*, Tch*, jrb*, lantian, ie**, so far
+       目前是 Kio*，sun*，Tch*，jrb*，Lan Tian，ie** 几个
+&lt;Kio*&gt; barely notice any flapping here, is it v4 or v6 ?
+       几乎没观察到左右横跳，是 IPv4 还是 IPv6？
+&lt;bur*&gt; 4 mostly, I think. you got killed on us-nyc1
+       我觉得大部分是 IPv4，你和我美国纽约 1 号节点的 Peer 被关了
+&lt;bur*&gt; Nap*
+       Nap*
+&lt;Nap*&gt; Shut mine down if you need, I can't look into with much detail until tonight
+       有必要的话就把我的 Peer 关了吧，我今晚之前都不能仔细检查
+&lt;bau*&gt; half of dn42 is about to loose connectivity due to bur* disableing peerings lol
+       哈哈，半个 DN42 会因为 Bur* 禁用 Peering 而断网
+&lt;do**&gt; oh yeah, this looks nice
+       哦耶，太棒了
+&lt;Kio*&gt; thats why everybody should be at least multi homed with two peers
+       因此所有人都应该至少接两个 Peer
+&lt;jrb*&gt; bur*: and on which peering?
+       bur*：在哪个 Peering 上？
+&lt;Kio*&gt; you shouldnt loose connectivity if only one peer drops
+       如果只有一个 Peer 掉线，你不应该也掉线
+&lt;bur*&gt; jrb* us-nyc1 and us-lax1 for you so far
+       jrb* 目前是美国纽约 1 号和美国洛杉矶 1 号
+&lt;jrb*&gt; mapping table says us-3 and us-5, let me check.
+       映射表显示是美国 3 号和 5 号，我检查一下。
+&lt;Nap*&gt; Do we know what routes are flapping causing the updates?
+       我们知道是谁的路由造成这些更新吗？
+&lt;Kio*&gt; filtering problematic ASN on my us node now
+       正在我的节点上过滤有问题的 ASN
+&lt;bur*&gt; Nap* its NIA*
+       Nap*，是 NIA*
+&lt;bur*&gt; AS42424213**
+       AS42424213**
+&lt;jrb*&gt; sun*, rou*: disabling my peerings with you for now, there seems to be serious flapping
+       sun*，rou*：我现在禁用和你们的 Peering，看起来有严重的左右横跳
+&lt;do**&gt; him again?
+       又是他？
+&lt;sun*&gt; what?
+       啥？
+&lt;sun*&gt; is me problem?
+       我的问题吗？
+&lt;bur*&gt; sun*, I've killed all of our peerings
+       sun*，我关掉了我们所有的 Peering
+&lt;sun*&gt; why?
+       为什么？
+&lt;bur*&gt; sun*, you are distributing the problems from NIA*
+       sun*，你在传递 NIA* 造成的问题
+&lt;Nap*&gt; bur*: K, gonna try to filter on ATL/CHI at least.
+       bur*：行，准备尝试至少在亚特兰大和芝加哥节点上做过滤。
+&lt;bur*&gt; thanks Nap*
+       谢了 Nap*
+&lt;Kio*&gt; recommend everybody to temporarily enable "bgp_path ~" filter for the problematic ASN
+       推荐所有人暂时打开“bgp_path ~”过滤掉有问题的 ASN
+&lt;sun*&gt; i disabled NIA*, would fix problem?
+       我禁用了 NIA*，会解决问题吗？
+&lt;do**&gt; bur*: I also peer with NIA* and I don't get any bgp updates from him
+       bur*：我也和 NIA* Peer 了，但没收到他的任何 BGP 更新
+&lt;do**&gt; ah wait
+       啊等等
+&lt;bur*&gt; sun*, depends if you are also getting the updates from other peers too
+       sun*，取决于你会不会也从其他 Peer 收到这些更新
+&lt;do**&gt; now I see it
+       现在我看到了
+&lt;do**&gt; disabling peering
+       正在禁用 Peering
+&lt;sun*&gt; if bgp_path ~ [= 42424213** =] then reject;
+       （Bird Filter 命令）
+&lt;bur*&gt; ~ [= * 42424213** * =] to reject all paths
+       用“~ [= * 42424213** * =]”过滤掉所有包含他的路径
+&lt;sun*&gt; ohh
+       噢哦
+&lt;jrb*&gt; bur*: seems to be mostly rou* from my perspective
+       bur*：从我这看主要是 rou*
+&lt;Kio*&gt; Should be filtered on my side, if anyone continues to receive those updates please notify
+       我这里应该过滤好了，如果任何人继续收到这些更新，请通知我
+&lt;bur*&gt; sun*, I tried re-enabling you on lax1 but you jumped striaght to 1mb/s+ again
+       sun*，我尝试在洛杉矶 1 号节点重新启用我们的 Peering，但流量马上到了 1 MB/s 多
+&lt;bur*&gt; jrb*, re-enabled
+       jrb*，重新启用了
+&lt;sun*&gt; i have disabled NIA*
+       我也禁用 NIA* 了
+&lt;bur*&gt; Kio*, re-enabled
+       Kio*，重新启用了
+&lt;do**&gt; oh btw, I have notified NIA* about this issue
+       哦顺便提一句，我已经告知 NIA* 这个问题了
+&lt;jrb*&gt; do**: also tell him to notify everybody to get out of the blacklists.
+       do**：另外告诉他（修好网络后）通知所有人解除黑名单。
+&lt;do**&gt; jrb*: will do
+       jib*：好的
+&lt;Nap*&gt; bur*: I should have it filtered on my ATL (your CHI)
+       bur*：我应该在我的亚特兰大节点上过滤了（对应你的芝加哥节点）
+&lt;Kio*&gt; wrote NIA* also directly on telegram
+       在 Telegram 上直接向 NIA* 发了消息
+&lt;sun*&gt; bur*: is it better now?
+       bur*：现在好点了吗？
+&lt;bur*&gt; for the record, this is the first time that I've mass disabled peerings, but this was causing issues across the board
+       这是我有史以来第一次大规模禁用 Peering，但这次的确造成了很多问题
+&lt;bur*&gt; sun*, no not really
+       sun*，不，没有
+&lt;An**&gt; I've stop importing route from NIA*
+       我已经停止从 NIA* 导入路由了
+&lt;stv*&gt; I am also dropping NIA* now
+       我现在也丢弃 NIA*（的路由）了
+&lt;bur*&gt; sun*, thats like 1k updates every few seconds
+       sun*，每过几秒就会有一千条路由更新
+&lt;Nap*&gt; bur*: all host should have it filtered now.
+       bur*：所有节点都应该过滤了。
+&lt;bur*&gt; Nap*, looks to me, thanks
+       Nap*，看起来没问题，谢谢
+&lt;sun*&gt; bur*: seems to have reduced traffic
+       bur*：看起来流量降低了
+&lt;bur*&gt; sun*, yes that looks better
+       sun*，的确看起来好些了
+&lt;bur*&gt; sun*, is that now ok across all your nodes ?
+       sun*，现在你的所有节点都正常吗？
+&lt;sun*&gt; yep
+       对
+&lt;bur*&gt; sun*, ok re-enabled
+       sun*，好的，重新启用了
+&lt;do**&gt; alright, also filtered 42424213**
+       好的，也把 42424213** 过滤了
+&lt;tm**&gt; hi, also filtered 42424213**
+       大家好，我也把 42424213** 过滤了
+&lt;bur*&gt; I guess they got the message, seems we're back to normal again and everyone I disabled is back again
+       我猜他们（指 NIA*）收到消息了，看起来我们再次回复正常了，所有我禁用的人都被重新启用了
+&lt;do**&gt; bur*: I think NIA* is asleep, probably everyone filtered it
+       bur*：我觉得 NIA* 还在睡觉，也许所有人都过滤了
+&lt;do**&gt; or disabled peering
+       或者禁用了 Peering
+&lt;bur*&gt; do**, there is that, but I also renabled NIA* and am not getting the same errors now
+       do**，有可能，但我也重新启用了 NIA*，现在没有看到先前的错误
+&lt;do**&gt; oh, interesting
+       哦，有趣
+&lt;bur*&gt; I might regret doing that by morning, but hey. I do try and keep everything open as best as possible.
+       到了早上我有可能会后悔（指 NIA* 的问题在 bur* 睡觉时再次出现），但我尝试尽量公开/开放所有东西。
+&lt;do**&gt; bur*: last time when NIA* did that I waited for their response
+       bur*：上次 NIA* 搞出这种事情的时候，我等他们的回复（后才采取行动）
+&lt;Kio*&gt; Nope nia* just messaged in Telegram about it
+       不，NIA* 刚在 Telegram 上发了消息
+&lt;do**&gt; ah
+       啊
+&lt;bur*&gt; my peering hasn't re-established, so I guess they hit the big red shutdown button
+       我（和 NIA*）的 Peering 还没有重新建立，我猜他们按下了那个巨大的、红色的关闭按钮
+&lt;Kio*&gt; He tried to migrate his network to a full mesh
+       他尝试把网络迁移到 Full mesh
+&lt;Kio*&gt; and is now "pulling all the wires"
+       现在正在“全部拔线”
+&lt;do**&gt; Kio*: did you message him directly or was that on any of the groups?
+       Kio*：你给他直接发了消息吗，还是在哪个群里？
+&lt;Kio*&gt; on the telegram group
+       在 Telegram 群里
+&lt;do**&gt; bur*: you didn't get that many bgp updates from me?
+       bur*：你没有从我这里收到那么多 BGP 更新？
+&lt;sun*&gt; NIA* woke up :)
+       NIA* 醒了 :)
+&lt;bur*&gt; do**, you went from an average of ~3kbs to ~10kbs+, peaking at 50kbs. In the grand scheme of things that was lost in the noise
+       do**，你从平均 3 KB/s 到十几 KB/s，峰值 50 KB/s。在如此巨大的量级中这点小问题被淹没了
+&lt;do**&gt; interesting
+       有趣
+&lt;do**&gt; I also peer directly with NIA*
+       我也和 NIA* 直接 Peer 了
+&lt;bur*&gt; do**, yes, interesting. Is the link restricted in bandwidth ?
+       do**，是的，有趣。（你和他的）链路有带宽限制吗？
+&lt;do**&gt; not at all
+       完全没有
+</code></pre><h2 id="%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1-1" tabindex="-1">如何防御 <a class="header-anchor" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1-1">¶</a></h2><ul><li>最理想的方案是 Route Dampening，也就是限制一段时间能收到的路由更新数量。<ul><li>但是 Bird 不支持这个，没救了，等死吧，告辞.heic</li></ul></li><li>次优的方法是使用 Prometheus、Grafana 等工具对各个节点进行监控，在流量异常时收到提醒，上去手动处理。<ul><li>显而易见的是，如果你当时不在线，当你看到提醒时有可能已经几 G 的流量没了。</li></ul></li><li>再次优的方法是对 Peering 的端口进行限速。<ul><li>由于 DN42 内目前几乎没有大流量应用，这种方法的确能保证安全。</li><li>缺点显而易见：性能下降。</li></ul></li><li>土豪的方法是买无限流量的服务器。</li></ul><h1 id="%E8%BF%99%E6%AE%B5%E5%9C%B0%E5%9D%80%E5%88%B0%E5%BA%95%E5%A4%9A%E9%95%BF" tabindex="-1">这段地址到底多长 <a class="header-anchor" href="#%E8%BF%99%E6%AE%B5%E5%9C%B0%E5%9D%80%E5%88%B0%E5%BA%95%E5%A4%9A%E9%95%BF">¶</a></h1><p>因为今年是 2020 年，你准备给你的网络加一组 IPv6 地址。按照<a href="/article/modify-website/dn42-experimental-network-2020.lantian">我的 DN42 注册教程</a>，你很快就给自己注册了一个 IPv6 地址块，并且很快被合并进了 Registry。</p><p>在你看来，一切都很正常。但在地球的另一边，一个人的手机 / 电脑上弹出消息，告诉他他的 DN42 ROA 记录生成器出现了错误。他打开 Registry，扶额叹息，并 commit 了这样一个修改：</p><p><img src="../../../../usr/uploads/202007/dn42-registry-error.png" alt="DN42 Registry 中的错误 IPv6 地址块"></p><p><a target="_blank" rel="noopener" href="https://git.dn42.dev/dn42/registry/commit/9f45ee31cdea4a997d59a262c4a8ac8eb3cbd1f1">https://git.dn42.dev/dn42/registry/commit/9f45ee31cdea4a997d59a262c4a8ac8eb3cbd1f1</a></p><h2 id="%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88-2" tabindex="-1">发生了什么 <a class="header-anchor" href="#%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88-2">¶</a></h2><p>这位群友添加了 <code>fd37:<span class="hljs-number">03b3</span>:cae6:<span class="hljs-number">5158</span>::/<span class="hljs-number">48</span></code> 这样一个地址块。因为一个 IPv6 地址由 32 个 16 进制数构成（共 128 比特），而这个地址块显式定义了其中的前 16 个数（即 64 位），对应的子网掩码应该是 <code><span class="hljs-string">/64</span></code> 或更高。</p><p>但是由于未知原因，这个错误没有被 DN42 Registry 的内容检查程序检查出来，当时也没有被操作合并的管理员发现，就成功进入了 Registry。</p><p>随后，ROA 记录生成器在解析 Registry 内容时遇到了这个格式错误的地址块，就直接报错退出了。</p><h1 id="%E5%86%8D-%E6%94%BE-%E9%80%81" tabindex="-1">再 放 送 <a class="header-anchor" href="#%E5%86%8D-%E6%94%BE-%E9%80%81">¶</a></h1><p><img src="../../../../usr/uploads/202008/dn42-registry-error.png" alt="DN42 Registry 中的错误 IPv6 地址块 - 再放送"></p><p><a target="_blank" rel="noopener" href="https://git.dn42.dev/dn42/registry/commit/00f90f592a35e325152ce28157f64d3fca7c8d7d">https://git.dn42.dev/dn42/registry/commit/00f90f592a35e325152ce28157f64d3fca7c8d7d</a></p><h2 id="%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%93%8D%E4%BD%9C-1" tabindex="-1">正确的操作 <a class="header-anchor" href="#%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%93%8D%E4%BD%9C-1">¶</a></h2><ul><li>用户在注册地址块时应该检查子网掩码的大小和地址块的有效性。</li><li>DN42 Registry 的检查程序，或者操作合并的管理员，应该发现这个错误。</li><li>ROA 生成器应该跳过这条有问题的记录，正常处理剩下的数据，而非报错退出。</li></ul><p>万幸的是这个问题对整个 DN42 网络影响不大，只是 ROA 更新延迟了几小时而已。</p><h2 id="%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1-2" tabindex="-1">如何防御 <a class="header-anchor" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1-2">¶</a></h2><p>由于 DN42 从建立之初就在强调去中心特性，因此你可以写一个自己的 ROA 生成器作为备份。</p><blockquote><p>虽然这次我的 ROA 生成器也挂掉了……</p></blockquote><p>原因是不同人写的程序即使功能相同，也会在实现上有细微的差别。这样在遇到这样一个输入内容的 Bug 时，就有可能有人的程序仍能保持正常运行。</p><h1 id="bird-%E5%B7%A6%E5%8F%B3%E4%BA%92%E6%90%8F" tabindex="-1">Bird 左右互搏 <a class="header-anchor" href="#bird-%E5%B7%A6%E5%8F%B3%E4%BA%92%E6%90%8F">¶</a></h1><p>我有一个朋友…… 行吧就是我自己。</p><p>因为我同时接了 DN42 和 NeoNetwork，还有一段自己的内网，所以为了防止把内网路由发到 DN42 和 NeoNetwork，我采取了以下方法：</p><ul><li>把所有来自 Kernel 协议（从内核获取路由）和 Direct 协议（获取系统网络界面（网卡）所在的网段）的路由打上一个 Community。</li><li>在 DN42 和 NeoNetwork 的 Peering 中把它们过滤掉。</li><li>这样我的内网 IP 就不会被广播出去，但因为 DN42 和 NeoNetwork 的路由被配置在 Static Protocol 中，所以不受影响。</li></ul><p>配置完后一切看起来都很正常，直到几天后群友发现我的 Telegram Bot（就是我的 Looking Glass）Ping 不通任何 DN42 内的 IP。</p><h2 id="%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88-3" tabindex="-1">发生了什么 <a class="header-anchor" href="#%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88-3">¶</a></h2><p>刚开始一切都很正常，我的网段 <code><span class="hljs-number">172.22.76.184</span>/<span class="hljs-number">29</span></code> 被正常广播。直到某次 Direct 协议刷新了一次，从系统的某个网络界面获取到了 <code><span class="hljs-number">172.22.76.184</span>/<span class="hljs-number">29</span></code> 这个网段，并再次将它传进了路由表。</p><p>这条新的路由信息就把原先的路由覆盖了，同时因为这条路由来自 Direct 协议，被打上了 Community，就不再被广播了。并且 Static 如其名是 “静态” 协议，其内容不会改变，自然也不会产生新的路由再覆盖回去。</p><p>此时我相当于停止宣告了我的 IP 段，自然就无法收到回程数据包了。</p><h2 id="%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%93%8D%E4%BD%9C-2" tabindex="-1">正确的操作 <a class="header-anchor" href="#%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%93%8D%E4%BD%9C-2">¶</a></h2><p>在 Bird 中，尽量避免多个路由协议产生相同的路由条目，相互覆盖可能会造成不可预料的后果。</p><p>我最终选择添加 Filter 将 Direct 协议限制在我的内网网段，避免它再次覆盖我的 DN42 网段。</p><h1 id="%E6%98%9F%E9%99%85%E7%8E%A9%E5%AE%B6" tabindex="-1">星际玩家 <a class="header-anchor" href="#%E6%98%9F%E9%99%85%E7%8E%A9%E5%AE%B6">¶</a></h1><p>一名新玩家注册了一个 ASN：</p><p><img src="../../../../usr/uploads/202008/dn42-asn-error.png" alt="DN42 Registry 中的错误 ASN"></p><p>这是 DN42 发生的变化：</p><ul><li><p>Telegram 群：</p><p><img src="../../../../usr/uploads/202008/dn42-asn-error-response.png" alt="Telegram 群友的反应"></p></li><li><p>蒂 花 之 秀：</p><p><img src="../../../../usr/uploads/202008/dn42-asn-error-response-2.png" alt="Telegram 群友的反应 2"></p></li><li><p>IRC：</p><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">lantian</span>&gt;</span> Someone successfully registered in DN42 with ASN 424242236 (9 digits)
+          有人成功在 DN42 上注册了 ASN 424242236（9 位数）
+<span class="hljs-tag">&lt;<span class="hljs-name">lantian</span>&gt;</span> Is this expected?
+          这是正常的吗？
+   &lt;xu**&gt; doh
+          噢
+   &lt;xu**&gt; shouldt have happened
+          不应该发生
+   &lt;xu**&gt; probably forgot the extra 2
+          或许忘了个 2
+   &lt;xu**&gt; 424242 2236
+          424242 2236
+   &lt;Kai*&gt; too late tho. it already has one peer with tech9
+          太晚了，已经和 Tech9 Peer 上了
+   &lt;dne*&gt; filtering fail!
+          过滤器挂了！
+   &lt;xu**&gt; pomoke?
+          （用户名）
+<span class="hljs-tag">&lt;<span class="hljs-name">lantian</span>&gt;</span> yep, doesn't seem to be on irc though
+          对，但看起来不在 IRC 上
+<span class="hljs-tag">&lt;<span class="hljs-name">lantian</span>&gt;</span> nor on telegram
+          也不在 Telegram 上
+   &lt;0x7*&gt; so how a 9-digit ASN passed the schema checker...?
+          所以 9 位数 ASN 怎么过的检查程序……？
+<span class="hljs-tag">&lt;<span class="hljs-name">lantian</span>&gt;</span> I don't think schema checker checks ASN, or it will block out clearnet ASNs
+          我不觉得检查程序会检查 ASN，否则会阻挡掉公网 ASN
+<span class="hljs-tag">&lt;<span class="hljs-name">lantian</span>&gt;</span> But maybe we need a warning?
+          但也许需要加个警告？
+   &lt;xu**&gt; probably a bug in the policy checker
+          也许是检查程序的一个 Bug
+   &lt;xu**&gt; i wish we had gone with a prefix that had a visual space
+          我希望我们的 ASN 前缀有个看起来明显的分隔
+   &lt;xu**&gt; like AS424200xxxx
+          例如 AS424200xxxx
+<span class="hljs-tag">&lt;<span class="hljs-name">lantian</span>&gt;</span> Well pomoke tried to peer with me via email (but ended in spam folder)
+          总之 Pomoke 尝试发邮件找我 Peer（但进了垃圾箱）
+<span class="hljs-tag">&lt;<span class="hljs-name">lantian</span>&gt;</span> I'm going to tell him/her to correct the ASN
+          我准备告诉他/她改正自己的 ASN
+   &lt;Kai*&gt; 9 is a good number tho
+          不管怎么说 9 是个好数字
+   &lt;Kai*&gt; once in a blue moon that bur* made mistake
+          bur* 犯错，蓝月将至（英语成语，即千载难逢）
+   &lt;sun*&gt; westerners love digital 9
+          西方人喜欢数字 9
+   &lt;bur*&gt; crap
+          草
+   &lt;bur*&gt; lantian, are you in contact with pomoke? if they can submit a fix quickly
+          then I'll merge it. Otherwise I'll need to pull the commit
+          Lan Tian，你能联系上 Pomoke 吗？如果他们可以迅速提交修正信息我就马上把它合并了。
+          否则我就得撤销变更了
+<span class="hljs-tag">&lt;<span class="hljs-name">lantian</span>&gt;</span> bur*: I sent him/her an email, not sure about response time
+          bur*，我给他/她发了封邮件，不知什么时候会回
+   &lt;bur*&gt; umm, I'm going to have to pull it then
+          唔姆，那我就不得不撤销了
+</code></pre></li><li><p>裁决之镰：</p><p><img src="../../../../usr/uploads/202008/dn42-asn-error-correction.png" alt="错误被撤销"></p></li></ul><h2 id="%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1-3" tabindex="-1">如何防御 <a class="header-anchor" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E5%BE%A1-3">¶</a></h2><ul><li><p>看戏就完事了，这种事情太少见了：</p><pre><code class="hljs language-html">&lt;Kai*&gt; once in a blue moon that bur* made mistake
+       bur* 犯错，蓝月将至
+</code></pre></li><li><p>当然看戏归看戏，还是要上 IRC 说一句出问题了。</p></li><li><p>在和别人 Peer 的时候，多检查一遍对方的信息。</p></li><li><p>以及没事可以翻翻 <a target="_blank" rel="noopener" href="https://t.me/DN42new">DN42 New ASN</a> 这个自动推送新 ASN 的 Telegram 频道。</p></li></ul></div><div class="clearfix" id="post-navi"><div class="float-right text-right"><a href="/article/random-notes/youhua-pt926g-fiber-modem-crack.lantian" title="友华 PT926G 光猫破解">友华 PT926G 光猫破解</a><br>下一篇文章 &raquo;</div><div class="float-left text-left position-absolute">&laquo; 上一篇文章<br><a href="/article/modify-website/selfhost-dns-root-server.lantian" title="自建 DNS 根服务器">自建 DNS 根服务器</a></div></div><p class="text-center">本站使用 Disqus 评论系统，中国大陆访问可能不稳定。</p><div id="disqus_thread"></div><script>var disqus_config=function(){this.page.url="https://lantian.pub/article/modify-website/how-to-kill-the-dn42-network.lantian",this.page.identifier="/article/modify-website/how-to-kill-the-dn42-network.lantian"}</script><noscript>请启用 JavaScript 以查看 <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">Disqus</a> 评论区。</noscript></div></div></article></div><aside class="d-none d-lg-block"><section class="widget"><h3>最新文章</h3><ul class="list-unstyled"><li>05-02 <a href="/article/modify-website/dn42-experimental-network-2020.lantian">DN42 实验网络介绍及注册教程（2021-05-02 更新）</a></li><li>04-19 <a href="/article/modify-website/serve-dn42-whois-with-nginx.lantian">将 nginx 用作 DN42 WHOIS 服务器</a></li><li>03-21 <a href="/article/modify-website/serve-gopher-with-nginx.lantian">用 nginx 建立 Gopher 网站</a></li><li>12-27 <a href="/article/modify-website/4kb-infinite-sleep-docker-image.lantian">制作只有 4KB 大小的永久挂起程序</a></li><li>11-29 <a href="/article/modify-website/static-build-tiny-docker-images.lantian">静态编译制作微型 Docker 镜像</a></li><li>10-11 <a href="/article/creations/traceroute-chain.lantian">优雅地在 Traceroute 里膜 拜大佬</a></li><li>10-03 <a href="/article/random-notes/youhua-pt926g-disable-tr069.lantian">友华 PT926G 关闭 TR069</a></li><li>09-23 <a href="/article/modify-website/post-quantum-encryption.lantian">未雨绸缪：使用后量子时代的加密算法</a></li><li>09-05 <a href="/article/modify-website/selfhost-dns-root-server.lantian">自建 DNS 根服务器</a></li><li>08-28 <a href="/article/modify-website/how-to-kill-the-dn42-network.lantian">如何引爆 DN42 网络（2020-08-28 更新）</a></li><li>08-13 <a href="/article/random-notes/youhua-pt926g-fiber-modem-crack.lantian">友华 PT926G 光猫破解</a></li><li>08-01 <a href="/article/modify-website/an-elegant-scripture-of-safety-generator.lantian">制作一个优雅的平安经生成器</a></li><li>06-25 <a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus MUXless 下的 Intel 和 NVIDIA 虚拟机显卡直通</a></li><li>06-17 <a href="/article/one-pic/if-you-wanna-take-the-bite.lantian">愿者上钩（指美国签证）</a></li><li>06-08 <a href="/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian">毕业设计 - 传感器网络开发踩坑记录</a></li></ul></section><section class="widget"><h3>最新评论</h3><ul class="dsq-widget-list"><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">这一步我当时没遇到这个问题，可能是后面 QEMU 等版本有了更新。因为此时虚拟机的主显卡还是 QXL，Intel 显卡还没被正常驱动。你具体是遇到了什么错误？</span><p class="dsq-widget-meta"><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus 下的 Intel 和 NVIDIA 虚拟机显卡直通</a><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5434808981">2 weeks ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/EdenJohnson_atDisqus/">EdenJohnson</a> <span class="dsq-widget-comment">博主，关于Intel GVT-g“修改虚拟机配置，让虚拟显卡对虚拟机可见”这一节应该先把后面的qemu:commandline 写上 否则会因为POSTed名称不正确拒绝启动的说</span><p class="dsq-widget-meta"><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus 下的 Intel 和 NVIDIA 虚拟机显卡直通</a><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5433712806">2 weeks ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">i-83.net（即 QuadHost）但是不要买 不要买 不要买，我已经扔了，太不稳定了根本没法用，工单一个月不回</span><p class="dsq-widget-meta"><a href="/article/random-notes/debian-10-on-openvz-6.lantian">在 OpenVZ 6 上安装/升级到 Debian 10</a><a href="/article/random-notes/debian-10-on-openvz-6.lantian#comment-5398922977">1 month ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/maylihe/">Yo</a> <span class="dsq-widget-comment">大佬你1刀一年的openvz哪里买的？</span><p class="dsq-widget-meta"><a href="/article/random-notes/debian-10-on-openvz-6.lantian">在 OpenVZ 6 上安装/升级到 Debian 10</a><a href="/article/random-notes/debian-10-on-openvz-6.lantian#comment-5394222113">1 month ago</a></p></li><li class="dsq-widget-item">butdown <span class="dsq-widget-comment">rp_filter 一定要设置成0，刚刚跟kioubit解决完dns问题后的惨痛教训……</span><p class="dsq-widget-meta"><a href="/article/modify-website/dn42-experimental-network-2020.lantian">DN42 实验网络介绍及注册教程（2020 版）</a><a href="/article/modify-website/dn42-experimental-network-2020.lantian#comment-5366564019">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/disqus_lq2m2HGaPo/">Rangel Alvarado</a> <span class="dsq-widget-comment">I just follow the guide even the compilations things (vBiosFinder,OVMF_VARS.fd and the...</span><p class="dsq-widget-meta"><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">Intel and NVIDIA GPU Passthrough on a Optimus MUXless Laptop</a><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5364964743">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/kanzakitsukasa/">Kanzaki Tsukasa</a> <span class="dsq-widget-comment">感谢回复~ 无法 ping 通可能是因为 Linux 默认禁止普通用户 ping，可以用下面一行命令解决： sudo sysctl -w...</span><p class="dsq-widget-meta"><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian">（怀旧）ATduck 虚拟 Modem 拨号上网</a><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian#comment-5363079969">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/ttnb/">TTNB</a> <span class="dsq-widget-comment">@disqus_lq2m2HGaPo:disqus could you please elaborate how you resolved your problem? What did you...</span><p class="dsq-widget-meta"><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">Intel and NVIDIA GPU Passthrough on a Optimus MUXless Laptop</a><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5362718819">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">抱歉回复晚了，Disqus 把你的评论判为 Spam 了，没给我发通知邮件。 在有显卡直出的机器上，把显卡直通进虚拟机的实用性会高很多，因为你可以接个外接屏，或者用“假显示器”+steam...</span><p class="dsq-widget-meta"><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus 下的 Intel 和 NVIDIA 虚拟机显卡直通</a><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5361950865">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">抱歉回复晚了，你的评论被 Disqus 判为 Spam，没有给我发通知邮件。 无法 ping 通可能是因为 Linux 默认禁止普通用户 ping，可以用下面一行命令解决： sudo...</span><p class="dsq-widget-meta"><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian">（怀旧）ATduck 虚拟 Modem 拨号上网</a><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian#comment-5361944929">2 months ago</a></p></li></ul></section><section class="widget"><h3>其它功能</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-rss"></i> <a href="/rss2.xml" target="_blank">RSS 订阅</a> | <a href="/feed.xml" target="_blank">Atom</a> | <a href="/feed.json" target="_blank">JSON</a></li><li><i class="fas fa-fw fa-globe"></i> <a href="https://stats.uptimerobot.com/BLK6VsRkR" target="_blank">服务器状态</a></li><li><i class="fas fa-fw fa-sitemap"></i> <a href="https://lg.lantian.pub" target="_blank">DN42 节点状态</a></li></ul></section><section class="widget"><h3>友情链接</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://0x7f.cc">0x7f Blog 🐑</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://alanyhq.com">Alanyhq</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://blog.cas7.moe">Blog of Moecast</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://jerryxiao.cc">JerryXiao</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://lsc.moe">LSC.MOE</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://sangsir.com">SangSir | 艺术界的一朵奇葩</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://yuetau.net">YuetAu&#39;s Spot</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="http://foreverblog.cn">十年之约</a></li></ul></section></aside></div><footer class="lantian clearfix"><div id="copyright" class="float-right text-right"><i class="fas fa-copyright"></i> 2012-2021 Lan Tian @ Blog<br><small>基于 <a href="https://hexo.io/" target="_blank">Hexo</a> 构建 @ 2021-07-13 09:41</small></div></footer></div></body></html>

@@ -1,0 +1,196 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: Hacking a Youhua PT926G Fiber Optic Modem		{{server_addr}}	{{server_port}}
+icategories: "Random Notes"		{{server_addr}}	{{server_port}}
+itags: [Youhua PT926G, Fiber Optic Modem, Hack]		{{server_addr}}	{{server_port}}
+idate: 2020-08-13 20:43:26		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis article explains the prodecure to obtain such privileges from a		{{server_addr}}	{{server_port}}
+iYouhua PT926G fiber optic modem, without disassembling the device or		{{server_addr}}	{{server_port}}
+iusing serial port converters.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Super Admin users on Web UI (telecomadmin)		{{server_addr}}	{{server_port}}
+i- Telnet's root user access		{{server_addr}}	{{server_port}}
+i- FTP access		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFYI I obtained the device from China Telecom, Guangdong Shenzhen.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Log on as Super Admin		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you directly access the modem's IP (`http://192.168.1,1`), you will		{{server_addr}}	{{server_port}}
+isee such a login page to the modem:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IYouhua PT926G Login Page	/usr/uploads/202008/youhua-pt926g-default-page.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere you can login with account name `useradmin` and the password		{{server_addr}}	{{server_port}}
+ilabeled on the back of the modem, but there's not much you can do one		{{server_addr}}	{{server_port}}
+ilogged in. The only useful thing seems to be Wi-Fi setting.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut a nmap scan reveals much more:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i$ nmap -v 192.168.1.1		{{server_addr}}	{{server_port}}
+i# Some output redacted for simplicity		{{server_addr}}	{{server_port}}
+iPORT      STATE    SERVICE		{{server_addr}}	{{server_port}}
+i21/tcp    filtered ftp		{{server_addr}}	{{server_port}}
+i22/tcp    filtered ssh		{{server_addr}}	{{server_port}}
+i23/tcp    filtered telnet		{{server_addr}}	{{server_port}}
+i53/tcp    filtered domain		{{server_addr}}	{{server_port}}
+i80/tcp    open     http		{{server_addr}}	{{server_port}}
+i445/tcp   open     microsoft-ds		{{server_addr}}	{{server_port}}
+i8080/tcp  open     http-proxy		{{server_addr}}	{{server_port}}
+i10001/tcp open     scp-config		{{server_addr}}	{{server_port}}
+i32768/tcp open     filenet-tms		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThere is a port 8080 that we can try accessing		{{server_addr}}	{{server_port}}
+i(`http://192.168.1.1:8080`):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IYouhua PT926G Port 8080 Login Page	/usr/uploads/202008/youhua-pt926g-8080.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWell, looks familiar enough.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> I'm saying this because similar login UI can be found on a lot of		{{server_addr}}	{{server_port}}
+i> older fiber optic modems provided by China Telecom.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLet's try China Telecom's default password		{{server_addr}}	{{server_port}}
+i(`telecomadmin / nE7jA%5m`):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> This is the default super admin password for modems after a factory		{{server_addr}}	{{server_port}}
+i> reset, but before the modem registers to ISP.		{{server_addr}}	{{server_port}}
+i>		{{server_addr}}	{{server_port}}
+i> Usually ISP will push a config update to change the password.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IYouhua PT926G Port 8080 UI	/usr/uploads/202008/youhua-pt926g-8080-logged-on.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnd I'm in. China Telecom Shenzhen simply don't change that password.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> If the password is changed by your local China Telecom, you have a		{{server_addr}}	{{server_port}}
+i> few options:		{{server_addr}}	{{server_port}}
+i>		{{server_addr}}	{{server_port}}
+i> - Record the modem's LOID, pull out the fiber optic cable, reset the		{{server_addr}}	{{server_port}}
+i>   modem to factory default, log in with the default password and		{{server_addr}}	{{server_port}}
+i>   disable config updates, and finally type in LOID to connect to the		{{server_addr}}	{{server_port}}
+i>   Internet.		{{server_addr}}	{{server_port}}
+i> - Disassemble the modem and use a serial port converter to log in.		{{server_addr}}	{{server_port}}
+i>		{{server_addr}}	{{server_port}}
+i> I'm not covering these options in this article, you need to do your		{{server_addr}}	{{server_port}}
+i> own research.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Turn on Telnet		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBased on		{{server_addr}}	{{server_port}}
+i[this post by tm5880891 on ChinAdsl.net](http://www.chinadsl.net/forum.php?mod=viewthread&tid=165272),		{{server_addr}}	{{server_port}}
+ifollow the steps:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. First log in as `telecomadmin` at `http://192.168.1.1:8080`		{{server_addr}}	{{server_port}}
+i   - This may not be necessary, and you may try skipping this if you		{{server_addr}}	{{server_port}}
+i     don't know the telecomadmin password.		{{server_addr}}	{{server_port}}
+i2. Open		{{server_addr}}	{{server_port}}
+i   `http://192.168.1.1:8080/cgi-bin/abcdidfope94e0934jiewru8ew414.cgi`,		{{server_addr}}	{{server_port}}
+i   and the page should show `success`.		{{server_addr}}	{{server_port}}
+i3. Then you can `telnet 192.168.1.1`.		{{server_addr}}	{{server_port}}
+i   - Username: `admin`		{{server_addr}}	{{server_port}}
+i   - Password: `TeleCom_1234`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut once logged on, the telnet provides a modified shell, that only		{{server_addr}}	{{server_port}}
+iallows running commands in a (small) list:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- ip		{{server_addr}}	{{server_port}}
+i- ifconfig		{{server_addr}}	{{server_port}}
+i- route		{{server_addr}}	{{server_port}}
+i- ping		{{server_addr}}	{{server_port}}
+i  - You may use them for diagnostic purposes.		{{server_addr}}	{{server_port}}
+i- su		{{server_addr}}	{{server_port}}
+i  - Important, but we don't know the password yet.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNo other commands are allowed. But I found that Tab completion of this		{{server_addr}}	{{server_port}}
+ishell still works, and I can list files with it. For example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# Type /, Telnet currently shows this		{{server_addr}}	{{server_port}}
+i$/		{{server_addr}}	{{server_port}}
+i# Press Tab twice		{{server_addr}}	{{server_port}}
+i.lstripped  etc/        lib/        overlay/    sys/        usr/		{{server_addr}}	{{server_port}}
+ibin/        home/       mnt/        proc/       tmp/        var/		{{server_addr}}	{{server_port}}
+idev/        image/      opt/        sbin/       userfs/		{{server_addr}}	{{server_port}}
+i# And here is the list of files on root folder.		{{server_addr}}	{{server_port}}
+i# Similarly you can list other directories.		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter some search, I found that website `http://192.168.1.1:8080` is		{{server_addr}}	{{server_port}}
+istored in `/home/httpd/web/`, and I found quite some weird pages in		{{server_addr}}	{{server_port}}
+iit.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Export Config File		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCurrently most tutorials online require connecting to the modem's		{{server_addr}}	{{server_port}}
+ibuiltin FTP server and downloading files from it, but my modem has a		{{server_addr}}	{{server_port}}
+inewer firmware that blocks port 21 (as shown in nmap).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut with one weird page I found, I can export the config file:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. First login as `telecomadmin` at `http://192.168.1.1:8080`:		{{server_addr}}	{{server_port}}
+i   - This is necessary, and you can't proceed if you don't know		{{server_addr}}	{{server_port}}
+i     `telecomadmin`'s password.		{{server_addr}}	{{server_port}}
+i2. Then visit `http://192.168.1.1:8080/bd/saveconf.asp` and click		{{server_addr}}	{{server_port}}
+i   `Backup` button.		{{server_addr}}	{{server_port}}
+i3. You will get a XML file, which is its configuration.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Obtain Telnet Root Password		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOpen the config XML and search for `MIB_TELNET_CLI_PASSWD`, its value		{{server_addr}}	{{server_port}}
+isimilar to `TeleCom_1a2b3c` is the telnet root password.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iType `su` followed by this password in telnet, and the shell		{{server_addr}}	{{server_port}}
+iindication will change from `$` to `#`. You're root now, start doing		{{server_addr}}	{{server_port}}
+iwhatever you want!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Access Builtin FTP		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince the existence of previous hack via FTP, later firmware blocked		{{server_addr}}	{{server_port}}
+iport 21 for FTP. But the FTP service itself is still running, and the		{{server_addr}}	{{server_port}}
+iport block is not complete: it only blocks IPv4 connections, not IPv6.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis means you can connect to the FTP via the modem's IPv6 address. We		{{server_addr}}	{{server_port}}
+ican do a nmap first:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# Obtain modem's IPv6 address from http://192.168.1.1:8080		{{server_addr}}	{{server_port}}
+i# You don't need telecomadmin here, useradmin also works		{{server_addr}}	{{server_port}}
+i$ nmap -v -6 240e:xxxx:xxxx::xxxx		{{server_addr}}	{{server_port}}
+i# Replace with modem's Ipv6 address		{{server_addr}}	{{server_port}}
+i# Some output redacted for simplicity		{{server_addr}}	{{server_port}}
+iPORT     STATE    SERVICE		{{server_addr}}	{{server_port}}
+i21/tcp   open     ftp		{{server_addr}}	{{server_port}}
+i22/tcp   filtered ssh		{{server_addr}}	{{server_port}}
+i23/tcp   open     telnet		{{server_addr}}	{{server_port}}
+i53/tcp   filtered domain		{{server_addr}}	{{server_port}}
+i80/tcp   open     http		{{server_addr}}	{{server_port}}
+i445/tcp  open     microsoft-ds		{{server_addr}}	{{server_port}}
+i8080/tcp open     http-proxy		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnd connect with your FTP client, username is `useradmin` and the		{{server_addr}}	{{server_port}}
+ipassword is what's on the back of your modem.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ISuccessful FTP Connection to Youhua PT926G	/usr/uploads/202008/youhua-pt926g-ftp.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Here I'm using the modem's link-local address `fe80::1%wlp3s0`,		{{server_addr}}	{{server_port}}
+i> where `wlp3s0` is my Linux network interface name. This may not be		{{server_addr}}	{{server_port}}
+i> possible under Windows, and in this case you can simply use the		{{server_addr}}	{{server_port}}
+i> public accessible IPv6 of the modem.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut even with access to the FTP, you cannot reuse the older hacking		{{server_addr}}	{{server_port}}
+imethods, as the FTP is now restricted to `/mnt`, and is unable to		{{server_addr}}	{{server_port}}
+iaccess config files in `/var/config`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## References		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHuge thanks to previous people who worked on fiber optic modem		{{server_addr}}	{{server_port}}
+ihacking.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- [Partial Technical Publication of PT926E PT926G (ChinAdsl.net tm5880891)](http://www.chinadsl.net/forum.php?mod=viewthread&tid=165272)		{{server_addr}}	{{server_port}}
+i- [Changing Region and MAC SN of Youhua PT926E PT926G (ChinAdsl.net tm5880891)](http://www.chinadsl.net/forum.php?mod=viewthread&tid=166519)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

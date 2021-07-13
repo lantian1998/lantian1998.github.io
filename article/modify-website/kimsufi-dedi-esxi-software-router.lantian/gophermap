@@ -1,0 +1,204 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Kimsufi 独服安装升级 ESXi 并设置软路由"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [Kimsufi, ESXi]		{{server_addr}}	{{server_port}}
+idate: 2018-06-06 17:22:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2018/06/4190919588.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iKimsufi 是法国 OVH 公司的一个廉价品牌，专门出租性价比极高的服务器。我		{{server_addr}}	{{server_port}}
+i自己租的是 KS-4C 型号，i5-2400 处理器，16GB 内存，2TB 硬盘，百兆带宽无		{{server_addr}}	{{server_port}}
+i限流量，只需要 13 欧元/月，性价比极高，非常适合开虚拟机做实验。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iVMware ESXi（现在也叫 vSphere Hypervisor）和 Proxmox VE 是两个非常流行		{{server_addr}}	{{server_port}}
+i的专门用来开虚拟机的操作系统，且两者都是免费的。最重要的是，Kimsufi 的		{{server_addr}}	{{server_port}}
+i控制面板中都有两款系统的一键安装。但我在使用过程中发现 Proxmox VE 在网		{{server_addr}}	{{server_port}}
+i络条件不佳的情况下远程控制虚拟机经常连接不上（VNC 黑屏）或者丢键（输密		{{server_addr}}	{{server_port}}
+i码时尤其要命），因此还是换装了 ESXi。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这里又产生了一个问题：ESXi 不是完整的 Linux、FreeBSD 等系统，它不具有		{{server_addr}}	{{server_port}}
+iLinux 等所有的 NAT 功能，也就是不能一个 IP 地址开好几台虚拟机然后做端		{{server_addr}}	{{server_port}}
+i口转发。不过，由于 Kimsufi 同时提供 IPv4 和 IPv6 地址，可以把 IPv4 给		{{server_addr}}	{{server_port}}
+i一台虚拟机用，让 ESXi 用 IPv6；再设置这台虚拟机做 NAT 就可以了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这就是本文中要做的事。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 为什么要写这篇文章		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因为我在配置的过程中遇到了一堆问题：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. ESXi 5.0 从命令行下在线升级的方法已经不能用了，会报错；		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. ESXi 6 系列带的网页面板虽然平时管理虚拟机很好用，不需要装客户端，但		{{server_addr}}	{{server_port}}
+i   是一设置 ESXi 的网络就会出现 bug。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 安装 ESXi		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iKimsufi 提供的 ESXi 版本极其古老，是 5.0 版本，而本文写成时最新版本已		{{server_addr}}	{{server_port}}
+i经到了 6.7。因此，安装完 ESXi 后就需要立即升级系统。但是由于 VMware 官		{{server_addr}}	{{server_port}}
+i方的一些操作，下面这种在线升级的方法已经行不通了：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iesxcli software profile update -p ESXi-6.5.0-20170702001-standard -d https://hostupdate.vmware.com/software/VUM/PRODUCTION/main/vmw-depot-index.xml		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iESXi 5.0 运行上述命令会提示 XML 格式错误等等。所以必须下载离线安装包，		{{server_addr}}	{{server_port}}
+i本地升级。但是 ESXi 的 wget 居然不支持 HTTPS，因此还需要另一台 VPS 中		{{server_addr}}	{{server_port}}
+i转。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i具体步骤如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1: 挂上中转 VPS 的 SS，因为 VMware 下载网站会验证下载的 IP。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2: 访问 <https://my.vmware.com/group/vmware/patch#search>，选择 ESXi		{{server_addr}}	{{server_port}}
+i6.0.0（5.0 不能直接升级 6.5），点击搜索，出现补丁列表：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IVMware 补丁列表	/usr/uploads/2018/06/4190919588.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3: 向下翻，找到任何文件名类似于 update-from-esxi6.0-6.0_update03 的补		{{server_addr}}	{{server_port}}
+i丁：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I我们要的补丁	/usr/uploads/2018/06/162530643.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i4: 点击下载，然后把下载链接复制到 VPS 上去 wget。在 VPS 上 wget 完后，		{{server_addr}}	{{server_port}}
+i开一个 HTTP 服务器，再从 ESXi 上 wget 一遍。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i5: 点击第三栏的 KBxxxxxx 链接，在上图中就是 KB2148155。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i6: 在新开的页面向下翻，找到 Image Profiles 段：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IImage Profiles	/usr/uploads/2018/06/85829824.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这里的类似 ESXi-6.0.0-20170202001-standard 的这一段名称就是更新的版本		{{server_addr}}	{{server_port}}
+i名称。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i7: 在 ESXi 的 SSH 中输入：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iesxcli software profile update -d [下载的补丁 ZIP 的绝对路径] -p [版本名称]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i例如：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iesxcli software profile update -d /vmfs/volumes/datastore1/update-from-esxi6.0-6.0_update03.zip -p ESXi-6.0.0-20170202001-standard		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i回车执行升级，重启。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i8: 回到第二步，选择 6.5.0 版本（本文写成时还没有 6.7 的升级文件），重		{{server_addr}}	{{server_port}}
+i复以上流程。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如上操作完成后，我们就有了一个 6.5 版本的 ESXi。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 设置 IPv6		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我们的目标是把 IPv6 给 ESXi 用，把 IPv4 分给虚拟机，因此需要先给 ESXi		{{server_addr}}	{{server_port}}
+i配置 IPv6。但是这里 ESXi 的网页界面配置会出现无法成功保存设置的问题，		{{server_addr}}	{{server_port}}
+i因此需要命令行操作，步骤如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1: 登录 ESXi，执行如下命令开启 IPv6，然后重启：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iesxcli network ip set -e true		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2: 执行如下命令开启默认网卡的 IPv6：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iesxcli network ip interface ipv6 set -e true -r false -i vmk0		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3: 假设你的服务器分到的 IPv6 是 2001:41d0:1:234::1，那么你的 IPv6 网关		{{server_addr}}	{{server_port}}
+i是 2001:41d0:1:2ff:ff:ff:ff:ff，具体可以参照 Kimsufi 其它系统上的 IPv6		{{server_addr}}	{{server_port}}
+i设置教程。我们需要添加两个 IPv6 地址，一个是我们自己的 IPv6，另一个则		{{server_addr}}	{{server_port}}
+i是在和网关同一个 /64 里随便取一个，以让 ESXi 承认这个网关：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iesxcli network ip interface ipv6 address add -i vmk0 -I 2001:41d0:1:234::1		{{server_addr}}	{{server_port}}
+iesxcli network ip interface ipv6 address add -i vmk0 -I 2001:41d0:1:2ff:12:34:56:78		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i4: 接下来就是设置默认网关：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iesxcli network ip route ipv6 add -g 2001:41d0:1:2ff:ff:ff:ff:ff -n default		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i5: 从其它支持 IPv6 的 VPS 等 ping 一下，确认可以 ping 通再继续下一步。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i6: 如果本地没有 IPv6，可以考虑使用 Cloudflare 反代服务器的 IPv6 地址，		{{server_addr}}	{{server_port}}
+i方便之后的操作。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 安装软路由		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我使用的软路由系统是 pfSense。首先把 pfSense 的 ISO 下载到 ESXi 服务器		{{server_addr}}	{{server_port}}
+i上。因为 pfSense 的下载服务器支持 HTTP，所以不必再中转了：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+icd /vmfs/volumes/datastore1		{{server_addr}}	{{server_port}}
+iwget http://frafiles.pfsense.org/mirror/downloads/pfSense-CE-2.4.3-RELEASE-amd64.iso.gz		{{server_addr}}	{{server_port}}
+igunzip pfSense-CE-2.4.3-RELEASE-amd64.iso.gz		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后在网页面板上点 Networking - Virtual Switches，创建一个虚拟交换机，		{{server_addr}}	{{server_port}}
+i并在 Port groups 页面创建一个端口组，连接到这个交换机，这将是之后虚拟		{{server_addr}}	{{server_port}}
+i机之间的内网。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I新的端口组	/usr/uploads/2018/06/1606507342.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你想要让 ESXi 连接进入虚拟机的内网，需要先做一些准备操作：再创建一		{{server_addr}}	{{server_port}}
+i个端口组，连接到这个交换机，如图：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I第二个新的端口组	/usr/uploads/2018/06/4199878051.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后在 VMkernel NICs 创建一个虚拟网卡，连接到这个端口组，选择 Services		{{server_addr}}	{{server_port}}
+i中的 Management，如图：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IESXi 连接到内网	/usr/uploads/2018/06/1501702341.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后在 Physical NIC 页面中复制下物理网卡的 MAC 地址。由于机房有 IP 和		{{server_addr}}	{{server_port}}
+iMAC 的绑定，我们要让这台虚拟机伪装成主服务器的 MAC 地址，才能正常获取		{{server_addr}}	{{server_port}}
+iIP 地址。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后按照正常步骤创建虚拟机、安装系统。此处注意虚拟机的第一张网卡的 MAC		{{server_addr}}	{{server_port}}
+i地址要改的和物理网卡相同，并将这张网卡连接到“VM Network”，也就是和外网		{{server_addr}}	{{server_port}}
+i相通。如果你现在通过 IPv4 连接服务器，那么在软路由系统启动后，到 ESXi		{{server_addr}}	{{server_port}}
+i管理面板的连接会突然中断一下，这是正常的，因为 ESXi 和软路由在同时抢占		{{server_addr}}	{{server_port}}
+i这个地址。因为相同的原因，现在软路由里已经可以 ping 通外网了，但是 TCP		{{server_addr}}	{{server_port}}
+i连接会被 reset。接下来就要关闭 ESXi 的 IPv4，解决这个冲突。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 关闭 IPv4		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这一步是危险操作，因为如果你 IPv6 没有设置好，又关闭了 IPv4，那么就没		{{server_addr}}	{{server_port}}
+i有人可以访问这台服务器了，只能重装！因此请务必确认服务器的 IPv6 已经正		{{server_addr}}	{{server_port}}
+i常工作！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i从支持 IPv6 的 VPS ssh 到服务器上，运行如下命令即可：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iesxcli network ip interface ipv4 set -i vmk0 -t none		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i此时软路由应该已经可以正常上网了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你之前想让 ESXi 连接到内网，只要在网页面板 VMkernel NICs 页面上修		{{server_addr}}	{{server_port}}
+i改之前手动创建的虚拟网卡的 IP 地址，符合内网的设置：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I修改虚拟网卡地址	/usr/uploads/2018/06/3509596894.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后在 ESXi SSH 中运行：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iesxcli network ip route ipv4 add -g [内网网关 IP] -n default		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i例如：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iesxcli network ip route ipv4 add -g 172.18.254.1 -n default		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后 ESXi 就也能通过软路由访问 IPv4 的网站了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

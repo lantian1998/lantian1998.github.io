@@ -1,0 +1,241 @@
+i---		{{server_addr}}	{{server_port}}
+ititle:		{{server_addr}}	{{server_port}}
+i  "(Almost) Lossless Archival with Modern Formats - H265 and HEIF"		{{server_addr}}	{{server_port}}
+icategories: "Computers and Clients"		{{server_addr}}	{{server_port}}
+itags: [Image, Video, H265, HEIF]		{{server_addr}}	{{server_port}}
+idate: 2020-02-13 15:05:18		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMany people keep their inventory of photos and videos for their		{{server_addr}}	{{server_port}}
+itravels, parties, or whatever important moments of their lives. If you		{{server_addr}}	{{server_port}}
+iare into taking photos and recording videos, and keeping all of them,		{{server_addr}}	{{server_port}}
+iyou are likely to fill up hard drives after hard drives. If you don't		{{server_addr}}	{{server_port}}
+iwant to keep adding more drives to your collection, you may also try		{{server_addr}}	{{server_port}}
+ito compress your photos and videos.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSpeaking of compression, a common method is to reduce the resolution		{{server_addr}}	{{server_port}}
+iof images. I've used the good old Microsoft Office Picture Manager		{{server_addr}}	{{server_port}}
+i(that comes with Office 2003) and its builtin one-key image		{{server_addr}}	{{server_port}}
+icompression. Behind the scenes, it's actually downsampling images to		{{server_addr}}	{{server_port}}
+iJPEG files of around 1024x768. One major drawback is that a lot of the		{{server_addr}}	{{server_port}}
+idetails are completely lost. Even if you think you can accept the		{{server_addr}}	{{server_port}}
+ilosses by the time you archive the files, with the development of		{{server_addr}}	{{server_port}}
+itechnology, those losses may become significant one day. For example,		{{server_addr}}	{{server_port}}
+iin mid-2000 a common monitor has a resolution of 1024x768, which is		{{server_addr}}	{{server_port}}
+iwhy Microsoft Office Picture Manager chose to compress images to this		{{server_addr}}	{{server_port}}
+iresolution. But when they are enlarged on a modern 1080p or even 4K		{{server_addr}}	{{server_port}}
+imonitor, the loss of details makes images blurry, and such losses are		{{server_addr}}	{{server_port}}
+iirreversible.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTherefore, I wish that the quality is almost not affected at all while		{{server_addr}}	{{server_port}}
+icompressing photos and videos. To do this, help from modern video and		{{server_addr}}	{{server_port}}
+iimage compression algorithms are needed. Early compression algorithms		{{server_addr}}	{{server_port}}
+icome with limitations from their era, since due to the CPU performance		{{server_addr}}	{{server_port}}
+iand RAM size limits, they are unable to perform complicated		{{server_addr}}	{{server_port}}
+icompression or decompression operations, and produce worsely		{{server_addr}}	{{server_port}}
+icompressed files (larger in file size). Modern algorithms, on the		{{server_addr}}	{{server_port}}
+iother hand, are designed with multicore processors and large RAMs in		{{server_addr}}	{{server_port}}
+imind, and can compress the files to a smaller size. For example, the		{{server_addr}}	{{server_port}}
+imost popular JPEG image format is invented back in 1992, and its		{{server_addr}}	{{server_port}}
+icompression rate is being laughed at by WebP, invented in 2010.		{{server_addr}}	{{server_port}}
+iAccording to		{{server_addr}}	{{server_port}}
+i[this study by Google](https://developers.google.com/speed/webp/docs/webp_study),		{{server_addr}}	{{server_port}}
+iWebP is 25% smaller than JPEG for a set of sample files used. Another		{{server_addr}}	{{server_port}}
+iexample is LZMA used by 7-Zip, which fully utilizes multicore		{{server_addr}}	{{server_port}}
+iprocessors and eats a few gigs of RAM, and in turn produces results		{{server_addr}}	{{server_port}}
+imuch smaller than Zip files' Deflate algorithm.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn this article, I will use FFmpeg and ImageMagick, to convert all my		{{server_addr}}	{{server_port}}
+ivideos to H265 (HEVC) encoded MP4 files, and my photos to HEIF.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Changelog		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 2020-06-24: Fix an error with ImageMagick in Arch repo: it doesn't		{{server_addr}}	{{server_port}}
+i  come with HEIF support by default, but installing `libheif` can fix		{{server_addr}}	{{server_port}}
+i  that, no need for `imagemagick-full`.		{{server_addr}}	{{server_port}}
+i- 2020-02-13: Initial version.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Video Archival - H265		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere are the reasons I chose H265:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- H265 (invented in 2013) is newer than H264 (invented in 2003), and		{{server_addr}}	{{server_port}}
+i  has a higher compress rate.		{{server_addr}}	{{server_port}}
+i- According to		{{server_addr}}	{{server_port}}
+i  [FFmpeg's H265 page](https://trac.ffmpeg.org/wiki/Encode/H.265),		{{server_addr}}	{{server_port}}
+i  compared to the popular H264, H265 files can be around 50% smaller		{{server_addr}}	{{server_port}}
+i  at the same quality.		{{server_addr}}	{{server_port}}
+i- Although older computers may have performance issues decoding H265		{{server_addr}}	{{server_port}}
+i  videos, its hardware decoders are appearing on newer graphic cards		{{server_addr}}	{{server_port}}
+i  and mobile devices. With the widespread of hardware decoders, such		{{server_addr}}	{{server_port}}
+i  obstacles will gradually go away.		{{server_addr}}	{{server_port}}
+i- Current H265 software encoders are mature enough.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iComparatively:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- While H264 is indeed popular with a ton of hardware and software		{{server_addr}}	{{server_port}}
+i  decoders, it is too old, and cannot achieve a satisfying compression		{{server_addr}}	{{server_port}}
+i  ratio.		{{server_addr}}	{{server_port}}
+i- VP9 is a free and open source video format created in 2013 by		{{server_addr}}	{{server_port}}
+i  Google. Yes, it costs money to use H265 in a commercial environment.		{{server_addr}}	{{server_port}}
+i  According to		{{server_addr}}	{{server_port}}
+i  [Netflix's report](https://netflixtechblog.com/a-large-scale-comparison-of-x264-x265-and-libvpx-a-sneak-peek-2e81e88f8b0f),		{{server_addr}}	{{server_port}}
+i  at same image quality, VP9 produces better compression rate than		{{server_addr}}	{{server_port}}
+i  H264, but worse than H265.		{{server_addr}}	{{server_port}}
+i  - Since we are personal users, we don't care about H265's		{{server_addr}}	{{server_port}}
+i    commercialization costs; simply use it.		{{server_addr}}	{{server_port}}
+i- AV1 is created by an alliance of corporations in 2018, to compete		{{server_addr}}	{{server_port}}
+i  with the costly commercial H265. The problem is that it's too new		{{server_addr}}	{{server_port}}
+i  with immature encoders, and may produce worse results than H265.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhile using FFmpeg to encode videos, we need to pay attention to		{{server_addr}}	{{server_port}}
+iparameter selections, to both prevent wasting space and prevent		{{server_addr}}	{{server_port}}
+idegrading image quality.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- H265 is just a video encode format, and we need a corresponding		{{server_addr}}	{{server_port}}
+i  encoder. This is similar to writing a blog in Markdown, which I can		{{server_addr}}	{{server_port}}
+i  do with either Notepad, Word, or VS Code.		{{server_addr}}	{{server_port}}
+i  - For H265 video archivals, **never use GPU hardware acceleration,		{{server_addr}}	{{server_port}}
+i    even with a 2080 Ti**. Hardware acceleration of graphic cards are		{{server_addr}}	{{server_port}}
+i    primarily focused on **realtime**, which is incredibly useful for		{{server_addr}}	{{server_port}}
+i    online streaming and game recording. But to achieve that, a lot of		{{server_addr}}	{{server_port}}
+i    details are lost. In addition, with limited space on hardware		{{server_addr}}	{{server_port}}
+i    encoding circuit on the silicon chip, the hardware encoder cannot		{{server_addr}}	{{server_port}}
+i    use all features of H265, and will produce a larger file. You may		{{server_addr}}	{{server_port}}
+i    think of this as "degraded to H264 level".		{{server_addr}}	{{server_port}}
+i    - GPUs of the same generation share the same encoding/decoding		{{server_addr}}	{{server_port}}
+i      circuit, the only difference is number. For example, GTX 1050		{{server_addr}}	{{server_port}}
+i      has one set of circuit, while GTX 1080 Ti has two. This means		{{server_addr}}	{{server_port}}
+i      that GTX 1080 Ti can encode two streams simultaneously. But for		{{server_addr}}	{{server_port}}
+i      each stream, the quality and speed should be largely the same		{{server_addr}}	{{server_port}}
+i      (assuming GPUs run at the same frequency).		{{server_addr}}	{{server_port}}
+i    - In fact, according to		{{server_addr}}	{{server_port}}
+i      [NVIDIA's information](https://developer.nvidia.com/video-encode-decode-gpu-support-matrix),		{{server_addr}}	{{server_port}}
+i      GPUs with only one set of circuit, such as 1050, can encode two		{{server_addr}}	{{server_port}}
+i      streams at the same time, and I guess it's achieved by switching		{{server_addr}}	{{server_port}}
+i      back and forth. However, don't expect much performance in this		{{server_addr}}	{{server_port}}
+i      case. On a second thought, if you have to encode two streams at		{{server_addr}}	{{server_port}}
+i      the same time, you can definitely afford another 1050.		{{server_addr}}	{{server_port}}
+i  - The commonly used CPU encoder is `x265`, a runtime library that		{{server_addr}}	{{server_port}}
+i    cannot be executed directly. Therefore we will use `FFmpeg`, which		{{server_addr}}	{{server_port}}
+i    calls x265 to perform H265 encoding.		{{server_addr}}	{{server_port}}
+i  - For H264, since NVIDIA's new hardware encoders are mature enough,		{{server_addr}}	{{server_port}}
+i    and can achieve a similar quality compared to CPU encoding, you		{{server_addr}}	{{server_port}}
+i    may try them on **10 series or newer** GPUs. However, I still		{{server_addr}}	{{server_port}}
+i    recommend CPU encoding unless you're unable to use it.		{{server_addr}}	{{server_port}}
+i  - Similarly, the most popular CPU encoder for H264 is `x264`, also		{{server_addr}}	{{server_port}}
+i    called by FFmpeg.		{{server_addr}}	{{server_port}}
+i- The parameter with the most impact on video quality is `Bitrate`, or		{{server_addr}}	{{server_port}}
+i  the file size of one second's video.		{{server_addr}}	{{server_port}}
+i  - Usually we don't manually specify bitrates for each video, this		{{server_addr}}	{{server_port}}
+i    will need a lot of time. Instead, we use		{{server_addr}}	{{server_port}}
+i    `CRF (Constant Rate Factor)` to set a desired quality, and let		{{server_addr}}	{{server_port}}
+i    software automatically determine a suitable bitrate. **A lower CRF		{{server_addr}}	{{server_port}}
+i    means larger file and higher quality**, and vice versa.		{{server_addr}}	{{server_port}}
+i  - For different encoding formats, the same CRF number refer to		{{server_addr}}	{{server_port}}
+i    different quality levels. For example according to		{{server_addr}}	{{server_port}}
+i    [FFmpeg's H265 page](https://trac.ffmpeg.org/wiki/Encode/H.265),		{{server_addr}}	{{server_port}}
+i    H264's CRF 23 is almost equivalent to H265's CRF 28 quality-wise.		{{server_addr}}	{{server_port}}
+i  - For H265, according to		{{server_addr}}	{{server_port}}
+i    [HandBrake converter's doc](https://handbrake.fr/docs/en/latest/workflow/adjust-quality.html),		{{server_addr}}	{{server_port}}
+i    the common range of CRF for 4K resolution is 22-28, and 20-24 for		{{server_addr}}	{{server_port}}
+i    1080p. My final choice of CRF is 22, as I consider it to be a		{{server_addr}}	{{server_port}}
+i    balance point between quality and size personally.		{{server_addr}}	{{server_port}}
+i  - For H264, CRF is usually set to 17-24.		{{server_addr}}	{{server_port}}
+i  - Bitrate doesn't impact encoding speed much.		{{server_addr}}	{{server_port}}
+i- Another important factor is `preset`, which sets the computational		{{server_addr}}	{{server_port}}
+i  complexity of encoder to look for similar parts in the video and		{{server_addr}}	{{server_port}}
+i  compress them, even at the same bitrate.		{{server_addr}}	{{server_port}}
+i  - For H264 and H265, `preset` can be set to:		{{server_addr}}	{{server_port}}
+i    - ultrafast		{{server_addr}}	{{server_port}}
+i    - superfast		{{server_addr}}	{{server_port}}
+i    - veryfast		{{server_addr}}	{{server_port}}
+i    - faster		{{server_addr}}	{{server_port}}
+i    - fast		{{server_addr}}	{{server_port}}
+i    - medium		{{server_addr}}	{{server_port}}
+i    - slow		{{server_addr}}	{{server_port}}
+i    - slower		{{server_addr}}	{{server_port}}
+i    - veryslow		{{server_addr}}	{{server_port}}
+i    - placebo		{{server_addr}}	{{server_port}}
+i  - For H265, since H265 encoding already takes ages, I chose `medium`		{{server_addr}}	{{server_port}}
+i    (for i7-7700HQ). If you're using something like a i9-9900K,		{{server_addr}}	{{server_port}}
+i    i9-10980XE, or a Threadripper 3990X, something with many many		{{server_addr}}	{{server_port}}
+i    threads and super high clock speeds, you may try `slow` or even		{{server_addr}}	{{server_port}}
+i    `slower`.		{{server_addr}}	{{server_port}}
+i  - For H264, since H264 encoding is much simpler (compared to H265),		{{server_addr}}	{{server_port}}
+i    you may start from `slower`, and try `veryslow`.		{{server_addr}}	{{server_port}}
+i  - If you set this parameter too high, the output file will not be		{{server_addr}}	{{server_port}}
+i    much smaller, but the time it takes will **increase		{{server_addr}}	{{server_port}}
+i    exponentially**.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI'm doing the transcoding on Arch Linux. First install `x264`		{{server_addr}}	{{server_port}}
+i(optional), `x265` and `FFmpeg`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+isudo pacman -S ffmpeg x265 x264		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen `cd` to the directory containing your videos, and run this		{{server_addr}}	{{server_port}}
+icommand (H265, CRF 22, `medium`):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ifor FILE in **/*.mp4; do ffmpeg -loglevel quiet -stats -i "$FILE" -c:v libx265 -crf 22 -preset medium -c:a aac -b:a 128k -movflags +faststart "$FILE.converted.mp4"; done		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOr this command (H264, CRF 17, `slower`):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ifor FILE in **/*.mp4; do ffmpeg -loglevel quiet -stats -i "$FILE" -c:v libx264 -crf 17 -preset slower -c:a aac -b:a 128k -movflags +faststart "$FILE.converted.mp4"; done		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince video encoding is slow, you may leave the computer transcoding		{{server_addr}}	{{server_port}}
+iwhile you go to sleep. It may take a few hours and even up to a few		{{server_addr}}	{{server_port}}
+idays. As a reference, by using the H265 command on my i7-7700HQ		{{server_addr}}	{{server_port}}
+ilaptop, the speed factor is 0.065x, or the computer will encode 0.065		{{server_addr}}	{{server_port}}
+iseconds of video every real world second, or 15 real world seconds for		{{server_addr}}	{{server_port}}
+i1 video second.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Image Archival - HEIF		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere are the reasons I chose HEIF:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- HEIF specification is finalized in 2015.		{{server_addr}}	{{server_port}}
+i- HEIF is currently widely used on iOS devices, as the default format		{{server_addr}}	{{server_port}}
+i  for cameras. Android 9 also added support as well. In the forseeable		{{server_addr}}	{{server_port}}
+i  future, software support for HEIF will become mature quickly.		{{server_addr}}	{{server_port}}
+i- It's major advantage is that it uses H265 to encode photos, which		{{server_addr}}	{{server_port}}
+i  fully utilizes the maturity of video encoders. In addition, hardware		{{server_addr}}	{{server_port}}
+i  acceleration can be used if necessary.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHEIF files can be generated by ImageMagick. But on Arch Linux, the		{{server_addr}}	{{server_port}}
+iImageMagick from Arch repo doesn't come with HEIF support by default,		{{server_addr}}	{{server_port}}
+iand we need to install `libheif` additionally. We can also install		{{server_addr}}	{{server_port}}
+i`exiftool`, which copies EXIF information (including camera model,		{{server_addr}}	{{server_port}}
+iaperture, shutter, ISO parameters, locations, etc) to HEIF files.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ipikaur -S imagemagick libheif perl-image-exiftool		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe next three commands convert all JPG files to HEIC (file extension		{{server_addr}}	{{server_port}}
+ifor HEIF), transfer EXIF information, and remove the JPG files:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ifor x in **/*.jpg; do magick "$x" "${x%.jpg}.heic"; done		{{server_addr}}	{{server_port}}
+ifor x in **/*.jpg; do exiftool -overwrite_original -tagsFromFile "$x" -all:all "${x%.jpg}.heic"; done		{{server_addr}}	{{server_port}}
+irm -rf **/*.jpg		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe HEIC files produces should be around half the size of JPEG files.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThere's not much parameter to tune for HEIF, and the default settings		{{server_addr}}	{{server_port}}
+iis enough for almost everyone. By contrast, in my testing, if I adjust		{{server_addr}}	{{server_port}}
+iquality with parameters, the generated image will be huge (even larger		{{server_addr}}	{{server_port}}
+ithan JPEG), but with no noticable differences in image quality.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Results		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI compressed my photos and videos from 36 GB to 19 GB with the help of		{{server_addr}}	{{server_port}}
+iH265 and HEIC, with no noticable quality changes.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

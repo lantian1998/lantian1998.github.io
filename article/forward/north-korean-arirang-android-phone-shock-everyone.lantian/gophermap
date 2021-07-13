@@ -1,0 +1,91 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "朝鲜自主研发安卓手机：我和我的小伙伴都惊呆了"		{{server_addr}}	{{server_port}}
+icategories: 转载		{{server_addr}}	{{server_port}}
+itags: [安卓]		{{server_addr}}	{{server_port}}
+idate: 2013-08-23 18:00:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2013/08/2002816947.jpg		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i朝鲜是一个神秘的国度。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i当朝鲜人开发出 Red Star Linux 时，人们惊呼：朝鲜还有这能力？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i当朝鲜人在自己国家建立 3G 网络时，人们惊呼：朝鲜竟然还有 3G 技术？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i虽然朝鲜的非智能手机都是中国进口，虽然目前为止朝鲜的安卓机也都是中国制		{{server_addr}}	{{server_port}}
+i造，但是朝鲜突然宣布自主研发了安卓手机……我和我的小伙伴都惊呆了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这款手机名为阿里郎，来自当地一首民歌的名字。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I阿里郎智能手机	/usr/uploads/2013/08/2002816947.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i鉴于朝鲜手机不可能太好，所以我就拿几款廉价安卓手机来做一下横评。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i参与横评手机：华为 G520 移动版，联想 A288t 移动版，红米移动版，HTC 新		{{server_addr}}	{{server_port}}
+i渴望联通版。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i关于制式问题，国产手机中不同制式之间价格差别一般不大。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1.价格与外观		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<table>		{{server_addr}}	{{server_port}}
+i<tr><td>型号</td><td>G520</td><td>A288t</td><td>红米</td><td>新渴望</td><td>阿里郎</td></tr>		{{server_addr}}	{{server_port}}
+i<tr><td>尺寸/寸</td><td>4.5</td><td>3.5</td><td>4.7</td><td>4.0</td><td>4.2</td></tr>		{{server_addr}}	{{server_port}}
+i<tr><td>价格/RMB</td><td>800</td><td>290</td><td>799</td><td>800</td><td>未知</td></tr>		{{server_addr}}	{{server_port}}
+i</table>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i看起来阿里郎的大小还算可以。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2.网络		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<table>		{{server_addr}}	{{server_port}}
+i<tr><td>型号</td><td>G520</td><td>A288t</td><td>红米</td><td>新渴望</td><td>阿里郎</td></tr>		{{server_addr}}	{{server_port}}
+i<tr><td>网络（2G）</td><td>GSM</td><td>GSM</td><td>GSM</td><td>GSM</td><td>CDMA</td></tr>		{{server_addr}}	{{server_port}}
+i<tr><td>网络（3G）</td><td>TD-SCDMA</td><td>TD-SCDMA</td><td>TD-SCDMA</td><td>WCDMA</td><td>WCDMA</td></tr>		{{server_addr}}	{{server_port}}
+i</table>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i据可靠消息，朝鲜 2G 网络使用 CDMA，3G WCDMA 网络也已经投入使用。阿里郎		{{server_addr}}	{{server_port}}
+i符合朝鲜国情，但是 CDMA+WCDMA 的组合我从来没见过。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3.功能		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先说明一句，金三胖称赞阿里郎摄像头像素很高。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<table>		{{server_addr}}	{{server_port}}
+i<tr><td>型号</td><td>G520</td><td>A288t</td><td>红米</td><td>新渴望</td><td>阿里郎</td></tr>		{{server_addr}}	{{server_port}}
+i<tr><td>WiFi</td><td>有</td><td>有</td><td>有</td><td>有</td><td>有</td></tr>		{{server_addr}}	{{server_port}}
+i<tr><td>系统（安卓版本号）</td><td>4.1</td><td>2.3</td><td>4.2（MIUI v5）</td><td>4.0</td><td>4.1</td></tr>		{{server_addr}}	{{server_port}}
+i<tr><td>摄像头像素/万</td><td>500</td><td>320</td><td>800</td><td>500</td><td style="color:red">105</td></tr>		{{server_addr}}	{{server_port}}
+i</table>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i是的，你没有看错，我也没有写错，阿里郎摄像头像素是 105 万！因此，各大		{{server_addr}}	{{server_port}}
+i山寨手机厂商纷纷放弃了山寨阿里郎的想法，因为他们根本不可能做出摄像头像		{{server_addr}}	{{server_port}}
+i素只有 105 万的手机！由此看来，朝鲜的知识产权保护意识走在了世界的前列		{{server_addr}}	{{server_port}}
+i……		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i据说金三胖使用的手机是 HTC Butterfly，那东西摄像头像素 800 万！由此看		{{server_addr}}	{{server_port}}
+i来，阿里郎的像素真“高”啊！真“高”啊！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另外，诺基亚的宣传部门应该去检讨，他们最新的 Lumia 1020 手机摄像头像素		{{server_addr}}	{{server_port}}
+i是 4100 万，是阿里郎的 19 倍，而它们居然没有让金三胖知道！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i4.性能		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i虽然朝鲜落后，但是阿里郎不落后，它的 CPU 居然是四核的！四核的！四核的		{{server_addr}}	{{server_port}}
+i！四核的！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<table>		{{server_addr}}	{{server_port}}
+i<tr><td>型号</td><td>G520</td><td>A288t</td><td>红米</td><td>新渴望</td><td>阿里郎</td></tr>		{{server_addr}}	{{server_port}}
+i<tr><td>CPU（核心x频率）</td><td>4x1.2G</td><td>1x1.0G</td><td>4x1.5G</td><td>1x1.0G</td><td>4x?</td></tr>		{{server_addr}}	{{server_port}}
+i<tr><td>CPU（具体型号）</td><td>联发科MT6589</td><td>展讯8810</td><td>联发科MT6589T</td><td>高通骁龙MSM7227A</td><td>?</td></tr>		{{server_addr}}	{{server_port}}
+i</table>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于高通是美国厂商，不能和朝鲜贸易，因此阿里郎的 CPU 只能是台湾的联发		{{server_addr}}	{{server_port}}
+i科生产的。根据其四核数据，目测应该是 MT6589。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因此，我们还是不能小瞧朝鲜啊！人家电脑才步入双核时代，手机就抢先一步到		{{server_addr}}	{{server_port}}
+i达四核了！这让我们情何以堪啊！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果阿里郎拿到中国卖，我估计售价在 600 元左右。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

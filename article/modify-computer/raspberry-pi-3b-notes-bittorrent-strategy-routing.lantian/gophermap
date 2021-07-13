@@ -1,0 +1,207 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "树莓派 3B 折腾笔记：BT 下载与策略路由"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [Linux, Raspberry Pi, 策略路由]		{{server_addr}}	{{server_port}}
+idate: 2017-10-21 19:17:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这次就直接进入正题。（其实是不知道该拿什么开头）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 安装 Transmission 挂 PT		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i作为一个可以自由连接各种传感器的小型电脑，树莓派的可玩性相当高。即使你		{{server_addr}}	{{server_port}}
+i不想在 GPIO 上接一大堆传感器（或者像我一样觉得另外的传感器暂时没什么用		{{server_addr}}	{{server_port}}
+i），你也可以利用它低功耗的特点，让它 24 小时运行，做一些不需要大量 CPU		{{server_addr}}	{{server_port}}
+i运算，但是因为其它因素需要较长时间才能完成的任务，例如……挂机下载。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我所在的大学有一个内网的 PT（Private Tracker）站。PT 站就是一个 BT 种		{{server_addr}}	{{server_port}}
+i子的发布网站，但是它在传统 BT 的基础上增加了用户管理功能，并且通过限制		{{server_addr}}	{{server_port}}
+i客户端种类、强制要求上传率等方式，解决了传统 BT 下各类客户端吸血（只下		{{server_addr}}	{{server_port}}
+i载不上传，例如迅雷）和种子很快失效（因为一段时间后就没人继续上传了）的		{{server_addr}}	{{server_port}}
+i问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但因为有了这些要求，PT 站用户往往需要长时间挂机上传下载，而这刚好是树		{{server_addr}}	{{server_port}}
+i莓派擅长的事。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+在		{{server_addr}}	{{server_port}}
+1上篇文章	/article/modify-computer/raspberry-pi-3b-notes.lantian	{{server_addr}}	{{server_port}}
+i里i，我弄好了一个简单的 NAS。在此基础上装一个 BT 下载软件就可以挂 PT 了。		{{server_addr}}	{{server_port}}
+i这个 PT 站在 Linux 下仅允许 Deluge，Rufus，Transmission 和 rTorrent。		{{server_addr}}	{{server_port}}
+i我一开始准备用 Deluge，但是 PT 站提示不允许使用 Raspbian 软件源内最新		{{server_addr}}	{{server_port}}
+i的 Deluge 1.3.13。该站推荐旧版本的 Deluge 1.3.3，可以在 Debian 7 软件		{{server_addr}}	{{server_port}}
+i源内找到，但是可能是因为 Debian 9 基于 systemd，我装上旧版后无法启动。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i总之我选择了 Transmission。首先 apt-get：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iapt-get install transmission-daemon		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后编辑 `/etc/transmission-daemon/settings.json`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```json		{{server_addr}}	{{server_port}}
+i# 屏蔽吸血客户端		{{server_addr}}	{{server_port}}
+i"blocklist-enabled": true,		{{server_addr}}	{{server_port}}
+i"blocklist-url": "http://john.bitsurge.net/public/biglist.p2p.gz",		{{server_addr}}	{{server_port}}
+i# 修改默认下载位置		{{server_addr}}	{{server_port}}
+i"download-dir": "/mnt/usb/Transmission",		{{server_addr}}	{{server_port}}
+i# 用 PT 站一定要把这几项都关掉，如果用传统 BT 这里不用改		{{server_addr}}	{{server_port}}
+i"dht-enabled": false,		{{server_addr}}	{{server_port}}
+i"lpd-enabled": false,		{{server_addr}}	{{server_port}}
+i"pex-enabled": false,		{{server_addr}}	{{server_port}}
+i# 远程 Web 管理		{{server_addr}}	{{server_port}}
+i"rpc-enabled": true,		{{server_addr}}	{{server_port}}
+i"rpc-authentication-required": true,		{{server_addr}}	{{server_port}}
+i"rpc-username": "用户名",		{{server_addr}}	{{server_port}}
+i"rpc-password": "密码，启动 Transmission 后会被自动加密",		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最后 `service transmission-daemon start` 启动后，访问 \[树莓派		{{server_addr}}	{{server_port}}
+iIP]:9091 可以查看 Web 管理界面，可以上传种子、调整限速等。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 针对学校网络环境的调整		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+在		{{server_addr}}	{{server_port}}
+1上篇文章	/article/modify-computer/raspberry-pi-3b-notes.lantian#quicklink8	{{server_addr}}	{{server_port}}
+i中i我提到过，学校提供了一个有线网和两个 Wi-Fi，它们各自有如下特点：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 有线网，限速 1.5M，网页方式登录，其它设备局域网内可访问		{{server_addr}}	{{server_port}}
+i2. 无线网，限速 1.5M，网页方式登录，其它设备若通过无线网连接则无法访问		{{server_addr}}	{{server_port}}
+i   （Wi-Fi 设备隔离，通过有线网仍可访问）		{{server_addr}}	{{server_port}}
+i3. eduroam，不限速，WPA2 企业级登录，其它设备若通过无线网连接则无法访		{{server_addr}}	{{server_port}}
+i   问（Wi-Fi 设备隔离，通过有线网仍可访问）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于树莓派有一个有线网卡和一个无线网卡，因此最佳的方案是，树莓派平时通		{{server_addr}}	{{server_port}}
+i过 eduroam 进行 PT 下载，我用自己电脑访问树莓派有线网卡的 IP 进行管理		{{server_addr}}	{{server_port}}
+i和访问文件。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是如果你直接把有线网和无线网都连上，你会发现只有一张网卡有流量，另外		{{server_addr}}	{{server_port}}
+i一张网卡甚至无法 ping 通。这是因为 Linux 内核在收到连接请求（例如 TCP		{{server_addr}}	{{server_port}}
+iSYN）时，并不是“从哪来回哪去”，直接从连接请求来源网卡继续建立连接（TCP		{{server_addr}}	{{server_port}}
+iACK）。相反，Linux 会根据内核的路由表来确定从哪张网卡回复。这样就会造		{{server_addr}}	{{server_port}}
+i成从有线网卡进入的请求被从无线网卡回复，然后回复因为设备隔离策略或是来		{{server_addr}}	{{server_port}}
+i源 IP 与网卡 IP 不符而被丢弃。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因此我们需要设置一下 Linux 的策略路由功能，做到“从哪来回哪去”。策略路		{{server_addr}}	{{server_port}}
+i由可以指定符合某些条件的数据包（例如从某张网卡进入的数据包）不经主路由		{{server_addr}}	{{server_port}}
+i表处理，而是单独开一张路由表处理它。这个功能早在		{{server_addr}}	{{server_port}}
+《		{{server_addr}}	{{server_port}}
+1OpenVZ 配置 Hurricane Electric IPv6 隧道，开启整个地址池并与原生 IPv6 共同使用	/article/modify-computer/openvz-he-ipv6-use-whole-block-along-native-ipv6.lantian	{{server_addr}}	{{server_port}}
+i》i里我就用过了。虽然当时是用在了 IPv6 地址上，但是 Linux 下 IPv4 和 IPv6		{{server_addr}}	{{server_port}}
+i的网络命令都大致相同，因此稍微改一下就可以使用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先输入 `route` 命令查看路由表，你会看到这样的输出：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iKernel IP routing table		{{server_addr}}	{{server_port}}
+iDestination     Gateway         Genmask         Flags Metric Ref    Use Iface		{{server_addr}}	{{server_port}}
+idefault         10.106.65.1     0.0.0.0         UG    202    0        0 eth0		{{server_addr}}	{{server_port}}
+idefault         10.107.128.1    0.0.0.0         UG    303    0        0 wlan0		{{server_addr}}	{{server_port}}
+i10.106.65.0     0.0.0.0         255.255.255.0   U     400    0        0 eth0		{{server_addr}}	{{server_port}}
+i10.107.128.0    0.0.0.0         255.255.240.0   U     303    0        0 wlan0		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i此处可以看到，有两条 Destination（目标）为 default（默认）的路由，一条		{{server_addr}}	{{server_port}}
+i对应有线网卡（eth0），一条对应无线网卡（wlan0）。它们的网关分别是		{{server_addr}}	{{server_port}}
+i10.106.65.1 和 10.107.128.1，记录好它们。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i再输入 `ip addr` 看一下现在的 IP。你会看到类似如下输出：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1		{{server_addr}}	{{server_port}}
+i   link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00		{{server_addr}}	{{server_port}}
+i   inet 127.0.0.1/8 scope host lo		{{server_addr}}	{{server_port}}
+i      valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i   inet6 ::1/128 scope host		{{server_addr}}	{{server_port}}
+i      valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq state UP group default qlen 1000		{{server_addr}}	{{server_port}}
+i   link/ether b8:27:eb:7c:5b:07 brd ff:ff:ff:ff:ff:ff		{{server_addr}}	{{server_port}}
+i   inet 10.106.65.213/24 brd 10.106.65.255 scope global eth0		{{server_addr}}	{{server_port}}
+i      valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i   inet6 fe80::62f6:bc87:f1f5:533a/64 scope link		{{server_addr}}	{{server_port}}
+i      valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq state UP group default qlen 1000		{{server_addr}}	{{server_port}}
+i   link/ether b8:27:eb:29:0e:52 brd ff:ff:ff:ff:ff:ff		{{server_addr}}	{{server_port}}
+i   inet 10.107.134.208/20 brd 10.107.143.255 scope global wlan0		{{server_addr}}	{{server_port}}
+i      valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i   inet6 fe80::f013:e96e:8451:7a94/64 scope link		{{server_addr}}	{{server_port}}
+i      valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i很长？其实重要的就几句话。我们只关心各张网卡的地址：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i2: eth0: [...]		{{server_addr}}	{{server_port}}
+i    inet 10.106.65.213/24 [...]		{{server_addr}}	{{server_port}}
+i3: wlan0: [...]		{{server_addr}}	{{server_port}}
+i    inet 10.107.134.208/20 [...]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样就可以清楚地看到，有线网卡的地址是 10.106.65.213/24。因为 IPv4 的		{{server_addr}}	{{server_port}}
+i地址用 32 bit 表示，所以把最后（32-24=）8 bit 清零，获得		{{server_addr}}	{{server_port}}
+i10.106.65.0/24。也就是说，你 DHCP 自动获取到的 IP 必然在		{{server_addr}}	{{server_port}}
+i10.106.65.0/24 这个 IP 段以内。同理，无线网卡的地址是		{{server_addr}}	{{server_port}}
+i10.107.134.208/20，清掉最后（32-20=）12 bit，获得 10.107.128.0/20。记		{{server_addr}}	{{server_port}}
+i好，等会也要用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后修改 `/etc/iproute2/rt_tables`，这里记录了路由表的列表，我们需要在		{{server_addr}}	{{server_port}}
+i这里加两张路由表，分别给两张网卡使用：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i#		{{server_addr}}	{{server_port}}
+i# reserved values		{{server_addr}}	{{server_port}}
+i#		{{server_addr}}	{{server_port}}
+i255    local		{{server_addr}}	{{server_port}}
+i254    main		{{server_addr}}	{{server_port}}
+i253    default		{{server_addr}}	{{server_port}}
+i0    unspec		{{server_addr}}	{{server_port}}
+i#		{{server_addr}}	{{server_port}}
+i# local		{{server_addr}}	{{server_port}}
+i#		{{server_addr}}	{{server_port}}
+i#1    inr.ruhep		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# 上面的都是 Raspbian 默认的设置，在文件末尾添加这两行：		{{server_addr}}	{{server_port}}
+i100    university_eth		{{server_addr}}	{{server_port}}
+i101    university_wlan		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后设置策略路由：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# 对于 university_eth 这张路由表，设置流量默认从 10.106.65.1（就是有线网卡的网关）走		{{server_addr}}	{{server_port}}
+iip route add default via 10.106.65.1 dev eth0 table university_eth		{{server_addr}}	{{server_port}}
+i# 对于 university_wlan 这张路由表，设置默认走 10.107.128.1（无线网卡网关）		{{server_addr}}	{{server_port}}
+iip route add default via 10.107.128.1 dev wlan0 table university_wlan		{{server_addr}}	{{server_port}}
+i# 对于来自 10.106.65.0/24（也就是刚才算出的有线网卡的 IP 段），走 university_eth 路由表		{{server_addr}}	{{server_port}}
+iip rule add from 10.106.65.0/24 table university_eth		{{server_addr}}	{{server_port}}
+i# 对于来自 10.107.128.0/20（也就是刚才算出的无线网卡的 IP 段），走 university_wlan 路由表		{{server_addr}}	{{server_port}}
+iip rule add from 10.107.128.0/20 table university_wlan		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i输完这些命令，你的两张网卡就都能 ping 通了，“从哪来到哪去”完工。你可以		{{server_addr}}	{{server_port}}
+i把上面这四条命令加入 `/etc/rc.local` 以开机自动设置。如果开机时没有生		{{server_addr}}	{{server_port}}
+i效，在四行命令上面再加一行 `sleep 5` 就可以了——开机的时候有可能 Linux		{{server_addr}}	{{server_port}}
+i网络功能还没启动完，因此先等 5 秒让网络功能启动了再继续设置。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最后一个问题，在同时连接了有线和无线的情况下，Linux 的 DHCP 客户端会给		{{server_addr}}	{{server_port}}
+i有线网卡设置更低的 Metric，使得流量优先从有线网卡走。Metric 就是 Linux		{{server_addr}}	{{server_port}}
+i下每条路由的优先级，Metric 越低，优先级越高。但是我希望优先使用无线网		{{server_addr}}	{{server_port}}
+i卡，因此就要修改 DHCP 客户端的设置，给有线网卡更高的 Metric。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i编辑 `/etc/dhcpcd.conf`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iinterface eth0    # 对于网卡 eth0（有线网卡）		{{server_addr}}	{{server_port}}
+imetric 400        # 将它的 Metric 设置成 400（无线网卡默认是 303，任何比 303 大的数都可以）		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存重启，然后网络请求就都优先通过无线网卡发送了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 最终效果		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i树莓派下所有的下载软件均通过不限速的 eduroam Wi-Fi 进行下载。我用自己		{{server_addr}}	{{server_port}}
+i的电脑通过连接较慢的有线网卡的 IP 操作 SSH、Transmission，访问共享等，		{{server_addr}}	{{server_port}}
+i不影响 Wi-Fi 的传输速度，同时 1.5M 的限速也足以观看 1080p 分辨率的视频		{{server_addr}}	{{server_port}}
+i（特别高清的除外）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

@@ -1,0 +1,322 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Running Anycast DNS with Docker in DN42"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [DN42, Anycast, BGP]		{{server_addr}}	{{server_port}}
+idate: 2019-03-14 22:54:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 2020-03-16 Notes		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThere is an updated scheme compared to this article, see		{{server_addr}}	{{server_port}}
+1Sharing Network Namespace Among Docker Containers for Bird Anycasting	/en/article/modify-website/docker-share-network-namespace-bird-high-availability.lantian	{{server_addr}}	{{server_port}}
+i.i		{{server_addr}}	{{server_port}}
+iIt is suggested to read only the concept explanations in this article,		{{server_addr}}	{{server_port}}
+iand use the above scheme instead for deployment.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## What's Anycast		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe commonly used routing protocol on Internet, the BGP, works like		{{server_addr}}	{{server_port}}
+ithis:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- I own an IP range, 172.22.76.104/29, on DN42.		{{server_addr}}	{{server_port}}
+i- With a BGP software like BIRD, I "announce" that my server has		{{server_addr}}	{{server_port}}
+i  access to IP range 172.22.76.104/29.		{{server_addr}}	{{server_port}}
+i- Servers with peering to me will record this message: "Over this		{{server_addr}}	{{server_port}}
+i  path, I can access 172.22.76.104/29 which is 1 step away."		{{server_addr}}	{{server_port}}
+i- These servers continue to announce to others with peering to them:		{{server_addr}}	{{server_port}}
+i  "This server is 1 step away from the source of 172.22.76.104/29."		{{server_addr}}	{{server_port}}
+i- Similarly, other servers announce that they are 2, 3, 4... steps		{{server_addr}}	{{server_port}}
+i  away from 172.22.76.104/29.		{{server_addr}}	{{server_port}}
+i- All servers will take the shortest route to send data to my server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn this case, only one server is announcing that it's the source for		{{server_addr}}	{{server_port}}
+i172.22.76.104/29, this is called Unicast. By contrast, Anycast is		{{server_addr}}	{{server_port}}
+iannouncing the source of 172.22.76.104/29 on multiple servers (usually		{{server_addr}}	{{server_port}}
+iin different locations, such as Hong Kong, Los Angeles, Paris, etc),		{{server_addr}}	{{server_port}}
+iwhile other servers still count steps to send data to the closest		{{server_addr}}	{{server_port}}
+iservers. Therefore, visitors in Mainland China are more likely to hit		{{server_addr}}	{{server_port}}
+imy Hong Kong server, since usually there are much less steps from		{{server_addr}}	{{server_port}}
+iMainland China to Hong Kong compared to other locations; similarly,		{{server_addr}}	{{server_port}}
+iGermany visitors will access my Paris server, and Chicago users will		{{server_addr}}	{{server_port}}
+iconnect to my Los Angeles server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(P.S. There is some simplifications done in the previous explanation.		{{server_addr}}	{{server_port}}
+iActual BGP route selection is more complex than that.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn the config above, all servers are sharing one IP range, and users		{{server_addr}}	{{server_port}}
+iare automatically directed to their closest server, without the		{{server_addr}}	{{server_port}}
+iassistance of client side software, by simply accessing IPs in the		{{server_addr}}	{{server_port}}
+irange.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, Anycast has its limitations: since each server is still		{{server_addr}}	{{server_port}}
+iindependent, the network connection status is not shared among them.		{{server_addr}}	{{server_port}}
+iRouting situation on the Internet changes rapidly, and every user may		{{server_addr}}	{{server_port}}
+ibe redirected to another server any time. Since everything happens on		{{server_addr}}	{{server_port}}
+ithe network layer (L3), application layer (L7) is unaware of the		{{server_addr}}	{{server_port}}
+ichange. This means that stateful protocols (like TCP) cannot work		{{server_addr}}	{{server_port}}
+ireliably. Therefore, Anycast is more commonly used for stateless		{{server_addr}}	{{server_port}}
+iservices, like DNS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## What I'm Trying to Achieve		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Unifying the IP address of services to ease configuration. For		{{server_addr}}	{{server_port}}
+i   example, I set the DNS service's IP to 172.18.53.53, and set up		{{server_addr}}	{{server_port}}
+i   Anycast on every server, so requests will end up in the nearest		{{server_addr}}	{{server_port}}
+i   server. Then, while configuring services that require DNS, I can		{{server_addr}}	{{server_port}}
+i   simply hard code 172.18.53.53, and copy config files to every		{{server_addr}}	{{server_port}}
+i   server for mass deployment.		{{server_addr}}	{{server_port}}
+i2. Fast recovery from failures: sometimes my services, such as DNS,		{{server_addr}}	{{server_port}}
+i   may stop running on one server for an erroneous config change or a		{{server_addr}}	{{server_port}}
+i   upstream provider issue. With the DNS stop running on the server,		{{server_addr}}	{{server_port}}
+i   it will stop announcing its access to the DNS IP. Requests to DNS		{{server_addr}}	{{server_port}}
+i   services are automatically sent to other servers. Services that are		{{server_addr}}	{{server_port}}
+i   still up won't die together with DNS anymore.		{{server_addr}}	{{server_port}}
+i3. Lower latency: in DN42, European users can reach my France server,		{{server_addr}}	{{server_port}}
+i   United States users can reach my Los Angeles server, and Asian		{{server_addr}}	{{server_port}}
+i   users can reach my Hong Kong server. The latencies are minimized		{{server_addr}}	{{server_port}}
+i   and therefore stability improved.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iExtra requirements: I must use Docker for the whole deployment.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Problems with Existing Solutions		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThere are some common solutions that all have some shortcomings:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Directly assign the IP in the OS and do BGP announcements. When the		{{server_addr}}	{{server_port}}
+i   DNS service crashes, BGP announcements will still continue,		{{server_addr}}	{{server_port}}
+i   directing external requests to this server. Since DNS service is		{{server_addr}}	{{server_port}}
+i   dead, it will be unavailable in the region.		{{server_addr}}	{{server_port}}
+i2. Directly assign the IP in the OS, and use ExaBGP along with		{{server_addr}}	{{server_port}}
+i   monitoring scripts to withdraw BGP announcements on a service		{{server_addr}}	{{server_port}}
+i   crash. Now while routes are removed, the IP address will still be		{{server_addr}}	{{server_port}}
+i   present in the OS. If DNS requests go through this server (even		{{server_addr}}	{{server_port}}
+i   though they're heading for other servers), they will be handled by		{{server_addr}}	{{server_port}}
+i   this server. Therefore, DNS service will still be down in the		{{server_addr}}	{{server_port}}
+i   region.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn addition, neither of them supports Docker.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs for my final solution, I added IPs in Docker containers, and		{{server_addr}}	{{server_port}}
+iinstalled Bird to communicate with host Bird instance via OSPF, to do		{{server_addr}}	{{server_port}}
+ithe announcements. If the container crashed, the announcement will		{{server_addr}}	{{server_port}}
+iautomatically stop. As the IP isn't configured on the host OS, it will		{{server_addr}}	{{server_port}}
+iforward the packets correctly, instead of stopping them halfway.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Adding IPs to Containers		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDocker's default network driver, `bridge`, creates a virtual network		{{server_addr}}	{{server_port}}
+icard on the host OS, and adds a IP block and routes relevant traffic		{{server_addr}}	{{server_port}}
+ito them. But if I take this approach, there will always be a route to		{{server_addr}}	{{server_port}}
+isend relevant traffic to the virtual card, causing request loss during		{{server_addr}}	{{server_port}}
+idowntime. Therefore, I need a network isolated from the host OS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAn isolated network can be created with Docker's `macvlan` driver,		{{server_addr}}	{{server_port}}
+iwith `internal` option enabled.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```docker		{{server_addr}}	{{server_port}}
+inetworks:		{{server_addr}}	{{server_port}}
+i  anycast_ip:		{{server_addr}}	{{server_port}}
+i    driver: macvlan		{{server_addr}}	{{server_port}}
+i    internal: true		{{server_addr}}	{{server_port}}
+i    enable_ipv6: true		{{server_addr}}	{{server_port}}
+i    ipam:		{{server_addr}}	{{server_port}}
+i      config:		{{server_addr}}	{{server_port}}
+i        - subnet: 172.22.76.104/29		{{server_addr}}	{{server_port}}
+i        - subnet: fdbc:f9dc:67ad:2547::/64		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis network is only responsible for adding IPs, and containers still		{{server_addr}}	{{server_port}}
+iaccess the network via Docker's default bridge network. Therefore,		{{server_addr}}	{{server_port}}
+icontainers need to be configured like:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```docker		{{server_addr}}	{{server_port}}
+iservices:		{{server_addr}}	{{server_port}}
+i  dnsmasq:		{{server_addr}}	{{server_port}}
+i    image: xddxdd/dnsmasq-bird		{{server_addr}}	{{server_port}}
+i    [...]		{{server_addr}}	{{server_port}}
+i    networks:		{{server_addr}}	{{server_port}}
+i      default:		{{server_addr}}	{{server_port}}
+i        ipv4_address: 172.18.1.53		{{server_addr}}	{{server_port}}
+i        ipv6_address: fcf9:a876:ed8b:c606:ba01::53		{{server_addr}}	{{server_port}}
+i      anycast_ip:		{{server_addr}}	{{server_port}}
+i        ipv4_address: 172.22.76.110		{{server_addr}}	{{server_port}}
+i        ipv6_address: fdbc:f9dc:67ad:2547::53		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn the example above, 172.18.1.53 is the container's IP in `bridge`		{{server_addr}}	{{server_port}}
+inetwork, and 172.22.76.110 is the container's Anycast IP address.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOnce we start the container, we can check that the container indeed		{{server_addr}}	{{server_port}}
+ihas two IPs:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# docker exec -it dnsmasq ip addr		{{server_addr}}	{{server_port}}
+i[...]		{{server_addr}}	{{server_port}}
+i391: eth1@if302: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP		{{server_addr}}	{{server_port}}
+i    link/ether 02:42:ac:16:4c:6e brd ff:ff:ff:ff:ff:ff		{{server_addr}}	{{server_port}}
+i    inet 172.22.76.110/29 brd 172.22.76.111 scope global eth1		{{server_addr}}	{{server_port}}
+i       valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i    inet6 fdbc:f9dc:67ad:2547::53/64 scope global flags 02		{{server_addr}}	{{server_port}}
+i       valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i392: eth0@if393: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP		{{server_addr}}	{{server_port}}
+i    link/ether 02:42:ac:12:01:35 brd ff:ff:ff:ff:ff:ff		{{server_addr}}	{{server_port}}
+i    inet 172.18.1.53/24 brd 172.18.1.255 scope global eth0		{{server_addr}}	{{server_port}}
+i       valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i    inet6 fcf9:a876:ed8b:c606:ba01::53/80 scope global flags 02		{{server_addr}}	{{server_port}}
+i       valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnd the container will still use the `bridge` network by default, thus		{{server_addr}}	{{server_port}}
+inot affecting network access:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# docker exec -it dnsmasq ip route		{{server_addr}}	{{server_port}}
+idefault via 172.18.1.1 dev eth0		{{server_addr}}	{{server_port}}
+i172.18.1.0/24 dev eth0 scope link  src 172.18.1.53		{{server_addr}}	{{server_port}}
+i172.22.76.104/29 dev eth1 scope link  src 172.22.76.110		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Announcing IP from Containers		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe next step is installing Bird and announcing owned IPs. An example		{{server_addr}}	{{server_port}}
+iof Dockerfile can be seen in		{{server_addr}}	{{server_port}}
+i[this commit](https://github.com/xddxdd/dockerfiles/tree/0b36ccecc7f8da33e994a479686bb78e918a969f/dnsmasq-bird).		{{server_addr}}	{{server_port}}
+iThe changes are mostly relevant to installing Bird and Supervisord and		{{server_addr}}	{{server_port}}
+istarting Bird and Dnsmasq with Supervisord. In addition, put a simple		{{server_addr}}	{{server_port}}
+iBird configuration to the container, so it will announce its IPs via		{{server_addr}}	{{server_port}}
+iOSPF.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNote that BGP isn't used here, since an ASN need to be manually		{{server_addr}}	{{server_port}}
+iallocated, which in addition to complexity, may cause problems if		{{server_addr}}	{{server_port}}
+ithey're assigned incorrectly. But for OSPF, there is no unique		{{server_addr}}	{{server_port}}
+iidentifiers for each devices, so it's easier to deploy.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe configuration looks like: (Alpine uses Bird 2.0)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ilog syslog all;		{{server_addr}}	{{server_port}}
+iprotocol device {}		{{server_addr}}	{{server_port}}
+iprotocol ospf {		{{server_addr}}	{{server_port}}
+i    ipv4 {		{{server_addr}}	{{server_port}}
+i        import none;		{{server_addr}}	{{server_port}}
+i        export all;		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i    area 0.0.0.0 {		{{server_addr}}	{{server_port}}
+i        interface "eth*" {		{{server_addr}}	{{server_port}}
+i            type broadcast;		{{server_addr}}	{{server_port}}
+i            cost 1;		{{server_addr}}	{{server_port}}
+i            hello 2;		{{server_addr}}	{{server_port}}
+i            retransmit 2;		{{server_addr}}	{{server_port}}
+i            dead count 2;		{{server_addr}}	{{server_port}}
+i        };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+iprotocol ospf v3 {		{{server_addr}}	{{server_port}}
+i    ipv6 {		{{server_addr}}	{{server_port}}
+i        import none;		{{server_addr}}	{{server_port}}
+i        export all;		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i    area 0.0.0.0 {		{{server_addr}}	{{server_port}}
+i        interface "eth*" {		{{server_addr}}	{{server_port}}
+i            type broadcast;		{{server_addr}}	{{server_port}}
+i            cost 1;		{{server_addr}}	{{server_port}}
+i            hello 2;		{{server_addr}}	{{server_port}}
+i            retransmit 2;		{{server_addr}}	{{server_port}}
+i            dead count 2;		{{server_addr}}	{{server_port}}
+i        };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iinclude "/etc/bird-static.conf";		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut with this config alone, Bird only announces routes obtained from		{{server_addr}}	{{server_port}}
+ithe container itself, or only 172.22.76.104/29. But what we expect is		{{server_addr}}	{{server_port}}
+ian independent route for 172.22.76.110/32, so we need a static route		{{server_addr}}	{{server_port}}
+iin `bird-static.conf`. This file is in place so that it can be easily		{{server_addr}}	{{server_port}}
+ireplaced with Volumes.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iprotocol static {		{{server_addr}}	{{server_port}}
+i    ipv4;		{{server_addr}}	{{server_port}}
+i    route 172.22.76.110/32 unreachable;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iprotocol static {		{{server_addr}}	{{server_port}}
+i    ipv6;		{{server_addr}}	{{server_port}}
+i    route fdbc:f9dc:67ad:2547::53/128 unreachable;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis config tells Bird to announce these two IPs on every network card		{{server_addr}}	{{server_port}}
+ivia OSPF.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, add OSPF protocol to Bird's host OS: (Host OS is using Bird 1.6)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iprotocol ospf lt_docker_ospf {		{{server_addr}}	{{server_port}}
+i    tick 2;		{{server_addr}}	{{server_port}}
+i    rfc1583compat yes;		{{server_addr}}	{{server_port}}
+i    area 0.0.0.0 {		{{server_addr}}	{{server_port}}
+i        interface "docker*" {		{{server_addr}}	{{server_port}}
+i        type broadcast;		{{server_addr}}	{{server_port}}
+i        cost 1;		{{server_addr}}	{{server_port}}
+i        hello 2;		{{server_addr}}	{{server_port}}
+i        retransmit 2;		{{server_addr}}	{{server_port}}
+i        dead count 2;		{{server_addr}}	{{server_port}}
+i        };		{{server_addr}}	{{server_port}}
+i        interface "ltnet" {		{{server_addr}}	{{server_port}}
+i        type broadcast;		{{server_addr}}	{{server_port}}
+i        cost 1;		{{server_addr}}	{{server_port}}
+i        hello 2;		{{server_addr}}	{{server_port}}
+i        retransmit 2;		{{server_addr}}	{{server_port}}
+i        dead count 2;		{{server_addr}}	{{server_port}}
+i        };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDon't forget to add `NET_ADMIN` capability to the container, or Bird		{{server_addr}}	{{server_port}}
+icannot establish OSPF connection correctly:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```yaml		{{server_addr}}	{{server_port}}
+i  dnsmasq:		{{server_addr}}	{{server_port}}
+i    image: xddxdd/dnsmasq-bird		{{server_addr}}	{{server_port}}
+i    [...]		{{server_addr}}	{{server_port}}
+i    cap_add:		{{server_addr}}	{{server_port}}
+i      - NET_ADMIN		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen the host OS can see announcements from containers:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# birdc show route protocol lt_docker_ospf		{{server_addr}}	{{server_port}}
+iBIRD 1.6.3 ready.		{{server_addr}}	{{server_port}}
+i172.22.76.110/32   via 172.18.1.53 on ltnet [lt_docker_ospf 00:00:37] * E2 (150/1/10000) [172.18.1.53]		{{server_addr}}	{{server_port}}
+i172.22.76.109/32   via 172.18.1.54 on ltnet [lt_docker_ospf 17:41:06] * E2 (150/1/10000) [172.18.1.54]		{{server_addr}}	{{server_port}}
+i172.22.76.104/29   via 172.18.1.54 on ltnet [lt_docker_ospf 01:00:08] * I (150/2) [172.18.1.54]		{{server_addr}}	{{server_port}}
+i[...]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNote that the container is still broadcasting the Anycast IP range		{{server_addr}}	{{server_port}}
+i(which is a bit hard to filter), but since each Anycast IP generated a		{{server_addr}}	{{server_port}}
+i`/32` route that precedents `/29` routes, there's no actual impact.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWith each server configured identically, and peers established		{{server_addr}}	{{server_port}}
+ibetween, the host OS's Bird will announce the container's routes to		{{server_addr}}	{{server_port}}
+iother servers, so every server can access the container's services.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen a container is stopped, all traffic will be redirected to another		{{server_addr}}	{{server_port}}
+iservice, so the service isn't interrupted.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## DN42 Demonstrations		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCurrently I have two Anycast services in DN42:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i172.22.76.110 - A Dnsmasq-based recursive DNS 172.22.76.109 - A		{{server_addr}}	{{server_port}}
+iPowerDNS-based authoritative DNS, for DNS resolution of my IP range		{{server_addr}}	{{server_port}}
+iand `lantian.dn42`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

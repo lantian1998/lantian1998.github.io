@@ -1,0 +1,10 @@
+https://lantian.pub/article/modify-website/dn42-experimental-network-2020.lantian/
+https://lantian.pub/en/article/modify-website/dn42-experimental-network-2020.lantian/
+https://lantian.pub/article/modify-website/serve-dn42-whois-with-nginx.lantian/
+https://lantian.pub/en/article/modify-website/serve-dn42-whois-with-nginx.lantian/
+https://lantian.pub/article/modify-website/serve-gopher-with-nginx.lantian/
+https://lantian.pub/en/article/modify-website/serve-gopher-with-nginx.lantian/
+https://lantian.pub/article/modify-website/4kb-infinite-sleep-docker-image.lantian/
+https://lantian.pub/en/article/modify-website/4kb-infinite-sleep-docker-image.lantian/
+https://lantian.pub/article/modify-website/static-build-tiny-docker-images.lantian/
+https://lantian.pub/en/article/modify-website/static-build-tiny-docker-images.lantian/

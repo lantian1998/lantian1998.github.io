@@ -1,0 +1,293 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" itemscope itemtype="https://schema.org/Article"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="theme-color" content="#bbdefb"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><title>用 Pdnsd，给你的 DNS 解析缓存加速 | Lan Tian @ Blog</title><meta name="title" content="用 Pdnsd，给你的 DNS 解析缓存加速 | Lan Tian @ Blog"><meta name="keywords" content="Lan,Tian"><meta name="description" content="Lan Tian @ Blog"><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/article/chat/pdnsd-accelerate-dns-resolving.lantian"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/chat/pdnsd-accelerate-dns-resolving.lantian" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/chat/pdnsd-accelerate-dns-resolving.lantian" hreflang="en"><script>function addLoadEvent(o){var n=window.onload;"function"!=typeof window.onload?window.onload=o:window.onload=function(){n&&n(),o()}}</script><link rel="stylesheet" href="/assets/style.css?v=63f60c5"><script defer src="/assets/script.main.bundle.js?v=63f60c5"></script><meta name="copyright" content="Copyright 2012-2021 Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><meta name="application-name" content="Lan Tian @ Blog"><meta name="msapplication-TileColor" content="#03a9f4"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-navbutton-color" content="#03a9f4"><meta content="name=Lan Tian @ Blog;action-uri=/;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=文章们;action-uri=/page/archive;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=俯瞰地球;action-uri=/page/himawari;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=DN42;action-uri=/page/dn42;icon-uri=/favicon.png" name="msapplication-task"><meta name="theme-color" content="#03a9f4"><meta name="mobile-web-app-capable" content="yes"><meta property="og:url" content="https://lantian.pub/article/chat/pdnsd-accelerate-dns-resolving.lantian"><meta property="og:type" content="website"><meta property="og:title" content="用 Pdnsd，给你的 DNS 解析缓存加速 | Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/apple-touch-icon.png"><meta property="og:description" content="你向浏览器里输入了一串网址后，浏览器并不能马上找到这个网站。它会先把网址发送给 DNS 服务器，DNS 服务器再向其它服务器一层层查询，直到根服务器，查出网站的 IP 地址，浏览器才能进行连接。因此，每次你打开一个新的网站，这个过程都要重复一次，速度比较慢。而且，..."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="zh"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/article/chat/pdnsd-accelerate-dns-resolving.lantian"><meta name="twitter:title" content="用 Pdnsd，给你的 DNS 解析缓存加速 | Lan Tian @ Blog"><meta name="twitter:image" content="https://lantian.pub/apple-touch-icon.png"><meta name="twitter:description" content="你向浏览器里输入了一串网址后，浏览器并不能马上找到这个网站。它会先把网址发送给 DNS 服务器，DNS 服务器再向其它服务器一层层查询，直到根服务器，查出网站的 IP 地址，浏览器才能进行连接。因此，每次你打开一个新的网站，这个过程都要重复一次，速度比较慢。而且，..."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="用 Pdnsd，给你的 DNS 解析缓存加速 | Lan Tian @ Blog"><meta itemprop="image" content="https://lantian.pub/apple-touch-icon.png"><meta itemprop="description" content="你向浏览器里输入了一串网址后，浏览器并不能马上找到这个网站。它会先把网址发送给 DNS 服务器，DNS 服务器再向其它服务器一层层查询，直到根服务器，查出网站的 IP 地址，浏览器才能进行连接。因此，每次你打开一个新的网站，这个过程都要重复一次，速度比较慢。而且，..."><style>.spoiler{display:inline-flex}p.spoiler{display:flex}.spoiler a{pointer-events:none}.spoiler-blur,.spoiler-blur>*{transition:text-shadow .5s ease}.spoiler .spoiler-blur,.spoiler .spoiler-blur>*{color:transparent;background-color:rgba(0,0,0,0);text-shadow:0 0 10px grey;cursor:pointer}.spoiler .spoiler-blur:hover,.spoiler .spoiler-blur:hover>*{text-shadow:0 0 5px grey}.spoiler-box,.spoiler-box>*{transition:color .5s ease,background-color .5s ease}.spoiler .spoiler-box,.spoiler .spoiler-box>*{color:#000;background-color:#000;text-shadow:none}</style><meta name="generator" content="Hexo 5.4.0"></head><body><div id="bg"></div><div id="container"><header class="lantian navbar navbar-expand-lg"><a class="navbar-brand" href="/">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="lantian-navbar"><ul class="navbar-nav nav-pills navbar-spacer"><li class="nav-item d-none d-md-block"><a class="nav-link" href="/page/archive">文章们</a></li><li class="nav-item d-none d-md-block"><a class="nav-link" href="/page/himawari">俯瞰地球</a></li><li class="nav-item d-none d-md-block"><a class="nav-link" href="/page/dn42">DN42</a></li><li class="nav-item dropdown d-block d-md-none"><a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-file"></i> 页面 <span class="caret"></span></a><div class="dropdown-menu"><a class="dropdown-item" href="/page/archive">文章们</a> <a class="dropdown-item" href="/page/himawari">俯瞰地球</a> <a class="dropdown-item" href="/page/dn42">DN42</a></div></li><li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-language"></i> Language <span class="caret"></span></a><div class="dropdown-menu"><a href="/article/chat/pdnsd-accelerate-dns-resolving.lantian" class="dropdown-item"><span class="flag-icon flag-icon-cn"></span> Chinese </a><a href="/en/article/chat/pdnsd-accelerate-dns-resolving.lantian" class="dropdown-item"><span class="flag-icon flag-icon-us"></span> English</a><div class="dropdown-divider"></div><a class="dropdown-item disabled" href="#">Not all pages have translations.</a> <a class="dropdown-item disabled" href="#">You may see 404 - this is normal.</a></div></li></ul><ul class="navbar-nav nav-pills"><li class="nav-item position-relative"><a class="nav-link" id="dark-mode" href="#"><i class="fas fa-fw fa-adjust"></i> 深色/浅色</a></li></ul></div></header><section class="text-center lantian">I'm starting to provide Chinese / English versions of some articles, switch with the Language menu above. 我开始提供部分文章的中文、英文翻译，请使用顶部语言菜单切换。</section><div class="d-flex"><div id="content"><article><div class="d-flex"><div class="post-info-wrap"><div class="post-info"><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-clock"></span><br><small>09-14</small></p><div class="post-meta-value">2013-09-14 15:42 &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-file-alt"></span><br><small>闲聊</small></p><div class="post-meta-value"><a href="/category/chat">闲聊</a> &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-tag"></span><br><small>1 标签</small></p><div class="post-meta-value"><a href="/tag/DNS">DNS</a> &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-qrcode"></span><br><small>二维码</small></p><div class="post-meta-value"><img class="qrcode" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACv0lEQVR42u3awW7cMAwE0Pz/T2+vBZp1ZkgpSYHnU1F4bT0XkFgOPz7i6/XX9e7v/73n9Xi9e8u7N7771YELDw8Pb7H0fKHP+OfnJM/M8V88Bw8PD+8aL3lcvvSEne/hz+v5woKHh4f3C3hJqZ3c2f4KDw8P7//lJeV12ytIjhY8PDy838bLy9nZ8dAW022z40CvBQ8PD6/Lnobb90/9+Uq+h4eHh7dO1Tft1Fm7ISmji9Xi4eHhXeDt26ntcjfN39nHwsPDwzvLa1sDScs1D73yDzE7QvDw8PBu8E4Vvs/bfTueNRvMeqvAw8PDO8prN/c2JNuX4HkwFv1fAQ8PD2/NyweqktfPxrZm7eAiGMPDw8M7yptFTZuRgvy9s2bEF/keHh4e3pqXNBHawyN5ziwMez4GouMBDw8P7ygvX1D+sn1zNhkgWDVz8fDw8Epe0bFYbNazsjt/49t/Hjw8PLxrvLaFWpw5o0GuY+0PPDw8vGu8esNdt1zbjT4fdFjlZnh4eHgj3r4Z0bLbA6Y4nPDw8PAu82YjUHlB3A4KzI6ETyYj8PDw8C7wNulZG1PNPtYwJMPDw8O7wMs36M14QV5MJ3fW7WY8PDy8C7xT8f+sVXGquYyHh4f3Pbx8C24D/ueivG1DDD8xHh4e3gVeXtomMVjbqN23G/JWCB4eHt5Z3j6CaiP/tv2RR25FXoeHh4e35uWwvJBtR6le8VUcXXh4eHjXeJtDYra5t+3apO1blNR4eHh4I96rvPYF8SZaq4fD8PDw8C7w8ispXvPtfjZotQrA8PDw8I7yZtH+Jv5vY7D8YPhkJXh4eHjXeHkwNhuxau9pD623a8PDw8P7BbyzmNnb62kyPDw8vB/ltdRN8N8W3B+zvA4PDw9vxNuHXu2ds9+2TQo8PDy8G7zNYNMswt98rGOZHh4eHt6E9wfEyJxxDAKNdQAAAABJRU5ErkJggg==" alt="二维码"></div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-list"></span><br><small>目录</small></p><div class="post-meta-value"><ol id="quicklink"></ol></div></div></div></div></div><div class="post-wrap"><h1 class="post-title"><a href="/article/chat/pdnsd-accelerate-dns-resolving.lantian" rel="bookmark" title="用 Pdnsd，给你的 DNS 解析缓存加速">用 Pdnsd，给你的 DNS 解析缓存加速</a></h1><div class="post-text"><p>你向浏览器里输入了一串网址后，浏览器并不能马上找到这个网站。它会先把网址发送给 DNS 服务器，DNS 服务器再向其它服务器一层层查询，直到根服务器，查出网站的 IP 地址，浏览器才能进行连接。</p><p>因此，每次你打开一个新的网站，这个过程都要重复一次，速度比较慢。而且，天朝电信的 DNS 还会劫持你到 114 导航之类的地方。</p><p>所以，我们可以在自己电脑上搭建一个 DNS 服务器，用来加速浏览，并有抗解析干扰等附加效果。</p><p>在 Linux 和 Mac 下，Pdnsd 就是一个这样的小软件。它通过向其它 DNS 服务器以 TCP 或 UDP 形式发出请求，查询到域名对应的 IP，并进行缓存，以便达到加速目的。</p><p>1. 安装</p><p>如果是 Linux，以 Ubuntu 为例：</p><pre><code class="hljs language-bash">sudo apt-get install pdnsd
+sudo gedit /etc/pdnsd.conf
+</code></pre><p>如果是 Mac，需要先安装 Homebrew：</p><pre><code class="hljs language-bash">ruby -e <span class="hljs-string">"<span class="hljs-subst">$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)</span>"</span>
+brew install pdnsd
+sudo nano /Library/LaunchDaemons/pdnsd.plist
+</code></pre><p>写入如下内容：</p><pre><code class="hljs language-xml"><span class="hljs-meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">plist</span> <span class="hljs-meta-keyword">PUBLIC</span> <span class="hljs-meta-string">"-//Apple//DTD PLIST 1.0//EN"</span> <span class="hljs-meta-string">"http://www.apple.com/DTDs/PropertyList-1.0.dtd"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">plist</span> <span class="hljs-attr">version</span>=<span class="hljs-string">"1.0"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>Label<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>pdnsd<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>Program<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>/usr/local/sbin/pdnsd<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>RunAtLoad<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">true</span>/&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>ServiceDescription<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>pdnsd dns caching daemon<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">plist</span>&gt;</span>
+</code></pre><pre><code class="hljs language-bash">sudo nano /usr/<span class="hljs-built_in">local</span>/etc/pdnsd.conf
+</code></pre><p>操作完成后，应该打开了 Pdnsd 的配置文件，我们要进行修改。</p><p>2. 开始配置 DNS 服务器。</p><p>首先把整个配置文件清空，当然有可能本来就是空的。然后我们要先进行基本设置。</p><pre><code class="hljs language-bash">global {
+        perm_cache=16384;
+        cache_dir=<span class="hljs-string">"/var/pdnsd"</span>;
+        run_as=<span class="hljs-string">"nobody"</span>;
+        server_ip=127.0.0.1;
+        status_ctl=on;
+        paranoid=off;
+        <span class="hljs-comment"># 优先TCP方式查询抗干扰</span>
+        query_method=tcp_udp;
+        min_ttl=600;
+        timeout=10;
+}
+</code></pre><p>在国内查询某些网站的 IP 地址时，会受到某些故障服务器的干扰，返回的 IP 地址会不对，导致打不开这个网站。但是这是对于基于 UDP 53 端口的 DNS 来说的，如果改用 TCP 查询，就不会受到干扰。而 Win、Mac、Linux 默认使用 UDP 53 端口查询。利用 Pdnsd，可以把 TCP 的 DNS 转换到 UDP 来使用。</p><p>min_ttl 是域名解析的最短生效时间，单位是秒。比如这个设置成 600，那么你在第一次请求一个网站的 IP 之后 600 秒（10 分钟）内，Pdnsd 可以起到缓存效果。一般这个设置不宜过小也不宜过大，设置在 600-3600 之间较合理。</p><p>然后，我们就可以开始设置上级 DNS 服务器了。</p><p>国内最干净安全的 DNS 服务器应该是 114DNS，它在各个省份都有节点，速度很快。因此我们可以先配置一个来使用。</p><pre><code class="hljs language-bash">server{
+        <span class="hljs-comment"># 优先走国内的114DNS解析</span>
+        label=<span class="hljs-string">"114 DNS"</span>;
+        ip=114.114.114.114;
+        <span class="hljs-comment"># 检测到干扰就跳过</span>
+        reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+                64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+                66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+                128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+                202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+                209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+                216.221.188.182,216.234.179.13,243.185.187.39;
+        edns_query=on;
+        reject_policy=fail;
+}
+</code></pre><p>网民们发现那些故障服务器返回的 IP 有一个规律，就是属于上面那张表之中，而那些 IP 不指向任何已知网站，不会干扰正常访问。</p><p>114DNS 由于同样受到干扰，因此从上游服务器查询时也会返回错误 IP，我们予以过滤即可。</p><p>另一个著名的 DNS 是谷歌提供的，优点是十分干净，TCP 下不会受到任何干扰。但是为什么我们不直接用谷歌 DNS 呢？</p><p>这是由于大型网站一般采用 CDN，如果直接用谷歌 DNS，部分网站会把你带到外国节点去，速度很慢。所以能用国内 114DNS 解析的就解析掉，受到故障影响再去谷歌 DNS。</p><p>配置如下：</p><pre><code class="hljs language-bash">server {
+        <span class="hljs-comment"># Google DNS 基于TCP解析</span>
+        label=<span class="hljs-string">"Google DNS"</span>;
+        ip=8.8.8.8,8.8.4.4;
+        <span class="hljs-comment"># 检测到干扰就跳过</span>
+        reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+                64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+                66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+                128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+                202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+                209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+                216.221.188.182,216.234.179.13,243.185.187.39;
+        edns_query=on;
+        reject_policy=fail;
+}
+</code></pre><p>但是我们无法确定故障今后会不会波及谷歌 DNS，因此还是予以过滤。对于接下来的 DNS 同理。</p><p>下一个著名的是 V2EX DNS，如果你把 google.com 敲成 google.cmo，它能自动帮你纠正，或者直接把你带到谷歌进行搜索。由于它支持非标准端口，所以一般也不会受到故障影响。</p><pre><code class="hljs language-bash">server {
+        <span class="hljs-comment"># V2EX DNS 进行域名拼写纠正</span>
+        label=<span class="hljs-string">"V2EX DNS"</span>;
+        ip=199.91.73.222,178.79.131.110;
+        port=3389;
+        <span class="hljs-comment"># 检测到干扰就跳过</span>
+        reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+                64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+                66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+                128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+                202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+                209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+                216.221.188.182,216.234.179.13,243.185.187.39;
+        edns_query=on;
+        reject_policy=fail;
+}
+</code></pre><p>然后是 OpenDNS，通过 5353 端口，也不会受到影响。</p><pre><code class="hljs language-bash">server {
+        <span class="hljs-comment"># OpenDNS 走5353端口反干扰</span>
+        label=<span class="hljs-string">"OpenDNS"</span>;
+        ip=208.67.222.222,208.67.220.220;
+        port=5353;
+        <span class="hljs-comment"># 检测到干扰就跳过</span>
+        reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+                64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+                66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+                128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+                202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+                209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+                216.221.188.182,216.234.179.13,243.185.187.39,
+                <span class="hljs-comment"># 拒绝OpenDNS域名导航</span>
+                208.69.32.0/24,208.69.34.0/24,208.67.219.0/24,208.67.217.0/24,
+                208.67.216.0/24,67.215.82.0/24,67.215.65.0/24;
+        edns_query=on;
+        reject_policy=fail;
+}
+</code></pre><p>NameCoin 大家听说过没？这是和 BitCoin 差不多的东西，大家可以自己搜索。使用 NameCoin 可以注册.BIT 域名，但是由于属于私下组织的域名，DNS 根服务器不认可，不给你解析。因此，有些网友就自己搭建了 BIT 域名的根服务器。</p><p>但是由于 BIT 域名不多（几乎没人用），这个属于可选项目，不对其它域名产生任何影响。另外，如果要添加，这个就要直接放在第一块 global 的下面，放在别的地方是不行的。</p><pre><code class="hljs language-bash">server {
+        <span class="hljs-comment"># BIT域名专用服务器</span>
+        label=<span class="hljs-string">"Bit DNS"</span>;
+        ip=192.249.59.89,192.184.89.74,64.31.48.60,192.3.27.117;
+        <span class="hljs-comment"># 检测到干扰就跳过</span>
+        reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+                64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+                66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+                128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+                202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+                209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+                216.221.188.182,216.234.179.13,243.185.187.39;
+        reject_policy=fail;
+        policy=excluded;
+        include=<span class="hljs-string">".bit"</span>;
+}
+</code></pre><p>但是如果以上服务器全挂掉了，我们就干脆自己去查询根服务器吧。</p><pre><code class="hljs language-bash">server {
+        <span class="hljs-comment"># 实在不行就走根服务器查询</span>
+        label=<span class="hljs-string">"Root DNS Servers"</span>;
+        root_server=discover;
+        randomize_servers=on;
+        ip=198.41.0.4,192.228.79.201,192.33.4.12,199.7.91.13,192.203.230.10,
+                192.5.5.241,192.112.36.4,128.63.2.53,192.36.148.17,192.58.128.30,
+                193.0.14.129,199.7.83.42,202.12.27.33;
+        <span class="hljs-comment"># 检测到欺骗就跳过</span>
+        reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+                64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+                66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+                128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+                202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+                209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+                216.221.188.182,216.234.179.13,243.185.187.39;
+        edns_query=on;
+        reject_policy=fail;
+}
+</code></pre><p>然后再加一段本地解析，诸如 localhost 之类的：</p><pre><code class="hljs language-bash"><span class="hljs-built_in">source</span> {
+        owner=localhost;
+        file=<span class="hljs-string">"/etc/hosts"</span>;
+}
+
+rr {
+        name=localhost;
+        reverse=on;
+        a=127.0.0.1;
+        owner=localhost;
+        soa=localhost,root.localhost,42,86400,900,86400,86400;
+}
+</code></pre><p>这样，我们的配置就完成了，然后重启电脑，把电脑的 DNS 设置改成 127.0.0.1 就可以了。</p><p>附完整配置文件：（赠送 HiNet 备用解析）</p><pre><code class="hljs language-bash">global {
+    perm_cache=16384;
+    cache_dir=<span class="hljs-string">"/var/pdnsd"</span>;
+    run_as=<span class="hljs-string">"nobody"</span>;
+    server_ip=127.0.0.1;
+    status_ctl=on;
+      paranoid=off;
+    <span class="hljs-comment"># 优先TCP方式查询抗干扰</span>
+    query_method=tcp_udp;
+    min_ttl=600;
+    timeout=10;
+}
+
+server {
+    <span class="hljs-comment"># BIT域名专用服务器</span>
+    label=<span class="hljs-string">"Bit DNS"</span>;
+    ip=192.249.59.89,192.184.89.74,64.31.48.60,192.3.27.117;
+    <span class="hljs-comment"># 检测到干扰就跳过</span>
+    reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+        64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+        66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+        128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+        202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+        209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+        216.221.188.182,216.234.179.13,243.185.187.39;
+    reject_policy=fail;
+    policy=excluded;
+    include=<span class="hljs-string">".bit"</span>;
+}
+
+
+server{
+    <span class="hljs-comment"># 优先走国内的114DNS解析</span>
+    label=<span class="hljs-string">"114 DNS"</span>;
+    ip=114.114.114.114;
+    <span class="hljs-comment"># 检测到干扰就跳过</span>
+    reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+        64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+        66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+        128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+        202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+        209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+        216.221.188.182,216.234.179.13,243.185.187.39;
+    edns_query=on;
+    reject_policy=fail;
+}
+
+server {
+    <span class="hljs-comment"># Google DNS 基于TCP解析</span>
+    label=<span class="hljs-string">"Google DNS"</span>;
+    ip=8.8.8.8,8.8.4.4;
+    <span class="hljs-comment"># 检测到干扰就跳过</span>
+    reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+        64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+        66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+        128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+        202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+        209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+        216.221.188.182,216.234.179.13,243.185.187.39;
+    edns_query=on;
+    reject_policy=fail;
+}
+
+server {
+    <span class="hljs-comment"># OpenDNS 走5353端口反干扰</span>
+    label=<span class="hljs-string">"OpenDNS"</span>;
+    ip=208.67.222.222,208.67.220.220;
+    port=5353;
+    <span class="hljs-comment"># 检测到干扰就跳过</span>
+    reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+        64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+        66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+        128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+        202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+        209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+        216.221.188.182,216.234.179.13,243.185.187.39,
+        <span class="hljs-comment"># 拒绝OpenDNS域名导航</span>
+        208.69.32.0/24,208.69.34.0/24,208.67.219.0/24,208.67.217.0/24,
+        208.67.216.0/24,67.215.82.0/24,67.215.65.0/24;
+    edns_query=on;
+    reject_policy=fail;
+}
+
+server {
+    <span class="hljs-comment"># V2EX DNS 进行域名拼写纠正</span>
+    label=<span class="hljs-string">"V2EX DNS"</span>;
+    ip=199.91.73.222,178.79.131.110;
+    port=3389;
+    <span class="hljs-comment"># 检测到干扰就跳过</span>
+    reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+        64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+        66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+        128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+        202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+        209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+        216.221.188.182,216.234.179.13,243.185.187.39;
+    edns_query=on;
+    reject_policy=fail;
+}
+
+server {
+    <span class="hljs-comment"># 台湾HiNet DNS备用</span>
+    label=<span class="hljs-string">"HiNet DNS"</span>;
+    ip=168.95.1.1,168.95.192.1,168.95.192.2;
+    <span class="hljs-comment"># 检测到干扰就跳过</span>
+    reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+        64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+        66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+        128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+        202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+        209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+        216.221.188.182,216.234.179.13,243.185.187.39;
+    edns_query=on;
+    reject_policy=fail;
+}
+
+server {
+    <span class="hljs-comment"># 实在不行就走根服务器查询</span>
+    label=<span class="hljs-string">"Root DNS Servers"</span>;
+    root_server=discover;
+    randomize_servers=on;
+    ip=198.41.0.4,192.228.79.201,192.33.4.12,199.7.91.13,192.203.230.10,
+        192.5.5.241,192.112.36.4,128.63.2.53,192.36.148.17,192.58.128.30,
+        193.0.14.129,199.7.83.42,202.12.27.33;
+    <span class="hljs-comment"># 检测到干扰就跳过</span>
+    reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,
+        64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,
+        66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,
+        128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,
+        202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,
+        209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,
+        216.221.188.182,216.234.179.13,243.185.187.39;
+    edns_query=on;
+    reject_policy=fail;
+}
+
+<span class="hljs-built_in">source</span> {
+    owner=localhost;
+    file=<span class="hljs-string">"/etc/hosts"</span>;
+}
+
+rr {
+    name=localhost;
+    reverse=on;
+    a=127.0.0.1;
+    owner=localhost;
+    soa=localhost,root.localhost,42,86400,900,86400,86400;
+}
+</code></pre></div><div class="clearfix" id="post-navi"><div class="float-right text-right"><a href="/article/forward/world-throw-mobile-phone-competition.lantian" title="奇葩的比赛：扔手机世界竞标赛">奇葩的比赛：扔手机世界竞标赛</a><br>下一篇文章 &raquo;</div><div class="float-left text-left position-absolute">&laquo; 上一篇文章<br><a href="/article/modify-computer/windows-control-macbook-fan.lantian" title="Windows 下控制 MacBook 风扇转速">Windows 下控制 MacBook 风扇转速</a></div></div><p class="text-center">本站使用 Disqus 评论系统，中国大陆访问可能不稳定。</p><div id="disqus_thread"></div><script>var disqus_config=function(){this.page.url="https://lantian.pub/article/chat/pdnsd-accelerate-dns-resolving.lantian",this.page.identifier="/article/chat/pdnsd-accelerate-dns-resolving.lantian"}</script><noscript>请启用 JavaScript 以查看 <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">Disqus</a> 评论区。</noscript></div></div></article></div><aside class="d-none d-lg-block"><section class="widget"><h3>最新文章</h3><ul class="list-unstyled"><li>05-02 <a href="/article/modify-website/dn42-experimental-network-2020.lantian">DN42 实验网络介绍及注册教程（2021-05-02 更新）</a></li><li>04-19 <a href="/article/modify-website/serve-dn42-whois-with-nginx.lantian">将 nginx 用作 DN42 WHOIS 服务器</a></li><li>03-21 <a href="/article/modify-website/serve-gopher-with-nginx.lantian">用 nginx 建立 Gopher 网站</a></li><li>12-27 <a href="/article/modify-website/4kb-infinite-sleep-docker-image.lantian">制作只有 4KB 大小的永久挂起程序</a></li><li>11-29 <a href="/article/modify-website/static-build-tiny-docker-images.lantian">静态编译制作微型 Docker 镜像</a></li><li>10-11 <a href="/article/creations/traceroute-chain.lantian">优雅地在 Traceroute 里膜 拜大佬</a></li><li>10-03 <a href="/article/random-notes/youhua-pt926g-disable-tr069.lantian">友华 PT926G 关闭 TR069</a></li><li>09-23 <a href="/article/modify-website/post-quantum-encryption.lantian">未雨绸缪：使用后量子时代的加密算法</a></li><li>09-05 <a href="/article/modify-website/selfhost-dns-root-server.lantian">自建 DNS 根服务器</a></li><li>08-28 <a href="/article/modify-website/how-to-kill-the-dn42-network.lantian">如何引爆 DN42 网络（2020-08-28 更新）</a></li><li>08-13 <a href="/article/random-notes/youhua-pt926g-fiber-modem-crack.lantian">友华 PT926G 光猫破解</a></li><li>08-01 <a href="/article/modify-website/an-elegant-scripture-of-safety-generator.lantian">制作一个优雅的平安经生成器</a></li><li>06-25 <a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus MUXless 下的 Intel 和 NVIDIA 虚拟机显卡直通</a></li><li>06-17 <a href="/article/one-pic/if-you-wanna-take-the-bite.lantian">愿者上钩（指美国签证）</a></li><li>06-08 <a href="/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian">毕业设计 - 传感器网络开发踩坑记录</a></li></ul></section><section class="widget"><h3>最新评论</h3><ul class="dsq-widget-list"><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">这一步我当时没遇到这个问题，可能是后面 QEMU 等版本有了更新。因为此时虚拟机的主显卡还是 QXL，Intel 显卡还没被正常驱动。你具体是遇到了什么错误？</span><p class="dsq-widget-meta"><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus 下的 Intel 和 NVIDIA 虚拟机显卡直通</a><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5434808981">2 weeks ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/EdenJohnson_atDisqus/">EdenJohnson</a> <span class="dsq-widget-comment">博主，关于Intel GVT-g“修改虚拟机配置，让虚拟显卡对虚拟机可见”这一节应该先把后面的qemu:commandline 写上 否则会因为POSTed名称不正确拒绝启动的说</span><p class="dsq-widget-meta"><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus 下的 Intel 和 NVIDIA 虚拟机显卡直通</a><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5433712806">2 weeks ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">i-83.net（即 QuadHost）但是不要买 不要买 不要买，我已经扔了，太不稳定了根本没法用，工单一个月不回</span><p class="dsq-widget-meta"><a href="/article/random-notes/debian-10-on-openvz-6.lantian">在 OpenVZ 6 上安装/升级到 Debian 10</a><a href="/article/random-notes/debian-10-on-openvz-6.lantian#comment-5398922977">1 month ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/maylihe/">Yo</a> <span class="dsq-widget-comment">大佬你1刀一年的openvz哪里买的？</span><p class="dsq-widget-meta"><a href="/article/random-notes/debian-10-on-openvz-6.lantian">在 OpenVZ 6 上安装/升级到 Debian 10</a><a href="/article/random-notes/debian-10-on-openvz-6.lantian#comment-5394222113">1 month ago</a></p></li><li class="dsq-widget-item">butdown <span class="dsq-widget-comment">rp_filter 一定要设置成0，刚刚跟kioubit解决完dns问题后的惨痛教训……</span><p class="dsq-widget-meta"><a href="/article/modify-website/dn42-experimental-network-2020.lantian">DN42 实验网络介绍及注册教程（2020 版）</a><a href="/article/modify-website/dn42-experimental-network-2020.lantian#comment-5366564019">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/disqus_lq2m2HGaPo/">Rangel Alvarado</a> <span class="dsq-widget-comment">I just follow the guide even the compilations things (vBiosFinder,OVMF_VARS.fd and the...</span><p class="dsq-widget-meta"><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">Intel and NVIDIA GPU Passthrough on a Optimus MUXless Laptop</a><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5364964743">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/kanzakitsukasa/">Kanzaki Tsukasa</a> <span class="dsq-widget-comment">感谢回复~ 无法 ping 通可能是因为 Linux 默认禁止普通用户 ping，可以用下面一行命令解决： sudo sysctl -w...</span><p class="dsq-widget-meta"><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian">（怀旧）ATduck 虚拟 Modem 拨号上网</a><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian#comment-5363079969">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/ttnb/">TTNB</a> <span class="dsq-widget-comment">@disqus_lq2m2HGaPo:disqus could you please elaborate how you resolved your problem? What did you...</span><p class="dsq-widget-meta"><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">Intel and NVIDIA GPU Passthrough on a Optimus MUXless Laptop</a><a href="/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5362718819">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">抱歉回复晚了，Disqus 把你的评论判为 Spam 了，没给我发通知邮件。 在有显卡直出的机器上，把显卡直通进虚拟机的实用性会高很多，因为你可以接个外接屏，或者用“假显示器”+steam...</span><p class="dsq-widget-meta"><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian">笔记本 Optimus 下的 Intel 和 NVIDIA 虚拟机显卡直通</a><a href="/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian#comment-5361950865">2 months ago</a></p></li><li class="dsq-widget-item"><a class="dsq-widget-user" target="_blank" rel="noopener" href="https://disqus.com/by/lan_tian/">Lan Tian</a> <span class="dsq-widget-comment">抱歉回复晚了，你的评论被 Disqus 判为 Spam，没有给我发通知邮件。 无法 ping 通可能是因为 Linux 默认禁止普通用户 ping，可以用下面一行命令解决： sudo...</span><p class="dsq-widget-meta"><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian">（怀旧）ATduck 虚拟 Modem 拨号上网</a><a href="/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian#comment-5361944929">2 months ago</a></p></li></ul></section><section class="widget"><h3>其它功能</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-rss"></i> <a href="/rss2.xml" target="_blank">RSS 订阅</a> | <a href="/feed.xml" target="_blank">Atom</a> | <a href="/feed.json" target="_blank">JSON</a></li><li><i class="fas fa-fw fa-globe"></i> <a href="https://stats.uptimerobot.com/BLK6VsRkR" target="_blank">服务器状态</a></li><li><i class="fas fa-fw fa-sitemap"></i> <a href="https://lg.lantian.pub" target="_blank">DN42 节点状态</a></li></ul></section><section class="widget"><h3>友情链接</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://0x7f.cc">0x7f Blog 🐑</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://alanyhq.com">Alanyhq</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://blog.cas7.moe">Blog of Moecast</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://jerryxiao.cc">JerryXiao</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://lsc.moe">LSC.MOE</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://sangsir.com">SangSir | 艺术界的一朵奇葩</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://yuetau.net">YuetAu&#39;s Spot</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="http://foreverblog.cn">十年之约</a></li></ul></section></aside></div><footer class="lantian clearfix"><div id="copyright" class="float-right text-right"><i class="fas fa-copyright"></i> 2012-2021 Lan Tian @ Blog<br><small>基于 <a href="https://hexo.io/" target="_blank">Hexo</a> 构建 @ 2021-07-13 09:41</small></div></footer></div></body></html>

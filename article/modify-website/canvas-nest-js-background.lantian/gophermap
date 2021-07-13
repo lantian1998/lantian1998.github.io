@@ -1,0 +1,42 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "用  Canvas-Nest.js 加上酷炫的网页背景"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [JS]		{{server_addr}}	{{server_port}}
+idate: 2016-08-03 22:28:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2016/08/2318195135.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i今天在 [进阶博客](https://jinjie.bid/) 看到了一个酷炫的网页背景效果，		{{server_addr}}	{{server_port}}
+i背景上会有动态的线组合成三角形等各种图形，并且会对用户鼠标移动作出响应		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i要在自己的网站上加入这个效果，很简单，在 `</body>` 之前加入这段代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i<script src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i刷新网页，效果就有了。如果没有看到效果，请检查你加的位置，这段代码不能		{{server_addr}}	{{server_port}}
+i加在 `<head>` 和 `</head>` 之间！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但这样就产生了一个问题：在服务器到用户速度较慢的时候（比如晚上中美链路		{{server_addr}}	{{server_port}}
+i抽风的时候），用户浏览器在加载到上面这段代码所在的位置，也就是页面底部		{{server_addr}}	{{server_port}}
+i之前，无法得知它要加载这个 Javascript。也就是说，这段 Javascript 要在		{{server_addr}}	{{server_port}}
+i页面加载完毕后才会开始下载，而这会显著拖慢网页的总体加载速度。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i所以，我们要在开头 `<head>` 和 `</head>` 之间再加入如下代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i<link href="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js" rel="preload" as="script"/>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这会让浏览器在加载完 `<head>`，也就是加载页面顶端之前，就知道要去下载		{{server_addr}}	{{server_port}}
+i这段代码，可以有效地提升加载速度。在开发者工具中可以看到，这段代码尽管		{{server_addr}}	{{server_port}}
+i放在页面底部，但在经过如上设置后，会和放在 `<head>` 里的 Javascript 一		{{server_addr}}	{{server_port}}
+i起加载。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I屏幕快照 2016-08-03 下午10.27.03.png	/usr/uploads/2016/08/2318195135.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最终设置的效果可以在本站看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

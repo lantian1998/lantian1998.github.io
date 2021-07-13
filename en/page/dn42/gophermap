@@ -1,0 +1,254 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "DN42"		{{server_addr}}	{{server_port}}
+idate: 1970-01-01 00:00:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you need assistance on DN42 configuration, you may refer to		{{server_addr}}	{{server_port}}
+1DN42 Experimental Network: Intro and Registration	/en/article/modify-website/dn42-experimental-network-2020.lantian	{{server_addr}}	{{server_port}}
+iand my previous articles on DN42.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Some Helpful Links for Debugging		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere's some links that may assist you in diagnosing problems with our		{{server_addr}}	{{server_port}}
+ipeering.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- [My Looking Glass](https://lg.lantian.pub/)		{{server_addr}}	{{server_port}}
+i  - You can see BIRD routing software status across my nodes,		{{server_addr}}	{{server_port}}
+i    including whether BGP session is established, and whether route is		{{server_addr}}	{{server_port}}
+i    received.		{{server_addr}}	{{server_port}}
+i  - You can perform traceroute to either public IP addresses or DN42		{{server_addr}}	{{server_port}}
+i    ones.		{{server_addr}}	{{server_port}}
+i- Route ROA filtering stats		{{server_addr}}	{{server_port}}
+i  - My network only accepts routes that are registered in DN42.		{{server_addr}}	{{server_port}}
+i    Received invalid or unknown routes will be listed here.		{{server_addr}}	{{server_port}}
+i  - Invalid route: this IP block is registerd in DN42, but the actual		{{server_addr}}	{{server_port}}
+i    source of route is different from the registration.		{{server_addr}}	{{server_port}}
+i    - For example, I registered IP block `172.22.76.184/29` and allow		{{server_addr}}	{{server_port}}
+i      4242422547 (my AS) to announce it. If you tried to announce this		{{server_addr}}	{{server_port}}
+i      route, your announcement will be shown here.		{{server_addr}}	{{server_port}}
+i    - See the		{{server_addr}}	{{server_port}}
+i      [list of invalid IPv4 routes](https://lg.lantian.pub/route_generic/hostdare/table%20roa_fail_v4),		{{server_addr}}	{{server_port}}
+i      and the		{{server_addr}}	{{server_port}}
+i      [list of invalid IPv6 routes](https://lg.lantian.pub/route_generic/hostdare/table%20roa_fail_v6).		{{server_addr}}	{{server_port}}
+i  - Unknown route: this IP block isn't registered in DN42.		{{server_addr}}	{{server_port}}
+i    - It usually means you announced your personal intranet (such as		{{server_addr}}	{{server_port}}
+i      `192.168.0.0/16` or `10.0.0.0/8`) to others by mistake.		{{server_addr}}	{{server_port}}
+i    - Or maybe you just registrated and my ROA information isn't		{{server_addr}}	{{server_port}}
+i      updated yet. Please wait 4-8 hours and restart our peering.		{{server_addr}}	{{server_port}}
+i    - Or maybe you only created inetnum/inet6num objects, but not		{{server_addr}}	{{server_port}}
+i      route/route6 objects.		{{server_addr}}	{{server_port}}
+i    - See the		{{server_addr}}	{{server_port}}
+i      [list of unknown IPv4 routes](https://lg.lantian.pub/route_generic/hostdare/table%20roa_unknown_v4),		{{server_addr}}	{{server_port}}
+i      and the		{{server_addr}}	{{server_port}}
+i      [list of unknown IPv6 routes](https://lg.lantian.pub/route_generic/hostdare/table%20roa_unknown_v6).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## "1xRTT" Peering		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI live in China, and (many of) you may be on the opposite side of the		{{server_addr}}	{{server_port}}
+iplanet. This means that due to timezone differences, one round of		{{server_addr}}	{{server_port}}
+iinformation exchange (you send an email, I respond while you sleep,		{{server_addr}}	{{server_port}}
+iyou see my reply after wake up) may need 24 hours or even more.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere I provide instructions to perform "1xRTT" peering, which means we		{{server_addr}}	{{server_port}}
+ican peer with only one email from you and one email from me. Even if		{{server_addr}}	{{server_port}}
+iyou and me are in the same timezone, this will still simplify things.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Choose a server from the list below. Usually this will be the one		{{server_addr}}	{{server_port}}
+i   with lowest latency (ping) to your server.		{{server_addr}}	{{server_port}}
+i   - If you have multiple servers in DN42, I'm open to peering with		{{server_addr}}	{{server_port}}
+i     all of them at once.		{{server_addr}}	{{server_port}}
+i2. Choose a type of VPN for tunneling.		{{server_addr}}	{{server_port}}
+i   - I usually prefer WireGuard and OpenVPN, but others such as		{{server_addr}}	{{server_port}}
+i     GRE/IPSec, GRE/Plain and ZeroTier will also work.		{{server_addr}}	{{server_port}}
+i     - **Please avoid GRE/IPSec wherever possible**, unless it's your		{{server_addr}}	{{server_port}}
+i       only option. Different IPSec implementations usually have		{{server_addr}}	{{server_port}}
+i       severe compatibility issues, and it may take days or even weeks		{{server_addr}}	{{server_port}}
+i       to debug.		{{server_addr}}	{{server_port}}
+i   - **WARN: I DO NOT** peer with servers in mainland China, to avoid		{{server_addr}}	{{server_port}}
+i     possible legal issues.		{{server_addr}}	{{server_port}}
+i   - I'm also willing to try new types of VPNs - just ask!		{{server_addr}}	{{server_port}}
+i3. Configure BGP daemon and VPN software on your side. You may assume		{{server_addr}}	{{server_port}}
+i   I will use the following configuration:		{{server_addr}}	{{server_port}}
+i   - My General Information:		{{server_addr}}	{{server_port}}
+i     - ASN: **4242422547**		{{server_addr}}	{{server_port}}
+i     - Public IP: listed below		{{server_addr}}	{{server_port}}
+i     - DN42 IPv4 (IP used in tunnel on my end): listed below		{{server_addr}}	{{server_port}}
+i       - If you need an address block (such as /30) for IPv4 tunnel,		{{server_addr}}	{{server_port}}
+i         it will come out of your address space.		{{server_addr}}	{{server_port}}
+i       - This is usually needed for hardware routers, such as		{{server_addr}}	{{server_port}}
+i         Mikrotik.		{{server_addr}}	{{server_port}}
+i     - DN42 IPv6: **fe80::2547** for peering over link-local addresses		{{server_addr}}	{{server_port}}
+i       - If you need an address block (such as /64) for IPv6 tunnel,		{{server_addr}}	{{server_port}}
+i         it will come out of your address space.		{{server_addr}}	{{server_port}}
+i     - Multiprotocol BGP (MP-BGP):		{{server_addr}}	{{server_port}}
+i       - Although I support MP-BGP, I still configure two BGP		{{server_addr}}	{{server_port}}
+i         sesssions (1 IPv4 & 1 IPv6) by default.		{{server_addr}}	{{server_port}}
+i       - If you also support MP-BGP and only need one session, just		{{server_addr}}	{{server_port}}
+i         let me know.		{{server_addr}}	{{server_port}}
+i   - For creating a tunnel connection:		{{server_addr}}	{{server_port}}
+i     - WireGuard/OpenVPN port on my side: **last 5 digits of your		{{server_addr}}	{{server_port}}
+i       ASN**		{{server_addr}}	{{server_port}}
+i       - e.g. 4242420001 means I will use port 20001		{{server_addr}}	{{server_port}}
+i     - OpenVPN static key: generated by you, send to me later		{{server_addr}}	{{server_port}}
+i     - GRE/IPSec public key: listed below		{{server_addr}}	{{server_port}}
+i     - OpenVPN/IPSec default configuration: show below		{{server_addr}}	{{server_port}}
+i       - If you can't use my default configuration, set something		{{server_addr}}	{{server_port}}
+i         suitable for you and send it to me		{{server_addr}}	{{server_port}}
+i     - ZeroTier One: I will request to join your network		{{server_addr}}	{{server_port}}
+i       - You may try to invite my server to your network, if possible		{{server_addr}}	{{server_port}}
+i4. Send the following information via email to		{{server_addr}}	{{server_port}}
+i   **<b980120@hotmail.com>**:		{{server_addr}}	{{server_port}}
+i   - Your General Information:		{{server_addr}}	{{server_port}}
+i     - ASN		{{server_addr}}	{{server_port}}
+i     - Public IP		{{server_addr}}	{{server_port}}
+i       - I prefer IPv4 since IPv6 is tunnelled on some of my servers		{{server_addr}}	{{server_port}}
+i         (HE.NET Tunnelbroker)		{{server_addr}}	{{server_port}}
+i     - DN42 IPv4 and IPv6 (IP used in tunnel on your end)		{{server_addr}}	{{server_port}}
+i       - Or address blocks, if you need them for the tunnel		{{server_addr}}	{{server_port}}
+i       - Including link-local address for IPv6 peering		{{server_addr}}	{{server_port}}
+i     - Which server you want to peer with		{{server_addr}}	{{server_port}}
+i   - For creating a tunnel connection:		{{server_addr}}	{{server_port}}
+i     - WireGuard/OpenVPN port on your side		{{server_addr}}	{{server_port}}
+i       - I will assume 22547 if you don't specify		{{server_addr}}	{{server_port}}
+i     - OpenVPN static key (generated by you)		{{server_addr}}	{{server_port}}
+i     - GRE/IPSec public key		{{server_addr}}	{{server_port}}
+i     - ZeroTier One: Your network ID (I will request to join your		{{server_addr}}	{{server_port}}
+i       network)		{{server_addr}}	{{server_port}}
+i     - OpenVPN/IPSec custom configuration (if necessary)		{{server_addr}}	{{server_port}}
+i5. Wait till I set up the tunnel and peering, and respond to your		{{server_addr}}	{{server_port}}
+i   email. Usually peering is successful by now.		{{server_addr}}	{{server_port}}
+i   - You may use [my Looking Glass](https://lg.lantian.pub/) to debug		{{server_addr}}	{{server_port}}
+i     our connection.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPS: It's not recommended to contact me over IRC. Although I leave my		{{server_addr}}	{{server_port}}
+iIRC client running, I only read messages once or twice per month,		{{server_addr}}	{{server_port}}
+iunless you ask me to do so in email. And IRC chat is unlikely to be		{{server_addr}}	{{server_port}}
+iinstant due to timezone differences.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## My Network		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- ASN: 4242422547		{{server_addr}}	{{server_port}}
+i- IPv4 Pool: 172.22.76.184/29 and 172.22.76.96/27		{{server_addr}}	{{server_port}}
+i- IPv6 Pool: fdbc:f9dc:67ad::/48		{{server_addr}}	{{server_port}}
+i- My Side's Default Port: last 5 digits of your ASN		{{server_addr}}	{{server_port}}
+i- Looking glass: [https://lg.lantian.pub](https://lg.lantian.pub/)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Servers		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Server 1: Hong Kong, China, provider IDC.wiki (originally 50KVM)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  - Domain: `50kvm.lantian.pub`		{{server_addr}}	{{server_port}}
+i  - Public IPv4: `23.226.61.104`		{{server_addr}}	{{server_port}}
+i  - Public IPv6: `2001:470:19:10bd::1`		{{server_addr}}	{{server_port}}
+i  - DN42 IPv4: `172.22.76.186`		{{server_addr}}	{{server_port}}
+i  - DN42 IPv6: `fdbc:f9dc:67ad:1::1`		{{server_addr}}	{{server_port}}
+i  - Link-local IPv6: `fe80::2547`		{{server_addr}}	{{server_port}}
+i  - WireGuard Public Key:		{{server_addr}}	{{server_port}}
+i    `xelzwt1j0aoKjsQnnq8jMjZNLbLucBPwPTvHgFH/czs=`		{{server_addr}}	{{server_port}}
+i  - IPSec Public Key:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    ```bash		{{server_addr}}	{{server_port}}
+i    -----BEGIN PUBLIC KEY-----		{{server_addr}}	{{server_port}}
+i    MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAzy8ZqMazr2Ur6jiEoVdr		{{server_addr}}	{{server_port}}
+i    1d8WJaWTySaSwQqhkMnWKNv9Zuk4aITyBxHmtNfVexJGploAeby0zCqLS8CiNbor		{{server_addr}}	{{server_port}}
+i    odPgOPjJdVzkgu6nS+mq1mrjMtrUYJE+GkoILpFoz3z5zS40q2eLh1TJUGQdhSai		{{server_addr}}	{{server_port}}
+i    dTkLiAB6XbBXUBZUPDdBGeKQ72EYBck2oJKpe8B/gXXGwyZqlM7h3h4w8XkOYcrF		{{server_addr}}	{{server_port}}
+i    CI6wbpusiPKaSOW1TkgHHBlIo0qje+Hbax+HcBlrRiftWl5cgVxyS5G7FvNgFVj5		{{server_addr}}	{{server_port}}
+i    H3Tlvhh+wnhdaYQcsaWvcUDHZhOGqeIO1OJMXZ1oi55Mhr7/gFEw1ELk9VWVM+Mj		{{server_addr}}	{{server_port}}
+i    KmAY/7X7l2fupt7QqFHh453kT1P6v75GnLyGLcbgIkAFJyqWiGUT0/TcTEtXimDn		{{server_addr}}	{{server_port}}
+i    +e4Tt5XBYr6YoKsF2YZtcQbQp0UyUGECvKbU1JAmpJoZl+6nUdv89RCOTxvyxpv9		{{server_addr}}	{{server_port}}
+i    0cSX2NLt05nA93BBKm5wwjClIrablF6nnvuWY3pQrneZFgz9iDaBRqQJWpcfw8Qa		{{server_addr}}	{{server_port}}
+i    v1Oi/Uug7kl/v/OZEV7xMV71e5OnQlWjwp5dhmIgmkUMEsEviFoVwUPnDsgamzF4		{{server_addr}}	{{server_port}}
+i    p1iBnYAPBVbJm2pTv/AerKdCBOj6XwGu2N12bZNtSuDFbZR7tOTytB+/tcQBXaPu		{{server_addr}}	{{server_port}}
+i    2DslNqlf/ddRj0Avj5pV/5UCAwEAAQ==		{{server_addr}}	{{server_port}}
+i    -----END PUBLIC KEY-----		{{server_addr}}	{{server_port}}
+i    ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Server 2：Los Angeles, United States, provider HostDare		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  - Domain: `hostdare.lantian.pub`		{{server_addr}}	{{server_port}}
+i  - Public IPv4: `185.186.147.110`		{{server_addr}}	{{server_port}}
+i  - Public IPv6: `2607:fcd0:100:b100::198a:b7f6`		{{server_addr}}	{{server_port}}
+i  - DN42 IPv4: `172.22.76.185`		{{server_addr}}	{{server_port}}
+i  - DN42 IPv6: `fdbc:f9dc:67ad:3::1`		{{server_addr}}	{{server_port}}
+i  - Link-local IPv6: `fe80::2547`		{{server_addr}}	{{server_port}}
+i  - WireGuard Public Key:		{{server_addr}}	{{server_port}}
+i    `zyATu8FW392WFFNAz7ZH6+4TUutEYEooPPirwcoIiXo=`		{{server_addr}}	{{server_port}}
+i  - IPSec Public Key:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    ```bash		{{server_addr}}	{{server_port}}
+i    -----BEGIN PUBLIC KEY-----		{{server_addr}}	{{server_port}}
+i    MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAw5uRE2augI9l4pCKG6Kh		{{server_addr}}	{{server_port}}
+i    qFTXGIcxtp367yLnKb5SPlYt3p2evpo58KNYMZtB50/iaUy/jkBDWEYPuwXMmKc1		{{server_addr}}	{{server_port}}
+i    hjWC3C1/ZS5KLlM8zY3S7LCc+GhJw5DuC7dQpeadLzpKpIOqzcIOUh0qe0mkOXCS		{{server_addr}}	{{server_port}}
+i    f+ulgCYTH1nh5xENvfV0ulxv37SjdZFjORGwIYpARvdJ6DsyEbyNyDsm8Va8XLen		{{server_addr}}	{{server_port}}
+i    DQrVZjQM0Dw8BcFqIysVpPsjGzddO58KUCln02Y+l9OUXuH46z5i4SdpqpAS60q3		{{server_addr}}	{{server_port}}
+i    hhJNzSSZCvfs38/fEelq3rAn+73lXBJKKtBgmYku+t2/stfQuV3Jem7EcM21nnWJ		{{server_addr}}	{{server_port}}
+i    aKBem8+WRmWvYbr1eJZBYSbIQNaPgN8kcnapUq0VPS8jS2vmx63uATnetc0ZN5yG		{{server_addr}}	{{server_port}}
+i    1t8HMmkAN2QB9+Hl28iVvYCgwK3R0wRfZNlIMLechMjHlyi2Pp9+0hMB1yRH6+tq		{{server_addr}}	{{server_port}}
+i    isYGJtm2ZqQ+1+Z17FLb1zNBoMniV+rdkMXxJT7sac5dFv3J4nbxdDYQzdK2gUq+		{{server_addr}}	{{server_port}}
+i    6ZOtBjgJF66GogwaclL0XdU8PANwfzOSapsnjeo3O7EOteEc/1Tf2sFU0KzcxY2B		{{server_addr}}	{{server_port}}
+i    3rKqHX/sThD3xaBbF1sS/JvN9yTrPcCOIzAePlKA+3+n7JabtKRtVvJXUwmidwja		{{server_addr}}	{{server_port}}
+i    OLIBFYyHNksKOBYLkeFhrAMCAwEAAQ==		{{server_addr}}	{{server_port}}
+i    -----END PUBLIC KEY-----		{{server_addr}}	{{server_port}}
+i    ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Server 3: New York, United States, provider VirMach		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  - Domain: `virmach-ny1g.lantian.pub`		{{server_addr}}	{{server_port}}
+i  - Public IPv4: `107.172.134.89`		{{server_addr}}	{{server_port}}
+i  - Public IPv6: `2001:470:1f07:54d::1`		{{server_addr}}	{{server_port}}
+i  - DN42 IPv4: `172.22.76.190`		{{server_addr}}	{{server_port}}
+i  - DN42 IPv6: `fdbc:f9dc:67ad:8::1`		{{server_addr}}	{{server_port}}
+i  - Link-local IPv6: `fe80::2547`		{{server_addr}}	{{server_port}}
+i  - WireGuard Public Key:		{{server_addr}}	{{server_port}}
+i    `a+zL2tDWjwxBXd2bho2OjR/BEmRe2tJF9DHFmZIE+Rk=`		{{server_addr}}	{{server_port}}
+i  - IPSec Public Key:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    ```bash		{{server_addr}}	{{server_port}}
+i    -----BEGIN PUBLIC KEY-----		{{server_addr}}	{{server_port}}
+i    MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAvi/9B2Ms73OqyITx7fmF		{{server_addr}}	{{server_port}}
+i    euImT7rHexwQ8Xz6Hdn8O6FfPK9XLBYRnxYxOT616PNfwHxZpddQgE9ilgmCmGH/		{{server_addr}}	{{server_port}}
+i    W/7+gF+Ub0WfPPsmCjQ0XoYB32bEv9FTuF0Z94A2HGB4DW7b4zRcwC63NgTWLZ1t		{{server_addr}}	{{server_port}}
+i    S+josno+1Q4pwmffNipPm/Z3jH+DMoJep8ShqANG3JKnzAR40X1XHv9KpYIgyIgZ		{{server_addr}}	{{server_port}}
+i    QGChXK55rY7zprQQ+Hab2sHZ1vAlsfQ0OitgIYqc770Tewfz9AWbOLqz6WIPifKg		{{server_addr}}	{{server_port}}
+i    9Mhzli1dsO5rBG3VG3KAuJOejiEZKrG1EteWW24Zv5iRCh2qTbiyZmHHlKpwukOw		{{server_addr}}	{{server_port}}
+i    UwLyE3k8b8ZnAF0rpZ3Amq0W1zZXI6M9VXtcyHUPUCFICdTluE9UHHpFDCQvolqO		{{server_addr}}	{{server_port}}
+i    UuEzqJ6FyAXMhH14JG19uM+uGcbLEtFOQR13iQK8LnVWVl3nF3AqHUthdXCmWqb/		{{server_addr}}	{{server_port}}
+i    IjfcThEFvno4qE95ByOzIW3/AR+IWSU1XDEQZieIztQqJvUADUl60j4lbM5+SbLw		{{server_addr}}	{{server_port}}
+i    uBcAjWSK8wLeUqy8CLeIv41olKnpPXTNbouu+E/7qxOLEfjkx6QZ3DhN1UGtPFQS		{{server_addr}}	{{server_port}}
+i    Xt1p+DuItBlcE2vJzADHTCb3LsdhMQ3q3reH9DVbDxyIxrKxpcVJHHI37rboBDl9		{{server_addr}}	{{server_port}}
+i    BWxEF0pSRIaVU2DExNVLz6ECAwEAAQ==		{{server_addr}}	{{server_port}}
+i    -----END PUBLIC KEY-----		{{server_addr}}	{{server_port}}
+i    ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Server 4: Frankfurt, Germany, provider Virtono		{{server_addr}}	{{server_port}}
+i  - Domain: `virtono.lantian.pub`		{{server_addr}}	{{server_port}}
+i  - Public IPv4: `45.138.97.165`		{{server_addr}}	{{server_port}}
+i  - Public IPv6: `2001:ac8:20:3::433a:a05d`		{{server_addr}}	{{server_port}}
+i  - DN42 IPv4: `172.22.76.187`		{{server_addr}}	{{server_port}}
+i  - DN42 IPv6: `fdbc:f9dc:67ad:2::1`		{{server_addr}}	{{server_port}}
+i  - Link-local IPv6: `fe80::2547`		{{server_addr}}	{{server_port}}
+i  - WireGuard Public Key:		{{server_addr}}	{{server_port}}
+i    `DkmSBCIgrxPPZmT07DraoCSD/jSByjPkYqHJWfVZ5hM=`		{{server_addr}}	{{server_port}}
+i  - IPSec Public Key: None yet (will generate one if someone ever		{{server_addr}}	{{server_port}}
+i    needs IPSec)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Recommended Config Templates (Default Parameters)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> These templates are from your perspective, you don't need to swap		{{server_addr}}	{{server_port}}
+i> sides when using them on your server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOpenVPN:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i{% insertmd \_templates/dn42-experimental-network-2020/openvpn-en.md %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iipsec.conf:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i{% insertmd \_templates/dn42-experimental-network-2020/ipsec-en.md %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWireGuard config (for use with `wg-quick up`):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i{% insertmd \_templates/dn42-experimental-network-2020/wireguard-en.md %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

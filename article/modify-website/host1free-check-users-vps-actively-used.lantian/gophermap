@@ -1,0 +1,53 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Host1Free 检查所有用户是否使用VPS"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [VPS, Host1Free]		{{server_addr}}	{{server_port}}
+idate: 2013-02-06 19:48:05		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHost1Free 送 VPS 的活动已经搞了好一段时间了，总共上了 30 多台服务器，		{{server_addr}}	{{server_port}}
+i划出了总共 30000 台 VPS（超售严重啊……免费的忍忍吧），引来超级大批用户		{{server_addr}}	{{server_port}}
+i注册，最重要的是官方不歧视景德镇用户注册。但是景德镇的人有一个特点，就		{{server_addr}}	{{server_port}}
+i是拿到之后玩，玩烦了就把它放在一边不管，或者是自己又搞到了其他的 VPS（		{{server_addr}}	{{server_port}}
+i比如 EC2，还有早几个月可以弄到 VPS.me），就再也不去用它了。但是		{{server_addr}}	{{server_port}}
+iHost1Free 总体比较敬业，每次服务器 down 掉，都会把所有的 VPS 都开起来		{{server_addr}}	{{server_port}}
+i，于是那些没人用的 VPS，一个就是 128M 内存+640M Swap，浪费资源。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i于是 Host1Free 想了一个奇葩的方法检查用户是否活跃使用，关机！大概上个		{{server_addr}}	{{server_port}}
+i星期四晚上，所有 VPS 全部被关机。同时 Host1Free 发邮件通知所有用户，赶		{{server_addr}}	{{server_port}}
+i紧到 SolusVM 里开启 VPS，否则过几天就要被干掉了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i上个星期回到家，我想折腾 VPS，结果连不上，到 SolusVM 里发现 VPS 关机了		{{server_addr}}	{{server_port}}
+i，于是我就开启了它（我以为 Host1Free 抽风了），折腾了一会儿。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i结果今天我偶然点开 Thunderbird 看了一下，就看到 Host1Free 的这封邮件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+iDear Host1Free Users,		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWe have recently noticed that majority of the ONLINE free VPS servers are not being used and are simply kept online consuming resources.		{{server_addr}}	{{server_port}}
+iA week ago we have issued a shutdown on all of free VPS servers and we are currently monitoring the system to see how many of the servers are being actively used.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWe would like to inform you that all of the servers that will not be turned back ONLINE after the initial shutdown will be TERMINATED next week.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPlease take your time and turn ON your free VPS if you intend to use it, otherwise you will lose all of the data present on your server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you found this message in your spam folder - mark it as not spam for future service alerts.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iKeep in mind - Host1Free does not provide any backups for your free services. You should do it by yourself.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRegards,		{{server_addr}}	{{server_port}}
+iHost1Free		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最危险的是，这篇文章居然是我在垃圾邮件箱里找到的！还好我的 VPS 已经开		{{server_addr}}	{{server_port}}
+i机，并且在活跃使用（折腾）。这时我突然想到 imbushuo，他也有一个		{{server_addr}}	{{server_port}}
+iHost1Free VPS，但是他后来折腾 EC2 去了。不如帮他检查一下。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i他的 VPS 绑了<http://preview.imbushuo.net>，我打开网页，果然是		{{server_addr}}	{{server_port}}
+iCloudFlare 的 AlwaysOnline 页面，然后我用微博通知他启动 VPS。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我也提醒一下大家（虽然我的博客没什么人看），大家一定要赶紧开启 VPS（不		{{server_addr}}	{{server_port}}
+i想再折腾的除外），免得自己的数据挂掉。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

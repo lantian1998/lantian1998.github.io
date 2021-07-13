@@ -1,0 +1,71 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: 友华 PT926G 关闭 TR069		{{server_addr}}	{{server_port}}
+icategories: 随手记		{{server_addr}}	{{server_port}}
+itags: [友华 PT926G, 光猫, TR069]		{{server_addr}}	{{server_port}}
+idate: 2020-10-03 15:40:30		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i本文介绍如何关闭友华 PT926G 光猫的 TR069 功能，防止电信推送配置/固件更		{{server_addr}}	{{server_port}}
+i新，导致你自己改的桥接、端口转发等失效。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这台光猫的 WAN 设置里，TR069 连接是无法修改或者删除的。但是我们只要对		{{server_addr}}	{{server_port}}
+i光猫后台的代码做一点小小的修改，就可以破解这个限制。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先你需要按照我的		{{server_addr}}	{{server_port}}
+《		{{server_addr}}	{{server_port}}
+1友华 PT926G 光猫破解	/article/random-notes/youhua-pt926g-fiber-modem-crack.lantian/	{{server_addr}}	{{server_port}}
+i》i这篇文章获取 Telnet 管理员密码。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后 Telnet 进去，执行 `su` 并输入密码进入 Root Shell。进入后命令行应		{{server_addr}}	{{server_port}}
+i该会显示 `#`。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后依次执行以下操作：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 输入 `cp /home/httpd/web/net_eth_links.asp /var/`，回车运行。		{{server_addr}}	{{server_port}}
+i   - 我们准备修改这个文件，但这个文件放在一个只读的分区上，所以先把它		{{server_addr}}	{{server_port}}
+i     复制一份到可以读写的地方。		{{server_addr}}	{{server_port}}
+i2. 输入 `vi /var/net_eth_links.asp` 编辑这个文件。`vi` 是著名的非常难		{{server_addr}}	{{server_port}}
+i   用的编辑器，因此我们一步步来：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   1. 输入 `/is_configurable` 然后回车，也就是查找 `is_configurable`		{{server_addr}}	{{server_port}}
+i      这个字符串。光标应该会跳转到这个位置：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      ```javascript		{{server_addr}}	{{server_port}}
+i      //If connection type is TR069 return false, else return true		{{server_addr}}	{{server_port}}
+i      function is_configurable()		{{server_addr}}	{{server_port}}
+i      {		{{server_addr}}	{{server_port}}
+i        var lk = document.forms[0].lkname.value;		{{server_addr}}	{{server_port}}
+i        var province= <%checkWrite("PROVINCE");%>;		{{server_addr}}	{{server_port}}
+i        /* 中间略去一些 */		{{server_addr}}	{{server_port}}
+i        return true;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i      ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   2. 按上下键把光标定位到 `var lk` 一行，然后按两次 D 键。这样这一行		{{server_addr}}	{{server_port}}
+i      就被删掉了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   3. 不停按 D 键删除，删到 `return true;` 的上一行为止		{{server_addr}}	{{server_port}}
+i      （`return true;`这一行不要删），整个函数看起来就像这样：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      ```javascript		{{server_addr}}	{{server_port}}
+i      //If connection type is TR069 return false, else return true		{{server_addr}}	{{server_port}}
+i      function is_configurable() {		{{server_addr}}	{{server_port}}
+i        return true;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i      ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   4. 输入 `:wq` 回车，保存文件并退出编辑器。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. 输入		{{server_addr}}	{{server_port}}
+i   `mount --bind /var/net_eth_links.asp /home/httpd/web/net_eth_links.asp`，		{{server_addr}}	{{server_port}}
+i   回车运行。		{{server_addr}}	{{server_port}}
+i   - 虽然我们没法修改原文件，但我们可以用新文件“取代”老文件的位置，让		{{server_addr}}	{{server_port}}
+i     系统访问时自动走到新文件上。		{{server_addr}}	{{server_port}}
+i   - 上面这一行就是干的这个事。		{{server_addr}}	{{server_port}}
+i4. 用浏览器进入 8080 端口的光猫后台，此时 WAN 设置里的 TR069 连接已经		{{server_addr}}	{{server_port}}
+i   可以编辑了。		{{server_addr}}	{{server_port}}
+i   - 你可以选择删了它，或者把它的类型改成 Internet 或者 Other，或者把		{{server_addr}}	{{server_port}}
+i     它也改桥接，都可以。		{{server_addr}}	{{server_port}}
+i   - 这样光猫的 TR069 连接就失效了，连不上电信的管理后台了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

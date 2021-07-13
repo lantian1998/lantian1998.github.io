@@ -1,0 +1,353 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Static Build Tiny Docker Images"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [Docker]		{{server_addr}}	{{server_port}}
+idate: 2020-11-29 23:04:46		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhat's stored in Docker images can be seen as numerous tiny Linux		{{server_addr}}	{{server_port}}
+isystems. Most of them are based on Debian, Ubuntu or Alpine, with		{{server_addr}}	{{server_port}}
+iextra software installed on top.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUsing a complete Linux distribution as the basis gives the benefit of		{{server_addr}}	{{server_port}}
+ihaving commonly used commands available, such as `ls` and `cat`. They		{{server_addr}}	{{server_port}}
+iare often used in the image building process. In addition, they have		{{server_addr}}	{{server_port}}
+icomprehensive libraries of software packages, allowing users to create		{{server_addr}}	{{server_port}}
+iimages that "just work" with `apt-get`. However, as soon as the image		{{server_addr}}	{{server_port}}
+iis built, these utilities become unnecessary burdens for disk space.		{{server_addr}}	{{server_port}}
+iIn addition, a full Linux contains a service managing daemon, like		{{server_addr}}	{{server_port}}
+iSystemD or OpenRC, useless for Docker containers running only one		{{server_addr}}	{{server_port}}
+iprogram at a time.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAlthough Docker images are "overlaid", having the base system and		{{server_addr}}	{{server_port}}
+iupper level changes (such as installling a program) split to layers		{{server_addr}}	{{server_port}}
+iand stored separately, in order to deduplicate and minimize storage		{{server_addr}}	{{server_port}}
+iuse, this doesn't fully resolve the problem. For example, assume I		{{server_addr}}	{{server_port}}
+icreated an image A based on Debian, then one month layer created image		{{server_addr}}	{{server_port}}
+iB. During the month, the base Debian image had an upgrade, so Docker		{{server_addr}}	{{server_port}}
+istarts to store two copies of Debian, new and old, and consumes a		{{server_addr}}	{{server_port}}
+isignificant amount of space.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIt's obvious that base system images are responsible for most of the		{{server_addr}}	{{server_port}}
+istorage consumption. In addition, they're large, with over 100 MB for		{{server_addr}}	{{server_port}}
+iDebian and Ubuntu. While Alpine's image is smaller, it still takes		{{server_addr}}	{{server_port}}
+i5-10 MB, and is less commonly used. What if we remove the base system		{{server_addr}}	{{server_port}}
+icompletely from the created image, only keeping the executables of our		{{server_addr}}	{{server_port}}
+iprograms?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYes, we can do that, although it does have its difficulty.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Docker Multi-stage Build		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, let's try building an image for a Hello World program written		{{server_addr}}	{{server_port}}
+iin C. Save this file as `hello.c`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```c		{{server_addr}}	{{server_port}}
+i#include <stdio.h>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iint main() {		{{server_addr}}	{{server_port}}
+i    printf("Hello World\n");		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince we plan to remove the base system and only keep the program, we		{{server_addr}}	{{server_port}}
+ibegin to write the Dockerfile:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```dockerfile		{{server_addr}}	{{server_port}}
+iFROM scratch		{{server_addr}}	{{server_port}}
+i# Then what?		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow we realize that without a basic system, we don't even have `ls` or		{{server_addr}}	{{server_port}}
+i`cat`, let alone `wget` and `gcc`. Good news is that we can still		{{server_addr}}	{{server_port}}
+i`COPY` stuff in:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```dockerfile		{{server_addr}}	{{server_port}}
+iFROM scratch		{{server_addr}}	{{server_port}}
+iCOPY ./hello /		{{server_addr}}	{{server_port}}
+iENTRYPOINT [ "/hello" ]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWe copied the executable `hello` into the image, and set it as the		{{server_addr}}	{{server_port}}
+i`ENTRYPOINT`. Now we have an image with no base system. Isn't that		{{server_addr}}	{{server_port}}
+ieasy?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWait, where did the `hello` file came from? You'll need to install		{{server_addr}}	{{server_port}}
+icompilers and dependencies, and run the compilation beforehand. But		{{server_addr}}	{{server_port}}
+ithis is an extra step needed, and different programs may have		{{server_addr}}	{{server_port}}
+iconflicting needs for the environment (which is one of the problems		{{server_addr}}	{{server_port}}
+ithat Docker solves). It would be better if we can also put the		{{server_addr}}	{{server_port}}
+icompilation process in a container. Even better if it's in the same		{{server_addr}}	{{server_port}}
+iDockerfile.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGood news is, Docker supports this in the form of "multistage build":		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```dockerfile		{{server_addr}}	{{server_port}}
+iFROM gcc AS step_0		{{server_addr}}	{{server_port}}
+iCOPY hello.c /		{{server_addr}}	{{server_port}}
+iRUN gcc /hello.c -o /hello		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFROM scratch AS step_1		{{server_addr}}	{{server_port}}
+iCOPY --from=step_0 /hello /		{{server_addr}}	{{server_port}}
+iENTRYPOINT [ "/hello" ]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDocker first created a container with GCC to compile the program, then		{{server_addr}}	{{server_port}}
+icreate an empty image `FROM scratch` and copy in the executable. All		{{server_addr}}	{{server_port}}
+ithese done in a single Dockerfile.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## But It Doesn't Work, Why?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince the Dockerfile looks good, let's actually build it:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> docker build -t xddxdd/test .		{{server_addr}}	{{server_port}}
+iSending build context to Docker daemon  3.072kB		{{server_addr}}	{{server_port}}
+i# ...		{{server_addr}}	{{server_port}}
+iSuccessfully built 92004f08c63f		{{server_addr}}	{{server_port}}
+iSuccessfully tagged xddxdd/test:latest		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> docker images xddxdd/test		{{server_addr}}	{{server_port}}
+iREPOSITORY          TAG                 IMAGE ID            CREATED              SIZE		{{server_addr}}	{{server_port}}
+ixddxdd/test         latest              92004f08c63f        About a minute ago   16.4kB		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe image is build with 16.4 KB in size, really small. Let's run it:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> docker run -it --rm xddxdd/test		{{server_addr}}	{{server_port}}
+istandard_init_linux.go:219: exec user process caused: no such file or directory		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWait, no what file or directory? There's only a single `hello`		{{server_addr}}	{{server_port}}
+iexecutable which isn't supposed to look for other files.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOr is it?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## C Standard Library and Static Builds		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAlthough our C code doesn't access any files, the executable itself		{{server_addr}}	{{server_port}}
+ineeds to depend on other files. Let's take a look with `ldd`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> ldd hello		{{server_addr}}	{{server_port}}
+ilinux-vdso.so.1 (0x00007ffd3759d000)		{{server_addr}}	{{server_port}}
+ilibc.so.6 => /usr/lib/libc.so.6 (0x00007f5772a31000)		{{server_addr}}	{{server_port}}
+i/lib64/ld-linux-x86-64.so.2 => /usr/lib64/ld-linux-x86-64.so.2 (0x00007f5772c53000)		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iELF executables used by Linux supports loading other .so files during		{{server_addr}}	{{server_port}}
+istartup, to use precompiled functions in such files. These .so files		{{server_addr}}	{{server_port}}
+iare called "dynamic libraries" since they're dynamically loaded on		{{server_addr}}	{{server_port}}
+iprogram startup. The process is called "dynamic linking".		{{server_addr}}	{{server_port}}
+iCorrespondingly, the executables are called "dynamic executables".		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBack to our program:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```c		{{server_addr}}	{{server_port}}
+i#include <stdio.h>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iint main() {		{{server_addr}}	{{server_port}}
+i    printf("Hello World\n");		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe `printf` function comes from the dynamic library `libc.so.6`. It		{{server_addr}}	{{server_port}}
+iis Glibc, a C standard library with over 30 years of history, which		{{server_addr}}	{{server_port}}
+iexists in most of the commonly used Linux distributions, and is		{{server_addr}}	{{server_port}}
+idepended on by most programs. Since there's no Glibc in our Docker		{{server_addr}}	{{server_port}}
+iimage, the single `hello` executable won't work naturally.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIs there any way to simply include the `printf` function in the		{{server_addr}}	{{server_port}}
+iexecutable? Yes, it's called "static linking":		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> gcc hello.c -o hello-static -static		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWith `-static` parameter added to GCC, it will extract the `printf`		{{server_addr}}	{{server_port}}
+ifunction (as well as functions `printf` use) from Glibc and put all of		{{server_addr}}	{{server_port}}
+ithem in the `hello-static` file. Now the created executable won't		{{server_addr}}	{{server_port}}
+idepend on external libraries such as Glibc. It's called a "static		{{server_addr}}	{{server_port}}
+iexecutable".		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> ldd hello-static		{{server_addr}}	{{server_port}}
+inot a dynamic executable		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLet's try again with `-static` included in Dockerfile:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```dockerfile		{{server_addr}}	{{server_port}}
+iFROM gcc AS step_0		{{server_addr}}	{{server_port}}
+iCOPY hello.c /		{{server_addr}}	{{server_port}}
+iRUN gcc /hello.c -o /hello -static		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFROM scratch AS step_1		{{server_addr}}	{{server_port}}
+iCOPY --from=step_0 /hello /		{{server_addr}}	{{server_port}}
+iENTRYPOINT [ "/hello" ]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBuild and run the image:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> docker build -t xddxdd/test .		{{server_addr}}	{{server_port}}
+i# ...		{{server_addr}}	{{server_port}}
+iSuccessfully built 03a938aadafd		{{server_addr}}	{{server_port}}
+iSuccessfully tagged xddxdd/test:latest		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> docker run -it --rm xddxdd/test		{{server_addr}}	{{server_port}}
+iHello World		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGreat, it works. Let's take another look at the image:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> docker images xddxdd/test		{{server_addr}}	{{server_port}}
+iREPOSITORY          TAG                 IMAGE ID            CREATED             SIZE		{{server_addr}}	{{server_port}}
+ixddxdd/test         latest              03a938aadafd        2 minutes ago       945kB		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWait, 945 KB? It was 16.4 KB before. Does a simple `printf` really		{{server_addr}}	{{server_port}}
+itake up that much space?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Replacing Glibc With Musl		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIt's still Glibc's fault, since it isn't designed to be statically		{{server_addr}}	{{server_port}}
+ilinked to programs. The reasons are:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. It's functionalities are too complex, and will greatly increase the		{{server_addr}}	{{server_port}}
+i   size of the final executable.		{{server_addr}}	{{server_port}}
+i2. Even with static linking, Glibc will still call external dynamic		{{server_addr}}	{{server_port}}
+i   libraries, such as `nss` library used for DNS resolution. If it		{{server_addr}}	{{server_port}}
+i   doesn't exist, DNS resolution won't work. This means we still have		{{server_addr}}	{{server_port}}
+i   to include extra files in the container.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen Glibc complicates things too much, we can replace it with simpler		{{server_addr}}	{{server_port}}
+isolutions, such as Musl, another C standard library. Musl works		{{server_addr}}	{{server_port}}
+isimilar to Glibc, both providing the most basic functions in C (such		{{server_addr}}	{{server_port}}
+ias `printf`), but Musl is more lightweight with simplified structure.		{{server_addr}}	{{server_port}}
+iIn addition, it doesn't depend on external libraries such as `nss`, so		{{server_addr}}	{{server_port}}
+ieverything will continue to work with static linking.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut Musl isn't completely compatible with Glibc, and programs have to		{{server_addr}}	{{server_port}}
+ibe recompiled to switch to another C standard library. Therefore we		{{server_addr}}	{{server_port}}
+icannot simply replace the Glibc file with Musl, which will crash the		{{server_addr}}	{{server_port}}
+isystem. But we can still install Musl alongside Glibc in the commonly		{{server_addr}}	{{server_port}}
+iused Linux distributions:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# Arch Linux		{{server_addr}}	{{server_port}}
+i> pacman -S musl		{{server_addr}}	{{server_port}}
+i# Debian		{{server_addr}}	{{server_port}}
+i> apt-get install musl-dev musl-tools		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter installation, Musl provides a command, `musl-gcc`, that adds		{{server_addr}}	{{server_port}}
+iproper parameters to GCC to create Musl-linked programs instead of		{{server_addr}}	{{server_port}}
+iGlibc ones. Let's modify the Dockerfile again:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```dockerfile		{{server_addr}}	{{server_port}}
+iFROM gcc AS step_0		{{server_addr}}	{{server_port}}
+iRUN apt-get update && apt-get install -y musl-dev musl-tools		{{server_addr}}	{{server_port}}
+iCOPY hello.c /		{{server_addr}}	{{server_port}}
+iRUN musl-gcc /hello.c -o /hello -static		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFROM scratch AS step_1		{{server_addr}}	{{server_port}}
+iCOPY --from=step_0 /hello /		{{server_addr}}	{{server_port}}
+iENTRYPOINT [ "/hello" ]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBuild, run, and check the image, same as above:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> docker build -t xddxdd/test .		{{server_addr}}	{{server_port}}
+i# ...		{{server_addr}}	{{server_port}}
+iSuccessfully built c3ee94508e4e		{{server_addr}}	{{server_port}}
+iSuccessfully tagged xddxdd/test:latest		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> docker run -it --rm xddxdd/test		{{server_addr}}	{{server_port}}
+iHello World		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> docker images xddxdd/test		{{server_addr}}	{{server_port}}
+iREPOSITORY          TAG                 IMAGE ID            CREATED             SIZE		{{server_addr}}	{{server_port}}
+ixddxdd/test         latest              c3ee94508e4e        49 seconds ago      26kB		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i26 KB, a bit larger than the dynamically linked version since there		{{server_addr}}	{{server_port}}
+iare extra functions included, but it's way smaller than the Glibc		{{server_addr}}	{{server_port}}
+iversion.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut using Musl isn't always this easy. With all programs and libraries		{{server_addr}}	{{server_port}}
+icompiled against Glibc, when our program needs other libraries, we		{{server_addr}}	{{server_port}}
+icannot simply install them with the package manager. We'll have		{{server_addr}}	{{server_port}}
+icompile our own with Musl. For example, my `Bird` container compiled		{{server_addr}}	{{server_port}}
+i`ncurses` and `readline` manually as a consequence of using Musl:		{{server_addr}}	{{server_port}}
+i<https://github.com/xddxdd/dockerfiles/blob/8b0484073c7ffd8926247688ba12425d3953f051/dockerfiles/bird/template.Dockerfile>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Static Linking and the Go Language		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThere's simply no way to not mention Go programs when talking about		{{server_addr}}	{{server_port}}
+istatic linking. First let's create a Hello World in Go:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```go		{{server_addr}}	{{server_port}}
+ipackage main		{{server_addr}}	{{server_port}}
+iimport "fmt"		{{server_addr}}	{{server_port}}
+ifunc main() {		{{server_addr}}	{{server_port}}
+i    fmt.Println("Hello World")		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen compile:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> go build main.go		{{server_addr}}	{{server_port}}
+i> ldd main		{{server_addr}}	{{server_port}}
+inot a dynamic executable		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe compiled executable of Go is simply a static one, with no		{{server_addr}}	{{server_port}}
+idependency on Glibc. This means it can be added alone to a Docker		{{server_addr}}	{{server_port}}
+icontainer and work correctly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMore complicated Go programs may still call Glibc, for example my		{{server_addr}}	{{server_port}}
+i[Bird-lg-go](https://github.com/xddxdd/bird-lg-go):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> cd frontend		{{server_addr}}	{{server_port}}
+i> go build		{{server_addr}}	{{server_port}}
+i> ldd frontend		{{server_addr}}	{{server_port}}
+ilinux-vdso.so.1 (0x00007fff2ffe9000)		{{server_addr}}	{{server_port}}
+ilibpthread.so.0 => /usr/lib/libpthread.so.0 (0x00007fc81014a000)		{{server_addr}}	{{server_port}}
+ilibc.so.6 => /usr/lib/libc.so.6 (0x00007fc80ff81000)		{{server_addr}}	{{server_port}}
+i/lib64/ld-linux-x86-64.so.2 => /usr/lib64/ld-linux-x86-64.so.2 (0x00007fc8101c0000)		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhile it is still Go, it uses Glibc, and Pthread the multithreadling		{{server_addr}}	{{server_port}}
+ilibrary. But unlike other languages, you can easily disallow linking		{{server_addr}}	{{server_port}}
+ito Glibc in Go:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i> CGO_ENABLED=0 go build		{{server_addr}}	{{server_port}}
+i> ldd frontend		{{server_addr}}	{{server_port}}
+inot a dynamic executable		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAll you have to add is the `CGO_ENABLED=0` environment variable. By		{{server_addr}}	{{server_port}}
+ithe way, Go static executables are different from GCC ones. Go static		{{server_addr}}	{{server_port}}
+iexecutables contains zero instructions from Glibc, unlike GCC which		{{server_addr}}	{{server_port}}
+isimply copies Glibc instructions into the executable. As a result, Go		{{server_addr}}	{{server_port}}
+iprograms do not suffer from the problem of `nss` and limited		{{server_addr}}	{{server_port}}
+ifunctionality for using Glibc.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo, Go programs can be packed to Docker images without base systems		{{server_addr}}	{{server_port}}
+ieasily, which no code modification required in most circumstances.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Conclusion		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWith static linking, you can reduce your Docker image from over 100 MB		{{server_addr}}	{{server_port}}
+iwith base system to a few MB or even KB for a single executable. Now		{{server_addr}}	{{server_port}}
+iyour server don't have to hold dozens of different Debian copies for		{{server_addr}}	{{server_port}}
+iyour dozens of images.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

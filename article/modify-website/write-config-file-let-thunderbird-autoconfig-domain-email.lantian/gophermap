@@ -1,0 +1,102 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "编写配置文件，让 Thunderbird 自动配置域名邮箱"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [邮件, Thunderbird, 域名邮箱]		{{server_addr}}	{{server_port}}
+idate: 2018-06-01 14:45:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2018/06/1206081669.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i许多人在自己的网站域名上设置了邮箱系统，我也在主站 lantian.pub 的域名		{{server_addr}}	{{server_port}}
+i上使用了 Zoho 的域名邮箱。不过使用域名邮箱的一大缺点是，你很难记住邮件		{{server_addr}}	{{server_port}}
+i系统的 POP3、IMAP、SMTP 等服务器地址，一旦出现重装系统、重装邮件客户端		{{server_addr}}	{{server_port}}
+i等情况，需要重新配置时，就不得不再登上邮件系统去查看服务器地址，非常麻		{{server_addr}}	{{server_port}}
+i烦。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过，如果你用的是 Thunderbird 邮件客户端，在设置账户时，你可能注意到		{{server_addr}}	{{server_port}}
+i，Thunderbird 在添加账户时，会有一个“从邮件服务商获取设置”的过程。这个		{{server_addr}}	{{server_port}}
+i过程实质上就是从这个域名的网站服务器上请求一份 XML 文档，其中记录了邮		{{server_addr}}	{{server_port}}
+i件服务器的设置。因此，只要手动编写这份配置文件，并将它放在网站服务器上		{{server_addr}}	{{server_port}}
+i，就可以实现 Thunderbird 下的自动配置了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 创建配置文件		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i配置文件中保存了 POP3、IMAP、SMTP 服务器的地址、端口号、用户名等信息。		{{server_addr}}	{{server_port}}
+i对于本站使用的 Zoho 邮件系统，配置文件如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```xml		{{server_addr}}	{{server_port}}
+i<?xml version="1.0" encoding="UTF-8"?>		{{server_addr}}	{{server_port}}
+i<clientConfig version="1.1">		{{server_addr}}	{{server_port}}
+i  <emailProvider id="lantian.pub">		{{server_addr}}	{{server_port}}
+i    <domain>lantian.pub</domain>		{{server_addr}}	{{server_port}}
+i    <displayName>Lan Tian @ Mail</displayName>		{{server_addr}}	{{server_port}}
+i    <displayShortName>Lan Tian Mail</displayShortName>		{{server_addr}}	{{server_port}}
+i    <incomingServer type="imap">		{{server_addr}}	{{server_port}}
+i      <hostname>imappro.zoho.com</hostname>		{{server_addr}}	{{server_port}}
+i      <port>993</port>		{{server_addr}}	{{server_port}}
+i      <socketType>SSL</socketType>		{{server_addr}}	{{server_port}}
+i      <authentication>password-cleartext</authentication>		{{server_addr}}	{{server_port}}
+i      <username>%EMAILADDRESS%</username>		{{server_addr}}	{{server_port}}
+i    </incomingServer>		{{server_addr}}	{{server_port}}
+i    <incomingServer type="pop3">		{{server_addr}}	{{server_port}}
+i      <hostname>poppro.zoho.com</hostname>		{{server_addr}}	{{server_port}}
+i      <port>995</port>		{{server_addr}}	{{server_port}}
+i      <socketType>SSL</socketType>		{{server_addr}}	{{server_port}}
+i      <authentication>password-cleartext</authentication>		{{server_addr}}	{{server_port}}
+i      <username>%EMAILADDRESS%</username>		{{server_addr}}	{{server_port}}
+i    </incomingServer>		{{server_addr}}	{{server_port}}
+i    <outgoingServer type="smtp">		{{server_addr}}	{{server_port}}
+i      <hostname>smtp.zoho.com</hostname>		{{server_addr}}	{{server_port}}
+i      <port>465</port>		{{server_addr}}	{{server_port}}
+i      <socketType>SSL</socketType>		{{server_addr}}	{{server_port}}
+i      <authentication>password-cleartext</authentication>		{{server_addr}}	{{server_port}}
+i      <username>%EMAILADDRESS%</username>		{{server_addr}}	{{server_port}}
+i    </outgoingServer>		{{server_addr}}	{{server_port}}
+i  </emailProvider>		{{server_addr}}	{{server_port}}
+i</clientConfig>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i可以看到，这个 XML 文件记录了 IMAP、POP3、SMTP 三个服务器的域名、端口		{{server_addr}}	{{server_port}}
+i、加密方式、认证方式。如果你也使用 Zoho 系统，把上面的 lantian.pub 替		{{server_addr}}	{{server_port}}
+i换成你自己的域名，就可以直接拿去用了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你使用的是其它邮件系统，就要把对应的邮件服务器地址替换进去。但是，		{{server_addr}}	{{server_port}}
+i替换后也可能会遇到问题，提示“用户名密码错误”。这是因为邮件客户端在发送		{{server_addr}}	{{server_port}}
+i用户名密码的时候，可能以明文方式发送，也可能进行 MD5 加密后再发送。如		{{server_addr}}	{{server_port}}
+i果服务器不支持某种方式，就会出问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i那么如何知道邮件服务器支持的认证方式呢？打开 Thunderbird，在添加账户界		{{server_addr}}	{{server_port}}
+i面选择“手动配置”，填入服务器配置，然后在“认证 / Authentication”一栏全		{{server_addr}}	{{server_port}}
+i部选择“自动检测 / Autodetect”，如图：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IThunderbird 添加账户	/usr/uploads/2018/06/689399879.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后点击下面的“重新测试 / Re-test”，稍等片刻：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IThunderbird 服务器认证方式变化	/usr/uploads/2018/06/2691471279.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i认证方式一栏就会发生变化。“普通密码 / Normal password” 就是明文方式发		{{server_addr}}	{{server_port}}
+i送密码，对应 XML 文件 authentication 字段的 password-cleartext 值；“加		{{server_addr}}	{{server_port}}
+i密密码 / Encrypted password” 就是 MD5 加密，对应 password-encrypted。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你需要更复杂的配置，请参考 Mozilla 官方的		{{server_addr}}	{{server_port}}
+i[Autoconfiguration in Thunderbird](https://developer.mozilla.org/en-US/docs/Mozilla/Thunderbird/Autoconfiguration)		{{server_addr}}	{{server_port}}
+i和		{{server_addr}}	{{server_port}}
+i[Autoconfig: How to create a configuration file](https://developer.mozilla.org/en-US/docs/Mozilla/Thunderbird/Autoconfiguration/FileFormat/HowTo)		{{server_addr}}	{{server_port}}
+i两篇文章。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 上传配置文件		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThunderbird 获取配置文件时，会尝试两个地址：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. <http://autoconfig.你的域名.com/mail/config-v1.1.xml?emailaddress=[你的邮箱]>		{{server_addr}}	{{server_port}}
+i2. <http://你的域名.com/.well-known/autoconfig/mail/config-v1.1.xml>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因此将配置文件放在上述任选一处的位置即可。正确配置完成后的效果如下：（		{{server_addr}}	{{server_port}}
+i注意 Thunderbird 的提示“从邮件服务商获得配置 / Configuration found at		{{server_addr}}	{{server_port}}
+iemail provider”）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IThunderbird 自动检测到配置	/usr/uploads/2018/06/1206081669.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i/usr/uploads/2018/06/1206081669.png		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

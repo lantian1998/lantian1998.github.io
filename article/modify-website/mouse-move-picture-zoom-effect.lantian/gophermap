@@ -1,0 +1,110 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "鼠标移过图片放大显示效果"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [特效, HTML, CSS, jQuery, JS]		{{server_addr}}	{{server_port}}
+idate: 2013-06-18 20:36:47		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2013/06/1260012588.jpg		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i鼠标移过图片放大显示效果 - Original by [Maomihz](http://maomihz.com),		{{server_addr}}	{{server_port}}
+iModified by [Lan Tian](https://lantian.pub)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i昨天晚上[Maomihz](http://maomihz.com)让我帮他改一段 jQuery，实现鼠标移		{{server_addr}}	{{server_port}}
+i上去自动显示高清大图的效果。一开始有两个 Bug，一个是鼠标移到大图框上时		{{server_addr}}	{{server_port}}
+i，大图会闪来闪去，另一个就是图片会超出屏幕上边界。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我的修改， 就是把大图放到小图底下去，然后给小图设定半透明效果。超出上		{{server_addr}}	{{server_port}}
+i边界的判断非常容易，写了个 max 函数就搞定了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下面放 jQuery：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```javascript		{{server_addr}}	{{server_port}}
+i$(function () {		{{server_addr}}	{{server_port}}
+i  var x = 22;		{{server_addr}}	{{server_port}}
+i  var y = 540;		{{server_addr}}	{{server_port}}
+i  var a = 0;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  $("a.smallimage").hover(		{{server_addr}}	{{server_port}}
+i    function (e) {		{{server_addr}}	{{server_port}}
+i      if (a == 0) {		{{server_addr}}	{{server_port}}
+i        $("body").append(		{{server_addr}}	{{server_port}}
+i          '<div id="bigimage"><img src="' +		{{server_addr}}	{{server_port}}
+i            this.rel +		{{server_addr}}	{{server_port}}
+i            '" alt="" /></div>'		{{server_addr}}	{{server_port}}
+i        );		{{server_addr}}	{{server_port}}
+i        a = 1;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i      widthJudge(e);		{{server_addr}}	{{server_port}}
+i      $("a.smallimage").fadeTo(300, 0.3);		{{server_addr}}	{{server_port}}
+i      $("#bigimage").fadeIn(300);		{{server_addr}}	{{server_port}}
+i    },		{{server_addr}}	{{server_port}}
+i    function () {		{{server_addr}}	{{server_port}}
+i      $("#bigimage").fadeOut(300);		{{server_addr}}	{{server_port}}
+i      $("a.smallimage").fadeTo(300, 1);		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  );		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  $("a.smallimage").mousemove(function (e) {		{{server_addr}}	{{server_port}}
+i    widthJudge(e);		{{server_addr}}	{{server_port}}
+i  });		{{server_addr}}	{{server_port}}
+i  function max(a, b) {		{{server_addr}}	{{server_port}}
+i    if (a > b) {		{{server_addr}}	{{server_port}}
+i      return a;		{{server_addr}}	{{server_port}}
+i    } else {		{{server_addr}}	{{server_port}}
+i      return b;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  function widthJudge(e) {		{{server_addr}}	{{server_port}}
+i    var marginRight = document.body.clientWidth - e.pageX;		{{server_addr}}	{{server_port}}
+i    var imageWidth = $("#bigimage").width();		{{server_addr}}	{{server_port}}
+i    if (marginRight < imageWidth) {		{{server_addr}}	{{server_port}}
+i      $("#bigimage").css({		{{server_addr}}	{{server_port}}
+i        top: max(e.pageY - y, 22) + "px",		{{server_addr}}	{{server_port}}
+i        left: document.body.clientWidth - imageWidth + x + "px",		{{server_addr}}	{{server_port}}
+i      });		{{server_addr}}	{{server_port}}
+i    } else {		{{server_addr}}	{{server_port}}
+i      x = -22;		{{server_addr}}	{{server_port}}
+i      $("#bigimage").css({		{{server_addr}}	{{server_port}}
+i        top: max(e.pageY - y, 22) + "px",		{{server_addr}}	{{server_port}}
+i        left: e.pageX + x + "px",		{{server_addr}}	{{server_port}}
+i      });		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i});		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对应的 CSS：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```css		{{server_addr}}	{{server_port}}
+i.smallimage {		{{server_addr}}	{{server_port}}
+i  position: relative;		{{server_addr}}	{{server_port}}
+i  z-index: 3;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i#bigimage {		{{server_addr}}	{{server_port}}
+i  position: absolute;		{{server_addr}}	{{server_port}}
+i  z-index: 2;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i#bigimage img {		{{server_addr}}	{{server_port}}
+i  height: 500px;		{{server_addr}}	{{server_port}}
+i  padding: 5px;		{{server_addr}}	{{server_port}}
+i  background: #fff;		{{server_addr}}	{{server_port}}
+i  border: 1px solid #e3e3e3;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i网页调用方法：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+<div class="imgls">		{{server_addr}}	{{server_port}}
+Ismall.jpg" rel="img0.jpg" class="smallimage"><img src="small	/article/modify-website/mouse-move-picture-zoom-effect.lantian/small.jpg" rel="img0.jpg" class="smallimage"><img src="small.jpg	{{server_addr}}	{{server_port}}
+i</div>i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i截图：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I特效截图	/usr/uploads/2013/06/1260012588.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下载：（用的是 Win8 那两朵花）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1样例包	/usr/uploads/2013/06/3009674103.zip	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

@@ -1,0 +1,80 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "树莓派 3B 折腾笔记：硬件看门狗"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [Raspberry Pi]		{{server_addr}}	{{server_port}}
+idate: 2018-02-12 22:46:18		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在计算机中，“看门狗”指的是一种硬件计时器，用于在计算机失去响应（死机）		{{server_addr}}	{{server_port}}
+i的时候重启计算机。计算机的系统上要运行一个程序不断和看门狗硬件通信。当		{{server_addr}}	{{server_port}}
+i通信中断经过一段预设的时间后，看门狗就会通过发送 RESET 信号或者切断再		{{server_addr}}	{{server_port}}
+i接通电源等方式强制重启，保证计算机上运行的服务不长时间中断。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在折腾树莓派的过程中，我也曾好几次让树莓派失去响应，结果不得不人工开关		{{server_addr}}	{{server_port}}
+i电源来重启。通过开启树莓派上的硬件看门狗功能，就可以减少这种情况的出现		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 加载驱动		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于 Linux “万物皆文件”的特点，可以通过 ls 命令直接查看看门狗驱动的状		{{server_addr}}	{{server_port}}
+i态：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ils /dev/watchdog		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果有这个文件，可以直接跳到下一部分。如果没有，就要根据树莓派版本加载		{{server_addr}}	{{server_port}}
+i驱动：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 树莓派 1 代的驱动名为：bcm2708_wdog		{{server_addr}}	{{server_port}}
+i2. 树莓派 2 代的驱动名为：bcm2709_wdog		{{server_addr}}	{{server_port}}
+i3. 树莓派 3 代的驱动名为：bcm2835_wdt		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i使用 `modprobe -v [驱动名]` 加载驱动，然后再 `ls /dev/watchdog` 查看情		{{server_addr}}	{{server_port}}
+i况。如果驱动加载成功，就要将这个驱动设置为开机加载。编辑		{{server_addr}}	{{server_port}}
+i`/etc/modules`，另起一行填入驱动名就可以了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 安装通信软件		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i前面提到，硬件看门狗需要和软件通信来确定系统的状态。在 Raspbian 下这个		{{server_addr}}	{{server_port}}
+i软件是 watchdog，可以直接 apt-get 安装：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iapt-get install watchdog		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后由于显而易见的原因，要把它设置为开机启动：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+isystemctl enable watchdog		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后编辑配置文件 `/etc/watchdog.conf`，作出如下修改：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 取消 #max-load-1 = 24 的注释（删除开头的 # 号），代表当系统 1 分钟		{{server_addr}}	{{server_port}}
+i   内的负载高于 24（已经非常非常高了），就重启系统		{{server_addr}}	{{server_port}}
+i2. 取消 #watchdog-device = /dev/watchdog 的注释，设置看门狗的路径		{{server_addr}}	{{server_port}}
+i3. 增加一行 watchdog-timeout = 15，代表 15 秒内系统无响应就重启系统，		{{server_addr}}	{{server_port}}
+i   在树莓派 3B 上这个值最高为 15。注意不要设置的太小，否则可能造成系统		{{server_addr}}	{{server_port}}
+i   反复重启。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存修改，重启看门狗服务：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iservice watchdog restart		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i看门狗功能就启用了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 测试		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i可以通过 kill 掉看门狗服务来模拟系统死机的情况：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ipkill -9 watchdog		{{server_addr}}	{{server_port}}
+ipkill -9 wd_keepalive		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i过 15 秒后树莓派就会自动重启。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

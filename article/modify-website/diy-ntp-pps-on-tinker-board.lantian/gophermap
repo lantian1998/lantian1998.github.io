@@ -1,0 +1,114 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "（自建 NTP）在 Tinker Board 上使用 PPS"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [NTP, GPS]		{{server_addr}}	{{server_port}}
+idate: 2019-09-16 22:20:20		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2019/09/2438465593.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+在		{{server_addr}}	{{server_port}}
+1前一篇文章	/article/modify-website/diy-gps-based-ntp-server.lantian	{{server_addr}}	{{server_port}}
+i中i，我使用 Tinker Board 和 ATGM336H GPS/北斗模块自建了 NTP 服务器，以		{{server_addr}}	{{server_port}}
+iGPS 作为时间基准。GPS 模块除了提供传统的串口输出 NMEA 语句之外，还额外		{{server_addr}}	{{server_port}}
+i提供了一个 PPS 信号，这个信号会每秒变化一次。原本 gpsd 需要不断解析		{{server_addr}}	{{server_port}}
+iGPS 模块传来的 NMEA 语句，需要耗费不短的时间，并且容易被其它程序抢占运		{{server_addr}}	{{server_port}}
+i行时间，产生 delay（延迟）和 jitter（波动）。而 PPS 信号可以直接触发		{{server_addr}}	{{server_port}}
+iCPU 的中断，运行一个简单的处理程序，让操作系统以高优先级处理，不会被其		{{server_addr}}	{{server_port}}
+i它程序影响。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i一般而言，在 Linux 中，PPS 由内核直接提供驱动支持。但是在前文中，由于		{{server_addr}}	{{server_port}}
+iTinker Board 的 Armbian Linux 内核没有提供 PPS 支持，所以我们没法直接		{{server_addr}}	{{server_port}}
+i开启。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 解决方法 1：重新编译内核		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果内核没有对应支持，那就重新编译内核，加上功能就好。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i[Tinker Board 论坛上的这篇帖子](https://tinkerboarding.co.uk/forum/thread-594.html)中		{{server_addr}}	{{server_port}}
+i提供了一个内核补丁，为内核加上了 PPS 支持。打上补丁、编译内核后，将		{{server_addr}}	{{server_port}}
+iPPS 信号连到第 22 针，就可以使用了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是由于 Armbian 重新编译内核的过程比较复杂（需要指定的操作系统		{{server_addr}}	{{server_port}}
+i（Ubuntu 18.04），交叉编译环境等等），而且似乎不能打成 deb 包（容易被		{{server_addr}}	{{server_port}}
+i后续系统更新覆盖），所以我不打算这么做。我选择了另一种方法：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 解决方法 2：使用用户态程序		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果内核中不提供支持，那就可以用用户态的程序解决		{{server_addr}}	{{server_port}}
+i。<https://github.com/flok99/rpi_gpio_ntpd> 这个程序就可以读取指定针脚		{{server_addr}}	{{server_port}}
+i上的信号，并且发送给 ntpd 用于授时。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是用户态程序有一个问题：它和 gpsd 一样，容易被其它程序打断，影响准确		{{server_addr}}	{{server_port}}
+i度。为了解决这个问题，这个程序在启动时，会将自己设置成实时调度		{{server_addr}}	{{server_port}}
+i（SCHED_RR）。简单来说，实时调度下的程序拥有最高的优先级，永远第一时间		{{server_addr}}	{{server_port}}
+i响应事件，并且（几乎）永远不会被打断。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i又有一个问题出现了：我在编译了这个程序尝试运行时，出现了		{{server_addr}}	{{server_port}}
+i`sched_setscheduler() failed: Operation not permitted` 这个错误，而我		{{server_addr}}	{{server_port}}
+i已经是以 root 用户运行。经过查找，发现 Docker 会使用 cgroup 功能，而		{{server_addr}}	{{server_port}}
+icgroup 会与此处优先级设置出现冲突。具体信息可以查看		{{server_addr}}	{{server_port}}
+i[StackOverflow 上的这篇帖子](https://unix.stackexchange.com/questions/207762/why-sudo-user-can-use-sched-setscheduler-sched-rr-while-root-can-not/511261#511261)		{{server_addr}}	{{server_port}}
+i和		{{server_addr}}	{{server_port}}
+i[RedHat Bugzilla 上的这篇讨论记录](https://bugzilla.redhat.com/show_bug.cgi?id=1467919)。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i总之，解决方案就是，让程序启动时不要自己将自己设置成实时调度。在程序启		{{server_addr}}	{{server_port}}
+i动后，将程序加入主要 cgroup 中，再修改优先级。具体的操作可以在		{{server_addr}}	{{server_port}}
+i<https://github.com/xddxdd/rpi_gpio_ntpd/blob/master/systemd/rpi_gpio_ntp.service>		{{server_addr}}	{{server_port}}
+i看到，修改后的程序也可以在 <https://github.com/xddxdd/rpi_gpio_ntpd>		{{server_addr}}	{{server_port}}
+i这里获得。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你不用 Docker，也可以直接使用原版程序。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下载程序后，直接 `make && make install` 安装，然后在		{{server_addr}}	{{server_port}}
+i`/etc/default/gps0` 中，将 ORIG_DEVICE 设置为对应的串口，我用的是		{{server_addr}}	{{server_port}}
+i`ttyS1`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+iORIG_DEVICE="ttyS1"		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后在 `/etc/default/rpi_gpio_ntp` 中设置 GPIO 针脚，此处 171 对应		{{server_addr}}	{{server_port}}
+iTinker Board 上的 22 针，具体对应关系可以运行 `gpio readall` 查看：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i# Configuration file for rpi_gpio_ntp.service		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Shared memory segment to communicate on		{{server_addr}}	{{server_port}}
+iSHMSEG=1		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# GPIO pin to listen on		{{server_addr}}	{{server_port}}
+i# 4 for Adafruit Ultimate GPS HAT for Raspberry Pi		{{server_addr}}	{{server_port}}
+iGPIO=171		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Other options, if any		{{server_addr}}	{{server_port}}
+iOPTS=		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ITinker Board GPIO	/usr/uploads/2019/09/901961425.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i随后启动 PPS 程序：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+isystemctl enable gps0 rpi_gpio_ntp		{{server_addr}}	{{server_port}}
+isystemctl start gps0 rpi_gpio_ntp		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 `/etc/ntp.conf` 中加入 PPS 配置：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i# PPS reference		{{server_addr}}	{{server_port}}
+iserver 127.127.28.1 minpoll 4 maxpoll 4 prefer		{{server_addr}}	{{server_port}}
+ifudge  127.127.28.1 refid PPS		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i重新启动 NTP 服务：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+isystemctl restart ntp		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后运行 `ntpq -pn` 就可以看到 PPS 了，它的 jitter（波动）特别小：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+Intpq -pn 结果	/usr/uploads/2019/09/2438465593.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

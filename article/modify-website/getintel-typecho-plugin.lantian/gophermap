@@ -1,0 +1,25 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "GetIPIntel 的 Typecho 插件"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [反欺诈, GetIPIntel]		{{server_addr}}	{{server_port}}
+idate: 2016-10-01 22:20:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGetIPIntel 的介绍可以		{{server_addr}}	{{server_port}}
+在		{{server_addr}}	{{server_port}}
+1刚刚这篇文章	/article/modify-website/getipintel-anti-fraud.lantian	{{server_addr}}	{{server_port}}
+i看i到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我写了一个 Typecho 的插件，可以阻止使用代理的访客评论，或者把他们的评		{{server_addr}}	{{server_port}}
+i论丢进垃圾箱。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i功能：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 多种模式选择（仅黑名单，快速检查，全面检查）		{{server_addr}}	{{server_port}}
+i2. 多种处理措施（人工审核，丢垃圾箱，提交失败）		{{server_addr}}	{{server_port}}
+i3. 自定义阈值		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i插件可以在 <https://github.com/xddxdd/typecho-getipintel> 下载到。把		{{server_addr}}	{{server_port}}
+iGetIPIntel 文件夹丢到 usr/plugins 文件夹下面就行。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

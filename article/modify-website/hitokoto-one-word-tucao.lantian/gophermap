@@ -1,0 +1,49 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Hitokoto 一句话吐槽"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [Hitokoto, 吐槽]		{{server_addr}}	{{server_port}}
+idate: 2013-08-04 15:52:01		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IHitokoto	/usr/uploads/2013/08/1999601044.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHitokoto 是一个一句话吐槽网站。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i所谓一句话吐槽，就是用一句话的方式，记录自己的所说、所做、所想，并与别		{{server_addr}}	{{server_port}}
+i人分享。Hitokoto 就提供了一个让大家分享吐槽的网站。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是很明显，这篇文章的目的不是讲这个。我讲的是他的 API，也就是在自己网		{{server_addr}}	{{server_port}}
+i站上显示这些吐槽。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1.PHP 服务器端拉取		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i提示：这种方法我不建议，因为拖慢页面加载速度，如果你服务器不在北美或加		{{server_addr}}	{{server_port}}
+i拿大（Hitokoto 主站在加拿大）更是这样。如果你的网站刚好遭到 CC……在你的		{{server_addr}}	{{server_port}}
+i上传下载都被占满的时候，你就节哀顺变吧。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```php		{{server_addr}}	{{server_port}}
+i<?php $hitokoto = json_decode(file_get_contents('https://api.hitokoto.us/rand?'.rand(0,10000)),true);		{{server_addr}}	{{server_port}}
+iecho $hitokoto['author'].'&#22312;'.$hitokoto['date'].'&#23545;'.$hitokoto['source'].'&#21520;&#27133;&#26352;&#65306;'.$hitokoto['hitokoto']; ?>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2.Javascript 客户端拉取		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这种方法我喜欢，让客户端自己去读取数据，既省时间，又省服务器资源。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+i<script		{{server_addr}}	{{server_port}}
+i  type="text/javascript"		{{server_addr}}	{{server_port}}
+i  src="https://api.hitokoto.us/rand?encode=js&amp;charset=utf-8"		{{server_addr}}	{{server_port}}
+i></script>		{{server_addr}}	{{server_port}}
+i<script>		{{server_addr}}	{{server_port}}
+i  hitokoto();		{{server_addr}}	{{server_port}}
+i</script>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i演示：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<script type="text/javascript" src="https://api.hitokoto.us/rand?encode=js&charset=utf-8"></script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<script>hitokoto();</script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

@@ -1,0 +1,1404 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "How to Kill the DN42 Network (Updated 2020-08-28)"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [DN42, BGP]		{{server_addr}}	{{server_port}}
+idate: 2020-08-28 01:11:18		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/202008/i-love-niantic-network.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> DN42 is an **experimental network**, where everyone helps everyone.		{{server_addr}}	{{server_port}}
+i> Nobody is going to blame you if you screwed up. You may seek help at		{{server_addr}}	{{server_port}}
+i> DN42's [IRC channel](https://wiki.dn42.us/services/IRC),		{{server_addr}}	{{server_port}}
+i> [mailing list](https://wiki.dn42.us/contact#contact_mailing-list) or		{{server_addr}}	{{server_port}}
+i> the [unofficial Telegram group](https://t.me/Dn42Chat).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince DN42 is a network for experimentation, a lot of relatively		{{server_addr}}	{{server_port}}
+iinexperienced users also participate in it. Therefore, occasionally an		{{server_addr}}	{{server_port}}
+iinexperienced user may misconfigure his/her system and impact the		{{server_addr}}	{{server_port}}
+iwhole DN42 network, or even shut it down.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs a more experienced user, here I will teach new users about some		{{server_addr}}	{{server_port}}
+ioperations that can kill the network, and about defense against such		{{server_addr}}	{{server_port}}
+imisconfigurations that everyone can set up against peers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> WARNING: You should not actually perform these operations in DN42.		{{server_addr}}	{{server_port}}
+i> You should focus more on protecting yourself against them.		{{server_addr}}	{{server_port}}
+i>		{{server_addr}}	{{server_port}}
+i> Malicious actions will cause you to be kicked from DN42.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe stories are based on **real disasters** in the Telegram group and		{{server_addr}}	{{server_port}}
+iIRC channel.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Changelog		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 2020-08-27: Format changes, add full IRC logs, add another netmask		{{server_addr}}	{{server_port}}
+i  error content, and add content on missing digit in ASN.		{{server_addr}}	{{server_port}}
+i- 2020-07-13: Add a IPv6 netmask error in registry, and Bird's		{{server_addr}}	{{server_port}}
+i  conflicts between different protocols.		{{server_addr}}	{{server_port}}
+i- 2020-05-30：Initial version, including OSPF, Babel and route flaps.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# OSPF is Fun		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou just joined DN42, and plan to connect all of your servers. You've		{{server_addr}}	{{server_port}}
+ialready peered with a few others on several of your nodes, but you		{{server_addr}}	{{server_port}}
+ihaven't finished on your internal routing yet.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo you plan to configure OSPF. You opened Bird's configuration file		{{server_addr}}	{{server_port}}
+iand added a protocol:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iprotocol ospf {		{{server_addr}}	{{server_port}}
+i  ipv4 {		{{server_addr}}	{{server_port}}
+i    import all;		{{server_addr}}	{{server_port}}
+i    export all;		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i  area 0.0.0.0 {		{{server_addr}}	{{server_port}}
+i    interface zt0 {		{{server_addr}}	{{server_port}}
+i      type broadcast;		{{server_addr}}	{{server_port}}
+i      # Unimportant stuff redacted		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i};		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSatisfied, you copied the config file to every server and ran		{{server_addr}}	{{server_port}}
+i`bird configure`. You checked and confirmed that every server obtained		{{server_addr}}	{{server_port}}
+iroutes from each other via OSPF.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSuddenly a message box pops up on your IRC client / Telegram. You		{{server_addr}}	{{server_port}}
+iclicked on it:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+i<mc**>		{{server_addr}}	{{server_port}}
+i  shit.... as424242**** is hijacking my prefixes, for example		{{server_addr}}	{{server_port}}
+i  172.23.*.*/27		{{server_addr}}	{{server_port}}
+i  <he**> yup, I see some roa fails for them as well</he**></mc**		{{server_addr}}	{{server_port}}
+i>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCongratulations! You've successfully hijacking (part of) DN42.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## What's Going On		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen your server peer with others via BGP protocol, each route		{{server_addr}}	{{server_port}}
+icontains a path information, including the origin as well as list of		{{server_addr}}	{{server_port}}
+inodes it went through. For example, the route `172.22.76.184/29` may		{{server_addr}}	{{server_port}}
+ihave the path information of `4242422547 -> 4242422601 -> 424242****`,		{{server_addr}}	{{server_port}}
+iwhere `4242422547` is the origin (me by the way), and `4242422601` is		{{server_addr}}	{{server_port}}
+iyour neighbor (Burble here, as an example).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut since your internal networking uses OSPF, it doesn't preserve BGP		{{server_addr}}	{{server_port}}
+ipaths while passing routes around, since OSPF has no idea what it is.		{{server_addr}}	{{server_port}}
+iNow your another node obtained `172.22.76.184/29` via OSPF, yet		{{server_addr}}	{{server_port}}
+iwithout any path information. It will then proceed to announce the		{{server_addr}}	{{server_port}}
+iroute with your own ASN to your peers, causing a hijack.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere is a graph of what's going on:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i[2547] -> [2601] -> [Your Node A] -> [Your Node B] -> [Peer of Node B]		{{server_addr}}	{{server_port}}
+i 2547      2547      2547             Gone!            Your ASN (BOOM)		{{server_addr}}	{{server_port}}
+i           2601      2601		{{server_addr}}	{{server_port}}
+i                     Your ASN		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Babel is Fun, Too		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThose in the Telegram group are really nice guys. As they help you in		{{server_addr}}	{{server_port}}
+ifixing the problem, they also recommended Babel to you:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Babel automatically selects the shortest path by latency.		{{server_addr}}	{{server_port}}
+i- Babel is extremely simple to configure.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut they don't recommend you to use Bird's builtin Babel support,		{{server_addr}}	{{server_port}}
+isince it doesn't support selecting path by latency.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou are persuaded, removed the OSPF configuration, and installed		{{server_addr}}	{{server_port}}
+iBabeld. Soon each of your nodes is getting Babel routes. You waited		{{server_addr}}	{{server_port}}
+ifor a few minutes. No sign of catastrophe.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut you do notice that Bird isn't announcing the routes via BGP. The		{{server_addr}}	{{server_port}}
+iTelegram guys instigated you to enable the `learn` option of Bird's		{{server_addr}}	{{server_port}}
+ikernel protocol:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iprotocol kernel sys_kernel_v4 {		{{server_addr}}	{{server_port}}
+i  scan time 20;		{{server_addr}}	{{server_port}}
+i  # You're gonna add this line!		{{server_addr}}	{{server_port}}
+i  learn;		{{server_addr}}	{{server_port}}
+i  # Unimportant stuff redacted		{{server_addr}}	{{server_port}}
+i};		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou do this. A few minutes later, you are ATed again by people in IRC		{{server_addr}}	{{server_port}}
+iand Telegram. Yes, you hijacked other's network. Again.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## What's Going On		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis is actually the same problem as the OSPF one, Babel dropped all		{{server_addr}}	{{server_port}}
+iBGP path information while passing routes around. However by default,		{{server_addr}}	{{server_port}}
+iBird ignores routing information that are installed to the system by		{{server_addr}}	{{server_port}}
+iother routing software, until you enabled `learn`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Correct Way to Do This		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Always remember: Interior Gateway Protocols, including OSPF, Babel,		{{server_addr}}	{{server_port}}
+i  etc, should never process BGP routing information. BGP routing		{{server_addr}}	{{server_port}}
+i  should be handled solely by BGP.		{{server_addr}}	{{server_port}}
+i  - There are multiple schemes to configure BGP in a network. You may		{{server_addr}}	{{server_port}}
+i    refer to:		{{server_addr}}	{{server_port}}
+    		{{server_addr}}	{{server_port}}
+1Bird BGP Confederation: Configuration and Emulation	/en/article/modify-website/bird-confederation.lantian	{{server_addr}}	{{server_port}}
+i.i- Similarly, interior routes should not be passed to BGP, unless you		{{server_addr}}	{{server_port}}
+i  own each and every IP that you're using internally on DN42.		{{server_addr}}	{{server_port}}
+i- So you should set BGP's `export filter` to this in Bird:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iexport filter {		{{server_addr}}	{{server_port}}
+i  # Only allow announcing STATIC (manually configured) and BGP routes		{{server_addr}}	{{server_port}}
+i  if source ~ [RTS_STATIC, RTS_BGP] then accept;		{{server_addr}}	{{server_port}}
+i  # Reject routes from other protocols		{{server_addr}}	{{server_port}}
+i  reject;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Defensive Measures		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- The best countermeasure is ROA, or Route Origin Authorization. It		{{server_addr}}	{{server_port}}
+i  restricts the source ASN of each route.		{{server_addr}}	{{server_port}}
+i  - For DN42, ROA configuration is generated automatically based on		{{server_addr}}	{{server_port}}
+i    Registry data. They can be downloaded from		{{server_addr}}	{{server_port}}
+i    [DN42 Wiki's Bird Config Page](https://wiki.dn42.us/howto/Bird#route-origin-authorization),		{{server_addr}}	{{server_port}}
+i    and can be automatically updated with a cron job.		{{server_addr}}	{{server_port}}
+i- If you don't want to configure ROA, you may try to peer with more		{{server_addr}}	{{server_port}}
+i  people.		{{server_addr}}	{{server_port}}
+i  - Since BGP chooses the path with least number of ASes, if you're		{{server_addr}}	{{server_port}}
+i    directly connected to a lot of people, your network will prefer		{{server_addr}}	{{server_port}}
+i    these direct routes even if someone is hijacking.		{{server_addr}}	{{server_port}}
+i  - But this **doesn't guarantee** full defense against the problem,		{{server_addr}}	{{server_port}}
+i    for example:		{{server_addr}}	{{server_port}}
+i    - The path from hijacker to you is shorter than the real AS.		{{server_addr}}	{{server_port}}
+i    - The path from hijacker and from real AS is of equal length, and		{{server_addr}}	{{server_port}}
+i      your routing software will likely choose one randomly.		{{server_addr}}	{{server_port}}
+i    - You have DN42 Community Filter, and for some reason prefers		{{server_addr}}	{{server_port}}
+i      hijacker's route over the real ones.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Route Flapping		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRoute flapping is a whole range of errors that cause one problem: they		{{server_addr}}	{{server_port}}
+icause the BGP routing software to frequently switch (or flap) the best		{{server_addr}}	{{server_port}}
+iroute they chose. Since the best route gets announced to other nodes		{{server_addr}}	{{server_port}}
+ivia peering, the flapping sets off a chained reaction, where multiple		{{server_addr}}	{{server_port}}
+iconnected nodes will flap together for one node's mistake. Eventually		{{server_addr}}	{{server_port}}
+ithe problem will be distributed to the whole network.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis process consumes a significant amount of bandwidth / traffic.		{{server_addr}}	{{server_port}}
+iSince many people in DN42 use cheap VPSes for nodes, eventually there		{{server_addr}}	{{server_port}}
+iare only two possible outcomes:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Your peer found out about the abnormal traffic and cut the peering		{{server_addr}}	{{server_port}}
+i   to you.		{{server_addr}}	{{server_port}}
+i2. Your hosting provider (or even your peer's provider) found out of		{{server_addr}}	{{server_port}}
+i   your high bandwidth consumption (or using up traffic limit), and		{{server_addr}}	{{server_port}}
+i   shut down the VPS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn addition, route flapping may cause severe impacts:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- If the problematic AS peered with many other ASes, even if you		{{server_addr}}	{{server_port}}
+i  disconnected from it, the route flap may still be passed from		{{server_addr}}	{{server_port}}
+i  another AS to your AS again.		{{server_addr}}	{{server_port}}
+i  - To fix the problem of one problematic AS, you may have to cut off		{{server_addr}}	{{server_port}}
+i    multiple ASes.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor example, one user in Telegram group had a misconfiguration while		{{server_addr}}	{{server_port}}
+itransitioning from Fullmesh + Direct connections to Multihop.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+II Always Love Niantic Network	/usr/uploads/202008/i-love-niantic-network.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHe didn't disconnect BGP in the process, and the Babel configuration		{{server_addr}}	{{server_port}}
+ierror caused large amounts of routes to be announced and withdrawed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBecause of the chain reaction, and the large number of peerings the		{{server_addr}}	{{server_port}}
+iguy has set up, multiple large ASes had to disconnect from each other		{{server_addr}}	{{server_port}}
+ito control the problem (before he woke up).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBy the way, this guy had a number of similar accidents before at a		{{server_addr}}	{{server_port}}
+ismaller scale, which this margin is too narrow to contain.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Case Review		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+i<bur*>		{{server_addr}}	{{server_port}}
+i  is someone awake who is on telegram ?		{{server_addr}}	{{server_port}}
+i  <bur*>		{{server_addr}}	{{server_port}}
+i    Kio*, sun*, ie**, lantian perhaps ?		{{server_addr}}	{{server_port}}
+i    <Kio*>		{{server_addr}}	{{server_port}}
+i      Kio* is here		{{server_addr}}	{{server_port}}
+i      <fox*>		{{server_addr}}	{{server_port}}
+i        I am in that dn42 telegram chat too but I do not understand		{{server_addr}}	{{server_port}}
+i        moon runes		{{server_addr}}	{{server_port}}
+i        <fox*>		{{server_addr}}	{{server_port}}
+i          also its midnight for china?		{{server_addr}}	{{server_port}}
+i          <bur*>		{{server_addr}}	{{server_port}}
+i            yes, I'm going to be nuking a lot of peerings if they are		{{server_addr}}	{{server_port}}
+i            all asleep		{{server_addr}}	{{server_port}}
+i            <bur*>		{{server_addr}}	{{server_port}}
+i              I think its originating from NIA*, but a lovely multi		{{server_addr}}	{{server_port}}
+i              mb/s flap going on for the past hour		{{server_addr}}	{{server_port}}
+i              <bur*>		{{server_addr}}	{{server_port}}
+i                and its like whack-a-mole, if I disable one peering		{{server_addr}}	{{server_port}}
+i                the traffic just pops up on a different one		{{server_addr}}	{{server_port}}
+i                <fox*>		{{server_addr}}	{{server_port}}
+i                  petition for bur* network to stop accepting new		{{server_addr}}	{{server_port}}
+i                  peers to help save dn42 network health		{{server_addr}}	{{server_port}}
+i                  <Kio*>		{{server_addr}}	{{server_port}}
+i                    NIA* is awake now		{{server_addr}}	{{server_port}}
+i                    <bur*>		{{server_addr}}	{{server_port}}
+i                      NIA* certainly has ipv4 next hop problems, they		{{server_addr}}	{{server_port}}
+i                      are advertising routes with next hops in other		{{server_addr}}	{{server_port}}
+i                      networks		{{server_addr}}	{{server_port}}
+i                      <Kio*>		{{server_addr}}	{{server_port}}
+i                        He says he is adjusting his "network from		{{server_addr}}	{{server_port}}
+i                        full-mesh to rr and multihops"		{{server_addr}}	{{server_port}}
+i                        <bur*>		{{server_addr}}	{{server_port}}
+i                          well its not working ;)		{{server_addr}}	{{server_port}}
+i                          <stv*>		{{server_addr}}	{{server_port}}
+i                            bur*: I also took down our peering		{{server_addr}}	{{server_port}}
+i                            <bur*>		{{server_addr}}	{{server_port}}
+i                              stv*, too much traffic from the grc?		{{server_addr}}	{{server_port}}
+i                              <stv*>		{{server_addr}}	{{server_port}}
+i                                I added a new peer around 1hr ago.		{{server_addr}}	{{server_port}}
+i                                Just to check that this hasnt be the		{{server_addr}}	{{server_port}}
+i                                cause..		{{server_addr}}	{{server_port}}
+i                                <stv*>		{{server_addr}}	{{server_port}}
+i                                  bur*: no the grc is still up and		{{server_addr}}	{{server_port}}
+i                                  running		{{server_addr}}	{{server_port}}
+i                                  <bur*>		{{server_addr}}	{{server_port}}
+i                                    ah, if you are getting a lot of		{{server_addr}}	{{server_port}}
+i                                    route updates its cos of NIA*		{{server_addr}}	{{server_port}}
+i                                    <bur*>		{{server_addr}}	{{server_port}}
+i                                      grc is currently pumping about		{{server_addr}}	{{server_port}}
+i                                      4mb/s to downstram peers		{{server_addr}}	{{server_port}}
+i                                      <sun*>		{{server_addr}}	{{server_port}}
+i                                        bur*: what happen?		{{server_addr}}	{{server_port}}
+i                                        <bur*>		{{server_addr}}	{{server_port}}
+i                                          NIA* is having issues		{{server_addr}}	{{server_port}}
+i                                          <bur*>		{{server_addr}}	{{server_port}}
+i                                            sun* anyway, you are up		{{server_addr}}	{{server_port}}
+i                                            late!		{{server_addr}}	{{server_port}}
+i                                            <sun*>		{{server_addr}}	{{server_port}}
+i                                              I just came back from		{{server_addr}}	{{server_port}}
+i                                              the bar:)		{{server_addr}}	{{server_port}}
+i                                              <do**>		{{server_addr}}	{{server_port}}
+i                                                don't drink and root		{{server_addr}}	{{server_port}}
+i                                                <bur*>		{{server_addr}}	{{server_port}}
+i                                                  nice :)		{{server_addr}}	{{server_port}}
+i                                                  <sun*>		{{server_addr}}	{{server_port}}
+i                                                    l like drink ;)		{{server_addr}}	{{server_port}}
+i                                                    <bur*>		{{server_addr}}	{{server_port}}
+i                                                      ok, I'm bored of		{{server_addr}}	{{server_port}}
+i                                                      this now, if you		{{server_addr}}	{{server_port}}
+i                                                      are currently		{{server_addr}}	{{server_port}}
+i                                                      sending me more		{{server_addr}}	{{server_port}}
+i                                                      than 1mb/s of		{{server_addr}}	{{server_port}}
+i                                                      bgp traffic your		{{server_addr}}	{{server_port}}
+i                                                      peering is about		{{server_addr}}	{{server_port}}
+i                                                      to get disabled.		{{server_addr}}	{{server_port}}
+i                                                      <bur*>		{{server_addr}}	{{server_port}}
+i                                                        Kio*, sun*,		{{server_addr}}	{{server_port}}
+i                                                        Tch*, jrb*,		{{server_addr}}	{{server_port}}
+i                                                        lantian, ie**,		{{server_addr}}	{{server_port}}
+i                                                        so far		{{server_addr}}	{{server_port}}
+i                                                        <Kio*>		{{server_addr}}	{{server_port}}
+i                                                          barely		{{server_addr}}	{{server_port}}
+i                                                          notice any		{{server_addr}}	{{server_port}}
+i                                                          flapping		{{server_addr}}	{{server_port}}
+i                                                          here, is it		{{server_addr}}	{{server_port}}
+i                                                          v4 or v6 ?		{{server_addr}}	{{server_port}}
+i                                                          <bur*>		{{server_addr}}	{{server_port}}
+i                                                            4 mostly,		{{server_addr}}	{{server_port}}
+i                                                            I think.		{{server_addr}}	{{server_port}}
+i                                                            you got		{{server_addr}}	{{server_port}}
+i                                                            killed on		{{server_addr}}	{{server_port}}
+i                                                            us-nyc1		{{server_addr}}	{{server_port}}
+i                                                            <bur*>		{{server_addr}}	{{server_port}}
+i                                                              Nap*		{{server_addr}}	{{server_port}}
+i                                                              <Nap*>		{{server_addr}}	{{server_port}}
+i                                                                Shut		{{server_addr}}	{{server_port}}
+i                                                                mine		{{server_addr}}	{{server_port}}
+i                                                                down		{{server_addr}}	{{server_port}}
+i                                                                if you		{{server_addr}}	{{server_port}}
+i                                                                need,		{{server_addr}}	{{server_port}}
+i                                                                I		{{server_addr}}	{{server_port}}
+i                                                                can't		{{server_addr}}	{{server_port}}
+i                                                                look		{{server_addr}}	{{server_port}}
+i                                                                into		{{server_addr}}	{{server_port}}
+i                                                                with		{{server_addr}}	{{server_port}}
+i                                                                much		{{server_addr}}	{{server_port}}
+i                                                                detail		{{server_addr}}	{{server_port}}
+i                                                                until		{{server_addr}}	{{server_port}}
+i                                                                tonight		{{server_addr}}	{{server_port}}
+i                                                                <bau*>		{{server_addr}}	{{server_port}}
+i                                                                  half		{{server_addr}}	{{server_port}}
+i                                                                  of		{{server_addr}}	{{server_port}}
+i                                                                  dn42		{{server_addr}}	{{server_port}}
+i                                                                  is		{{server_addr}}	{{server_port}}
+i                                                                  about		{{server_addr}}	{{server_port}}
+i                                                                  to		{{server_addr}}	{{server_port}}
+i                                                                  loose		{{server_addr}}	{{server_port}}
+i                                                                  connectivity		{{server_addr}}	{{server_port}}
+i                                                                  due		{{server_addr}}	{{server_port}}
+i                                                                  to		{{server_addr}}	{{server_port}}
+i                                                                  bur*		{{server_addr}}	{{server_port}}
+i                                                                  disableing		{{server_addr}}	{{server_port}}
+i                                                                  peerings		{{server_addr}}	{{server_port}}
+i                                                                  lol		{{server_addr}}	{{server_port}}
+i                                                                  <do**>		{{server_addr}}	{{server_port}}
+i                                                                    oh		{{server_addr}}	{{server_port}}
+i                                                                    yeah,		{{server_addr}}	{{server_port}}
+i                                                                    this		{{server_addr}}	{{server_port}}
+i                                                                    looks		{{server_addr}}	{{server_port}}
+i                                                                    nice		{{server_addr}}	{{server_port}}
+i                                                                    <Kio*>		{{server_addr}}	{{server_port}}
+i                                                                      thats		{{server_addr}}	{{server_port}}
+i                                                                      why		{{server_addr}}	{{server_port}}
+i                                                                      everybody		{{server_addr}}	{{server_port}}
+i                                                                      should		{{server_addr}}	{{server_port}}
+i                                                                      be		{{server_addr}}	{{server_port}}
+i                                                                      at		{{server_addr}}	{{server_port}}
+i                                                                      least		{{server_addr}}	{{server_port}}
+i                                                                      multi		{{server_addr}}	{{server_port}}
+i                                                                      homed		{{server_addr}}	{{server_port}}
+i                                                                      with		{{server_addr}}	{{server_port}}
+i                                                                      two		{{server_addr}}	{{server_port}}
+i                                                                      peers		{{server_addr}}	{{server_port}}
+i                                                                      <jrb*>		{{server_addr}}	{{server_port}}
+i                                                                        bur*:		{{server_addr}}	{{server_port}}
+i                                                                        and		{{server_addr}}	{{server_port}}
+i                                                                        on		{{server_addr}}	{{server_port}}
+i                                                                        which		{{server_addr}}	{{server_port}}
+i                                                                        peering?		{{server_addr}}	{{server_port}}
+i                                                                        <Kio*>		{{server_addr}}	{{server_port}}
+i                                                                          you		{{server_addr}}	{{server_port}}
+i                                                                          shouldnt		{{server_addr}}	{{server_port}}
+i                                                                          loose		{{server_addr}}	{{server_port}}
+i                                                                          connectivity		{{server_addr}}	{{server_port}}
+i                                                                          if		{{server_addr}}	{{server_port}}
+i                                                                          only		{{server_addr}}	{{server_port}}
+i                                                                          one		{{server_addr}}	{{server_port}}
+i                                                                          peer		{{server_addr}}	{{server_port}}
+i                                                                          drops		{{server_addr}}	{{server_port}}
+i                                                                          <bur*>		{{server_addr}}	{{server_port}}
+i                                                                            jrb*		{{server_addr}}	{{server_port}}
+i                                                                            us-nyc1		{{server_addr}}	{{server_port}}
+i                                                                            and		{{server_addr}}	{{server_port}}
+i                                                                            us-lax1		{{server_addr}}	{{server_port}}
+i                                                                            for		{{server_addr}}	{{server_port}}
+i                                                                            you		{{server_addr}}	{{server_port}}
+i                                                                            so		{{server_addr}}	{{server_port}}
+i                                                                            far		{{server_addr}}	{{server_port}}
+i                                                                            <jrb*>		{{server_addr}}	{{server_port}}
+i                                                                              mapping		{{server_addr}}	{{server_port}}
+i                                                                              table		{{server_addr}}	{{server_port}}
+i                                                                              says		{{server_addr}}	{{server_port}}
+i                                                                              us-3		{{server_addr}}	{{server_port}}
+i                                                                              and		{{server_addr}}	{{server_port}}
+i                                                                              us-5,		{{server_addr}}	{{server_port}}
+i                                                                              let		{{server_addr}}	{{server_port}}
+i                                                                              me		{{server_addr}}	{{server_port}}
+i                                                                              check.		{{server_addr}}	{{server_port}}
+i                                                                              <Nap*>		{{server_addr}}	{{server_port}}
+i                                                                                Do		{{server_addr}}	{{server_port}}
+i                                                                                we		{{server_addr}}	{{server_port}}
+i                                                                                know		{{server_addr}}	{{server_port}}
+i                                                                                what		{{server_addr}}	{{server_port}}
+i                                                                                routes		{{server_addr}}	{{server_port}}
+i                                                                                are		{{server_addr}}	{{server_port}}
+i                                                                                flapping		{{server_addr}}	{{server_port}}
+i                                                                                causing		{{server_addr}}	{{server_port}}
+i                                                                                the		{{server_addr}}	{{server_port}}
+i                                                                                updates?		{{server_addr}}	{{server_port}}
+i                                                                                <Kio*>		{{server_addr}}	{{server_port}}
+i                                                                                  filtering		{{server_addr}}	{{server_port}}
+i                                                                                  problematic		{{server_addr}}	{{server_port}}
+i                                                                                  ASN		{{server_addr}}	{{server_port}}
+i                                                                                  on		{{server_addr}}	{{server_port}}
+i                                                                                  my		{{server_addr}}	{{server_port}}
+i                                                                                  us		{{server_addr}}	{{server_port}}
+i                                                                                  node		{{server_addr}}	{{server_port}}
+i                                                                                  now		{{server_addr}}	{{server_port}}
+i                                                                                  <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                    Nap*		{{server_addr}}	{{server_port}}
+i                                                                                    its		{{server_addr}}	{{server_port}}
+i                                                                                    NIA*		{{server_addr}}	{{server_port}}
+i                                                                                    <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                      AS42424213**		{{server_addr}}	{{server_port}}
+i                                                                                      <jrb*>		{{server_addr}}	{{server_port}}
+i                                                                                        sun*,		{{server_addr}}	{{server_port}}
+i                                                                                        rou*:		{{server_addr}}	{{server_port}}
+i                                                                                        disabling		{{server_addr}}	{{server_port}}
+i                                                                                        my		{{server_addr}}	{{server_port}}
+i                                                                                        peerings		{{server_addr}}	{{server_port}}
+i                                                                                        with		{{server_addr}}	{{server_port}}
+i                                                                                        you		{{server_addr}}	{{server_port}}
+i                                                                                        for		{{server_addr}}	{{server_port}}
+i                                                                                        now,		{{server_addr}}	{{server_port}}
+i                                                                                        there		{{server_addr}}	{{server_port}}
+i                                                                                        seems		{{server_addr}}	{{server_port}}
+i                                                                                        to		{{server_addr}}	{{server_port}}
+i                                                                                        be		{{server_addr}}	{{server_port}}
+i                                                                                        serious		{{server_addr}}	{{server_port}}
+i                                                                                        flapping		{{server_addr}}	{{server_port}}
+i                                                                                        <do**>		{{server_addr}}	{{server_port}}
+i                                                                                          him		{{server_addr}}	{{server_port}}
+i                                                                                          again?		{{server_addr}}	{{server_port}}
+i                                                                                          <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                            what?		{{server_addr}}	{{server_port}}
+i                                                                                            <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                              is		{{server_addr}}	{{server_port}}
+i                                                                                              me		{{server_addr}}	{{server_port}}
+i                                                                                              problem?		{{server_addr}}	{{server_port}}
+i                                                                                              <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                sun*,		{{server_addr}}	{{server_port}}
+i                                                                                                I've		{{server_addr}}	{{server_port}}
+i                                                                                                killed		{{server_addr}}	{{server_port}}
+i                                                                                                all		{{server_addr}}	{{server_port}}
+i                                                                                                of		{{server_addr}}	{{server_port}}
+i                                                                                                our		{{server_addr}}	{{server_port}}
+i                                                                                                peerings		{{server_addr}}	{{server_port}}
+i                                                                                                <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                                  why?		{{server_addr}}	{{server_port}}
+i                                                                                                  <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                    sun*,		{{server_addr}}	{{server_port}}
+i                                                                                                    you		{{server_addr}}	{{server_port}}
+i                                                                                                    are		{{server_addr}}	{{server_port}}
+i                                                                                                    distributing		{{server_addr}}	{{server_port}}
+i                                                                                                    the		{{server_addr}}	{{server_port}}
+i                                                                                                    problems		{{server_addr}}	{{server_port}}
+i                                                                                                    from		{{server_addr}}	{{server_port}}
+i                                                                                                    NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                    <Nap*>		{{server_addr}}	{{server_port}}
+i                                                                                                      bur*:		{{server_addr}}	{{server_port}}
+i                                                                                                      K,		{{server_addr}}	{{server_port}}
+i                                                                                                      gonna		{{server_addr}}	{{server_port}}
+i                                                                                                      try		{{server_addr}}	{{server_port}}
+i                                                                                                      to		{{server_addr}}	{{server_port}}
+i                                                                                                      filter		{{server_addr}}	{{server_port}}
+i                                                                                                      on		{{server_addr}}	{{server_port}}
+i                                                                                                      ATL/CHI		{{server_addr}}	{{server_port}}
+i                                                                                                      at		{{server_addr}}	{{server_port}}
+i                                                                                                      least.		{{server_addr}}	{{server_port}}
+i                                                                                                      <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                        thanks		{{server_addr}}	{{server_port}}
+i                                                                                                        Nap*		{{server_addr}}	{{server_port}}
+i                                                                                                        <Kio*>		{{server_addr}}	{{server_port}}
+i                                                                                                          recommend		{{server_addr}}	{{server_port}}
+i                                                                                                          everybody		{{server_addr}}	{{server_port}}
+i                                                                                                          to		{{server_addr}}	{{server_port}}
+i                                                                                                          temporarily		{{server_addr}}	{{server_port}}
+i                                                                                                          enable		{{server_addr}}	{{server_port}}
+i                                                                                                          "bgp_path		{{server_addr}}	{{server_port}}
+i                                                                                                          ~"		{{server_addr}}	{{server_port}}
+i                                                                                                          filter		{{server_addr}}	{{server_port}}
+i                                                                                                          for		{{server_addr}}	{{server_port}}
+i                                                                                                          the		{{server_addr}}	{{server_port}}
+i                                                                                                          problematic		{{server_addr}}	{{server_port}}
+i                                                                                                          ASN		{{server_addr}}	{{server_port}}
+i                                                                                                          <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                                            i		{{server_addr}}	{{server_port}}
+i                                                                                                            disabled		{{server_addr}}	{{server_port}}
+i                                                                                                            NIA*,		{{server_addr}}	{{server_port}}
+i                                                                                                            would		{{server_addr}}	{{server_port}}
+i                                                                                                            fix		{{server_addr}}	{{server_port}}
+i                                                                                                            problem?		{{server_addr}}	{{server_port}}
+i                                                                                                            <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                              bur*:		{{server_addr}}	{{server_port}}
+i                                                                                                              I		{{server_addr}}	{{server_port}}
+i                                                                                                              also		{{server_addr}}	{{server_port}}
+i                                                                                                              peer		{{server_addr}}	{{server_port}}
+i                                                                                                              with		{{server_addr}}	{{server_port}}
+i                                                                                                              NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                              and		{{server_addr}}	{{server_port}}
+i                                                                                                              I		{{server_addr}}	{{server_port}}
+i                                                                                                              don't		{{server_addr}}	{{server_port}}
+i                                                                                                              get		{{server_addr}}	{{server_port}}
+i                                                                                                              any		{{server_addr}}	{{server_port}}
+i                                                                                                              bgp		{{server_addr}}	{{server_port}}
+i                                                                                                              updates		{{server_addr}}	{{server_port}}
+i                                                                                                              from		{{server_addr}}	{{server_port}}
+i                                                                                                              him		{{server_addr}}	{{server_port}}
+i                                                                                                              <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                ah		{{server_addr}}	{{server_port}}
+i                                                                                                                wait		{{server_addr}}	{{server_port}}
+i                                                                                                                <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                  sun*,		{{server_addr}}	{{server_port}}
+i                                                                                                                  depends		{{server_addr}}	{{server_port}}
+i                                                                                                                  if		{{server_addr}}	{{server_port}}
+i                                                                                                                  you		{{server_addr}}	{{server_port}}
+i                                                                                                                  are		{{server_addr}}	{{server_port}}
+i                                                                                                                  also		{{server_addr}}	{{server_port}}
+i                                                                                                                  getting		{{server_addr}}	{{server_port}}
+i                                                                                                                  the		{{server_addr}}	{{server_port}}
+i                                                                                                                  updates		{{server_addr}}	{{server_port}}
+i                                                                                                                  from		{{server_addr}}	{{server_port}}
+i                                                                                                                  other		{{server_addr}}	{{server_port}}
+i                                                                                                                  peers		{{server_addr}}	{{server_port}}
+i                                                                                                                  too		{{server_addr}}	{{server_port}}
+i                                                                                                                  <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                    now		{{server_addr}}	{{server_port}}
+i                                                                                                                    I		{{server_addr}}	{{server_port}}
+i                                                                                                                    see		{{server_addr}}	{{server_port}}
+i                                                                                                                    it		{{server_addr}}	{{server_port}}
+i                                                                                                                    <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                      disabling		{{server_addr}}	{{server_port}}
+i                                                                                                                      peering		{{server_addr}}	{{server_port}}
+i                                                                                                                      <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                                                        if		{{server_addr}}	{{server_port}}
+i                                                                                                                        bgp_path		{{server_addr}}	{{server_port}}
+i                                                                                                                        ~		{{server_addr}}	{{server_port}}
+i                                                                                                                        [=		{{server_addr}}	{{server_port}}
+i                                                                                                                        42424213**		{{server_addr}}	{{server_port}}
+i                                                                                                                        =]		{{server_addr}}	{{server_port}}
+i                                                                                                                        then		{{server_addr}}	{{server_port}}
+i                                                                                                                        reject;		{{server_addr}}	{{server_port}}
+i                                                                                                                        <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                          ~		{{server_addr}}	{{server_port}}
+i                                                                                                                          [=		{{server_addr}}	{{server_port}}
+i                                                                                                                          *		{{server_addr}}	{{server_port}}
+i                                                                                                                          42424213**		{{server_addr}}	{{server_port}}
+i                                                                                                                          *		{{server_addr}}	{{server_port}}
+i                                                                                                                          =]		{{server_addr}}	{{server_port}}
+i                                                                                                                          to		{{server_addr}}	{{server_port}}
+i                                                                                                                          reject		{{server_addr}}	{{server_port}}
+i                                                                                                                          all		{{server_addr}}	{{server_port}}
+i                                                                                                                          paths		{{server_addr}}	{{server_port}}
+i                                                                                                                          <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                                                            ohh		{{server_addr}}	{{server_port}}
+i                                                                                                                            <jrb*>		{{server_addr}}	{{server_port}}
+i                                                                                                                              bur*:		{{server_addr}}	{{server_port}}
+i                                                                                                                              seems		{{server_addr}}	{{server_port}}
+i                                                                                                                              to		{{server_addr}}	{{server_port}}
+i                                                                                                                              be		{{server_addr}}	{{server_port}}
+i                                                                                                                              mostly		{{server_addr}}	{{server_port}}
+i                                                                                                                              rou*		{{server_addr}}	{{server_port}}
+i                                                                                                                              from		{{server_addr}}	{{server_port}}
+i                                                                                                                              my		{{server_addr}}	{{server_port}}
+i                                                                                                                              perspective		{{server_addr}}	{{server_port}}
+i                                                                                                                              <Kio*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                Should		{{server_addr}}	{{server_port}}
+i                                                                                                                                be		{{server_addr}}	{{server_port}}
+i                                                                                                                                filtered		{{server_addr}}	{{server_port}}
+i                                                                                                                                on		{{server_addr}}	{{server_port}}
+i                                                                                                                                my		{{server_addr}}	{{server_port}}
+i                                                                                                                                side,		{{server_addr}}	{{server_port}}
+i                                                                                                                                if		{{server_addr}}	{{server_port}}
+i                                                                                                                                anyone		{{server_addr}}	{{server_port}}
+i                                                                                                                                continues		{{server_addr}}	{{server_port}}
+i                                                                                                                                to		{{server_addr}}	{{server_port}}
+i                                                                                                                                receive		{{server_addr}}	{{server_port}}
+i                                                                                                                                those		{{server_addr}}	{{server_port}}
+i                                                                                                                                updates		{{server_addr}}	{{server_port}}
+i                                                                                                                                please		{{server_addr}}	{{server_port}}
+i                                                                                                                                notify		{{server_addr}}	{{server_port}}
+i                                                                                                                                <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                  sun*,		{{server_addr}}	{{server_port}}
+i                                                                                                                                  I		{{server_addr}}	{{server_port}}
+i                                                                                                                                  tried		{{server_addr}}	{{server_port}}
+i                                                                                                                                  re-enabling		{{server_addr}}	{{server_port}}
+i                                                                                                                                  you		{{server_addr}}	{{server_port}}
+i                                                                                                                                  on		{{server_addr}}	{{server_port}}
+i                                                                                                                                  lax1		{{server_addr}}	{{server_port}}
+i                                                                                                                                  but		{{server_addr}}	{{server_port}}
+i                                                                                                                                  you		{{server_addr}}	{{server_port}}
+i                                                                                                                                  jumped		{{server_addr}}	{{server_port}}
+i                                                                                                                                  striaght		{{server_addr}}	{{server_port}}
+i                                                                                                                                  to		{{server_addr}}	{{server_port}}
+i                                                                                                                                  1mb/s+		{{server_addr}}	{{server_port}}
+i                                                                                                                                  again		{{server_addr}}	{{server_port}}
+i                                                                                                                                  <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                    jrb*,		{{server_addr}}	{{server_port}}
+i                                                                                                                                    re-enabled		{{server_addr}}	{{server_port}}
+i                                                                                                                                    <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                      i		{{server_addr}}	{{server_port}}
+i                                                                                                                                      have		{{server_addr}}	{{server_port}}
+i                                                                                                                                      disabled		{{server_addr}}	{{server_port}}
+i                                                                                                                                      NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                                                      <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                        Kio*,		{{server_addr}}	{{server_port}}
+i                                                                                                                                        re-enabled		{{server_addr}}	{{server_port}}
+i                                                                                                                                        <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                          oh		{{server_addr}}	{{server_port}}
+i                                                                                                                                          btw,		{{server_addr}}	{{server_port}}
+i                                                                                                                                          I		{{server_addr}}	{{server_port}}
+i                                                                                                                                          have		{{server_addr}}	{{server_port}}
+i                                                                                                                                          notified		{{server_addr}}	{{server_port}}
+i                                                                                                                                          NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                                                          about		{{server_addr}}	{{server_port}}
+i                                                                                                                                          this		{{server_addr}}	{{server_port}}
+i                                                                                                                                          issue		{{server_addr}}	{{server_port}}
+i                                                                                                                                          <jrb*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                            do**:		{{server_addr}}	{{server_port}}
+i                                                                                                                                            also		{{server_addr}}	{{server_port}}
+i                                                                                                                                            tell		{{server_addr}}	{{server_port}}
+i                                                                                                                                            him		{{server_addr}}	{{server_port}}
+i                                                                                                                                            to		{{server_addr}}	{{server_port}}
+i                                                                                                                                            notify		{{server_addr}}	{{server_port}}
+i                                                                                                                                            everybody		{{server_addr}}	{{server_port}}
+i                                                                                                                                            to		{{server_addr}}	{{server_port}}
+i                                                                                                                                            get		{{server_addr}}	{{server_port}}
+i                                                                                                                                            out		{{server_addr}}	{{server_port}}
+i                                                                                                                                            of		{{server_addr}}	{{server_port}}
+i                                                                                                                                            the		{{server_addr}}	{{server_port}}
+i                                                                                                                                            blacklists.		{{server_addr}}	{{server_port}}
+i                                                                                                                                            <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                              jrb*:		{{server_addr}}	{{server_port}}
+i                                                                                                                                              will		{{server_addr}}	{{server_port}}
+i                                                                                                                                              do		{{server_addr}}	{{server_port}}
+i                                                                                                                                              <Nap*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                bur*:		{{server_addr}}	{{server_port}}
+i                                                                                                                                                I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                should		{{server_addr}}	{{server_port}}
+i                                                                                                                                                have		{{server_addr}}	{{server_port}}
+i                                                                                                                                                it		{{server_addr}}	{{server_port}}
+i                                                                                                                                                filtered		{{server_addr}}	{{server_port}}
+i                                                                                                                                                on		{{server_addr}}	{{server_port}}
+i                                                                                                                                                my		{{server_addr}}	{{server_port}}
+i                                                                                                                                                ATL		{{server_addr}}	{{server_port}}
+i                                                                                                                                                (your		{{server_addr}}	{{server_port}}
+i                                                                                                                                                CHI)		{{server_addr}}	{{server_port}}
+i                                                                                                                                                <Kio*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                  wrote		{{server_addr}}	{{server_port}}
+i                                                                                                                                                  NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                  also		{{server_addr}}	{{server_port}}
+i                                                                                                                                                  directly		{{server_addr}}	{{server_port}}
+i                                                                                                                                                  on		{{server_addr}}	{{server_port}}
+i                                                                                                                                                  telegram		{{server_addr}}	{{server_port}}
+i                                                                                                                                                  <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                    bur*:		{{server_addr}}	{{server_port}}
+i                                                                                                                                                    is		{{server_addr}}	{{server_port}}
+i                                                                                                                                                    it		{{server_addr}}	{{server_port}}
+i                                                                                                                                                    better		{{server_addr}}	{{server_port}}
+i                                                                                                                                                    now?		{{server_addr}}	{{server_port}}
+i                                                                                                                                                    <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      for		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      record,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      this		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      is		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      first		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      time		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      that		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      I've		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      mass		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      disabled		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      peerings,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      but		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      this		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      was		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      causing		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      issues		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      across		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      board		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                        sun*,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                        no		{{server_addr}}	{{server_port}}
+i                                                                                                                                                        not		{{server_addr}}	{{server_port}}
+i                                                                                                                                                        really		{{server_addr}}	{{server_port}}
+i                                                                                                                                                        <An**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                          I've		{{server_addr}}	{{server_port}}
+i                                                                                                                                                          stop		{{server_addr}}	{{server_port}}
+i                                                                                                                                                          importing		{{server_addr}}	{{server_port}}
+i                                                                                                                                                          route		{{server_addr}}	{{server_port}}
+i                                                                                                                                                          from		{{server_addr}}	{{server_port}}
+i                                                                                                                                                          NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                          <stv*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                            I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                            am		{{server_addr}}	{{server_port}}
+i                                                                                                                                                            also		{{server_addr}}	{{server_port}}
+i                                                                                                                                                            dropping		{{server_addr}}	{{server_port}}
+i                                                                                                                                                            NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                            now		{{server_addr}}	{{server_port}}
+i                                                                                                                                                            <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                              sun*,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                              thats		{{server_addr}}	{{server_port}}
+i                                                                                                                                                              like		{{server_addr}}	{{server_port}}
+i                                                                                                                                                              1k		{{server_addr}}	{{server_port}}
+i                                                                                                                                                              updates		{{server_addr}}	{{server_port}}
+i                                                                                                                                                              every		{{server_addr}}	{{server_port}}
+i                                                                                                                                                              few		{{server_addr}}	{{server_port}}
+i                                                                                                                                                              seconds		{{server_addr}}	{{server_port}}
+i                                                                                                                                                              <Nap*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                bur*:		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                all		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                host		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                should		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                have		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                it		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                filtered		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                now.		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                  Nap*,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                  looks		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                  to		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                  me,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                  thanks		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                  <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                    bur*:		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                    seems		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                    to		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                    have		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                    reduced		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                    traffic		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                    <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                      sun*,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                      yes		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                      that		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                      looks		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                      better		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                      <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        sun*,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        is		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        that		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        now		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        ok		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        across		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        all		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        your		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        nodes		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        ?		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                          yep		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                          <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                            sun*,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                            ok		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                            re-enabled		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                            <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                              alright,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                              also		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                              filtered		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                              42424213**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                              <tm**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                hi,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                also		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                filtered		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                42424213**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  guess		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  they		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  got		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  message,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  seems		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  we're		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  back		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  to		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  normal		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  again		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  and		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  everyone		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  disabled		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  is		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  back		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  again		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    bur*:		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    think		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    is		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    asleep,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    probably		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    everyone		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    filtered		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    it		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                      or		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                      disabled		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                      peering		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                      <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        do**,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        there		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        is		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        that,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        but		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        also		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        renabled		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        and		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        am		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        not		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        getting		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        same		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        errors		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        now		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                          oh,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                          interesting		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                          <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            might		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            regret		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            doing		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            that		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            by		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            morning,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            but		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            hey.		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            do		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            try		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            and		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            keep		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            everything		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            open		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            as		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            best		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            as		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            possible.		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              bur*:		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              last		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              time		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              when		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              did		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              that		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              waited		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              for		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              their		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              response		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              <Kio*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                Nope		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                nia*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                just		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                messaged		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                in		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                Telegram		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                about		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                it		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                  ah		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                  <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    my		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    peering		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    hasn't		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    re-established,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    so		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    guess		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    they		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    hit		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    big		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    red		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    shutdown		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    button		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    <Kio*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      He		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      tried		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      to		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      migrate		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      his		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      network		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      to		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      a		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      full		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      mesh		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      <Kio*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                        and		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                        is		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                        now		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                        "pulling		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                        all		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                        the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                        wires"		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                        <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          Kio*:		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          did		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          you		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          message		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          him		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          directly		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          or		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          was		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          that		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          on		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          any		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          of		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          groups?		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          <Kio*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                            on		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                            the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                            telegram		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                            group		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                            <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              bur*:		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              you		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              didn't		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              get		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              that		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              many		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              bgp		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              updates		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              from		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              me?		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              <sun*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                woke		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                up		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                :)		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  do**,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  you		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  went		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  from		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  an		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  average		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  of		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  ~3kbs		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  to		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  ~10kbs+,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  peaking		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  at		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  50kbs.		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  In		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  grand		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  scheme		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  of		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  things		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  that		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  was		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  lost		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  in		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  noise		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                    interesting		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                    <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                      I		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                      also		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                      peer		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                      directly		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                      with		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                      NIA*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                      <bur*>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        do**,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        yes,		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        interesting.		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        Is		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        the		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        link		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        restricted		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        in		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        bandwidth		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        ?		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        <do**>		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                          not		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                          at		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                          all</do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                        ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                      ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                    ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                  ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                                ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                              ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                            ></Kio*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                          ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                        ></Kio*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                      ></Kio*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                    ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                  ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                                ></Kio*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                              ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                            ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                          ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                        ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                      ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                    ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                  ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                                ></tm**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                              ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                            ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                          ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                        ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                      ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                    ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                  ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                                ></Nap*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                              ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                            ></stv*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                          ></An**		{{server_addr}}	{{server_port}}
+i                                                                                                                                                        ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                      ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                    ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                  ></Kio*		{{server_addr}}	{{server_port}}
+i                                                                                                                                                ></Nap*		{{server_addr}}	{{server_port}}
+i                                                                                                                                              ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                            ></jrb*		{{server_addr}}	{{server_port}}
+i                                                                                                                                          ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                                        ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                      ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                                                                    ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                  ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                                ></Kio*		{{server_addr}}	{{server_port}}
+i                                                                                                                              ></jrb*		{{server_addr}}	{{server_port}}
+i                                                                                                                            ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                                                          ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                        ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                                                      ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                    ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                                  ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                                ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                              ></do**		{{server_addr}}	{{server_port}}
+i                                                                                                            ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                                          ></Kio*		{{server_addr}}	{{server_port}}
+i                                                                                                        ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                      ></Nap*		{{server_addr}}	{{server_port}}
+i                                                                                                    ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                                  ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                                ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                              ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                            ></sun*		{{server_addr}}	{{server_port}}
+i                                                                                          ></do**		{{server_addr}}	{{server_port}}
+i                                                                                        ></jrb*		{{server_addr}}	{{server_port}}
+i                                                                                      ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                    ></bur*		{{server_addr}}	{{server_port}}
+i                                                                                  ></Kio*		{{server_addr}}	{{server_port}}
+i                                                                                ></Nap*		{{server_addr}}	{{server_port}}
+i                                                                              ></jrb*		{{server_addr}}	{{server_port}}
+i                                                                            ></bur*		{{server_addr}}	{{server_port}}
+i                                                                          ></Kio*		{{server_addr}}	{{server_port}}
+i                                                                        ></jrb*		{{server_addr}}	{{server_port}}
+i                                                                      ></Kio*		{{server_addr}}	{{server_port}}
+i                                                                    ></do**		{{server_addr}}	{{server_port}}
+i                                                                  ></bau*		{{server_addr}}	{{server_port}}
+i                                                                ></Nap*		{{server_addr}}	{{server_port}}
+i                                                              ></bur*		{{server_addr}}	{{server_port}}
+i                                                            ></bur*		{{server_addr}}	{{server_port}}
+i                                                          ></Kio*		{{server_addr}}	{{server_port}}
+i                                                        ></bur*		{{server_addr}}	{{server_port}}
+i                                                      ></bur*		{{server_addr}}	{{server_port}}
+i                                                    ></sun*		{{server_addr}}	{{server_port}}
+i                                                  ></bur*		{{server_addr}}	{{server_port}}
+i                                                ></do**		{{server_addr}}	{{server_port}}
+i                                              ></sun*		{{server_addr}}	{{server_port}}
+i                                            ></bur*		{{server_addr}}	{{server_port}}
+i                                          ></bur*		{{server_addr}}	{{server_port}}
+i                                        ></sun*		{{server_addr}}	{{server_port}}
+i                                      ></bur*		{{server_addr}}	{{server_port}}
+i                                    ></bur*		{{server_addr}}	{{server_port}}
+i                                  ></stv*		{{server_addr}}	{{server_port}}
+i                                ></stv*		{{server_addr}}	{{server_port}}
+i                              ></bur*		{{server_addr}}	{{server_port}}
+i                            ></stv*		{{server_addr}}	{{server_port}}
+i                          ></bur*		{{server_addr}}	{{server_port}}
+i                        ></Kio*		{{server_addr}}	{{server_port}}
+i                      ></bur*		{{server_addr}}	{{server_port}}
+i                    ></Kio*		{{server_addr}}	{{server_port}}
+i                  ></fox*		{{server_addr}}	{{server_port}}
+i                ></bur*		{{server_addr}}	{{server_port}}
+i              ></bur*		{{server_addr}}	{{server_port}}
+i            ></bur*		{{server_addr}}	{{server_port}}
+i          ></fox*		{{server_addr}}	{{server_port}}
+i        ></fox*		{{server_addr}}	{{server_port}}
+i      ></Kio*		{{server_addr}}	{{server_port}}
+i    ></bur*		{{server_addr}}	{{server_port}}
+i  ></bur*		{{server_addr}}	{{server_port}}
+i>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Defensive Measures		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- The best solution is Route Dampening, which restricts the number of		{{server_addr}}	{{server_port}}
+i  routing updates to be accepted in a time range.		{{server_addr}}	{{server_port}}
+i  - But Bird doesn't support this. You'd have to put up with it.		{{server_addr}}	{{server_port}}
+i- Alternatively you can monitor your nodes with Prometheus, Grafana,		{{server_addr}}	{{server_port}}
+i  etc, so you get an alarm that something's off, and handle it		{{server_addr}}	{{server_port}}
+i  manually.		{{server_addr}}	{{server_port}}
+i  - But obviously, if you aren't online at that time, you may have		{{server_addr}}	{{server_port}}
+i    already used a few gigs of traffic before you're aware.		{{server_addr}}	{{server_port}}
+i- Next solution is to rate limit the peering connection.		{{server_addr}}	{{server_port}}
+i  - Since there is almost no application that requires lots of		{{server_addr}}	{{server_port}}
+i    bandwidth in DN42, this is a viable solution that ensures safety.		{{server_addr}}	{{server_port}}
+i  - But the downside is also obvious: degradation of performance.		{{server_addr}}	{{server_port}}
+i- If you're rich enough, get a server with uncapped traffic.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# How Long is That IP Block?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince it's year 2020, you plan to add a IPv6 block to your network.		{{server_addr}}	{{server_port}}
+iWith		{{server_addr}}	{{server_port}}
+1my DN42 registration guide	/en/article/modify-website/dn42-experimental-network-2020.lantian	{{server_addr}}	{{server_port}}
+i,iyou registered yourself a IPv6 block, which quickly got merged to		{{server_addr}}	{{server_port}}
+iregistry.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFrom your perspective everything is normal. Yet on the other side of		{{server_addr}}	{{server_port}}
+ithe planet, a message pops up on one person's phone/computer that his		{{server_addr}}	{{server_port}}
+iDN42 ROA generator is malfunctioning. He opens the registry page,		{{server_addr}}	{{server_port}}
+ifacepalms, and commits this change:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IErrorneous IPv6 Block in DN42 Registry	/usr/uploads/202007/dn42-registry-error.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<https://git.dn42.dev/dn42/registry/commit/9f45ee31cdea4a997d59a262c4a8ac8eb3cbd1f1>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## What's Going On		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis user added a IPv6 block, `fd37:03b3:cae6:5158::/48`. Since a IPv6		{{server_addr}}	{{server_port}}
+iaddress consists of 32 hex numbers (128 bits total), and this block		{{server_addr}}	{{server_port}}
+idefined the first 16 digits (or 64 bits), the corresponding netmask		{{server_addr}}	{{server_port}}
+ishould be `/64` or higher.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut for some reason, this error wasn't detected by DN42 Registry's		{{server_addr}}	{{server_port}}
+ischema checker, nor by the admin who inspected and merged the change,		{{server_addr}}	{{server_port}}
+iand successfully ended up in the Registry.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLater, the ROA generator found the errorneous IP block while parsing		{{server_addr}}	{{server_port}}
+ithe Registry, and crashed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# And It Happened Again		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IErrorneous IPv6 Block Happened Again	/usr/uploads/202008/dn42-registry-error.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<https://git.dn42.dev/dn42/registry/commit/00f90f592a35e325152ce28157f64d3fca7c8d7d>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Correct Way to Do This		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- While registering for a IP block, user should check the validity of		{{server_addr}}	{{server_port}}
+i  netmasks and address blocks.		{{server_addr}}	{{server_port}}
+i- The DN42 Registry schema checker, or the admin performing the merge		{{server_addr}}	{{server_port}}
+i  operation, should have found out the problem.		{{server_addr}}	{{server_port}}
+i- ROA generator should skip the problematic record and properly handle		{{server_addr}}	{{server_port}}
+i  rest of the data, instead of crashing.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFortunately except that the ROA update was delayed by a few hours,		{{server_addr}}	{{server_port}}
+ithis error didn't impact the network itself much.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Defensive Measures		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince the decentralized nature of DN42 as it's born, you can write		{{server_addr}}	{{server_port}}
+iyour own ROA generator as a backup.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Although my ROA generator also failed this time...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe reason is that different implementations may have minor		{{server_addr}}	{{server_port}}
+idifferences even though they do the same thing. When such a bug on		{{server_addr}}	{{server_port}}
+iinput content arises, some implementations may survive.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Bird Protocol Fights		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe story starts with my friend Joe... Fine. The story starts with me.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince my network is connected to both DN42 and NeoNetwork, as well as		{{server_addr}}	{{server_port}}
+imy internal network with a private IP range, to prevent announcing my		{{server_addr}}	{{server_port}}
+iinternal network to DN42 and NeoNetwork, I did this:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- All routes from Kernel protocol (from OS routing table) and Direct		{{server_addr}}	{{server_port}}
+i  protocol (from network interface addresses) are labeled with a BGP		{{server_addr}}	{{server_port}}
+i  community.		{{server_addr}}	{{server_port}}
+i- Routes with the community are filtered in exterior peerings with		{{server_addr}}	{{server_port}}
+i  DN42 and NeoNetwork.		{{server_addr}}	{{server_port}}
+i- This way, my internal IPs won't be announced to other networks, but		{{server_addr}}	{{server_port}}
+i  since my DN42 and NeoNetwork IP blocks are configured in Static		{{server_addr}}	{{server_port}}
+i  protocol, they won't be impacted.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInitially everything looks normal, until a few days later when some		{{server_addr}}	{{server_port}}
+iusers in Telegram found that my looking glass bot times out on any IP		{{server_addr}}	{{server_port}}
+iin DN42.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## What's Going On		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInitially everything is indeed normal, and my IP block		{{server_addr}}	{{server_port}}
+i`172.22.76.184/29` is announced correctly. Until Direct protocol		{{server_addr}}	{{server_port}}
+iperformed a refresh and obtained `172.22.76.184/29` from one of the		{{server_addr}}	{{server_port}}
+inetwork interfaces, and sent the route to Bird routing table again.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe new route overwrote the previous route, and since it comes from		{{server_addr}}	{{server_port}}
+iDirect protocol, it's labeled with the community and won't be		{{server_addr}}	{{server_port}}
+ibroadcasted. Static protocol, on the other hand, is indeed "static",		{{server_addr}}	{{server_port}}
+iand won't overwrite the route again.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAt this time I effectly stopped announcing my IP range. Of course I		{{server_addr}}	{{server_port}}
+icannot receive any packets coming back to my nodes now.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Correct Way to Do This		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn Bird, you should avoid getting the same route entry from multiple		{{server_addr}}	{{server_port}}
+irouting protocols, as they overwrite each other and may cause		{{server_addr}}	{{server_port}}
+iunexpected behavior.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI finally chose to limit Direct protocol to my internal IP range with		{{server_addr}}	{{server_port}}
+ia filter, so it won't overwrite my DN42 ranges again.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Need Better Glasses?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iA new user registered an ASN:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IErrorneous ASN in DN42 Registry	/usr/uploads/202008/dn42-asn-error.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis is what happened to DN42:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Telegram Group: (Translation available below the image)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+  		{{server_addr}}	{{server_port}}
+ITelegram Reactions	/usr/uploads/202008/dn42-asn-error-response.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Translation:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```html		{{server_addr}}	{{server_port}}
+i  <lantian>		{{server_addr}}	{{server_port}}
+i    Why someone with an ASN of 424242236 came to peer with me		{{server_addr}}	{{server_port}}
+i    <lantian>		{{server_addr}}	{{server_port}}
+i      Yep, 9 digits		{{server_addr}}	{{server_port}}
+i      <lantian>		{{server_addr}}	{{server_port}}
+i        /whois@lantian_lg_bot 424242236		{{server_addr}}	{{server_port}}
+i        <lg>		{{server_addr}}	{{server_port}}
+i          (outputs WHOIS information of the AS)		{{server_addr}}	{{server_port}}
+i          <lantian>		{{server_addr}}	{{server_port}}
+i            And it has proper WHOIS information		{{server_addr}}	{{server_port}}
+i            <KaiKai>		{{server_addr}}	{{server_port}}
+i              https://net-info.nia.ac.cn/#424242236		{{server_addr}}	{{server_port}}
+i              <KaiKai>		{{server_addr}}	{{server_port}}
+i                Really, it exists		{{server_addr}}	{{server_port}}
+i                <Pastel>		{{server_addr}}	{{server_port}}
+i                  Burble didn't spot the error?		{{server_addr}}	{{server_port}}
+i                  <Pastel>		{{server_addr}}	{{server_port}}
+i                    Like the /64 which crashed the ROA		{{server_addr}}	{{server_port}}
+i                    generator</Pastel		{{server_addr}}	{{server_port}}
+i                  ></Pastel		{{server_addr}}	{{server_port}}
+i                ></KaiKai		{{server_addr}}	{{server_port}}
+i              ></KaiKai		{{server_addr}}	{{server_port}}
+i            ></lantian		{{server_addr}}	{{server_port}}
+i          ></lg		{{server_addr}}	{{server_port}}
+i        ></lantian		{{server_addr}}	{{server_port}}
+i      ></lantian		{{server_addr}}	{{server_port}}
+i    ></lantian		{{server_addr}}	{{server_port}}
+i  >		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- IRC：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```html		{{server_addr}}	{{server_port}}
+i  <lantian>		{{server_addr}}	{{server_port}}
+i    Someone successfully registered in DN42 with ASN 424242236 (9		{{server_addr}}	{{server_port}}
+i    digits)		{{server_addr}}	{{server_port}}
+i    <lantian>		{{server_addr}}	{{server_port}}
+i      Is this expected?		{{server_addr}}	{{server_port}}
+i      <xu**>		{{server_addr}}	{{server_port}}
+i        doh		{{server_addr}}	{{server_port}}
+i        <xu**>		{{server_addr}}	{{server_port}}
+i          shouldt have happened		{{server_addr}}	{{server_port}}
+i          <xu**>		{{server_addr}}	{{server_port}}
+i            probably forgot the extra 2		{{server_addr}}	{{server_port}}
+i            <xu**>		{{server_addr}}	{{server_port}}
+i              424242 2236		{{server_addr}}	{{server_port}}
+i              <Kai*>		{{server_addr}}	{{server_port}}
+i                too late tho. it already has one peer with tech9		{{server_addr}}	{{server_port}}
+i                <dne*>		{{server_addr}}	{{server_port}}
+i                  filtering fail!		{{server_addr}}	{{server_port}}
+i                  <xu**>		{{server_addr}}	{{server_port}}
+i                    pomoke?		{{server_addr}}	{{server_port}}
+i                    <lantian>		{{server_addr}}	{{server_port}}
+i                      yep, doesn't seem to be on irc though		{{server_addr}}	{{server_port}}
+i                      <lantian>		{{server_addr}}	{{server_port}}
+i                        nor on telegram <0x7*> so how a 9-digit ASN		{{server_addr}}	{{server_port}}
+i                        passed the schema checker...?		{{server_addr}}	{{server_port}}
+i                        <lantian>		{{server_addr}}	{{server_port}}
+i                          I don't think schema checker checks ASN, or		{{server_addr}}	{{server_port}}
+i                          it will block out clearnet ASNs		{{server_addr}}	{{server_port}}
+i                          <lantian>		{{server_addr}}	{{server_port}}
+i                            But maybe we need a warning?		{{server_addr}}	{{server_port}}
+i                            <xu**>		{{server_addr}}	{{server_port}}
+i                              probably a bug in the policy checker		{{server_addr}}	{{server_port}}
+i                              <xu**>		{{server_addr}}	{{server_port}}
+i                                i wish we had gone with a prefix that		{{server_addr}}	{{server_port}}
+i                                had a visual space		{{server_addr}}	{{server_port}}
+i                                <xu**>		{{server_addr}}	{{server_port}}
+i                                  like AS424200xxxx		{{server_addr}}	{{server_port}}
+i                                  <lantian>		{{server_addr}}	{{server_port}}
+i                                    Well pomoke tried to peer with me		{{server_addr}}	{{server_port}}
+i                                    via email (but ended in spam		{{server_addr}}	{{server_port}}
+i                                    folder)		{{server_addr}}	{{server_port}}
+i                                    <lantian>		{{server_addr}}	{{server_port}}
+i                                      I'm going to tell him/her to		{{server_addr}}	{{server_port}}
+i                                      correct the ASN		{{server_addr}}	{{server_port}}
+i                                      <Kai*>		{{server_addr}}	{{server_port}}
+i                                        9 is a good number tho		{{server_addr}}	{{server_port}}
+i                                        <Kai*>		{{server_addr}}	{{server_port}}
+i                                          once in a blue moon that		{{server_addr}}	{{server_port}}
+i                                          bur* made mistake		{{server_addr}}	{{server_port}}
+i                                          <sun*>		{{server_addr}}	{{server_port}}
+i                                            westerners love digital 9		{{server_addr}}	{{server_port}}
+i                                            <bur*>		{{server_addr}}	{{server_port}}
+i                                              crap		{{server_addr}}	{{server_port}}
+i                                              <bur*>		{{server_addr}}	{{server_port}}
+i                                                lantian, are you in		{{server_addr}}	{{server_port}}
+i                                                contact with pomoke?		{{server_addr}}	{{server_port}}
+i                                                if they can submit a		{{server_addr}}	{{server_port}}
+i                                                fix quickly then I'll		{{server_addr}}	{{server_port}}
+i                                                merge it. Otherwise		{{server_addr}}	{{server_port}}
+i                                                I'll need to pull the		{{server_addr}}	{{server_port}}
+i                                                commit		{{server_addr}}	{{server_port}}
+i                                                <lantian>		{{server_addr}}	{{server_port}}
+i                                                  bur*: I sent him/her		{{server_addr}}	{{server_port}}
+i                                                  an email, not sure		{{server_addr}}	{{server_port}}
+i                                                  about response time		{{server_addr}}	{{server_port}}
+i                                                  <bur*>		{{server_addr}}	{{server_port}}
+i                                                    umm, I'm going to		{{server_addr}}	{{server_port}}
+i                                                    have to pull it		{{server_addr}}	{{server_port}}
+i                                                    then</bur*		{{server_addr}}	{{server_port}}
+i                                                  ></lantian		{{server_addr}}	{{server_port}}
+i                                                ></bur*		{{server_addr}}	{{server_port}}
+i                                              ></bur*		{{server_addr}}	{{server_port}}
+i                                            ></sun*		{{server_addr}}	{{server_port}}
+i                                          ></Kai*		{{server_addr}}	{{server_port}}
+i                                        ></Kai*		{{server_addr}}	{{server_port}}
+i                                      ></lantian		{{server_addr}}	{{server_port}}
+i                                    ></lantian		{{server_addr}}	{{server_port}}
+i                                  ></xu**		{{server_addr}}	{{server_port}}
+i                                ></xu**		{{server_addr}}	{{server_port}}
+i                              ></xu**		{{server_addr}}	{{server_port}}
+i                            ></lantian		{{server_addr}}	{{server_port}}
+i                          ></lantian		{{server_addr}}	{{server_port}}
+i                        ></lantian		{{server_addr}}	{{server_port}}
+i                      ></lantian		{{server_addr}}	{{server_port}}
+i                    ></xu**		{{server_addr}}	{{server_port}}
+i                  ></dne*		{{server_addr}}	{{server_port}}
+i                ></Kai*		{{server_addr}}	{{server_port}}
+i              ></xu**		{{server_addr}}	{{server_port}}
+i            ></xu**		{{server_addr}}	{{server_port}}
+i          ></xu**		{{server_addr}}	{{server_port}}
+i        ></xu**		{{server_addr}}	{{server_port}}
+i      ></lantian		{{server_addr}}	{{server_port}}
+i    ></lantian		{{server_addr}}	{{server_port}}
+i  >		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Justice Has Arrived:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+  		{{server_addr}}	{{server_port}}
+IErrorneous Commit Reverted	/usr/uploads/202008/dn42-asn-error-correction.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Defensive Measures		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Just have fun, this is so rare:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```html		{{server_addr}}	{{server_port}}
+i  <Kai*> once in a blue moon that bur* made mistake</Kai*>		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- But while having fun, remember to point out the problem on IRC.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Double check your peer's information when peering.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Check [DN42 New ASN](https://t.me/DN42new), a Telegram channel that		{{server_addr}}	{{server_port}}
+i  notifies on new DN42 ASNs, in your free time.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

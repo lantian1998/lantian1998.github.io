@@ -1,0 +1,54 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "用证书验证Linux远程登录"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [折腾, VPS]		{{server_addr}}	{{server_port}}
+idate: 2013-02-22 20:21:04		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i一般人远程登录 Linux Shell 都是敲密码，烦不说，一旦你的密码在全世界都		{{server_addr}}	{{server_port}}
+i一样，再遇到 CSDN 600 万密码大泄漏的事件，你的 VPS 也差不多完了。所以		{{server_addr}}	{{server_port}}
+i我们可以用一种更加方便和安全的方式替代密码，也就是 RSA 加密的证书文件		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先，我们要生成一个证书。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+icd ~/.ssh		{{server_addr}}	{{server_port}}
+issh-keygen -t rsa		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这时你的.ssh 目录里应该多出来 id_rsa.pub 和 id_rsa，其中后一个文件保管		{{server_addr}}	{{server_port}}
+i好，是你的密码，前一个是你的公钥，可以全世界去发布。然后我们要设置一下		{{server_addr}}	{{server_port}}
+i我们的 VPS。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先用 FileZilla 或者 WinSCP 把你的 id_rsa.pub 上传到服务器的\~/.ssh		{{server_addr}}	{{server_port}}
+i里，并重命名为 authorized_keys，注意你想用哪个用户登录就 copy 到哪个用		{{server_addr}}	{{server_port}}
+i户的.ssh 下，比如用 root 登，就是/root/.ssh，用 lantian 登就是		{{server_addr}}	{{server_port}}
+i/home/lantian/.ssh。然后要在 OpenSSH 里做一点设置。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+icd /etc/ssh		{{server_addr}}	{{server_port}}
+inano sshd_config		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i改下面的内容：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iRSAAuthentication yes		{{server_addr}}	{{server_port}}
+iPubkeyAuthentication yes		{{server_addr}}	{{server_port}}
+iPermitEmptyPasswords no		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i存盘后 service ssh restart，然后可以断掉 SSH 再次连接，如果只输用户名		{{server_addr}}	{{server_port}}
+i就连接成功，那么就 OK 了，如果还要输密码，就回去检查你前面的操作步骤		{{server_addr}}	{{server_port}}
+i。OK 后还可以做一点修改，就是禁止密码登录，更加安全。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iPasswordAuthentication no		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后为了安全起见，请登上 SSH，把 authorized_keys 文件权限改成		{{server_addr}}	{{server_port}}
+i600，.ssh 目录改成 700，对于你本机则把两个密钥改成 600，.ssh 改成		{{server_addr}}	{{server_port}}
+i700。这样就安全多了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

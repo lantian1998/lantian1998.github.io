@@ -1,0 +1,128 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "为 nginx 启用 TLS 1.3，并传递给 FastCGI 后端"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [OpenSSL, nginx, TLS 1.3]		{{server_addr}}	{{server_port}}
+idate: 2017-08-06 19:38:59		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2017/08/3111686958.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOpenSSL 在最新的测试版中提供了 TLS 1.3 的实验性支持，包括了一系列的性		{{server_addr}}	{{server_port}}
+i能和安全性优化。最新的 nginx 1.13 系列也相应的添加了 TLS 1.3 的相关选		{{server_addr}}	{{server_port}}
+i项。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过由于 TLS 1.3 还处在草案状态，现在使用还是要踩一些坑的：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. TLS 1.3 目前有 18、19、20 三个版本的草案已经被 OpenSSL 等实现，而且		{{server_addr}}	{{server_port}}
+i   它们互不兼容，也没有一个 SSL 的库把它们三合一。		{{server_addr}}	{{server_port}}
+i2. 目前 Chrome、Firefox 等浏览器广泛使用的是 18 版草案，但是这个版本的		{{server_addr}}	{{server_port}}
+i   OpenSSL 不支持 TLS 扩展，而 Certificate Transparency 需要用到它。		{{server_addr}}	{{server_port}}
+i3. 虽然最新的 [nginx-ct](https://github.com/grahamedgecombe/nginx-ct)		{{server_addr}}	{{server_port}}
+i   插件增加了 TLS 1.3 的 Certificate Transparency 支持，但是由于第二条		{{server_addr}}	{{server_port}}
+i   ，它无法与草案 18 的 OpenSSL 一同工作，会出现编译失败的情况。因此必		{{server_addr}}	{{server_port}}
+i   须退回到 nginx-ct 项目		{{server_addr}}	{{server_port}}
+i   [release](https://github.com/grahamedgecombe/nginx-ct/releases) 中		{{server_addr}}	{{server_port}}
+i   的 1.3.2 版本，而这个版本对 TLS 1.3 不生效。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 我部署 nginx 使用的 Dockerfile 如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```docker		{{server_addr}}	{{server_port}}
+iFROM debian:jessie-slim		{{server_addr}}	{{server_port}}
+iMAINTAINER Lan Tian "lantian@lantian.pub"		{{server_addr}}	{{server_port}}
+iENV NGINX_VERSION=1.13.3 OPENSSL_VERSION=tls1.3-draft-18 NGINX_CT_VERSION=1.3.2		{{server_addr}}	{{server_port}}
+iRUN cd /tmp \		{{server_addr}}	{{server_port}}
+i  && apt-get update -q \		{{server_addr}}	{{server_port}}
+i  && apt-get -y upgrade \		{{server_addr}}	{{server_port}}
+i  && apt-get -y install build-essential git autoconf automake libtool wget tar zlib1g-dev libpcre3 libpcre3-dev unzip libjemalloc-dev \		{{server_addr}}	{{server_port}}
+i  && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \		{{server_addr}}	{{server_port}}
+i    && tar xf nginx-${NGINX_VERSION}.tar.gz \		{{server_addr}}	{{server_port}}
+i  && git clone https://github.com/bagder/libbrotli.git \		{{server_addr}}	{{server_port}}
+i    && cd /tmp/libbrotli && ./autogen.sh && ./configure && make && make install && cd /tmp \		{{server_addr}}	{{server_port}}
+i    && ln -s /usr/local/lib/libbrotlienc.so.1 /usr/lib/libbrotlienc.so.1 \		{{server_addr}}	{{server_port}}
+i  && git clone https://github.com/google/ngx_brotli.git \		{{server_addr}}	{{server_port}}
+i    && cd /tmp/ngx_brotli && git submodule update --init && cd /tmp/ \		{{server_addr}}	{{server_port}}
+i  && wget https://github.com/grahamedgecombe/nginx-ct/archive/v${NGINX_CT_VERSION}.zip \		{{server_addr}}	{{server_port}}
+i    && unzip v${NGINX_CT_VERSION}.zip \		{{server_addr}}	{{server_port}}
+i  && wget https://github.com/openssl/openssl/archive/${OPENSSL_VERSION}.zip \		{{server_addr}}	{{server_port}}
+i    && unzip ${OPENSSL_VERSION}.zip \		{{server_addr}}	{{server_port}}
+i  && cd nginx-${NGINX_VERSION} \		{{server_addr}}	{{server_port}}
+i  && wget https://github.com/cloudflare/sslconfig/raw/master/patches/nginx__1.13.0_http2_spdy.patch \		{{server_addr}}	{{server_port}}
+i    && sh -c "cat nginx__1.13.0_http2_spdy.patch | patch -p1" \		{{server_addr}}	{{server_port}}
+i  && wget https://github.com/cloudflare/sslconfig/raw/master/patches/nginx__1.11.5_dynamic_tls_records.patch \		{{server_addr}}	{{server_port}}
+i    && sh -c "cat nginx__1.11.5_dynamic_tls_records.patch | patch -p1" \		{{server_addr}}	{{server_port}}
+i  && ./configure \		{{server_addr}}	{{server_port}}
+i     --with-threads \		{{server_addr}}	{{server_port}}
+i     --with-file-aio \		{{server_addr}}	{{server_port}}
+i     --with-ipv6 \		{{server_addr}}	{{server_port}}
+i     --with-http_ssl_module \		{{server_addr}}	{{server_port}}
+i     --with-http_spdy_module \		{{server_addr}}	{{server_port}}
+i     --with-http_v2_module \		{{server_addr}}	{{server_port}}
+i     --with-http_gzip_static_module \		{{server_addr}}	{{server_port}}
+i     --with-http_gunzip_module \		{{server_addr}}	{{server_port}}
+i     --with-http_stub_status_module \		{{server_addr}}	{{server_port}}
+i     --with-http_sub_module \		{{server_addr}}	{{server_port}}
+i     --add-module=/tmp/nginx-ct-${NGINX_CT_VERSION} \		{{server_addr}}	{{server_port}}
+i     --add-module=/tmp/ngx_brotli \		{{server_addr}}	{{server_port}}
+i     --with-openssl=/tmp/openssl-${OPENSSL_VERSION} \		{{server_addr}}	{{server_port}}
+i     --with-openssl-opt='enable-ec_nistp_64_gcc_128 enable-weak-ssl-ciphers enable-tls1_3 -ljemalloc' \		{{server_addr}}	{{server_port}}
+i     --with-ld-opt="-ljemalloc" \		{{server_addr}}	{{server_port}}
+i     --with-cc-opt="-O3 -flto -fPIC -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wno-deprecated-declarations" \		{{server_addr}}	{{server_port}}
+i  && make \		{{server_addr}}	{{server_port}}
+i  && make install \		{{server_addr}}	{{server_port}}
+i  && cd / && rm -rf /tmp/* \		{{server_addr}}	{{server_port}}
+i  && apt-get purge -y unzip git autoconf libtool automake build-essential \		{{server_addr}}	{{server_port}}
+i  && apt-get autoremove -y --purge \		{{server_addr}}	{{server_port}}
+i  && apt-get clean \		{{server_addr}}	{{server_port}}
+i  && ln -sf /usr/local/nginx/sbin/nginx /usr/local/nginx \		{{server_addr}}	{{server_port}}
+i  && ln -sf /dev/stdout /usr/local/nginx/logs/access.log \		{{server_addr}}	{{server_port}}
+i    && ln -sf /dev/stderr /usr/local/nginx/logs/error.log		{{server_addr}}	{{server_port}}
+i#EXPOSE 80 443		{{server_addr}}	{{server_port}}
+iENTRYPOINT /usr/local/nginx		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i该 Dockerfile 编译的 nginx 包含了 Brotli 压缩算法，Certificate		{{server_addr}}	{{server_port}}
+iTransparency（仅 TLS 1.2 及以下），OpenSSL 1.1.1 draft 18，以及		{{server_addr}}	{{server_port}}
+iCloudFlare 的 SPDY 支持补丁和 Dynamic TLS Record 补丁。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你不使用 Docker，但是使用 Debian 或者 Ubuntu，可以直接用 RUN 后面		{{server_addr}}	{{server_port}}
+i的一长串命令来直接安装 nginx。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 对配置文件的修改		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+inginx 的配置文件也需要修改，以开启 TLS 1.3 功能。在 nginx.conf 的		{{server_addr}}	{{server_port}}
+iserver 块里：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 修改 ssl_protocols，添加 TLSv1.3		{{server_addr}}	{{server_port}}
+i2. 修改 ssl_ciphers，在最开头添加		{{server_addr}}	{{server_port}}
+i   `TLS13-AES-256-GCM-SHA384:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-128-CCM-8-SHA256:TLS13-AES-128-CCM-SHA256`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i修改完成的示例如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+issl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;		{{server_addr}}	{{server_port}}
+issl_ciphers 'TLS13-AES-256-GCM-SHA384:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-128-CCM-8-SHA256:TLS13-AES-128-CCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS';		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## FastCGI 检测 TLS 版本		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于 SSL 连接往往并不直接建立到程序语言服务端上，例如 PHP 等 FastCGI		{{server_addr}}	{{server_port}}
+i服务端，这些服务端往往无法得知用户连接的 TLS 版本号和加密方式。但是		{{server_addr}}	{{server_port}}
+i，nginx 可以得知这些信息，并且把它们作为变量存储起来。简单的修改配置文		{{server_addr}}	{{server_port}}
+i件，就能把这些信息传递到 FastCGI 后端。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i打开你 nginx 配置目录下的 fastcgi_params 文件，并向里面加入两行：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ifastcgi_param  SSL_CIPHER         $ssl_cipher;		{{server_addr}}	{{server_port}}
+ifastcgi_param  SSL_PROTOCOL       $ssl_protocol;		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i重新加载 nginx 配置即可。以 PHP 为例，这些信息可以通过类似		{{server_addr}}	{{server_port}}
+i`$_SERVER['SSL_CIPHER']` 的方式来获取。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 配置完成的 Qualys SSL Labs 检查结果		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I概览	/usr/uploads/2017/08/3111686958.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I协议信息	/usr/uploads/2017/08/1884892609.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

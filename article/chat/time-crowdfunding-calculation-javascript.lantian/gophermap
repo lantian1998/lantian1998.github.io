@@ -1,0 +1,52 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "A Javascript for time crowdfunding calculation"		{{server_addr}}	{{server_port}}
+icategories: 闲聊		{{server_addr}}	{{server_port}}
+itags: [JS]		{{server_addr}}	{{server_port}}
+idate: 2016-08-25 00:19:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn the old Eastern country with mysterious magic power, a minute will		{{server_addr}}	{{server_port}}
+ipass every 59 seconds.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```javascript		{{server_addr}}	{{server_port}}
+ivar toad = new Date();		{{server_addr}}	{{server_port}}
+ivar secondsDonated = Math.floor(		{{server_addr}}	{{server_port}}
+i  (toad.getTime() + 1368835200000) / 59000		{{server_addr}}	{{server_port}}
+i);		{{server_addr}}	{{server_port}}
+itoad.setTime(toad.getTime() + secondsDonated * 1000);		{{server_addr}}	{{server_port}}
+itoad.toLocaleString();		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i\-1368835200 is the UNIX timestamp of his birthday, and the trailing		{{server_addr}}	{{server_port}}
+izeroes are added because time is calculated in milliseconds in		{{server_addr}}	{{server_port}}
+iJavascript.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBy donating your time, you are identical to a person living in		{{server_addr}}	{{server_port}}
+i<span id="time-crowdfund-status"></span> outside China.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou and each person has donated		{{server_addr}}	{{server_port}}
+i<span id="time-crowdfund-donated"></span> seconds. That is		{{server_addr}}	{{server_port}}
+i<span id="time-crowdfund-year"></span> years,		{{server_addr}}	{{server_port}}
+i<span id="time-crowdfund-day"></span> days,		{{server_addr}}	{{server_port}}
+i<span id="time-crowdfund-hour"></span> hours,		{{server_addr}}	{{server_port}}
+i<span id="time-crowdfund-minute"></span> minutes and		{{server_addr}}	{{server_port}}
+i<span id="time-crowdfund-second"></span> seconds.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<script>		{{server_addr}}	{{server_port}}
+ifunction crowdFund() {		{{server_addr}}	{{server_port}}
+ivar toad = new Date();		{{server_addr}}	{{server_port}}
+ivar secondsDonated = Math.floor((toad.getTime() + 1368835200000) / 59000);		{{server_addr}}	{{server_port}}
+i$('#time-crowdfund-donated').text(secondsDonated);		{{server_addr}}	{{server_port}}
+i$('#time-crowdfund-second').text(secondsDonated % 60);		{{server_addr}}	{{server_port}}
+i$('#time-crowdfund-minute').text(Math.floor(secondsDonated / 60) % 60);		{{server_addr}}	{{server_port}}
+i$('#time-crowdfund-hour').text(Math.floor(secondsDonated / 3600) % 24);		{{server_addr}}	{{server_port}}
+i$('#time-crowdfund-day').text(Math.floor(secondsDonated / 86400) % 365);		{{server_addr}}	{{server_port}}
+i$('#time-crowdfund-year').text(Math.floor(secondsDonated / 31536000));		{{server_addr}}	{{server_port}}
+itoad.setTime(toad.getTime() + secondsDonated * 1000);		{{server_addr}}	{{server_port}}
+i$('#time-crowdfund-status').text(toad.toLocaleString());		{{server_addr}}	{{server_port}}
+isetTimeout("crowdFund()", 200);		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+isetTimeout("crowdFund()", 200);		{{server_addr}}	{{server_port}}
+i</script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

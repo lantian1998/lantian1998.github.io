@@ -1,0 +1,48 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "SCIM抽风的解决办法"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [Linux, 折腾]		{{server_addr}}	{{server_port}}
+idate: 2012-12-31 22:27:39		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Ubuntu 12.10 下，我不喜欢用默认的 ibus，软件源里的 fcitx 和 scim 都		{{server_addr}}	{{server_port}}
+i不带拼音包，于是我自己下载了 scim 的谷歌拼音模块，编译安装使用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是在使用过程中，scim 经常动不动抽几下风，症状是无论点击什么输入框		{{server_addr}}	{{server_port}}
+i，scim 通通不识别，认为这里无法输入中文。于是就只能打英文。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBug 掉的那次，我在和同学用 pywebqq 聊天，结果 scim 一抽，接下来的聊天		{{server_addr}}	{{server_port}}
+i都是用拼音进行的，直到对方一会儿没回复，我乘机注销，重新登录，才找回了		{{server_addr}}	{{server_port}}
+iscim。结果今天我在用电脑写作文，scim 又抽风了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我实在不想注销系统，于是打开终端，查查 scim 的命令。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ixdd@xdd-asus:~$ scim --help		{{server_addr}}	{{server_port}}
+iSmart Common Input Method 1.4.14		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUsage: scim [option]...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe options are:		{{server_addr}}	{{server_port}}
+i  -l, --list              List all of available modules.		{{server_addr}}	{{server_port}}
+i  -f, --frontend name     Use specified FrontEnd module.		{{server_addr}}	{{server_port}}
+i  -c, --config name       Use specified Config module.		{{server_addr}}	{{server_port}}
+i  -e, --engines name      Load specified set of IMEngines.		{{server_addr}}	{{server_port}}
+i  -ne,--no-engines name   Do not load those set of IMEngines.		{{server_addr}}	{{server_port}}
+i  -d, --daemon            Run scim as a daemon.		{{server_addr}}	{{server_port}}
+i  --no-socket             Do not try to start a SCIM SocketFrontEnd daemon.		{{server_addr}}	{{server_port}}
+i  -h, --help              Show this help message.		{{server_addr}}	{{server_port}}
+ixdd@xdd-asus:~$		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我发现了-d 这个命令行选项，估计是启动 scim 的。然后我一想，scim 挂了，		{{server_addr}}	{{server_port}}
+i把它干了然后重启不就行了吗。于是我输了下面一行代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ipkill -9 scim & scim -d		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i一执行，scim 消失了。这时我按下 Ctrl+Space，scim 再次出现。点击		{{server_addr}}	{{server_port}}
+ilibreoffice，语言、符号选项等全部出现，至此，问题解决。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

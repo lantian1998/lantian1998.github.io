@@ -1,0 +1,29 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Host1Free 近期改造网络架构，更换VPS IP"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [VPS, Host1Free, IP]		{{server_addr}}	{{server_port}}
+idate: 2013-06-08 21:59:07		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+iDear Host1Free User Lan Tian,		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    We would like to announce that due to changes in our network infrastructure we will be changing current IP address of your free VPS server 5.175.206.68 to the new one 5.175.156.249.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    In order to allow you to prepare for this event we added IP address 5.175.206.68 as main IP address and old 5.175.156.249 IP left as additional to your free VPS server.		{{server_addr}}	{{server_port}}
+i    Next Wednesday (2013-06-13) old IP address will be removed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    Please make sure to update your servers settings, DNS settings and etc. accordingly to avoid any inconience after old IP(5.175.156.249) address removal at Wednesday."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    Please accept our apologies for the inconvenience.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRegards,		{{server_addr}}	{{server_port}}
+iHost1Free adminsitrators team		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i简洁来说，VPS 的 IP 地址改成 5.175.206.68，原来的 5.175.156.249 留到下		{{server_addr}}	{{server_port}}
+i周三作为过渡，请修改好自己的 DNS 解析。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过永久免费的 VPS 撑到现在还这么稳定（？）真强悍。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

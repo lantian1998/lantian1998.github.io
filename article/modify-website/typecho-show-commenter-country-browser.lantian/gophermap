@@ -1,0 +1,924 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Typecho 显示评论者国家和浏览器"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [IP, Typecho]		{{server_addr}}	{{server_port}}
+idate: 2014-07-30 21:09:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTypecho 由于插件稀少，一直没有找到显示评论者国家和浏览器的插件，所以只		{{server_addr}}	{{server_port}}
+i好自力更生了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i代码修改自 WordPress 插件 Show UserAgent，下载页面		{{server_addr}}	{{server_port}}
+i：<https://wordpress.org/plugins/show-useragent/>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i前提是你的主题使用了自定义评论代码而不是 Typecho 默认的评论显示代码，		{{server_addr}}	{{server_port}}
+i一般符合要求的主题的 comments.php 或者 functions.php 中会有如下代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```php		{{server_addr}}	{{server_port}}
+i<?php function threadedComments($comments, $options) {		{{server_addr}}	{{server_port}}
+i    //blablabla		{{server_addr}}	{{server_port}}
+i?>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下载 Show UserAgent 插件解压，把里面的 flags 文件夹改名成		{{server_addr}}	{{server_port}}
+icountry，browsers 文件夹改名成 browser，ip2c 文件夹改名成 lib，上传到		{{server_addr}}	{{server_port}}
+i服务器上你的主题文件夹。（其实不改也可以，但是我是按照个人习惯这么改的		{{server_addr}}	{{server_port}}
+i，你也可以修改下面代码的路径）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在主题的 functions.php 中插入这么长一串代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```php		{{server_addr}}	{{server_port}}
+i<?php /* 地理位置判断 */ ?>		{{server_addr}}	{{server_port}}
+i<?php function CID_get_country($ip) {		{{server_addr}}	{{server_port}}
+i    require_once(dirname(__FILE__).'/lib/ip2c.php');		{{server_addr}}	{{server_port}}
+i    if (isset($GLOBALS['ip2c'])) {		{{server_addr}}	{{server_port}}
+i        global $ip2c;		{{server_addr}}	{{server_port}}
+i    } else {		{{server_addr}}	{{server_port}}
+i        $ip2c = new ip2country(dirname(__FILE__).'/lib/ip-to-country.bin');		{{server_addr}}	{{server_port}}
+i        $GLOBALS['ip2c'] = $ip2c;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    return $ip2c->get_country($ip);		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ifunction CID_get_flag($ip, $show_image = true, $show_text = false, $before = '', $after = '') {		{{server_addr}}	{{server_port}}
+i    if($ip == '127.0.0.1'){		{{server_addr}}	{{server_port}}
+i        $code = 'wordpress';		{{server_addr}}	{{server_port}}
+i        $name = 'Localhost';		{{server_addr}}	{{server_port}}
+i    }else{		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    $country = CID_get_country($ip);		{{server_addr}}	{{server_port}}
+i    if (!$country) return "";		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    $code = strtolower($country['id2']);		{{server_addr}}	{{server_port}}
+i    $name = $country['name'];		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    global $CID_options;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    $output = '';		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if ($show_image)		{{server_addr}}	{{server_port}}
+i        $output = ' <img src="http://cdn.lantian.lt/usr/themes/hybridside/lib/country/' . $code . '.png" title="' . $name . '" alt="' . $name . '" class="country-flag" />';		{{server_addr}}	{{server_port}}
+i    if ($show_text)		{{server_addr}}	{{server_port}}
+i        $output .= ' ' . $name;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    return $before . $output . $after;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i?>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<?php /* 浏览器判断 */ ?>		{{server_addr}}	{{server_port}}
+i<?php function CID_windows_detect_os($ua) {		{{server_addr}}	{{server_port}}
+i    $os_name = $os_code = $os_ver = $pda_name = $pda_code = $pda_ver = null;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if (preg_match('/Windows 95/i', $ua) || preg_match('/Win95/', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows";		{{server_addr}}	{{server_port}}
+i        $os_ver = "95";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Windows NT 5.0/i', $ua) || preg_match('/Windows 2000/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows";		{{server_addr}}	{{server_port}}
+i        $os_ver = "2000";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Win 9x 4.90/i', $ua) || preg_match('/Windows ME/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows";		{{server_addr}}	{{server_port}}
+i        $os_ver = "ME";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Windows.98/i', $ua) || preg_match('/Win98/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows";		{{server_addr}}	{{server_port}}
+i        $os_ver = "98";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Windows NT 6.0/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows_vista";		{{server_addr}}	{{server_port}}
+i        $os_ver = "Vista";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Windows NT 6.1/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows_win7";		{{server_addr}}	{{server_port}}
+i        $os_ver = "7";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Windows NT 6.2/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows_win8";		{{server_addr}}	{{server_port}}
+i        $os_ver = "8";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Windows NT 5.1/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows";		{{server_addr}}	{{server_port}}
+i        $os_ver = "XP";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Windows NT 5.2/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows";		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Win64/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_ver = "XP 64 bit";		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            $os_ver = "Server 2003";		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    elseif (preg_match('/Mac_PowerPC/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Mac OS";		{{server_addr}}	{{server_port}}
+i        $os_code = "macos";		{{server_addr}}	{{server_port}}
+i    }elseif (preg_match('/Windows Phone/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $matches = explode(';',$ua);		{{server_addr}}	{{server_port}}
+i        $os_name = $matches[2];		{{server_addr}}	{{server_port}}
+i        $os_code = "windows_phone7";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Windows NT 4.0/i', $ua) || preg_match('/WinNT4.0/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows";		{{server_addr}}	{{server_port}}
+i        $os_ver = "NT 4.0";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Windows NT/i', $ua) || preg_match('/WinNT/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows";		{{server_addr}}	{{server_port}}
+i        $os_ver = "NT";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Windows CE/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver, $pda_name, $pda_code, $pda_ver) = CID_pda_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows";		{{server_addr}}	{{server_port}}
+i        $os_ver = "CE";		{{server_addr}}	{{server_port}}
+i        if (preg_match('/PPC/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_name = "Microsoft PocketPC";		{{server_addr}}	{{server_port}}
+i            $os_code = "windows";		{{server_addr}}	{{server_port}}
+i            $os_ver = '';		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i        if (preg_match('/smartphone/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_name = "Microsoft Smartphone";		{{server_addr}}	{{server_port}}
+i            $os_code = "windows";		{{server_addr}}	{{server_port}}
+i            $os_ver = '';		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } else{		{{server_addr}}	{{server_port}}
+i        $os_name = 'Unknow Os';		{{server_addr}}	{{server_port}}
+i        $os_code = 'other';		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    return array($os_name, $os_code, $os_ver, $pda_name, $pda_code, $pda_ver);		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ifunction CID_unix_detect_os($ua) {		{{server_addr}}	{{server_port}}
+i    $os_name = $os_ver = $os_code = null;		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Linux/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Linux";		{{server_addr}}	{{server_port}}
+i        $os_code = "linux";		{{server_addr}}	{{server_port}}
+i        if (preg_match('#Debian#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_code = "debian";		{{server_addr}}	{{server_port}}
+i            $os_name = "Debian GNU/Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Mandrake#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_code = "mandrake";		{{server_addr}}	{{server_port}}
+i            $os_name = "Mandrake Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Kindle Fire#i',$ua)) {//for Kindle Fire		{{server_addr}}	{{server_port}}
+i            $matches = explode(';',$ua);		{{server_addr}}	{{server_port}}
+i            $os_code = "kindle";		{{server_addr}}	{{server_port}}
+i            $matches2 = explode(')',$matches[4]);		{{server_addr}}	{{server_port}}
+i            $os_name = $matches[2].$matches2[0];		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Android#i',$ua)) {//Android		{{server_addr}}	{{server_port}}
+i            $matches = explode(';',$ua);		{{server_addr}}	{{server_port}}
+i            $os_code = "android";		{{server_addr}}	{{server_port}}
+i            $matches2 = explode(')',$matches[4]);		{{server_addr}}	{{server_port}}
+i            $os_name = $matches[2].$matches2[0];		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#SuSE#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_code = "suse";		{{server_addr}}	{{server_port}}
+i            $os_name = "SuSE Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Novell#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_code = "novell";		{{server_addr}}	{{server_port}}
+i            $os_name = "Novell Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Ubuntu#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_code = "ubuntu";		{{server_addr}}	{{server_port}}
+i            $os_name = "Ubuntu Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Red ?Hat#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_code = "redhat";		{{server_addr}}	{{server_port}}
+i            $os_name = "RedHat Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Gentoo#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_code = "gentoo";		{{server_addr}}	{{server_port}}
+i            $os_name = "Gentoo Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Fedora#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_code = "fedora";		{{server_addr}}	{{server_port}}
+i            $os_name = "Fedora Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#MEPIS#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_name = "MEPIS Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Knoppix#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_name = "Knoppix Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Slackware#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_code = "slackware";		{{server_addr}}	{{server_port}}
+i            $os_name = "Slackware Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Xandros#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_name = "Xandros Linux";		{{server_addr}}	{{server_port}}
+i        } elseif (preg_match('#Kanotix#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_name = "Kanotix Linux";		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/FreeBSD/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "FreeBSD";		{{server_addr}}	{{server_port}}
+i        $os_code = "freebsd";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/NetBSD/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "NetBSD";		{{server_addr}}	{{server_port}}
+i        $os_code = "netbsd";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/OpenBSD/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "OpenBSD";		{{server_addr}}	{{server_port}}
+i        $os_code = "openbsd";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/IRIX/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "SGI IRIX";		{{server_addr}}	{{server_port}}
+i        $os_code = "sgi";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/SunOS/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Solaris";		{{server_addr}}	{{server_port}}
+i        $os_code = "sun";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#iPod.*.CPU.([a-zA-Z0-9.( _)]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "iPod";		{{server_addr}}	{{server_port}}
+i        $os_code = "iphone";		{{server_addr}}	{{server_port}}
+i        $os_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#iPhone.*.CPU.([a-zA-Z0-9.( _)]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "iPhone";		{{server_addr}}	{{server_port}}
+i        $os_code = "iphone";		{{server_addr}}	{{server_port}}
+i        $os_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#iPad.*.CPU.([a-zA-Z0-9.( _)]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "iPad";		{{server_addr}}	{{server_port}}
+i        $os_code = "ipad";		{{server_addr}}	{{server_port}}
+i        $os_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Mac OS X.([0-9. _]+)/i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Mac OS";		{{server_addr}}	{{server_port}}
+i        $os_code = "macos";		{{server_addr}}	{{server_port}}
+i        if(count(explode(7,$matches[1]))>1) $matches[1] = 'Lion '.$matches[1];		{{server_addr}}	{{server_port}}
+i        elseif(count(explode(8,$matches[1]))>1) $matches[1] = 'Mountain Lion '.$matches[1];		{{server_addr}}	{{server_port}}
+i        $os_ver = "X ".$matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Macintosh/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Mac OS";		{{server_addr}}	{{server_port}}
+i        $os_code = "macos";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Unix/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "UNIX";		{{server_addr}}	{{server_port}}
+i        $os_code = "unix";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/CrOS/i', $ua)){		{{server_addr}}	{{server_port}}
+i        $os_name="Google Chrome OS";		{{server_addr}}	{{server_port}}
+i        $os_code="chromeos";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/Fedor.([0-9. _]+)/i', $ua, $matches)){		{{server_addr}}	{{server_port}}
+i        $os_name="Fedora";		{{server_addr}}	{{server_port}}
+i        $os_code="fedora";		{{server_addr}}	{{server_port}}
+i        $os_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } else{		{{server_addr}}	{{server_port}}
+i        $os_name = 'Unknow Os';		{{server_addr}}	{{server_port}}
+i        $os_code = 'other';		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    return array($os_name, $os_code, $os_ver);		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ifunction CID_pda_detect_os($ua) {		{{server_addr}}	{{server_port}}
+i    $os_name = $os_code = $os_ver = $pda_name = $pda_code = $pda_ver = null;		{{server_addr}}	{{server_port}}
+i    if (preg_match('#PalmOS#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Palm OS";		{{server_addr}}	{{server_port}}
+i        $os_code = "palm";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Windows CE#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Windows CE";		{{server_addr}}	{{server_port}}
+i        $os_code = "windows";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#QtEmbedded#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Qtopia";		{{server_addr}}	{{server_port}}
+i        $os_code = "linux";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Zaurus#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Linux";		{{server_addr}}	{{server_port}}
+i        $os_code = "linux";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Symbian#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "Symbian OS";		{{server_addr}}	{{server_port}}
+i        $os_code = "symbian";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#PalmOS/sony/model#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Sony Clie";		{{server_addr}}	{{server_port}}
+i        $pda_code = "sony";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Zaurus ([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Sharp Zaurus " . $matches[1];		{{server_addr}}	{{server_port}}
+i        $pda_code = "zaurus";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Series ([0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Series";		{{server_addr}}	{{server_port}}
+i        $pda_code = "nokia";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Nokia ([0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Nokia";		{{server_addr}}	{{server_port}}
+i        $pda_code = "nokia";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#SIE-([a-zA-Z0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Siemens";		{{server_addr}}	{{server_port}}
+i        $pda_code = "siemens";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#dopod([a-zA-Z0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Dopod";		{{server_addr}}	{{server_port}}
+i        $pda_code = "dopod";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#o2 xda ([a-zA-Z0-9 ]+);#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "O2 XDA";		{{server_addr}}	{{server_port}}
+i        $pda_code = "o2";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#SEC-([a-zA-Z0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Samsung";		{{server_addr}}	{{server_port}}
+i        $pda_code = "samsung";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#SonyEricsson ?([a-zA-Z0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "SonyEricsson";		{{server_addr}}	{{server_port}}
+i        $pda_code = "sonyericsson";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Kindle\/([a-zA-Z0-9. ×\(.\)]+)#i',$ua, $matches)) {//for Kindle		{{server_addr}}	{{server_port}}
+i        $pda_name = "kindle";		{{server_addr}}	{{server_port}}
+i        $pda_code = "kindle";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } else {		{{server_addr}}	{{server_port}}
+i        $pda_name = 'Unknow Os';		{{server_addr}}	{{server_port}}
+i        $pda_code = 'other';		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    return array($os_name, $os_code, $os_ver, $pda_name, $pda_code, $pda_ver);		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ifunction CID_detect_browser($ua) {		{{server_addr}}	{{server_port}}
+i    $browser_name = $browser_code = $browser_ver = $os_name = $os_code = $os_ver = $pda_name = $pda_code = $pda_ver = null;		{{server_addr}}	{{server_port}}
+i    $ua = preg_replace("/FunWebProducts/i", "", $ua);		{{server_addr}}	{{server_port}}
+    if (preg_match('#MovableType		{{server_addr}}	{{server_port}}
+1 /	/article/modify-website/typecho-show-commenter-country-browser.lantian/[a-zA-Z0-9.]+	{{server_addr}}	{{server_port}}
+i#i', $ua, $matches)) {i        $browser_name = 'MovableType';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'mt';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+    } elseif (preg_match('#WordPress		{{server_addr}}	{{server_port}}
+1 /	/article/modify-website/typecho-show-commenter-country-browser.lantian/[a-zA-Z0-9.]*	{{server_addr}}	{{server_port}}
+i#i', $ua, $matches)) {i        $browser_name = 'WordPress';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'wp';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+    } elseif (preg_match('#typepad		{{server_addr}}	{{server_port}}
+1 /	/article/modify-website/typecho-show-commenter-country-browser.lantian/[a-zA-Z0-9.]*	{{server_addr}}	{{server_port}}
+i#i', $ua, $matches)) {i        $browser_name = 'TypePad';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'typepad';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#drupal#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Drupal';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'drupal';		{{server_addr}}	{{server_port}}
+i        $browser_ver = count($matches) > 0 ? $matches[1] : "";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#symbianos/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $os_name = "SymbianOS";		{{server_addr}}	{{server_port}}
+i        $os_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $os_code = 'symbian';		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#avantbrowser.com#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Avant Browser';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'avantbrowser';		{{server_addr}}	{{server_port}}
+    } elseif (preg_match('#(Camino|Chimera)		{{server_addr}}	{{server_port}}
+1 /	/article/modify-website/typecho-show-commenter-country-browser.lantian/[a-zA-Z0-9.]+	{{server_addr}}	{{server_port}}
+i#i', $ua, $matches)) {i        $browser_name = 'Camino';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'camino';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[2];		{{server_addr}}	{{server_port}}
+i        $os_name = "Mac OS";		{{server_addr}}	{{server_port}}
+i        $os_code = "macos";		{{server_addr}}	{{server_port}}
+i        $os_ver = "X";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#anonymouse#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Anonymouse';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'anonymouse';		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#PHP#', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'PHP';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'php';		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#danger hiptop#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Danger HipTop';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'danger';		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#w3m/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'W3M';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'w3m';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+    } elseif (preg_match('#Shiira		{{server_addr}}	{{server_port}}
+1/	/article/modify-website/typecho-show-commenter-country-browser.lantian/[a-zA-Z0-9.]+	{{server_addr}}	{{server_port}}
+i#i', $ua, $matches)) {i        $browser_name = 'Shiira';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'shiira';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $os_name = "Mac OS";		{{server_addr}}	{{server_port}}
+i        $os_code = "macos";		{{server_addr}}	{{server_port}}
+i        $os_ver = "X";		{{server_addr}}	{{server_port}}
+    } elseif (preg_match('#Dillo		{{server_addr}}	{{server_port}}
+1 /	/article/modify-website/typecho-show-commenter-country-browser.lantian/[a-zA-Z0-9.]+	{{server_addr}}	{{server_port}}
+i#i', $ua, $matches)) {i        $browser_name = 'Dillo';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'dillo';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Epiphany/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Epiphany';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'epiphany';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#UP.Browser/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Openwave UP.Browser';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'openwave';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#DoCoMo/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'DoCoMo';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'docomo';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if ($browser_ver == '1.0') {		{{server_addr}}	{{server_port}}
+i            preg_match('#DoCoMo/([a-zA-Z0-9.]+)/([a-zA-Z0-9.]+)#i', $ua, $matches);		{{server_addr}}	{{server_port}}
+i            $browser_ver = $matches[2];		{{server_addr}}	{{server_port}}
+i        } elseif ($browser_ver == '2.0') {		{{server_addr}}	{{server_port}}
+i            preg_match('#DoCoMo/([a-zA-Z0-9.]+) ([a-zA-Z0-9.]+)#i', $ua, $matches);		{{server_addr}}	{{server_port}}
+i            $browser_ver = $matches[2];		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#(SeaMonkey)/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Mozilla SeaMonkey';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'seamonkey';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[2];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Kazehakase/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Kazehakase';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'kazehakase';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Flock/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Flock';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'flock';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#(Firefox|Phoenix|Firebird|BonEcho|GranParadiso|Minefield|Iceweasel)/4([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Mozilla Firefox';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'firefox';		{{server_addr}}	{{server_port}}
+i        $browser_ver = '4'.$matches[2];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#(Firefox|Phoenix|Firebird|BonEcho|GranParadiso|Minefield|Iceweasel)/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Mozilla Firefox';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'firefox';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[2];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Minimo/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Minimo';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'mozilla';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#MultiZilla/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'MultiZilla';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'mozilla';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#SE 2([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'SouGou Browser';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'sogou';		{{server_addr}}	{{server_port}}
+i        $browser_ver = '2'.$matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#baidubrowser ([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'BaiDu Browser';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'baidubrowser';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#360([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = '360 Browser';		{{server_addr}}	{{server_port}}
+i        $browser_code = '360se';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i                if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#QQBrowser/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'QQ Browser';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'qqbrowser';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/PSP \(PlayStation Portable\)\; ([a-zA-Z0-9.]+)/', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Sony PSP";		{{server_addr}}	{{server_port}}
+i        $pda_code = "sony-psp";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Galeon/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Galeon';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'galeon';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#iCab/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'iCab';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'icab';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $os_name = "Mac OS";		{{server_addr}}	{{server_port}}
+i        $os_code = "macos";		{{server_addr}}	{{server_port}}
+i        if (preg_match('#Mac OS X#i', $ua)) {		{{server_addr}}	{{server_port}}
+i            $os_ver = "X";		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#K-Meleon/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'K-Meleon';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'kmeleon';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Lynx/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Lynx';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'lynx';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Links \\(([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Links';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'lynx';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+    } elseif (preg_match('#ELinks		{{server_addr}}	{{server_port}}
+1/ 	/article/modify-website/typecho-show-commenter-country-browser.lantian/[a-zA-Z0-9.]+	{{server_addr}}	{{server_port}}
+i#i', $ua, $matches)) {i        $browser_name = 'ELinks';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'lynx';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#ELinks \\(([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'ELinks';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'lynx';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Konqueror/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Konqueror';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'konqueror';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        if (!$os_name) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_pda_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#NetPositive/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'NetPositive';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'netpositive';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $os_name = "BeOS";		{{server_addr}}	{{server_port}}
+i        $os_code = "beos";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#OmniWeb#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'OmniWeb';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'omniweb';		{{server_addr}}	{{server_port}}
+i        $os_name = "Mac OS";		{{server_addr}}	{{server_port}}
+i        $os_code = "macos";		{{server_addr}}	{{server_port}}
+i        $os_ver = "X";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Chrome/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i    $browser_name = 'Google Chrome'; $browser_code = 'chrome'; $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i    list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i    } else {		{{server_addr}}	{{server_port}}
+i    list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Arora/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Arora';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'arora';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Maxthon( |\/)([a-zA-Z0-9.]+)#i', $ua,$matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Maxthon';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'maxthon';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[2];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Win/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#CriOS/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Chrome for iOS';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'crios';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i             list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Safari/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Safari';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'safari';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i             list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#opera mini#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Opera Mini';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'opera';		{{server_addr}}	{{server_port}}
+i        preg_match('#Opera/([a-zA-Z0-9.]+)#i', $ua, $matches);		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+    } elseif (preg_match('#Opera.(.*)Version		{{server_addr}}	{{server_port}}
+1 /	/article/modify-website/typecho-show-commenter-country-browser.lantian/[a-zA-Z0-9.]+	{{server_addr}}	{{server_port}}
+i#i', $ua, $matches)) {i        $browser_name = 'Opera';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'opera';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[2];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i        if (!$os_name) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i        if (!$os_name) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver, $pda_name, $pda_code, $pda_ver) = CID_pda_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i        if (!$os_name) {		{{server_addr}}	{{server_port}}
+i            if (preg_match('/Wii/i', $ua)) {		{{server_addr}}	{{server_port}}
+i                $os_name = "Nintendo Wii";		{{server_addr}}	{{server_port}}
+i                $os_code = "nintendo-wii";		{{server_addr}}	{{server_port}}
+i            }		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Opera/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Opera Mini';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'opera';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#WebPro/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'WebPro';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'webpro';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $os_name = "PalmOS";		{{server_addr}}	{{server_port}}
+i        $os_code = "palmos";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#WebPro#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'WebPro';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'webpro';		{{server_addr}}	{{server_port}}
+i        $os_name = "PalmOS";		{{server_addr}}	{{server_port}}
+i        $os_code = "palmos";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Netfront/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Netfront';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'netfront';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver, $pda_name, $pda_code, $pda_ver) = CID_pda_detect_os($ua);		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Xiino/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Xiino';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'xiino';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/wp-blackberry\/([a-zA-Z0-9.]*)/i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = "WordPress for BlackBerry";		{{server_addr}}	{{server_port}}
+i        $browser_code = "wordpress";		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $pda_name = "BlackBerry";		{{server_addr}}	{{server_port}}
+i        $pda_code = "blackberry";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Blackberry([0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Blackberry";		{{server_addr}}	{{server_port}}
+i        $pda_code = "blackberry";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Blackberry#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Blackberry";		{{server_addr}}	{{server_port}}
+i        $pda_code = "blackberry";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#SPV ([0-9a-zA-Z.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Orange SPV";		{{server_addr}}	{{server_port}}
+i        $pda_code = "orange";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#LGE-([a-zA-Z0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "LG";		{{server_addr}}	{{server_port}}
+i        $pda_code = 'lg';		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#MOT-([a-zA-Z0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Motorola";		{{server_addr}}	{{server_port}}
+i        $pda_code = 'motorola';		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Nokia ?([0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Nokia";		{{server_addr}}	{{server_port}}
+i        $pda_code = "nokia";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#NokiaN-Gage#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Nokia";		{{server_addr}}	{{server_port}}
+i        $pda_code = "nokia";		{{server_addr}}	{{server_port}}
+i        $pda_ver = "N-Gage";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Blazer[ /]?([a-zA-Z0-9.]*)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = "Blazer";		{{server_addr}}	{{server_port}}
+i        $browser_code = "blazer";		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $os_name = "Palm OS";		{{server_addr}}	{{server_port}}
+i        $os_code = "palm";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#SIE-([a-zA-Z0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Siemens";		{{server_addr}}	{{server_port}}
+i        $pda_code = "siemens";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#SEC-([a-zA-Z0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Samsung";		{{server_addr}}	{{server_port}}
+i        $pda_code = "samsung";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/wp-iphone\/([a-zA-Z0-9.]*)/i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = "WordPress for iOS";		{{server_addr}}	{{server_port}}
+i        $browser_code = "wordpress";		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $pda_name = "iPhone & iPad";		{{server_addr}}	{{server_port}}
+i        $pda_code = "ipad";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/wp-android\/([a-zA-Z0-9.]*)/i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = "WordPress for Android";		{{server_addr}}	{{server_port}}
+i        $browser_code = "wordpress";		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $pda_name = "Android";		{{server_addr}}	{{server_port}}
+i        $pda_code = "android";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/wp-windowsphone\/([a-zA-Z0-9.]*)/i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = "WordPress for Windows Phone 7";		{{server_addr}}	{{server_port}}
+i        $browser_code = "wordpress";		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $pda_name = "Windows Phone 7";		{{server_addr}}	{{server_port}}
+i        $pda_code = "windows_phone7";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/wp-nokia\/([a-zA-Z0-9.]*)/i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = "WordPress for Nokia";		{{server_addr}}	{{server_port}}
+i        $browser_code = "wordpress";		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        $pda_name = "Nokia";		{{server_addr}}	{{server_port}}
+i        $pda_code = "nokia";		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#SAMSUNG-(S.H-[a-zA-Z0-9_/.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "Samsung";		{{server_addr}}	{{server_port}}
+i        $pda_code = "samsung";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('#(j2me|midp)#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = "J2ME/MIDP Browser";		{{server_addr}}	{{server_port}}
+i        $browser_code = "j2me";		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#SonyEricsson ?([a-zA-Z0-9]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $pda_name = "SonyEricsson";		{{server_addr}}	{{server_port}}
+i        $pda_code = "sonyericsson";		{{server_addr}}	{{server_port}}
+i        $pda_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#(j2me|midp)#i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = "J2ME/MIDP Browser";		{{server_addr}}	{{server_port}}
+i        $browser_code = "j2me";		{{server_addr}}	{{server_port}}
+i    // mice		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('/GreenBrowser/i', $ua)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'GreenBrowser';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'greenbrowser';		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Win/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#TencentTraveler ([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = '腾讯TT浏览器';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'tencenttraveler';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#UCWEB([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'UCWEB';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'ucweb';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#MSIE ([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Internet Explorer';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if ( strpos($browser_ver, '7') !== false || strpos($browser_ver, '8') !== false)		{{server_addr}}	{{server_port}}
+i            $browser_code = 'ie8';		{{server_addr}}	{{server_port}}
+i        elseif ( strpos($browser_ver, '9') !== false)		{{server_addr}}	{{server_port}}
+i            $browser_code = 'ie9';		{{server_addr}}	{{server_port}}
+i        elseif ( strpos($browser_ver, '10') !== false)		{{server_addr}}	{{server_port}}
+i            $browser_code = 'ie10';		{{server_addr}}	{{server_port}}
+i        else		{{server_addr}}	{{server_port}}
+i            $browser_code = 'ie';		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver, $pda_name, $pda_code, $pda_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#Universe/([0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Universe';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'universe';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        list($os_name, $os_code, $os_ver, $pda_name, $pda_code, $pda_ver) = CID_pda_detect_os($ua);		{{server_addr}}	{{server_port}}
+i    }elseif (preg_match('#Netscape[0-9]?/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Netscape';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'netscape';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#^Mozilla/5.0#i', $ua) && preg_match('#rv:([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Mozilla';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'mozilla';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Windows/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif (preg_match('#^Mozilla/([a-zA-Z0-9.]+)#i', $ua, $matches)) {		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Netscape Navigator';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'netscape';		{{server_addr}}	{{server_port}}
+i        $browser_ver = $matches[1];		{{server_addr}}	{{server_port}}
+i        if (preg_match('/Win/i', $ua)) {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_windows_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            list($os_name, $os_code, $os_ver) = CID_unix_detect_os($ua);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    }else{		{{server_addr}}	{{server_port}}
+i        $browser_name = 'Unknow Browser';		{{server_addr}}	{{server_port}}
+i        $browser_code = 'null';		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i      if (!$pda_name && !$os_name){		{{server_addr}}	{{server_port}}
+i        $pda_name = 'Unknow Os';		{{server_addr}}	{{server_port}}
+i        $pda_code = 'other';		{{server_addr}}	{{server_port}}
+i        $os_name = 'Unknow Os';		{{server_addr}}	{{server_port}}
+i        $os_code = 'other';		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i    return array($browser_name, $browser_code, $browser_ver, $os_name, $os_code, $os_ver, $pda_name, $pda_code, $pda_ver);		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ifunction CID_friendly_string($browser_name = '', $browser_code = '', $browser_ver = '', $os_name = '', $os_code = '', $os_ver = '', $pda_name= '', $pda_code = '', $pda_ver = '', $show_image = true, $show_text = false, $between = '', $before = '', $after = '') {		{{server_addr}}	{{server_port}}
+i    global $CID_width_height, $CID_image_url;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    $browser_name = htmlspecialchars($browser_name);		{{server_addr}}	{{server_port}}
+i    $browser_code = htmlspecialchars($browser_code);		{{server_addr}}	{{server_port}}
+i    $browser_ver = htmlspecialchars($browser_ver);		{{server_addr}}	{{server_port}}
+i    $os_name = htmlspecialchars($os_name);		{{server_addr}}	{{server_port}}
+i    $os_code = htmlspecialchars($os_code);		{{server_addr}}	{{server_port}}
+i    $os_ver = htmlspecialchars($os_ver);		{{server_addr}}	{{server_port}}
+i    $pda_name = htmlspecialchars($pda_name);		{{server_addr}}	{{server_port}}
+i    $pda_code = htmlspecialchars($pda_code);		{{server_addr}}	{{server_port}}
+i    $pda_ver = htmlspecialchars($pda_ver);		{{server_addr}}	{{server_port}}
+i    $between = htmlspecialchars($between);		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    $text1 = ''; $text2 = ''; $image1 = ''; $image2 = '';		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if ($browser_name && $pda_name) {		{{server_addr}}	{{server_port}}
+i        if ($show_image) {		{{server_addr}}	{{server_port}}
+i            $image1 = " <img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/$browser_code.png' title='$browser_name $browser_ver' alt='$browser_name' width='$CID_width_height' height='$CID_width_height' class='browser-icon' />";		{{server_addr}}	{{server_port}}
+i            $image2 = " <img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/$pda_code.png' title='$pda_name $pda_ver' alt='$pda_name' width='$CID_width_height' height='$CID_width_height' class='os-icon' />";		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i        if ($show_text) {		{{server_addr}}	{{server_port}}
+i            $text1 = "$browser_name $browser_ver $between ";		{{server_addr}}	{{server_port}}
+i            $text2 = "$pda_name $pda_ver";		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif ($browser_name && $os_name) {		{{server_addr}}	{{server_port}}
+i        if ($show_image) {		{{server_addr}}	{{server_port}}
+i            $image1 = " <img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/$browser_code.png' title='$browser_name $browser_ver' alt='$browser_name' width='$CID_width_height' height='$CID_width_height' class='browser-icon' /> ";		{{server_addr}}	{{server_port}}
+i            $image2 = " <img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/$os_code.png' title='$os_name $os_ver' alt='$os_name' width='$CID_width_height' height='$CID_width_height' class='os-icon' /> ";		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i        if ($show_text) {		{{server_addr}}	{{server_port}}
+i            $text1 = "$browser_name $browser_ver $between ";		{{server_addr}}	{{server_port}}
+i            $text2 = "$os_name $os_ver";		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    } elseif ($browser_name) {		{{server_addr}}	{{server_port}}
+i        if ($show_image)		{{server_addr}}	{{server_port}}
+i            $image1 = " <img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/$browser_code.png' title='$browser_name $browser_ver' alt='$browser_name' width='$CID_width_height' height='$CID_width_height' class='browser-icon' />";		{{server_addr}}	{{server_port}}
+i        if ($show_text)		{{server_addr}}	{{server_port}}
+i            $text1 = "$browser_name $browser_ver";		{{server_addr}}	{{server_port}}
+i    } elseif ($os_name) {		{{server_addr}}	{{server_port}}
+i        if ($show_image)		{{server_addr}}	{{server_port}}
+i            $image1 = " <img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/$os_code.png' title='$os_name $os_ver' alt='$os_name' width='$CID_width_height' height='$CID_width_height' class='os-icon' /> ";		{{server_addr}}	{{server_port}}
+i        if ($show_text)		{{server_addr}}	{{server_port}}
+i            $text1 = "$os_name $os_ver";		{{server_addr}}	{{server_port}}
+i    } elseif ($pda_name) {		{{server_addr}}	{{server_port}}
+i        if ($show_image)		{{server_addr}}	{{server_port}}
+i            $image1 = " <img src='http://cdn.lantian.lt/usr/themes/hybridside/lib/browser/$pda_code.png' title='$pda_name $pda_ver' alt='$pda_name' width='$CID_width_height' height='$CID_width_height' class='os-icon' />";		{{server_addr}}	{{server_port}}
+i        if ($show_text)		{{server_addr}}	{{server_port}}
+i            $text1 = "$pda_name $pda_ver";		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    return $before . $image1 . ' ' . $text1 . ' ' . $image2 . ' ' . $text2 . $after;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ifunction CID_browser_string($ua, $show_image = true, $show_text = false, $between = '', $before = '', $after = '') {		{{server_addr}}	{{server_port}}
+i    list ($browser_name, $browser_code, $browser_ver, $os_name, $os_code, $os_ver, $pda_name, $pda_code, $pda_ver) = CID_detect_browser($ua);		{{server_addr}}	{{server_port}}
+i    $string = CID_friendly_string($browser_name, $browser_code, $browser_ver, $os_name, $os_code, $os_ver, $pda_name, $pda_code, $pda_ver, $show_image, $show_text, $between, $before, $after);		{{server_addr}}	{{server_port}}
+i    /*if (!$string) {		{{server_addr}}	{{server_port}}
+i        $string = "Unknown browser";		{{server_addr}}	{{server_port}}
+i    }*/		{{server_addr}}	{{server_port}}
+i    return $string;		{{server_addr}}	{{server_port}}
+i} ?>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i把里面的`http://cdn.lantian.lt/usr/themes/hybridside`这个网址全部改成		{{server_addr}}	{{server_port}}
+i你的主题文件夹的网址。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在主题的自定义评论代码里你想显示评论者国家的地方插入：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```php		{{server_addr}}	{{server_port}}
+i<?php echo CID_get_flag($comments->ip);?>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在你想显示系统和浏览器的地方插入：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```php		{{server_addr}}	{{server_port}}
+i<?php echo CID_browser_string($comments->agent);?>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i修改完成，测试效果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

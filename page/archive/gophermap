@@ -1,0 +1,7 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "文章们"		{{server_addr}}	{{server_port}}
+idate: 1970-01-01 00:00:00		{{server_addr}}	{{server_port}}
+ispecial: post-list		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

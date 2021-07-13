@@ -1,0 +1,78 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: Disabling TR069 on a Youhua PT926G Fiber Optic Modem		{{server_addr}}	{{server_port}}
+icategories: "Random Notes"		{{server_addr}}	{{server_port}}
+itags: [Youhua PT926G, Fiber Optic Modem, TR069]		{{server_addr}}	{{server_port}}
+idate: 2020-10-03 15:40:30		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis article explains the procedure to disable TR069 on a Youhua		{{server_addr}}	{{server_port}}
+iPT926G fiber optic modem, to prevent China Telecom from pushing		{{server_addr}}	{{server_port}}
+iconfig/firmware updates, and void your changes of switching to		{{server_addr}}	{{server_port}}
+ibridging mode, or setting port forward rules.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn the WAN settings of the management portal of this modem, the TR069		{{server_addr}}	{{server_port}}
+iconnection can neither be modified or removed. But with a simple patch		{{server_addr}}	{{server_port}}
+ion the management portal's code, you can break the limitation on the		{{server_addr}}	{{server_port}}
+imodem.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, you should follow my previous article:		{{server_addr}}	{{server_port}}
+1Hacking a Youhua PT926G Fiber Optic Modem	/en/article/random-notes/youhua-pt926g-fiber-modem-crack.lantian/	{{server_addr}}	{{server_port}}
+i,ito obtain the Telnet Root password.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen Telnet in, run `su` and type in the password to get to Root		{{server_addr}}	{{server_port}}
+iShell. When you do that correctly, the commandline will prompt `#`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen follow these steps:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Type `cp /home/httpd/web/net_eth_links.asp /var/` and hit Enter.		{{server_addr}}	{{server_port}}
+i   - We're going to modify this file, but it's on a readonly		{{server_addr}}	{{server_port}}
+i     partition. So we first copy it to somewhere writable first.		{{server_addr}}	{{server_port}}
+i2. Type `vi /var/net_eth_links.asp` to edit the file. `vi` is famous		{{server_addr}}	{{server_port}}
+i   for being difficult to use, so let's go through this step by step:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   1. Type `/is_configurable` and Enter, which is searching for string		{{server_addr}}	{{server_port}}
+i      `is_configurable`. The cursor should jump to somewhere around:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      ```javascript		{{server_addr}}	{{server_port}}
+i      //If connection type is TR069 return false, else return true		{{server_addr}}	{{server_port}}
+i      function is_configurable()		{{server_addr}}	{{server_port}}
+i      {		{{server_addr}}	{{server_port}}
+i        var lk = document.forms[0].lkname.value;		{{server_addr}}	{{server_port}}
+i        var province= <%checkWrite("PROVINCE");%>;		{{server_addr}}	{{server_port}}
+i        /* Some code redacted here */		{{server_addr}}	{{server_port}}
+i        return true;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i      ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   2. Use your arrow keys to move to the line with `var lk`, and press		{{server_addr}}	{{server_port}}
+i      D key twice. Now that line is removed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   3. Press D repeatedly until you removed the line right before		{{server_addr}}	{{server_port}}
+i      `return true;` (not including `return true;`), so the whole		{{server_addr}}	{{server_port}}
+i      function will look like:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      ```javascript		{{server_addr}}	{{server_port}}
+i      //If connection type is TR069 return false, else return true		{{server_addr}}	{{server_port}}
+i      function is_configurable() {		{{server_addr}}	{{server_port}}
+i        return true;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i      ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   4. Type `:wq` and Enter, to save the file and close the editor.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. Type		{{server_addr}}	{{server_port}}
+i   `mount --bind /var/net_eth_links.asp /home/httpd/web/net_eth_links.asp`		{{server_addr}}	{{server_port}}
+i   and Enter.		{{server_addr}}	{{server_port}}
+i   - Although we cannot modify the original file, we can use the new		{{server_addr}}	{{server_port}}
+i     file "in place of" the old file, so the system will automatically		{{server_addr}}	{{server_port}}
+i     use the new copy when trying to access the file.		{{server_addr}}	{{server_port}}
+i   - This is what this line is doing.		{{server_addr}}	{{server_port}}
+i4. Open your browser and visit the management portal at 8080. Now the		{{server_addr}}	{{server_port}}
+i   TR069 connection in WAN settings can be edited.		{{server_addr}}	{{server_port}}
+i   - You may remove it, change its type to `Internet` or `Other`, or		{{server_addr}}	{{server_port}}
+i     set it to `Bridge` mode, it's up to you.		{{server_addr}}	{{server_port}}
+i   - Now the modem's TR069 settings is no longer valid, and it won't		{{server_addr}}	{{server_port}}
+i     be able to connect to China Telecom's central management		{{server_addr}}	{{server_port}}
+i     services.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

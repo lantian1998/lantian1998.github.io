@@ -1,0 +1,69 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Font Awesome 图标字体使用"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [fontawesome]		{{server_addr}}	{{server_port}}
+idate: 2014-08-18 18:15:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFont Awesome 是一个图标库开源项目，它目前最新的 4.1 版本提供了 439 个		{{server_addr}}	{{server_port}}
+i矢量图标，可以匹配各种大小和各种分辨率的屏幕，而它是作为一个字体存在		{{server_addr}}	{{server_port}}
+i，71KB 的一个文件就包括了这些图标。这些图标风格统一，可以很方便地用在		{{server_addr}}	{{server_port}}
+i各种地方。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1.安装		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先下载 Font		{{server_addr}}	{{server_port}}
+iAwesome：<https://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.1.0.zip>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后解压，把里面的文件上传到你的网站。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后在网页的 head 标签部分加入以下代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i<link rel="stylesheet" href="http://你的网站/文件夹/font-awesome/css/font-awesome.min.css">		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样就安装完成了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2.使用		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<https://fortawesome.github.io/Font-Awesome/icons/> 这里有一张表，对应		{{server_addr}}	{{server_port}}
+i着图标的 class 名称，找到你要的图标，比如 fa-cloud，然后在你的网页代码		{{server_addr}}	{{server_port}}
+i里插入：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i<i class="fa fa-cloud"></i>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i效果：<em class="fa fa-cloud"></em>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你需要放大图标，那么就增加一个类 fa-lg，或		{{server_addr}}	{{server_port}}
+ifa-2x，fa-3x，fa-4x，fa-5x。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+i<i class="fa fa-cloud fa-lg"></i>		{{server_addr}}	{{server_port}}
+i<i class="fa fa-cloud fa-2x"></i>		{{server_addr}}	{{server_port}}
+i<i class="fa fa-cloud fa-3x"></i>		{{server_addr}}	{{server_port}}
+i<i class="fa fa-cloud fa-4x"></i>		{{server_addr}}	{{server_port}}
+i<i class="fa fa-cloud fa-5x"></i>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i效果		{{server_addr}}	{{server_port}}
+i：<em class="fa fa-cloud fa-lg"></em><em class="fa fa-cloud fa-2x"></em><em class="fa fa-cloud fa-3x"></em><em class="fa fa-cloud fa-4x"></em><em class="fa fa-cloud fa-5x"></em>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i同时还有一些图标是可以转的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+i<i class="fa fa-spinner fa-spin"></i>		{{server_addr}}	{{server_port}}
+i<i class="fa fa-circle-o-notch fa-spin"></i>		{{server_addr}}	{{server_port}}
+i<i class="fa fa-refresh fa-spin"></i>		{{server_addr}}	{{server_port}}
+i<i class="fa fa-cog fa-spin"></i>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i效果		{{server_addr}}	{{server_port}}
+i：<em class="fa fa-spinner fa-spin"></em><em class="fa fa-circle-o-notch fa-spin"></em><em class="fa fa-refresh fa-spin"></em><em class="fa fa-cog fa-spin"></em>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i用这些图标，可以更加直观地表现网站上的各个功能，同时不拖慢网站加载速度		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.
