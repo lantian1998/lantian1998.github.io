@@ -1,0 +1,1376 @@
+i---		{{server_addr}}	{{server_port}}
+ititle:		{{server_addr}}	{{server_port}}
+i  "DN42 Experimental Network: Intro and Registration (Updated 2022-12)"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [DN42, BGP]		{{server_addr}}	{{server_port}}
+idate: 2021-05-02 12:21:45		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDN42, aka Decentralized Network 42, is a large, decentralized		{{server_addr}}	{{server_port}}
+iVPN-based network. But unlike other traditional VPNs, DN42 itself		{{server_addr}}	{{server_port}}
+idoesn't provide any VPN exits, which means it doesn't allow you to		{{server_addr}}	{{server_port}}
+ibypass Internet censorships or unlock streaming services. On the		{{server_addr}}	{{server_port}}
+icontrary, the goal of DN42 is to simulate another Internet. It uses		{{server_addr}}	{{server_port}}
+imuch of the technology running on modern Internet backbones (BGP,		{{server_addr}}	{{server_port}}
+irecursive DNS, etc), and is a great replica of a real network		{{server_addr}}	{{server_port}}
+ienvironment.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn short, DN42 is:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- NOT suitable for users only seeking privacy protection or bypassing		{{server_addr}}	{{server_port}}
+i  censorship		{{server_addr}}	{{server_port}}
+i- NOT suitable for users consuming large amounts of bandwidth/data,		{{server_addr}}	{{server_port}}
+i  such as for unlocking streaming services		{{server_addr}}	{{server_port}}
+i- IS suitable for users learning about networking, practicing		{{server_addr}}	{{server_port}}
+i  configuration of servers and routers, and even preparing for an AS		{{server_addr}}	{{server_port}}
+i  on the real Internet		{{server_addr}}	{{server_port}}
+i- IS suitable for users with a real AS, but is worried of		{{server_addr}}	{{server_port}}
+i  [knocking out the Internet due to configuration errors](https://blog.cloudflare.com/how-verizon-and-a-bgp-optimizer-knocked-large-parts-of-the-internet-offline-today/),		{{server_addr}}	{{server_port}}
+i  and want a test field.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBecause of this, the bar to enter DN42 is a bit high. Just like the		{{server_addr}}	{{server_port}}
+ireal Internet, you will be playing the role of a ISP, register your		{{server_addr}}	{{server_port}}
+ipersonal ID, ASN, IPv4 and IPv6 blocks, and announce your IP blocks on		{{server_addr}}	{{server_port}}
+iyour server with BGP. You also need to contact other users and peer		{{server_addr}}	{{server_port}}
+iwith them, so you can enter the "real" DN42 step by step.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDN42 is running on `172.20.0.0/14` and `fd00::/8`, IP blocks reserved		{{server_addr}}	{{server_port}}
+ifor internal usage. In other words, whatever you do on DN42 won't		{{server_addr}}	{{server_port}}
+iimpact real Interner connections.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Changelog		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 2022-12: Add steps to use a free IPv4 block finder.		{{server_addr}}	{{server_port}}
+i- 2022-06: Update to the latest registration procedure.		{{server_addr}}	{{server_port}}
+i- 2022-02: Update `rp_filter` content, never use `rp_filter=2`!		{{server_addr}}	{{server_port}}
+i- 2021-06: Improve readability of some config files, differ `contact`		{{server_addr}}	{{server_port}}
+i  from `e-mail`.		{{server_addr}}	{{server_port}}
+i- 2021-05: Add "Skills Required" section; Add iptables firewall rules.		{{server_addr}}	{{server_port}}
+i- 2020-12: Fix peer config path for BIRDv2.		{{server_addr}}	{{server_port}}
+i- 2020-10: No longer recommend using Debian Unstable repo for		{{server_addr}}	{{server_port}}
+i  WireGuard (better ways exist now); Recommend using WSL on Windows.		{{server_addr}}	{{server_port}}
+i- 2020-09: Update to the latest registration procedure.		{{server_addr}}	{{server_port}}
+i- 2020-08: No longer recommend new users to go to Burble, following		{{server_addr}}	{{server_port}}
+i  his policy update.		{{server_addr}}	{{server_port}}
+i- 2020-07: DN42 Git server has changed from `git.dn42.us` to		{{server_addr}}	{{server_port}}
+i  `git.dn42.dev`.		{{server_addr}}	{{server_port}}
+i- 2020-05: Update `rp_filter` content, and suggest disabling UFW.		{{server_addr}}	{{server_port}}
+i- 2020-04: Add suggestions for configuring your internal network		{{server_addr}}	{{server_port}}
+i  across servers, request to not use too much resource, and add more		{{server_addr}}	{{server_port}}
+i  detailed explanation of config choices.		{{server_addr}}	{{server_port}}
+i- 2020-03: Explain the risk of choosing your own IPv6 ULA; Add "Very		{{server_addr}}	{{server_port}}
+i  Important System Configuration" section; Add guides to create and		{{server_addr}}	{{server_port}}
+i  upload GPG keys and sign git commits.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Skill Requirements		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis post assumes that you are already capable of:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. You have a Linux environment (either dual-boot/virtual machine/VPS		{{server_addr}}	{{server_port}}
+i   is fine).		{{server_addr}}	{{server_port}}
+i2. You know how to use common Linux commands (`cd`, `ls`, etc), how to		{{server_addr}}	{{server_port}}
+i   install packages on your Linux OS (`apt`, `yum`, etc.), and how to		{{server_addr}}	{{server_port}}
+i   use at least one editor (either graphical editors like `gedit` or		{{server_addr}}	{{server_port}}
+i   `vscode`, or command-line ones like `vim` or `nano`). If you don't		{{server_addr}}	{{server_port}}
+i   know how to do this, please have a look at		{{server_addr}}	{{server_port}}
+i   [this guide](https://ryanstutorials.net/linuxtutorial/).		{{server_addr}}	{{server_port}}
+i3. You know basic usage of Git version control system, like		{{server_addr}}	{{server_port}}
+i   push/pull/commit. If you don't, please have a look at		{{server_addr}}	{{server_port}}
+i   [this guide](https://guides.github.com/introduction/git-handbook/).		{{server_addr}}	{{server_port}}
+i4. You have a moderate level of knowledge in networking, know what IP		{{server_addr}}	{{server_port}}
+i   and MAC addresses are, know the working principles of switches and		{{server_addr}}	{{server_port}}
+i   routers, can do basic networking diagnosis under Linux (with		{{server_addr}}	{{server_port}}
+i   `ping`, `traceroute`, etc.), have heard of dynamic routing		{{server_addr}}	{{server_port}}
+i   protocols like BGP or OSPF. If you don't, please have a look at		{{server_addr}}	{{server_port}}
+i   [this guide (Chapter 1-8)](https://www.cs.unh.edu/cnrg/people/gherrin/linux-net.html).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you don't fulfill the knowledge required, it's very likely that you		{{server_addr}}	{{server_port}}
+icannot understand important aspects in this guide, make mistakes		{{server_addr}}	{{server_port}}
+iduring the configuration process, and cause trouble to other users in		{{server_addr}}	{{server_port}}
+iDN42.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Registration Procedure		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen I wrote my previous guide in 2017,		{{server_addr}}	{{server_port}}
+1Joining DN42 Experimental Network (Chinese Only)	/article/modify-website/join-dn42-experimental-network.lantian	{{server_addr}}	{{server_port}}
+i,ithe user information as well as ASN and IP are all managed from a		{{server_addr}}	{{server_port}}
+isystem called Monotone. But in the year of 2018, DN42 gave up on		{{server_addr}}	{{server_port}}
+iMonotone and switched to Git.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**WARNING:** The registration procedure to DN42 is long and		{{server_addr}}	{{server_port}}
+icomplicated since the procedure to register ASN and IP in the real		{{server_addr}}	{{server_port}}
+iInternet is similar, and DN42's goal is being a replicate to the real		{{server_addr}}	{{server_port}}
+iInternet.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**ATTENTION:**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- The procedure here may become outdated as DN42 updates its		{{server_addr}}	{{server_port}}
+i  registration procedures. Please refer to DN42's official guides		{{server_addr}}	{{server_port}}
+i  first, and use my guide only as reference.		{{server_addr}}	{{server_port}}
+i- [DN42 Registration Procedure on Official Wiki](https://dn42.dev/howto/Getting-Started)		{{server_addr}}	{{server_port}}
+i- [DN42 Git Guide (Creating Pull Request) on Official Wiki](https://git.dn42.dev/dn42/registry/src/branch/master/README.md)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn addition, since a bunch of UNIX tools (such as Git, GnuPG) are		{{server_addr}}	{{server_port}}
+irequired in the procedure:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- It's recommended to use Linux or macOS for the whole procedure.		{{server_addr}}	{{server_port}}
+i- If you use Windows, you may try		{{server_addr}}	{{server_port}}
+i  [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere are the steps:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. First, go to <https://git.dn42.dev> and register an account. This		{{server_addr}}	{{server_port}}
+i   is the GitHub for DN42, and the account information is stored in		{{server_addr}}	{{server_port}}
+i   one of the git repos.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. Visit [dn42/registry](https://git.dn42.dev/dn42/registry), the		{{server_addr}}	{{server_port}}
+i   account information repo, and click Fork on the top right. This		{{server_addr}}	{{server_port}}
+i   will create a copy of the repo into your own account.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   - Previously you can directly create a branch in the repository,		{{server_addr}}	{{server_port}}
+i     but now you need to fork the repo, just like what you do on		{{server_addr}}	{{server_port}}
+i     GitHub and similar sites.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. Now the page should automatically switch to the copy in your own		{{server_addr}}	{{server_port}}
+i   account. Git clone it to your local machine.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i4. Now, you need to create a series of files in the cloned repo,		{{server_addr}}	{{server_port}}
+i   including:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   1. Create a file `[NICKNAME]-MNT` under `data/mntner` directory.		{{server_addr}}	{{server_port}}
+i      This file is your account that authorizes your further		{{server_addr}}	{{server_port}}
+i      operations. For example, this is my `mntner` file (available		{{server_addr}}	{{server_port}}
+i      under `data/mntner/LANTIAN-MNT`):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% interactive\_buttons vertical %} noop|Here is my registration		{{server_addr}}	{{server_port}}
+i      info for reference only. noop|Read the document carefully and		{{server_addr}}	{{server_port}}
+i      replace EVERYTHING with YOUR information. code1|I acknowledge		{{server_addr}}	{{server_port}}
+i      the notes above, and I want to see the code.		{{server_addr}}	{{server_port}}
+i      {% endinteractive\_buttons %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% interactive code1 %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      ```bash		{{server_addr}}	{{server_port}}
+i      mntner:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+i      admin-c:            LANTIAN-DN42		{{server_addr}}	{{server_port}}
+i      tech-c:             LANTIAN-DN42		{{server_addr}}	{{server_port}}
+i      mnt-by:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+i      source:             DN42		{{server_addr}}	{{server_port}}
+i      auth:               pgp-fingerprint 23067C13B6AEBDD7C0BB567327F31700E751EC22		{{server_addr}}	{{server_port}}
+i      auth:               ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCulLscvKjEeroKdPE207W10MbZ3+ZYzWn34EnVeIG0GzfZ3zkjQJVfXFahu97P68Tw++N6zIk7htGic9SouQuAH8+8kzTB8/55Yjwp7W3bmqL7heTmznRmKehtKg6RVgcpvFfciyxQXV/bzOkyO+xKdmEw+fs92JLUFjd/rbUfVnhJKmrfnohdvKBfgA27szHOzLlESeOJf3PuXV7BLge1B+cO8TJMJXv8iG8P5Uu8UCr857HnfDyrJS82K541Scph3j+NXFBcELb2JSZcWeNJRVacIH3RzgLvp5NuWPBCt6KET1CCJZLsrcajyonkA5TqNhzumIYtUimEnAPoH51hoUD1BaL4wh2DRxqCWOoXn0HMrRmwx65nvWae6+C/7l1rFkWLBir4ABQiKoUb/MrNvoXb+Qw/ZRo6hVCL5rvlvFd35UF0/9wNu1nzZRSs9os2WLBMt00A4qgaU2/ux7G6KApb7shz1TXxkN1k+/EKkxPj/sQuXNvO6Bfxww1xEWFywMNZ8nswpSq/4Ml6nniS2OpkZVM2SQV1q/VdLEKYPrObtp2NgneQ4lzHmAa5MGnUCckES+qOrXFZAcpI126nv1uDXqA2aytN6WHGfN50K05MZ+jA8OM9CWFWIcglnT+rr3l+TI/FLAjE13t6fMTYlBH0C8q+RnQDiIncNwyidQ==		{{server_addr}}	{{server_port}}
+i      remarks:            pin-sha256:o1lfYvcdcYy81UIuZMZO1CkCLX+vJOdD5GLw1cmeStU=		{{server_addr}}	{{server_port}}
+i      ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% endinteractive %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - The items in the file are:		{{server_addr}}	{{server_port}}
+i        - `mntner`: `maintainer`, the name for your account. Same as		{{server_addr}}	{{server_port}}
+i          the file name.		{{server_addr}}	{{server_port}}
+i        - `admin-c`: `admin contact`, points to a later created		{{server_addr}}	{{server_port}}
+i          `person` file. Usually `[NICKNAME]-DN42`.		{{server_addr}}	{{server_port}}
+i        - `tech-c`: `tech contact`, points to a later created `person`		{{server_addr}}	{{server_port}}
+i          file. Usually `[NICKNAME]-DN42`.		{{server_addr}}	{{server_port}}
+i        - `mnt-by`: `maintain by`, points to this account itself.		{{server_addr}}	{{server_port}}
+i          Usually `[NICKNAME]-DN42`.		{{server_addr}}	{{server_port}}
+i        - `source`: has a fixed value of `DN42`.		{{server_addr}}	{{server_port}}
+i        - `auth`: your authentication info. Usually, two types of data		{{server_addr}}	{{server_port}}
+i          are accepted: GPG public key and SSH public key.		{{server_addr}}	{{server_port}}
+i          - You **MUST** add at least one out of GPG pubkey and SSH		{{server_addr}}	{{server_port}}
+i            pubkey.		{{server_addr}}	{{server_port}}
+i          - If you plan to add a GPG pubkey, you need to create one		{{server_addr}}	{{server_port}}
+i            first (assuming you don't have one). You may follow		{{server_addr}}	{{server_port}}
+i            [this guide by GitHub](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-gpg-key).		{{server_addr}}	{{server_port}}
+i            You will also need the pubkey when submitting your		{{server_addr}}	{{server_port}}
+i            registration request.		{{server_addr}}	{{server_port}}
+i            - You also need to upload your GPG pubkey to a public		{{server_addr}}	{{server_port}}
+i              server, aka Keyserver, for other people to obtain.		{{server_addr}}	{{server_port}}
+i            - Run this command:		{{server_addr}}	{{server_port}}
+i              - `gpg --keyserver hkp://keyserver.ubuntu.com --send-key [GPG Key ID]`		{{server_addr}}	{{server_port}}
+i            - Then fill the key ID to `auth` item, with the format of		{{server_addr}}	{{server_port}}
+i              `pgp-fingerprint [GPG Key ID]`, similar to my example		{{server_addr}}	{{server_port}}
+i              above.		{{server_addr}}	{{server_port}}
+i          - If you plan to add an SSH pubkey, you need to create one		{{server_addr}}	{{server_port}}
+i            first (assuming you don't have one).		{{server_addr}}	{{server_port}}
+i            - Running `ssh-keygen -t ed25519` is usually enough for		{{server_addr}}	{{server_port}}
+i              Mac and Linux, but if you have a rather old version of		{{server_addr}}	{{server_port}}
+i              SSH, which doesn't support ED25519 crypto, you may run		{{server_addr}}	{{server_port}}
+i              `ssh-keygen -t rsa` instead to use RSA crypto.		{{server_addr}}	{{server_port}}
+i            - For Windows, you can		{{server_addr}}	{{server_port}}
+i              [download PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)		{{server_addr}}	{{server_port}}
+i              and use its `puttygen` utility.		{{server_addr}}	{{server_port}}
+i            - After generation, add your pubkey (usually stored at		{{server_addr}}	{{server_port}}
+i              `~/.ssh` and named `id_ed25519.pub` or `id_rsa.pub` on		{{server_addr}}	{{server_port}}
+i              Mac and Linux; displayed straight on `puttygen` window		{{server_addr}}	{{server_port}}
+i              after generation) to `auth` item, with format		{{server_addr}}	{{server_port}}
+i              `ssh-ed25519 [SSH Pubkey]` or `ssh-rsa [SSH Pubkey]`.		{{server_addr}}	{{server_port}}
+i            - In addition, some services on DN42 verify your identity		{{server_addr}}	{{server_port}}
+i              with your SSH pubkey here.		{{server_addr}}	{{server_port}}
+i          - Read DN42's		{{server_addr}}	{{server_port}}
+i            [Registry Authentication Wiki Page](https://dn42.dev/howto/Registry-Authentication)		{{server_addr}}	{{server_port}}
+i            for more information.		{{server_addr}}	{{server_port}}
+i        - `remarks`: comments, fill with whatever content you like. Or		{{server_addr}}	{{server_port}}
+i          you may simply remove them.		{{server_addr}}	{{server_port}}
+i      - **ATTENTION:** There is a long sequence of spaces between the		{{server_addr}}	{{server_port}}
+i        name and values. The length of this space sequence **cannot be		{{server_addr}}	{{server_port}}
+i        changed to whatever you like, and cannot be replaced with		{{server_addr}}	{{server_port}}
+i        TAB**. The length of the name, the colon, and the spaces		{{server_addr}}	{{server_port}}
+i        **MUST be exactly 20 characters**.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   2. Create `[NICKNAME]-DN42` under `data/person`. This stands for		{{server_addr}}	{{server_port}}
+i      your personal information, but what's actually needed is simply		{{server_addr}}	{{server_port}}
+i      a mailbox. Here's my `person` file, for example		{{server_addr}}	{{server_port}}
+i      (`data/person/LANTIAN-DN42`):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% interactive\_buttons vertical %} noop|Here is my registration		{{server_addr}}	{{server_port}}
+i      info for reference only. noop|Read the document carefully and		{{server_addr}}	{{server_port}}
+i      replace EVERYTHING with YOUR information. code2|I acknowledge		{{server_addr}}	{{server_port}}
+i      the notes above, and I want to see the code.		{{server_addr}}	{{server_port}}
+i      {% endinteractive\_buttons %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% interactive code2 %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      ```bash		{{server_addr}}	{{server_port}}
+i      person:             Lan Tian		{{server_addr}}	{{server_port}}
+i      e-mail:             b980120@hotmail.com		{{server_addr}}	{{server_port}}
+i      contact:            telegram:lantian1998		{{server_addr}}	{{server_port}}
+i      nic-hdl:            LANTIAN-DN42		{{server_addr}}	{{server_port}}
+i      mnt-by:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+i      source:             DN42		{{server_addr}}	{{server_port}}
+i      ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% endinteractive %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - The items in the file are:		{{server_addr}}	{{server_port}}
+i        - `person`: your nickname.		{{server_addr}}	{{server_port}}
+i        - `e-mail`: your e-mail address.		{{server_addr}}	{{server_port}}
+i        - `contact`: optional, your contact information other than		{{server_addr}}	{{server_port}}
+i          e-mail, e.g. IRC or Telegram.		{{server_addr}}	{{server_port}}
+i        - `nic-hdl`: `NIC handle`, points to the file itself. It is		{{server_addr}}	{{server_port}}
+i          the same as file name, `[NICKNAME]-DN42`.		{{server_addr}}	{{server_port}}
+i        - `mnt-by`: `maintain by`, points to the `mntner` file you		{{server_addr}}	{{server_port}}
+i          previously created, `[NICKNAME]-MNT`.		{{server_addr}}	{{server_port}}
+i        - `source`: has a fixed value of `DN42`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   3. Next, you need to choose for yourself an Autonomous System		{{server_addr}}	{{server_port}}
+i      Number or ASN. On the real/global Internet, the ASN range		{{server_addr}}	{{server_port}}
+i      4200000000 - 4294967294 is reserved for private use, and DN42		{{server_addr}}	{{server_port}}
+i      occupies one small block in it, 424242**0000** - 424242**3999**.		{{server_addr}}	{{server_port}}
+i      **(Note that the range contains 4000 ASNs rather than 10000! The		{{server_addr}}	{{server_port}}
+i      other 6000 ASNs aren't open to registration yet.)** Pick		{{server_addr}}	{{server_port}}
+i      yourself an ASN in the range that you like and is not occupied,		{{server_addr}}	{{server_port}}
+i      and create a file for it under `data/aut-num`. For example, I'm		{{server_addr}}	{{server_port}}
+i      running AS4242422547, so I have the file		{{server_addr}}	{{server_port}}
+i      `data/aut-num/AS4242422547`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% interactive\_buttons vertical %} noop|Here is my registration		{{server_addr}}	{{server_port}}
+i      info for reference only. noop|Read the document carefully and		{{server_addr}}	{{server_port}}
+i      replace EVERYTHING with YOUR information. code3|I acknowledge		{{server_addr}}	{{server_port}}
+i      the notes above, and I want to see the code.		{{server_addr}}	{{server_port}}
+i      {% endinteractive\_buttons %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% interactive code3 %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      ```bash		{{server_addr}}	{{server_port}}
+i      aut-num:            AS4242422547		{{server_addr}}	{{server_port}}
+i      as-name:            LANTIAN-AS		{{server_addr}}	{{server_port}}
+i      descr:              Peer with me at b980120@hotmail.com		{{server_addr}}	{{server_port}}
+i      admin-c:            LANTIAN-DN42		{{server_addr}}	{{server_port}}
+i      tech-c:             LANTIAN-DN42		{{server_addr}}	{{server_port}}
+i      mnt-by:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+i      source:             DN42		{{server_addr}}	{{server_port}}
+i      ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% endinteractive %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - The items in the file are:		{{server_addr}}	{{server_port}}
+i        - `aut-num`: Your ASN.		{{server_addr}}	{{server_port}}
+i        - `as-name`: Name for the AS, usually only visible in some		{{server_addr}}	{{server_port}}
+i          network structure graphs of DN42. The recommended value is		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-AS`.		{{server_addr}}	{{server_port}}
+i        - `descr`: Description for the AS, usually only visible in		{{server_addr}}	{{server_port}}
+i          some network structure graphs of DN42. Fill with whatever		{{server_addr}}	{{server_port}}
+i          you like.		{{server_addr}}	{{server_port}}
+i        - `admin-c`: `admin contact`, points to your `person` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-DN42`.		{{server_addr}}	{{server_port}}
+i        - `tech-c`: `tech contact`, points to your `person` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-DN42`.		{{server_addr}}	{{server_port}}
+i        - `mnt-by`: `maintain by`, points to your `mntner` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-MNT`.		{{server_addr}}	{{server_port}}
+i        - `source`: has a fixed value of `DN42`.		{{server_addr}}	{{server_port}}
+i      - If you have an ASN on the real Internet:		{{server_addr}}	{{server_port}}
+i        - **You may choose to use your real, global ASN in DN42.**		{{server_addr}}	{{server_port}}
+i          Simply use your own ASN in this step.		{{server_addr}}	{{server_port}}
+i        - If you do this, you may run into a bit of trouble when		{{server_addr}}	{{server_port}}
+i          peering with others：		{{server_addr}}	{{server_port}}
+i          - When establishing a VPN connection, many people in DN42		{{server_addr}}	{{server_port}}
+i            use the last 5 digits of your ASN as the port number. In		{{server_addr}}	{{server_port}}
+i            this case, your public ASN may collide with an internal		{{server_addr}}	{{server_port}}
+i            ASN in DN42.		{{server_addr}}	{{server_port}}
+i          - If this happens, you need to talk to the other side, so		{{server_addr}}	{{server_port}}
+i            you can connect to another port.		{{server_addr}}	{{server_port}}
+i        - And your identity may need to be verified, such as checking		{{server_addr}}	{{server_port}}
+i          if the mailbox match what's on the WHOIS information of your		{{server_addr}}	{{server_port}}
+i          global ASN, etc.		{{server_addr}}	{{server_port}}
+i          - I never experienced this sequence, and the verification		{{server_addr}}	{{server_port}}
+i            procedure is my guess. Perhaps a more complicated		{{server_addr}}	{{server_port}}
+i            procedure is required.		{{server_addr}}	{{server_port}}
+i        - Generally, I suggest that you **register for a new ASN in		{{server_addr}}	{{server_port}}
+i          DN42**. It's less hassle.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   4. Next, you start to choose your IP. Browse to `data/inetnum`		{{server_addr}}	{{server_port}}
+i      folder, where all registered IPv4 blocks are stored. You need to		{{server_addr}}	{{server_port}}
+i      find a free space and occupy it for your own use.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - DN42's IPv4 addresses are in range `172.20.0.0/14`, or		{{server_addr}}	{{server_port}}
+i        `172.20.0.0 - 172.23.255.255`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        - However, a lot of IPv4 blocks are reserved for other		{{server_addr}}	{{server_port}}
+i          purposes, and you cannot apply for them. Therefore,		{{server_addr}}	{{server_port}}
+i        - **Please use the following tools to choose your IP block,		{{server_addr}}	{{server_port}}
+i          instead of manually finding one in `data/inetnum`**.		{{server_addr}}	{{server_port}}
+i        - **Please use the following tools to choose your IP block,		{{server_addr}}	{{server_port}}
+i          instead of manually finding one in `data/inetnum`**.		{{server_addr}}	{{server_port}}
+i        - **Please use the following tools to choose your IP block,		{{server_addr}}	{{server_port}}
+i          instead of manually finding one in `data/inetnum`**.		{{server_addr}}	{{server_port}}
+i          - <https://explorer.burble.com/free#/4>		{{server_addr}}	{{server_port}}
+i          - <https://dn42.us/peers/free>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - The smallest address block you can register in DN42 is `/29`,		{{server_addr}}	{{server_port}}
+i        or 8 IPs. Out of which 6 IPs are usable for servers and		{{server_addr}}	{{server_port}}
+i        devices, as the first IP is reserved for marking the address		{{server_addr}}	{{server_port}}
+i        block, and the last IP is for broadcasting within the block.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        - For users who "just want a bit of experience", `/29` is		{{server_addr}}	{{server_port}}
+i          enough.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - If you satisfy any requirement below, `/29` is not enough for		{{server_addr}}	{{server_port}}
+i        you, and you need to apply for a larger block:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        - You have more than 6 servers and devices		{{server_addr}}	{{server_port}}
+i        - You plan to set up services like Anycast, which will occupy		{{server_addr}}	{{server_port}}
+i          more IPs		{{server_addr}}	{{server_port}}
+i        - Some devices that you use (for example, Mikrotik routers)		{{server_addr}}	{{server_port}}
+i          may require `/30` blocks when establishing tunnels for		{{server_addr}}	{{server_port}}
+i          peering.		{{server_addr}}	{{server_port}}
+i          - In the later peering stage, Linux servers can set up		{{server_addr}}	{{server_port}}
+i            point-to-point tunnels between any pair of single IPs,		{{server_addr}}	{{server_port}}
+i            such as `172.22.76.185/32` to `172.21.2.3/32`. In		{{server_addr}}	{{server_port}}
+i            addition, my address `172.22.76.185/32` may be reused for		{{server_addr}}	{{server_port}}
+i            any number of tunnels, which means I can also set up		{{server_addr}}	{{server_port}}
+i            `172.22.76.185/32` to `172.22.3.4/32`, etc. In short, I		{{server_addr}}	{{server_port}}
+i            can peer with any number of people without extra IPs.		{{server_addr}}	{{server_port}}
+i          - But if your device requires `/30`, one tunnel will occupy		{{server_addr}}	{{server_port}}
+i            4 individual IP addresses, and your address cannot be		{{server_addr}}	{{server_port}}
+i            reused. This is a waste of IP space.		{{server_addr}}	{{server_port}}
+i          - In this case, you need to reserve a large number of IPs		{{server_addr}}	{{server_port}}
+i            yourself. Since physical routers are relatively rare in		{{server_addr}}	{{server_port}}
+i            DN42, your peer may not have reserved that many addresses.		{{server_addr}}	{{server_port}}
+i            The `/30` block needs to be provided by you.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - DN42 generally suggests registering for `/27`. The largest		{{server_addr}}	{{server_port}}
+i        block you can directly register without additional steps is		{{server_addr}}	{{server_port}}
+i        `/26`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - If you **REALLY have a lot of servers (more than 62)** that		{{server_addr}}	{{server_port}}
+i        doesn't fit even a `/26`, then:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        - Your application won't be accepted immediately. In this		{{server_addr}}	{{server_port}}
+i          case, you need to visit one of the places below, tell		{{server_addr}}	{{server_port}}
+i          everyone that you need a larger block, state your reasons,		{{server_addr}}	{{server_port}}
+i          and request a vote:		{{server_addr}}	{{server_port}}
+i          - DN42's IRC channel		{{server_addr}}	{{server_port}}
+i            ([here](https://wiki.dn42.us/services/IRC), under		{{server_addr}}	{{server_port}}
+i            `public internet`)		{{server_addr}}	{{server_port}}
+i          - DN42's mailing list		{{server_addr}}	{{server_port}}
+i            ([here](https://wiki.dn42.us/contact#contact_mailing-list),		{{server_addr}}	{{server_port}}
+i            under `Mailing list`)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - **DO NOT REQUEST HUGE BLOCKS LIKE `/24` ON YOUR FIRST		{{server_addr}}	{{server_port}}
+i        REGISTRATION!**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - **DO NOT REQUEST HUGE BLOCKS LIKE `/24` ON YOUR FIRST		{{server_addr}}	{{server_port}}
+i        REGISTRATION!**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - **DO NOT REQUEST HUGE BLOCKS LIKE `/24` ON YOUR FIRST		{{server_addr}}	{{server_port}}
+i        REGISTRATION!**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        - You may find a free `/24` and take a small block from it		{{server_addr}}	{{server_port}}
+i          like `/27`. Later, when you need it, you may expand the		{{server_addr}}	{{server_port}}
+i          block to `/24`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - **ESPECIALLY, DO NOT RESERVE `/24` AND IDLE IT!**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - **ESPECIALLY, DO NOT RESERVE `/24` AND IDLE IT!**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - **ESPECIALLY, DO NOT RESERVE `/24` AND IDLE IT!**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        - DN42's IPv4 addresses are scarce, just like public Internet.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - When you finally finish choosing your IP block, create the		{{server_addr}}	{{server_port}}
+i        file under `data/inetnum`. For example, one of my blocks is		{{server_addr}}	{{server_port}}
+i        `172.22.76.184/29`, and the corresponding file is		{{server_addr}}	{{server_port}}
+i        `data/inetnum/172.22.76.184_29`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        {% interactive\_buttons vertical %} noop|Here is my		{{server_addr}}	{{server_port}}
+i        registration info for reference only. noop|Read the document		{{server_addr}}	{{server_port}}
+i        carefully and replace EVERYTHING with YOUR information.		{{server_addr}}	{{server_port}}
+i        code4|I acknowledge the notes above, and I want to see the		{{server_addr}}	{{server_port}}
+i        code. {% endinteractive\_buttons %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        {% interactive code4 %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        ```bash		{{server_addr}}	{{server_port}}
+i        inetnum:            172.22.76.184 - 172.22.76.191		{{server_addr}}	{{server_port}}
+i        netname:            LANTIAN-IPV4		{{server_addr}}	{{server_port}}
+i        remarks:            Peer with me at b980120@hotmail.com		{{server_addr}}	{{server_port}}
+i        descr:              Peer with me at b980120@hotmail.com		{{server_addr}}	{{server_port}}
+i        country:            CN		{{server_addr}}	{{server_port}}
+i        admin-c:            LANTIAN-DN42		{{server_addr}}	{{server_port}}
+i        tech-c:             LANTIAN-DN42		{{server_addr}}	{{server_port}}
+i        mnt-by:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+i        nserver:            ns1.lantian.dn42		{{server_addr}}	{{server_port}}
+i        nserver:            ns2.lantian.dn42		{{server_addr}}	{{server_port}}
+i        status:             ASSIGNED		{{server_addr}}	{{server_port}}
+i        cidr:               172.22.76.184/29		{{server_addr}}	{{server_port}}
+i        source:             DN42		{{server_addr}}	{{server_port}}
+i        ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        {% endinteractive %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - The items in the file are:		{{server_addr}}	{{server_port}}
+i        - `inetnum`: range of your IP block. If you don't know how to		{{server_addr}}	{{server_port}}
+i          calculate this, you may deduce it from nearby blocks or use		{{server_addr}}	{{server_port}}
+i          a [calculator](https://mxtoolbox.com/subnetcalculator.aspx).		{{server_addr}}	{{server_port}}
+i        - `netname`: name of your IP block. Not really useful, fill		{{server_addr}}	{{server_port}}
+i          with anything (but recommended to be `[NICKNAME]-IPV4`).		{{server_addr}}	{{server_port}}
+i        - `remarks`: comments, fill with anything you like.		{{server_addr}}	{{server_port}}
+i        - `descr`: description, fill with anything you like.		{{server_addr}}	{{server_port}}
+i        - `country`: your country, CN for Mainland China, US for		{{server_addr}}	{{server_port}}
+i          United States, etc.		{{server_addr}}	{{server_port}}
+i        - `admin-c`: `admin contact`, points to your `person` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-DN42`.		{{server_addr}}	{{server_port}}
+i        - `tech-c`: `tech contact`, points to your `person` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-DN42`.		{{server_addr}}	{{server_port}}
+i        - `mnt-by`: `maintain by`, points to your `mntner` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-MNT`.		{{server_addr}}	{{server_port}}
+i        - `nserver`: name servers for reverse resolving the IP block.		{{server_addr}}	{{server_port}}
+i          If you don't know that this is or don't need this, remove		{{server_addr}}	{{server_port}}
+i          the line.		{{server_addr}}	{{server_port}}
+i        - `status`: has a fixed value of `ASSIGNED`.		{{server_addr}}	{{server_port}}
+i        - `cidr`: range of your IP block, same as `inetnum` but in		{{server_addr}}	{{server_port}}
+i          CIDR.		{{server_addr}}	{{server_port}}
+i        - `source`: has a fixed value of `DN42`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   5. IP registration is not done yet. You also need a `route` object		{{server_addr}}	{{server_port}}
+i      to authorize your AS to use the address. Create a file under		{{server_addr}}	{{server_port}}
+i      `data/route`, `data/route/172.22.76.184_29` for example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% interactive\_buttons vertical %} noop|Here is my registration		{{server_addr}}	{{server_port}}
+i      info for reference only. noop|Read the document carefully and		{{server_addr}}	{{server_port}}
+i      replace EVERYTHING with YOUR information. code5|I acknowledge		{{server_addr}}	{{server_port}}
+i      the notes above, and I want to see the code.		{{server_addr}}	{{server_port}}
+i      {% endinteractive\_buttons %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% interactive code5 %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      ```bash		{{server_addr}}	{{server_port}}
+i      route:              172.22.76.184/29		{{server_addr}}	{{server_port}}
+i      descr:              Peer with me at b980120@hotmail.com		{{server_addr}}	{{server_port}}
+i      origin:             AS4242422547		{{server_addr}}	{{server_port}}
+i      mnt-by:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+i      source:             DN42		{{server_addr}}	{{server_port}}
+i      ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% endinteractive %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - The items in the file are:		{{server_addr}}	{{server_port}}
+i        - `route`: range of your IP block.		{{server_addr}}	{{server_port}}
+i        - `descr`: description, fill with anything you like.		{{server_addr}}	{{server_port}}
+i        - `origin`: AS you authorize to use this IP block. Fill with		{{server_addr}}	{{server_port}}
+i          your ASN.		{{server_addr}}	{{server_port}}
+i        - `mnt-by`: `maintain by`, points to your `mntner` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-MNT`.		{{server_addr}}	{{server_port}}
+i        - `source`: has a fixed value of `DN42`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   6. Since it's already the year 2020, you'd better also register an		{{server_addr}}	{{server_port}}
+i      IPv6 block. Create a file under `data/inet6num`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - DN42's IPv6 blocks are in the `fd00::/8` range, reserved for		{{server_addr}}	{{server_port}}
+i        private use.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - DN42's IPv6 blocks usually exist in `/48`. This ought to be		{{server_addr}}	{{server_port}}
+i        enough for anybody.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        - Even if your router requires `/64` for IPv6 tunnels, there		{{server_addr}}	{{server_port}}
+i          can be $2^{16} = 65536$ `/64` in a `/48`, enough to peer		{{server_addr}}	{{server_port}}
+i          with everybody in DN42.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - You may want to customize your block, filling it with contents		{{server_addr}}	{{server_port}}
+i        like `deadbeef`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        - First, I am **against you from doing this**!		{{server_addr}}	{{server_port}}
+i        - First, I am **against you from doing this**!		{{server_addr}}	{{server_port}}
+i        - First, I am **against you from doing this**!		{{server_addr}}	{{server_port}}
+i          - Instead of an easy-to-remember IPv6 address, you may want		{{server_addr}}	{{server_port}}
+            		{{server_addr}}	{{server_port}}
+1an easy-to-remember domain in DN42	/en/article/modify-website/register-own-domain-in-dn42.lantian	{{server_addr}}	{{server_port}}
+i。i        - RFC4193 regulates that all IPv6 ULA addresses should be		{{server_addr}}	{{server_port}}
+i          generated randomly to be **globally unique**.		{{server_addr}}	{{server_port}}
+i          - If you customize your block, another user may have an		{{server_addr}}	{{server_port}}
+i            address conflict while joining DN42. This causes trouble		{{server_addr}}	{{server_port}}
+i            for both of you.		{{server_addr}}	{{server_port}}
+i        - In addition, DN42 interconnects with similar experimental		{{server_addr}}	{{server_port}}
+i          networks and shares the IPv6 ULA range with them.		{{server_addr}}	{{server_port}}
+i          - Since DN42 **may not get complete address allocations from		{{server_addr}}	{{server_port}}
+i            other networks**, your IPv6 block may still conflict with		{{server_addr}}	{{server_port}}
+i            other networks, even when your IPv6 block isn't registered		{{server_addr}}	{{server_port}}
+i            in DN42 Registry.		{{server_addr}}	{{server_port}}
+i        - If such collision occurs, **you may need to renumber the		{{server_addr}}	{{server_port}}
+i          IPv6 address of your whole network**.		{{server_addr}}	{{server_port}}
+i        - By the way, DN42 admins have different opinions on		{{server_addr}}	{{server_port}}
+i          customizing IPv6 blocks. Some registered successfully, while		{{server_addr}}	{{server_port}}
+i          others were denied.		{{server_addr}}	{{server_port}}
+i          - So if you customized your block and got denied, **don't be		{{server_addr}}	{{server_port}}
+i            surprised, just fix the problem**.		{{server_addr}}	{{server_port}}
+i        - If you are **REALLY REALLY REALLY** sure that you want a		{{server_addr}}	{{server_port}}
+i          customized address, DN42 admins may reply with the following		{{server_addr}}	{{server_port}}
+i          message when you submit your registration request:		{{server_addr}}	{{server_port}}
+i        - > Your inet6num violates RFC4193 section 3.2. Are you fully		{{server_addr}}	{{server_port}}
+i          > aware of the consequences, and do you really want to		{{server_addr}}	{{server_port}}
+i          > continue? Being forced to renumber your whole network		{{server_addr}}	{{server_port}}
+i          > really isn't fun.		{{server_addr}}	{{server_port}}
+i        - If you are **REALLY REALLY REALLY** sure, reply		{{server_addr}}	{{server_port}}
+i          `Yes, I'm sure`.		{{server_addr}}	{{server_port}}
+i        - But keep in mind that some DN42 admins as well as myself are		{{server_addr}}	{{server_port}}
+i          **against this behavior**.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - Your best choice is a random IPv6 block. You may use some		{{server_addr}}	{{server_port}}
+i        [random prefix generator](https://simpledns.plus/private-ipv6).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - After generating your IPv6 block, create a file in		{{server_addr}}	{{server_port}}
+i        `data/inet6num` similar to IPv4. For example I have		{{server_addr}}	{{server_port}}
+i        `data/inet6num/fdbc:f9dc:67ad::_48` for `fdbc:f9dc:67ad::/48`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        {% interactive\_buttons vertical %} noop|Here is my		{{server_addr}}	{{server_port}}
+i        registration info for reference only. noop|Read the document		{{server_addr}}	{{server_port}}
+i        carefully and replace EVERYTHING with YOUR information.		{{server_addr}}	{{server_port}}
+i        code6|I acknowledge the notes above, and I want to see the		{{server_addr}}	{{server_port}}
+i        code. {% endinteractive\_buttons %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        {% interactive code6 %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        ```bash		{{server_addr}}	{{server_port}}
+i        inet6num:           fdbc:f9dc:67ad:0000:0000:0000:0000:0000 - fdbc:f9dc:67ad:ffff:ffff:ffff:ffff:ffff		{{server_addr}}	{{server_port}}
+i        netname:            LANTIAN-IPV6		{{server_addr}}	{{server_port}}
+i        descr:              Peer with me at b980120@hotmail.com		{{server_addr}}	{{server_port}}
+i        country:            CN		{{server_addr}}	{{server_port}}
+i        admin-c:            LANTIAN-DN42		{{server_addr}}	{{server_port}}
+i        tech-c:             LANTIAN-DN42		{{server_addr}}	{{server_port}}
+i        mnt-by:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+i        nserver:            ns1.lantian.dn42		{{server_addr}}	{{server_port}}
+i        nserver:            ns2.lantian.dn42		{{server_addr}}	{{server_port}}
+i        status:             ASSIGNED		{{server_addr}}	{{server_port}}
+i        cidr:               fdbc:f9dc:67ad::/48		{{server_addr}}	{{server_port}}
+i        source:             DN42		{{server_addr}}	{{server_port}}
+i        ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        {% endinteractive %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - The items in the file are:		{{server_addr}}	{{server_port}}
+i        - `inet6num`: range of your IP block. IPv6 ranges are easy to		{{server_addr}}	{{server_port}}
+i          calculate, from all 0 to all f.		{{server_addr}}	{{server_port}}
+i        - `netname`: name of your IP block. Not really useful, fill		{{server_addr}}	{{server_port}}
+i          with anything (but recommended to be `[NICKNAME]-IPV6`).		{{server_addr}}	{{server_port}}
+i        - `remarks`: comments, fill with anything you like.		{{server_addr}}	{{server_port}}
+i        - `descr`: description, fill with anything you like.		{{server_addr}}	{{server_port}}
+i        - `country`: your country, CN for Mainland China, US for		{{server_addr}}	{{server_port}}
+i          United States, etc.		{{server_addr}}	{{server_port}}
+i        - `admin-c`: `admin contact`, points to your `person` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-DN42`.		{{server_addr}}	{{server_port}}
+i        - `tech-c`: `tech contact`, points to your `person` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-DN42`.		{{server_addr}}	{{server_port}}
+i        - `mnt-by`: `maintain by`, points to your `mntner` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-MNT`.		{{server_addr}}	{{server_port}}
+i        - `nserver`: name servers for reverse resolving the IP block.		{{server_addr}}	{{server_port}}
+i          If you don't know that this is or don't need this, remove		{{server_addr}}	{{server_port}}
+i          the line.		{{server_addr}}	{{server_port}}
+i        - `status`: has a fixed value of `ASSIGNED`.		{{server_addr}}	{{server_port}}
+i        - `cidr`: range of your IP block, same as `inetnum` but in		{{server_addr}}	{{server_port}}
+i          CIDR.		{{server_addr}}	{{server_port}}
+i        - `source`: has a fixed value of `DN42`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   7. Then create a `route6` object under `data/route6`, to authorize		{{server_addr}}	{{server_port}}
+i      your AS to use the IP range. For example I have		{{server_addr}}	{{server_port}}
+i      `data/route6/fdbc:f9dc:67ad::_48`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% interactive\_buttons vertical %} noop|Here is my registration		{{server_addr}}	{{server_port}}
+i      info for reference only. noop|Read the document carefully and		{{server_addr}}	{{server_port}}
+i      replace EVERYTHING with YOUR information. code7|I acknowledge		{{server_addr}}	{{server_port}}
+i      the notes above, and I want to see the code.		{{server_addr}}	{{server_port}}
+i      {% endinteractive\_buttons %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% interactive code7 %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      ```bash		{{server_addr}}	{{server_port}}
+i      route6:             fdbc:f9dc:67ad::/48		{{server_addr}}	{{server_port}}
+i      descr:              Peer with me at b980120@hotmail.com		{{server_addr}}	{{server_port}}
+i      origin:             AS4242422547		{{server_addr}}	{{server_port}}
+i      mnt-by:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+i      source:             DN42		{{server_addr}}	{{server_port}}
+i      ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      {% endinteractive %}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      - The items in the file are:		{{server_addr}}	{{server_port}}
+i        - `route6`: range of your IP block.		{{server_addr}}	{{server_port}}
+i        - `descr`: description, fill with anything you like.		{{server_addr}}	{{server_port}}
+i        - `origin`: AS you authorize to use this IP block. Fill with		{{server_addr}}	{{server_port}}
+i          your ASN.		{{server_addr}}	{{server_port}}
+i        - `mnt-by`: `maintain by`, points to your `mntner` file,		{{server_addr}}	{{server_port}}
+i          `[NICKNAME]-MNT`.		{{server_addr}}	{{server_port}}
+i        - `source`: has a fixed value of `DN42`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i5. Congratulations, you have created all files you need. Next, `cd` to		{{server_addr}}	{{server_port}}
+i   the root folder of the git repo, run `git add .`, and run		{{server_addr}}	{{server_port}}
+i   `git commit -S`, use your previously created GPG key to create a		{{server_addr}}	{{server_port}}
+i   **GPG signed commit**.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   - If you have already committed, run `git commit --amend -S` sign		{{server_addr}}	{{server_port}}
+i     your previous commit.		{{server_addr}}	{{server_port}}
+i     - If you don't have a GPG key, remove `-S` from the command. This		{{server_addr}}	{{server_port}}
+i       means you need to authenticate yourself with your SSH pubkey.		{{server_addr}}	{{server_port}}
+i       See the following steps.		{{server_addr}}	{{server_port}}
+i   - According to feedbacks, you may run into problems with GPG		{{server_addr}}	{{server_port}}
+i     signing here if you're using Windows.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i     - You may try		{{server_addr}}	{{server_port}}
+i       [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i     - Alternatively, a possible solution is provided in the comment		{{server_addr}}	{{server_port}}
+i       section. Run this command, then retry:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i       ```bash		{{server_addr}}	{{server_port}}
+i       export GPG_TTY=$(tty)		{{server_addr}}	{{server_port}}
+i       ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i     - Alternatively, authenticate yourself with SSH pubkey instead of		{{server_addr}}	{{server_port}}
+i       GPG. See the following steps.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i6. If you committed multiple times before, you need to squash all of		{{server_addr}}	{{server_port}}
+i   your changes into a single commit. Simply run the		{{server_addr}}	{{server_port}}
+i   `./squash-my-commits` script to do so.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i7. Since others may have changed the registry while you're adding your		{{server_addr}}	{{server_port}}
+i   files, you need to update your repository:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   ```bash		{{server_addr}}	{{server_port}}
+i   # Obtain registry updates		{{server_addr}}	{{server_port}}
+i   git fetch origin master		{{server_addr}}	{{server_port}}
+i   # Switch to your own branch		{{server_addr}}	{{server_port}}
+i   git checkout lantian-20200901/register		{{server_addr}}	{{server_port}}
+i   # Rebase your branch, effectively reapplying your changes on the latest registry		{{server_addr}}	{{server_port}}
+i   # An editor will pop up after typing this line. You need to keep the "pick" in 1st line		{{server_addr}}	{{server_port}}
+i   # and change all "pick" to "squash" starting from 2nd line (if they exist)		{{server_addr}}	{{server_port}}
+i   # then save and exit your editor		{{server_addr}}	{{server_port}}
+i   #		{{server_addr}}	{{server_port}}
+i   # If you don't have a GPG key, remove -S from the command		{{server_addr}}	{{server_port}}
+i   git rebase -i -S origin/master		{{server_addr}}	{{server_port}}
+i   ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i8. Run `git push -f` to upload your changes to the Git server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i9. Back to [dn42/registry](https://git.dn42.dev/dn42/registry), send a		{{server_addr}}	{{server_port}}
+i   Pull Request and wait for your information to be merged.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- If you're authenticating with SSH pubkey, firstly run `git log` to		{{server_addr}}	{{server_port}}
+i  see the hash of your commit, then run this command and post the		{{server_addr}}	{{server_port}}
+i  result along with your Pull Request:		{{server_addr}}	{{server_port}}
+i  - `echo [commit hash] | ssh-keygen -Y sign -f ~/.ssh/id_ed25519 -n dn42`		{{server_addr}}	{{server_port}}
+i  - Remember to replace with your commit hash and private key		{{server_addr}}	{{server_port}}
+i    location.		{{server_addr}}	{{server_port}}
+i- If there are some errors in your procedure or file contents, an		{{server_addr}}	{{server_port}}
+i  admin will reply to your Pull Request, fix them accordingly.		{{server_addr}}	{{server_port}}
+i- But you **don't need to close your previous Pull Request and create		{{server_addr}}	{{server_port}}
+i  a new one** after fixing your problem. Simply `git commit` and		{{server_addr}}	{{server_port}}
+i  `git push` and your later changes will be automatically linked to		{{server_addr}}	{{server_port}}
+i  the Pull Request.		{{server_addr}}	{{server_port}}
+i  - You need only one Pull Request per registration/information		{{server_addr}}	{{server_port}}
+i    change.		{{server_addr}}	{{server_port}}
+i- **Use ENGLISH** for Pull Requests!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter merging your information, you've officially obtained your		{{server_addr}}	{{server_port}}
+iaddress block and may start peering with others.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Finding a Peer Node		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince DN42 is a decentralized network, there is no official server to		{{server_addr}}	{{server_port}}
+iconnect to. You need to contact other users registered in DN42 just		{{server_addr}}	{{server_port}}
+ilike you, create a VPN tunnel connection and BGP session, to establish		{{server_addr}}	{{server_port}}
+ipeering.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere are some recommended places to find other users:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Use [DN42 PingFinder](https://dn42.us/peers). Submit your IP		{{server_addr}}	{{server_port}}
+i   address, and server nodes of other users registered on PingFinder		{{server_addr}}	{{server_port}}
+i   will test their latency to you. These node entries usually have		{{server_addr}}	{{server_port}}
+i   e-mail addresses or links to their description pages for their DN42		{{server_addr}}	{{server_port}}
+i   AS. You may contact them with this information.		{{server_addr}}	{{server_port}}
+i2. Go to DN42's [IRC channel](https://wiki.dn42.us/services/IRC).		{{server_addr}}	{{server_port}}
+i3. Go to this [unofficial Telegram group](https://t.me/Dn42Chat).		{{server_addr}}	{{server_port}}
+i4. ~~Directly go to Burble. Burble is a really active user in DN42 who		{{server_addr}}	{{server_port}}
+i   has many nodes around the world. Visit		{{server_addr}}	{{server_port}}
+i   [his peering info page](https://dn42.burble.com/peering) to see his		{{server_addr}}	{{server_port}}
+i   server information and contacts.~~		{{server_addr}}	{{server_port}}
+i   - To reduce network centrality and avoid single point failure,		{{server_addr}}	{{server_port}}
+i     Burble now only accepts users with at least 2 already established		{{server_addr}}	{{server_port}}
+i     peers.		{{server_addr}}	{{server_port}}
+5. Directly go to me. Click 		{{server_addr}}	{{server_port}}
+1here	/en/page/dn42/index.html	{{server_addr}}	{{server_port}}
+i or thei   DN42 item on the top navbar to see my information and contacts.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou may peer with many people/nodes simultaneously. It increases the		{{server_addr}}	{{server_port}}
+istability of your network and prevents loss of connection when a		{{server_addr}}	{{server_port}}
+isingle node fails.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFind a few nodes close to your server with low latency, and proceed		{{server_addr}}	{{server_port}}
+idownwards.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Very Important System Configuration		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- First, **MAKE SURE** that you enabled Linux's packet forwarding, or		{{server_addr}}	{{server_port}}
+i  `ip_forwarding`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  - There is no absolute "client" in DN42. Everyone's server is a		{{server_addr}}	{{server_port}}
+i    router for others and needs to forward packets. The steps are:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    ```bash		{{server_addr}}	{{server_port}}
+i    echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf		{{server_addr}}	{{server_port}}
+i    echo "net.ipv6.conf.default.forwarding=1" >> /etc/sysctl.conf		{{server_addr}}	{{server_port}}
+i    echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.conf		{{server_addr}}	{{server_port}}
+i    sysctl -p		{{server_addr}}	{{server_port}}
+i    ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  - By the way, if you configured a firewall like `iptables`, check		{{server_addr}}	{{server_port}}
+i    the configuration and make sure they don't block packet		{{server_addr}}	{{server_port}}
+i    forwarding.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Then, **MAKE SURE** to disable Linux `rp_filter`'s strict mode:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```bash		{{server_addr}}	{{server_port}}
+i  echo "net.ipv4.conf.default.rp_filter=0" >> /etc/sysctl.conf		{{server_addr}}	{{server_port}}
+i  echo "net.ipv4.conf.all.rp_filter=0" >> /etc/sysctl.conf		{{server_addr}}	{{server_port}}
+i  sysctl -p		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  - `rp_filter` is a network security mechanism of the Linux kernel.		{{server_addr}}	{{server_port}}
+i    It checks the packet's source address and the source network		{{server_addr}}	{{server_port}}
+i    interface:		{{server_addr}}	{{server_port}}
+i    - If set to 0 (disabled), allow all packets.		{{server_addr}}	{{server_port}}
+i      - Some packets that cannot be replied to correctly (no entries		{{server_addr}}	{{server_port}}
+i        in the routing table) will be processed by userspace		{{server_addr}}	{{server_port}}
+i        applications, possibly consuming extra resources.		{{server_addr}}	{{server_port}}
+i      - But the overhead should be tiny, so setting to 0 is no issue		{{server_addr}}	{{server_port}}
+i        here.		{{server_addr}}	{{server_port}}
+i    - If set to 1 (strict), if the packet doesn't come from the "best"		{{server_addr}}	{{server_port}}
+i      network interface (or in other words, your machine will reply to		{{server_addr}}	{{server_port}}
+i      the packet on a different network interface), the packet will be		{{server_addr}}	{{server_port}}
+i      **dropped**.		{{server_addr}}	{{server_port}}
+i      - Having different network interfaces for source and reply is		{{server_addr}}	{{server_port}}
+i        **very common** in DN42, so **MAKE SURE** you don't set		{{server_addr}}	{{server_port}}
+i        `rp_filter` to 1!		{{server_addr}}	{{server_port}}
+i    - If set to 2 (relaxed), **in theory**, Linux will only drop		{{server_addr}}	{{server_port}}
+i      packets that don't have a source address in the routing table,		{{server_addr}}	{{server_port}}
+i      which means it doesn't know how to properly reply to them.		{{server_addr}}	{{server_port}}
+i      - However, theory is just theory. In newer versions (5.0+) of		{{server_addr}}	{{server_port}}
+i        the kernel, still, a lot of normal packets with correct source		{{server_addr}}	{{server_port}}
+i        addresses are dropped. Therefore, don't use this mode, please		{{server_addr}}	{{server_port}}
+i        stick to 0 instead.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Then, **MAKE SURE** to turn off any tool that helps you configure		{{server_addr}}	{{server_port}}
+i  `iptables` easily, such as UFW.		{{server_addr}}	{{server_port}}
+i  - These easy tools may use some assumptions that are suitable for		{{server_addr}}	{{server_port}}
+i    personal users but are not suitable for DN42, such as using		{{server_addr}}	{{server_port}}
+i    conntrack.		{{server_addr}}	{{server_port}}
+i    - Conntrack filters packets from links it hasn't seen before,		{{server_addr}}	{{server_port}}
+i      effectively doing strict `rp_filter`.		{{server_addr}}	{{server_port}}
+i  - I personally recommend you to configure iptable manually.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Choose Tunnel Software		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAlmost every peering in DN42 is established on tunneling software (or		{{server_addr}}	{{server_port}}
+iVPN) since:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- DN42 nodes are spread across the world, and tunneling provides basic		{{server_addr}}	{{server_port}}
+i  encryption and protection;		{{server_addr}}	{{server_port}}
+i- DN42 uses private addresses that will be dropped by firewalls on the		{{server_addr}}	{{server_port}}
+i  Internet. What's worse, your ISP may think you are doing "IP		{{server_addr}}	{{server_port}}
+i  Spoofing" which is a violation of ToS and cause catastrophic		{{server_addr}}	{{server_port}}
+i  consequences.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut there are exceptions:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Two nodes connected to the same internal network may be connected		{{server_addr}}	{{server_port}}
+i  directly.		{{server_addr}}	{{server_port}}
+i  - Examples are some NAT VPSes, or Alibaba Cloud servers with Classic		{{server_addr}}	{{server_port}}
+i    Networking.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere is my recommendation for tunneling software:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. If you're using a Linux VPS or dedicated server, and you're not		{{server_addr}}	{{server_port}}
+i   using OpenVZ or LXC, use WireGuard.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   - Pros:		{{server_addr}}	{{server_port}}
+i     - Extremely easy to configure		{{server_addr}}	{{server_port}}
+i     - Little resource consumption		{{server_addr}}	{{server_port}}
+i     - Good security		{{server_addr}}	{{server_port}}
+i   - Cons:		{{server_addr}}	{{server_port}}
+i     - Lack of features, only allow point-to-point connections		{{server_addr}}	{{server_port}}
+i     - Needs extra kernel modules		{{server_addr}}	{{server_port}}
+i     - Layer 3 only and doesn't support bridging		{{server_addr}}	{{server_port}}
+i   - If you're using OpenVZ or LXC, `wireguard-go` is not suggested.		{{server_addr}}	{{server_port}}
+i     It's not updated as frequently, and it's reported by other users		{{server_addr}}	{{server_port}}
+i     to have stability issues.		{{server_addr}}	{{server_port}}
+i   - Installation, on Debian 10 (Buster) as an example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i     - First, add Debian Backports repo:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i       - Edit `/etc/apt/sources.list`, add:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i         ```bash		{{server_addr}}	{{server_port}}
+i         deb http://deb.debian.org/debian buster-backports main		{{server_addr}}	{{server_port}}
+i         ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i     - Then, use DKMS to install WireGuard kernel modules and		{{server_addr}}	{{server_port}}
+i       management tools:		{{server_addr}}	{{server_port}}
+i       - `sudo apt update`		{{server_addr}}	{{server_port}}
+i       - `sudo apt install wireguard-tools wireguard-dkms`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. If you're using OpenVZ or LXC VPS, use OpenVPN.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   - Pros:		{{server_addr}}	{{server_port}}
+i     - Extremely wide usage		{{server_addr}}	{{server_port}}
+i     - Tons of tutorials		{{server_addr}}	{{server_port}}
+i     - No need for any extra kernel module		{{server_addr}}	{{server_port}}
+i     - Choose between Layer 2 and Layer 2		{{server_addr}}	{{server_port}}
+i   - Cons:		{{server_addr}}	{{server_port}}
+i     - Being a bit complicated to configure		{{server_addr}}	{{server_port}}
+i     - Less secure than WireGuard		{{server_addr}}	{{server_port}}
+i   - Installation `sudo apt install openvpn supervisor`		{{server_addr}}	{{server_port}}
+i   - Here, Supervisor is for managing processes. You may use others		{{server_addr}}	{{server_port}}
+i     like `systemd`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. If you're using a hardware router from Cisco, Mikrotik, etc.,		{{server_addr}}	{{server_port}}
+i   you're usually restricted to GRE/IPSec:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   - Pros:		{{server_addr}}	{{server_port}}
+i     - Wide use on hardware routers		{{server_addr}}	{{server_port}}
+i   - Cons:		{{server_addr}}	{{server_port}}
+i     - Difficult to configure, may need repeated		{{server_addr}}	{{server_port}}
+i       communication/discussions		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i4. Or simply use plain GRE:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   - Pro:		{{server_addr}}	{{server_port}}
+i     - Available on hardware routers		{{server_addr}}	{{server_port}}
+i     - Easy to configure		{{server_addr}}	{{server_port}}
+i   - Cons:		{{server_addr}}	{{server_port}}
+i     - **NO ENCRYPTION! PLAINTEXT TRANSMISSION!**		{{server_addr}}	{{server_port}}
+i     - **NO ENCRYPTION! PLAINTEXT TRANSMISSION!**		{{server_addr}}	{{server_port}}
+i     - **NO ENCRYPTION! PLAINTEXT TRANSMISSION!**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i5. On Linux servers, you may also use ZeroTier One for internal		{{server_addr}}	{{server_port}}
+i   connections or for peering.		{{server_addr}}	{{server_port}}
+i   - Pros:		{{server_addr}}	{{server_port}}
+i     - Nice web interface		{{server_addr}}	{{server_port}}
+i     - Fully automated IP assign		{{server_addr}}	{{server_port}}
+i   - Cons:		{{server_addr}}	{{server_port}}
+i     - May consume much CPU and RAM		{{server_addr}}	{{server_port}}
+i     - Not widely accepted in DN42		{{server_addr}}	{{server_port}}
+i   - Installation: `curl -s https://install.zerotier.com | sudo bash`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Choose BGP Software		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe BGP protocol is used to exchange route information between DN42		{{server_addr}}	{{server_port}}
+iusers. Here is a list of widely used, BGP supported routing software:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. BIRD Internet Routing Daemon **(v2)**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   - Supports various routing protocols, including BGP, OSPF, RIP, etc		{{server_addr}}	{{server_port}}
+i   - Supports both IPv4 and IPv6		{{server_addr}}	{{server_port}}
+i   - Clear configuration syntax yet powerful		{{server_addr}}	{{server_port}}
+i   - ATTENTION: this is for BIRD2, which is different from BIRD1.		{{server_addr}}	{{server_port}}
+i   - BIRD configuration is a bit complicated, so please refer to		{{server_addr}}	{{server_port}}
+i     [DN42 Wiki's Bird2 Guide](https://wiki.dn42.us/howto/Bird2),		{{server_addr}}	{{server_port}}
+i     where a copy-paste-able config is available.		{{server_addr}}	{{server_port}}
+i   - You can directly use BIRD's official repo in Debian:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i     ```bash		{{server_addr}}	{{server_port}}
+i     wget -O - http://bird.network.cz/debian/apt.key | apt-key add -		{{server_addr}}	{{server_port}}
+i     apt-get install lsb-release		{{server_addr}}	{{server_port}}
+i     echo "deb http://bird.network.cz/debian/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/bird.list		{{server_addr}}	{{server_port}}
+i     apt-get update		{{server_addr}}	{{server_port}}
+i     apt-get install bird2		{{server_addr}}	{{server_port}}
+i     ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i     You may refer to		{{server_addr}}	{{server_port}}
+i     [BIRD's download page](https://bird.network.cz/?download&tdir=debian/).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. BIRD Internet Routing Daemon **(v1)**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i   - Split IPv4 and IPv6 into two processes compared to V2		{{server_addr}}	{{server_port}}
+i   - And lack some features, like Multiprotocol BGP, OSPFv3, etc		{{server_addr}}	{{server_port}}
+i     - But doesn't affect basic peerings		{{server_addr}}	{{server_port}}
+i   - Refer to		{{server_addr}}	{{server_port}}
+i     [DN42 Wiki's Bird1 Guide](https://wiki.dn42.us/howto/Bird), where		{{server_addr}}	{{server_port}}
+i     a copy-paste-able config is available.		{{server_addr}}	{{server_port}}
+i   - You can directly use BIRD's official repo in Debian:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i     ```bash		{{server_addr}}	{{server_port}}
+i     wget -O - http://bird.network.cz/debian/apt.key | apt-key add -		{{server_addr}}	{{server_port}}
+i     apt-get install lsb-release		{{server_addr}}	{{server_port}}
+i     echo "deb http://bird.network.cz/debian/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/bird.list		{{server_addr}}	{{server_port}}
+i     apt-get update		{{server_addr}}	{{server_port}}
+i     apt-get install bird		{{server_addr}}	{{server_port}}
+i     ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i     You may refer to		{{server_addr}}	{{server_port}}
+i     [BIRD's download page](https://bird.network.cz/?download&tdir=debian/).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. Quagga / FRRouting		{{server_addr}}	{{server_port}}
+i   - Syntax is similar to Cisco routers, so people with hardware		{{server_addr}}	{{server_port}}
+i     router experiences may like this		{{server_addr}}	{{server_port}}
+i   - Might be the only available option for some routing OSes (like		{{server_addr}}	{{server_port}}
+i     pfSense)		{{server_addr}}	{{server_port}}
+i   - Refer to		{{server_addr}}	{{server_port}}
+i     [DN42 Wiki's Quagga Guide](https://wiki.dn42.us/howto/Quagga)		{{server_addr}}	{{server_port}}
+i4. BGP functionality of hardware routers		{{server_addr}}	{{server_port}}
+i   - Supported by router manufacturer, and is usually rock stable		{{server_addr}}	{{server_port}}
+i   - But might be limited in terms of extended functionality		{{server_addr}}	{{server_port}}
+i   - And the configuration is different per vendor, so you have to do		{{server_addr}}	{{server_port}}
+i     your own research		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Building Internal Network		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you have multiple servers joining DN42, you need to configure your		{{server_addr}}	{{server_port}}
+iinternal network first. Your network needs to satisfy the following		{{server_addr}}	{{server_port}}
+irequirements to work normally:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Proper communication (or pingable) between any two servers		{{server_addr}}	{{server_port}}
+i   - Routers outside your AS are only responsible for sending the		{{server_addr}}	{{server_port}}
+i     packet to your own AS, and the packet may enter from any node.		{{server_addr}}	{{server_port}}
+i     Your own node needs to forward the packet to the correct node.		{{server_addr}}	{{server_port}}
+i   - You may use these schemes:		{{server_addr}}	{{server_port}}
+i     1. A full-mesh VPN with Tinc, ZeroTier One, etc., so any two		{{server_addr}}	{{server_port}}
+i        servers can talk directly.		{{server_addr}}	{{server_port}}
+i     2. $\frac{n (n-1)}{2}$ point-to-point tunnels with OpenVPN,		{{server_addr}}	{{server_port}}
+i        WireGuard, etc., so any two servers can talk directly.		{{server_addr}}	{{server_port}}
+i     3. **(Relatively Dangerous)** Use OpenVPN, WireGuard, etc., to		{{server_addr}}	{{server_port}}
+i        create less than $\frac{n (n-1)}{2}$ tunnels, but make sure		{{server_addr}}	{{server_port}}
+i        there is a path between any two servers (intermediate nodes		{{server_addr}}	{{server_port}}
+i        allowed). Then use Babel, OSPF, RIP, etc., to find the path in		{{server_addr}}	{{server_port}}
+i        your own network.		{{server_addr}}	{{server_port}}
+i     - In this scheme, it's easy to make mistakes and **cause		{{server_addr}}	{{server_port}}
+i       catastrophic failures**.		{{server_addr}}	{{server_port}}
+i       - Some real examples are available at		{{server_addr}}	{{server_port}}
+         		{{server_addr}}	{{server_port}}
+1How to Kill the DN42 Network	/en/article/modify-website/how-to-kill-the-dn42-network.lantian/	{{server_addr}}	{{server_port}}
+i.i     - Routing protocols, including Babel, OSPF, RIP, etc., can		{{server_addr}}	{{server_port}}
+i       automatically detect the topology of your whole network and		{{server_addr}}	{{server_port}}
+i       configure the routes.		{{server_addr}}	{{server_port}}
+i     - But Babel, OSPF, RIP are only supposed to handle your internal		{{server_addr}}	{{server_port}}
+i       routing, and **shouldn't be used to forward routes received		{{server_addr}}	{{server_port}}
+i       externally from BGP!**		{{server_addr}}	{{server_port}}
+i       - When BGP routing information is forwarded by Babel, OSPF,		{{server_addr}}	{{server_port}}
+i         RIP, information such as source, route length, and BGP		{{server_addr}}	{{server_port}}
+i         communities are all lost.		{{server_addr}}	{{server_port}}
+i       - Therefore, your other nodes will think that the route **comes		{{server_addr}}	{{server_port}}
+i         from your own network** and broadcast the route to others		{{server_addr}}	{{server_port}}
+i         with your AS as the source.		{{server_addr}}	{{server_port}}
+i       - In short: you will **hijack the whole DN42**.		{{server_addr}}	{{server_port}}
+i     - Babel, OSPF, RIP should be strictly restricted to your own IP		{{server_addr}}	{{server_port}}
+i       range. **External routing must be handled by BGP**.		{{server_addr}}	{{server_port}}
+i     - If you have questions, seek help at		{{server_addr}}	{{server_port}}
+i       [the unofficial Telegram group](https://t.me/Dn42Chat).		{{server_addr}}	{{server_port}}
+i2. BGP configuration must satisfy one of:		{{server_addr}}	{{server_port}}
+i   1. One BGP session between each of your two servers.		{{server_addr}}	{{server_port}}
+i      - BGP has a feature that, within one AS, a BGP node will only		{{server_addr}}	{{server_port}}
+i        broadcast routes that it **received externally** and **won't		{{server_addr}}	{{server_port}}
+i        forward** routes it received from other internal nodes in the		{{server_addr}}	{{server_port}}
+i        AS. It is to prevent any occurrence of route loops. Therefore,		{{server_addr}}	{{server_port}}
+i        each server needs to establish BGP sessions with all other		{{server_addr}}	{{server_port}}
+i        servers, so it can obtain a complete routing table.		{{server_addr}}	{{server_port}}
+i      - If you have a lot of servers, you will have fun configuring		{{server_addr}}	{{server_port}}
+i        each server by hand. You may consider writing a script or		{{server_addr}}	{{server_port}}
+i        using any plan below.		{{server_addr}}	{{server_port}}
+i   2. Configure one server as a `BGP Route Reflector` and establish		{{server_addr}}	{{server_port}}
+i      BGP sessions with all other servers.		{{server_addr}}	{{server_port}}
+i      - Route Reflector will manage and broadcast all routing		{{server_addr}}	{{server_port}}
+i        information within the AS.		{{server_addr}}	{{server_port}}
+i      - Compared to the last scheme, you will need to do substantially		{{server_addr}}	{{server_port}}
+i        less configuration, but if the Route Reflector is down, your		{{server_addr}}	{{server_port}}
+i        whole network is dead.		{{server_addr}}	{{server_port}}
+i      - Note that I haven't tried this configuration and cannot		{{server_addr}}	{{server_port}}
+i        provide any technical help.		{{server_addr}}	{{server_port}}
+i      - If you have questions, seek help at		{{server_addr}}	{{server_port}}
+i        [the unofficial Telegram group](https://t.me/Dn42Chat), where		{{server_addr}}	{{server_port}}
+i        some users use this scheme.		{{server_addr}}	{{server_port}}
+i   3. Configure a different private ASN at each node, and configure		{{server_addr}}	{{server_port}}
+i      BGP Confederation.		{{server_addr}}	{{server_port}}
+i      - ASN should be in the private ASN range 4200000000 -		{{server_addr}}	{{server_port}}
+i        4294967294, but not 4242420000 - 4242429999 since it may		{{server_addr}}	{{server_port}}
+i        overlap with other DN42 users.		{{server_addr}}	{{server_port}}
+i      - With Confederation, multiple servers team together and appear		{{server_addr}}	{{server_port}}
+i        as one AS when observed externally.		{{server_addr}}	{{server_port}}
+i      - See		{{server_addr}}	{{server_port}}
+        		{{server_addr}}	{{server_port}}
+1Bird BGP Confederation: Configuration and Emulation	/en/article/modify-website/bird-confederation.lantian	{{server_addr}}	{{server_port}}
+i.i      - If you have questions, seek help at		{{server_addr}}	{{server_port}}
+i        [the unofficial Telegram group](https://t.me/Dn42Chat), where		{{server_addr}}	{{server_port}}
+i        some other users also use this scheme.		{{server_addr}}	{{server_port}}
+i3. **All your servers must finish the Very Important System		{{server_addr}}	{{server_port}}
+i   Configuration.**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## "1xRTT Peering": Faster Peering		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMost users in DN42 are in the United States or Europe. When I contact		{{server_addr}}	{{server_port}}
+ithem from China, due to the timezone differences, one communication		{{server_addr}}	{{server_port}}
+icycle can be quite lengthy. So we should configure our side as		{{server_addr}}	{{server_port}}
+icompletely as possible based on the public information of the other		{{server_addr}}	{{server_port}}
+iside. This makes debugging easier for others and reduces the time		{{server_addr}}	{{server_port}}
+iconsumption in repeated communications.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I have a list on my 		{{server_addr}}	{{server_port}}
+1DN42 Page	/en/page/dn42/index.html	{{server_addr}}	{{server_port}}
+i, includingithe information I'll need when setting up the tunnel and BGP session		{{server_addr}}	{{server_port}}
+iand the steps you should take.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNote that I don't have any special configuration/requirements, and the		{{server_addr}}	{{server_port}}
+ilist is a general requirement for almost any DN42 user. Therefore I		{{server_addr}}	{{server_port}}
+isuggest that you follow the list and provide complete information.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere is a copy of the list for reference:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Choose a server from the list below. Usually, this will be the one		{{server_addr}}	{{server_port}}
+i   with the lowest latency (ping) to your server.		{{server_addr}}	{{server_port}}
+i   - If you have multiple servers in DN42, I'm open to peering with		{{server_addr}}	{{server_port}}
+i     all of them at once.		{{server_addr}}	{{server_port}}
+i2. Choose a type of VPN for tunneling.		{{server_addr}}	{{server_port}}
+i   - I usually prefer WireGuard and OpenVPN, but others such as		{{server_addr}}	{{server_port}}
+i     GRE/Plain and ZeroTier will also work.		{{server_addr}}	{{server_port}}
+i     - GRE/IPSec configuration is extremely complicated, and different		{{server_addr}}	{{server_port}}
+i       IPSec implementations usually have severe compatibility issues,		{{server_addr}}	{{server_port}}
+i       so it may take days or even weeks to debug. Therefore, **I no		{{server_addr}}	{{server_port}}
+i       longer accept GRE/IPSec tunnels**, and existing tunnels may be		{{server_addr}}	{{server_port}}
+i       disconnected at any time.		{{server_addr}}	{{server_port}}
+i   - **WARN: I DO NOT peer with servers in mainland China to avoid		{{server_addr}}	{{server_port}}
+i     possible legal issues.**		{{server_addr}}	{{server_port}}
+i   - I'm also willing to try new types of VPNs - just ask!		{{server_addr}}	{{server_port}}
+i3. Configure BGP daemon and VPN software on your side. You may assume		{{server_addr}}	{{server_port}}
+i   I will use the following configuration:		{{server_addr}}	{{server_port}}
+i   - My General Information:		{{server_addr}}	{{server_port}}
+i     - ASN: **4242422547**		{{server_addr}}	{{server_port}}
+i     - Public IP: listed below		{{server_addr}}	{{server_port}}
+i     - DN42 IPv4 (IP used in the tunnel on my end): listed below		{{server_addr}}	{{server_port}}
+i       - If you need an address block (such as /30) for the IPv4		{{server_addr}}	{{server_port}}
+i         tunnel, it will come out of your address space.		{{server_addr}}	{{server_port}}
+i       - This is usually needed for hardware routers, such as		{{server_addr}}	{{server_port}}
+i         Mikrotik.		{{server_addr}}	{{server_port}}
+i     - DN42 IPv6: **fe80::2547** for peering over link-local addresses		{{server_addr}}	{{server_port}}
+i       - If you need an address block (such as /64) for the IPv6		{{server_addr}}	{{server_port}}
+i         tunnel, it will come out of your address space.		{{server_addr}}	{{server_port}}
+i     - Multiprotocol BGP (MP-BGP):		{{server_addr}}	{{server_port}}
+i       - Although I support MP-BGP, I still configure two BGP sessions		{{server_addr}}	{{server_port}}
+i         (1 IPv4 & 1 IPv6) by default.		{{server_addr}}	{{server_port}}
+i       - If you also support MP-BGP and only need one session, just		{{server_addr}}	{{server_port}}
+i         let me know.		{{server_addr}}	{{server_port}}
+i   - For creating a tunnel connection:		{{server_addr}}	{{server_port}}
+i     - WireGuard/OpenVPN port on my side: **last 5 digits of your		{{server_addr}}	{{server_port}}
+i       ASN**		{{server_addr}}	{{server_port}}
+i       - e.g., 4242420001 means I will use port 20001		{{server_addr}}	{{server_port}}
+i     - OpenVPN static key: generated by you, sent to me later		{{server_addr}}	{{server_port}}
+i     - OpenVPN default configuration: show below		{{server_addr}}	{{server_port}}
+i       - If you can't use my default configuration, set something		{{server_addr}}	{{server_port}}
+i         suitable for you and send it to me		{{server_addr}}	{{server_port}}
+i     - ZeroTier One: I will request to join your network		{{server_addr}}	{{server_port}}
+i       - You may try to invite my server to your network, if possible		{{server_addr}}	{{server_port}}
+i4. Send the following information via email to		{{server_addr}}	{{server_port}}
+i   **b980120\@hotmail.com**:		{{server_addr}}	{{server_port}}
+i   - Your General Information:		{{server_addr}}	{{server_port}}
+i     - ASN		{{server_addr}}	{{server_port}}
+i     - Public IP		{{server_addr}}	{{server_port}}
+i       - I prefer IPv4 since IPv6 is tunneled on some of my servers		{{server_addr}}	{{server_port}}
+i         (HE.NET Tunnelbroker)		{{server_addr}}	{{server_port}}
+i     - DN42 IPv4 and IPv6 (IP used in the tunnel on your end)		{{server_addr}}	{{server_port}}
+i       - Or address blocks, if you need them for the tunnel		{{server_addr}}	{{server_port}}
+i       - Including link-local address for IPv6 peering		{{server_addr}}	{{server_port}}
+i     - The server you want to peer with		{{server_addr}}	{{server_port}}
+i   - For creating a tunnel connection:		{{server_addr}}	{{server_port}}
+i     - WireGuard/OpenVPN port on your side		{{server_addr}}	{{server_port}}
+i       - I will assume 22547 if you don't specify		{{server_addr}}	{{server_port}}
+i     - OpenVPN static key (generated by you)		{{server_addr}}	{{server_port}}
+i     - ZeroTier One: Your network ID (I will request to join your		{{server_addr}}	{{server_port}}
+i       network)		{{server_addr}}	{{server_port}}
+i     - OpenVPN custom configuration (if necessary)		{{server_addr}}	{{server_port}}
+i5. Wait till I set up the tunnel and the peering, and respond to your		{{server_addr}}	{{server_port}}
+i   email. Usually, the peering is successful by now.		{{server_addr}}	{{server_port}}
+i   - You may use [my Looking Glass](https://lg.lantian.pub/) to debug		{{server_addr}}	{{server_port}}
+i     our connection.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Tunnel Setup: WireGuard		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDN42 Wiki has a WireGuard configuration guide available. I made minor		{{server_addr}}	{{server_port}}
+imodifications to it so that it's clearer.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, run `wg genkey | tee privatekey | wg pubkey > publickey` to		{{server_addr}}	{{server_port}}
+igenerate your public/private key pair. This is the only authentication		{{server_addr}}	{{server_port}}
+iinfo in a WireGuard tunnel, so don't leak the private key.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen create a configuration file `[PEER_NAME].conf`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i[Interface]		{{server_addr}}	{{server_port}}
+i# Your WireGuard private key		{{server_addr}}	{{server_port}}
+iPrivateKey = ABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFA=		{{server_addr}}	{{server_port}}
+i# Port number on your side		{{server_addr}}	{{server_port}}
+iListenPort = 22547		{{server_addr}}	{{server_port}}
+iTable = off		{{server_addr}}	{{server_port}}
+i# Add your link-local IPv6 (fe80::1234 in this case)		{{server_addr}}	{{server_port}}
+iPostUp = ip addr add fe80::1234/64 dev %i		{{server_addr}}	{{server_port}}
+i# Add your DN42 IPv6 address (fd12:3456:7890::1 in this case)		{{server_addr}}	{{server_port}}
+iPostUp = ip addr add fd12:3456:7890::1/128 dev %i		{{server_addr}}	{{server_port}}
+i# First IP is your DN42 IPv4, second is mine		{{server_addr}}	{{server_port}}
+iPostUp = ip addr add 172.21.2.3 peer 172.22.76.185 dev %i		{{server_addr}}	{{server_port}}
+iPostUp = sysctl -w net.ipv6.conf.%i.autoconf=0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i[Peer]		{{server_addr}}	{{server_port}}
+i# Set to my (or your peer's) public key		{{server_addr}}	{{server_port}}
+iPublicKey = zyATu8FW392WFFNAz7ZH6+4TUutEYEooPPirwcoIiXo=		{{server_addr}}	{{server_port}}
+i# Set to my (or your peer's) node IP and port, the port is last 5 digits of your ASN		{{server_addr}}	{{server_port}}
+iEndpoint = hostdare.lantian.pub:21234		{{server_addr}}	{{server_port}}
+iAllowedIPs = 10.0.0.0/8, 172.20.0.0/14, 172.31.0.0/16, fd00::/8, fe80::/64		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen run `wg-quick up [PEER_NAME].conf` to set up the tunnel.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Tunnel Setup: OpenVPN		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDN42 Wiki also provided an OpenVPN configuration template. I made		{{server_addr}}	{{server_port}}
+iminor modifications to it so that it's clearer.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iproto         udp		{{server_addr}}	{{server_port}}
+imode          p2p		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# my (or your peer's) server IP		{{server_addr}}	{{server_port}}
+iremote        185.186.147.110		{{server_addr}}	{{server_port}}
+i# my (or your peer's) tunnel port, last 5 digits of your ASN		{{server_addr}}	{{server_port}}
+irport         21234		{{server_addr}}	{{server_port}}
+i# your server IP		{{server_addr}}	{{server_port}}
+ilocal         12.34.56.78		{{server_addr}}	{{server_port}}
+i# your tunnel port, usually 22547 (or last 5 digits of your peer's ASN)		{{server_addr}}	{{server_port}}
+ilport         22547		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+idev-type      tun		{{server_addr}}	{{server_port}}
+iresolv-retry  infinite		{{server_addr}}	{{server_port}}
+idev           dn42-lantian    # change to whatever you want		{{server_addr}}	{{server_port}}
+icomp-lzo		{{server_addr}}	{{server_port}}
+ipersist-key		{{server_addr}}	{{server_port}}
+ipersist-tun		{{server_addr}}	{{server_port}}
+itun-ipv6		{{server_addr}}	{{server_port}}
+icipher        aes-256-cbc		{{server_addr}}	{{server_port}}
+i# first is your DN42 IPv4, second is mine (or your peer's)		{{server_addr}}	{{server_port}}
+iifconfig      172.21.2.3 172.22.76.185		{{server_addr}}	{{server_port}}
+i# first is your link-local IPv6, second is mine (or your peer's)		{{server_addr}}	{{server_port}}
+iifconfig-ipv6 fe80::1234 fe80::2547		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Post-up script that:		{{server_addr}}	{{server_port}}
+i# 1. Remove stable-privacy IPv6 address		{{server_addr}}	{{server_port}}
+i# 2. Assigns preferred outbound IPv6 address (fd12:3456:7890::1 in this case)		{{server_addr}}	{{server_port}}
+iscript-security 2		{{server_addr}}	{{server_port}}
+iup "/bin/sh -c '/sbin/sysctl -w net.ipv6.conf.$dev.autoconf=0 && /sbin/sysctl -w net.ipv6.conf.$dev.accept_ra=0 && /sbin/sysctl -w net.ipv6.conf.$dev.addr_gen_mode=1 && /sbin/ip addr add fd12:3456:7890::1/128 dev $dev'"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Set to static key for our tunnel		{{server_addr}}	{{server_port}}
+i# Generated with openvpn --genkey --secret static.key		{{server_addr}}	{{server_port}}
+i<secret>		{{server_addr}}	{{server_port}}
+i-----BEGIN OpenVPN Static key V1-----		{{server_addr}}	{{server_port}}
+i0123456789abcdef0123456789abcdef		{{server_addr}}	{{server_port}}
+i# ...		{{server_addr}}	{{server_port}}
+i# key contents		{{server_addr}}	{{server_port}}
+i# ...		{{server_addr}}	{{server_port}}
+i0123456789abcdef0123456789abcdef		{{server_addr}}	{{server_port}}
+i-----END OpenVPN Static key V1-----		{{server_addr}}	{{server_port}}
+i</secret>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Limit Traffic on DN42 Interfaces		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe tunnel established during a DN42 peering usually allows traffic to		{{server_addr}}	{{server_port}}
+iany IP (unless you set AllowedIPs for WireGuard), and this creates a		{{server_addr}}	{{server_port}}
+irisk: your peer can inject packets destined for public IPs to your		{{server_addr}}	{{server_port}}
+itunnel, and your node will forward them to the public Internet, under		{{server_addr}}	{{server_port}}
+iyour name. If your peer is exploiting this for a network attack, you		{{server_addr}}	{{server_port}}
+iwill be in great trouble.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTherefore, it's recommended that you set up iptables rules to block		{{server_addr}}	{{server_port}}
+iforwarding from your peers to the Internet.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Note: you don't need this if you only use WireGuard. WireGuard		{{server_addr}}	{{server_port}}
+i> already has IP limitations built-in.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe following rules will restrict traffic to DN42 IP ranges on all		{{server_addr}}	{{server_port}}
+iinterfaces with name starting with `dn42-`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iiptables -N DN42_INPUT		{{server_addr}}	{{server_port}}
+iiptables -A DN42_INPUT -s 172.20.0.0/14 -j ACCEPT		{{server_addr}}	{{server_port}}
+iiptables -A DN42_INPUT -s 172.31.0.0/16 -j ACCEPT		{{server_addr}}	{{server_port}}
+iiptables -A DN42_INPUT -s 10.0.0.0/8 -j ACCEPT		{{server_addr}}	{{server_port}}
+iiptables -A DN42_INPUT -s 224.0.0.0/4 -j ACCEPT		{{server_addr}}	{{server_port}}
+iiptables -A DN42_INPUT -j REJECT		{{server_addr}}	{{server_port}}
+iiptables -A INPUT -i dn42+ -j DN42_INPUT		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iiptables -N DN42_OUTPUT		{{server_addr}}	{{server_port}}
+iiptables -A DN42_OUTPUT -d 172.20.0.0/14 -j ACCEPT		{{server_addr}}	{{server_port}}
+iiptables -A DN42_OUTPUT -d 172.31.0.0/16 -j ACCEPT		{{server_addr}}	{{server_port}}
+iiptables -A DN42_OUTPUT -d 10.0.0.0/8 -j ACCEPT		{{server_addr}}	{{server_port}}
+iiptables -A DN42_OUTPUT -d 224.0.0.0/4 -j ACCEPT		{{server_addr}}	{{server_port}}
+iiptables -A DN42_OUTPUT -j REJECT		{{server_addr}}	{{server_port}}
+iiptables -A OUTPUT -o dn42+ -j DN42_OUTPUT		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iip6tables -N DN42_INPUT		{{server_addr}}	{{server_port}}
+iip6tables -A DN42_INPUT -s fd00::/8 -j ACCEPT		{{server_addr}}	{{server_port}}
+iip6tables -A DN42_INPUT -s fe80::/10 -j ACCEPT		{{server_addr}}	{{server_port}}
+iip6tables -A DN42_INPUT -s ff00::/8 -j ACCEPT		{{server_addr}}	{{server_port}}
+iip6tables -A DN42_INPUT -j REJECT		{{server_addr}}	{{server_port}}
+iip6tables -A INPUT -i dn42+ -j DN42_INPUT		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iip6tables -N DN42_OUTPUT		{{server_addr}}	{{server_port}}
+iip6tables -A DN42_OUTPUT -d fd00::/8 -j ACCEPT		{{server_addr}}	{{server_port}}
+iip6tables -A DN42_OUTPUT -d fe80::/10 -j ACCEPT		{{server_addr}}	{{server_port}}
+iip6tables -A DN42_OUTPUT -d ff00::/8 -j ACCEPT		{{server_addr}}	{{server_port}}
+iip6tables -A DN42_OUTPUT -j REJECT		{{server_addr}}	{{server_port}}
+iip6tables -A OUTPUT -o dn42+ -j DN42_OUTPUT		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iiptables -A FORWARD -i dn42+ -j DN42_INPUT		{{server_addr}}	{{server_port}}
+iiptables -A FORWARD -o dn42+ -j DN42_OUTPUT		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iip6tables -A FORWARD -i dn42+ -j DN42_INPUT		{{server_addr}}	{{server_port}}
+iip6tables -A FORWARD -o dn42+ -j DN42_OUTPUT		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## BGP Session Setup: BIRD v1 & v2		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI will only talk about the configuration of BIRD v1 and v2 since they		{{server_addr}}	{{server_port}}
+iare the most widely used. I assume you have finished the setup		{{server_addr}}	{{server_port}}
+ifollowing the Wiki but don't have any peers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- [DN42 Wiki's Bird2 Guide](https://wiki.dn42.us/howto/Bird2)		{{server_addr}}	{{server_port}}
+i- [DN42 Wiki's Bird1 Guide](https://wiki.dn42.us/howto/Bird)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor BIRD v1, what you need is:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# Add to /etc/bird/peers4/dn42_lantian.conf		{{server_addr}}	{{server_port}}
+i# Rename dn42_lantian to whatever you want		{{server_addr}}	{{server_port}}
+iprotocol bgp dn42_lantian from dnpeers {		{{server_addr}}	{{server_port}}
+i    # Set to my (or your peer's) DN42 IPv4 address and ASN		{{server_addr}}	{{server_port}}
+i    neighbor 172.22.76.185 as 4242421234;		{{server_addr}}	{{server_port}}
+i    direct;		{{server_addr}}	{{server_port}}
+i};		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Add to /etc/bird/peers4/dn42_lantian.conf		{{server_addr}}	{{server_port}}
+i# Rename dn42_lantian to whatever you want		{{server_addr}}	{{server_port}}
+iprotocol bgp dn42_lantian from dnpeers {		{{server_addr}}	{{server_port}}
+i    # Set to my (or your peer's) link-local IPv6, the tunnel's interface name, and ASN		{{server_addr}}	{{server_port}}
+i    neighbor fe80::1234 % 'dn42-lantian' as 4242421234;		{{server_addr}}	{{server_port}}
+i    direct;		{{server_addr}}	{{server_port}}
+i};		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor BIRD v2, what you need is:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# Add to /etc/bird/peers/dn42_lantian.conf		{{server_addr}}	{{server_port}}
+i# Rename dn42_lantian_v4 to whatever you want		{{server_addr}}	{{server_port}}
+iprotocol bgp dn42_lantian_v4 from dnpeers {		{{server_addr}}	{{server_port}}
+i    # Set to my (or your peer's) DN42 IPv4 address and ASN		{{server_addr}}	{{server_port}}
+i    neighbor 172.22.76.185 as 4242421234;		{{server_addr}}	{{server_port}}
+i    direct;		{{server_addr}}	{{server_port}}
+i    # Disable IPv6 route exchange in IPv4 BGP, strongly recommended		{{server_addr}}	{{server_port}}
+i    ipv6 {		{{server_addr}}	{{server_port}}
+i        import none;		{{server_addr}}	{{server_port}}
+i        export none;		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i};		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Rename dn42_lantian_v6 to whatever you want		{{server_addr}}	{{server_port}}
+iprotocol bgp dn42_lantian_v6 from dnpeers {		{{server_addr}}	{{server_port}}
+i    # Set to my (or your peer's) link-local IPv6, the tunnel's interface name, and ASN		{{server_addr}}	{{server_port}}
+i    neighbor fe80::1234 % 'dn42-lantian' as 4242421234;		{{server_addr}}	{{server_port}}
+i    direct;		{{server_addr}}	{{server_port}}
+i    # Disable IPv4 route exchange in IPv6 BGP		{{server_addr}}	{{server_port}}
+i    # You may remove these statements if you want to use "multiprotocol BGP" (MP-BGP)		{{server_addr}}	{{server_port}}
+i    ipv4 {		{{server_addr}}	{{server_port}}
+i        import none;		{{server_addr}}	{{server_port}}
+i        export none;		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i};		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Network Test & Bonus		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter finishing all the setup above, you have successfully entered the		{{server_addr}}	{{server_port}}
+iDN42 network. Now you can perform some tests:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `ping 172.20.0.53` or `ping 172.23.0.53`, this is the Anycast DNS in		{{server_addr}}	{{server_port}}
+i  DN42.		{{server_addr}}	{{server_port}}
+i- `ping 172.23.0.80`, this is the internal IP address of DN42 Wiki.		{{server_addr}}	{{server_port}}
+i- Try		{{server_addr}}	{{server_port}}
+i  [Internal Services on DN42 Wiki](https://wiki.dn42.us/internal/Internal-Services),		{{server_addr}}	{{server_port}}
+i  [Burble's Services](https://dn42.burble.com/home/burble-dn42-services).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou can also challenge yourself and change your tunnel and BGP config,		{{server_addr}}	{{server_port}}
+iadd more functionalities and improve performance and/or safety:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- ROA, or Route Origin Authorization, checks if a route comes from the		{{server_addr}}	{{server_port}}
+i  AS it's supposed to. For example, my `172.22.76.184/29` should come		{{server_addr}}	{{server_port}}
+i  from `4242422547`. Routes failing the check will be rejected;		{{server_addr}}	{{server_port}}
+i  - DN42 Wiki has a ROA configuration guide for BIRD: see		{{server_addr}}	{{server_port}}
+i    [Bird2](https://wiki.dn42.us/howto/Bird2) or		{{server_addr}}	{{server_port}}
+i    [Bird1](https://wiki.dn42.us/howto/Bird)		{{server_addr}}	{{server_port}}
+i- Community Filter, that assigns scores to links in DN42 based on		{{server_addr}}	{{server_port}}
+i  latency, bandwidth, and encryption, and selects a faster route based		{{server_addr}}	{{server_port}}
+i  on them		{{server_addr}}	{{server_port}}
+i  - For Bird1, refer to		{{server_addr}}	{{server_port}}
+i    [DN42 Wiki's Bird Communities Page](https://wiki.dn42.us/howto/Bird-communities).		{{server_addr}}	{{server_port}}
+i    For Bird2, changes are needed, and you may try out yourself		{{server_addr}}	{{server_port}}
+i- Anycast, aka multiple servers announcing the same IP, so that		{{server_addr}}	{{server_port}}
+i  external requests will be directed to the nearest server		{{server_addr}}	{{server_port}}
+i  - Usually used for DNS on the global Internet, but in DN42, the Wiki		{{server_addr}}	{{server_port}}
+i    (172.23.0.80) is also anycasted.		{{server_addr}}	{{server_port}}
+i  - I've written two posts on this, one in last year and one in this		{{server_addr}}	{{server_port}}
+i    year: see		{{server_addr}}	{{server_port}}
+    		{{server_addr}}	{{server_port}}
+1Building Anycast DNS with Docker in DN42	/en/article/modify-website/dn42-docker-anycast-dns.lantian	{{server_addr}}	{{server_port}}
+i    and		{{server_addr}}	{{server_port}}
+    		{{server_addr}}	{{server_port}}
+1Sharing Network Namespace Among Docker Containers for Bird Anycasting	/en/article/modify-website/docker-share-network-namespace-bird-high-availability.lantian	{{server_addr}}	{{server_port}}
+i.i- Build your own recursive or authoritative DNS server		{{server_addr}}	{{server_port}}
+i  - You may even apply to join DN42's DNS Anycast and become a DN42		{{server_addr}}	{{server_port}}
+i    official DNS server.		{{server_addr}}	{{server_port}}
+i- Register a domain and create a website		{{server_addr}}	{{server_port}}
+i  - See my post in 2018:		{{server_addr}}	{{server_port}}
+    		{{server_addr}}	{{server_port}}
+1Register Domain in DN42	/en/article/modify-website/register-own-domain-in-dn42.lantian	{{server_addr}}	{{server_port}}
+i- Or register an AS on the real Internet with RIPE, rent a public IPv4		{{server_addr}}	{{server_port}}
+i  and IPv6 address pool, and start doing it for real.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Need Help?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRemember: DN42 is an **experimental network** where everyone helps		{{server_addr}}	{{server_port}}
+ieveryone. Nobody is going to blame you if you screwed up. You may seek		{{server_addr}}	{{server_port}}
+ihelp at DN42's [IRC channel](https://wiki.dn42.us/services/IRC),		{{server_addr}}	{{server_port}}
+i[mailing list](https://wiki.dn42.us/contact#contact_mailing-list) or		{{server_addr}}	{{server_port}}
+ithe [unofficial Telegram group](https://t.me/Dn42Chat).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

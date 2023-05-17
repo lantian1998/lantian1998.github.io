@@ -1,0 +1,37 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "WP博客一键签到JS"		{{server_addr}}	{{server_port}}
+icategories: 闲聊		{{server_addr}}	{{server_port}}
+itags: [WordPress, JS, 签到]		{{server_addr}}	{{server_port}}
+idate: 2013-07-01 22:04:09		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个是我从 Arefly 的博客上看来的。原网址		{{server_addr}}	{{server_port}}
+i：<http://www.arefly.com/zh-cn/wordpress-js-check/>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i使用方法：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1.随便收藏一个网页。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2.找到你刚才收藏的网页，右键编辑，把名字改成「一键签到」或者你喜欢的东		{{server_addr}}	{{server_port}}
+i西，地址改成下面的这段代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```javascript		{{server_addr}}	{{server_port}}
+ijavascript: document.getElementById("author").value = "你的昵称";		{{server_addr}}	{{server_port}}
+idocument.getElementById("email").value = "你的邮箱";		{{server_addr}}	{{server_port}}
+idocument.getElementById("url").value = "你的网站";		{{server_addr}}	{{server_port}}
+ivar myDate = new Date();		{{server_addr}}	{{server_port}}
+ivar mytime = myDate.toLocaleTimeString();		{{server_addr}}	{{server_port}}
+idocument.getElementById("comment").value =		{{server_addr}}	{{server_port}}
+i  "今天签到啦！时间：" + mytime;		{{server_addr}}	{{server_port}}
+isubmit.click();		{{server_addr}}	{{server_port}}
+ivoid 0;		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i注意里面的昵称、邮箱、网站别忘了修改。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3.打开你想签到的网页，点一下这个收藏，搞定。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i好好动下脑筋，可以用这段代码来发垃圾评论，别说是我教的。另外别想用这个		{{server_addr}}	{{server_port}}
+i在我这里签到，我用的是 Typecho，评论用的是友言。看着办吧。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

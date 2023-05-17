@@ -1,0 +1,39 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: Himawari Satellite's Earth Images		{{server_addr}}	{{server_port}}
+idate: 1970-01-01 00:00:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis page contains a Javascript snippet to dynamically load photos		{{server_addr}}	{{server_port}}
+itaken from Japan's Himawari 8 satellite. The data comes from		{{server_addr}}	{{server_port}}
+i<http://himawari8.nict.go.jp/> and is updated every 10 minutes, with a		{{server_addr}}	{{server_port}}
+i1-hour delay.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDetailed information and implementation can be found at		{{server_addr}}	{{server_port}}
+1/en/article/modify-website/php-javascript-satellite-earth-picture.lantian	/en/article/modify-website/php-javascript-satellite-earth-picture.lantian	{{server_addr}}	{{server_port}}
+i.i		{{server_addr}}	{{server_port}}
+i<p id="himawari-time">Loading, may take some time...</p>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<img id="himawari-pic" src="" />		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<script>		{{server_addr}}	{{server_port}}
+i(function(){		{{server_addr}}	{{server_port}}
+i    var today = new Date();		{{server_addr}}	{{server_port}}
+i    // get date for himawari picture		{{server_addr}}	{{server_port}}
+i    t = today.getTime();		{{server_addr}}	{{server_port}}
+i    t = t - t % 600000 - 3600000;		{{server_addr}}	{{server_port}}
+i    today.setTime(t);		{{server_addr}}	{{server_port}}
+i    year = today.getUTCFullYear();		{{server_addr}}	{{server_port}}
+i    month = today.getUTCMonth() + 1;		{{server_addr}}	{{server_port}}
+i    day = today.getUTCDate();		{{server_addr}}	{{server_port}}
+i    hour = today.getUTCHours();		{{server_addr}}	{{server_port}}
+i    minute = today.getUTCMinutes();		{{server_addr}}	{{server_port}}
+i    if(month<10) month = '0' + month;		{{server_addr}}	{{server_port}}
+i    if(day<10) day = '0' + day;		{{server_addr}}	{{server_port}}
+i    if(hour<10) hour = '0' + hour;		{{server_addr}}	{{server_port}}
+i    if(minute<10) minute = '0' + minute;		{{server_addr}}	{{server_port}}
+i    document.getElementById('himawari-time').innerHTML = 'Image taken at '+today.toLocaleString();		{{server_addr}}	{{server_port}}
+i    document.getElementById('himawari-pic').src = 'https://himawari8.nict.go.jp/img/D531106/1d/550/'+year+'/'+month+'/'+day+'/'+hour+minute+'00_0_0.png';		{{server_addr}}	{{server_port}}
+i})();		{{server_addr}}	{{server_port}}
+i</script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

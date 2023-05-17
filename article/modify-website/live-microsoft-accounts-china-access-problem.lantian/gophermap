@@ -1,0 +1,83 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Microsoft Accounts 在天朝访问发生异常"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [微软]		{{server_addr}}	{{server_port}}
+idate: 2014-10-04 22:41:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/46671412433584.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2014 年 10 月 4 日晚上，从中国访问微软账户登陆页面均会跳出 SSL 证书无		{{server_addr}}	{{server_port}}
+i效提示，如图：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/46671412433584.png	/usr/uploads/46671412433584.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i颁发对象		{{server_addr}}	{{server_port}}
+i公用名 (CN)    hotmai.com		{{server_addr}}	{{server_port}}
+i组织 (O)    hotmail.com		{{server_addr}}	{{server_port}}
+i组织单位 (OU)     <未包含在证书中>		{{server_addr}}	{{server_port}}
+i序列号    29		{{server_addr}}	{{server_port}}
+i颁发者		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i颁发者		{{server_addr}}	{{server_port}}
+i公用名 (CN)    hotmai.com		{{server_addr}}	{{server_port}}
+i组织 (O)    hotmail.com		{{server_addr}}	{{server_port}}
+i组织单位 (OU)     <未包含在证书中>		{{server_addr}}	{{server_port}}
+i有效期		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i颁发日期    14-9-23		{{server_addr}}	{{server_port}}
+i截止日期    15-9-23		{{server_addr}}	{{server_port}}
+i指纹		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSHA-256 指纹    7B AC CB 75 4D A5 BA 45 1F C5 FA E5 10 6B CE 22		{{server_addr}}	{{server_port}}
+i34 E3 14 0C 8A 3B 05 9B 36 B0 8C 47 C7 C1 97 2D		{{server_addr}}	{{server_port}}
+iSHA-1 指纹    30 F3 B3 AD C6 E5 70 BD A6 06 B9 F9 6D E2 41 90		{{server_addr}}	{{server_port}}
+iCE 26 2C 67		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以上复制自 Chrome，由「颁发者公用名仅为域名」和「hotmai.com」（没有		{{server_addr}}	{{server_port}}
+il）可以看出，这是一次 SSL 中间人攻击事件。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i假证书内容如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i-----BEGIN CERTIFICATE-----		{{server_addr}}	{{server_port}}
+iMIICYjCCAcugAwIBAgIBKTANBgkqhkiG9w0BAQQFADA4MQswCQYDVQQGEwJjbjEU		{{server_addr}}	{{server_port}}
+iMBIGA1UEChMLaG90bWFpbC5jb20xEzARBgNVBAMTCmhvdG1haS5jb20wHhcNMTQw		{{server_addr}}	{{server_port}}
+iOTIzMTEzNDAzWhcNMTUwOTIzMTEzNDAzWjA4MQswCQYDVQQGEwJjbjEUMBIGA1UE		{{server_addr}}	{{server_port}}
+iChMLaG90bWFpbC5jb20xEzARBgNVBAMTCmhvdG1haS5jb20wgZ8wDQYJKoZIhvcN		{{server_addr}}	{{server_port}}
+iAQEBBQADgY0AMIGJAoGBAJ0A+/fnNmwleMfxTRBS5iYkwq4jdOzdXMdWxJjYCJSL		{{server_addr}}	{{server_port}}
+iizdyB2lfR1UFK0Q6230HkIYqUVzaUC4hsS9nvin3jQB37W5UESXAextNCIgpSQ9N		{{server_addr}}	{{server_port}}
+iBaf4t5q5ud3AkbR11rdb559e/wMLzGsyD4CML3HlJwgcf4ZHAtrKIVbbBRcGt86J		{{server_addr}}	{{server_port}}
+iAgMBAAGjfDB6MAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgQwMB0GA1UdDgQW		{{server_addr}}	{{server_port}}
+iBBQ0j1vwhAYDwOUlEFdLxqlBjF0t6TARBglghkgBhvhCAQEEBAMCBeAwKAYJYIZI		{{server_addr}}	{{server_port}}
+iAYb4QgENBBsWGWV4YW1wbGUgY29tbWVudCBleHRlbnNpb24wDQYJKoZIhvcNAQEE		{{server_addr}}	{{server_port}}
+iBQADgYEANQTg2dSEXNPVBJYPSSEe6jLuFbAF7mULievq90yRzPDvXpzdBDxnevbg		{{server_addr}}	{{server_port}}
+iA2bkXJJUJ3CimwvSg2WVgu4VK+fJMFiXBZthHjkcjGbPydtO7f+WeQKaEUK7EZe1		{{server_addr}}	{{server_port}}
+irNGBhbyz/1RpgXRwAw+oBp/Ii9ZoNsde1qD4hkP3OOlTTQNP2kg=		{{server_addr}}	{{server_port}}
+i-----END CERTIFICATE-----		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i同时，也有反馈称 login.windows.net 出现同样问题，经过 DNS 查询，发现		{{server_addr}}	{{server_port}}
+iDNS 没有受到污染。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/26971412433584.png	/usr/uploads/26971412433584.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i上图左：Google DNS，通过 TCP 查询，右：114DNS，通过 UDP 查询		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/96551412433589.png	/usr/uploads/96551412433589.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i经过测试，通过 Windows Azure 中国版建立的 SSH 隧道进行访问，没有出现问		{{server_addr}}	{{server_port}}
+i题。上左图为本地查询结果，右图为 Azure 中国版查询结果，再次证实 DNS 没		{{server_addr}}	{{server_port}}
+i出问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/59401412433590.png	/usr/uploads/59401412433590.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i经过 tcping 测试（<https://github.com/jlyo/tcping>）到 443 端口的连接		{{server_addr}}	{{server_port}}
+i明显遭到劫持，毕竟 ping login.live.com 的延迟也有 200ms 左右，10ms 内		{{server_addr}}	{{server_port}}
+i做出响应是绝对不可能的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i大约晚上 10：30 左右，问题已经消失，到 login.live.com 的 SSL 连接恢复		{{server_addr}}	{{server_port}}
+i正常。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

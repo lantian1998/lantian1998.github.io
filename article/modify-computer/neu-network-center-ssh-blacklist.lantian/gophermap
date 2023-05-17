@@ -1,0 +1,35 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "使用东北大学网络中心的 SSH 黑名单系统"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [Linux, ssh]		{{server_addr}}	{{server_port}}
+idate: 2017-03-27 22:26:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2017/03/4117890454.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i东北大学网络中心在其网站上提供了一份 SSH 黑名单，列出了使用端口扫描工		{{server_addr}}	{{server_port}}
+i具扫描 SSH 端口的 IP 名单，貌似是由他们自己设立的蜜罐服务器检测统计的		{{server_addr}}	{{server_port}}
+i。同时，他们也提供了黑名单对应的 hosts.deny 文件的下载，允许用户使用		{{server_addr}}	{{server_port}}
+icron 一类的计划任务软件自动更新 SSH 黑名单列表并屏蔽这些扫描者（阻止它		{{server_addr}}	{{server_port}}
+i们登录）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不确定这套系统是什么时候推出的，但是它至少已经运行了两年了。另外，它对		{{server_addr}}	{{server_port}}
+i于这些 IP 的屏蔽时间貌似是最后一次发现的 60 天内。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I东北大学网络中心 网络威胁黑名单系统	/usr/uploads/2017/03/4117890454.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i使用方法：在服务器上安装 cron，然后运行如下命令安装脚本：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+ildd `which sshd` | grep libwrap		{{server_addr}}	{{server_port}}
+icd /usr/local/bin/		{{server_addr}}	{{server_port}}
+iwget antivirus.neu.edu.cn/ssh/soft/fetch_neusshbl.sh		{{server_addr}}	{{server_port}}
+ichmod +x fetch_neusshbl.sh		{{server_addr}}	{{server_port}}
+icd /etc/cron.hourly/		{{server_addr}}	{{server_port}}
+iln -s /usr/local/bin/fetch_neusshbl.sh .		{{server_addr}}	{{server_port}}
+i./fetch_neusshbl.sh		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个脚本会每小时连接东北大学网络中心的服务器，下载最新的 hosts.deny 并		{{server_addr}}	{{server_port}}
+i应用到你的系统上。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

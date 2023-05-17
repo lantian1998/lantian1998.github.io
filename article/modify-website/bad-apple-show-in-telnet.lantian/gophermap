@@ -1,0 +1,107 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Bad Apple 移植到 Telnet 中并成功放映"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [VPS, 折腾, Bad Apple]		{{server_addr}}	{{server_port}}
+idate: 2013-03-02 13:31:23		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i今天折腾了半天，把 Bad Apple 折腾到了我 VPS 的 Telnet 里面，用的就是我		{{server_addr}}	{{server_port}}
+i早些时候发		{{server_addr}}	{{server_port}}
+的		{{server_addr}}	{{server_port}}
+1命令行动画版	/article/modify-computer/bad-apple-command-line-art.lantian	{{server_addr}}	{{server_port}}
+i</a>。i		{{server_addr}}	{{server_port}}
+i如果大家想看，telnet xuyh0120.tk 或 telnet 5.175.156.249		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRound 1. 移植到 SSH		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因为本来和同学说好我要在 SSH 下折腾出一个，所以就先用这个了。首先把		{{server_addr}}	{{server_port}}
+iBad Apple 传到 VPS 上，我存在/opt/badapple。这个文件夹里两个文件		{{server_addr}}	{{server_port}}
+i：badapple 和 badapple.in（资源文件，我改过扩展名）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iuseradd badapple		{{server_addr}}	{{server_port}}
+ipasswd badapple		{{server_addr}}	{{server_port}}
+i# 密码我设的badapple		{{server_addr}}	{{server_port}}
+isu badapple		{{server_addr}}	{{server_port}}
+i# 切换过去		{{server_addr}}	{{server_port}}
+ichsh		{{server_addr}}	{{server_port}}
+i# 输入/opt/badapple/badapple		{{server_addr}}	{{server_port}}
+iexit		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSSH 登录看效果，结果 Error 2，找不到资源文件。我就在本地重新编译一遍		{{server_addr}}	{{server_port}}
+i（VPS 上没 FPC），把路径从相对改成绝对，上传，再次登录，就成功出现了		{{server_addr}}	{{server_port}}
+iBad Apple 的动画。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下一个要解决的问题是放完片子自动把用户 T 出去，我的一同学给我的建议居		{{server_addr}}	{{server_port}}
+i然是 pkill -9 sshd……这样效果不错，但是你对得起另外在看的人吗……不过我发		{{server_addr}}	{{server_port}}
+i现，片子放完，我用 pascal 写的这个程序结束之后，openssh 自动断掉了链接		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是 SSH 功能过分强大，会有安全隐患，比如 SSH 自带的 SFTP 文件传输协议		{{server_addr}}	{{server_port}}
+i，可以直接跳过 sh。所以需要在/etc/ssh/sshd_config 里找到这么一段：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i````bash		{{server_addr}}	{{server_port}}
+iSubsystem sftp /usr/libexec/openssh/sftp-server```		{{server_addr}}	{{server_port}}
+i````		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i具体内容有所差异，但是开头就是 Subsystem，前面加#号注释掉就可以。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i第二个要禁用的就是 TCP/IP 端口转发，这个功能强大，必须得封掉。还是在上		{{server_addr}}	{{server_port}}
+i面那个文件里加上：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i````bash		{{server_addr}}	{{server_port}}
+iAllowTcpForwarding no```		{{server_addr}}	{{server_port}}
+i````		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是在后来的研究中，我又发现了 SCP 文件传输，而且居然和 SSH 深度绑定，		{{server_addr}}	{{server_port}}
+i无法禁用。于是我只好悲剧的放弃了 SSH，删除了用户。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRound 2. 移植到 Telnet		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i大家在自己机器里执行一下 telnet towel.blinkenlights.nl 试试。放心，不		{{server_addr}}	{{server_port}}
+i会搞坏你的机器，但是 Vista 及以上用户一般看不到效果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这是国外一家网站提供的星球大战 ASCII 艺术，可以在 telnet 里看。所以我		{{server_addr}}	{{server_port}}
+i也准备试试。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iapt-get install telnet telnetd xinetd		{{server_addr}}	{{server_port}}
+icd /etc/xinetd.d		{{server_addr}}	{{server_port}}
+inano telnet		{{server_addr}}	{{server_port}}
+i#输入：		{{server_addr}}	{{server_port}}
+i#service telnet		{{server_addr}}	{{server_port}}
+i#{		{{server_addr}}	{{server_port}}
+i#        disable=no		{{server_addr}}	{{server_port}}
+i#        flags=REUSE		{{server_addr}}	{{server_port}}
+i#        socket_type=stream		{{server_addr}}	{{server_port}}
+i#        wait=no		{{server_addr}}	{{server_port}}
+i#        user=root		{{server_addr}}	{{server_port}}
+i#        server=/usr/sbin/in.telnetd		{{server_addr}}	{{server_port}}
+i#        log_in_failure+=USERID		{{server_addr}}	{{server_port}}
+i#}		{{server_addr}}	{{server_port}}
+iservice xinetd restart		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i当时我还没有删除 badapple 用户，所以 telnet 过去，输用户名密码就进了。		{{server_addr}}	{{server_port}}
+i但是输密码麻烦，而且在那个星球大战里面也无需输密码。所以我只好研究一下		{{server_addr}}	{{server_port}}
+itelnetd 了。执行 man telnetd，发现有一个-L 参数，可以自己设定登录用的		{{server_addr}}	{{server_port}}
+i程序，也就是 Login Shell。我在 xinetd 里加了参数，没用。结果 man 里还		{{server_addr}}	{{server_port}}
+i有一句：默认使用/usr/lib/telnetlogin。高级！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+icd /usr/lib		{{server_addr}}	{{server_port}}
+imv telnetlogin telnetlogin_backup		{{server_addr}}	{{server_port}}
+iln -sf /opt/badapple/badapple telnetlogin		{{server_addr}}	{{server_port}}
+iservice xinetd restart		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以上就是用 Bad Apple 替代原有 Login Shell，在登录阶段就开始显示动画。		{{server_addr}}	{{server_port}}
+i和 SSH 一样，动画放完 telnet 也会自动断掉。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i效果非常爽，除了出来动画前还有一句 Debian GNU Linux 6.0 什么的，但是我		{{server_addr}}	{{server_port}}
+i要的效果已经达到了，收工。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i演示地址：telnet xuyh0120.tk 或 telnet 5.175.156.249		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

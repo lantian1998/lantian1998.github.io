@@ -1,0 +1,189 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "神算法对班里进行八卦"		{{server_addr}}	{{server_port}}
+icategories: 转载		{{server_addr}}	{{server_port}}
+itags: [算法]		{{server_addr}}	{{server_port}}
+idate: 2014-03-22 17:43:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iB 站上看到的，[av1020723](http://www.bilibili.tv/video/av1020723/)。等		{{server_addr}}	{{server_port}}
+i会我可能会做一个 PHP 版出来。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<embed height="452" width="544" quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="http://static.hdslb.com/miniloader.swf" flashvars="aid=1020723&page=1" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"></embed>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i原程序为 Java 语言，在我电脑上运行不起来（原因未知），我看着源代码翻译		{{server_addr}}	{{server_port}}
+i成了 Pascal。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<blockquote>Java版：		{{server_addr}}	{{server_port}}
+i程序：http://pan.baidu.com/s/1sjtZs1v		{{server_addr}}	{{server_port}}
+i源代码：http://pan.baidu.com/s/1ntmFSLV</blockquote>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPascal 版源代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```pascal		{{server_addr}}	{{server_port}}
+iuses math;		{{server_addr}}	{{server_port}}
+itype		{{server_addr}}	{{server_port}}
+i    relation=record		{{server_addr}}	{{server_port}}
+i        p:longint;		{{server_addr}}	{{server_port}}
+i        q:longint;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+ivar		{{server_addr}}	{{server_port}}
+i    i,boy,girl,total,count:longint;		{{server_addr}}	{{server_port}}
+i    boylove,girllove:float;		{{server_addr}}	{{server_port}}
+i    cpresult:relation;		{{server_addr}}	{{server_port}}
+i    //Union变量		{{server_addr}}	{{server_port}}
+i    id,sz,lead:array[0..10000]of longint;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i//模拟java bernoulli函数功能		{{server_addr}}	{{server_port}}
+ifunction possibility(maybe:float):boolean;		{{server_addr}}	{{server_port}}
+i    var		{{server_addr}}	{{server_port}}
+i        i:longint;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        i:=random(10000);		{{server_addr}}	{{server_port}}
+i        if(i>maybe*10000)then exit(false) else exit(true);		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i//配对		{{server_addr}}	{{server_port}}
+ifunction cp(i:integer):relation;		{{server_addr}}	{{server_port}}
+i    var		{{server_addr}}	{{server_port}}
+i        j:float;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        cp.p:=i;		{{server_addr}}	{{server_port}}
+i        j:=-1;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        if(i<boy)then begin		{{server_addr}}	{{server_port}}
+i            if(possibility(1-boylove))then begin		{{server_addr}}	{{server_port}}
+i                //这个人不恋爱		{{server_addr}}	{{server_port}}
+i                cp.q:=i;		{{server_addr}}	{{server_port}}
+i            end else begin		{{server_addr}}	{{server_port}}
+i                //随机一个女生和他配对		{{server_addr}}	{{server_port}}
+i                while(j<boy)or(j>boy+girl)do begin		{{server_addr}}	{{server_port}}
+i                    j:=randg(boy+girl/2,girl/2);		{{server_addr}}	{{server_port}}
+i                end;		{{server_addr}}	{{server_port}}
+i                cp.q:=trunc(j);		{{server_addr}}	{{server_port}}
+i            end;		{{server_addr}}	{{server_port}}
+i        end else begin		{{server_addr}}	{{server_port}}
+i            if(possibility(1-girllove))then begin		{{server_addr}}	{{server_port}}
+i                //这个人不恋爱		{{server_addr}}	{{server_port}}
+i                cp.q:=i;		{{server_addr}}	{{server_port}}
+i            end else begin		{{server_addr}}	{{server_port}}
+i                //随机一个男生和她配对		{{server_addr}}	{{server_port}}
+i                while(j<0)or(j>boy)do begin		{{server_addr}}	{{server_port}}
+i                    j:=randg(boy+girl/2,girl/2);		{{server_addr}}	{{server_port}}
+i                end;		{{server_addr}}	{{server_port}}
+i                cp.q:=trunc(j);		{{server_addr}}	{{server_port}}
+i            end;		{{server_addr}}	{{server_port}}
+i        end;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i//Union部分代码		{{server_addr}}	{{server_port}}
+iprocedure unioninit(n:longint);		{{server_addr}}	{{server_port}}
+i    var		{{server_addr}}	{{server_port}}
+i        i:longint;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        for i:=0 to n-1 do begin		{{server_addr}}	{{server_port}}
+i            id[i]:=i;		{{server_addr}}	{{server_port}}
+i            sz[i]:=1;		{{server_addr}}	{{server_port}}
+i            lead[i]:=1;		{{server_addr}}	{{server_port}}
+i        end;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+ifunction unionfind(p:longint):longint;		{{server_addr}}	{{server_port}}
+i    var		{{server_addr}}	{{server_port}}
+i        t:longint;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        t:=p;		{{server_addr}}	{{server_port}}
+i        //找到关系的根源		{{server_addr}}	{{server_port}}
+i        while(t<>id[t])do t:=id[t];		{{server_addr}}	{{server_port}}
+i        unionfind:=t;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+ifunction unionconnected(p,q:longint):boolean;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        unionconnected:=unionfind(p)=unionfind(q);		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+iprocedure union(p,q:longint);		{{server_addr}}	{{server_port}}
+i    var		{{server_addr}}	{{server_port}}
+i        rootp,rootq:longint;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        rootp:=unionfind(p);		{{server_addr}}	{{server_port}}
+i        rootq:=unionfind(q);		{{server_addr}}	{{server_port}}
+i        //两个人的关系链条没有交叉		{{server_addr}}	{{server_port}}
+i        if(rootp<>rootq)then begin		{{server_addr}}	{{server_port}}
+i            if(sz[rootp]<sz[rootq])then begin		{{server_addr}}	{{server_port}}
+i                //把rootP链接到rootQ上表示他们相爱		{{server_addr}}	{{server_port}}
+i                id[rootp]:=rootq;		{{server_addr}}	{{server_port}}
+i                //链条长度相加		{{server_addr}}	{{server_port}}
+i                sz[rootq]:=sz[rootq]+sz[rootp];		{{server_addr}}	{{server_port}}
+i                //取消链条头标记		{{server_addr}}	{{server_port}}
+i                lead[rootp]:=0;		{{server_addr}}	{{server_port}}
+i            end else begin		{{server_addr}}	{{server_port}}
+i                id[rootq]:=rootp;		{{server_addr}}	{{server_port}}
+i                sz[rootp]:=sz[rootq]+sz[rootp];		{{server_addr}}	{{server_port}}
+i                lead[rootq]:=0;		{{server_addr}}	{{server_port}}
+i            end;		{{server_addr}}	{{server_port}}
+i            count:=count-1;		{{server_addr}}	{{server_port}}
+i        end;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+iprocedure unionshow;		{{server_addr}}	{{server_port}}
+i    var		{{server_addr}}	{{server_port}}
+i        i:longint;		{{server_addr}}	{{server_port}}
+i        poly:array[0..100]of longint;		{{server_addr}}	{{server_port}}
+i    begin		{{server_addr}}	{{server_port}}
+i        for i:=0 to 100 do poly[i]:=0;		{{server_addr}}	{{server_port}}
+i        for i:=0 to total do begin		{{server_addr}}	{{server_port}}
+i            if(lead[i]=0)then continue;		{{server_addr}}	{{server_port}}
+i            poly[sz[i]]:=poly[sz[i]]+1;		{{server_addr}}	{{server_port}}
+i        end;		{{server_addr}}	{{server_port}}
+i        for i:=1 to 100 do begin		{{server_addr}}	{{server_port}}
+i            if(poly[i]<>0)then begin		{{server_addr}}	{{server_port}}
+i                if(i=1)then writeln('Lonely: ',poly[1])		{{server_addr}}	{{server_port}}
+i                else if(i=2)then writeln('Couple: ',poly[2])		{{server_addr}}	{{server_port}}
+i                else writeln(i,' angle love: ',poly[i]);		{{server_addr}}	{{server_port}}
+i            end;		{{server_addr}}	{{server_port}}
+i        end;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+ibegin		{{server_addr}}	{{server_port}}
+i    randomize;		{{server_addr}}	{{server_port}}
+i    write('Boy number:');		{{server_addr}}	{{server_port}}
+i    readln(boy);		{{server_addr}}	{{server_port}}
+i    write('Girl number:');		{{server_addr}}	{{server_port}}
+i    readln(girl);		{{server_addr}}	{{server_port}}
+i    total:=boy+girl;		{{server_addr}}	{{server_port}}
+i    count:=total;		{{server_addr}}	{{server_port}}
+i    unioninit(total);		{{server_addr}}	{{server_port}}
+i    write('Boy love rate:');		{{server_addr}}	{{server_port}}
+i    readln(boylove);		{{server_addr}}	{{server_port}}
+i    while(boylove>1)do boylove:=boylove/100;		{{server_addr}}	{{server_port}}
+i    write('Girl love rate:');		{{server_addr}}	{{server_port}}
+i    readln(girllove);		{{server_addr}}	{{server_port}}
+i    while(girllove>1)do girllove:=girllove/100;		{{server_addr}}	{{server_port}}
+i    for i:=0 to total-1 do begin		{{server_addr}}	{{server_port}}
+i        //创建一对恋人		{{server_addr}}	{{server_port}}
+i        cpresult:=cp(i);		{{server_addr}}	{{server_port}}
+i        //把他们记录在案		{{server_addr}}	{{server_port}}
+i        //if(cpresult.p<>cpresult.q)then writeln('Lovers logged: ',cpresult.p,' ',cpresult.q);		{{server_addr}}	{{server_port}}
+i        union(cpresult.p,cpresult.q);		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+i    //列出恋情情况		{{server_addr}}	{{server_port}}
+i    unionshow;		{{server_addr}}	{{server_port}}
+iend.		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i算法解释：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先开 3 个数组，id 记录某个人的恋人，sz 记录关系链长度，lead 记录这个		{{server_addr}}	{{server_port}}
+i人是否一条关系链的开头。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i先设置全部 id 为这个人自己，sz 为 1，lead 为 true（1）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后用随机数扫一遍所有的人，如果这个人符合创建关系条件（随机数在恋爱率		{{server_addr}}	{{server_port}}
+i范围内），那么随机一个异性配偶配置关系。原作者用的随机数算法貌似是高斯		{{server_addr}}	{{server_port}}
+i算法，java 的高斯算法出结果后貌似还要开根号，pascal 的不用，然后我翻译		{{server_addr}}	{{server_port}}
+i时开了根号，然后调试死循环调了半个小时。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i配置关系时，先找到两个人关系链条的头，然后进行下一步操作。比如 1 和 31		{{server_addr}}	{{server_port}}
+i配置关系，1 的上一级链条是 2，2 的上级是 3，31 的上级是 32，那么实际上		{{server_addr}}	{{server_port}}
+i要把 3 和 32 配置关系，形成五角恋。然后两人关系链条长度相加，第一个人		{{server_addr}}	{{server_port}}
+i关系链条指向第二个人，取消第一个人的链条端点标记，完工。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最后扫 sz 数组输出各种情况的组数，完工。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

@@ -1,0 +1,40 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Aroma 文件管理器：Recovery 环境下的文件管理器"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [分区, Recovery, Android]		{{server_addr}}	{{server_port}}
+idate: 2014-07-25 15:32:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/39561406273492.jpg		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAroma 文件管理器是一个神奇的文件管理器，因为它运行在 Recovery 环境下。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i有的时候，改一个文件就能把安卓系统弄坏，开不起机，此时一般的做法是重新		{{server_addr}}	{{server_port}}
+i刷机，但是这样会丢失你的数据和你之前对系统做的所有修改。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAroma 文件管理器就可以让你把出错的文件删除或者替换，恢复系统。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i使用前提：你的手机的 Recovery 环境必须基于 CWM，不能是官方原版		{{server_addr}}	{{server_port}}
+i、TWRP。MIUI 触屏恢复环境未测试		{{server_addr}}	{{server_port}}
+i。</p><ol class=" list-paddingleft-2" style="list-style-type: decimal;"><li><p>你		{{server_addr}}	{{server_port}}
+i下载得到的是一个 zip 文件（链接在后面），它实际上是一个刷机包。把它放		{{server_addr}}	{{server_port}}
+i到你的 SD 卡里。</p></li><li><p>把手机关机，按住音量上键和电源键，当屏		{{server_addr}}	{{server_port}}
+i幕亮起出现手机厂商 LOGO 时放开电源键，继续按着音量上键，直到手机进入		{{server_addr}}	{{server_port}}
+iRecovery 模式。（部分手机是按住音量下和电源键，请查阅相应机型论坛		{{server_addr}}	{{server_port}}
+i）</p></li><li><p>按照正常刷入刷机包的步骤，刷入 Aroma 文件管理器的		{{server_addr}}	{{server_port}}
+izip 包。提示开始刷机后，你就应该进入了一个文件管理界面		{{server_addr}}	{{server_port}}
+i。</p></li></ol><p><img src="/usr/uploads/39561406273492.jpg" title="main-ui.25.jpg"/>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（图片来自 XDA 论坛）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个界面可以触摸屏操作，你可以在其中进行文件删除、复制等操作。当你完成		{{server_addr}}	{{server_port}}
+i操作时，点右下角 Menu-Exit，就可以退回 Recovery 界面，继续刷入刷机包或		{{server_addr}}	{{server_port}}
+i者重启。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i原帖地址：<http://forum.xda-developers.com/showthread.php?t=1646108>（		{{server_addr}}	{{server_port}}
+i链接在二楼底部，可以查找 aromafm-1.91.zip 找到）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i汉化版：<http://pan.baidu.com/s/1o6sNMxc> （基于别人的汉化做的，我增加		{{server_addr}}	{{server_port}}
+i了 Adobe 最新公开的思源黑体字体，然后改了汉化的几处错误，原帖找不到了		{{server_addr}}	{{server_port}}
+i）</p>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

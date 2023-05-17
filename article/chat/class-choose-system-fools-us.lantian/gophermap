@@ -1,0 +1,25 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "选课系统坑爹"		{{server_addr}}	{{server_port}}
+icategories: 闲聊		{{server_addr}}	{{server_port}}
+itags: [学校, Bug, 抢课]		{{server_addr}}	{{server_port}}
+idate: 2013-12-14 12:56:12		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i学校的抢课系统上 12 点开始选择社团，采用抢课制度，也就是名额有限，先到		{{server_addr}}	{{server_port}}
+i先得。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i之前用过这个系统选选修课，所以提前登录好（此时页面没有课可以选）		{{server_addr}}	{{server_port}}
+i，11：59：30 开始连续刷新页面，等待课程出现。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i12：00 课程准时出现，我找到我要的社团直接点了下去。页面上瞬间弹出一个		{{server_addr}}	{{server_port}}
+i窗口：报名失败，有课表冲突！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i仔细研究一下：社团时间都是周一、周二第八节课（当然实际不是这个时间），		{{server_addr}}	{{server_port}}
+i而以前的选修课是周一、周二、周四的七八两节和周三的五六两节。冲突了。。		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i之后学校短信来，13：00 重新开抢。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPending...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

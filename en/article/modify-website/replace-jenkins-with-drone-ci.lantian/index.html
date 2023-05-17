@@ -1,0 +1,327 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" itemscope itemtype="https://schema.org/Article"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="theme-color" content="#bbdefb"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><title>Replace Jenkins with Drone CI | Lan Tian @ Blog</title><meta name="title" content="Replace Jenkins with Drone CI | Lan Tian @ Blog"><meta name="keywords" content="Lan,Tian"><meta name="description" content="Lan Tian @ Blog"><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/en/article/modify-website/replace-jenkins-with-drone-ci.lantian"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-website/replace-jenkins-with-drone-ci.lantian" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-website/replace-jenkins-with-drone-ci.lantian" hreflang="en"><script>function addLoadEvent(o){var n=window.onload;"function"!=typeof window.onload?window.onload=o:window.onload=function(){n&&n(),o()}}</script><link rel="stylesheet" href="/assets/style.css?v=6c6e88f"><script defer src="/assets/script.main.bundle.js?v=6c6e88f"></script><meta name="copyright" content="Copyright 2012-2023 Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><meta name="application-name" content="Lan Tian @ Blog"><meta name="msapplication-TileColor" content="#03a9f4"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-navbutton-color" content="#03a9f4"><meta content="name=Lan Tian @ Blog;action-uri=/;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=Posts;action-uri=/en/page/archive;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=Himawari;action-uri=/en/page/himawari;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=DN42;action-uri=/en/page/dn42;icon-uri=/favicon.png" name="msapplication-task"><meta name="theme-color" content="#03a9f4"><meta name="mobile-web-app-capable" content="yes"><meta property="og:url" content="https://lantian.pub/en/article/modify-website/replace-jenkins-with-drone-ci.lantian"><meta property="og:type" content="website"><meta property="og:title" content="Replace Jenkins with Drone CI | Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/apple-touch-icon.png"><meta property="og:description" content="Jenkins is a free and open-source CI/CD software widely used in all kinds of scenarios...."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="en"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/en/article/modify-website/replace-jenkins-with-drone-ci.lantian"><meta name="twitter:title" content="Replace Jenkins with Drone CI | Lan Tian @ Blog"><meta name="twitter:image" content="https://lantian.pub/apple-touch-icon.png"><meta name="twitter:description" content="Jenkins is a free and open-source CI/CD software widely used in all kinds of scenarios...."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="Replace Jenkins with Drone CI | Lan Tian @ Blog"><meta itemprop="image" content="https://lantian.pub/apple-touch-icon.png"><meta itemprop="description" content="Jenkins is a free and open-source CI/CD software widely used in all kinds of scenarios...."><style>.spoiler{display:inline-flex}p.spoiler{display:flex}.spoiler a{pointer-events:none}.spoiler-blur,.spoiler-blur>*{transition:text-shadow .5s ease}.spoiler .spoiler-blur,.spoiler .spoiler-blur>*{color:transparent;background-color:rgba(0,0,0,0);text-shadow:0 0 10px grey;cursor:pointer}.spoiler .spoiler-blur:hover,.spoiler .spoiler-blur:hover>*{text-shadow:0 0 5px grey}.spoiler-box,.spoiler-box>*{transition:color .5s ease,background-color .5s ease}.spoiler .spoiler-box,.spoiler .spoiler-box>*{color:#000;background-color:#000;text-shadow:none}</style><meta name="generator" content="Hexo 6.3.0"></head><body><div id="bg"></div><div id="container" class="container"><nav class="lantian navbar navbar-expand-lg"><div class="container-fluid"><a class="navbar-brand" href="/en">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="lantian-navbar"><ul class="navbar-nav"><li class="nav-item d-none d-lg-block"><a class="nav-link" href="/en/page/archive">Posts</a></li><li class="nav-item d-none d-lg-block"><a class="nav-link" href="/en/page/himawari">Himawari</a></li><li class="nav-item d-none d-lg-block"><a class="nav-link" href="/en/page/dn42">DN42</a></li><li class="nav-item dropdown d-block d-lg-none"><a href="#" class="nav-link dropdown-toggle" id="pages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-fw fa-file"></i> Page <span class="caret"></span></a><ul class="dropdown-menu" aria-labelledby="pages-dropdown"><li><a class="dropdown-item" href="/en/page/archive">Posts</a></li><li><a class="dropdown-item" href="/en/page/himawari">Himawari</a></li><li><a class="dropdown-item" href="/en/page/dn42">DN42</a></li></ul></li></ul><ul class="navbar-nav ms-auto"><li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" id="languages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-fw fa-language"></i> Language <span class="caret"></span></a><ul class="dropdown-menu" aria-labelledby="languages-dropdown"><li><a href="/article/modify-website/replace-jenkins-with-drone-ci.lantian" class="dropdown-item"><span class="flag-icon flag-icon-cn"></span> Chinese</a></li><li><a href="/en/article/modify-website/replace-jenkins-with-drone-ci.lantian" class="dropdown-item"><span class="flag-icon flag-icon-us"></span> English</a></li><li><hr class="dropdown-divider"></li><li><a class="dropdown-item disabled" href="#">Not all pages have translations.</a></li><li><a class="dropdown-item disabled" href="#">You may see 404 - this is normal.</a></li></ul></li><li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" id="color-scheme-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-fw fa-adjust"></i> Night Mode</a><ul class="dropdown-menu" aria-labelledby="color-scheme-dropdown"><li><a id="color-scheme-auto" class="dropdown-item" href="#"><i class="fas fa-fw fa-adjust"></i> Auto</a></li><li><hr class="dropdown-divider"></li><li><a id="color-scheme-light" class="dropdown-item" href="#"><i class="fas fa-fw fa-sun"></i> Light</a></li><li><a id="color-scheme-dark" class="dropdown-item" href="#"><i class="fas fa-fw fa-moon"></i> Dark</a></li></ul></li></ul></div></div></nav><div class="d-flex"><div id="content"><article><div class="d-flex"><div class="post-info-wrap"><div class="post-info"><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-clock"></span><br><small>08-29</small></p><div class="post-meta-value">Published on <span class="badge badge-tag">2021-08-29 02:18</span></div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-file-alt"></span><br><small>Website and Servers</small></p><div class="post-meta-value">Category <a class="badge badge-tag" href="/en/category/modify-website">Website and Servers</a> &nbsp; &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-tag"></span><br><small>3 tags</small></p><div class="post-meta-value">Tags <a class="badge badge-tag" href="/en/tag/CI">CI</a> &nbsp; <a class="badge badge-tag" href="/en/tag/Jenkins">Jenkins</a> &nbsp; <a class="badge badge-tag" href="/en/tag/Drone">Drone</a> &nbsp; &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-qrcode"></span><br><small>QR</small></p><div class="post-meta-value"><img class="qrcode" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACs0lEQVR42u3a0U7EMAwEQP7/p+EVCV3ZdWJ0SNOnit6FTJFiY/vjI74+v13Jz5On3z/z6v7V08sXHh4e3sHWf17Pn3leJ1n/ec3nFxGtgIeHh7fGy4/s5EBP1j/BJ3vGw8PDex9eEhKeN/QcWvJgg4eHh/dfeEmaOysf4OHh4f0v3q1jvS1hJJ9sCxx4eHh427z2yH6H+5X+Hh4eHt5xVz1pd7VJdjJekASkaLd4eHh4C7z8wM2HBvJN58WFPF3Gw8PD+xveLJluj/iTYYK8JFEn33h4eHglL1miPXzz8axZIy3hFfEKDw8Pb8Q7b4bl270VzaI/DB4eHt4aLx8LaMsTJ+Xddj9Fjo+Hh4d3wGsXypPptoQxeynDyTI8PDy8BV7S6MqT4HYUIHkR7VM8PDy8Dd4JO996fvTnYaYdL8DDw8M74RUpaXAE562v9k3Pmmp4eHh4G7xZgyqnJt+dpeBFkRcPDw/vKi8pOmwMSCXINmWvm154eHh4V3knW0+2e7deEhUj8PDw8C7xZq2jZHN5m3/W3CrCDx4eHt4CL9liXnSI6h9xkj17QXh4eHh7vDaRbcsWswT9VrjCw8PD2+O1ffZ2FKAdEWipRRkCDw8P75jXtvnzcYGTZtjlF42Hh4e3wMvT5dko1clAwGwkCw8PD2+bN0t5ZyWMu0d/tHM8PDy8NV4bGGatrJPwkF94eHh4f8mblSSKCYW4bVYc/beiGR4eHt4B7GSIKh8LmA0TFKNaeHh4eAu8W8EjP+LbEsNJ+MHDw8Pb4yXBYON+VszNxw7w8PDwtnknjau77a5Z0Hq5Dh4eHt4b8JIk+DzJbgsfL38jHh4e3hvw2tGrvLXWji9Ee8DDw8Nb4yUp76wN1qbg7UjBcOgKDw8P74B34R/+UWv/ZDxrpb+Hh4eH9/t3vwD3kyvwBwOxJAAAAABJRU5ErkJggg==" alt="QR"></div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-list"></span><br><small>ToC</small></p><div class="post-meta-value"><ol id="quicklink"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#install-drone"><span class="toc-text">Install Drone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#basic-drone-cicd"><span class="toc-text">Basic Drone CI&#x2F;CD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#matrix-build"><span class="toc-text">Matrix Build</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aborting-build-early"><span class="toc-text">Aborting Build Early</span></a></li></ol></ol></div></div></div></div></div><div class="post-wrap"><h1 class="post-title"><a href="/en/article/modify-website/replace-jenkins-with-drone-ci.lantian" rel="bookmark" title="Replace Jenkins with Drone CI">Replace Jenkins with Drone CI</a></h1><div class="post-text"><p>Jenkins is a free and open-source CI/CD software widely used in all kinds of scenarios. The main advantage of Jenkins is its grand collection of plugins capable of all sorts of jobs, including deploying with <a target="_blank" rel="noopener" href="https://plugins.jenkins.io/scp/">SCP</a> or <a target="_blank" rel="noopener" href="https://plugins.jenkins.io/ansible/">Ansible</a>, analyzing code with <a target="_blank" rel="noopener" href="https://plugins.jenkins.io/cppcheck/">Cppcheck</a>, and notifying job status with <a target="_blank" rel="noopener" href="https://plugins.jenkins.io/telegram-notifications/">Telegram</a> or <a target="_blank" rel="noopener" href="https://plugins.jenkins.io/dingding-notifications/">DingTalk</a>.</p><p>Previously I also used Jenkins for automation of numerous jobs, like rebuilding <a target="_blank" rel="noopener" href="https://github.com/xddxdd/dockerfiles">my Docker images</a>, deploying the blog you're visiting right now, and even <a target="_blank" rel="noopener" href="https://github.com/y1ndan/genshinhelper">auto sign-in to Genshin Impact</a>.</p><p>But Jenkins is a CI with a long history, and its predecessor Hudson was released back in 2005. Therefore, Jenkins executes commands directly when it comes to running jobs instead of using modern approaches such as containers. This means that whether a CI pipeline succeeds will largely depend on the environment of the Worker host. For example, I rented a dedicated server with higher specs. As I rebuilt my whole environment, I was greeted with a number of weird issues, which took me about a week to find out and fix.</p><p>In addition, Jenkins is written in Java, hence its high memory consumption. A Jenkins instance can take as much as 1GB RAM, which makes it impossible for a low specs server to run even the simplest tasks. In addition, it's hard to use all the awesomeness of Jenkins plugins from a configuration file. A lot of plugins didn't implement the functionality of setting parameters from a Jenkinsfile, and such plugins can only be configured one-by-one on the Jenkins webpage, which is a complicated and error-prone process.</p><p>By comparison, <a target="_blank" rel="noopener" href="https://www.drone.io/">Drone</a> the container-based CI is a relatively modern approach. Drone recommends its <a target="_blank" rel="noopener" href="https://readme.drone.io/runner/docker/overview/">Docker-container-based Worker (called Runner by the Drone folks)</a>. As containers are used as execution environments, Drone fully exploits the advantage of containers: consistency. As long as the container image is consistent, you can be sure that those CI commands will be executed under the same environment every time, and its output should be stable. Of course, if your script cannot run in a container by any means, Drone also has runners for <a target="_blank" rel="noopener" href="https://readme.drone.io/runner/exec/overview/">executing commands directly on host</a> or <a target="_blank" rel="noopener" href="https://readme.drone.io/runner/digitalocean/overview/">in a DigitalOcean cloud server</a>.</p><p>Drone also has a lot of other advantages: Drone is written in Go, using one-tenth the memory of Jenkins; Drone's configuration files are written in YAML or Jsonnet, unlike the special language of Jenkinsfile; Although the number of <a target="_blank" rel="noopener" href="http://plugins.drone.io/">Drone's plugins</a> is comparatively smaller to Jenkins, all of them are Docker containers and can be used from the configuration file.</p><table><thead><tr><th></th><th>Jenkins</th><th>Drone</th></tr></thead><tbody><tr><td>Environment</td><td>Worker's host</td><td>Your choice: Docker container, Worker's host, or DigitalOcean cloud server</td></tr><tr><td>Config syntax</td><td>Special language: Jenkinsfile</td><td>Generic YAML/Jsonnet</td></tr><tr><td>Plugins</td><td>More, 1836 (as of this is written)</td><td>Less, 102</td></tr><tr><td>Plugin config</td><td>Web-based, some available through config file</td><td>All in config file</td></tr><tr><td>Programming Language</td><td>Java</td><td>Go</td></tr><tr><td>Memory Usage</td><td>More, around 1GB</td><td>Less, around 100MB</td></tr></tbody></table><h2 id="install-drone">Install Drone</h2><p>As a containerized CI, Drone itself is a Docker container and is configured through environment variables. Drone can be connected to <a target="_blank" rel="noopener" href="https://readme.drone.io/server/provider/github/">GitHub</a>, <a target="_blank" rel="noopener" href="https://readme.drone.io/server/provider/gitlab/">GitLab</a>, <a target="_blank" rel="noopener" href="https://readme.drone.io/server/provider/gitea/">Gitea</a> or <a target="_blank" rel="noopener" href="https://readme.drone.io/server/provider/bitbucket-cloud/">BitBucket</a>, please refer to the linked official documents for guides. However, one Drone instance can only connect to one of them. If you are like me, who needs CI on both GitHub and my own Gitea instance, you will need two sets of Drone.</p><p>If you plan to use Drone for deploying, you will need some way to pass your deployment keys to Drone. I use secret management software <a target="_blank" rel="noopener" href="https://www.vaultproject.io/">Vault</a>, <a target="_blank" rel="noopener" href="https://docs.drone.io/secret/external/vault/">with official support from Drone</a>. Of course, you can simply store your secrets in Drone, but not through its web UI. You must <a target="_blank" rel="noopener" href="https://readme.drone.io/secret/">use Drone's command-line tool for that</a>.</p><p>Here is my configuration with Vault and Drone for reference:</p><pre><code class="hljs language-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">'2.4'</span>
+<span class="hljs-attr">services:</span>
+    <span class="hljs-comment"># Secret management, Vault instance, and plugin for Drone</span>
+    <span class="hljs-attr">vault:</span>
+        <span class="hljs-attr">image:</span> <span class="hljs-string">vault</span>
+        <span class="hljs-attr">container_name:</span> <span class="hljs-string">vault</span>
+        <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span>
+        <span class="hljs-attr">command:</span> <span class="hljs-string">'server'</span>
+        <span class="hljs-attr">labels:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">com.centurylinklabs.watchtower.enable=false</span>
+        <span class="hljs-attr">volumes:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">'./conf/vault:/vault/config:ro'</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">'./data/vault:/vault/file'</span>
+
+    <span class="hljs-attr">drone-vault:</span>
+        <span class="hljs-attr">image:</span> <span class="hljs-string">drone/vault</span>
+        <span class="hljs-attr">container_name:</span> <span class="hljs-string">drone-vault</span>
+        <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span>
+        <span class="hljs-attr">environment:</span>
+            <span class="hljs-attr">DRONE_DEBUG:</span> <span class="hljs-string">'true'</span>
+            <span class="hljs-attr">DRONE_SECRET:</span> <span class="hljs-string">'***drone-vault secret***'</span>
+            <span class="hljs-attr">VAULT_ADDR:</span> <span class="hljs-string">'https://vault.lantian.pub'</span>
+            <span class="hljs-attr">VAULT_TOKEN:</span> <span class="hljs-string">'***Vault secret***'</span>
+        <span class="hljs-attr">depends_on:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">vault</span>
+
+    <span class="hljs-comment"># Drone #1 for my own Gitea</span>
+    <span class="hljs-attr">drone:</span>
+        <span class="hljs-attr">image:</span> <span class="hljs-string">drone/drone:2</span>
+        <span class="hljs-attr">container_name:</span> <span class="hljs-string">drone</span>
+        <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span>
+        <span class="hljs-attr">environment:</span>
+            <span class="hljs-attr">DRONE_GITEA_SERVER:</span> <span class="hljs-string">'https://git.lantian.pub'</span>
+            <span class="hljs-attr">DRONE_GITEA_CLIENT_ID:</span> <span class="hljs-string">'***Gitea OAuth ID***'</span>
+            <span class="hljs-attr">DRONE_GITEA_CLIENT_SECRET:</span> <span class="hljs-string">'***Gitea OAuth Secret***'</span>
+            <span class="hljs-attr">DRONE_RPC_SECRET:</span> <span class="hljs-string">'***Drone Runner Secret, generate with openssl rand -hex 16***'</span>
+            <span class="hljs-attr">DRONE_SERVER_HOST:</span> <span class="hljs-string">ci.lantian.pub</span>
+            <span class="hljs-attr">DRONE_SERVER_PROTO:</span> <span class="hljs-string">https</span>
+            <span class="hljs-attr">DRONE_USER_CREATE:</span> <span class="hljs-string">username:lantian,admin:true</span> <span class="hljs-comment"># Admin account</span>
+            <span class="hljs-attr">DRONE_JSONNET_ENABLED:</span> <span class="hljs-string">'true'</span>
+            <span class="hljs-attr">DRONE_STARLARK_ENABLED:</span> <span class="hljs-string">'true'</span>
+        <span class="hljs-attr">volumes:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">'./data/drone:/data'</span>
+
+    <span class="hljs-comment"># Drone #1's Docker Runner</span>
+    <span class="hljs-attr">drone-runner-docker:</span>
+        <span class="hljs-attr">image:</span> <span class="hljs-string">drone/drone-runner-docker:1</span>
+        <span class="hljs-attr">container_name:</span> <span class="hljs-string">drone-runner-docker</span>
+        <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span>
+        <span class="hljs-attr">environment:</span>
+            <span class="hljs-attr">DRONE_RPC_PROTO:</span> <span class="hljs-string">https</span>
+            <span class="hljs-attr">DRONE_RPC_HOST:</span> <span class="hljs-string">ci.lantian.pub</span>
+            <span class="hljs-attr">DRONE_RPC_SECRET:</span> <span class="hljs-string">'***Drone Secret, same as DRONE_RPC_SECRET above'</span>
+            <span class="hljs-attr">DRONE_RUNNER_CAPACITY:</span> <span class="hljs-number">4</span> <span class="hljs-comment"># Max parallel jobs</span>
+            <span class="hljs-attr">DRONE_RUNNER_NAME:</span> <span class="hljs-string">drone-docker</span>
+            <span class="hljs-attr">DRONE_SECRET_PLUGIN_ENDPOINT:</span> <span class="hljs-string">http://drone-vault:3000</span>
+            <span class="hljs-attr">DRONE_SECRET_PLUGIN_TOKEN:</span> <span class="hljs-string">'***drone-vault secret***'</span>
+        <span class="hljs-attr">volumes:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">'/var/run:/var/run'</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">'/cache:/cache'</span>
+        <span class="hljs-attr">depends_on:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">drone</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">drone-vault</span>
+
+    <span class="hljs-comment"># Drone #1 for GitHub</span>
+    <span class="hljs-attr">drone-github:</span>
+        <span class="hljs-attr">image:</span> <span class="hljs-string">drone/drone:2</span>
+        <span class="hljs-attr">container_name:</span> <span class="hljs-string">drone-github</span>
+        <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span>
+        <span class="hljs-attr">environment:</span>
+            <span class="hljs-attr">DRONE_GITHUB_CLIENT_ID:</span> <span class="hljs-string">'**GitHub OAuth ID**'</span>
+            <span class="hljs-attr">DRONE_GITHUB_CLIENT_SECRET:</span> <span class="hljs-string">'***GitHub OAuth Secret***'</span>
+            <span class="hljs-attr">DRONE_RPC_SECRET:</span> <span class="hljs-string">'***Drone Runner Secret, generate with openssl rand -hex 16***'</span>
+            <span class="hljs-attr">DRONE_SERVER_HOST:</span> <span class="hljs-string">ci-github.lantian.pub</span>
+            <span class="hljs-attr">DRONE_SERVER_PROTO:</span> <span class="hljs-string">https</span>
+            <span class="hljs-attr">DRONE_USER_CREATE:</span> <span class="hljs-string">username:xddxdd,admin:true</span> <span class="hljs-comment"># Admin account</span>
+            <span class="hljs-attr">DRONE_REGISTRATION_CLOSED:</span> <span class="hljs-string">'true'</span> <span class="hljs-comment"># Disallow new user registration</span>
+            <span class="hljs-attr">DRONE_JSONNET_ENABLED:</span> <span class="hljs-string">'true'</span>
+            <span class="hljs-attr">DRONE_STARLARK_ENABLED:</span> <span class="hljs-string">'true'</span>
+        <span class="hljs-attr">volumes:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">'./data/drone-github:/data'</span>
+
+    <span class="hljs-comment"># Drone #2's Docker Runner</span>
+    <span class="hljs-attr">drone-github-runner-docker:</span>
+        <span class="hljs-attr">image:</span> <span class="hljs-string">drone/drone-runner-docker:1</span>
+        <span class="hljs-attr">container_name:</span> <span class="hljs-string">drone-github-runner-docker</span>
+        <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span>
+        <span class="hljs-attr">environment:</span>
+            <span class="hljs-attr">DRONE_RPC_PROTO:</span> <span class="hljs-string">https</span>
+            <span class="hljs-attr">DRONE_RPC_HOST:</span> <span class="hljs-string">ci-github.lantian.pub</span>
+            <span class="hljs-attr">DRONE_RPC_SECRET:</span> <span class="hljs-string">'***Drone Secret, same as DRONE_RPC_SECRET above'</span>
+            <span class="hljs-attr">DRONE_RUNNER_CAPACITY:</span> <span class="hljs-number">4</span> <span class="hljs-comment"># Max parallel jobs</span>
+            <span class="hljs-attr">DRONE_RUNNER_NAME:</span> <span class="hljs-string">drone-docker</span>
+            <span class="hljs-attr">DRONE_SECRET_PLUGIN_ENDPOINT:</span> <span class="hljs-string">http://drone-vault:3000</span>
+            <span class="hljs-attr">DRONE_SECRET_PLUGIN_TOKEN:</span> <span class="hljs-string">'***drone-vault secret***'</span>
+        <span class="hljs-attr">volumes:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">'/var/run:/var/run'</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">'/cache:/cache'</span>
+        <span class="hljs-attr">depends_on:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">drone-github</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">drone-vault</span>
+</code></pre><h2 id="basic-drone-cicd">Basic Drone CI/CD</h2><p>After setting up Drone, the next step is to add a task. Here I'll use the example of deploying my Hexo blog.</p><p>I already have a set of deployment scripts for the following tasks:</p><ul><li>Install node_modules</li><li><code>hexo generate</code></li><li><code>hexo deploy</code> to GitHub Pages (as a backup)</li><li>Convert all images to WebP, and Gzip and Brotli compress all static resources</li><li>Rsync generated files to all of my nodes with Ansible</li></ul><p>In addition, since my blog uses Dependabot to update dependencies automatically, Dependabot may create pull requests from time to time. Obviously, the pull requests shouldn't be deployed to my nodes. The CI should just try generating the files and see if it fails.</p><p>So here comes the most basic form of our configuration, written to <code>.drone.yaml</code>:</p><pre><code class="hljs language-yaml"><span class="hljs-attr">kind:</span> <span class="hljs-string">pipeline</span>
+<span class="hljs-attr">type:</span> <span class="hljs-string">docker</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">default</span>
+
+<span class="hljs-attr">trigger:</span>
+    <span class="hljs-attr">branch:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-string">master</span>
+
+<span class="hljs-attr">steps:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span>
+      <span class="hljs-attr">image:</span> <span class="hljs-string">node:15-alpine</span>
+      <span class="hljs-attr">commands:</span>
+          <span class="hljs-comment"># Not all packages are needed: this is to be consistent with following steps</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">apk</span> <span class="hljs-string">add</span> <span class="hljs-string">--no-cache</span> <span class="hljs-string">build-base</span> <span class="hljs-string">bash</span> <span class="hljs-string">git</span> <span class="hljs-string">openssh</span> <span class="hljs-string">wget</span> <span class="hljs-string">python3</span> <span class="hljs-string">gzip</span> <span class="hljs-string">brotli</span> <span class="hljs-string">zstd</span> <span class="hljs-string">parallel</span> <span class="hljs-string">imagemagick</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">npm</span> <span class="hljs-string">install</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">node_modules/hexo/bin/hexo</span> <span class="hljs-string">generate</span>
+
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">hexo</span> <span class="hljs-string">deploy</span>
+      <span class="hljs-attr">image:</span> <span class="hljs-string">node:15-alpine</span>
+      <span class="hljs-attr">commands:</span>
+          <span class="hljs-comment"># Install packages</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">apk</span> <span class="hljs-string">add</span> <span class="hljs-string">--no-cache</span> <span class="hljs-string">build-base</span> <span class="hljs-string">bash</span> <span class="hljs-string">git</span> <span class="hljs-string">openssh</span> <span class="hljs-string">wget</span> <span class="hljs-string">python3</span> <span class="hljs-string">gzip</span> <span class="hljs-string">brotli</span> <span class="hljs-string">zstd</span> <span class="hljs-string">parallel</span> <span class="hljs-string">imagemagick</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">node_modules/hexo/bin/hexo</span> <span class="hljs-string">deploy</span>
+      <span class="hljs-comment"># Don't deploy Dependabot's PRs</span>
+      <span class="hljs-attr">when:</span>
+          <span class="hljs-attr">event:</span>
+              <span class="hljs-attr">exclude:</span>
+                  <span class="hljs-bullet">-</span> <span class="hljs-string">pull_request</span>
+
+    <span class="hljs-comment"># Some subsequent steps are skipped</span>
+</code></pre><p>This config will generate the static files and attempt <code>hexo deploy</code>, but it will fail since it doesn't have the SSH keys. For obvious reason I won't recommend adding your SSH key directly to the config. You should instead add it to Vault (or Drone's secret storage), and use it from the config file:</p><pre><code class="hljs language-yaml"><span class="hljs-comment"># Fetch SSH key from Vault, the repository must be set to Trusted in Drone</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">secret</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">id_ed25519</span>
+<span class="hljs-attr">get:</span>
+    <span class="hljs-comment"># This path is shown as kv/ssh in Vault. "data" must be added.</span>
+    <span class="hljs-attr">path:</span> <span class="hljs-string">kv/data/ssh</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">id_ed25519</span>
+
+<span class="hljs-meta">---</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">pipeline</span>
+<span class="hljs-attr">type:</span> <span class="hljs-string">docker</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">default</span>
+
+<span class="hljs-comment"># ...</span>
+
+<span class="hljs-attr">steps:</span>
+    <span class="hljs-comment"># ...</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">hexo</span> <span class="hljs-string">deploy</span>
+      <span class="hljs-attr">image:</span> <span class="hljs-string">node:15-alpine</span>
+      <span class="hljs-attr">environment:</span>
+          <span class="hljs-comment"># Use the SSH key fetched from Vault, set as environment variable</span>
+          <span class="hljs-attr">SSH_KEY:</span>
+              <span class="hljs-attr">from_secret:</span> <span class="hljs-string">id_ed25519</span>
+      <span class="hljs-attr">commands:</span>
+          <span class="hljs-comment"># Install SSH key</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">mkdir</span> <span class="hljs-string">-p</span> <span class="hljs-string">/root/.ssh/</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">echo</span> <span class="hljs-string">"$SSH_KEY"</span> <span class="hljs-string">&gt;</span> <span class="hljs-string">/root/.ssh/id_ed25519</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">chmod</span> <span class="hljs-number">600</span> <span class="hljs-string">/root/.ssh/id_ed25519</span>
+
+          <span class="hljs-comment"># Configure SSH, mainly disable host key verification, or login will fail</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">|
+              cat &lt;&lt;EOF &gt;/root/.ssh/config
+              StrictHostKeyChecking no
+              UserKnownHostsFile=/dev/null
+              VerifyHostKeyDNS yes
+              LogLevel ERROR
+              EOF
+</span>
+          <span class="hljs-comment"># Install packages... redacted</span>
+</code></pre><p>Now we have SSH keys in the CI containers, and it will be able to connect to GitHub or other deployment targets via SSH.</p><p>But another problem exists: every time the build is started, the container is in a clean state without <code>node_modules</code>, which means a considerable amount of time is needed to download <del>this blackhole</del>.</p><p>The good news is that Drone provides a plugin to cache intermediate directories and decompress them on the next build:</p><pre><code class="hljs language-yaml"><span class="hljs-comment"># ...</span>
+<span class="hljs-attr">steps:</span>
+    <span class="hljs-comment"># Restore the last cache</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">restore</span> <span class="hljs-string">cache</span>
+      <span class="hljs-attr">image:</span> <span class="hljs-string">meltwater/drone-cache:dev</span>
+      <span class="hljs-attr">settings:</span>
+          <span class="hljs-attr">backend:</span> <span class="hljs-string">'filesystem'</span>
+          <span class="hljs-attr">restore:</span> <span class="hljs-literal">true</span>
+          <span class="hljs-attr">cache_key:</span> <span class="hljs-string">'volume'</span>
+          <span class="hljs-attr">archive_format:</span> <span class="hljs-string">'gzip'</span>
+          <span class="hljs-attr">filesystem_cache_root:</span> <span class="hljs-string">'/cache'</span>
+          <span class="hljs-comment"># Cache these two folders</span>
+          <span class="hljs-attr">mount:</span>
+              <span class="hljs-bullet">-</span> <span class="hljs-string">'node_modules'</span>
+              <span class="hljs-bullet">-</span> <span class="hljs-string">'img_cache'</span>
+      <span class="hljs-attr">volumes:</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">cache</span>
+            <span class="hljs-attr">path:</span> <span class="hljs-string">/cache</span>
+
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span>
+      <span class="hljs-comment"># ...</span>
+
+    <span class="hljs-comment"># Cache result generated this time</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">rebuild</span> <span class="hljs-string">cache</span>
+      <span class="hljs-attr">image:</span> <span class="hljs-string">meltwater/drone-cache:dev</span>
+      <span class="hljs-attr">settings:</span>
+          <span class="hljs-attr">backend:</span> <span class="hljs-string">'filesystem'</span>
+          <span class="hljs-attr">rebuild:</span> <span class="hljs-literal">true</span>
+          <span class="hljs-attr">cache_key:</span> <span class="hljs-string">'volume'</span>
+          <span class="hljs-attr">archive_format:</span> <span class="hljs-string">'gzip'</span>
+          <span class="hljs-attr">filesystem_cache_root:</span> <span class="hljs-string">'/cache'</span>
+          <span class="hljs-comment"># Cache these two folders</span>
+          <span class="hljs-attr">mount:</span>
+              <span class="hljs-bullet">-</span> <span class="hljs-string">'node_modules'</span>
+              <span class="hljs-bullet">-</span> <span class="hljs-string">'img_cache'</span>
+      <span class="hljs-attr">volumes:</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">cache</span>
+            <span class="hljs-attr">path:</span> <span class="hljs-string">/cache</span>
+
+<span class="hljs-comment"># Cache files are stored to /cache on the host, need repo set to Trusted in Drone</span>
+<span class="hljs-attr">volumes:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">cache</span>
+      <span class="hljs-attr">host:</span>
+          <span class="hljs-attr">path:</span> <span class="hljs-string">/cache</span>
+</code></pre><p>We can also have Telegram notifications on build failures:</p><pre><code class="hljs language-yaml"><span class="hljs-comment"># Fetch Telegram token and target account from Vault</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">secret</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">tg_token</span>
+<span class="hljs-attr">get:</span>
+    <span class="hljs-attr">path:</span> <span class="hljs-string">kv/data/telegram</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">token</span>
+
+<span class="hljs-meta">---</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">secret</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">tg_target</span>
+<span class="hljs-attr">get:</span>
+    <span class="hljs-attr">path:</span> <span class="hljs-string">kv/data/telegram</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">target</span>
+
+<span class="hljs-meta">---</span>
+<span class="hljs-comment"># ...</span>
+<span class="hljs-attr">steps:</span>
+    <span class="hljs-comment"># ...</span>
+
+    <span class="hljs-comment"># Handle notification on failure</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">telegram</span> <span class="hljs-string">notification</span> <span class="hljs-string">for</span> <span class="hljs-string">failure</span>
+      <span class="hljs-attr">image:</span> <span class="hljs-string">appleboy/drone-telegram</span>
+      <span class="hljs-attr">settings:</span>
+          <span class="hljs-attr">token:</span>
+              <span class="hljs-attr">from_secret:</span> <span class="hljs-string">tg_token</span>
+          <span class="hljs-attr">to:</span>
+              <span class="hljs-attr">from_secret:</span> <span class="hljs-string">tg_target</span>
+      <span class="hljs-attr">when:</span>
+          <span class="hljs-attr">status:</span>
+              <span class="hljs-bullet">-</span> <span class="hljs-string">failure</span>
+
+    <span class="hljs-comment"># Handle notification on failure, not sent when triggered from a cron job</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">telegram</span> <span class="hljs-string">notification</span> <span class="hljs-string">for</span> <span class="hljs-string">success</span>
+      <span class="hljs-attr">image:</span> <span class="hljs-string">appleboy/drone-telegram</span>
+      <span class="hljs-attr">settings:</span>
+          <span class="hljs-attr">token:</span>
+              <span class="hljs-attr">from_secret:</span> <span class="hljs-string">tg_token</span>
+          <span class="hljs-attr">to:</span>
+              <span class="hljs-attr">from_secret:</span> <span class="hljs-string">tg_target</span>
+      <span class="hljs-attr">when:</span>
+          <span class="hljs-attr">branch:</span>
+              <span class="hljs-bullet">-</span> <span class="hljs-string">master</span>
+          <span class="hljs-attr">status:</span>
+              <span class="hljs-bullet">-</span> <span class="hljs-string">success</span>
+          <span class="hljs-attr">event:</span>
+              <span class="hljs-attr">exclude:</span>
+                  <span class="hljs-bullet">-</span> <span class="hljs-string">cron</span>
+</code></pre><p>Now we have a Drone configuration with deployments, caching, and Telegram notifications.</p><h2 id="matrix-build">Matrix Build</h2><p>Sometimes we need to test our programs on different environments, such as Python 2.7/3.6/3.7/3.8/3.9, GCC/Clang, etc. Drone supports the Jsonnet configuration format to define jobs in batches.</p><p><a target="_blank" rel="noopener" href="https://github.com/xddxdd/route-chain/blob/master/.drone.jsonnet">Take my route-chain project for example</a>, some contents are removed/simplified for demonstration:</p><pre><code class="hljs language-json"><span class="hljs-comment">// Define a "function" to create a pipeline</span>
+local DebianCompileJob(image<span class="hljs-punctuation">,</span> kernel_headers) = <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">"kind"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"pipeline"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"type"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"docker"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> image<span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"steps"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"build"</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"image"</span><span class="hljs-punctuation">:</span> image<span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"commands"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-string">"apt-get update"</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-string">"DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install build-essential "</span> + kernel_headers<span class="hljs-punctuation">,</span>
+        <span class="hljs-string">"make"</span>
+      <span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"telegram notification"</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"image"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"appleboy/drone-telegram"</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"settings"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+        <span class="hljs-attr">"token"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">"from_secret"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"tg_token"</span>
+        <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"to"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">"from_secret"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"tg_target"</span>
+        <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">}</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>;
+
+<span class="hljs-punctuation">[</span>
+  <span class="hljs-comment">// Telegram token and target account</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">"kind"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"secret"</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"tg_token"</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"get"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">"path"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"kv/data/telegram"</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"token"</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">"kind"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"secret"</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"tg_target"</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"get"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">"path"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"kv/data/telegram"</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"target"</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-comment">// Call DebianCompileJob in batches to create jobs for different images and linux-headers packages</span>
+  DebianCompileJob('debian<span class="hljs-punctuation">:</span>jessie'<span class="hljs-punctuation">,</span> 'linux-headers-amd64')<span class="hljs-punctuation">,</span>
+  DebianCompileJob('debian<span class="hljs-punctuation">:</span>stretch'<span class="hljs-punctuation">,</span> 'linux-headers-amd64')<span class="hljs-punctuation">,</span>
+  DebianCompileJob('debian<span class="hljs-punctuation">:</span>buster'<span class="hljs-punctuation">,</span> 'linux-headers-amd64')<span class="hljs-punctuation">,</span>
+  DebianCompileJob('debian<span class="hljs-punctuation">:</span>bullseye'<span class="hljs-punctuation">,</span> 'linux-headers-amd64')<span class="hljs-punctuation">,</span>
+  DebianCompileJob('debian<span class="hljs-punctuation">:</span>unstable'<span class="hljs-punctuation">,</span> 'linux-headers-amd64')<span class="hljs-punctuation">,</span>
+  DebianCompileJob('ubuntu<span class="hljs-punctuation">:</span>xenial'<span class="hljs-punctuation">,</span> 'linux-headers-generic')<span class="hljs-punctuation">,</span>
+  DebianCompileJob('ubuntu<span class="hljs-punctuation">:</span>bionic'<span class="hljs-punctuation">,</span> 'linux-headers-generic')<span class="hljs-punctuation">,</span>
+  DebianCompileJob('ubuntu<span class="hljs-punctuation">:</span>focal'<span class="hljs-punctuation">,</span> 'linux-headers-generic')<span class="hljs-punctuation">,</span>
+<span class="hljs-punctuation">]</span>
+</code></pre><p>Save the config to <code>.drone.jsonnet</code>, and change the config file name from <code>.drone.yaml</code> to <code>.drone.jsonnet</code>, and you're good to go.</p><h2 id="aborting-build-early">Aborting Build Early</h2><p>Sometimes we don't need to run all jobs in a Matrix Build. For example, I don't need to rebuild all Docker images on every commit to my <a target="_blank" rel="noopener" href="https://github.com/xddxdd/dockerfiles">Dockerfiles repository</a>, specifically 14 (images) multiplied by 8 (architectures) to 112 jobs.</p><p>Fortunately, Drone supports aborting a pipeline early, just quit at some step with exit code 78 like this:</p><pre><code class="hljs language-yaml"><span class="hljs-comment"># ...</span>
+<span class="hljs-attr">steps:</span>
+    <span class="hljs-comment"># ...</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">skip</span> <span class="hljs-string">build</span>
+      <span class="hljs-attr">image:</span> <span class="hljs-string">alpine</span>
+      <span class="hljs-attr">commands:</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">./should_build.sh</span> <span class="hljs-string">&amp;&amp;</span> <span class="hljs-string">exit</span> <span class="hljs-number">0</span> <span class="hljs-string">||</span> <span class="hljs-string">exit</span> <span class="hljs-number">78</span>
+</code></pre><p>An actual example can be found <a target="_blank" rel="noopener" href="https://github.com/xddxdd/dockerfiles/blob/4268d0f076ee76efdff670e2f9b0dae5961a968f/.drone.jsonnet">at this commit in my Dockerfiles repo</a>.</p><p>But since Drone runs builds in containers, and containers are somewhat slow to start, handling 112 pipelines alone needs tens of minutes, even if all jobs quit immediately. Therefore, <a target="_blank" rel="noopener" href="https://github.com/xddxdd/dockerfiles/blob/master/.drone.jsonnet">I adjusted the Dockerfiles repo configuration to run one pipeline for each architecture</a>, and to determine the images to be built from the commit message. In this case, only 8 pipelines are needed, and the execution time for an empty job won't be too long.</p></div><div class="clearfix" id="post-navi"><div class="float-end text-end"><a href="/en/article/modify-website/lookup-any-whois-with-nginx.lantian" title="Lookup Any Public WHOIS with this nginx-based Server">Lookup Any Public WHOIS with this nginx-based Server</a><br>Next post &raquo;</div><div class="float-start text-start position-absolute">&laquo; Previous post<br><a href="/en/article/modify-website/nixos-why.lantian" title="NixOS Series 1: Why I fell in love">NixOS Series 1: Why I fell in love</a></div></div><div id="waline"></div><script>var waline_config={el:"#waline",serverURL:window.location.origin,path:"/en/article/modify-website/replace-jenkins-with-drone-ci.lantian",lang:"en-US",requiredMeta:["nick","mail"],login:"disable",emoji:["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"]}</script></div></div></article></div><aside class="d-none d-xl-block"><section class="widget"><h3>Latest posts</h3><ul class="list-unstyled"><li>05-12 <a href="/en/article/modify-website/how-to-kill-the-dn42-network.lantian">How to Kill the DN42 Network (Updated 2023-05-12)</a></li><li>05-08 <a href="/en/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian">NVIDIA GPU Passthrough on an Optimus MUXed Laptop (Updated 2023-05)</a></li><li>04-17 <a href="/en/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian">Fix China Telecom 4G Roaming on AOSP ROM by Changing APN</a></li><li>03-26 <a href="/en/article/random-notes/old-hp-workstation-as-all-in-one.lantian">Notes on Setting Up NAS+Router on Old HP Workstation</a></li><li>01-14 <a href="/en/article/modify-computer/nixos-impermanence.lantian">NixOS Series 4: &#34;Stateless&#34; Operating System</a></li><li>06-21 <a href="/en/article/modify-computer/nixos-packaging.lantian">NixOS Series 3: Software Packaging 101</a></li><li>04-04 <a href="/en/article/modify-computer/reverse-engineered-linux-driver-for-hp-omen-macro-keys.lantian">Reverse Engineered Linux Driver for HP OMEN Macro Keys</a></li><li>02-06 <a href="/en/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian">Low-cost GeoDNS with NS1 and UptimeRobot/Freshping</a></li><li>12-15 <a href="/en/article/chat/how-i-nuked-my-btrfs-partition.lantian">I Moved My SSD to My New Laptop. This is What Happened To My Btrfs Data</a></li><li>11-13 <a href="/en/article/modify-website/nixos-initial-config-flake-deploy.lantian">NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy</a></li><li>10-11 <a href="/en/article/modify-website/nixos-why.lantian">NixOS Series 1: Why I fell in love</a></li><li>08-29 <a href="/en/article/modify-website/replace-jenkins-with-drone-ci.lantian">Replace Jenkins with Drone CI</a></li><li>07-18 <a href="/en/article/modify-website/lookup-any-whois-with-nginx.lantian">Lookup Any Public WHOIS with this nginx-based Server</a></li><li>05-02 <a href="/en/article/modify-website/dn42-experimental-network-2020.lantian">DN42 Experimental Network: Intro and Registration (Updated 2022-12)</a></li><li>04-19 <a href="/en/article/modify-website/serve-dn42-whois-with-nginx.lantian">Setting up DN42 WHOIS Server with Nginx</a></li></ul></section><section class="widget"><h3>Latest comments</h3><ul class="list-unstyled" id="recent-comments"><li><a href="#">Loading...</a></li></ul></section><section class="widget"><h3>Others</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-rss"></i> <a href="/rss2.xml" target="_blank">RSS Feed</a> | <a href="/feed.xml" target="_blank">Atom</a> | <a href="/feed.json" target="_blank">JSON</a></li><li><i class="fas fa-fw fa-globe"></i> <a href="https://stats.uptimerobot.com/BLK6VsRkR" target="_blank">Server Status</a></li><li><i class="fas fa-fw fa-sitemap"></i> <a href="https://lg.lantian.pub" target="_blank">DN42 Looking Glass</a></li></ul></section><section class="widget"><h3>Links</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://0x7f.cc">0x7f Blog 🐑</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="http://foreverblog.cn">10 Year&#39;s Promise (Forever Blog)</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://alanyhq.com">Alanyhq</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://blog.baoshuo.ren/?utm_source=friends">Baoshuo&#39;s Blog</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://blog.cas7.moe">Blog of Moecast</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://jerryxiao.cc">JerryXiao</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://sangsir.com">SangSir</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://snli.org">Shucheng Li</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://yuetau.net">YuetAu&#39;s Spot</a></li></ul></section></aside></div><footer class="lantian clearfix"><div id="copyright" class="float-end text-end"><i class="fas fa-copyright"></i> 2012-2023 Lan Tian @ Blog<br><small>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> @ 2023-05-17 15:12</small></div></footer></div></body></html>

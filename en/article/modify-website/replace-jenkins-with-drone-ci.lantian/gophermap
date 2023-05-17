@@ -1,0 +1,523 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Replace Jenkins with Drone CI"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [CI, Jenkins, Drone]		{{server_addr}}	{{server_port}}
+idate: 2021-08-29 02:18:32		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iJenkins is a free and open-source CI/CD software widely used in all		{{server_addr}}	{{server_port}}
+ikinds of scenarios. The main advantage of Jenkins is its grand		{{server_addr}}	{{server_port}}
+icollection of plugins capable of all sorts of jobs, including		{{server_addr}}	{{server_port}}
+ideploying with [SCP](https://plugins.jenkins.io/scp/) or		{{server_addr}}	{{server_port}}
+i[Ansible](https://plugins.jenkins.io/ansible/), analyzing code with		{{server_addr}}	{{server_port}}
+i[Cppcheck](https://plugins.jenkins.io/cppcheck/), and notifying job		{{server_addr}}	{{server_port}}
+istatus with		{{server_addr}}	{{server_port}}
+i[Telegram](https://plugins.jenkins.io/telegram-notifications/) or		{{server_addr}}	{{server_port}}
+i[DingTalk](https://plugins.jenkins.io/dingding-notifications/).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPreviously I also used Jenkins for automation of numerous jobs, like		{{server_addr}}	{{server_port}}
+irebuilding [my Docker images](https://github.com/xddxdd/dockerfiles),		{{server_addr}}	{{server_port}}
+ideploying the blog you're visiting right now, and even		{{server_addr}}	{{server_port}}
+i[auto sign-in to Genshin Impact](https://github.com/y1ndan/genshinhelper).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut Jenkins is a CI with a long history, and its predecessor Hudson		{{server_addr}}	{{server_port}}
+iwas released back in 2005. Therefore, Jenkins executes commands		{{server_addr}}	{{server_port}}
+idirectly when it comes to running jobs instead of using modern		{{server_addr}}	{{server_port}}
+iapproaches such as containers. This means that whether a CI pipeline		{{server_addr}}	{{server_port}}
+isucceeds will largely depend on the environment of the Worker host.		{{server_addr}}	{{server_port}}
+iFor example, I rented a dedicated server with higher specs. As I		{{server_addr}}	{{server_port}}
+irebuilt my whole environment, I was greeted with a number of weird		{{server_addr}}	{{server_port}}
+iissues, which took me about a week to find out and fix.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn addition, Jenkins is written in Java, hence its high memory		{{server_addr}}	{{server_port}}
+iconsumption. A Jenkins instance can take as much as 1GB RAM, which		{{server_addr}}	{{server_port}}
+imakes it impossible for a low specs server to run even the simplest		{{server_addr}}	{{server_port}}
+itasks. In addition, it's hard to use all the awesomeness of Jenkins		{{server_addr}}	{{server_port}}
+iplugins from a configuration file. A lot of plugins didn't implement		{{server_addr}}	{{server_port}}
+ithe functionality of setting parameters from a Jenkinsfile, and such		{{server_addr}}	{{server_port}}
+iplugins can only be configured one-by-one on the Jenkins webpage,		{{server_addr}}	{{server_port}}
+iwhich is a complicated and error-prone process.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBy comparison, [Drone](https://www.drone.io/) the container-based CI		{{server_addr}}	{{server_port}}
+iis a relatively modern approach. Drone recommends its		{{server_addr}}	{{server_port}}
+i[Docker-container-based Worker (called Runner by the Drone folks)](https://readme.drone.io/runner/docker/overview/).		{{server_addr}}	{{server_port}}
+iAs containers are used as execution environments, Drone fully exploits		{{server_addr}}	{{server_port}}
+ithe advantage of containers: consistency. As long as the container		{{server_addr}}	{{server_port}}
+iimage is consistent, you can be sure that those CI commands will be		{{server_addr}}	{{server_port}}
+iexecuted under the same environment every time, and its output should		{{server_addr}}	{{server_port}}
+ibe stable. Of course, if your script cannot run in a container by any		{{server_addr}}	{{server_port}}
+imeans, Drone also has runners for		{{server_addr}}	{{server_port}}
+i[executing commands directly on host](https://readme.drone.io/runner/exec/overview/)		{{server_addr}}	{{server_port}}
+ior		{{server_addr}}	{{server_port}}
+i[in a DigitalOcean cloud server](https://readme.drone.io/runner/digitalocean/overview/).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDrone also has a lot of other advantages: Drone is written in Go,		{{server_addr}}	{{server_port}}
+iusing one-tenth the memory of Jenkins; Drone's configuration files are		{{server_addr}}	{{server_port}}
+iwritten in YAML or Jsonnet, unlike the special language of		{{server_addr}}	{{server_port}}
+iJenkinsfile; Although the number of		{{server_addr}}	{{server_port}}
+i[Drone's plugins](http://plugins.drone.io/) is comparatively smaller		{{server_addr}}	{{server_port}}
+ito Jenkins, all of them are Docker containers and can be used from the		{{server_addr}}	{{server_port}}
+iconfiguration file.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i|                      | Jenkins                                       | Drone                                                                      |		{{server_addr}}	{{server_port}}
+i| -------------------- | --------------------------------------------- | -------------------------------------------------------------------------- |		{{server_addr}}	{{server_port}}
+i| Environment          | Worker's host                                 | Your choice: Docker container, Worker's host, or DigitalOcean cloud server |		{{server_addr}}	{{server_port}}
+i| Config syntax        | Special language: Jenkinsfile                 | Generic YAML/Jsonnet                                                       |		{{server_addr}}	{{server_port}}
+i| Plugins              | More, 1836 (as of this is written)            | Less, 102                                                                  |		{{server_addr}}	{{server_port}}
+i| Plugin config        | Web-based, some available through config file | All in config file                                                         |		{{server_addr}}	{{server_port}}
+i| Programming Language | Java                                          | Go                                                                         |		{{server_addr}}	{{server_port}}
+i| Memory Usage         | More, around 1GB                              | Less, around 100MB                                                         |		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Install Drone		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs a containerized CI, Drone itself is a Docker container and is		{{server_addr}}	{{server_port}}
+iconfigured through environment variables. Drone can be connected to		{{server_addr}}	{{server_port}}
+i[GitHub](https://readme.drone.io/server/provider/github/),		{{server_addr}}	{{server_port}}
+i[GitLab](https://readme.drone.io/server/provider/gitlab/),		{{server_addr}}	{{server_port}}
+i[Gitea](https://readme.drone.io/server/provider/gitea/) or		{{server_addr}}	{{server_port}}
+i[BitBucket](https://readme.drone.io/server/provider/bitbucket-cloud/),		{{server_addr}}	{{server_port}}
+iplease refer to the linked official documents for guides. However, one		{{server_addr}}	{{server_port}}
+iDrone instance can only connect to one of them. If you are like me,		{{server_addr}}	{{server_port}}
+iwho needs CI on both GitHub and my own Gitea instance, you will need		{{server_addr}}	{{server_port}}
+itwo sets of Drone.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you plan to use Drone for deploying, you will need some way to pass		{{server_addr}}	{{server_port}}
+iyour deployment keys to Drone. I use secret management software		{{server_addr}}	{{server_port}}
+i[Vault](https://www.vaultproject.io/),		{{server_addr}}	{{server_port}}
+i[with official support from Drone](https://docs.drone.io/secret/external/vault/).		{{server_addr}}	{{server_port}}
+iOf course, you can simply store your secrets in Drone, but not through		{{server_addr}}	{{server_port}}
+iits web UI. You must		{{server_addr}}	{{server_port}}
+i[use Drone's command-line tool for that](https://readme.drone.io/secret/).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere is my configuration with Vault and Drone for reference:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```yaml		{{server_addr}}	{{server_port}}
+iversion: "2.4"		{{server_addr}}	{{server_port}}
+iservices:		{{server_addr}}	{{server_port}}
+i  # Secret management, Vault instance, and plugin for Drone		{{server_addr}}	{{server_port}}
+i  vault:		{{server_addr}}	{{server_port}}
+i    image: vault		{{server_addr}}	{{server_port}}
+i    container_name: vault		{{server_addr}}	{{server_port}}
+i    restart: unless-stopped		{{server_addr}}	{{server_port}}
+i    command: "server"		{{server_addr}}	{{server_port}}
+i    labels:		{{server_addr}}	{{server_port}}
+i      - com.centurylinklabs.watchtower.enable=false		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - "./conf/vault:/vault/config:ro"		{{server_addr}}	{{server_port}}
+i      - "./data/vault:/vault/file"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  drone-vault:		{{server_addr}}	{{server_port}}
+i    image: drone/vault		{{server_addr}}	{{server_port}}
+i    container_name: drone-vault		{{server_addr}}	{{server_port}}
+i    restart: unless-stopped		{{server_addr}}	{{server_port}}
+i    environment:		{{server_addr}}	{{server_port}}
+i      DRONE_DEBUG: "true"		{{server_addr}}	{{server_port}}
+i      DRONE_SECRET: "***drone-vault secret***"		{{server_addr}}	{{server_port}}
+i      VAULT_ADDR: "https://vault.lantian.pub"		{{server_addr}}	{{server_port}}
+i      VAULT_TOKEN: "***Vault secret***"		{{server_addr}}	{{server_port}}
+i    depends_on:		{{server_addr}}	{{server_port}}
+i      - vault		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Drone #1 for my own Gitea		{{server_addr}}	{{server_port}}
+i  drone:		{{server_addr}}	{{server_port}}
+i    image: drone/drone:2		{{server_addr}}	{{server_port}}
+i    container_name: drone		{{server_addr}}	{{server_port}}
+i    restart: unless-stopped		{{server_addr}}	{{server_port}}
+i    environment:		{{server_addr}}	{{server_port}}
+i      DRONE_GITEA_SERVER: "https://git.lantian.pub"		{{server_addr}}	{{server_port}}
+i      DRONE_GITEA_CLIENT_ID: "***Gitea OAuth ID***"		{{server_addr}}	{{server_port}}
+i      DRONE_GITEA_CLIENT_SECRET: "***Gitea OAuth Secret***"		{{server_addr}}	{{server_port}}
+i      DRONE_RPC_SECRET:		{{server_addr}}	{{server_port}}
+i        "***Drone Runner Secret, generate with openssl rand -hex 16***"		{{server_addr}}	{{server_port}}
+i      DRONE_SERVER_HOST: ci.lantian.pub		{{server_addr}}	{{server_port}}
+i      DRONE_SERVER_PROTO: https		{{server_addr}}	{{server_port}}
+i      DRONE_USER_CREATE: username:lantian,admin:true # Admin account		{{server_addr}}	{{server_port}}
+i      DRONE_JSONNET_ENABLED: "true"		{{server_addr}}	{{server_port}}
+i      DRONE_STARLARK_ENABLED: "true"		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - "./data/drone:/data"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Drone #1's Docker Runner		{{server_addr}}	{{server_port}}
+i  drone-runner-docker:		{{server_addr}}	{{server_port}}
+i    image: drone/drone-runner-docker:1		{{server_addr}}	{{server_port}}
+i    container_name: drone-runner-docker		{{server_addr}}	{{server_port}}
+i    restart: unless-stopped		{{server_addr}}	{{server_port}}
+i    environment:		{{server_addr}}	{{server_port}}
+i      DRONE_RPC_PROTO: https		{{server_addr}}	{{server_port}}
+i      DRONE_RPC_HOST: ci.lantian.pub		{{server_addr}}	{{server_port}}
+i      DRONE_RPC_SECRET:		{{server_addr}}	{{server_port}}
+i        "***Drone Secret, same as DRONE_RPC_SECRET above"		{{server_addr}}	{{server_port}}
+i      DRONE_RUNNER_CAPACITY: 4 # Max parallel jobs		{{server_addr}}	{{server_port}}
+i      DRONE_RUNNER_NAME: drone-docker		{{server_addr}}	{{server_port}}
+i      DRONE_SECRET_PLUGIN_ENDPOINT: http://drone-vault:3000		{{server_addr}}	{{server_port}}
+i      DRONE_SECRET_PLUGIN_TOKEN: "***drone-vault secret***"		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - "/var/run:/var/run"		{{server_addr}}	{{server_port}}
+i      - "/cache:/cache"		{{server_addr}}	{{server_port}}
+i    depends_on:		{{server_addr}}	{{server_port}}
+i      - drone		{{server_addr}}	{{server_port}}
+i      - drone-vault		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Drone #1 for GitHub		{{server_addr}}	{{server_port}}
+i  drone-github:		{{server_addr}}	{{server_port}}
+i    image: drone/drone:2		{{server_addr}}	{{server_port}}
+i    container_name: drone-github		{{server_addr}}	{{server_port}}
+i    restart: unless-stopped		{{server_addr}}	{{server_port}}
+i    environment:		{{server_addr}}	{{server_port}}
+i      DRONE_GITHUB_CLIENT_ID: "**GitHub OAuth ID**"		{{server_addr}}	{{server_port}}
+i      DRONE_GITHUB_CLIENT_SECRET: "***GitHub OAuth Secret***"		{{server_addr}}	{{server_port}}
+i      DRONE_RPC_SECRET:		{{server_addr}}	{{server_port}}
+i        "***Drone Runner Secret, generate with openssl rand -hex 16***"		{{server_addr}}	{{server_port}}
+i      DRONE_SERVER_HOST: ci-github.lantian.pub		{{server_addr}}	{{server_port}}
+i      DRONE_SERVER_PROTO: https		{{server_addr}}	{{server_port}}
+i      DRONE_USER_CREATE: username:xddxdd,admin:true # Admin account		{{server_addr}}	{{server_port}}
+i      DRONE_REGISTRATION_CLOSED: "true" # Disallow new user registration		{{server_addr}}	{{server_port}}
+i      DRONE_JSONNET_ENABLED: "true"		{{server_addr}}	{{server_port}}
+i      DRONE_STARLARK_ENABLED: "true"		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - "./data/drone-github:/data"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Drone #2's Docker Runner		{{server_addr}}	{{server_port}}
+i  drone-github-runner-docker:		{{server_addr}}	{{server_port}}
+i    image: drone/drone-runner-docker:1		{{server_addr}}	{{server_port}}
+i    container_name: drone-github-runner-docker		{{server_addr}}	{{server_port}}
+i    restart: unless-stopped		{{server_addr}}	{{server_port}}
+i    environment:		{{server_addr}}	{{server_port}}
+i      DRONE_RPC_PROTO: https		{{server_addr}}	{{server_port}}
+i      DRONE_RPC_HOST: ci-github.lantian.pub		{{server_addr}}	{{server_port}}
+i      DRONE_RPC_SECRET:		{{server_addr}}	{{server_port}}
+i        "***Drone Secret, same as DRONE_RPC_SECRET above"		{{server_addr}}	{{server_port}}
+i      DRONE_RUNNER_CAPACITY: 4 # Max parallel jobs		{{server_addr}}	{{server_port}}
+i      DRONE_RUNNER_NAME: drone-docker		{{server_addr}}	{{server_port}}
+i      DRONE_SECRET_PLUGIN_ENDPOINT: http://drone-vault:3000		{{server_addr}}	{{server_port}}
+i      DRONE_SECRET_PLUGIN_TOKEN: "***drone-vault secret***"		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - "/var/run:/var/run"		{{server_addr}}	{{server_port}}
+i      - "/cache:/cache"		{{server_addr}}	{{server_port}}
+i    depends_on:		{{server_addr}}	{{server_port}}
+i      - drone-github		{{server_addr}}	{{server_port}}
+i      - drone-vault		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Basic Drone CI/CD		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter setting up Drone, the next step is to add a task. Here I'll use		{{server_addr}}	{{server_port}}
+ithe example of deploying my Hexo blog.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI already have a set of deployment scripts for the following tasks:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Install node_modules		{{server_addr}}	{{server_port}}
+i- `hexo generate`		{{server_addr}}	{{server_port}}
+i- `hexo deploy` to GitHub Pages (as a backup)		{{server_addr}}	{{server_port}}
+i- Convert all images to WebP, and Gzip and Brotli compress all static		{{server_addr}}	{{server_port}}
+i  resources		{{server_addr}}	{{server_port}}
+i- Rsync generated files to all of my nodes with Ansible		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn addition, since my blog uses Dependabot to update dependencies		{{server_addr}}	{{server_port}}
+iautomatically, Dependabot may create pull requests from time to time.		{{server_addr}}	{{server_port}}
+iObviously, the pull requests shouldn't be deployed to my nodes. The CI		{{server_addr}}	{{server_port}}
+ishould just try generating the files and see if it fails.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo here comes the most basic form of our configuration, written to		{{server_addr}}	{{server_port}}
+i`.drone.yaml`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```yaml		{{server_addr}}	{{server_port}}
+ikind: pipeline		{{server_addr}}	{{server_port}}
+itype: docker		{{server_addr}}	{{server_port}}
+iname: default		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+itrigger:		{{server_addr}}	{{server_port}}
+i  branch:		{{server_addr}}	{{server_port}}
+i    - master		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+isteps:		{{server_addr}}	{{server_port}}
+i  - name: hexo generate		{{server_addr}}	{{server_port}}
+i    image: node:15-alpine		{{server_addr}}	{{server_port}}
+i    commands:		{{server_addr}}	{{server_port}}
+i      # Not all packages are needed: this is to be consistent with following steps		{{server_addr}}	{{server_port}}
+i      - apk add --no-cache build-base bash git openssh wget python3		{{server_addr}}	{{server_port}}
+i        gzip brotli zstd parallel imagemagick		{{server_addr}}	{{server_port}}
+i      - npm install		{{server_addr}}	{{server_port}}
+i      - node_modules/hexo/bin/hexo generate		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  - name: hexo deploy		{{server_addr}}	{{server_port}}
+i    image: node:15-alpine		{{server_addr}}	{{server_port}}
+i    commands:		{{server_addr}}	{{server_port}}
+i      # Install packages		{{server_addr}}	{{server_port}}
+i      - apk add --no-cache build-base bash git openssh wget python3		{{server_addr}}	{{server_port}}
+i        gzip brotli zstd parallel imagemagick		{{server_addr}}	{{server_port}}
+i      - node_modules/hexo/bin/hexo deploy		{{server_addr}}	{{server_port}}
+i    # Don't deploy Dependabot's PRs		{{server_addr}}	{{server_port}}
+i    when:		{{server_addr}}	{{server_port}}
+i      event:		{{server_addr}}	{{server_port}}
+i        exclude:		{{server_addr}}	{{server_port}}
+i          - pull_request		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Some subsequent steps are skipped		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis config will generate the static files and attempt `hexo deploy`,		{{server_addr}}	{{server_port}}
+ibut it will fail since it doesn't have the SSH keys. For obvious		{{server_addr}}	{{server_port}}
+ireason I won't recommend adding your SSH key directly to the config.		{{server_addr}}	{{server_port}}
+iYou should instead add it to Vault (or Drone's secret storage), and		{{server_addr}}	{{server_port}}
+iuse it from the config file:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```yaml		{{server_addr}}	{{server_port}}
+i# Fetch SSH key from Vault, the repository must be set to Trusted in Drone		{{server_addr}}	{{server_port}}
+ikind: secret		{{server_addr}}	{{server_port}}
+iname: id_ed25519		{{server_addr}}	{{server_port}}
+iget:		{{server_addr}}	{{server_port}}
+i  # This path is shown as kv/ssh in Vault. "data" must be added.		{{server_addr}}	{{server_port}}
+i  path: kv/data/ssh		{{server_addr}}	{{server_port}}
+i  name: id_ed25519		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+ikind: pipeline		{{server_addr}}	{{server_port}}
+itype: docker		{{server_addr}}	{{server_port}}
+iname: default		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# ...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+isteps:		{{server_addr}}	{{server_port}}
+i  # ...		{{server_addr}}	{{server_port}}
+i  - name: hexo deploy		{{server_addr}}	{{server_port}}
+i    image: node:15-alpine		{{server_addr}}	{{server_port}}
+i    environment:		{{server_addr}}	{{server_port}}
+i      # Use the SSH key fetched from Vault, set as environment variable		{{server_addr}}	{{server_port}}
+i      SSH_KEY:		{{server_addr}}	{{server_port}}
+i        from_secret: id_ed25519		{{server_addr}}	{{server_port}}
+i    commands:		{{server_addr}}	{{server_port}}
+i      # Install SSH key		{{server_addr}}	{{server_port}}
+i      - mkdir -p /root/.ssh/		{{server_addr}}	{{server_port}}
+i      - echo "$SSH_KEY" > /root/.ssh/id_ed25519		{{server_addr}}	{{server_port}}
+i      - chmod 600 /root/.ssh/id_ed25519		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      # Configure SSH, mainly disable host key verification, or login will fail		{{server_addr}}	{{server_port}}
+i      - |		{{server_addr}}	{{server_port}}
+i        cat <<EOF >/root/.ssh/config		{{server_addr}}	{{server_port}}
+i        StrictHostKeyChecking no		{{server_addr}}	{{server_port}}
+i        UserKnownHostsFile=/dev/null		{{server_addr}}	{{server_port}}
+i        VerifyHostKeyDNS yes		{{server_addr}}	{{server_port}}
+i        LogLevel ERROR		{{server_addr}}	{{server_port}}
+i        EOF		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      # Install packages... redacted		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow we have SSH keys in the CI containers, and it will be able to		{{server_addr}}	{{server_port}}
+iconnect to GitHub or other deployment targets via SSH.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut another problem exists: every time the build is started, the		{{server_addr}}	{{server_port}}
+icontainer is in a clean state without `node_modules`, which means a		{{server_addr}}	{{server_port}}
+iconsiderable amount of time is needed to download ~~this blackhole~~.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe good news is that Drone provides a plugin to cache intermediate		{{server_addr}}	{{server_port}}
+idirectories and decompress them on the next build:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```yaml		{{server_addr}}	{{server_port}}
+i# ...		{{server_addr}}	{{server_port}}
+isteps:		{{server_addr}}	{{server_port}}
+i  # Restore the last cache		{{server_addr}}	{{server_port}}
+i  - name: restore cache		{{server_addr}}	{{server_port}}
+i    image: meltwater/drone-cache:dev		{{server_addr}}	{{server_port}}
+i    settings:		{{server_addr}}	{{server_port}}
+i      backend: "filesystem"		{{server_addr}}	{{server_port}}
+i      restore: true		{{server_addr}}	{{server_port}}
+i      cache_key: "volume"		{{server_addr}}	{{server_port}}
+i      archive_format: "gzip"		{{server_addr}}	{{server_port}}
+i      filesystem_cache_root: "/cache"		{{server_addr}}	{{server_port}}
+i      # Cache these two folders		{{server_addr}}	{{server_port}}
+i      mount:		{{server_addr}}	{{server_port}}
+i        - "node_modules"		{{server_addr}}	{{server_port}}
+i        - "img_cache"		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - name: cache		{{server_addr}}	{{server_port}}
+i        path: /cache		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  - name: hexo generate		{{server_addr}}	{{server_port}}
+i    # ...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Cache result generated this time		{{server_addr}}	{{server_port}}
+i  - name: rebuild cache		{{server_addr}}	{{server_port}}
+i    image: meltwater/drone-cache:dev		{{server_addr}}	{{server_port}}
+i    settings:		{{server_addr}}	{{server_port}}
+i      backend: "filesystem"		{{server_addr}}	{{server_port}}
+i      rebuild: true		{{server_addr}}	{{server_port}}
+i      cache_key: "volume"		{{server_addr}}	{{server_port}}
+i      archive_format: "gzip"		{{server_addr}}	{{server_port}}
+i      filesystem_cache_root: "/cache"		{{server_addr}}	{{server_port}}
+i      # Cache these two folders		{{server_addr}}	{{server_port}}
+i      mount:		{{server_addr}}	{{server_port}}
+i        - "node_modules"		{{server_addr}}	{{server_port}}
+i        - "img_cache"		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - name: cache		{{server_addr}}	{{server_port}}
+i        path: /cache		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Cache files are stored to /cache on the host, need repo set to Trusted in Drone		{{server_addr}}	{{server_port}}
+ivolumes:		{{server_addr}}	{{server_port}}
+i  - name: cache		{{server_addr}}	{{server_port}}
+i    host:		{{server_addr}}	{{server_port}}
+i      path: /cache		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWe can also have Telegram notifications on build failures:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```yaml		{{server_addr}}	{{server_port}}
+i# Fetch Telegram token and target account from Vault		{{server_addr}}	{{server_port}}
+ikind: secret		{{server_addr}}	{{server_port}}
+iname: tg_token		{{server_addr}}	{{server_port}}
+iget:		{{server_addr}}	{{server_port}}
+i  path: kv/data/telegram		{{server_addr}}	{{server_port}}
+i  name: token		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+ikind: secret		{{server_addr}}	{{server_port}}
+iname: tg_target		{{server_addr}}	{{server_port}}
+iget:		{{server_addr}}	{{server_port}}
+i  path: kv/data/telegram		{{server_addr}}	{{server_port}}
+i  name: target		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i# ...		{{server_addr}}	{{server_port}}
+isteps:		{{server_addr}}	{{server_port}}
+i  # ...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Handle notification on failure		{{server_addr}}	{{server_port}}
+i  - name: telegram notification for failure		{{server_addr}}	{{server_port}}
+i    image: appleboy/drone-telegram		{{server_addr}}	{{server_port}}
+i    settings:		{{server_addr}}	{{server_port}}
+i      token:		{{server_addr}}	{{server_port}}
+i        from_secret: tg_token		{{server_addr}}	{{server_port}}
+i      to:		{{server_addr}}	{{server_port}}
+i        from_secret: tg_target		{{server_addr}}	{{server_port}}
+i    when:		{{server_addr}}	{{server_port}}
+i      status:		{{server_addr}}	{{server_port}}
+i        - failure		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Handle notification on failure, not sent when triggered from a cron job		{{server_addr}}	{{server_port}}
+i  - name: telegram notification for success		{{server_addr}}	{{server_port}}
+i    image: appleboy/drone-telegram		{{server_addr}}	{{server_port}}
+i    settings:		{{server_addr}}	{{server_port}}
+i      token:		{{server_addr}}	{{server_port}}
+i        from_secret: tg_token		{{server_addr}}	{{server_port}}
+i      to:		{{server_addr}}	{{server_port}}
+i        from_secret: tg_target		{{server_addr}}	{{server_port}}
+i    when:		{{server_addr}}	{{server_port}}
+i      branch:		{{server_addr}}	{{server_port}}
+i        - master		{{server_addr}}	{{server_port}}
+i      status:		{{server_addr}}	{{server_port}}
+i        - success		{{server_addr}}	{{server_port}}
+i      event:		{{server_addr}}	{{server_port}}
+i        exclude:		{{server_addr}}	{{server_port}}
+i          - cron		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow we have a Drone configuration with deployments, caching, and		{{server_addr}}	{{server_port}}
+iTelegram notifications.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Matrix Build		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSometimes we need to test our programs on different environments, such		{{server_addr}}	{{server_port}}
+ias Python 2.7/3.6/3.7/3.8/3.9, GCC/Clang, etc. Drone supports the		{{server_addr}}	{{server_port}}
+iJsonnet configuration format to define jobs in batches.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i[Take my route-chain project for example](https://github.com/xddxdd/route-chain/blob/master/.drone.jsonnet),		{{server_addr}}	{{server_port}}
+isome contents are removed/simplified for demonstration:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```json		{{server_addr}}	{{server_port}}
+i// Define a "function" to create a pipeline		{{server_addr}}	{{server_port}}
+ilocal DebianCompileJob(image, kernel_headers) = {		{{server_addr}}	{{server_port}}
+i  "kind": "pipeline",		{{server_addr}}	{{server_port}}
+i  "type": "docker",		{{server_addr}}	{{server_port}}
+i  "name": image,		{{server_addr}}	{{server_port}}
+i  "steps": [		{{server_addr}}	{{server_port}}
+i    {		{{server_addr}}	{{server_port}}
+i      "name": "build",		{{server_addr}}	{{server_port}}
+i      "image": image,		{{server_addr}}	{{server_port}}
+i      "commands": [		{{server_addr}}	{{server_port}}
+i        "apt-get update",		{{server_addr}}	{{server_port}}
+i        "DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install build-essential " + kernel_headers,		{{server_addr}}	{{server_port}}
+i        "make"		{{server_addr}}	{{server_port}}
+i      ]		{{server_addr}}	{{server_port}}
+i    },		{{server_addr}}	{{server_port}}
+i    {		{{server_addr}}	{{server_port}}
+i      "name": "telegram notification",		{{server_addr}}	{{server_port}}
+i      "image": "appleboy/drone-telegram",		{{server_addr}}	{{server_port}}
+i      "settings": {		{{server_addr}}	{{server_port}}
+i        "token": {		{{server_addr}}	{{server_port}}
+i          "from_secret": "tg_token"		{{server_addr}}	{{server_port}}
+i        },		{{server_addr}}	{{server_port}}
+i        "to": {		{{server_addr}}	{{server_port}}
+i          "from_secret": "tg_target"		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  ]		{{server_addr}}	{{server_port}}
+i};		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i[		{{server_addr}}	{{server_port}}
+i  // Telegram token and target account		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    "kind": "secret",		{{server_addr}}	{{server_port}}
+i    "name": "tg_token",		{{server_addr}}	{{server_port}}
+i    "get": {		{{server_addr}}	{{server_port}}
+i      "path": "kv/data/telegram",		{{server_addr}}	{{server_port}}
+i      "name": "token"		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  },		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    "kind": "secret",		{{server_addr}}	{{server_port}}
+i    "name": "tg_target",		{{server_addr}}	{{server_port}}
+i    "get": {		{{server_addr}}	{{server_port}}
+i      "path": "kv/data/telegram",		{{server_addr}}	{{server_port}}
+i      "name": "target"		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  },		{{server_addr}}	{{server_port}}
+i  // Call DebianCompileJob in batches to create jobs for different images and linux-headers packages		{{server_addr}}	{{server_port}}
+i  DebianCompileJob('debian:jessie', 'linux-headers-amd64'),		{{server_addr}}	{{server_port}}
+i  DebianCompileJob('debian:stretch', 'linux-headers-amd64'),		{{server_addr}}	{{server_port}}
+i  DebianCompileJob('debian:buster', 'linux-headers-amd64'),		{{server_addr}}	{{server_port}}
+i  DebianCompileJob('debian:bullseye', 'linux-headers-amd64'),		{{server_addr}}	{{server_port}}
+i  DebianCompileJob('debian:unstable', 'linux-headers-amd64'),		{{server_addr}}	{{server_port}}
+i  DebianCompileJob('ubuntu:xenial', 'linux-headers-generic'),		{{server_addr}}	{{server_port}}
+i  DebianCompileJob('ubuntu:bionic', 'linux-headers-generic'),		{{server_addr}}	{{server_port}}
+i  DebianCompileJob('ubuntu:focal', 'linux-headers-generic'),		{{server_addr}}	{{server_port}}
+i]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSave the config to `.drone.jsonnet`, and change the config file name		{{server_addr}}	{{server_port}}
+ifrom `.drone.yaml` to `.drone.jsonnet`, and you're good to go.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Aborting Build Early		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSometimes we don't need to run all jobs in a Matrix Build. For		{{server_addr}}	{{server_port}}
+iexample, I don't need to rebuild all Docker images on every commit to		{{server_addr}}	{{server_port}}
+imy [Dockerfiles repository](https://github.com/xddxdd/dockerfiles),		{{server_addr}}	{{server_port}}
+ispecifically 14 (images) multiplied by 8 (architectures) to 112 jobs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFortunately, Drone supports aborting a pipeline early, just quit at		{{server_addr}}	{{server_port}}
+isome step with exit code 78 like this:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```yaml		{{server_addr}}	{{server_port}}
+i# ...		{{server_addr}}	{{server_port}}
+isteps:		{{server_addr}}	{{server_port}}
+i  # ...		{{server_addr}}	{{server_port}}
+i  - name: skip build		{{server_addr}}	{{server_port}}
+i    image: alpine		{{server_addr}}	{{server_port}}
+i    commands:		{{server_addr}}	{{server_port}}
+i      - ./should_build.sh && exit 0 || exit 78		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAn actual example can be found		{{server_addr}}	{{server_port}}
+i[at this commit in my Dockerfiles repo](https://github.com/xddxdd/dockerfiles/blob/4268d0f076ee76efdff670e2f9b0dae5961a968f/.drone.jsonnet).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut since Drone runs builds in containers, and containers are somewhat		{{server_addr}}	{{server_port}}
+islow to start, handling 112 pipelines alone needs tens of minutes,		{{server_addr}}	{{server_port}}
+ieven if all jobs quit immediately. Therefore,		{{server_addr}}	{{server_port}}
+i[I adjusted the Dockerfiles repo configuration to run one pipeline for each architecture](https://github.com/xddxdd/dockerfiles/blob/master/.drone.jsonnet),		{{server_addr}}	{{server_port}}
+iand to determine the images to be built from the commit message. In		{{server_addr}}	{{server_port}}
+ithis case, only 8 pipelines are needed, and the execution time for an		{{server_addr}}	{{server_port}}
+iempty job won't be too long.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

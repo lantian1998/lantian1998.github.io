@@ -1,0 +1,945 @@
+i#		{{server_addr}}	{{server_port}}
+i# Lan Tian @ Blog		{{server_addr}}	{{server_port}}
+i#		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLanguages:		{{server_addr}}	{{server_port}}
+1- Chinese (*)	/	{{server_addr}}	{{server_port}}
+1- English	/en/	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPosts:		{{server_addr}}	{{server_port}}
+1- 如何引爆 DN42 网络（2023-05-12 更新） (2023-05-12 14:03:33)	/article/modify-website/how-to-kill-the-dn42-network.lantian/	{{server_addr}}	{{server_port}}
+i  DN42 是一个测试网络，所有人都在帮助所有人。即使你不小心搞砸了，也没		{{server_addr}}	{{server_port}}
+i  有人会指责你。你可以在 DN42 的 IRC 频道，邮件列表或者非官方 Telegram		{{server_addr}}	{{server_port}}
+i  群组寻求帮助。由于 DN42 是一个实验用网络，其中也有很多新手、小白参与		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Optimus MUXed 笔记本上的 NVIDIA 虚拟机显卡直通（2023-05  (2023-05-07 16:28:52)	/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian/	{{server_addr}}	{{server_port}}
+i  一年前，为了能够一边用 Arch Linux 浏览网页、写代码，一边用 Windows 		{{server_addr}}	{{server_port}}
+i  运行游戏等没法在 Linux 上方便地完成的任务，我试着在我的联想 R720 游		{{server_addr}}	{{server_port}}
+i  本上进行了显卡直通。但是由于那台电脑是 Optimus MUXless 架构（前文有		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 修改 APN 解决 AOSP ROM 上中国电信无法 4G 漫游问题 (2023-04-17 11:16:39)	/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian/	{{server_addr}}	{{server_port}}
+i  由于我的一加 8T 官方系统维护周期即将结束，我给手机刷上了 Nameless OS		{{server_addr}}	{{server_port}}
+i  ，一个基于 Lineage OS 的第三方安卓 ROM。但是刷入后，我发现我的中国电		{{server_addr}}	{{server_port}}
+i  信手机卡无法连接本地运营商的 4G 网络进行国际漫游，只有 2G 或 3G 信号		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 老款 HP 工作站配置 NAS + 软路由笔记 (2023-03-26 07:05:19)	/article/random-notes/old-hp-workstation-as-all-in-one.lantian/	{{server_addr}}	{{server_port}}
+i  我买了一台 HP 的老款工作站，用作家里的 NAS + 软路由。本文简单记录这		{{server_addr}}	{{server_port}}
+i  台工作站的配置过程。硬件选择NAS 的硬件主要有这些选择：成品 NAS（如群		{{server_addr}}	{{server_port}}
+i  晖）优点：开箱即用。缺点：价格贵，到了「买系统送硬件」的程度。而且与		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NixOS 系列（四）：「无状态」操作系统 (2023-01-13 17:55:12)	/article/modify-computer/nixos-impermanence.lantian/	{{server_addr}}	{{server_port}}
+i  NixOS 系列文章目录：NixOS 系列（一）：我为什么心动了NixOS 系列（二）		{{server_addr}}	{{server_port}}
+i  ：基础配置，Nix Flake，和批量部署推荐阅读：NixOS 与 Nix Flakes 新手		{{server_addr}}	{{server_port}}
+i  入门，作者 Ryan YinNixOS 系列（三）：软件打包，从入门到放弃NixOS 系		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NixOS 系列（三）：软件打包，从入门到放弃 (2022-06-21 15:42:16)	/article/modify-computer/nixos-packaging.lantian/	{{server_addr}}	{{server_port}}
+i  NixOS 系列文章目录：NixOS 系列（一）：我为什么心动了NixOS 系列（二）		{{server_addr}}	{{server_port}}
+i  ：基础配置，Nix Flake，和批量部署推荐阅读：NixOS 与 Nix Flakes 新手		{{server_addr}}	{{server_port}}
+i  入门，作者 Ryan YinNixOS 系列（三）：软件打包，从入门到放弃NixOS 系		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用逆向工程方式给惠普暗影精灵宏按键编写 Linux 驱动 (2022-04-03 21:16:16)	/article/modify-computer/reverse-engineered-linux-driver-for-hp-omen-macro-keys.lantian/	{{server_addr}}	{{server_port}}
+i  我前段时间换了台新电脑，惠普的暗影精灵 17t-ck000（美版，应该对应的是		{{server_addr}}	{{server_port}}
+i  国内的暗影精灵 7 Plus）。这台电脑好是好，做工优秀，性能强大，就是有		{{server_addr}}	{{server_port}}
+i  一个问题：它在 Linux 下的驱动支持实在是太烂了。不支持调节风扇转速，		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用 NS1 和 UptimeRobot/Freshping 组建超低价 GeoDNS (2022-02-06 06:29:09)	/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian/	{{server_addr}}	{{server_port}}
+i  本文部分内容参考自 https://hostedtalk.net/t/connecting-uptime-robot-		{{server_addr}}	{{server_port}}
+i  with-ns1-dns-api/3883。目标我的 VPS 多且遍布世界各地，但一直以来，我		{{server_addr}}	{{server_port}}
+i  的网站都只用了美国洛杉矶的一台 VPS 提供服务。因为我为了特殊线路、低		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 我把硬盘换到了新电脑上，这是 Btrfs 上的数据发生的变化 (2021-12-14 18:07:09)	/article/chat/how-i-nuked-my-btrfs-partition.lantian/	{{server_addr}}	{{server_port}}
+i  发生甚么事了我的旧电脑（联想拯救者 R720）的做工不怎么样。经过四年的		{{server_addr}}	{{server_port}}
+i  使用，那台电脑换过一块键盘，一块机械硬盘（换成了 SATA 固态硬盘），而		{{server_addr}}	{{server_port}}
+i  且每次拆开电脑后盖时，后盖或者屏轴上都会掉点塑料碎屑或者螺丝下来，让		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NixOS 系列（二）：基础配置，Nix Flake，和批量部署 (2021-11-12 16:48:07)	/article/modify-website/nixos-initial-config-flake-deploy.lantian/	{{server_addr}}	{{server_port}}
+i  NixOS 系列文章目录：NixOS 系列（一）：我为什么心动了NixOS 系列（二）		{{server_addr}}	{{server_port}}
+i  ：基础配置，Nix Flake，和批量部署推荐阅读：NixOS 与 Nix Flakes 新手		{{server_addr}}	{{server_port}}
+i  入门，作者 Ryan YinNixOS 系列（三）：软件打包，从入门到放弃NixOS 系		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NixOS 系列（一）：我为什么心动了 (2021-10-11 08:06:58)	/article/modify-website/nixos-why.lantian/	{{server_addr}}	{{server_port}}
+i  NixOS 系列文章目录：NixOS 系列（一）：我为什么心动了NixOS 系列（二）		{{server_addr}}	{{server_port}}
+i  ：基础配置，Nix Flake，和批量部署推荐阅读：NixOS 与 Nix Flakes 新手		{{server_addr}}	{{server_port}}
+i  入门，作者 Ryan YinNixOS 系列（三）：软件打包，从入门到放弃NixOS 系		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用 Drone CI 替换掉 Jenkins (2021-08-28 18:18:32)	/article/modify-website/replace-jenkins-with-drone-ci.lantian/	{{server_addr}}	{{server_port}}
+i  Jenkins 是一款免费开源的 CI/CD（持续集成、部署）软件，被广泛应用在各		{{server_addr}}	{{server_port}}
+i  种场景中。Jenkins 的主要优势在于其包罗万象的插件，可以完成各种任务，		{{server_addr}}	{{server_port}}
+i  例如自动执行 SCP、Ansible 等部署，Cppcheck 等代码分析，Telegram、钉		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用 nginx 搭建能查询任意公网 WHOIS 的服务器 (2021-07-17 17:52:18)	/article/modify-website/lookup-any-whois-with-nginx.lantian/	{{server_addr}}	{{server_port}}
+i  在魔改 nginx，建立一个 DN42 的 WHOIS 服务器之后，我把我的 DN42 Looki		{{server_addr}}	{{server_port}}
+i  ng Glass 接到了这个 WHOIS 服务器。由于我的 Looking Glass 可以作为一		{{server_addr}}	{{server_port}}
+i  个 Telegram 机器人运行，群友们就用它来查询 IP 和域名的 WHOIS 信息。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- DN42 实验网络介绍及注册教程（2022-12 更新） (2021-05-02 04:21:45)	/article/modify-website/dn42-experimental-network-2020.lantian/	{{server_addr}}	{{server_port}}
+i  DN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型、		{{server_addr}}	{{server_port}}
+i  去中心化的 VPN 网络。但是与其它传统 VPN 不同的是，DN42 本身不提供 VP		{{server_addr}}	{{server_port}}
+i   出口服务，即不提供规避网络审查、流媒体解锁等类似服务。相反，DN42 的		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 将 nginx 用作 DN42 WHOIS 服务器 (2021-04-18 18:12:15)	/article/modify-website/serve-dn42-whois-with-nginx.lantian/	{{server_addr}}	{{server_port}}
+i  在前一篇文章《用 nginx 建立 Gopher 网站》中我提到，用 nginx 提供 Gop		{{server_addr}}	{{server_port}}
+i  her 服务只是魔改的副产物，我原本的计划是将 nginx 魔改成一个 WHOIS 服		{{server_addr}}	{{server_port}}
+i  务器，用于 DN42。这篇文章将介绍详细过程。WHOIS 协议首先，我们可以找		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用 nginx 建立 Gopher 网站 (2021-03-21 14:16:44)	/article/modify-website/serve-gopher-with-nginx.lantian/	{{server_addr}}	{{server_port}}
+i  更新日志2021-03-24：改进文章处理逻辑，增加识别链接和图片的代码。2021		{{server_addr}}	{{server_port}}
+i  -03-21：最初版本。什么是 GopherGopher 是互联网发展早期的一种网络协议		{{server_addr}}	{{server_port}}
+i  ，由美国明尼苏达大学于 1991 年发明，用途类似于现在的 HTTP。它的基础		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 制作只有 4KB 大小的永久挂起程序 (2020-12-27 15:39:07)	/article/modify-website/4kb-infinite-sleep-docker-image.lantian/	{{server_addr}}	{{server_port}}
+i  在我的网络配置中，部分 Docker 容器的服务需要用 Anycast 的方式实现高		{{server_addr}}	{{server_port}}
+i  可用，例如 DNS。在之前的文章中，我的做法是，创建了一个 Busybox 容器		{{server_addr}}	{{server_port}}
+i  行 tail -f /dev/null 这条命令，永久挂起，不占用 CPU 也永远不会退出，		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 静态编译制作微型 Docker 镜像 (2020-11-29 15:04:46)	/article/modify-website/static-build-tiny-docker-images.lantian/	{{server_addr}}	{{server_port}}
+i  Docker 镜像中存储的，可以看作是一个个小型 Linux 系统。它们大都以 Deb		{{server_addr}}	{{server_port}}
+i  ian、Ubuntu 或是 Alpine 作为基础，再在上面安装额外的软件而成。以完整		{{server_addr}}	{{server_port}}
+i  的 Linux 作为基础的好处就是镜像中会自带常用的命令（ls，cat 等），在		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 优雅地在 Traceroute 里膜 拜大佬 (2020-10-11 12:25:01)	/article/creations/traceroute-chain.lantian/	{{server_addr}}	{{server_port}}
+i  Traceroute 是常用的检查网络状况的工具之一，会显示你操作的电脑到指定		{{server_addr}}	{{server_port}}
+i  服务器的网络路径上经过的每一个路由器的 IP 地址，类似于这样：可以看到		{{server_addr}}	{{server_port}}
+i  后两跳的 IP 显示出了对应的域名，这个域名就是 IP 的反向解析记录。反向		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 友华 PT926G 关闭 TR069 (2020-10-03 07:40:30)	/article/random-notes/youhua-pt926g-disable-tr069.lantian/	{{server_addr}}	{{server_port}}
+i  本文介绍如何关闭友华 PT926G 光猫的 TR069 功能，防止电信推送配置 / 固		{{server_addr}}	{{server_port}}
+i  件更新，导致你自己改的桥接、端口转发等失效。这台光猫的 WAN 设置里，T		{{server_addr}}	{{server_port}}
+i  R069 连接是无法修改或者删除的。但是我们只要对光猫后台的代码做一点小		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 未雨绸缪：使用后量子时代的加密算法 (2020-09-22 17:11:18)	/article/modify-website/post-quantum-encryption.lantian/	{{server_addr}}	{{server_port}}
+i  现代互联网上，绝大多数网站都已经支持 HTTPS，其使用的 SSL/TLS 加密协		{{server_addr}}	{{server_port}}
+i  议会将用户的请求数据与网站的响应进行加密，以防止信息被路径上的恶意用		{{server_addr}}	{{server_port}}
+i  户窃取或篡改。而 SSL/TLS 协议中的一个重要组成部分是 RSA、ECDSA 等非		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 自建 DNS 根服务器 (2020-09-05 13:59:46)	/article/modify-website/selfhost-dns-root-server.lantian/	{{server_addr}}	{{server_port}}
+i  随着近期中美对抗的不断升级，国内的部分社交平台上出现了一种担忧，担心		{{server_addr}}	{{server_port}}
+i  美国切断 DNS 系统的根服务器到中国大陆的网络连接，或者在 DNS 根服务器		{{server_addr}}	{{server_port}}
+i  中删除中国的域名记录，从而破坏中国的互联网。目前已经有很多分析，说明		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 友华 PT926G 光猫破解 (2020-08-13 12:43:26)	/article/random-notes/youhua-pt926g-fiber-modem-crack.lantian/	{{server_addr}}	{{server_port}}
+i  本文介绍如何在不拆光猫、不使用串口转换器的情况下，破解友华 PT926G 光		{{server_addr}}	{{server_port}}
+i  猫的以下权限：管理面板的超级管理员用户（telecomadmin）Telnet 的 root		{{server_addr}}	{{server_port}}
+i   用户访问 FTP坐标深圳电信。登录超级管理员界面如果你直接访问光猫的 IP		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 制作一个优雅的平安经生成器 (2020-08-01 15:36:16)	/article/modify-website/an-elegant-scripture-of-safety-generator.lantian/	{{server_addr}}	{{server_port}}
+i  由于本文内容与所用语言有关，中文、英文版内容有少许差异。《平安经》简		{{server_addr}}	{{server_port}}
+i  介《平安经》由（前）吉林公安厅党委副书记、常务副厅长贺电所作，书中内		{{server_addr}}	{{server_port}}
+i  容只是句式「XXX 平安」的简单重复，但书籍售价很高。因此公众质疑本书的		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 笔记本 Optimus MUXless 下的 Intel 和 NVIDIA 虚拟机显卡直 (2020-06-25 15:59:41)	/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian/	{{server_addr}}	{{server_port}}
+i  更新记录2022-07-21：补充 GVT-g 开机自启，感谢 Owsmyf 提醒。2022-01-2		{{server_addr}}	{{server_port}}
+i  2：根据 NVIDIA 驱动更新、评论区反馈更新内容。我在新电脑上成功完成了 		{{server_addr}}	{{server_port}}
+i  Optimus MUXed 显卡直通。摘要（剧透）我成功在联想 R720 游戏本上把 Int		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 愿者上钩（指美国签证） (2020-06-17 09:33:06)	/article/one-pic/if-you-wanna-take-the-bite.lantian/	{{server_addr}}	{{server_port}}
+i  附取消邮件内容：自 2020 年 2 月 3 日起，美国驻北京大使馆和美国驻成都		{{server_addr}}	{{server_port}}
+i  ，广州，上海和沈阳总领事馆暂停普通签证业务的办理。因此，美国驻华使领		{{server_addr}}	{{server_port}}
+i  馆将取消 6 月 29 日至 7 月 10 日的移民和非移民签证预约。鉴于新型冠状		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 毕业设计 - 传感器网络开发踩坑记录 (2020-06-07 20:06:23)	/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian/	{{server_addr}}	{{server_port}}
+i  欢迎来到踩坑系列的第三篇。之前两篇中我分别介绍了我 RoboMaster 机器人		{{server_addr}}	{{server_port}}
+i  竞赛和 FPGA 课程大作业中踩的坑。这次踩坑的是我的毕业设计，三人小组合		{{server_addr}}	{{server_port}}
+i  作的空气质量传感器网络。整个项目的设计如下：从安装的传感器模块中读取		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Bird 配置 BGP Confederation，及模拟 Confederation（2020- (2020-06-07 13:51:51)	/article/modify-website/bird-confederation.lantian/	{{server_addr}}	{{server_port}}
+i  更新记录2020-10-01：添加警告，模拟 Confederation 时不能在内网滤掉内		{{server_addr}}	{{server_port}}
+i  部 ASN2020-06-07：添加 Bird Confederation 的局限，及模拟 Confederati		{{server_addr}}	{{server_port}}
+i  n 方法 2020-05-17：最初版本ISP 内部 BGP 互联方案比较互联网中各个 ISP		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- x32 ABI 及相应 Docker 容器使用 (2020-05-14 16:20:26)	/article/modify-website/x32-abi-docker-containers.lantian/	{{server_addr}}	{{server_port}}
+i  x32 架构是怎么回事呢？x86、x86_64 架构相信大家都很熟悉，但是 x32 是		{{server_addr}}	{{server_port}}
+i  怎么回事呢，下面就让小编带大家一起了解吧。x32 架构，其实就是 x86 和 		{{server_addr}}	{{server_port}}
+i  86_64 架构拼在一起，大家可能会很惊讶 x86 和 x86_64 架构怎么会拼在一		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 写一个简单的 Telegram 机器人 (2020-04-23 08:02:50)	/article/modify-website/simple-telegram-bot.lantian/	{{server_addr}}	{{server_port}}
+i  应 DN42 Telegram 群群友的要求，我打算给我的 Bird Looking Glass 加上 		{{server_addr}}	{{server_port}}
+i  Telegram Bot 的支持，方便群友现场查询 Whois、测试网络通断、检查漏油		{{server_addr}}	{{server_port}}
+i  路由泄漏源头等。这个 Bot 要能识别以斜线 / 开头的命令，然后对命令消息		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 去除 OpenVPN 的 Stable-privacy IPv6 地址 (2020-03-21 04:28:40)	/article/random-notes/openvpn-remove-stable-privacy-ipv6.lantian/	{{server_addr}}	{{server_port}}
+i  在我的 VPS 上，OpenVPN 创建的 TAP 网络界面 / 虚拟网卡会带有一个随机		{{server_addr}}	{{server_port}}
+i  生成的 IPv6 地址，scope 为 stable-privacy。这个地址本身是随机生成、		{{server_addr}}	{{server_port}}
+i  于防止根据 IPv6 地址追踪用户的，但在 DN42 组网时，BGP 握手可能会从这		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在 OpenVZ 6 上安装 / 升级到 Debian 10 (2020-03-19 13:55:54)	/article/random-notes/debian-10-on-openvz-6.lantian/	{{server_addr}}	{{server_port}}
+i  2020 年了，你怎么还在用 OpenVZ 6 的 VPS？因为它（们）只要一刀一年。		{{server_addr}}	{{server_port}}
+i  因为 OpenVZ 6 的内核非常老旧（Linux 2.6.32），较新的系统无法在旧内核		{{server_addr}}	{{server_port}}
+i  上正常运行，因此之前我的 OpenVZ VPS 只能用 Debian 8。但我在 GitHub 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Docker 容器共享网络命名空间，集成 Bird 实现 Anycast 高可 (2020-03-13 12:23:20)	/article/modify-website/docker-share-network-namespace-bird-high-availability.lantian/	{{server_addr}}	{{server_port}}
+i  正好一年前，我在 DN42 网络内用 Docker 建立了 Anycast 服务。当时我的		{{server_addr}}	{{server_port}}
+i  方法是，自定义容器的镜像，在其中安装一个 Bird，然后加入 OSPF 协议的		{{server_addr}}	{{server_port}}
+i  置文件来广播 Anycast 路由。但是随着时间推移，这套方案出现了以下问题		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 系统禁用摄像头防止网课翻车 (2020-03-11 07:50:47)	/article/random-notes/system-disable-camera-prevent-online-course-leak.lantian/	{{server_addr}}	{{server_port}}
+i  本文介绍如何在 Windows 和 Linux 中禁用摄像头驱动，从而：在系统层面上		{{server_addr}}	{{server_port}}
+i  避免误操作开启摄像头，把你 在吃饭 在床上 在玩王者荣耀 在（数据删除）		{{server_addr}}	{{server_port}}
+i   的样子直播出来避免部分网课软件后台开启偷拍Windows 操作方法按下 Win+		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- LADSPA 双声道分频及低音增强插件 (2020-02-17 16:48:15)	/article/creations/ladspa-plugin-frequency-splitter-bass-boost.lantian/	{{server_addr}}	{{server_port}}
+i  今年过年期间，我爸给了我一只漫步者 M120 蓝牙音响。这只蓝牙音响并不是		{{server_addr}}	{{server_port}}
+i  高端型号，只有两个扬声器，没有低音单元，并且也不支持 aptX、LDAC 这些		{{server_addr}}	{{server_port}}
+i  高端的蓝牙音频编码技术。虽然我觉得便携音响用这些也听不出区别。我在用		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 使用现代格式几乎无损地存档图片及视频 - H265 与 HEIF (2020-02-13 07:05:18)	/article/modify-computer/modern-format-photo-video-archiving-almost-intact-h265-heif.lantian/	{{server_addr}}	{{server_port}}
+i  很多人都会保存有每次参加旅游、聚会等活动，或是人生重要时刻的图片和视		{{server_addr}}	{{server_port}}
+i  频。如果你很喜欢拍照和录视频，并且把它们都保存下来，你很有可能会飞快		{{server_addr}}	{{server_port}}
+i  地塞满一块有一块的硬盘。如果你不想不停地加硬盘，你也可以尝试对你的图		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 使用 PowerDNS 的 Lua 功能自建分地区解析 GeoDNS (2020-01-17 15:45:58)	/article/modify-website/powerdns-lua-diy-geodns.lantian/	{{server_addr}}	{{server_port}}
+i  之前，如果要为自己的网站自建权威 DNS 系统，那么（几乎）唯一的选择是 		{{server_addr}}	{{server_port}}
+i  PowerDNS 加上它的 GeoIP 后端。但是 GeoIP 后端使用的是 YAML 格式的配		{{server_addr}}	{{server_port}}
+i  置文件，不能与 MySQL 等数据库一同使用。这意味着必须手动配置一套跨服		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 学校网络中自建 VLAN，低价实现高速私有内网 (2020-01-13 14:31:07)	/article/modify-website/cheap-vlan-for-high-speed-transfer-in-school-managed-network.lantian/	{{server_addr}}	{{server_port}}
+i  和全国大多数高校一样，我所在的大学以「一人一账号」的方式提供网络。通		{{server_addr}}	{{server_port}}
+i  过有线网络或者 Wi-Fi 联网时，所有请求会被暂时重定向到一个登录界面（		{{server_addr}}	{{server_port}}
+i  即 Captive Portal），输入用户名密码后才可以访问互联网。这个做法也是		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- OS/2 Warp 4 系统试用及安装 Firefox (2020-01-07 05:28:40)	/article/modify-computer/os2-warp-firefox.lantian/	{{server_addr}}	{{server_port}}
+i  OS/2 是起初由 IBM 与微软公司联合开发，后续由 IBM 维护的操作系统。在		{{server_addr}}	{{server_port}}
+i  上世纪 90 年代，OS/2 是 Windows 的有力竞争者，但 OS/2 后续在市场上被		{{server_addr}}	{{server_port}}
+i  Windows 系列击败，IBM 也在 2006 年 12 月 31 日最终停止了 OS/2 Warp 4		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- （怀旧）ATduck 虚拟 Modem 拨号上网 (2019-12-12 13:10:04)	/article/modify-computer/atduck-emulate-modem-dialup-retro.lantian/	{{server_addr}}	{{server_port}}
+i  今年真的是 9102 年了吗？是的。出于怀旧的目的，我想尝试一下在 Windows		{{server_addr}}	{{server_port}}
+i   2000 等旧操作系统中拨号上网。当然，在 2019 年绝大部分人都已经不会有		{{server_addr}}	{{server_port}}
+i  使用电话线的调制解调器，甚至不会知道曾经有它存在。现在的电脑也早已没		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 与 Hexo 配合使用 Sass 和 Webpack (2019-10-25 16:48:17)	/article/modify-website/sass-webpack-with-hexo.lantian/	{{server_addr}}	{{server_port}}
+i  为何使用 Sass 和 WebpackSass 是 CSS 的超集，在 CSS 的基础上扩展了大		{{server_addr}}	{{server_port}}
+i  量的语法，支持规则嵌套、变量定义、include 等功能，也可以进行数学运算		{{server_addr}}	{{server_port}}
+i  。主要功能可以在官方入门教程中查看。Sass 原先的文件格式扩展名是 sass		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 开始使用 Hexo 静态网站生成器 (2019-09-25 14:17:00)	/article/modify-website/switching-to-hexo-static-site-generator.lantian/	{{server_addr}}	{{server_port}}
+i  什么是静态网站生成器我们常用的 WordPress、Typecho 等 CMS（内容管理系		{{server_addr}}	{{server_port}}
+i  统）都是动态网站。当用户访问网页时，服务端运行使用 PHP、Python、Node		{{server_addr}}	{{server_port}}
+i  .js 等语言的程序，根据用户的请求实时产生网页，将其返回给用户。而 Jek		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- （自建 NTP）在 Tinker Board 上使用 PPS (2019-09-16 14:20:20)	/article/modify-website/diy-ntp-pps-on-tinker-board.lantian/	{{server_addr}}	{{server_port}}
+i  在前一篇文章中，我使用 Tinker Board 和 ATGM336H GPS / 北斗模块自建了		{{server_addr}}	{{server_port}}
+i   NTP 服务器，以 GPS 作为时间基准。GPS 模块除了提供传统的串口输出 NME		{{server_addr}}	{{server_port}}
+i  A 语句之外，还额外提供了一个 PPS 信号，这个信号会每秒变化一次。原本 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 自建基于 GPS 的 NTP 服务端 (2019-09-16 13:01:00)	/article/modify-website/diy-gps-based-ntp-server.lantian/	{{server_addr}}	{{server_port}}
+i  NTP 是什么NTP（Network Time Protocol）是目前使用最广泛的互联网时间同		{{server_addr}}	{{server_port}}
+i  步协议。我们常用的 Windows、macOS、Linux 等都自带了 NTP 客户端，可以		{{server_addr}}	{{server_port}}
+i  连接远程服务器获取当前的时间。例如，Windows 的 Internet 时间同步功能		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 使用 GPP 预处理 Dockerfile，实现 #include、#if 等功能 (2019-08-03 05:23:00)	/article/modify-website/gpp-preprocess-dockerfile-include-if.lantian/	{{server_addr}}	{{server_port}}
+i  由于我有多种架构的设备运行 Docker（包括 x86_64 的电脑和服务器，ARM32		{{server_addr}}	{{server_port}}
+i  v7 的 Tinker Board 和 ARM64v8 的树莓派 3B），我的每个 Docker 镜像都		{{server_addr}}	{{server_port}}
+i  要构建多种版本。最初我给每个架构单独写一份 Dockerfile，但是很明显这		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Cyclone IV FPGA 开发踩坑记录 (2019-07-08 05:10:00)	/article/modify-computer/cyclone-iv-fpga-development-bugs-resolve.lantian/	{{server_addr}}	{{server_port}}
+i  上学期，学校开设了一门数字电路课程，使用 FPGA 进行开发。在课程结尾，		{{server_addr}}	{{server_port}}
+i  我们需要分成小组，利用 FPGA 自由设计电路的特性实现复杂的功能，例如制		{{server_addr}}	{{server_port}}
+i  作一款游戏、运行卷积神经网络等等，并且可以按自己喜好加入各种额外的功		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在 DN42 中使用 Docker 建立 Anycast DNS 服务 (2019-03-14 14:54:00)	/article/modify-website/dn42-docker-anycast-dns.lantian/	{{server_addr}}	{{server_port}}
+i  2020-03-16 提示本文中的方案已有更新版本：参见《Docker 容器共享网络命		{{server_addr}}	{{server_port}}
+i  名空间，集成 Bird 实现 Anycast 高可用》。建议阅读本文的概念介绍部分		{{server_addr}}	{{server_port}}
+i  及 Bird 的大致配置，配合上文的 Docker 部署方案使用。什么是 Anycast互		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Typecho 主题性能优化和缓存 (2019-03-02 14:24:00)	/article/modify-website/typecho-performance-optimization.lantian/	{{server_addr}}	{{server_port}}
+i  为了实现 Lightbox、代码高亮等功能，我在我的博客主题中写了一些后处理		{{server_addr}}	{{server_port}}
+i  代码，对 Typecho Markdown 输出后的 HTML 代码再进行一层处理。但是因为		{{server_addr}}	{{server_port}}
+i  我的博客历史文章较多，我在不同时期也用了不同的编辑器（WordPress 编辑		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 树莓派 3B 折腾笔记：串口拨号上网 (2019-01-18 14:12:56)	/article/modify-computer/raspberry-pi-3b-ppp-dial-ethernet.lantian/	{{server_addr}}	{{server_port}}
+i  今年是 9102 年了吗？是的。为什么要这样做我手上有一块树莓派 3B 和一块		{{server_addr}}	{{server_port}}
+i  华硕的 Tinker Board。有的时候，因为 Wi-Fi 爆炸 / 配置出错 /pacman -S		{{server_addr}}	{{server_port}}
+i  yu 滚挂系统之类的原因会导致其中一块板子断网。通过连接两块板子的串口		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Go 语言实现的 Bird-lg（Bird Looking Glass） (2019-01-08 15:40:00)	/article/modify-website/go-bird-looking-glass.lantian/	{{server_addr}}	{{server_port}}
+i  什么是 BIRD？什么是 Bird-lg？BIRD 是 Linux 上常用的一款 BGP 路由软件		{{server_addr}}	{{server_port}}
+i  。我主要在 DN42 网络内使用 Bird，与其它用户建立连接。Bird-lg 是 GitH		{{server_addr}}	{{server_port}}
+i  ub 用户 sileht 开发的一款基于 Python 2 的程序。它提供了一个网页面板		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- BuyPass GO SSL 证书试用 (2019-01-04 03:17:00)	/article/modify-website/buypass-go-ssl-certificate-trial.lantian/	{{server_addr}}	{{server_port}}
+i  BuyPass 是挪威的一家 CA，提供数字证书、安全认证产品等多种服务。最近 		{{server_addr}}	{{server_port}}
+i  BuyPass 上线了基于 ACME 的自动签发证书服务，类似于 Let's Encrypt，这		{{server_addr}}	{{server_port}}
+i  项服务称为 BuyPass GO。与 Let's Encrypt 主要的不同点在于他们的证书每		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 使用 Docker 构建参数，多架构共享一份 Dockerfile (2018-12-22 11:36:00)	/article/modify-website/docker-build-arg-multi-arch-share-one-dockerfile.lantian/	{{server_addr}}	{{server_port}}
+i  由于我有多种架构的设备运行 Docker（包括 x86 服务器，树莓派，Tinker B		{{server_addr}}	{{server_port}}
+i  oard），对于每个常用的软件，我需要为每种不同架构都构建一份镜像。之前		{{server_addr}}	{{server_port}}
+i  ，我采用的方式是每个架构都有一个独立的 Dockerfile，类似于这样：可以		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- pfSense 配置 IPv6 多 WAN 自动切换 (2018-11-16 19:29:00)	/article/modify-website/pfsense-ipv6-multi-wan-switching.lantian/	{{server_addr}}	{{server_port}}
+i  就在几天前，HE.NET Tunnelbroker 的法国服务器出了一次故障。因为我在配		{{server_addr}}	{{server_port}}
+i  置 Kimsufi 服务器时，将 Kimsufi 原生的 IPv6 分给了 ESXi 单独使用（见		{{server_addr}}	{{server_port}}
+i  这篇文章），pfSense 只具有原生 IPv4 并通过 Tunnelbroker 获取 IPv6 地		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- nginx 配置 LDAP 认证 (2018-10-14 04:34:17)	/article/modify-website/nginx-ldap-authentication.lantian/	{{server_addr}}	{{server_port}}
+i  我的各台服务器上安装了各种不同的服务，都有各自的用户名密码体系，难以		{{server_addr}}	{{server_port}}
+i  统一管理。假设未来某天我的密码泄露了，一个个修改就会非常累人。因此，		{{server_addr}}	{{server_port}}
+i  我希望用一个服务来专门管理用户名密码，其它服务都从它上面获取认证信息		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在 Traceroute 里膜 拜大佬 (2018-08-15 11:46:00)	/article/modify-computer/worship-in-traceroute.lantian/	{{server_addr}}	{{server_port}}
+i  2020-10-11 更新已经有了更好的配置方法，不需要启动一大堆 Docker 容器		{{server_addr}}	{{server_port}}
+i  了。请参阅《优雅地在 Traceroute 里膜拜大佬》。简介Traceroute 是常用		{{server_addr}}	{{server_port}}
+i  检查网络状况的工具之一，会显示你操作的电脑到指定服务器的网络路径上经		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- x86 下制作 ARM Docker 镜像，Docker Hub、Travis 自动构建 (2018-07-26 14:33:00)	/article/modify-computer/build-arm-docker-image-on-x86-docker-hub-travis-automatic-build.lantian/	{{server_addr}}	{{server_port}}
+i  一般情况下，Docker 的镜像都是在一个已有的镜像内，一步步运行给定的命		{{server_addr}}	{{server_port}}
+i  令，从而生成一个新的镜像。这样的步骤在大多数人使用的 x86 架构计算机		{{server_addr}}	{{server_port}}
+i  都不是问题，由于架构互相兼容，一台计算机上生成的镜像往往可以被直接复		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Docker 镜像的精简 (2018-07-17 19:18:00)	/article/modify-computer/docker-image-thin.lantian/	{{server_addr}}	{{server_port}}
+i  自从放弃 OpenVZ 架构的 VPS 并购买 KVM 架构的 VPS 以来，我一直使用 Do		{{server_addr}}	{{server_port}}
+i  cker 部署 nginx、MariaDB、PHP 等网站需要的程序，不仅方便平时单个服务		{{server_addr}}	{{server_port}}
+i  的重启和配置管理（把配置目录全部用 volume 映射到一起管理），而且方便		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- nginx：TLS 1.3 多版本草案和 HPACK (2018-07-06 16:28:00)	/article/modify-website/nginx-tls-1-3-multiple-draft-and-hpack.lantian/	{{server_addr}}	{{server_port}}
+i  距离我之前给 nginx 启用 TLS 1.3 已经过了 11 个月了。快一年过后，许多		{{server_addr}}	{{server_port}}
+i  与 nginx 相关的程序、补丁都有了很大的变化：OpenSSL 已经在发布 1.1.1 		{{server_addr}}	{{server_port}}
+i  的测试版，写本文时最新版本是 1.1.1-pre8（也就是 Beta 6）。nginx 已经		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Kimsufi 独服安装升级 ESXi 并设置软路由 (2018-06-06 09:22:00)	/article/modify-website/kimsufi-dedi-esxi-software-router.lantian/	{{server_addr}}	{{server_port}}
+i  Kimsufi 是法国 OVH 公司的一个廉价品牌，专门出租性价比极高的服务器。		{{server_addr}}	{{server_port}}
+i  我自己租的是 KS-4C 型号，i5-2400 处理器，16GB 内存，2TB 硬盘，百兆带		{{server_addr}}	{{server_port}}
+i  宽无限流量，只需要 13 欧元 / 月，性价比极高，非常适合开虚拟机做实验		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 编写配置文件，让 Thunderbird 自动配置域名邮箱 (2018-06-01 06:45:00)	/article/modify-website/write-config-file-let-thunderbird-autoconfig-domain-email.lantian/	{{server_addr}}	{{server_port}}
+i  许多人在自己的网站域名上设置了邮箱系统，我也在主站 lantian.pub 的域		{{server_addr}}	{{server_port}}
+i  名上使用了 Zoho 的域名邮箱。不过使用域名邮箱的一大缺点是，你很难记住		{{server_addr}}	{{server_port}}
+i  邮件系统的 POP3、IMAP、SMTP 等服务器地址，一旦出现重装系统、重装邮件		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在 DN42 中设置 IPv6 反向解析 (2018-05-27 12:19:00)	/article/modify-website/dn42-reverse-record-ipv6.lantian/	{{server_addr}}	{{server_port}}
+i  DN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型的 		{{server_addr}}	{{server_port}}
+i  VPN 网络。但是与其它传统 VPN 不同的是，DN42 使用了大量在互联网骨干上		{{server_addr}}	{{server_port}}
+i  应用的技术（例如 BGP），可以很好的模拟一个真实的网络环境。我在先前的		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在 DN42 中设置 IP 反向解析 (2018-05-05 13:58:00)	/article/modify-website/dn42-ip-reverse-record.lantian/	{{server_addr}}	{{server_port}}
+i  DN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型的 		{{server_addr}}	{{server_port}}
+i  VPN 网络。但是与其它传统 VPN 不同的是，DN42 使用了大量在互联网骨干上		{{server_addr}}	{{server_port}}
+i  应用的技术（例如 BGP），可以很好的模拟一个真实的网络环境。我在先前的		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在 DN42 中注册自己的域名 (2018-04-26 13:54:00)	/article/modify-website/register-own-domain-in-dn42.lantian/	{{server_addr}}	{{server_port}}
+i  DN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型的 		{{server_addr}}	{{server_port}}
+i  VPN 网络。但是与其它传统 VPN 不同的是，DN42 使用了大量在互联网骨干上		{{server_addr}}	{{server_port}}
+i  应用的技术（例如 BGP），可以很好的模拟一个真实的网络环境。我在先前的		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 抢到了 50KVM 家一台 0.1 折的 VPS (2018-04-03 14:01:00)	/article/modify-website/got-50kvm-99off-vps.lantian/	{{server_addr}}	{{server_port}}
+i  TG 最大主机商 50KVM 倒闭啦！原价 100 多，200 多的 VPS，现在通通 2 块		{{server_addr}}	{{server_port}}
+i  钱！通通 2 块钱！（并不起始4 月 1 号星期天凌晨，正躺在床上看最新一集		{{server_addr}}	{{server_port}}
+i  的国家队 Telegram 弹出消息，50KVM 发了一个愚人节优惠：反正国家队看完		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- RoboMaster 开发踩坑日记（2018-05-28 更新） (2018-03-31 01:44:00)	/article/modify-computer/robomaster-bugs-in-development.lantian/	{{server_addr}}	{{server_port}}
+i  学校组建了一支 RoboMaster 队伍，准备参加今年的比赛。因为是新校区新学		{{server_addr}}	{{server_port}}
+i  生，因此我们完全没有之前的参考资料，只能自己一个个踩坑。以下是我们在		{{server_addr}}	{{server_port}}
+i  软件开发中遇到的一些坑。硬件版本：RoboMaster 官方开发板（信仰板）芯		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NAT64 服务器搭建 (2018-03-10 12:21:00)	/article/modify-computer/nat64-server-build.lantian/	{{server_addr}}	{{server_port}}
+i  NAT64 是 IPv4 向 IPv6 过渡时出现的一项技术。它通过将 IPv4 的地址映射		{{server_addr}}	{{server_port}}
+i  到一个 IPv6 地址段上，来让仅支持 IPv6 的设备同样能够访问 IPv4 网络。		{{server_addr}}	{{server_port}}
+i  但由于仅支持 IPv6 的设备并不多，目前它在国内的应用主要是两个方面：对		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 树莓派 3B 折腾笔记：硬件看门狗 (2018-02-12 14:46:18)	/article/modify-computer/raspberry-pi-3b-hardware-watchdog.lantian/	{{server_addr}}	{{server_port}}
+i  在计算机中，「看门狗」指的是一种硬件计时器，用于在计算机失去响应（死		{{server_addr}}	{{server_port}}
+i  机）的时候重启计算机。计算机的系统上要运行一个程序不断和看门狗硬件通		{{server_addr}}	{{server_port}}
+i  信。当通信中断经过一段预设的时间后，看门狗就会通过发送 RESET 信号或		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 解决树莓派 HW CSum Failure 问题 (2018-01-25 15:18:00)	/article/modify-computer/solve-raspberry-pi-hw-csum-failure.lantian/	{{server_addr}}	{{server_port}}
+i  今天登录上树莓派，习惯性 df 查看磁盘空间，发现树莓派 TF 卡上的空间所		{{server_addr}}	{{server_port}}
+i  剩无几。最开始我以为我设置错误，把要挂机下载的文件下载到了 TF 卡里而		{{server_addr}}	{{server_port}}
+i  不是移动硬盘里。结果排查下来，/var/log 下的日志文件居然占据了整整 18		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 让 ASF 帮你在 Steam 中挂「贪玩蓝月」 (2018-01-16 14:02:00)	/article/modify-computer/asf-steam-tanwanlanyue.lantian/	{{server_addr}}	{{server_port}}
+i  最近贪玩蓝月因为其洗脑的广告而流行了起来，也出现了许多通过在 Steam 		{{server_addr}}	{{server_port}}
+i  中添加自定义程序后重命名为「贪玩蓝月」，达到显示自己在玩贪玩蓝月效果		{{server_addr}}	{{server_port}}
+i  的教程。不过这么做需要把那个自定义程序一直开着，有些时候还是比较麻烦		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 如何在 SSLLabs 测试中冲满分 (2018-01-02 14:44:00)	/article/modify-website/how-to-get-full-mark-in-ssllabs-test.lantian/	{{server_addr}}	{{server_port}}
+i  Qualys SSL Labs 是一个测试服务器 SSL 功能的网站，我们在配置服务器时		{{server_addr}}	{{server_port}}
+i  经常用它作为参考。一般来说我们只参考它的评级（A+，A，B，C，D，E，F，		{{server_addr}}	{{server_port}}
+i  ）等，达到 A+ 就认为服务器的配置足够优秀。不过，SSLLabs 也在评级右侧		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 树莓派 3B 折腾笔记：硬件随机数发生器 (2017-10-30 12:13:25)	/article/modify-computer/raspberry-pi-3b-hardware-random-number-generator.lantian/	{{server_addr}}	{{server_port}}
+i  随机数在计算机中有着十分重要的应用，例如常用的 SSL 加密算法就非常依		{{server_addr}}	{{server_port}}
+i  赖随机数。如果随机数不够随机，就很有可能被攻击者猜到，相应的加密验证		{{server_addr}}	{{server_port}}
+i  体系也就土崩瓦解。但是由于计算机说零是零、说一是一的特点，它没有办法		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 树莓派 3B 折腾笔记：BT 下载与策略路由 (2017-10-21 11:17:00)	/article/modify-computer/raspberry-pi-3b-notes-bittorrent-strategy-routing.lantian/	{{server_addr}}	{{server_port}}
+i  这次就直接进入正题。（其实是不知道该拿什么开头）安装 Transmission 挂		{{server_addr}}	{{server_port}}
+i   PT作为一个可以自由连接各种传感器的小型电脑，树莓派的可玩性相当高。		{{server_addr}}	{{server_port}}
+i  即使你不想在 GPIO 上接一大堆传感器（或者像我一样觉得另外的传感器暂时		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 树莓派 3B 折腾笔记 (2017-10-13 11:39:00)	/article/modify-computer/raspberry-pi-3b-notes.lantian/	{{server_addr}}	{{server_port}}
+i  国庆放假期间我在某宝上买了一只树莓派 3B 和一堆传感器，准备搞一波事情		{{server_addr}}	{{server_port}}
+i  。因为是国庆，所以各家店发货都有不同的延迟，导致我国庆长假后又过了好		{{server_addr}}	{{server_port}}
+i  几天东西才到齐。先上张完成体的图片：我分了五家店买了这些东西：树莓派		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- CommentToMail 修改版 (2017-09-26 13:23:00)	/article/modify-website/comment-to-mail-modified.lantian/	{{server_addr}}	{{server_port}}
+i  最近突然发现本来每天一封的自建贴吧签到系统的邮件突然没有了，但是贴吧		{{server_addr}}	{{server_port}}
+i  还是正常签到。上 Mailgun 界面一看，状态全线飘红：日志里一大排发往我		{{server_addr}}	{{server_port}}
+i  自己 Outlook 邮箱的退信，比如：看提示是 Mailgun 的整个 AS 都被 Outlo		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 为 nginx 启用 TLS 1.3，并传递给 FastCGI 后端 (2017-08-06 11:38:59)	/article/modify-website/nginx-enable-tls-1-3-fastcgi-pass-version.lantian/	{{server_addr}}	{{server_port}}
+i  OpenSSL 在最新的测试版中提供了 TLS 1.3 的实验性支持，包括了一系列的		{{server_addr}}	{{server_port}}
+i  性能和安全性优化。最新的 nginx 1.13 系列也相应的添加了 TLS 1.3 的相		{{server_addr}}	{{server_port}}
+i  选项。不过由于 TLS 1.3 还处在草案状态，现在使用还是要踩一些坑的：TLS		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 加入 DN42 实验网络 (2017-07-17 08:41:00)	/article/modify-website/join-dn42-experimental-network.lantian/	{{server_addr}}	{{server_port}}
+i  2020-03-16 提示本文已有更新版本：参见《DN42 实验网络介绍（2020 版）		{{server_addr}}	{{server_port}}
+i  》。新版介绍中有更详细的注册申请流程，并根据 DN42 三年来的变化做出了		{{server_addr}}	{{server_port}}
+i  修改。以下内容写于 2017 年，仅作存档用途。DN42 全称 Decentralized Ne		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 使用 ZeroTier One 建立自己的 IPv6 隧道 (2017-07-06 08:10:15)	/article/modify-computer/zerotier-one-own-ipv6-tunnel.lantian/	{{server_addr}}	{{server_port}}
+i  前言天朝绝大多数 ISP 均不为用户提供 IPv6 地址，除了教育网。但是教育		{{server_addr}}	{{server_port}}
+i  网的 IPv6 很不稳定（可能和我的学校有关），而且一旦离开学校就没有 IPv		{{server_addr}}	{{server_port}}
+i   了，很不爽。有一种方法是使用 HE.NET 的隧道服务。在 SixXS 关闭之后，		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 使用 ZeroTier One 在多台 Docker 服务器间建立双栈互通网络 (2017-05-06 04:15:00)	/article/modify-website/zerotier-one-connect-docker-containers-dualstack.lantian/	{{server_addr}}	{{server_port}}
+i  前言多台 Docker 服务器上的容器互通是一个不好解决的问题。如果自建一个		{{server_addr}}	{{server_port}}
+i   Overlay 网络，就需要在一台服务器上建立 etcd 之类的服务。但如果 etcd		{{server_addr}}	{{server_port}}
+i   所在的服务器挂了，整个网络就 GG 了。我用的便宜 VPS 有偶尔网络中断的		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 使用东北大学网络中心的 SSH 黑名单系统 (2017-03-27 14:26:00)	/article/modify-computer/neu-network-center-ssh-blacklist.lantian/	{{server_addr}}	{{server_port}}
+i  东北大学网络中心在其网站上提供了一份 SSH 黑名单，列出了使用端口扫描		{{server_addr}}	{{server_port}}
+i  工具扫描 SSH 端口的 IP 名单，貌似是由他们自己设立的蜜罐服务器检测统		{{server_addr}}	{{server_port}}
+i  的。同时，他们也提供了黑名单对应的 hosts.deny 文件的下载，允许用户使		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- LT NoLitter：防止 Android 应用乱建文件夹的 Xposed 插件 (2017-01-31 15:17:27)	/article/modify-computer/lt-nolitter-stop-android-app-litter-folder.lantian/	{{server_addr}}	{{server_port}}
+i  Android 系统有着用户可直接操作的存储空间，用户可以很方便地管理自己的		{{server_addr}}	{{server_port}}
+i  文件（相比 iOS 而言）。但是某些软件也会在存储空间根目录直接建立大量		{{server_addr}}	{{server_port}}
+i  的文件夹，影响了用户的文件管理，并对强迫症人群造成了极大的威胁。于是		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 基于 Mailgun 的 Typecho 评论邮件提醒插件 (2017-01-04 11:30:20)	/article/modify-website/mailgun-typecho-comment-email-notification.lantian/	{{server_addr}}	{{server_port}}
+i  很多时候，在 WordPress、Typecho 等自建评论系统的网站中回复，只能靠自		{{server_addr}}	{{server_port}}
+i  己不断访问来确定自己的评论有没有被别人回复。然而，对于大多数人来说这		{{server_addr}}	{{server_port}}
+i  样做是非常麻烦的。博主解决问题的常用方法，就是安装邮件提醒插件。当一		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 将网站迁移到 Docker (2016-12-29 05:55:00)	/article/modify-website/migrate-website-docker.lantian/	{{server_addr}}	{{server_port}}
+i  Docker 是一个 Linux 下的容器管理软件。每个容器某种意义上相当于一个 O		{{server_addr}}	{{server_port}}
+i  penVZ VPS，可以将服务器上的各个应用隔离开来。这种隔离有助于同一软件		{{server_addr}}	{{server_port}}
+i  不同版本，或是互相冲突的软件在同一服务器上运行，比如 MySQL 5.7，MySQ		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 一次 Linux 内存泄漏的排查 (2016-12-04 15:42:00)	/article/modify-computer/linux-memory-leak-check.lantian/	{{server_addr}}	{{server_port}}
+i  起因我最近在用 PHP 写一套自己的 VPS 监控系统，包括 VPS 端和显示端。		{{server_addr}}	{{server_port}}
+i  今天下午 3 点，我给监控系统加上了监测 VPS 上服务的运行情况的功能。由		{{server_addr}}	{{server_port}}
+i  于我的 VPS 统一使用 Debian 8 系统，我使用了 service --status-all 作		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Bilibili 弹幕过滤工具 (2016-11-20 09:05:00)	/article/modify-computer/bilibili-danmaku-filter.lantian/	{{server_addr}}	{{server_port}}
+i  随着 Bilibili 用户的增多，不少小学生也进入了 B 站，并且发布了大量不		{{server_addr}}	{{server_port}}
+i  合弹幕礼仪的弹幕，对其他用户观看视频造成了极大的影响。不少用户甚至因		{{server_addr}}	{{server_port}}
+i  此彻底关闭弹幕，但不看弹幕用什么 B 站？我自己用 Python 3 写了个小程		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Bilibili 底端弹幕转 LRC 工具 (2016-10-22 10:56:00)	/article/modify-computer/bilibili-danmaku2lrc.lantian/	{{server_addr}}	{{server_port}}
+i  Bilibili 上从来不乏各路大神的作品，包括各类原创音乐、翻唱，还有带感		{{server_addr}}	{{server_port}}
+i  的鬼畜。有时我们想把它们保存到一些能放音乐 + 歌词，但不能放视频的设		{{server_addr}}	{{server_port}}
+i  上（比如某些 MP3），或者把它们作为 BGM 在后台播放并在桌面上显示歌词		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- GetIPIntel 的 Typecho 插件 (2016-10-01 14:20:00)	/article/modify-website/getintel-typecho-plugin.lantian/	{{server_addr}}	{{server_port}}
+i  GetIPIntel 的介绍可以在刚刚这篇文章看到。我写了一个 Typecho 的插件，		{{server_addr}}	{{server_port}}
+i  可以阻止使用代理的访客评论，或者把他们的评论丢进垃圾箱。功能：多种模		{{server_addr}}	{{server_port}}
+i  式选择（仅黑名单，快速检查，全面检查）多种处理措施（人工审核，丢垃圾		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- GetIPIntel 反欺诈服务 (2016-10-01 12:50:00)	/article/modify-website/getipintel-anti-fraud.lantian/	{{server_addr}}	{{server_port}}
+i  没人知道在网络上和你聊天的是一个人还是一条狗。网络的匿名性给网络欺诈		{{server_addr}}	{{server_port}}
+i  带来了很大方便。前几年，有几位学生站长联盟里的站长邮件地址泄露，有好		{{server_addr}}	{{server_port}}
+i  事者就挂上 Go^_^Agent 用他们的常用网名和邮件地址辱骂联盟里其它博客的		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Rummy 拉米纸牌记牌程序 (2016-09-18 08:49:00)	/article/modify-computer/rummy-card-remember-program.lantian/	{{server_addr}}	{{server_port}}
+i  英语课上，外教给我们介绍了 Rummy 这种纸牌游戏。这种纸牌游戏没有官方		{{server_addr}}	{{server_port}}
+i  规则，因此在民间有多个变种。外教给我们介绍的这种规则如下：游戏需要至		{{server_addr}}	{{server_port}}
+i  少一副扑克牌，取决于人数，去掉所有的大小王。开局时，每人发到 7 张扑		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 沃通你咋不上天呢！ (2016-08-28 09:38:00)	/article/chat/wosign-leak-sign-github.lantian/	{{server_addr}}	{{server_port}}
+i  刚在 V2EX 上看到，有人利用沃通证书签发系统的漏洞，成功签出了一张 Git		{{server_addr}}	{{server_port}}
+i  Hub 主域名的证书。https://crt.sh/?id=29647048Certificate:    Data:  		{{server_addr}}	{{server_port}}
+i        Version: 3 (0x2)        Serial Number:            5d:8f:2b:91:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- A Javascript for time crowdfunding calculation (2016-08-24 16:19:00)	/article/chat/time-crowdfunding-calculation-javascript.lantian/	{{server_addr}}	{{server_port}}
+i  In the old Eastern country with mysterious magic power, a minute wil		{{server_addr}}	{{server_port}}
+i  l pass every 59 seconds.var toad = new Date();var secondsDonated = M		{{server_addr}}	{{server_port}}
+i  ath.floor((toad.getTime() + 1368835200000) / 59000);toad.setTime(toa		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 让 IE 与 Firefox 支持 WebP 图像格式 (2016-08-23 05:59:00)	/article/modify-website/ie-firefox-webp-support.lantian/	{{server_addr}}	{{server_port}}
+i  写了段 PHP 代码，自动从向日葵 8 号卫星的网站上抓取高清图并合成一张图		{{server_addr}}	{{server_port}}
+i  。获取卫星照片的方法可以在这里看到。但是…… 最终合成的 4d 分辨率（220		{{server_addr}}	{{server_port}}
+i  0x2200）的 PNG 图片有 7 MB 多大，而且中美网络又频繁抽风，实际都要 1 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- OpenVZ 配置 Hurricane Electric IPv6 隧道，开启整个地址池 (2016-08-09 15:19:00)	/article/modify-computer/openvz-he-ipv6-use-whole-block-along-native-ipv6.lantian/	{{server_addr}}	{{server_port}}
+i  AlphaRacks 是一个物美价廉的主机商，1CPU、512M 内存、10G 硬盘的 VPS 		{{server_addr}}	{{server_port}}
+i  只要 9.9 美元 / 年。但是这家主机商在 IPv6 地址上比较抠，需要用户说明		{{server_addr}}	{{server_port}}
+i  用 IPv6 的理由，据说最多给 20 个？但是不一定给满 20 个，比如我告诉主		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用  Canvas-Nest.js 加上酷炫的网页背景 (2016-08-03 14:28:00)	/article/modify-website/canvas-nest-js-background.lantian/	{{server_addr}}	{{server_port}}
+i  今天在 进阶博客 看到了一个酷炫的网页背景效果，背景上会有动态的线组合		{{server_addr}}	{{server_port}}
+i  成三角形等各种图形，并且会对用户鼠标移动作出响应。要在自己的网站上加		{{server_addr}}	{{server_port}}
+i  入这个效果，很简单，在 &lt;/body&gt; 之前加入这段代码：&lt;script sr		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在 Telnet 中显示有趣的东西 (2016-07-27 08:42:00)	/article/modify-website/telnet-interesting-things.lantian/	{{server_addr}}	{{server_port}}
+i  Telnet 是 1969 年发布的最古老的网络协议之一，却经久不衰，因为它实现		{{server_addr}}	{{server_port}}
+i  简单，也可以用来实现一些有趣的用途。网络上有人开发出可以在 Telnet 终		{{server_addr}}	{{server_port}}
+i  端中观看的彩虹猫（Nyancat），还有在 Telnet 中观看的星球大战。在你的		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在 Leaflet 中合并使用谷歌中国卫星图和高德地图 (2016-07-21 02:22:00)	/article/modify-website/leaflet-combine-google-cn-satellite-autonavi-map.lantian/	{{server_addr}}	{{server_port}}
+i  前几天用 Leaflet 这个 Javascript 模块制作了一个需要用到地图的项目，		{{server_addr}}	{{server_port}}
+i  但是在寻找地图数据源时发现，高德的卫星图在中国大陆以外地区无法放大到		{{server_addr}}	{{server_port}}
+i  较高精度，显示该区域无卫星图；而谷歌中国的卫星图上没有街道信息。经过		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 启用 Bash 的彩色显示 (2016-07-18 02:41:00)	/article/modify-computer/bash-color-display.lantian/	{{server_addr}}	{{server_port}}
+i  Linux 默认的 Bash 命令行总是黑底白字，有些单调。但我们可以通过加几行		{{server_addr}}	{{server_port}}
+i  命令，让 Bash 以彩色显示信息，不仅美观，而且可以突出重点内容。编辑你		{{server_addr}}	{{server_port}}
+i  的 Home 目录下的.profile 文件：nano ~/.profile```在文件末尾加上：exp		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 一个屏蔽莆田系医院的 Hosts (2016-06-18 04:39:00)	/article/modify-website/hosts-block-putian-hospitals.lantian/	{{server_addr}}	{{server_port}}
+i  1980年代，位于东庄镇的陈德良通过自己研制的偏方，在本地成为著名的皮肤		{{server_addr}}	{{server_port}}
+i  病（疥疮）游医，之后他招收门徒，开始向全国进军。他们最初在电线杆上张		{{server_addr}}	{{server_port}}
+i  贴性病、皮肤病等小广告宣传，在中国大陆各地赚到「第一桶金」，后来改在		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用 PHP 和 JavaScript 显示地球卫星照片 (2016-06-14 14:40:00)	/article/modify-website/php-javascript-satellite-earth-picture.lantian/	{{server_addr}}	{{server_port}}
+i  向日葵 8 号气象卫星是日本宇宙航空研究开发机构设计制造的向日葵系列卫		{{server_addr}}	{{server_port}}
+i  星之一，重约 3500 公斤，设计寿命 15 年以上。该卫星于 2014 年 10 月 7		{{server_addr}}	{{server_port}}
+i  日由 H2A 火箭搭载发射成功，主要用于监测暴雨云团、台风动向以及持续喷		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 解决 OpenSSH 登录缓慢的方法 (2014-12-26 11:53:57)	/article/modify-computer/fix-openssh-login-slow.lantian/	{{server_addr}}	{{server_port}}
+i  今天连接 Azure 中国版虚拟机时发现登录反应非常慢，在网络环境良好的情		{{server_addr}}	{{server_port}}
+i  况下要等上十几秒才出现输入密码的提示。经过 Google 查询，发现是 DNS 		{{server_addr}}	{{server_port}}
+i  向解析的问题。OpenSSH 会在你登录时把你的 IP 拿去做反向解析，从而判断		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在 Ubuntu Firefox 上使用最新版本的 Flash (2014-12-13 05:32:05)	/article/modify-computer/latest-flash-on-ubuntu-firefox.lantian/	{{server_addr}}	{{server_port}}
+i  早在一年前，Adobe 公司停止了其 Flash 插件在 Linux 系统下的新功能开发		{{server_addr}}	{{server_port}}
+i  ，只提供安全更新。Linux 版 Flash 的版本号也停留在了 11.2，而最新的 W		{{server_addr}}	{{server_port}}
+i  indows 版 Flash 已经更新到了 15.0 版本。不过，Adobe 又和 Google 合作		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Ubuntu 下编译安装 App Inventor (2014-10-18 09:37:03)	/article/modify-computer/ubuntu-compile-app-inventor.lantian/	{{server_addr}}	{{server_port}}
+i  App Inventor 是一款由麻省理工开发的简单的 Android 编程工具，只需要在		{{server_addr}}	{{server_port}}
+i  网页上拖动一个个对象，用流程图的方式设置好代码，就可以生成自己的 And		{{server_addr}}	{{server_port}}
+i  roid 程序。如果你在你的 Android 手机或平板上安装 App Inventor 的自带		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Ubuntu 安装 BCM4331 网卡闭源驱动 (2014-10-12 08:11:47)	/article/modify-computer/ubuntu-install-bcm4331-close-source-driver.lantian/	{{server_addr}}	{{server_port}}
+i  Ubuntu 系统对于大量设备都可以做到安装即用，因为 Ubuntu 内置了许多开		{{server_addr}}	{{server_port}}
+i  源社区提供的驱动。问题是，开源驱动相对于官方驱动有稳定性差、性能差的		{{server_addr}}	{{server_port}}
+i  问题，而闭源驱动由于版权问题不能集成在安装光盘内，因此一般安装完 Ubu		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Microsoft Accounts 在天朝访问发生异常 (2014-10-04 14:41:00)	/article/modify-website/live-microsoft-accounts-china-access-problem.lantian/	{{server_addr}}	{{server_port}}
+i  2014 年 10 月 4 日晚上，从中国访问微软账户登陆页面均会跳出 SSL 证书		{{server_addr}}	{{server_port}}
+i  无效提示，如图：颁发对象公用名 (CN)    hotmai.com组织 (O)    hotmail		{{server_addr}}	{{server_port}}
+i  com组织单位 (OU)     &lt;未包含在证书中&gt;序列号    29颁发者颁发者		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在 Macbook Pro 上安装 Ubuntu 操作系统 (2014-10-04 11:27:05)	/article/modify-computer/install-ubuntu-on-macbook-pro.lantian/	{{server_addr}}	{{server_port}}
+i  Mac 系统的确非常漂亮，非常流畅。但是 VirtualBox 虚拟机在上面的运行速		{{server_addr}}	{{server_port}}
+i  度惨不忍睹，而且一大堆在 Windows 或者 Ubuntu 上可以非常简单实现的功		{{server_addr}}	{{server_port}}
+i  能在 Mac 上就要大费周折。再加上我看到网上的文章，Ubuntu 系统的 UnixB		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 我感受到了来自百度深深的恶意 (2014-09-14 00:52:00)	/article/one-pic/i-feel-deep-ill-will-from-baidu.lantian/	{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 成龙将房祖名打飞 5 米：你 TM 在逗我？ (2014-08-21 09:55:02)	/article/chat/chenglong-beat-fangzuming-fly-5-meters-are-you-joking.lantian/	{{server_addr}}	{{server_port}}
+i  据网易新闻 http://ent.163.com/14/0820/20/A449AUVV00031H2L.html ，成		{{server_addr}}	{{server_port}}
+i  龙见到房祖名后怒打儿子，房祖名凌空飞 5 米。把一个成年男人打出 5 米远		{{server_addr}}	{{server_port}}
+i  ？果然是武术世家啊！我们先拿中学物理知识来计算一下吧，无视空气阻力。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Font Awesome 图标字体使用 (2014-08-18 10:15:00)	/article/modify-website/font-awesome-icon-font-use.lantian/	{{server_addr}}	{{server_port}}
+i  Font Awesome 是一个图标库开源项目，它目前最新的 4.1 版本提供了 439 		{{server_addr}}	{{server_port}}
+i  个矢量图标，可以匹配各种大小和各种分辨率的屏幕，而它是作为一个字体存		{{server_addr}}	{{server_port}}
+i  在，71KB 的一个文件就包括了这些图标。这些图标风格统一，可以很方便地		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在「开发者工具」中加上彩蛋 (2014-08-11 06:18:00)	/article/modify-website/easteregg-in-developer-tools.lantian/	{{server_addr}}	{{server_port}}
+i  Chrome 开发者工具里有一个叫「控制台」（Console）的地方，我们可以在这		{{server_addr}}	{{server_port}}
+i  里加几句彩蛋，比如：欢迎来到 Lan Tian @ Blog。如果你能够看到这几行话		{{server_addr}}	{{server_port}}
+i  ，那么你肯定没有女朋友。这几句话可以通过 Javascript 来输出，实现代码		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- nginx 配置并启用 SSL 和 SPDY 访问 (2014-08-08 06:41:00)	/article/modify-website/nginx-configure-enable-ssl-spdy.lantian/	{{server_addr}}	{{server_port}}
+i  来自 CloudFlare 博客的最新消息（http://blog.cloudflare.com/google-no		{{server_addr}}	{{server_port}}
+i  w-factoring-https-support-into-ranking-cloudflare-on-track-to-make-i		{{server_addr}}	{{server_port}}
+i  t-free-and-easy ），Google 可能会在算权重的时候把网站支持 SSL 作为加		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Debian VPS 设置 SMTP 发信 (2014-08-02 13:15:32)	/article/modify-website/debian-vps-smtp-sendmail.lantian/	{{server_addr}}	{{server_port}}
+i  在博客中，当博主对访客的评论作出回复，除非访客再次来访，否则很难发现		{{server_addr}}	{{server_port}}
+i  博主已经回复了自己。但是通过评论回复邮件通知功能，在博主或者其他访客		{{server_addr}}	{{server_port}}
+i  回复访客评论的时候，访客会收到邮件，从而及时得知自己收到了回复。但是		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Typecho 显示评论者国家和浏览器 (2014-07-30 13:09:00)	/article/modify-website/typecho-show-commenter-country-browser.lantian/	{{server_addr}}	{{server_port}}
+i  Typecho 由于插件稀少，一直没有找到显示评论者国家和浏览器的插件，所以		{{server_addr}}	{{server_port}}
+i  只好自力更生了。代码修改自 WordPress 插件 Show UserAgent，下载页面：		{{server_addr}}	{{server_port}}
+i  https://wordpress.org/plugins/show-useragent/前提是你的主题使用了自		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 【已辟谣】SAE 域名忘记续费，被 GoDaddy 抢购 (2014-07-29 09:53:00)	/article/chat/sae-domain-expire-godaddy.lantian/	{{server_addr}}	{{server_port}}
+i  更新：SAE 官方已经辟谣。http://weibo.com/1662047260/Bg8rZ0sGNSAE 是		{{server_addr}}	{{server_port}}
+i  新浪的云计算平台，也是国内最早的云计算平台，一直运行得还算可以，但是		{{server_addr}}	{{server_port}}
+i  最近他们犯了一个大错误：他们用来运行 SAE 上网站的域名 sinaapp.com 忘		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 华为 C8815 内置存储分区 (2014-07-25 08:00:30)	/article/modify-computer/huawei-c8815-partition.lantian/	{{server_addr}}	{{server_port}}
+i  华为 C8815 手机的内置存储是 4G，但是不代表这 4G 都是你可以使用的，其		{{server_addr}}	{{server_port}}
+i  中也包括系统文件和一些杂七杂八的东西。安卓手机的存储一般分为以下几个		{{server_addr}}	{{server_port}}
+i  区：缓存区（cache），存储安卓系统运行的一些临时文件，这些文件一般总		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Aroma 文件管理器：Recovery 环境下的文件管理器 (2014-07-25 07:32:00)	/article/modify-computer/aroma-file-manager-recovery-mode.lantian/	{{server_addr}}	{{server_port}}
+i  Aroma 文件管理器是一个神奇的文件管理器，因为它运行在 Recovery 环境下		{{server_addr}}	{{server_port}}
+i  。有的时候，改一个文件就能把安卓系统弄坏，开不起机，此时一般的做法是		{{server_addr}}	{{server_port}}
+i  重新刷机，但是这样会丢失你的数据和你之前对系统做的所有修改。Aroma 文		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Mac OS X 开启内置 FTP 服务 (2014-07-05 13:15:17)	/article/modify-computer/mac-osx-enable-builtin-ftp.lantian/	{{server_addr}}	{{server_port}}
+i  由于某些原因，我希望从手机里通过 FTP 访问电脑上的文件。而 Mac OS X 		{{server_addr}}	{{server_port}}
+i  一直内置了 FTP 和 SSH 服务，因此我希望把他们启用。点左上角苹果图标 -		{{server_addr}}	{{server_port}}
+i  系统偏好设置 - 共享，选中左侧远程登录的复选框，同时确认你的用户名在		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 验证码：不做死就不会死 (2014-06-27 14:22:05)	/article/chat/captcha-no-make-no-die.lantian/	{{server_addr}}	{{server_port}}
+i  众所周知，验证码是为了防止机器暴力破解密码或者发广告刷评论而产生的东		{{server_addr}}	{{server_port}}
+i  西，一般的验证码都是由 4 位数字组成，加上一些干扰线，从而尽可能防止		{{server_addr}}	{{server_port}}
+i  机器暴力破解。问题是…… 这世界上还有一种逗比的验证码。图片来自 [http:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- gogoCLIENT DNS 解析问题解决 (2014-06-01 15:17:00)	/article/modify-computer/gogoclient-dns-resolve-solution.lantian/	{{server_addr}}	{{server_port}}
+i  这几天 Google 服务不怎么正常，所以我决定使用 IPv6 隧道来连接 Google		{{server_addr}}	{{server_port}}
+i  ，以便获得较好的访问速度。按照我去年 10 月写的文章《Windows 8.1 下 g		{{server_addr}}	{{server_port}}
+i  goCLIENT 的安装使用与 Bug 修复》，我在我的电脑上设置好了隧道。但是此		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Windows Azure 虚拟机试用 (2014-05-23 08:40:00)	/article/modify-computer/windows-azure-vm-trial.lantian/	{{server_addr}}	{{server_port}}
+i  Windows Azure 是微软提供的类似 AWS 的虚拟机。由于天朝云计算服务数据		{{server_addr}}	{{server_port}}
+i  不能和国外共享的规定，Azure 在中国专门开了一家叫世纪互联的公司运营，		{{server_addr}}	{{server_port}}
+i  现在有华东和华北两个数据中心。Azure 现在没有看到有限制试用时间，在网		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Macbook 在 Windows 下发热的最终解决方案 (2014-05-03 07:50:08)	/article/modify-computer/macbook-windows-heat-final-solution.lantian/	{{server_addr}}	{{server_port}}
+i  LubbosFanControl 这款软件的确是 Windows 下控制风扇转速的神器，但是控		{{server_addr}}	{{server_port}}
+i  制转速只是治标不治本的做法，只解决了散热却没有解决发热量大的问题。在		{{server_addr}}	{{server_port}}
+i   Mac 系统下，在我使用 Chrome 访问 B 站时，CPU 温度一般稳定在 60℃左右		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- OpenSSL 「心血」漏洞 造成巨大影响 (2014-04-11 14:16:00)	/article/modify-website/openssl-heartbleed-leak.lantian/	{{server_addr}}	{{server_port}}
+i  2014 年 4 月 8 日，微软正式停止对 Windows XP 提供支持服务。2014 年 4		{{server_addr}}	{{server_port}}
+i   月 8 日，著名开源 SSL 支持软件 OpenSSL 爆出「心血」漏洞，该漏洞面前		{{server_addr}}	{{server_port}}
+i  几乎现在的一切 IDS 系统和防火墙都无法防御。SSL，全称 Secure Socket L		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 马航 MH370 失联 加拿大飞行员提出全新分析 (2014-03-27 09:11:00)	/article/forward/malaysia-mh370-canada-pilot-new-guess.lantian/	{{server_addr}}	{{server_port}}
+i  今天是 3 月 27 日，距离 MH370 失联已经过了 19 天。在寻找飞机无果的情		{{server_addr}}	{{server_port}}
+i  况下，大家也纷纷猜测飞机去处，空中解体说法和飞行员劫机说法都有漏洞（		{{server_addr}}	{{server_port}}
+i  其中前者已经被排除），而最近加拿大飞行员 Chris Goodfellow 分析称飞机		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 神算法对班里进行八卦 (2014-03-22 09:43:00)	/article/forward/calculate-couple-in-class.lantian/	{{server_addr}}	{{server_port}}
+i  B 站上看到的，av1020723。等会我可能会做一个 PHP 版出来。原程序为 Jav		{{server_addr}}	{{server_port}}
+i  a 语言，在我电脑上运行不起来（原因未知），我看着源代码翻译成了 Pasca		{{server_addr}}	{{server_port}}
+i  l。Java 版：程序：http://pan.baidu.com/s/1sjtZs1v源代码：http://pan.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 李坚柔神夺冠，贴吧网友神预测 (2014-02-15 03:11:00)	/article/forward/lijianrou-win-tieba-predict.lantian/	{{server_addr}}	{{server_port}}
+i  李坚柔最近火了啊……但是她那神奇的夺冠方式，有贴吧网友已经预测到了有木		{{server_addr}}	{{server_port}}
+i  有！《别着急，看我神预测》发帖时间：2014-02-13 19:29比赛开始，棒子第		{{server_addr}}	{{server_port}}
+i  一，意大利第二，英国第三，中国第四，一圈后，意大利和英国由于挣抢双双		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 六三群英传 —— 二中之巅 魔塔游戏反编译及彩蛋寻找 (2014-02-03 15:01:00)	/article/chat/erzhongzhidian-magic-tower-game-decompile-easteregg-find.lantian/	{{server_addr}}	{{server_port}}
+i  这几天晚上在上化学竞赛课。昨天的那节课，化学老师请来几个学长给我们传		{{server_addr}}	{{server_port}}
+i  （jiang）授（jiang）经（gu）验（shi）。学长们扯着扯着，扯到了他们空		{{server_addr}}	{{server_port}}
+i  闲时自己做的一款魔塔游戏 —— 六三群英传 —— 二中之巅。这么高大上的游戏		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 最傻的代码错误：一个空格酿成的血案 (2014-01-04 04:09:00)	/article/forward/foolish-code-typo.lantian/	{{server_addr}}	{{server_port}}
+i  Bumblebee 是 Linux 平台上的一款 NVidia 显卡的辅助工具，它可以让 NVid		{{server_addr}}	{{server_port}}
+i  ia 显卡启用 Optimus 技术，就是在笔记本电脑平台上由独立显卡渲染，集成		{{server_addr}}	{{server_port}}
+i  显卡显示。其实就是显卡硬件加速。这是一款非常有用的工具，但是它曾经出		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 选课系统坑爹 (2013-12-14 04:56:12)	/article/chat/class-choose-system-fools-us.lantian/	{{server_addr}}	{{server_port}}
+i  学校的抢课系统上 12 点开始选择社团，采用抢课制度，也就是名额有限，先		{{server_addr}}	{{server_port}}
+i  到先得。之前用过这个系统选选修课，所以提前登录好（此时页面没有课可以		{{server_addr}}	{{server_port}}
+i  选），11：59：30 开始连续刷新页面，等待课程出现。12：00 课程准时出现		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 朝鲜三明治平板电脑在 eBay 上惨遭拍卖！ (2013-11-17 03:31:00)	/article/forward/north-korean-samijyon-tablet-bid-on-ebay.lantian/	{{server_addr}}	{{server_port}}
+i  朝鲜搞出了「自主研发」的安卓手机，还搞出了面向外国游客的三明治平板电		{{server_addr}}	{{server_port}}
+i  脑。既然有得卖，那么就会有好奇的人来买。既然有人买，那么玩过之后，就		{{server_addr}}	{{server_port}}
+i  会有人卖。2013 年 11 月 7 日，国外著名拍卖网站 eBay 上出现了一台朝鲜		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 【有生之年】Typecho 0.9 Alpha 终于发布了 (2013-10-26 01:51:26)	/article/modify-website/typecho-09-alpha.lantian/	{{server_addr}}	{{server_port}}
+i  昨天下午回到家，打开 feedly，看到小蒋博客上有篇 Typecho 0.9 的文章。		{{server_addr}}	{{server_port}}
+i  啥，Typecho 居然在有生之年更新了！？果断打开 Typecho 官网，居然看到		{{server_addr}}	{{server_port}}
+i  了 TE 那个简洁的默认主题。我记得以前官网不是长这样。发布文章上来就一		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 杭二中台风特别节目《我们去看海》 (2013-10-07 10:31:15)	/article/chat/h2z-lets-see-ocean.lantian/	{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 给 IE 添加 HTML5 和 CSS3 支持 (2013-10-03 09:08:23)	/article/modify-website/ie-html5-css3-support.lantian/	{{server_addr}}	{{server_port}}
+i  自从我建立这个博客开始，我就从来没考虑过 IE 用户的感受。当时我的浏览		{{server_addr}}	{{server_port}}
+i  器是 Firefox，IE 对我的唯一用处是去下载 Firefox。现在我自己在 Win 下		{{server_addr}}	{{server_port}}
+i  用 Chrome，Mac 下也用 Chrome，手机上用 Opera。本来我以为我可以对 IE 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Host1Free 为防 VPS 闲置再出狠招：每月续期一次 (2013-10-03 03:11:32)	/article/modify-website/host1free-vps-xuqi-monthly.lantian/	{{server_addr}}	{{server_port}}
+i  8 个月前，Host1Free 用关机大法清理了一大批闲置用户。现在，H1F 又出狠		{{server_addr}}	{{server_port}}
+i  招，每月输验证码续期一次，否则就删除你的 VPS。每次你续期后 2 周，会		{{server_addr}}	{{server_port}}
+i  给你发下一月的续期邮件；你收到邮件后在 2 周内进行续期，否则先关闭你		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Windows 8.1 下 gogoCLIENT 的安装使用与 Bug 修复 (2013-10-02 12:28:15)	/article/modify-computer/windows-8-1-gogoclient-install-repair-bug.lantian/	{{server_addr}}	{{server_port}}
+i  半年前，当我还在用 Ubuntu 的时候，我用 XP 虚拟机 + gogoCLIENT 搞定了		{{server_addr}}	{{server_port}}
+i   IPv4 与 IPv6 的互通。今天，我尝试在 Windows 8.1 下安装 gogoCLIENT（		{{server_addr}}	{{server_port}}
+i  以下简称 GC）时，却出现了神一样的 Bug。下载地址：http://www.gogo6.co		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Windows 下控制 MacBook 风扇转速 (2013-10-01 07:00:54)	/article/modify-computer/windows-control-macbook-fan.lantian/	{{server_addr}}	{{server_port}}
+i  MacBook 的散热是用户们心中永远的痛，苹果的散热非常的保守，直到 CPU 		{{server_addr}}	{{server_port}}
+i  温度高于 90 度，才开始加转速降温，对 CPU 和用户伤害很大。今天早上我		{{server_addr}}	{{server_port}}
+i  好 Win8.1，在网上看了会视频，然后拿起电脑准备放到旁边时，手不小心碰		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用 Pdnsd，给你的 DNS 解析缓存加速 (2013-09-14 07:42:40)	/article/chat/pdnsd-accelerate-dns-resolving.lantian/	{{server_addr}}	{{server_port}}
+i  你向浏览器里输入了一串网址后，浏览器并不能马上找到这个网站。它会先把		{{server_addr}}	{{server_port}}
+i  网址发送给 DNS 服务器，DNS 服务器再向其它服务器一层层查询，直到根服		{{server_addr}}	{{server_port}}
+i  务器，查出网站的 IP 地址，浏览器才能进行连接。因此，每次你打开一个新		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 奇葩的比赛：扔手机世界竞标赛 (2013-09-05 02:10:00)	/article/forward/world-throw-mobile-phone-competition.lantian/	{{server_addr}}	{{server_port}}
+i  对于芬兰人来说，8 月 24 日是一个不平常的日子。从 2000 年开始，每年的		{{server_addr}}	{{server_port}}
+i  这天，芬兰会在萨沃林纳举行世界扔手机竞标赛。今年该比赛男子组前三名的		{{server_addr}}	{{server_port}}
+i  成绩是 97.73m、87.88m、86.09m。女子组第一氏 40.41m。该比赛的目的是让		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 朝鲜自主研发安卓平板：我和我的小伙伴又惊呆了 (2013-08-30 05:09:00)	/article/forward/north-korean-android-pad-shock-everybody.lantian/	{{server_addr}}	{{server_port}}
+i  朝鲜是一个神秘的国度。当朝鲜人开发出 Red Star Linux 时，人们惊呼：朝		{{server_addr}}	{{server_port}}
+i  鲜还有这能力？当朝鲜人在自己国家建立 3G 网络时，人们惊呼：朝鲜竟然还		{{server_addr}}	{{server_port}}
+i  有 3G 技术？虽然朝鲜的非智能手机都是中国进口，虽然目前为止朝鲜的安卓		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 朝鲜自主研发安卓手机：我和我的小伙伴都惊呆了 (2013-08-23 10:00:00)	/article/forward/north-korean-arirang-android-phone-shock-everyone.lantian/	{{server_addr}}	{{server_port}}
+i  朝鲜是一个神秘的国度。当朝鲜人开发出 Red Star Linux 时，人们惊呼：朝		{{server_addr}}	{{server_port}}
+i  鲜还有这能力？当朝鲜人在自己国家建立 3G 网络时，人们惊呼：朝鲜竟然还		{{server_addr}}	{{server_port}}
+i  有 3G 技术？虽然朝鲜的非智能手机都是中国进口，虽然目前为止朝鲜的安卓		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 杭二中老师经典语录大词典 (2013-08-18 05:02:00)	/article/forward/hz2hs-teacher-funny-words-dictionary.lantian/	{{server_addr}}	{{server_port}}
+i  先扯几句：1. 前几天出去旅游所以博客没更新。2. 本文转载自 http://user		{{server_addr}}	{{server_port}}
+i  .qzone.qq.com/292033386/blog/1376727949。---------- 正文开始 -------		{{server_addr}}	{{server_port}}
+i  ---题记：「我们在此铭心相约：一切皆不能将我和祖国的命运分开，无论是		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Hitokoto 一句话吐槽 (2013-08-04 07:52:01)	/article/modify-website/hitokoto-one-word-tucao.lantian/	{{server_addr}}	{{server_port}}
+i  Hitokoto 是一个一句话吐槽网站。所谓一句话吐槽，就是用一句话的方式，		{{server_addr}}	{{server_port}}
+i  记录自己的所说、所做、所想，并与别人分享。Hitokoto 就提供了一个让大		{{server_addr}}	{{server_port}}
+i  分享吐槽的网站。但是很明显，这篇文章的目的不是讲这个。我讲的是他的 A		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Tengine 网页服务器编译以及安装 (2013-07-31 08:19:50)	/article/modify-computer/tengine-web-server-complie-install.lantian/	{{server_addr}}	{{server_port}}
+i  Tengine 是阿里巴巴基于 nginx 开发的一款高性能网页服务器，除了保留 ng		{{server_addr}}	{{server_port}}
+i  inx 原有的高性能特性外，还增加了这堆东西：继承 Nginx-1.2.9 的所有特		{{server_addr}}	{{server_port}}
+i  性，100% 兼容 Nginx 的配置；动态模块加载（DSO）支持。加入一个模块不		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 一句话引发的全面爆吧 (2013-07-30 10:56:00)	/article/forward/a-girls-word-lead-to-large-boom-bar-attack.lantian/	{{server_addr}}	{{server_port}}
+i  2013 年 7 月 28 日凌晨，自称为权志龙粉丝 (伪) 的潘梦莹，实际为魏晨的		{{server_addr}}	{{server_port}}
+i  粉丝，在网上说出了不当言论，她「大言不惭」地侮辱众多足球明星，引起了		{{server_addr}}	{{server_port}}
+i  众多足球迷的不满，而球迷不但攻击潘梦莹，还攻击潘梦莹的「偶像」权志龙		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Win7 笔记本电脑发射无线网络 (2013-07-30 02:31:44)	/article/modify-computer/win7-laptop-make-wifi-hotspot.lantian/	{{server_addr}}	{{server_port}}
+i  先扯几句。1. 搬家了。2. 刚刚来装了网络，接口在客厅。3. 客厅没空调。		{{server_addr}}	{{server_port}}
+i  手上设备情况：两台笔记本电脑（分别 Macbook，Win7），一只手机（貌似没		{{server_addr}}	{{server_port}}
+i  用）。要求：用 Win7 笔记本发射无线网络。尝试 Macbook，结果只能发射 A		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用安卓手机引导启动 SliTaz Linux (2013-07-23 12:52:40)	/article/modify-computer/use-android-phone-bootup-slitaz-linux.lantian/	{{server_addr}}	{{server_port}}
+i  用安卓手机的，大概没人不知道安卓手机用数据线插在电脑上可以当 U 盘存		{{server_addr}}	{{server_port}}
+i  文件用。但是，安卓手机也可以用来在电脑上引导一个 Linux，你知道吗？首		{{server_addr}}	{{server_port}}
+i  先得从电脑的启动来讲。你按下电脑电源键，CPU、内存等部件通电后，就会		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 避免苹果笔记本电脑温度过高的方法 (2013-07-20 09:14:26)	/article/chat/ways-to-prevent-macbook-temperature-too-high.lantian/	{{server_addr}}	{{server_port}}
+i  苹果笔记本的过热传感好像不是很敏感，我摸着出风口都烫手了，风扇还是坚		{{server_addr}}	{{server_port}}
+i  持以 2000rpm 的速度慢悠悠地转。当时的温度是 90 度。笔记本电脑测出的 		{{server_addr}}	{{server_port}}
+i  CPU 温度，达到 70 度有一点问题但是不大，达到 80 度有必要注意，达到 9		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- ImageOptim 为网页使用而压缩图片 (2013-07-20 08:34:18)	/article/modify-website/imageoptim-compress-image-for-web.lantian/	{{server_addr}}	{{server_port}}
+i  先扯一句，网上搜索了一下，Macbook 系列不管是 Pro 还是 Air，不管系统		{{server_addr}}	{{server_port}}
+i  版本，貌似都存在 CPU 过热的问题，看 Flash 时尤其高。根据网上评测，Ma		{{server_addr}}	{{server_port}}
+i  book 历史最高温度 101 度，下次烧开水就靠它了。煎鸡蛋的话，温度可能还		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Macbook 合盖不断网的方法 (2013-07-20 05:15:45)	/article/modify-computer/macbook-close-lid-no-disconnect-network.lantian/	{{server_addr}}	{{server_port}}
+i  以前我不用电脑时，就把盖子合上，屏幕灭了，迅雷还在下载文件，QQ 还在		{{server_addr}}	{{server_port}}
+i  挂着，真好。 :-)不过苹果电脑一旦合盖，那是真正的待机，网断了，QQ 和		{{server_addr}}	{{server_port}}
+i  雷不用想了。QQ 还可以用手机来挂，但是迅雷……即使是手机挂，也要费电。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Macbook 手动设置 CPU 风扇散热 (2013-07-20 01:55:36)	/article/modify-computer/macbook-manual-config-cpu-fan-speed.lantian/	{{server_addr}}	{{server_port}}
+i  苹果在设计产品的时候，总是想尽一切办法把产品做薄。对于手机来说，问题		{{server_addr}}	{{server_port}}
+i  不大，但是对于笔记本电脑来说，电脑越薄，机器就会越烫！但是如果 CPU 		{{server_addr}}	{{server_port}}
+i  长期处在温度很高的情况下运行，那么 CPU 就会加速老化，寿命变短，你就		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Mac QQ 和手机 QQ 多开方法 (2013-07-18 02:32:31)	/article/modify-computer/mac-qq-android-qq-open-multiple.lantian/	{{server_addr}}	{{server_port}}
+i  本人有两个 QQ，一大一小，大号平时用，小号挂着玩。但是，Mac 系统的 QQ		{{server_addr}}	{{server_port}}
+i   不象 Windows 下的可以搞多账号登录，安卓 QQ 也不能多开。因此，我们需		{{server_addr}}	{{server_port}}
+i  要折腾一下。1）Mac QQ 多开其实这个方法很简单，只要按 Command+N 就可		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用新浪云和百度云搭建自己的 CDN (2013-07-17 11:28:58)	/article/modify-website/build-your-own-cdn-with-sae-bae.lantian/	{{server_addr}}	{{server_port}}
+i  警告：由于我疏忽，把 SAE CDN 的 index.php 代码打错了一行，请参照下面		{{server_addr}}	{{server_port}}
+i  代码中的注释修改代码，否则将造成远程图片不能获取的问题。大多数人的博		{{server_addr}}	{{server_port}}
+i  客都放在国外，原因我不说了。但是 SAE 和 BAE 的服务器放在国内，速度很		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 社会化评论系统的 JS 签到 (2013-07-02 03:40:43)	/article/modify-website/social-comment-javascript-auto-comment.lantian/	{{server_addr}}	{{server_port}}
+i  受 WP 博客一键签到 JS 启发，我自己修改 JS 代码，实现了友言和多说的一		{{server_addr}}	{{server_port}}
+i  键签到功能。友言版：javascript:try{document.getElementById('uyan_l_u		{{server_addr}}	{{server_port}}
+i  name').value='你的昵称';}catch(err){}var myDate=new Date();var mytim		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- WP 博客一键签到 JS (2013-07-01 14:04:09)	/article/chat/wordpress-blog-onekey-comment-javascript.lantian/	{{server_addr}}	{{server_port}}
+i  这个是我从 Arefly 的博客上看来的。原网址：http://www.arefly.com/zh-c		{{server_addr}}	{{server_port}}
+i  n/wordpress-js-check/使用方法：1. 随便收藏一个网页。2. 找到你刚才收		{{server_addr}}	{{server_port}}
+i  藏的网页，右键编辑，把名字改成「一键签到」或者你喜欢的东西，地址改成		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 每日笑点系列 (2013-06-22 02:20:00)	/article/chat/laughter-everyday-series.lantian/	{{server_addr}}	{{server_port}}
+i  最新更新：2013 年 6 月 22 日 PAGE 32-33，后记，封面（最终更新，每日		{{server_addr}}	{{server_port}}
+i  笑点完结）一路往下拖看最新页面！感谢才擦同学提供。（才擦微博：腾讯 @		{{server_addr}}	{{server_port}}
+i  yc009cc，新浪 @cyfcc）P11 题目答案 CC，第一题等号左边两个词的字母个		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 杭州市 2013 年中考英语阅读第二篇各种答案的可行性分析 (2013-06-20 03:57:58)	/article/chat/hangzhou-2013-zhongkao-english-reading-multiple-answers.lantian/	{{server_addr}}	{{server_port}}
+i  （本文同时发布在 19 楼论坛上，http://www.19lou.com/forum-15-thread-1		{{server_addr}}	{{server_port}}
+i  2021371701528323-1-1.html）原题图片：大家都知道，对于英语阅读第二部		{{server_addr}}	{{server_port}}
+i  分的正确答案，这几天 19 楼上吵得沸沸扬扬。其实对于这道题，不同人有不		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 鼠标移过图片放大显示效果 (2013-06-18 12:36:47)	/article/modify-website/mouse-move-picture-zoom-effect.lantian/	{{server_addr}}	{{server_port}}
+i  鼠标移过图片放大显示效果 - Original by Maomihz, Modified by Lan Tian		{{server_addr}}	{{server_port}}
+i  昨天晚上 Maomihz 让我帮他改一段 jQuery，实现鼠标移上去自动显示高清大		{{server_addr}}	{{server_port}}
+i  图的效果。一开始有两个 Bug，一个是鼠标移到大图框上时，大图会闪来闪去		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 中考第二天 (2013-06-16 08:12:55)	/article/chat/zhongkao-second-day.lantian/	{{server_addr}}	{{server_port}}
+i  Please ignore this line文澜加油！文澜必胜！2013 年 6 月 16 日，早上 		{{server_addr}}	{{server_port}}
+i  7：10 不到到校，看到老师在迎接我们，还是那个铃铛，每个人敲一下。还是		{{server_addr}}	{{server_port}}
+i  去实验室复习。8：00 去考科学。这次科学为什么觉得这么水，做完还剩 50 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 中考第一天 (2013-06-15 11:58:18)	/article/chat/zhongkao-first-day.lantian/	{{server_addr}}	{{server_port}}
+i  Please ignore this line文澜加油！文澜必胜！2013 年 6 月 15 日，杭州		{{server_addr}}	{{server_port}}
+i  市中考第一天。早上 7：20 到学校，看到老师排成两列迎接我们，还摆了一		{{server_addr}}	{{server_port}}
+i  类似于门的东西，上面还挂了一个铃铛。我一开始没搞清楚情况绕了过去…… 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Host1Free 近期改造网络架构，更换 VPS IP (2013-06-08 13:59:07)	/article/modify-website/host1free-change-network-infrastructure-change-vps-ip-address.lantian/	{{server_addr}}	{{server_port}}
+i  Dear Host1Free User Lan Tian,    We would like to announce that due 		{{server_addr}}	{{server_port}}
+i  to changes in our network infrastructure we will be changing current		{{server_addr}}	{{server_port}}
+i   IP address of your free VPS server 5.175.206.68 to the new one 5.17		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 奇葩年年有，今年特别多 (2013-06-08 13:39:42)	/article/fun/strange-things-happen-every-year-this-year-there-are-many.lantian/	{{server_addr}}	{{server_port}}
+i  新装的 Win8……		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- [转] 怀念文澜（机读卡篇） (2013-05-24 13:19:00)	/article/forward/memory-of-wenlan-answering-card.lantian/	{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- PHP 网页的 HTML 压缩 (2013-05-18 06:11:56)	/article/modify-website/php-webpage-html-minify.lantian/	{{server_addr}}	{{server_port}}
+i  &lt;body id="wordpress-org" class="home blog"&gt;&lt;div id="header"		{{server_addr}}	{{server_port}}
+i  &gt;     &lt;div class="wrapper"&gt;         &lt;h1&gt;[WordPress.or		{{server_addr}}	{{server_port}}
+i  g ](http://cn.wordpress.org/)&lt;/h1&gt;&lt;h2 class="rosetta"&gt;[C		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- [转] 回忆・文澜 (2013-05-14 11:16:00)	/article/forward/memory-of-wenlan.lantian/	{{server_addr}}	{{server_port}}
+i  来自 Maomihz's Blog。原文：http://maomihz.com/archives/225序章1.话说		{{server_addr}}	{{server_port}}
+i  三年忙下来，原来班里有44个同学一起学习，可是现在只剩32个了，一个一个		{{server_addr}}	{{server_port}}
+i  都走了，最后还是把自己也赶走了。三年下来，我觉得有些人似乎没有和我说		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 在微信面前，一切错误检测程序都是渣渣！ (2013-05-04 13:42:00)	/article/forward/weixin-error-report.lantian/	{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 大话三国志 (2013-05-01 02:58:00)	/article/forward/dahua-sanguo-zhi.lantian/	{{server_addr}}	{{server_port}}
+i  这是才擦的早期作品。（才擦微博：腾讯 @fyc009cc，新浪 @cyfcc）		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- IPv4 与 IPv6 的互通 (2013-04-20 10:25:37)	/article/modify-computer/ipv4-ipv6-porting.lantian/	{{server_addr}}	{{server_port}}
+i  IPv4 是目前支持最广泛的网络协议，网内计算机以 IP 地址标记，理论总共		{{server_addr}}	{{server_port}}
+i  能放 2322^{32}232 台（IPv4：8 个 16 进制位）网络设备，可惜现在已经用		{{server_addr}}	{{server_port}}
+i  完了，真不知道各大 ISP 是怎样把有限的 IP 分给无限的计算机的。IPv6 则		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 终极对抗开发者工具的一段 JS (2013-04-12 11:46:56)	/article/modify-website/js-against-develop-tools.lantian/	{{server_addr}}	{{server_port}}
+i  做网站最烦的就是辛辛苦苦做的模板被人用开发者工具扒去了，因为 Chrome 		{{server_addr}}	{{server_port}}
+i  Dev Tool 和 Firebug 都有超级牛力。（不解释）开发者工具曾经是无敌的，		{{server_addr}}	{{server_port}}
+i  直到这段 JS 出现。http://publicdn.cdn.duapp.com/js/wqnmlgb.min.js源		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Bad Apple NG 修正增强版本 (2013-03-23 13:34:44)	/article/modify-computer/bad-apple-ng-fix-enhance.lantian/	{{server_addr}}	{{server_port}}
+i  这次更新修正了几个错误。1. 帧率统计功能实际上是错误的（我脑抽写出的		{{server_addr}}	{{server_port}}
+i  代码），全片过程中帧率一般维持在 20FPS 不变。现已将 FPS 统计改成处理		{{server_addr}}	{{server_port}}
+i  延时。（PS：对于处理延时，程序自动调节）2. 有 TX 反馈说 64 位 OS 下		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Bad Apple NG：增强版 Bad Apple 播放系统 (2013-03-16 02:56:23)	/article/modify-computer/badapple-ng-enhanced-player.lantian/	{{server_addr}}	{{server_port}}
+i  UPDATE：如果碰到打不开、运行错误 2 什么的问题，请在 Bad Apple 命令行		{{server_addr}}	{{server_port}}
+i  动画版看说明下数据文件！！！上次我的 Bad Apple 命令行动画版成功被同		{{server_addr}}	{{server_port}}
+i  学 WotorDho 转载，并且进行了增强，主要是判断延时，以便控制系统卡的时		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用电驴断头档发现更多驴友，加快下载速度 (2013-03-15 14:18:55)	/article/modify-computer/use-emule-friend-file-find-emule-users-accelerate-download.lantian/	{{server_addr}}	{{server_port}}
+i  电驴（eMule）是一个现在很有名的 P2P 协议，电驴下载软件用户可以在网上		{{server_addr}}	{{server_port}}
+i  搜索其他电驴用户，并且获取自己需要的资源。电驴协议分两部分：一部分是		{{server_addr}}	{{server_port}}
+i   ED2K，它的原理和 BT 差不多。ED2K 要求电驴客户端里保存有一个服务器列		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Ubuntu 安装 LRC 歌词显示插件和开启类 SRS WOW 音效 (2013-03-09 03:40:45)	/article/modify-computer/ubuntu-lyric-and-like-srs-wow-surround.lantian/	{{server_addr}}	{{server_port}}
+i  我的华硕笔记本原先 Windows 7 下的声卡驱动自带一个叫 ASUS Sonic Focus		{{server_addr}}	{{server_port}}
+i   的技术，原理就是通过对音频的均衡器调节做到心理学杜比环绕，也就是让		{{server_addr}}	{{server_port}}
+i  人心理上以为声音是环绕声。开启 Sonic Focus 后，我觉得音效好多了。（		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Bad Apple 移植到 Telnet 中并成功放映 (2013-03-02 05:31:23)	/article/modify-website/bad-apple-show-in-telnet.lantian/	{{server_addr}}	{{server_port}}
+i  今天折腾了半天，把 Bad Apple 折腾到了我 VPS 的 Telnet 里面，用的就是		{{server_addr}}	{{server_port}}
+i  我早些时候发的命令行动画版。如果大家想看，telnet xuyh0120.tk 或 teln		{{server_addr}}	{{server_port}}
+i  et 5.175.156.249Round 1. 移植到 SSH因为本来和同学说好我要在 SSH 下折		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Bad Apple 命令行动画版 (2013-03-02 03:16:00)	/article/modify-computer/bad-apple-command-line-art.lantian/	{{server_addr}}	{{server_port}}
+i  Bad Apple 是岛国东方幻想乡制作的一个动画，全动画采用类似皮影戏的方式		{{server_addr}}	{{server_port}}
+i  ，只有黑白，但是做到了 3D 画面，而且全部手绘！效果非常好，没有任何跳		{{server_addr}}	{{server_port}}
+i  帧丢帧现象。因为它的黑白特性，大群人开始尝试将它移植到各种平台上，我		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- W3 Total Cache 实现内存缓存 (2013-02-23 13:30:05)	/article/modify-website/w3-total-cache-memory-cache.lantian/	{{server_addr}}	{{server_port}}
+i  W3 Total Cache 默认使用硬盘作为缓存，对于一些虚拟主机用户他们只能选		{{server_addr}}	{{server_port}}
+i  择这个，但是对于 VPS 用户，他们的选择就大的多了，尤其是买到一些超售		{{server_addr}}	{{server_port}}
+i  术较好的 VPS 商（Host1Free？）硬盘速度稍微偏慢，就可以利用你多余的内		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 用证书验证 Linux 远程登录 (2013-02-22 12:21:04)	/article/modify-website/login-linux-shell-with-cert.lantian/	{{server_addr}}	{{server_port}}
+i  一般人远程登录 Linux Shell 都是敲密码，烦不说，一旦你的密码在全世界		{{server_addr}}	{{server_port}}
+i  都一样，再遇到 CSDN 600 万密码大泄漏的事件，你的 VPS 也差不多完了。		{{server_addr}}	{{server_port}}
+i  以我们可以用一种更加方便和安全的方式替代密码，也就是 RSA 加密的证书		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 缓存插件的正确使用方法 (2013-02-18 01:55:23)	/article/modify-website/right-way-to-use-cache-plugins.lantian/	{{server_addr}}	{{server_port}}
+i  今天去 Blog @ Mr.Ducky 转，发现他首页上导航栏是 4 个，进了分页就是 6		{{server_addr}}	{{server_port}}
+i   个，一问他，是缓存出了问题……缓存插件 Bug 会对我们造成很大的困扰。所		{{server_addr}}	{{server_port}}
+i  以我们一定要学会正确地使用缓存插件。1. 当你发了一篇新文章，你的网站		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 为什么香港 CDN 会比美国 CDN 慢 (2013-02-16 14:21:09)	/article/modify-website/why-hongkong-cdn-slower-than-america-cdn.lantian/	{{server_addr}}	{{server_port}}
+i  CDN，也就是内容分发服务，可以为你的网站在某个位置建立一个分站，其内		{{server_addr}}	{{server_port}}
+i  容与你的原始站点相同。同时，这些分站还能保存你原有的一些静态资源，如		{{server_addr}}	{{server_port}}
+i  JS、CSS、图片，让你的网站访问更快。有时 CDN 还能优化某两地之间的网络		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- W3 Total Cache 末尾注释去除 (2013-02-13 13:07:00)	/article/modify-website/w3-total-cache-remove-information.lantian/	{{server_addr}}	{{server_port}}
+i  W3 Total Cache 开了资源最小化的效果是非常好的，连 HTML 都给我最小化		{{server_addr}}	{{server_port}}
+i  了，不信看看我的网页源代码，连换行符都被删掉了，最小化效果超级给力。		{{server_addr}}	{{server_port}}
+i  但是末尾的地方，却有个 W3 Total Cache 加的注释。&lt;!-- Performance 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Ubuntu 环境下安装 VMware Workstation 9 (2013-02-13 02:40:59)	/article/modify-computer/install-vmware-9-under-ubuntu.lantian/	{{server_addr}}	{{server_port}}
+i  话说 Ubuntu 软件源里的 VirtualBox 越来越不给力，原先至少还能安装，现		{{server_addr}}	{{server_port}}
+i  在装都装不上。官方源的那个倒是能用，但是要拖下来一大堆 KDE 组件，等 		{{server_addr}}	{{server_port}}
+i  VBox 装好了，KDE 也差不多了。然后我就决定去弄一个 VMware 玩玩。下载		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Host1Free VPS 内存占用优化 (2013-02-06 12:04:05)	/article/modify-website/host1free-vps-memory-optimize.lantian/	{{server_addr}}	{{server_port}}
+i  PS：第一次发完文章发现忘了写 nginx 和 php5-fpm 的对接，准备连上自己		{{server_addr}}	{{server_port}}
+i  的 VPS 去看设置，打开终端 - 上键 - 回车，才发现自己打的上一行代码居		{{server_addr}}	{{server_port}}
+i  是 exit……PS2：VPS 用 22 端口的童鞋请小心，你很有可能敲命令敲到一半断		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Host1Free 检查所有用户是否使用 VPS (2013-02-06 11:48:05)	/article/modify-website/host1free-check-users-vps-actively-used.lantian/	{{server_addr}}	{{server_port}}
+i  Host1Free 送 VPS 的活动已经搞了好一段时间了，总共上了 30 多台服务器		{{server_addr}}	{{server_port}}
+i  ，划出了总共 30000 台 VPS（超售严重啊…… 免费的忍忍吧），引来超级大批		{{server_addr}}	{{server_port}}
+i  用户注册，最重要的是官方不歧视景德镇用户注册。但是景德镇的人有一个特		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- nginx 启用 SSL 加密 (2013-01-26 17:09:00)	/article/modify-website/nginx-enable-ssl.lantian/	{{server_addr}}	{{server_port}}
+i  用自己的 VPS 的一个好处就是可以开 SSL 加密，可以实现在公共场所管理博		{{server_addr}}	{{server_port}}
+i  客的安全，以及减小某些自然因素导致连接异常中断的几率。Debian 6 软件		{{server_addr}}	{{server_port}}
+i  源里的 nginx 已经带了 SSL 模块，所以很简单就可以开启 SSL。只要把 /et		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- SCIM 抽风的解决办法 (2012-12-31 14:27:39)	/article/modify-computer/what-todo-if-scim-bug.lantian/	{{server_addr}}	{{server_port}}
+i  在 Ubuntu 12.10 下，我不喜欢用默认的 ibus，软件源里的 fcitx 和 scim 		{{server_addr}}	{{server_port}}
+i  都不带拼音包，于是我自己下载了 scim 的谷歌拼音模块，编译安装使用。但		{{server_addr}}	{{server_port}}
+i  是在使用过程中，scim 经常动不动抽几下风，症状是无论点击什么输入框，s		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- XJOI 被多款搜索引擎收录 (2012-12-01 08:29:49)	/article/chat/xjoj-can-be-found-in-search-engines.lantian/	{{server_addr}}	{{server_port}}
+i  最近无聊，在必应上搜了搜 XJOI，结果…… 还真被刨出来了……http://cn.bing		{{server_addr}}	{{server_port}}
+i  .com/search?q=www.hzxjhs.com%3A83&amp;go=&amp;qs=n&amp;form=QBLH&amp		{{server_addr}}	{{server_port}}
+i  ;pq=www.hzxjhs.com%3A83&amp;sc=0-3&amp;sp=-1&amp;sk=http://cn.bing.c		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NOIP 复赛有感 (2012-11-10 14:21:10)	/article/modify-computer/noip-contest-thought.lantian/	{{server_addr}}	{{server_port}}
+i  NOIP 真是一年比一年水。之前被 XJOJ 上的题狂虐，这次终于轮到我虐题了		{{server_addr}}	{{server_port}}
+i  。首先是星期五。上午整个年级疯传 XXY 要救我们出去上课。然后我们去找		{{server_addr}}	{{server_port}}
+i  主任请假。然后我们 AC 了。中午吃完饭，坐上家长的车，去 XJ。车上我爸		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 免费 ASIA 域名：CrazyDomains.Com.Au (2012-11-02 12:02:11)	/article/modify-website/crazy-asia-domains.lantian/	{{server_addr}}	{{server_port}}
+i  免费的.CO.CC 域名或者.TK 域名大家应该都有（我就在用 CO.CC），可是最		{{server_addr}}	{{server_port}}
+i  近有一个澳大利亚的域名商正在放送免费的.ASIA 域名，期限是一年。首先打		{{server_addr}}	{{server_port}}
+i  开主页：http://www.crazydomains.com.au/，找到首页上的域名输入框，选		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Host1Free VPS 申请成功 (2012-08-15 20:25:27)	/article/modify-website/host1free-vps-applied.lantian/	{{server_addr}}	{{server_port}}
+i  老早就在网上看到了 Host1Free VPS 的消息，想去申请，结果用家里的电脑		{{server_addr}}	{{server_port}}
+i  申请提示 Only registrations from unique IPs allowed。然后挂 Go^_^Age		{{server_addr}}	{{server_port}}
+i  t，提交成功，结果被 Reject 了。反反复复尝试，结果废掉 Gmail+Hotmail*		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 信息奥赛班的神人一个 (2012-07-18 01:53:56)	/article/chat/a-god-in-oi-class.lantian/	{{server_addr}}	{{server_port}}
+i  每次老师叫我们去讲题目的时候，初一的人总会高呼郭同学的名字。我一直不		{{server_addr}}	{{server_port}}
+i  知道他们为什么干这个，也许郭同学特别好吧。但是今天，我在学军 OJ 讨论		{{server_addr}}	{{server_port}}
+i  区上看到了这么一段话：标题：神人！1 楼：yujialuo2011「guoyuqi11」（		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- 各种 OIer 的快排（Pascal 语言） (2012-07-16 05:53:00)	/article/forward/three-oiers-qsort-pascal.lantian/	{{server_addr}}	{{server_port}}
+i  OIer 1：procedure qsort(l,r:longint);var  i,j,m,t:longint;begin  i:=		{{server_addr}}	{{server_port}}
+i  l;  j:=r;  m:=a[(l+r) div 2];  repeat    while a[i]m do dec(j);    i		{{server_addr}}	{{server_port}}
+i  f ij;  if l &lt;j then qsort(l,j);  if i &lt;r then qsort(i,r);end;O		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

@@ -1,0 +1,230 @@
+i#		{{server_addr}}	{{server_port}}
+i# Lan Tian @ Blog		{{server_addr}}	{{server_port}}
+i#		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLanguages:		{{server_addr}}	{{server_port}}
+1- Chinese	/	{{server_addr}}	{{server_port}}
+1- English (*)	/en/	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPosts:		{{server_addr}}	{{server_port}}
+1- How to Kill the DN42 Network (Updated 2023-05-12) (2023-05-12 14:03:33)	/en/article/modify-website/how-to-kill-the-dn42-network.lantian/	{{server_addr}}	{{server_port}}
+i  DN42 is an experimental network, where everyone helps everyone. Nobo		{{server_addr}}	{{server_port}}
+i  dy is going to blame you if you screwed up. You may seek help at DN4		{{server_addr}}	{{server_port}}
+i  2's IRC channel, mailing list or the unofficial Telegram group.Since		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NVIDIA GPU Passthrough on an Optimus MUXed Laptop (Updat (2023-05-07 16:28:52)	/en/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian/	{{server_addr}}	{{server_port}}
+i  A year ago, to simultaneously browse webpages and write codes on my 		{{server_addr}}	{{server_port}}
+i  Arch Linux installation and use Windows to run tasks infeasible on L		{{server_addr}}	{{server_port}}
+i  inux (such as gaming), I tried GPU passthrough on my Lenovo R720 gam		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Fix China Telecom 4G Roaming on AOSP ROM by Changing APN (2023-04-17 11:16:39)	/en/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian/	{{server_addr}}	{{server_port}}
+i  Since the support life of my OnePlus 8T's official ROM is about to e		{{server_addr}}	{{server_port}}
+i  nd, I flashed Nameless OS, a Lineage OS based third party Android RO		{{server_addr}}	{{server_port}}
+i  M, onto my phone. But after flashing the ROM, I found that my China 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Notes on Setting Up NAS+Router on Old HP Workstation (2023-03-26 07:05:19)	/en/article/random-notes/old-hp-workstation-as-all-in-one.lantian/	{{server_addr}}	{{server_port}}
+i  I purchased an old HP workstation to use as a NAS and router at my h		{{server_addr}}	{{server_port}}
+i  ome. This post is a short note of my process of setting it up.Hardwa		{{server_addr}}	{{server_port}}
+i  re ChoiceFor a NAS, you usually have these hardware choices:Ready-to		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NixOS Series 4: "Stateless" Operating System (2023-01-13 17:55:12)	/en/article/modify-computer/nixos-impermanence.lantian/	{{server_addr}}	{{server_port}}
+i  List of NixOS Series Posts:NixOS Series 1: Why I fell in loveNixOS S		{{server_addr}}	{{server_port}}
+i  eries 2: Basic Config, Nix Flake &amp; Batch DeployRecommended: NixO		{{server_addr}}	{{server_port}}
+i  S &amp; Nix Flakes - A Guide for Beginners by Ryan YinNixOS Series 3		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NixOS Series 3: Software Packaging 101 (2022-06-21 15:42:16)	/en/article/modify-computer/nixos-packaging.lantian/	{{server_addr}}	{{server_port}}
+i  List of NixOS Series Posts:NixOS Series 1: Why I fell in loveNixOS S		{{server_addr}}	{{server_port}}
+i  eries 2: Basic Config, Nix Flake &amp; Batch DeployRecommended: NixO		{{server_addr}}	{{server_port}}
+i  S &amp; Nix Flakes - A Guide for Beginners by Ryan YinNixOS Series 3		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Reverse Engineered Linux Driver for HP OMEN Macro Keys (2022-04-03 21:16:16)	/en/article/modify-computer/reverse-engineered-linux-driver-for-hp-omen-macro-keys.lantian/	{{server_addr}}	{{server_port}}
+i  I got a new laptop some time ago, an HP OMEN 17t-ck000. While it's a		{{server_addr}}	{{server_port}}
+i   nice laptop with excellent build quality and performance, it has on		{{server_addr}}	{{server_port}}
+i  e problem: it's drivers under Linux are far from complete.No support		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Low-cost GeoDNS with NS1 and UptimeRobot/Freshping (2022-02-06 06:29:09)	/en/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian/	{{server_addr}}	{{server_port}}
+i  Some parts of the content come from https://hostedtalk.net/t/connect		{{server_addr}}	{{server_port}}
+i  ing-uptime-robot-with-ns1-dns-api/3883。GoalI have quite a few VPSes		{{server_addr}}	{{server_port}}
+i   around the world, but my website had been served by a single VPS in		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- I Moved My SSD to My New Laptop. This is What Happened T (2021-12-14 18:07:09)	/en/article/chat/how-i-nuked-my-btrfs-partition.lantian/	{{server_addr}}	{{server_port}}
+i  What HappenedThe quality of my previous laptop (Lenovo Legion R720) 		{{server_addr}}	{{server_port}}
+i  isn't great. After 4 years of use, I swapped its keyboard once and r		{{server_addr}}	{{server_port}}
+i  eplaced its failed mechanical hard drive with a SATA SSD. In additio		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NixOS Series 2: Basic Config, Nix Flake & Batch Deploy (2021-11-12 16:48:07)	/en/article/modify-website/nixos-initial-config-flake-deploy.lantian/	{{server_addr}}	{{server_port}}
+i  List of NixOS Series Posts:NixOS Series 1: Why I fell in loveNixOS S		{{server_addr}}	{{server_port}}
+i  eries 2: Basic Config, Nix Flake &amp; Batch DeployRecommended: NixO		{{server_addr}}	{{server_port}}
+i  S &amp; Nix Flakes - A Guide for Beginners by Ryan YinNixOS Series 3		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- NixOS Series 1: Why I fell in love (2021-10-11 08:06:58)	/en/article/modify-website/nixos-why.lantian/	{{server_addr}}	{{server_port}}
+i  List of NixOS Series Posts:NixOS Series 1: Why I fell in loveNixOS S		{{server_addr}}	{{server_port}}
+i  eries 2: Basic Config, Nix Flake &amp; Batch DeployRecommended: NixO		{{server_addr}}	{{server_port}}
+i  S &amp; Nix Flakes - A Guide for Beginners by Ryan YinNixOS Series 3		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Replace Jenkins with Drone CI (2021-08-28 18:18:32)	/en/article/modify-website/replace-jenkins-with-drone-ci.lantian/	{{server_addr}}	{{server_port}}
+i  Jenkins is a free and open-source CI/CD software widely used in all 		{{server_addr}}	{{server_port}}
+i  kinds of scenarios. The main advantage of Jenkins is its grand colle		{{server_addr}}	{{server_port}}
+i  ction of plugins capable of all sorts of jobs, including deploying w		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Lookup Any Public WHOIS with this nginx-based Server (2021-07-17 17:52:18)	/en/article/modify-website/lookup-any-whois-with-nginx.lantian/	{{server_addr}}	{{server_port}}
+i  After I set up a DN42 WHOIS server with Nginx, I configured my DN42 		{{server_addr}}	{{server_port}}
+i  Looking Glass to use this service. As my Looking Glass is capable of		{{server_addr}}	{{server_port}}
+i   running as a Telegram bot, fellow group members are looking up WHOI		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- DN42 Experimental Network: Intro and Registration (Updat (2021-05-02 04:21:45)	/en/article/modify-website/dn42-experimental-network-2020.lantian/	{{server_addr}}	{{server_port}}
+i  DN42, aka Decentralized Network 42, is a large, decentralized VPN-ba		{{server_addr}}	{{server_port}}
+i  sed network. But unlike other traditional VPNs, DN42 itself doesn't 		{{server_addr}}	{{server_port}}
+i  provide any VPN exits, which means it doesn't allow you to bypass In		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Setting up DN42 WHOIS Server with Nginx (2021-04-18 18:12:15)	/en/article/modify-website/serve-dn42-whois-with-nginx.lantian/	{{server_addr}}	{{server_port}}
+i  In my previous post, "Setting up Gopher Site with Nginx", I mentione		{{server_addr}}	{{server_port}}
+i  d that the Gopher service is a byproduct of my original plan: modify		{{server_addr}}	{{server_port}}
+i  ing Nginx into a WHOIS server for DN42. This post will explore into 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Setting up Gopher Site with Nginx (2021-03-21 14:16:44)	/en/article/modify-website/serve-gopher-with-nginx.lantian/	{{server_addr}}	{{server_port}}
+i  Changelog2021-03-24: Improve post-processing, add scripts for parsin		{{server_addr}}	{{server_port}}
+i  g links and images.2021-03-21: Initial version.What's GopherGopher i		{{server_addr}}	{{server_port}}
+i  s a protocol born in the early ages of the Internet. It was invented		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Make an Infinite Sleep Program in Only 4KB (2020-12-27 15:39:07)	/en/article/modify-website/4kb-infinite-sleep-docker-image.lantian/	{{server_addr}}	{{server_port}}
+i  In my network configuration, some of my Docker containers, for examp		{{server_addr}}	{{server_port}}
+i  le DNS, need to achieve high availability with Anycast. In my previo		{{server_addr}}	{{server_port}}
+i  us post, I created a Busybox container and run tail -f /dev/null, in		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Static Build Tiny Docker Images (2020-11-29 15:04:46)	/en/article/modify-website/static-build-tiny-docker-images.lantian/	{{server_addr}}	{{server_port}}
+i  What's stored in Docker images can be seen as numerous tiny Linux sy		{{server_addr}}	{{server_port}}
+i  stems. Most of them are based on Debian, Ubuntu, or Alpine, with ext		{{server_addr}}	{{server_port}}
+i  ra software installed on top.Using a complete Linux distribution as 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Writing Stories in Traceroute, Elegantly (2020-10-11 12:25:01)	/en/article/creations/traceroute-chain.lantian/	{{server_addr}}	{{server_port}}
+i  Traceroute is one of the popular tools for network inspection. It sh		{{server_addr}}	{{server_port}}
+i  ows the IP addresses of routers on the route from your computer to a		{{server_addr}}	{{server_port}}
+i   destination server, similar to:Domains are shown on the last 2 hops		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Disabling TR069 on a Youhua PT926G Fiber Optic Modem (2020-10-03 07:40:30)	/en/article/random-notes/youhua-pt926g-disable-tr069.lantian/	{{server_addr}}	{{server_port}}
+i  This post explains the procedure to disable TR069 on a Youhua PT926G		{{server_addr}}	{{server_port}}
+i   fiber optic modem, to prevent China Telecom from pushing config/fir		{{server_addr}}	{{server_port}}
+i  mware updates, and void your change of switching to bridging mode or		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Planning Ahead: Using Post-Quantum Cryptography (2020-09-22 17:11:18)	/en/article/modify-website/post-quantum-encryption.lantian/	{{server_addr}}	{{server_port}}
+i  On the modern Internet, most websites already support HTTPS. The SSL		{{server_addr}}	{{server_port}}
+i  /TLS encryption protocol will encrypt users' requests and the websit		{{server_addr}}	{{server_port}}
+i  e's responses so that malicious users along the way cannot steal or 		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Self-hosting a DNS Root Server (2020-09-05 13:59:46)	/en/article/modify-website/selfhost-dns-root-server.lantian/	{{server_addr}}	{{server_port}}
+i  With the scale of conflict between China and the United States incre		{{server_addr}}	{{server_port}}
+i  asing, on some social media websites in China, some users started ex		{{server_addr}}	{{server_port}}
+i  pressing concerns for the United States cutting China's access to DN		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Hacking a Youhua PT926G Fiber Optic Modem (2020-08-13 12:43:26)	/en/article/random-notes/youhua-pt926g-fiber-modem-crack.lantian/	{{server_addr}}	{{server_port}}
+i  This post explains the procedure to obtain such privileges from a Yo		{{server_addr}}	{{server_port}}
+i  uhua PT926G fiber optic modem, without disassembling the device or u		{{server_addr}}	{{server_port}}
+i  sing serial port converters.Super Admin users on Web UI (telecomadmi		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- An Elegant "Scripture of Safety" Generator (2020-08-01 15:36:16)	/en/article/modify-website/an-elegant-scripture-of-safety-generator.lantian/	{{server_addr}}	{{server_port}}
+i  This post is about a meme in China that may require some cultural ba		{{server_addr}}	{{server_port}}
+i  ckground to understand.Since the content is related to the specific 		{{server_addr}}	{{server_port}}
+i  language used, there are minor differences between the Chinese and E		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Intel and NVIDIA GPU Passthrough on a Optimus MUXless La (2020-06-25 15:59:41)	/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian/	{{server_addr}}	{{server_port}}
+i  Changelog2022-07-21: Add starting GVT-g on startup. Thanks to commen		{{server_addr}}	{{server_port}}
+i  t from Owsmyf (on Chinese version of this post).2022-01-22: Revision		{{server_addr}}	{{server_port}}
+i  s on NVIDIA driver updates and comments.I successfully passed throug		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Graduation Design - Sensor Network Development Log (2020-06-07 20:06:23)	/en/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian/	{{server_addr}}	{{server_port}}
+i  Welcome to my third development log. In the two previous logs, I dis		{{server_addr}}	{{server_port}}
+i  cussed the pitfalls I met in the RoboMaster competition and FPGA cou		{{server_addr}}	{{server_port}}
+i  rse final project.This time I will be talking about my graduate desi		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Configure BGP Confederation & Fake Confederation in Bird (2020-06-07 13:51:51)	/en/article/modify-website/bird-confederation.lantian/	{{server_addr}}	{{server_port}}
+i  Changelog2020-10-01: Add warning to not filter private ASNs within t		{{server_addr}}	{{server_port}}
+i  he internal network2020-06-07: Add limitations of Bird confederation		{{server_addr}}	{{server_port}}
+i   and a way to simulate confederation2020-05-17: Initial versionCompa		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- x32 ABI and Docker Containers (2020-05-14 16:20:26)	/en/article/modify-website/x32-abi-docker-containers.lantian/	{{server_addr}}	{{server_port}}
+i  History of x86 &amp; x86_64, and x32 ABIMost of the personal compute		{{server_addr}}	{{server_port}}
+i  rs and servers we use nowadays use the x86_64 architecture, whose sp		{{server_addr}}	{{server_port}}
+i  ecification was released by AMD in 2000 and the first processor rele		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Writing a Simple Telegram Bot (2020-04-23 08:02:50)	/en/article/modify-website/simple-telegram-bot.lantian/	{{server_addr}}	{{server_port}}
+i  Based on the requests of DN42 Telegram Group members, I plan to add 		{{server_addr}}	{{server_port}}
+i  Telegram Bot support to my Bird Looking Glass, so it is easier for t		{{server_addr}}	{{server_port}}
+i  hem to look up whois information, testing networks and finding sourc		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Remove OpenVPN's Stable-privacy IPv6 Addresses (2020-03-21 04:28:40)	/en/article/random-notes/openvpn-remove-stable-privacy-ipv6.lantian/	{{server_addr}}	{{server_port}}
+i  On my VPSes, the TAP network interface created by OpenVPN has a rand		{{server_addr}}	{{server_port}}
+i  omly-generated IPv6 address with scope stable-privacy.This address i		{{server_addr}}	{{server_port}}
+i  tself is created randomly to prevent tracking users by their IPv6 ad		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Install/Upgrade to Debian 10 on OpenVZ 6 (2020-03-19 13:55:54)	/en/article/random-notes/debian-10-on-openvz-6.lantian/	{{server_addr}}	{{server_port}}
+i  It's the year 2020. Why are you still using OpenVZ 6 VPSes?Because t		{{server_addr}}	{{server_port}}
+i  hey only cost one dollar per year.Since the kernel of OpenVZ 6 is ex		{{server_addr}}	{{server_port}}
+i  tremely old (Linux 2.6.32), newer systems cannot function normally o		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Sharing Network Namespace Among Docker Containers for Bi (2020-03-13 12:23:20)	/en/article/modify-website/docker-share-network-namespace-bird-high-availability.lantian/	{{server_addr}}	{{server_port}}
+i  At exactly one year ago, I set up an Anycast service with Docker in 		{{server_addr}}	{{server_port}}
+i  the DN42 network (Chinese only atm). Back then, I customized the con		{{server_addr}}	{{server_port}}
+i  tainer's image and added a Bird installation to it, then put in a co		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Disabling Webcams During an Online Course (2020-03-11 07:50:47)	/en/article/random-notes/system-disable-camera-prevent-online-course-leak.lantian/	{{server_addr}}	{{server_port}}
+i  This post will explain the way to disable your webcam on Windows and		{{server_addr}}	{{server_port}}
+i   Linux, so:On the OS level, prevent you from turning on the webcam b		{{server_addr}}	{{server_port}}
+i  y mistake, and live-stream your footage of having a meal lying on th		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- LADSPA Stereo Frequency Splitter & Bass Booster (2020-02-17 16:48:15)	/en/article/creations/ladspa-plugin-frequency-splitter-bass-boost.lantian/	{{server_addr}}	{{server_port}}
+i  During the Chinese Spring Festival, my dad gave me an Edifier M120 B		{{server_addr}}	{{server_port}}
+i  luetooth speaker. This speaker is not one of these high-end models f		{{server_addr}}	{{server_port}}
+i  eaturing dedicated bass speakers or professional Bluetooth audio cod		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- (Almost) Lossless Archival with Modern Formats - H265 an (2020-02-13 07:05:18)	/en/article/modify-computer/modern-format-photo-video-archiving-almost-intact-h265-heif.lantian/	{{server_addr}}	{{server_port}}
+i  Many people keep their inventory of photos and videos for their trav		{{server_addr}}	{{server_port}}
+i  els, parties, or whatever important moments of their lives. If you a		{{server_addr}}	{{server_port}}
+i  re into taking photos and recording videos and like keeping all of t		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- OS/2 Warp 4: Trying out & Installing Firefox (2020-01-07 05:28:40)	/en/article/modify-computer/os2-warp-firefox.lantian/	{{server_addr}}	{{server_port}}
+i  OS/2 is an operating system initially developed by IBM and Microsoft		{{server_addr}}	{{server_port}}
+i   and later maintained by IBM. Back in the 1990s, OS/2 was a competit		{{server_addr}}	{{server_port}}
+i  ive rival to Windows, but later OS/2 was defeated by the Windows ser		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Cyclone IV FPGA Development Log (2019-07-08 05:10:00)	/en/article/modify-computer/cyclone-iv-fpga-development-bugs-resolve.lantian/	{{server_addr}}	{{server_port}}
+i  Last semester, the school offered a digital systems course, which in		{{server_addr}}	{{server_port}}
+i  volves development on FPGAs. At the end of the course, we need to ga		{{server_addr}}	{{server_port}}
+i  ther in groups and achieve some complicated functionality with the f		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Running Anycast DNS with Docker in DN42 (2019-03-14 14:54:00)	/en/article/modify-website/dn42-docker-anycast-dns.lantian/	{{server_addr}}	{{server_port}}
+i  2020-03-16 NotesThere is an updated scheme compared to this post, se		{{server_addr}}	{{server_port}}
+i  e Sharing Network Namespace Among Docker Containers for Bird Anycast		{{server_addr}}	{{server_port}}
+i  ing.It is suggested to read only the concept explanations in this po		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Bird-lg in Go (Bird Looking Glass) (2019-01-08 15:40:00)	/en/article/modify-website/go-bird-looking-glass.lantian/	{{server_addr}}	{{server_port}}
+i  What's BIRD? And What's Bird-lg?BIRD is a popular BGP routing softwa		{{server_addr}}	{{server_port}}
+i  re used on Linux. I mainly use Bird in the DN42 network, to establis		{{server_addr}}	{{server_port}}
+i  h connections with other users.Bird-lg is a Python 2 based program d		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Writing Stories in Traceroute (2018-08-15 11:46:00)	/en/article/modify-computer/worship-in-traceroute.lantian/	{{server_addr}}	{{server_port}}
+i  2020-10-11 UpdateNow a better way exists that doesn't involve a bunc		{{server_addr}}	{{server_port}}
+i  h of Docker containers. Please refer to Writing Stories in Tracerout		{{server_addr}}	{{server_port}}
+i  e, Elegantly.IntroTraceroute is one of the popular tools for network		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Registering Domain in DN42 (2018-04-26 13:54:00)	/en/article/modify-website/register-own-domain-in-dn42.lantian/	{{server_addr}}	{{server_port}}
+i  DN42, aka Decentralized Network 42, is a large VPN network. Unlike t		{{server_addr}}	{{server_port}}
+i  raditional VPNs, DN42 uses a lot of technology involved in Internet 		{{server_addr}}	{{server_port}}
+i  backbones (such as BGP) and is a great simulation of a realistic net		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- RoboMaster Development Log (Updated 2018-05-28) (2018-03-31 01:44:00)	/en/article/modify-computer/robomaster-bugs-in-development.lantian/	{{server_addr}}	{{server_port}}
+i  Our school organized a RoboMaster team and planned to attend the com		{{server_addr}}	{{server_port}}
+i  petition this year. Since we are all new students at a new campus, w		{{server_addr}}	{{server_port}}
+i  e do not have any reference materials available from previous studen		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Support WebP on IE and Firefox (2016-08-23 05:59:00)	/en/article/modify-website/ie-firefox-webp-support.lantian/	{{server_addr}}	{{server_port}}
+i  I wrote a PHP snippet to fetch high-resolution images from the websi		{{server_addr}}	{{server_port}}
+i  te of the Himawari 8 satellite and combine them into one high-resolu		{{server_addr}}	{{server_port}}
+i  tion image. The way to fetch satellite images is available here.Howe		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1- Show Earth Satellite Images with PHP and Javascript (2016-06-14 14:40:00)	/en/article/modify-website/php-javascript-satellite-earth-picture.lantian/	{{server_addr}}	{{server_port}}
+i  The Himawari 8 weather satellite is one of the Himawari satellites m		{{server_addr}}	{{server_port}}
+i  ade by JAXA, weighs around 3500kg and has an expected lifespan of ov		{{server_addr}}	{{server_port}}
+i  er 15 years. The satellite was successfully launched on October 7, 2		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

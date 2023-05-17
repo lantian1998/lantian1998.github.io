@@ -1,0 +1,94 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Support WebP on IE and Firefox"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [Himawari 8, Firefox, IE, WebP]		{{server_addr}}	{{server_port}}
+idate: 2016-08-23 13:59:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI wrote a PHP snippet to fetch high-resolution images from the website		{{server_addr}}	{{server_port}}
+iof the Himawari 8 satellite and combine them into one high-resolution		{{server_addr}}	{{server_port}}
+iimage. The way to fetch satellite images is available		{{server_addr}}	{{server_port}}
+1here	/en/article/modify-website/php-javascript-satellite-earth-picture.lantian	{{server_addr}}	{{server_port}}
+i.i		{{server_addr}}	{{server_port}}
+iHowever... The combined 4d resolution PNG image (2200x2200) is over 7		{{server_addr}}	{{server_port}}
+iMB in size, and due to the bad connectivity between China and the US,		{{server_addr}}	{{server_port}}
+iit takes over a minute to load the image (from my server).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWay too slow!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGoogle provided a solution: the WebP image format. WebP is famous for		{{server_addr}}	{{server_port}}
+iits high compression ratio on lossless compression scenarios.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter converting the 7 MB earth photo PNG file to WebP, the resulting		{{server_addr}}	{{server_port}}
+ifile size is less than 700 KB. For a photo with resolution 2200x2200,		{{server_addr}}	{{server_port}}
+ithis is pretty small.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut... Some browsers, including IE and Firefox, don't support WebP,		{{server_addr}}	{{server_port}}
+iand the picture simply won't display on them. Therefore some local		{{server_addr}}	{{server_port}}
+iprocessing is needed to convert WebP to something they will		{{server_addr}}	{{server_port}}
+iunderstand.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWebPJS is a Javascript library that does the conversion in the		{{server_addr}}	{{server_port}}
+ibrowser. It recognizes WebP images based on file extensions		{{server_addr}}	{{server_port}}
+i**(important!)**, converts them to PNG, and displays them in the		{{server_addr}}	{{server_port}}
+ibrowser.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo use it, you will need:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Download		{{server_addr}}	{{server_port}}
+i   [webpjs-0.0.2.min.js](http://webpjs.appspot.com/js/webpjs-0.0.2.min.js)		{{server_addr}}	{{server_port}}
+i   and		{{server_addr}}	{{server_port}}
+i   [webpjs-0.0.2.swf](http://webpjs.appspot.com/js/webpjs-0.0.2.swf)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. Add the following code to the `<head>` section:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+i<script>		{{server_addr}}	{{server_port}}
+i  (function () {		{{server_addr}}	{{server_port}}
+i    var WebP = new Image();		{{server_addr}}	{{server_port}}
+i    WebP.onload = WebP.onerror = function () {		{{server_addr}}	{{server_port}}
+i      if (WebP.height != 2) {		{{server_addr}}	{{server_port}}
+i        var sc = document.createElement("script");		{{server_addr}}	{{server_port}}
+i        sc.type = "text/javascript";		{{server_addr}}	{{server_port}}
+i        sc.async = true;		{{server_addr}}	{{server_port}}
+i        var s = document.getElementsByTagName("script")[0];		{{server_addr}}	{{server_port}}
+i        sc.src = "YOUR_PATH_TO_THE LIBRARY_FILES/webpjs-0.0.2.min.js";		{{server_addr}}	{{server_port}}
+i        s.parentNode.insertBefore(sc, s);		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i    WebP.src =		{{server_addr}}	{{server_port}}
+i      "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";		{{server_addr}}	{{server_port}}
+i  })();		{{server_addr}}	{{server_port}}
+i</script>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnd voila. The only downside is that the browser will lag for 2-3		{{server_addr}}	{{server_port}}
+iseconds while loading the image, but compared to the time on		{{server_addr}}	{{server_port}}
+itransferring the data this is ignorable.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBack to satellite images of Himawari 8. In my configuration PHP will		{{server_addr}}	{{server_port}}
+idirectly output a combined WebP image, and the URL ends with `.php`		{{server_addr}}	{{server_port}}
+irather than `.webp`. In this case, WebPJS will not recognize the		{{server_addr}}	{{server_port}}
+iimage. What can we do?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSuppose originally you have the following HTML code:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+i<img src="himawari.php" />		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSimply add something after `himawari.php`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+i<img src="himawari.php/TYPE_ANYTHING_HERE.webp" />		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUpon receiving the request, the webserver will first look for		{{server_addr}}	{{server_port}}
+i`himawari.php/TYPE_ANYTHING_HERE.webp` which, of course, doesn't		{{server_addr}}	{{server_port}}
+iexist. Then the server will look for `himawari.php`, which is there.		{{server_addr}}	{{server_port}}
+iNow the server will let the code handle the request.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI suggest you replace `TYPE_ANYTHING_HERE` with the current time or		{{server_addr}}	{{server_port}}
+iimage hash, so they can be cached on CDN services like Qiniu.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

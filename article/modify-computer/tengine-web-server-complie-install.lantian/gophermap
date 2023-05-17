@@ -1,0 +1,50 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Tengine 网页服务器编译以及安装"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [服务器, 网页, Tengine, 编译]		{{server_addr}}	{{server_port}}
+idate: 2013-07-31 16:19:50		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTengine 是阿里巴巴基于 nginx 开发的一款高性能网页服务器，除了保留		{{server_addr}}	{{server_port}}
+inginx 原有的高性能特性外，还增加了这堆东西：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<blockquote>		{{server_addr}}	{{server_port}}
+i继承Nginx-1.2.9的所有特性，100%兼容Nginx的配置；		{{server_addr}}	{{server_port}}
+i动态模块加载（DSO）支持。加入一个模块不再需要重新编译整个Tengine；		{{server_addr}}	{{server_port}}
+i输入过滤器机制支持。通过使用这种机制Web应用防火墙的编写更为方便；		{{server_addr}}	{{server_port}}
+i动态脚本语言Lua支持。扩展功能非常高效简单；		{{server_addr}}	{{server_port}}
+i支持管道（pipe）和syslog（本地和远端）形式的日志以及日志抽样；		{{server_addr}}	{{server_port}}
+i组合多个CSS、JavaScript文件的访问请求变成一个请求；		{{server_addr}}	{{server_port}}
+i更加强大的负载均衡能力，包括一致性hash模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线；		{{server_addr}}	{{server_port}}
+i自动根据CPU数目设置进程个数和绑定CPU亲缘性；		{{server_addr}}	{{server_port}}
+i监控系统的负载和资源占用从而对系统进行保护；		{{server_addr}}	{{server_port}}
+i显示对运维人员更友好的出错信息，便于定位出错机器；		{{server_addr}}	{{server_port}}
+i更强大的防攻击（访问速度限制）模块；		{{server_addr}}	{{server_port}}
+i更方便的命令行参数，如列出编译的模块列表、支持的指令等；		{{server_addr}}	{{server_port}}
+i可以根据访问文件类型设置过期时间；		{{server_addr}}	{{server_port}}
+i</blockquote>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i虽然对于普通用户没什么区别，但是拿来玩玩还是不错的，听说土豆还是 56 已		{{server_addr}}	{{server_port}}
+i经用上 Tengine 了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下面是编译步骤。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i./configure --prefix=/usr --enable-mods-shared=all --with-rtsig_module --with-select_module --with-poll_module --with-file-aio --with-ipv6 --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_geoip_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_slice_module --with-http_mp4_module --with-http_gzip_static_module --with-http_concat_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_sysguard_module --with-http_lua_module --with-http_tfs_module --with-mail --with-mail_ssl_module --with-google_perftools_module --with-cpp_test_module --with-backtrace_module --with-pcre --with-pcre-jit --with-md5-asm --with-sha1-asm --with-libatomic --with-jemalloc		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i插一句：因为 Tengine 是模块化的，所以自然地我们就把模块多开一点，反正		{{server_addr}}	{{server_port}}
+i动态加载。如果看哪个模块不顺眼不想要，把对应的 with。。。删掉就可以。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果 configure 报错，一般是少 libxxx，直接到新立得软件包管理去搜就行了		{{server_addr}}	{{server_port}}
+i。安装时要安装-dev 包，原始包也会自动安装。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+imake -j4		{{server_addr}}	{{server_port}}
+isudo make install		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i安装完成。命令行输入 nginx 启动。Tengine 配置与 nginx 类似，可以参考		{{server_addr}}	{{server_port}}
+inginx 相关文档。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

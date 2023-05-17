@@ -1,0 +1,39 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "启用 Bash 的彩色显示"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [Bash]		{{server_addr}}	{{server_port}}
+idate: 2016-07-18 10:41:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2016/07/1736856861.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLinux 默认的 Bash 命令行总是黑底白字，有些单调。但我们可以通过加几行命		{{server_addr}}	{{server_port}}
+i令，让 Bash 以彩色显示信息，不仅美观，而且可以突出重点内容。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<img src="/usr/uploads/2016/07/1736856861.png" alt="屏幕快照 2016-07-18 上午10.36.27.png" />		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i编辑你的 Home 目录下的.profile 文件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<pre class="prettypaint">		{{server_addr}}	{{server_port}}
+inano ~/.profile		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在文件末尾加上：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<pre class="prettypaint">		{{server_addr}}	{{server_port}}
+iexport LS_OPTIONS='--color=auto'		{{server_addr}}	{{server_port}}
+ieval "`dircolors`"		{{server_addr}}	{{server_port}}
+ialias ls='ls $LS_OPTIONS'		{{server_addr}}	{{server_port}}
+ialias ll='ls $LS_OPTIONS -l'		{{server_addr}}	{{server_port}}
+ialias l='ls $LS_OPTIONS -lA'		{{server_addr}}	{{server_port}}
+iPS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]@\[\033[01;36m\]\h\[\033[00m\]:[\[\033[01;34m\]\w\[\033[00m\]]\$ '  		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存退出，然后重进 Bash 或者输入：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<pre class="prettypaint">		{{server_addr}}	{{server_port}}
+isource ~/.bashrc		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i就可以看到彩色的命令行了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

@@ -1,0 +1,76 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "nginx 配置 LDAP 认证"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [nginx, LDAP]		{{server_addr}}	{{server_port}}
+idate: 2018-10-14 12:34:17		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我的各台服务器上安装了各种不同的服务，都有各自的用户名密码体系，难以统		{{server_addr}}	{{server_port}}
+i一管理。假设未来某天我的密码泄露了，一个个修改就会非常累人。因此，我希		{{server_addr}}	{{server_port}}
+i望用一个服务来专门管理用户名密码，其它服务都从它上面获取认证信息。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLDAP 是常用的认证协议之一，不仅有许多软件原生支持它的认证（包括		{{server_addr}}	{{server_port}}
+iJenkins，pfSense 等），而且通过插件可以使得 nginx 支持它，为任何基于网		{{server_addr}}	{{server_port}}
+i页的服务加上统一管理的认证。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 添加插件		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你的 nginx 已经是源代码编译的，添加 nginx 的 LDAP 插件只需要三步：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. `apk add openldap-dev`		{{server_addr}}	{{server_port}}
+i2. `git clone https://github.com/kvspb/nginx-auth-ldap.git`		{{server_addr}}	{{server_port}}
+i3. `./configure --add-module=/path/to/nginx-auth-ldap`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我依然使用 Docker 部署 nginx，Dockerfile 可以在		{{server_addr}}	{{server_port}}
+i<https://github.com/xddxdd/dockerfiles/blob/210f0f82c7bc1c0c3697d329b73ea31abea6b14a/nginx/Dockerfile>		{{server_addr}}	{{server_port}}
+i找到，其中的编译参数可以参考。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 配置认证		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i安装插件后，先在 nginx.conf 的 http 配置块中添加 ldap_server 配置块。		{{server_addr}}	{{server_port}}
+i为了防止我的单台服务器出问题导致认证服务全挂，我暂时先用了 JumpCloud		{{server_addr}}	{{server_port}}
+i的 LDAP 服务，配置如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```nginx		{{server_addr}}	{{server_port}}
+ildap_server jumpcloud {		{{server_addr}}	{{server_port}}
+i    url ldap://ldap.jumpcloud.com/ou=Users,o=[你的 JumpCloud LDAP 编号],dc=jumpcloud,dc=com?uid?sub?(objectClass=posixAccount);		{{server_addr}}	{{server_port}}
+i    binddn "uid=[LDAP 认证专用用户名],ou=Users,o=[你的 JumpCloud LDAP 编号],dc=jumpcloud,dc=com";		{{server_addr}}	{{server_port}}
+i    binddn_passwd "[LDAP 认证专用用户密码]";		{{server_addr}}	{{server_port}}
+i    group_attribute "memberOf";		{{server_addr}}	{{server_port}}
+i    group_attribute_is_dn on;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    max_down_retries 3;		{{server_addr}}	{{server_port}}
+i    connections 1;		{{server_addr}}	{{server_port}}
+i    referral off;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    require valid_user;		{{server_addr}}	{{server_port}}
+i    satisfy any;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后在要保护的 server 块或 location 块中添加如下内容：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```nginx		{{server_addr}}	{{server_port}}
+ilocation /private {		{{server_addr}}	{{server_port}}
+i    auth_ldap "Forbidden";		{{server_addr}}	{{server_port}}
+i    auth_ldap_servers jumpcloud;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i即可使用指定的 LDAP 服务器进行认证。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过要注意的是，LDAP 认证插件会和 http_addition 插件产生冲突，具体表现		{{server_addr}}	{{server_port}}
+i是如果同一个 location 里开启了 auth_ldap 和 add_after_body，在输入用户		{{server_addr}}	{{server_port}}
+i名密码认证通过后，nginx 似乎不会发送网页数据，体现为浏览器一直转圈直到		{{server_addr}}	{{server_port}}
+i超时。暂时的解决办法只能是禁用 add_after_body：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```nginx		{{server_addr}}	{{server_port}}
+i# LDAP auth doesn't work well with http_addition, disable it		{{server_addr}}	{{server_port}}
+iadd_after_body "";		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如上操作之后，指定的地址就启用了 LDAP 认证。如果将 nginx 作为反向代理		{{server_addr}}	{{server_port}}
+i代理其它内部服务，并屏蔽外网直接访问这些内部服务，就可以用 LDAP 统一保		{{server_addr}}	{{server_port}}
+i护认证这些服务。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

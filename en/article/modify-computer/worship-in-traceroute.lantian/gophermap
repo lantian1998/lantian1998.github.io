@@ -1,0 +1,148 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Writing Stories in Traceroute"		{{server_addr}}	{{server_port}}
+icategories: "Computers and Clients"		{{server_addr}}	{{server_port}}
+itags: [Traceroute, DN42]		{{server_addr}}	{{server_port}}
+idate: 2018-08-15 19:46:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2018/08/2301166997.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 2020-10-11 Update		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow a better way exists that doesn't involve a bunch of Docker		{{server_addr}}	{{server_port}}
+icontainers. Please refer to		{{server_addr}}	{{server_port}}
+1Writing Stories in Traceroute, Elegantly	/en/article/creations/traceroute-chain.lantian	{{server_addr}}	{{server_port}}
+i.i		{{server_addr}}	{{server_port}}
+i## Intro		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTraceroute is one of the popular tools for network inspection. It		{{server_addr}}	{{server_port}}
+ishows the IP addresses of routers on the route from your computer to a		{{server_addr}}	{{server_port}}
+idestination server, similar to:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ITraceroute Example	/usr/uploads/2018/08/2301166997.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDomains are shown on the last 2 hops, which is the IP's reverse DNS		{{server_addr}}	{{server_port}}
+irecord. Reverse DNS records exist as PTR records in the format of		{{server_addr}}	{{server_port}}
+i`4.3.2.1.in-addr.arpa`. For more information, you may refer to		{{server_addr}}	{{server_port}}
+1Setting IP Reverse Records in DN42 (Chinese Only)	/article/modify-website/dn42-ip-reverse-record.lantian	{{server_addr}}	{{server_port}}
+i.i		{{server_addr}}	{{server_port}}
+iHowever, PTR records need not be real domains. They can be any string		{{server_addr}}	{{server_port}}
+ithat "looks like" a domain. With this, we can write one sentence on		{{server_addr}}	{{server_port}}
+ieach hop of a Traceroute path to make a story:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ITraceroute Story Example	/usr/uploads/2018/08/1311499371.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis story is set up in DN42. If you have already joined DN42, you may		{{server_addr}}	{{server_port}}
+i`ping` or `traceroute` IPs in this post. However, this configuration		{{server_addr}}	{{server_port}}
+iis not limited to DN42. If you have a public IP block with control on		{{server_addr}}	{{server_port}}
+ireverse DNS, you may use the same method.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Prepare Routes		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe first step is setting up a bunch of routers that forward packets		{{server_addr}}	{{server_port}}
+ifor a specific IP one by one, to create a route long enough to show an		{{server_addr}}	{{server_port}}
+iessay.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe primitive method is chaining a bunch of physical routers with		{{server_addr}}	{{server_port}}
+inetwork cables. But first, I need the bunch of routers; and then I		{{server_addr}}	{{server_port}}
+ineed to connect them to DN42.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOn a second thought, Linux has routing capabilities. I can set up some		{{server_addr}}	{{server_port}}
+iLinux VMs with their own IPs, and execute this command on each of		{{server_addr}}	{{server_port}}
+ithem:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iip route add [Target IP]/32 via [Next Hop IP]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPackets to the destination IP will be forwarded through each VM to		{{server_addr}}	{{server_port}}
+icreate a path.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext, I need to think of a way to create the VMs. I have ESXi on		{{server_addr}}	{{server_port}}
+iKimsufi, and it shouldn't be that resource-intensive to start a bunch		{{server_addr}}	{{server_port}}
+iof Alpine Linux VMs. But I'd have to do manual configuration for each		{{server_addr}}	{{server_port}}
+iof them, which is too much of a hassle!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFrom another perspective, Docker is a management tool for LXC		{{server_addr}}	{{server_port}}
+icontainers, and LXC containers have their independent network		{{server_addr}}	{{server_port}}
+inamespaces with their own IPs and routes. For my purpose, they are		{{server_addr}}	{{server_port}}
+iperfect replacements for full Linux VMs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo I went to create Docker images. All I need is an Alpine image that		{{server_addr}}	{{server_port}}
+iruns the following script on startup:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i#!/bin/sh		{{server_addr}}	{{server_port}}
+iecho Target IP is $TARGET_IP		{{server_addr}}	{{server_port}}
+iTHIS_IP=$(ip addr show dev eth0 | grep inet | cut -d' ' -f6 | cut -d'/' -f1)		{{server_addr}}	{{server_port}}
+iecho My IP is $THIS_IP		{{server_addr}}	{{server_port}}
+iNEXT_IP=$(echo $THIS_IP | awk -F. '{print $1 "." $2 "." $3 "." $4 + 1}')		{{server_addr}}	{{server_port}}
+iif [ $THIS_IP == $NEXT_IP ]; then		{{server_addr}}	{{server_port}}
+i    echo I\'m the target, listening		{{server_addr}}	{{server_port}}
+ielse		{{server_addr}}	{{server_port}}
+i    echo Routing $TARGET_IP to $NEXT_IP		{{server_addr}}	{{server_port}}
+i    ip route add $TARGET_IP/32 via $NEXT_IP		{{server_addr}}	{{server_port}}
+ifi		{{server_addr}}	{{server_port}}
+iping 127.0.0.1 -q		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe last `ping` keeps the container running, or it will exit. The full		{{server_addr}}	{{server_port}}
+iDockerfile is available at		{{server_addr}}	{{server_port}}
+i<https://github.com/xddxdd/dockerfiles/tree/25625c20fd1b47b3057cf59b6b84b8401d1b3e1e/dockerfiles/route-next>.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen I need to generate a `docker-compose.yml` for simpler management.		{{server_addr}}	{{server_port}}
+iAn example is available on the repo above. Or, you can use the		{{server_addr}}	{{server_port}}
+i`mk-compose.py` tool to quickly generate a `docker-compose.yml`, but		{{server_addr}}	{{server_port}}
+iyou would still have to change the network information manually in the		{{server_addr}}	{{server_port}}
+ifile.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen copy it onto the server, and run `docker-compose up -d` to start		{{server_addr}}	{{server_port}}
+ithe containers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, run this command on the Docker host:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iip route add 172.22.76.102/32 via 172.22.76.98		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo packets will flow into the first Docker container. Now a Traceroute		{{server_addr}}	{{server_port}}
+iwill show the packet path:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IPacket Path	/usr/uploads/2018/08/846969415.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Prepare Essay		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince PTR records are limited to English, I'll need a short English		{{server_addr}}	{{server_port}}
+iessay. Since it's almost Aug 17, I chose this one:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> One should uphold his country』s interest with his life, he should		{{server_addr}}	{{server_port}}
+i> not do things just to pursue his personal gains and he should not		{{server_addr}}	{{server_port}}
+i> evade responsibilities for fear of personal loss.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe path I created has 5 hops, so I split the essay to 5 sentences,		{{server_addr}}	{{server_port}}
+iand removed punctuations PTR records aren't allowed to have:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- one should uphold his country s interest with his life		{{server_addr}}	{{server_port}}
+i- he should not do things		{{server_addr}}	{{server_port}}
+i- just to pursue his personal gains		{{server_addr}}	{{server_port}}
+i- and he should not evade responsibilities		{{server_addr}}	{{server_port}}
+i- for fear of personal loss		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe replace spaces with periods:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- one.should.uphold.his.country.s.interest.with.his.life		{{server_addr}}	{{server_port}}
+i- he.should.not.do.things		{{server_addr}}	{{server_port}}
+i- just.to.pursue.his.personal.gains		{{server_addr}}	{{server_port}}
+i- and.he.should.not.evade.responsibilities		{{server_addr}}	{{server_port}}
+i- for.fear.of.personal.loss		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe fill it to PTR records for the IPs on the path:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IPTR Record Settings	/usr/uploads/2018/08/921227701.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSave and wait for DNS updates to propagate:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ITraceroute Story Example	/usr/uploads/2018/08/1311499371.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou will see your small essay in Traceroute.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

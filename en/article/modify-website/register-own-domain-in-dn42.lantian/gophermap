@@ -1,0 +1,374 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Registering Domain in DN42"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [DN42, DNS]		{{server_addr}}	{{server_port}}
+idate: 2018-04-26 21:54:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2018/04/2335363675.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDN42, aka Decentralized Network 42, is a large VPN network. Unlike		{{server_addr}}	{{server_port}}
+itraditional VPNs, DN42 uses a lot of technology involved in Internet		{{server_addr}}	{{server_port}}
+ibackbones (such as BGP) and is a great simulation of a realistic		{{server_addr}}	{{server_port}}
+inetwork environment.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1In a previous post (Chinese only)	/article/modify-website/join-dn42-experimental-network.lantian	{{server_addr}}	{{server_port}}
+i,iI joined DN42 and connected most of my VPSes to it. (The ones left are		{{server_addr}}	{{server_port}}
+iOpenVZ VPSes without Tun/Tap support.) I knew from the beginning that		{{server_addr}}	{{server_port}}
+iDN42 has its own domain name system. For example, DN42's wiki		{{server_addr}}	{{server_port}}
+i(<https://wiki.dn42.us/Home>) can be accessed as		{{server_addr}}	{{server_port}}
+i<https://internal.dn42> in DN42. I didn't register a domain back then		{{server_addr}}	{{server_port}}
+isince I didn't have time, and I didn't have much knowledge of DN42. I		{{server_addr}}	{{server_port}}
+ifinished the registration this month and would like to share my		{{server_addr}}	{{server_port}}
+iexperience.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Building Authoritative DNS		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAn authoritative DNS is responsible for a domain's records. For		{{server_addr}}	{{server_port}}
+iexample, the domain for this blog, `lantian.pub`, has authoritative		{{server_addr}}	{{server_port}}
+iservers `lv3ns[1-4].ffdns.net` from CloudXNS. While registering		{{server_addr}}	{{server_port}}
+idomains on the Internet, we can use existing free DNS services, such		{{server_addr}}	{{server_port}}
+ias Cloudflare or CloudXNS. But in DN42, although there were people		{{server_addr}}	{{server_port}}
+iproviding such services, communication over IRC is usually required. I		{{server_addr}}	{{server_port}}
+ifound it not worth the hassle and decided to self-host one.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBind or PowerDNS is usually used when setting up an authoritative DNS		{{server_addr}}	{{server_port}}
+iserver on Linux. Bind stores DNS records as files, which are a bit		{{server_addr}}	{{server_port}}
+ihard to manage when synchronization across servers is needed. For		{{server_addr}}	{{server_port}}
+iPowerDNS though, in addition to files, the records can also be stored		{{server_addr}}	{{server_port}}
+iin a database like MySQL. By the way, PowerDNS also provides its own		{{server_addr}}	{{server_port}}
+isynchronization mechanisms.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince I never succeeded in setting up PowerDNS's native sync, and I		{{server_addr}}	{{server_port}}
+ihaven't figured out why, I simply set up a MySQL source/replica		{{server_addr}}	{{server_port}}
+ireplication.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> The server serving "standard" data is called "Primary DNS server /		{{server_addr}}	{{server_port}}
+i> MySQL replication source", and other servers synchronizing from it		{{server_addr}}	{{server_port}}
+i> are called "Secondary DNS server / MySQL replica".		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Setting up DNS: MySQL Master/Slave Sync		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, install a MySQL in each server, and add these lines to		{{server_addr}}	{{server_port}}
+i`my.cnf`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# Server IDs, can be assigned to anything, but must be unique		{{server_addr}}	{{server_port}}
+iserver-id=1		{{server_addr}}	{{server_port}}
+i# Server names, will be shown in phpMyAdmin's sync status page		{{server_addr}}	{{server_port}}
+ireport-host=Master		{{server_addr}}	{{server_port}}
+i# MySQL binary log files, core files for replication		{{server_addr}}	{{server_port}}
+ilog_bin=mysql-bin		{{server_addr}}	{{server_port}}
+ilog_error=mysql-bin.err		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen login to the source MySQL server with phpMyAdmin, and set the		{{server_addr}}	{{server_port}}
+iserver to source (master) on the "Replication" page, and create a user		{{server_addr}}	{{server_port}}
+ifor replication (with permissions of `REPLICATION SLAVE` and		{{server_addr}}	{{server_port}}
+i`REPLICATION CLIENT`).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen you've finished the setup, you should see a similar status as:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ISource Server State	/usr/uploads/2018/04/1826994756.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe "File" is the filename for the MySQL binary log, and "Position" is		{{server_addr}}	{{server_port}}
+ithe current line position. Record these two values.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, shut down MySQL on all servers. Use `rsync` or similar tools to		{{server_addr}}	{{server_port}}
+icopy the database to replica servers, replacing the data directories.		{{server_addr}}	{{server_port}}
+iThen restart all MySQL services. If you don't have much database		{{server_addr}}	{{server_port}}
+iwrites, like for a personal blog, you may try to do this without		{{server_addr}}	{{server_port}}
+ishutting down the source server, but keep in mind that in this case,		{{server_addr}}	{{server_port}}
+ithe copied data may be corrupted.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen use phpMyAdmin to log on to replica MySQL servers. Since I met a		{{server_addr}}	{{server_port}}
+istrange problem while setting up a replica with its wizards, I'm		{{server_addr}}	{{server_port}}
+iexecuting an SQL instead:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```sql		{{server_addr}}	{{server_port}}
+ichange master to master_host='[Source Server IP]',		{{server_addr}}	{{server_port}}
+imaster_user='[Replication Username]',		{{server_addr}}	{{server_port}}
+imaster_password='[Replication Password]',		{{server_addr}}	{{server_port}}
+imaster_log_file='[Binary Log Filename]',		{{server_addr}}	{{server_port}}
+imaster_log_pos=[Binary Log Position];		{{server_addr}}	{{server_port}}
+istart slave;		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen go to the "Replication" page, click "See slave status table", and		{{server_addr}}	{{server_port}}
+iconfirm that `Slave_IO_Running` and `Slave_SQL_Running` are both		{{server_addr}}	{{server_port}}
+i`Yes`. Now the replication is up and running.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IReplication Good Status	/usr/uploads/2018/04/3187246767.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Setting up DNS: Configuring PowerDNS		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter done with the database, we can set up PowerDNS. First, create a		{{server_addr}}	{{server_port}}
+iuser and database in MySQL for PowerDNS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, install PowerDNS. Since I'm a Docker user, I simply downloaded		{{server_addr}}	{{server_port}}
+iand started a container with `docker-compose`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```yaml		{{server_addr}}	{{server_port}}
+ipowerdns:		{{server_addr}}	{{server_port}}
+i  image: psitrax/powerdns		{{server_addr}}	{{server_port}}
+i  container_name: powerdns		{{server_addr}}	{{server_port}}
+i  restart: always		{{server_addr}}	{{server_port}}
+i  entrypoint:		{{server_addr}}	{{server_port}}
+i    "/entrypoint.sh --cache-ttl=120 --master=yes --slave=yes"		{{server_addr}}	{{server_port}}
+i  environment:		{{server_addr}}	{{server_port}}
+i    - MYSQL_HOST=[Database IP]		{{server_addr}}	{{server_port}}
+i    - MYSQL_USER=[Database Username]		{{server_addr}}	{{server_port}}
+i    - MYSQL_PASS=[Database Password]		{{server_addr}}	{{server_port}}
+i    - MYSQL_DB=[Database Name]		{{server_addr}}	{{server_port}}
+i  ports:		{{server_addr}}	{{server_port}}
+i    - "[DN42 IP]:53:53"		{{server_addr}}	{{server_port}}
+i    - "[DN42 IP]:53:53/udp"		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere PowerDNS may fail to start, telling you that some columns are too		{{server_addr}}	{{server_port}}
+ilong when creating the `comments` table. This is because of a		{{server_addr}}	{{server_port}}
+iconfiguration change with MySQL, causing a behavior change. These		{{server_addr}}	{{server_port}}
+icolumns may be up to 64000 bytes long, which won't fit in the data		{{server_addr}}	{{server_port}}
+itable.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInstead of changing the database config, we can simply reduce the		{{server_addr}}	{{server_port}}
+ilength from 64000 to 16000, for example, and manually create the		{{server_addr}}	{{server_port}}
+itables:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> This schema may be out of date for newer PowerDNS. See		{{server_addr}}	{{server_port}}
+i> <https://doc.powerdns.com/authoritative/backends/generic-mysql.html>		{{server_addr}}	{{server_port}}
+i> for the latest schema, and change length accordingly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```sql		{{server_addr}}	{{server_port}}
+iCREATE TABLE domains (		{{server_addr}}	{{server_port}}
+i  id                    INT AUTO_INCREMENT,		{{server_addr}}	{{server_port}}
+i  name                  VARCHAR(255) NOT NULL,		{{server_addr}}	{{server_port}}
+i  master                VARCHAR(128) DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  last_check            INT DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  type                  VARCHAR(6) NOT NULL,		{{server_addr}}	{{server_port}}
+i  notified_serial       INT DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  account               VARCHAR(40) DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  PRIMARY KEY (id)		{{server_addr}}	{{server_port}}
+i) Engine=InnoDB;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE UNIQUE INDEX name_index ON domains(name);		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE TABLE records (		{{server_addr}}	{{server_port}}
+i  id                    INT AUTO_INCREMENT,		{{server_addr}}	{{server_port}}
+i  domain_id             INT DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  name                  VARCHAR(255) DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  type                  VARCHAR(10) DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  content               VARCHAR(16000) DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  ttl                   INT DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  prio                  INT DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  change_date           INT DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  disabled              TINYINT(1) DEFAULT 0,		{{server_addr}}	{{server_port}}
+i  ordername             VARCHAR(255) BINARY DEFAULT NULL,		{{server_addr}}	{{server_port}}
+i  auth                  TINYINT(1) DEFAULT 1,		{{server_addr}}	{{server_port}}
+i  PRIMARY KEY (id)		{{server_addr}}	{{server_port}}
+i) Engine=InnoDB;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE INDEX nametype_index ON records(name,type);		{{server_addr}}	{{server_port}}
+iCREATE INDEX domain_id ON records(domain_id);		{{server_addr}}	{{server_port}}
+iCREATE INDEX recordorder ON records (domain_id, ordername);		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE TABLE supermasters (		{{server_addr}}	{{server_port}}
+i  ip                    VARCHAR(64) NOT NULL,		{{server_addr}}	{{server_port}}
+i  nameserver            VARCHAR(255) NOT NULL,		{{server_addr}}	{{server_port}}
+i  account               VARCHAR(40) NOT NULL,		{{server_addr}}	{{server_port}}
+i  PRIMARY KEY (ip, nameserver)		{{server_addr}}	{{server_port}}
+i) Engine=InnoDB;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE TABLE comments (		{{server_addr}}	{{server_port}}
+i  id                    INT AUTO_INCREMENT,		{{server_addr}}	{{server_port}}
+i  domain_id             INT NOT NULL,		{{server_addr}}	{{server_port}}
+i  name                  VARCHAR(255) NOT NULL,		{{server_addr}}	{{server_port}}
+i  type                  VARCHAR(10) NOT NULL,		{{server_addr}}	{{server_port}}
+i  modified_at           INT NOT NULL,		{{server_addr}}	{{server_port}}
+i  account               VARCHAR(40) NOT NULL,		{{server_addr}}	{{server_port}}
+i  comment               VARCHAR(16000) NOT NULL,		{{server_addr}}	{{server_port}}
+i  PRIMARY KEY (id)		{{server_addr}}	{{server_port}}
+i) Engine=InnoDB;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE INDEX comments_domain_id_idx ON comments (domain_id);		{{server_addr}}	{{server_port}}
+iCREATE INDEX comments_name_type_idx ON comments (name, type);		{{server_addr}}	{{server_port}}
+iCREATE INDEX comments_order_idx ON comments (domain_id, modified_at);		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE TABLE domainmetadata (		{{server_addr}}	{{server_port}}
+i  id                    INT AUTO_INCREMENT,		{{server_addr}}	{{server_port}}
+i  domain_id             INT NOT NULL,		{{server_addr}}	{{server_port}}
+i  kind                  VARCHAR(32),		{{server_addr}}	{{server_port}}
+i  content               TEXT,		{{server_addr}}	{{server_port}}
+i  PRIMARY KEY (id)		{{server_addr}}	{{server_port}}
+i) Engine=InnoDB;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE INDEX domainmetadata_idx ON domainmetadata (domain_id, kind);		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE TABLE cryptokeys (		{{server_addr}}	{{server_port}}
+i  id                    INT AUTO_INCREMENT,		{{server_addr}}	{{server_port}}
+i  domain_id             INT NOT NULL,		{{server_addr}}	{{server_port}}
+i  flags                 INT NOT NULL,		{{server_addr}}	{{server_port}}
+i  active                BOOL,		{{server_addr}}	{{server_port}}
+i  content               TEXT,		{{server_addr}}	{{server_port}}
+i  PRIMARY KEY(id)		{{server_addr}}	{{server_port}}
+i) Engine=InnoDB;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE INDEX domainidindex ON cryptokeys(domain_id);		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE TABLE tsigkeys (		{{server_addr}}	{{server_port}}
+i  id                    INT AUTO_INCREMENT,		{{server_addr}}	{{server_port}}
+i  name                  VARCHAR(255),		{{server_addr}}	{{server_port}}
+i  algorithm             VARCHAR(50),		{{server_addr}}	{{server_port}}
+i  secret                VARCHAR(255),		{{server_addr}}	{{server_port}}
+i  PRIMARY KEY (id)		{{server_addr}}	{{server_port}}
+i) Engine=InnoDB;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCREATE UNIQUE INDEX namealgoindex ON tsigkeys(name, algorithm);		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow PowerDNS will start successfully, but right now it isn't serving		{{server_addr}}	{{server_port}}
+iany records.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Setting up DNS: Installing PowerAdmin		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPowerAdmin is a control panel for PowerDNS, which can be obtained from		{{server_addr}}	{{server_port}}
+i<https://github.com/poweradmin/poweradmin>. Simply follow its		{{server_addr}}	{{server_port}}
+iinstallation wizard.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLog in to the main menu after installation:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IPowerAdmin Main Menu	/usr/uploads/2018/04/3108492334.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iClick "Add Master Zone", where you need to add your domains. Enter		{{server_addr}}	{{server_port}}
+iyour domain in the "Zone Name" box, and submit.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBack to the main menu, click on "List Zones", followed by the edit		{{server_addr}}	{{server_port}}
+ibutton to the left of each domain, to enter this interface. Here I'll		{{server_addr}}	{{server_port}}
+itake `lantian.dn42`, my DN42 domain, for example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IDomain Management UI	/usr/uploads/2018/04/938836545.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInitially, after installing PowerAdmin, the SOA record will not		{{server_addr}}	{{server_port}}
+icontain a similar record as `ns1.lantian.dn42`, which doesn't fit with		{{server_addr}}	{{server_port}}
+iDN42's recommended practices. I set my SOA record to "ns1.lantian.dn42		{{server_addr}}	{{server_port}}
+ilantian.lantian.dn42 0 28800 7200 604800 60", and a detailed		{{server_addr}}	{{server_port}}
+iexplanation of each field is:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `ns1.lantian.dn42`: Name of the main DNS server, usually the domain		{{server_addr}}	{{server_port}}
+i  name of the server you're operating on.		{{server_addr}}	{{server_port}}
+i- `lantian.lantian.dn42`: Mailbox of the DNS server administrator,		{{server_addr}}	{{server_port}}
+i  with `@` at symbol replaced with `.` dot symbol. Here this value		{{server_addr}}	{{server_port}}
+i  implies `lantian@lantian.dn42`. This doesn't have to be a real		{{server_addr}}	{{server_port}}
+i  address in DN42.		{{server_addr}}	{{server_port}}
+i- `0`: Record version ID, used to determine if records are changed if		{{server_addr}}	{{server_port}}
+i  AXFR is used. Since we use MySQL replication, this is not that		{{server_addr}}	{{server_port}}
+i  important. Set to 0 tells PowerDNS to manage it automatically		{{server_addr}}	{{server_port}}
+i  without manual intervention.		{{server_addr}}	{{server_port}}
+i- `28800`: Refresh time, the interval for the secondary DNS server to		{{server_addr}}	{{server_port}}
+i  pull from the primary server with AXFR. Not important here.		{{server_addr}}	{{server_port}}
+i- `7200`: Retry time, time to wait if a previous AXFR attempt failed.		{{server_addr}}	{{server_port}}
+i  Also not important here.		{{server_addr}}	{{server_port}}
+i- `604800`: Expiration time, time for a secondary DNS server to serve		{{server_addr}}	{{server_port}}
+i  records since the last successful AXFR. After this period of time,		{{server_addr}}	{{server_port}}
+i  the secondary DNS server will stop serving this zone. Also not		{{server_addr}}	{{server_port}}
+i  important here.		{{server_addr}}	{{server_port}}
+i- `60`: Minimal TTL for all records. Minimum time to refresh record		{{server_addr}}	{{server_port}}
+i  data.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iClick on the edit button to the left of SOA record, set the values,		{{server_addr}}	{{server_port}}
+iand save.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen we need to set NS records, specifying that your domain will be		{{server_addr}}	{{server_port}}
+iserved by these DNS servers. I will configure 3 servers,		{{server_addr}}	{{server_port}}
+i`ns[1-3].lantian.dn42`. An NS record is necessary for each of them:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IFilling in NS Records	/usr/uploads/2018/04/57781084.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSubmit each one.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, set the A records, to specify that the domain points to a		{{server_addr}}	{{server_port}}
+ispecific server:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IFilling in A Records	/usr/uploads/2018/04/2476632371.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow the primary PowerDNS has been set up. With MySQL replication in		{{server_addr}}	{{server_port}}
+iplace, your configuration has been synced to other servers. Simply		{{server_addr}}	{{server_port}}
+iinstall PowerDNS on each of them.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, `dig` your own server as a test:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IDIG Test	/usr/uploads/2018/04/3598285227.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Register Domain at DN42		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDN42 had an upgrade recently, replacing the old Monotone repository		{{server_addr}}	{{server_port}}
+iwith Git. First, register an account at		{{server_addr}}	{{server_port}}
+i<https://git.dn42.us/explore/repos>, Fork		{{server_addr}}	{{server_port}}
+i[dn42/registry](https://git.dn42.us/dn42/registry), and Clone it to		{{server_addr}}	{{server_port}}
+iyour local computer.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, DN42 requires Git Commits to be GPG signed. I'm using GPG		{{server_addr}}	{{server_port}}
+iKeychain on Mac. The procedures are: creating a key, uploading pubkey		{{server_addr}}	{{server_port}}
+ito a public GPG server such as SKS, and copy the Fingerprint.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen configure `git` so it will automatically sign each commit:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+igit config --global user.signingKey [Your Fingerprint]		{{server_addr}}	{{server_port}}
+igit config --global commit.gpgSign true		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince I'm already a DN42 user and have my own MNT handles, I need to		{{server_addr}}	{{server_port}}
+iedit `data/mntner/LANTIAN-MNT` and add my GPG fingerprint to it:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+imntner:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+iadmin-c:            LANTIAN-DN42		{{server_addr}}	{{server_port}}
+itech-c:             LANTIAN-DN42		{{server_addr}}	{{server_port}}
+imnt-by:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+isource:             DN42		{{server_addr}}	{{server_port}}
+iauth:               pgp-fingerprint 23067C13B6AEBDD7C0BB567327F31700E751EC22		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen create `data/dns/lantian.dn42`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+idomain:             lantian.dn42		{{server_addr}}	{{server_port}}
+iadmin-c:            LANTIAN-DN42		{{server_addr}}	{{server_port}}
+itech-c:             LANTIAN-DN42		{{server_addr}}	{{server_port}}
+imnt-by:             LANTIAN-MNT		{{server_addr}}	{{server_port}}
+inserver:            ns1.lantian.dn42 172.22.76.186		{{server_addr}}	{{server_port}}
+inserver:            ns1.lantian.dn42 fdbc:f9dc:67ad::8b:c606:ba01		{{server_addr}}	{{server_port}}
+inserver:            ns2.lantian.dn42 172.22.76.185		{{server_addr}}	{{server_port}}
+inserver:            ns2.lantian.dn42 fdbc:f9dc:67ad::dd:c85a:8a93		{{server_addr}}	{{server_port}}
+inserver:            ns3.lantian.dn42 172.22.76.187		{{server_addr}}	{{server_port}}
+inserver:            ns3.lantian.dn42 fdbc:f9dc:67ad::18:ca0f:741d		{{server_addr}}	{{server_port}}
+isource:             DN42		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(2020-03-22 Update: originally this line was also present:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+istatus:             CONNECT		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut it was removed in an update in Nov 2018.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI made this update since one user in Telegram Group had problems with		{{server_addr}}	{{server_port}}
+ithis.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen `git add`, `git commit`, `git push`, send a Pull Request and wait		{{server_addr}}	{{server_port}}
+ifor merging, and fix for any possible errors as admins request.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IDN42 Pull Request Record	/usr/uploads/2018/04/3250696671.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince DN42 uses Anycast DNS, anyone can host a DNS recursive server.		{{server_addr}}	{{server_port}}
+iWith different people polling updates from the central registry at		{{server_addr}}	{{server_port}}
+idifferent intervals, it may take up to a week for your domain to fully		{{server_addr}}	{{server_port}}
+iwork.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IDomain Activated	/usr/uploads/2018/04/2335363675.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, we've registered a domain in DN42. Now you can set up your		{{server_addr}}	{{server_port}}
+iwebsite, mail, IRC, game server, or whatever you want.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

@@ -1,0 +1,89 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Debian VPS 设置SMTP发信"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [WordPress, SMTP, sendmail]		{{server_addr}}	{{server_port}}
+idate: 2014-08-02 21:15:32		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在博客中，当博主对访客的评论作出回复，除非访客再次来访，否则很难发现博		{{server_addr}}	{{server_port}}
+i主已经回复了自己。但是通过评论回复邮件通知功能，在博主或者其他访客回复		{{server_addr}}	{{server_port}}
+i访客评论的时候，访客会收到邮件，从而及时得知自己收到了回复。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是在最常用的 WordPress 博客系统中，一般只能通过系统默认的 sendmail		{{server_addr}}	{{server_port}}
+i发送邮件，这样的邮件很容易进入垃圾箱，因此我们一般选用腾讯、微软		{{server_addr}}	{{server_port}}
+i、Google 等提供域名邮箱和他们的邮件服务，这就需要通过 SMTP 发邮件。问		{{server_addr}}	{{server_port}}
+i题是 sendmail 并不支持 SMTP，我们可以在博客系统中通过插件解决问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是这种方法有局限，如果 VPS 提供商屏蔽了 25 端口（SMTP 标准端口）那么		{{server_addr}}	{{server_port}}
+i某些不支持通过 SSL 加密的 SMTP 发送的博客系统也发不了邮件。而且如果你		{{server_addr}}	{{server_port}}
+i的 VPS 上运行好几个网站、不同网站程序，逐个设置非常麻烦也容易出错。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i所以我们可以在 VPS 中直接安装 SMTP 邮件发送软件来解决问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ieSMTP 是一款和 sendmail 语法兼容的软件，它可以把 sendmail 要发送的邮件		{{server_addr}}	{{server_port}}
+i通过 SMTP 来发送。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i登陆你的 VPS，输入以下命令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+isudo apt-get install esmtp		{{server_addr}}	{{server_port}}
+isudo ln -s /usr/bin/esmtp /usr/bin/sendmail		{{server_addr}}	{{server_port}}
+isudo nano /etc/esmtprc		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 hostname=后填入 SMTP 服务器地址，如果不是 25 端口那么需要指定端口号		{{server_addr}}	{{server_port}}
+i。Gmail 的 SMTP 服务器地址是 smtp.gmail.com:587。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 username=后填入邮箱地址，password=后填入邮箱密码。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果邮件服务器支持 StartTLS，那么把 starttls=后面的 disabled 改成		{{server_addr}}	{{server_port}}
+ienabled。Gmail 支持这么做。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 mda=后填入"/usr/bin/procmail -d %T"（包括双引号）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最后文件应该看起来像这样：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# Config file for ESMTP sendmail		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# The SMTP host and service (port)		{{server_addr}}	{{server_port}}
+ihostname=smtp.gmail.com:587		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# SECURITY WARNING: Do NOT set username and password in the system wide		{{server_addr}}	{{server_port}}
+i# configuration file unless you are the only user of this machine. See		{{server_addr}}	{{server_port}}
+i# esmtprc(5).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# The user name		{{server_addr}}	{{server_port}}
+iusername=邮件地址@gmail.com		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# The password		{{server_addr}}	{{server_port}}
+ipassword=密码		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Whether to use Starttls		{{server_addr}}	{{server_port}}
+istarttls=enabled		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# The certificate passphrase		{{server_addr}}	{{server_port}}
+i#certificate_passphrase=		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# The Mail Delivery Agent		{{server_addr}}	{{server_port}}
+imda="/usr/bin/procmail -d %T"		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCtrl+X 保存文件并退出。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i修改你的 php.ini，查找到 sendmail_path 一行，修改成：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+isendmail_path = /usr/bin/esmtp -t -i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存，输入以下命令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+isudo service apache2 restart #使用Apache2做服务器		{{server_addr}}	{{server_port}}
+isudo service php5-fpm restart #使用nginx或者其它基于php5-fpm的方式做服务器		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i配置完成，你可以在博客系统里发送一封邮件来进行测试。</p></li></ol>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

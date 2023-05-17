@@ -1,0 +1,133 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "W3 Total Cache 末尾注释去除"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [网站, 折腾, WordPress, W3 Total Cache]		{{server_addr}}	{{server_port}}
+idate: 2013-02-13 21:07:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iW3 Total Cache 开了资源最小化的效果是非常好的，连 HTML 都给我最小化了		{{server_addr}}	{{server_port}}
+i，不信看看我的网页源代码，连换行符都被删掉了，最小化效果超级给力。但是		{{server_addr}}	{{server_port}}
+i末尾的地方，却有个 W3 Total Cache 加的注释。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i<!-- Performance optimized by W3 Total Cache. Learn more: http://www.w3-edge.com/wordpress-plugins/		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMinified using disk: basic		{{server_addr}}	{{server_port}}
+iContent Delivery Network via lantian.pub		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iServed from: lantian.pub @ 2013-02-13 20:56:59 by W3 Total Cache -->		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于我这种追求速度的人，这段东西不光让网页无端变大，最重要的是我想到有		{{server_addr}}	{{server_port}}
+i这个东西就烦。于是，我决定对 W3 Total Cache 开刀，把产生注释的这一段代		{{server_addr}}	{{server_port}}
+i码删掉。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i先到 Google 上查了一下，有人说在		{{server_addr}}	{{server_port}}
+iw3-total-cache/lib/W3/Plugin/TotalCache.php 这个文件的 2000 多行的位置		{{server_addr}}	{{server_port}}
+i。结果我打开文件一看，整个文件才 800 行，哪来的 2000 行？继续搜，无果		{{server_addr}}	{{server_port}}
+i。只能我自己看看吧。于是我开始翻这个 php 文件，直到我翻到这一段代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```php		{{server_addr}}	{{server_port}}
+i/**		{{server_addr}}	{{server_port}}
+i * Add footer comment		{{server_addr}}	{{server_port}}
+i */		{{server_addr}}	{{server_port}}
+i$date = date_i18n('Y-m-d H:i:s');		{{server_addr}}	{{server_port}}
+i$host = (!empty($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost');		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iif ($this->_config->get_string('common.support') != '' || $this->_config->get_boolean('common.tweeted')) {		{{server_addr}}	{{server_port}}
+i    $buffer .= sprintf("\r\n<!-- Served from: %s @ %s by W3 Total Cache -->", w3_escape_comment($host), $date);		{{server_addr}}	{{server_port}}
+i} else {		{{server_addr}}	{{server_port}}
+i    $strings = array();		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if ($this->_config->get_boolean('minify.enabled') && !$this->_config->get_boolean('minify.debug')) {		{{server_addr}}	{{server_port}}
+i        $w3_plugin_minify = w3_instance('W3_Plugin_Minify');		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        $strings[] = sprintf("Minified using %s%s", w3_get_engine_name($this->_config->get_string('minify.engine')), ($w3_plugin_minify->minify_reject_reason != '' ? sprintf(' (%s)', $w3_plugin_minify->minify_reject_reason) : ''));		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if ($this->_config->get_boolean('pgcache.enabled') && !$this->_config->get_boolean('pgcache.debug')) {		{{server_addr}}	{{server_port}}
+i        $w3_pgcache = w3_instance('W3_PgCache');		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        $strings[] = sprintf("Page Caching using %s%s", w3_get_engine_name($this->_config->get_string('pgcache.engine')), ($w3_pgcache->cache_reject_reason != '' ? sprintf(' (%s)', $w3_pgcache->cache_reject_reason) : ''));		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if ($this->_config->get_boolean('dbcache.enabled') &&		{{server_addr}}	{{server_port}}
+i            !$this->_config->get_boolean('dbcache.debug')) {		{{server_addr}}	{{server_port}}
+i        $db = w3_instance('W3_DbCache');		{{server_addr}}	{{server_port}}
+i        $append = (!is_null($db->cache_reject_reason) ?		{{server_addr}}	{{server_port}}
+i            sprintf(' (%s)', $db->cache_reject_reason) :		{{server_addr}}	{{server_port}}
+i            '');		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        if ($db->query_hits) {		{{server_addr}}	{{server_port}}
+i            $strings[] = sprintf("Database Caching %d/%d queries in %.3f seconds using %s%s",		{{server_addr}}	{{server_port}}
+i$db->query_hits, $db->query_total, $db->time_total,		{{server_addr}}	{{server_port}}
+iw3_get_engine_name($this->_config->get_string('dbcache.engine')),		{{server_addr}}	{{server_port}}
+i$append);		{{server_addr}}	{{server_port}}
+i        } else {		{{server_addr}}	{{server_port}}
+i            $strings[] = sprintf("Database Caching using %s%s",		{{server_addr}}	{{server_port}}
+iw3_get_engine_name($this->_config->get_string('dbcache.engine')),		{{server_addr}}	{{server_port}}
+i$append);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if (w3_is_dbcluster()) {		{{server_addr}}	{{server_port}}
+i        $db_cluster = w3_instance('W3_Enterprise_DbCluster');		{{server_addr}}	{{server_port}}
+i        $strings[] = $db_cluster->status_message();		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if ($this->_config->get_boolean('objectcache.enabled') && !$this->_config->get_boolean('objectcache.debug')) {		{{server_addr}}	{{server_port}}
+i        $w3_objectcache = w3_instance('W3_ObjectCache');		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        $append = ($w3_objectcache->cache_reject_reason != '' ?		{{server_addr}}	{{server_port}}
+i            sprintf(' (%s)', $w3_objectcache->cache_reject_reason) :		{{server_addr}}	{{server_port}}
+i            '');		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        $strings[] = sprintf("Object Caching %d/%d objects using %s%s",		{{server_addr}}	{{server_port}}
+i            $w3_objectcache->cache_hits, $w3_objectcache->cache_total,		{{server_addr}}	{{server_port}}
+i            w3_get_engine_name($this->_config->get_string('objectcache.engine')),		{{server_addr}}	{{server_port}}
+i            $append);		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if ($this->_config->get_boolean('fragmentcache.enabled') && !$this->_config->get_boolean('fragmentcache.debug')) {		{{server_addr}}	{{server_port}}
+i        $w3_fragmentcache = w3_instance('W3_Pro_FragmentCache');		{{server_addr}}	{{server_port}}
+i        $append = ($w3_fragmentcache->cache_reject_reason != '' ?		{{server_addr}}	{{server_port}}
+i            sprintf(' (%s)', $w3_fragmentcache->cache_reject_reason) :'');		{{server_addr}}	{{server_port}}
+i        $strings[] = sprintf("Fragment Caching %d/%d fragments using %s%s",		{{server_addr}}	{{server_port}}
+i            $w3_fragmentcache->cache_hits, $w3_fragmentcache->cache_total,		{{server_addr}}	{{server_port}}
+i            w3_get_engine_name($this->_config->get_string('fragmentcache.engine')),		{{server_addr}}	{{server_port}}
+i            $append);		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if ($this->_config->get_boolean('cdn.enabled') && !$this->_config->get_boolean('cdn.debug')) {		{{server_addr}}	{{server_port}}
+i        $w3_plugin_cdn = w3_instance('W3_Plugin_Cdn');		{{server_addr}}	{{server_port}}
+i        $w3_plugin_cdncommon = w3_instance('W3_Plugin_CdnCommon');		{{server_addr}}	{{server_port}}
+i        $cdn = & $w3_plugin_cdncommon->get_cdn();		{{server_addr}}	{{server_port}}
+i        $via = $cdn->get_via();		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        $strings[] = sprintf("Content Delivery Network via %s%s", ($via ? $via : 'N/A'), ($w3_plugin_cdn->cdn_reject_reason != '' ? sprintf(' (%s)', $w3_plugin_cdn->cdn_reject_reason) : ''));		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if ($this->_config->get_boolean('newrelic.enabled')) {		{{server_addr}}	{{server_port}}
+i        $w3_newrelic = w3_instance('W3_Plugin_NewRelic');		{{server_addr}}	{{server_port}}
+i        $append = ($w3_newrelic->newrelic_reject_reason != '') ?		{{server_addr}}	{{server_port}}
+i            sprintf(' (%s)', $w3_newrelic->newrelic_reject_reason) : '';		{{server_addr}}	{{server_port}}
+i        $strings[] = sprintf(__("Application Monitoring using New Relic%s", 'w3-total-cache'), $append);		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    $buffer .= "\r\n<!-- Performance optimized by W3 Total Cache. Learn more: http://www.w3-edge.com/wordpress-plugins/\r\n";		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if (count($strings)) {		{{server_addr}}	{{server_port}}
+i        $buffer .= "\r\n" . implode("\r\n", $strings) . "\r\n";		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    $buffer .= sprintf("\r\n Served from: %s @ %s by W3 Total Cache -->", w3_escape_comment($host), $date);		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i「Add footer comment」，这一段代码，你摊上事了。这一段代码就是产生在		{{server_addr}}	{{server_port}}
+iHTML 最末端的注释，我当然不能让它存在。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你要删，你可以直接把这段代码删掉，但是如果你怕删错了搞坏插件，你可		{{server_addr}}	{{server_port}}
+i以在这段代码两段分别加一个/\* 和 \*/，这是 PHP 里的注释符号。如果你今		{{server_addr}}	{{server_port}}
+i后想把它弄出来，把这两个符号删掉就行了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

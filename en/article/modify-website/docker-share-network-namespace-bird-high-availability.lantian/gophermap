@@ -1,0 +1,228 @@
+i---		{{server_addr}}	{{server_port}}
+ititle:		{{server_addr}}	{{server_port}}
+i  "Sharing Network Namespace Among Docker Containers for Bird		{{server_addr}}	{{server_port}}
+i  Anycasting"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [Docker, Bird]		{{server_addr}}	{{server_port}}
+idate: 2020-03-13 20:23:20		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAt exactly one year ago, I		{{server_addr}}	{{server_port}}
+1set up an Anycast service with Docker in the DN42 network (Chinese only atm)	/article/modify-website/dn42-docker-anycast-dns.lantian	{{server_addr}}	{{server_port}}
+i.iBack then, I customized the container's image and added a Bird		{{server_addr}}	{{server_port}}
+iinstallation to it, then put in a config file to broadcast Anycast		{{server_addr}}	{{server_port}}
+iroutes via OSPF. However, as time went by, a few problems were		{{server_addr}}	{{server_port}}
+iexposed:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. The process of installing Bird takes time. Instead of installing		{{server_addr}}	{{server_port}}
+i   Bird with `apt-get`, since		{{server_addr}}	{{server_port}}
+   		{{server_addr}}	{{server_port}}
+1my Dockerfiles need to support multiple architectures (Chinese only atm)	/article/modify-website/gpp-preprocess-dockerfile-include-if.lantian	{{server_addr}}	{{server_port}}
+i,i   and Bird isn't available in some architecture's repos for Debian.		{{server_addr}}	{{server_port}}
+i   And since my building server is AMD64, and		{{server_addr}}	{{server_port}}
+   		{{server_addr}}	{{server_port}}
+1is running images of other architectures with `qemu-user-static` (Chinese only atm)	/article/modify-computer/build-arm-docker-image-on-x86-docker-hub-travis-automatic-build.lantian	{{server_addr}}	{{server_port}}
+i,i   a lot of instruction translation is needed in the image building		{{server_addr}}	{{server_port}}
+i   and software compilation progress, which is extremely inefficient.		{{server_addr}}	{{server_port}}
+i   It may take more than 2 hours to build an image for different		{{server_addr}}	{{server_port}}
+i   architectures, while if I installed it with Bird, it will take less		{{server_addr}}	{{server_port}}
+i   than 5 minutes.		{{server_addr}}	{{server_port}}
+i2. Customizing image also takes time. Since both the target		{{server_addr}}	{{server_port}}
+i   application (such as PowerDNS) and Bird need to be run		{{server_addr}}	{{server_port}}
+i   simultaneously, I cannot simply use the target app as the		{{server_addr}}	{{server_port}}
+i   ENTRYPOINT. Adding other managing software (supervisord,		{{server_addr}}	{{server_port}}
+i   s6-supervise, tini, or a custom Bash script) adds extra complexity		{{server_addr}}	{{server_port}}
+i   to the image (and therefore increases chances of error), and other		{{server_addr}}	{{server_port}}
+i   factors such as signals, return values and zombie processes need to		{{server_addr}}	{{server_port}}
+i   be taken into account.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRecently when I was reading		{{server_addr}}	{{server_port}}
+i[`docker-compose`'s reference document](https://docs.docker.com/compose/compose-file/compose-file-v2/),		{{server_addr}}	{{server_port}}
+iI realized that `network_mode`, or the container's network scheme, can		{{server_addr}}	{{server_port}}
+ibe set to `container:[ID]` or `service:[name]`, which means multiple		{{server_addr}}	{{server_port}}
+icontainers can share the same namespace, and therefore the same IP		{{server_addr}}	{{server_port}}
+iallocations and routes. This means I can create an individual Bird		{{server_addr}}	{{server_port}}
+icontainer, attach it to the application container's network namespace,		{{server_addr}}	{{server_port}}
+ito achieve Anycast without modifying the original container image.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Scheme 1: Two Containers		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe most straightforward solution is using two containers, one for		{{server_addr}}	{{server_port}}
+iapplication and one for Bird. Using PowerDNS as an example, this is my		{{server_addr}}	{{server_port}}
+iconfig file:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```yaml		{{server_addr}}	{{server_port}}
+iservices:		{{server_addr}}	{{server_port}}
+i  powerdns:		{{server_addr}}	{{server_port}}
+i    image: xddxdd/powerdns		{{server_addr}}	{{server_port}}
+i    container_name: powerdns		{{server_addr}}	{{server_port}}
+i    restart: always		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - "./conf/powerdns:/etc/powerdns:ro"		{{server_addr}}	{{server_port}}
+i      - "/etc/geoip:/etc/geoip:ro"		{{server_addr}}	{{server_port}}
+i    depends_on:		{{server_addr}}	{{server_port}}
+i      - mysql		{{server_addr}}	{{server_port}}
+i      - docker-ipv6nat		{{server_addr}}	{{server_port}}
+i    ports:		{{server_addr}}	{{server_port}}
+i      - "53:53"		{{server_addr}}	{{server_port}}
+i      - "53:53/udp"		{{server_addr}}	{{server_port}}
+i    networks:		{{server_addr}}	{{server_port}}
+i      default:		{{server_addr}}	{{server_port}}
+i        ipv4_address: 172.18.3.54		{{server_addr}}	{{server_port}}
+i        ipv6_address: fcf9:a876:eddd:c85a:8a93::54		{{server_addr}}	{{server_port}}
+i      anycast_ip:		{{server_addr}}	{{server_port}}
+i        ipv4_address: 172.22.76.109		{{server_addr}}	{{server_port}}
+i        ipv6_address: fdbc:f9dc:67ad:2547::54		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  powerdns-bird:		{{server_addr}}	{{server_port}}
+i    image: xddxdd/bird		{{server_addr}}	{{server_port}}
+i    container_name: powerdns-bird		{{server_addr}}	{{server_port}}
+i    restart: always		{{server_addr}}	{{server_port}}
+i    network_mode: "service:powerdns"		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - "./conf/powerdns/bird-static.conf:/etc/bird-static.conf:ro"		{{server_addr}}	{{server_port}}
+i    cap_add:		{{server_addr}}	{{server_port}}
+i      - NET_ADMIN		{{server_addr}}	{{server_port}}
+i    depends_on:		{{server_addr}}	{{server_port}}
+i      - docker-ipv6nat		{{server_addr}}	{{server_port}}
+i      - powerdns		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+inetworks: [Redacted...]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere I set all networking-related configuration (including IP and		{{server_addr}}	{{server_port}}
+iports) on the PowerDNS container, and set		{{server_addr}}	{{server_port}}
+i`network_mode: service:powerdns` on the Bird container, so they share		{{server_addr}}	{{server_port}}
+ithe network namespace. Here `NET_ADMIN` capability is still required		{{server_addr}}	{{server_port}}
+iby Bird to handle the broadcasting and routing, but no longer assigned		{{server_addr}}	{{server_port}}
+ito PowerDNS. Hence security is improved a bit?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen run `docker-compose up -d` to start both containers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## And Problem Arises		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNot long has passed before the host cannot receive OSPF broadcasts		{{server_addr}}	{{server_port}}
+ifrom the Bird container anymore. I entered the Bird container, did		{{server_addr}}	{{server_port}}
+isome checks, and saw:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# ip addr		{{server_addr}}	{{server_port}}
+i1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000		{{server_addr}}	{{server_port}}
+i    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00		{{server_addr}}	{{server_port}}
+i    inet 127.0.0.1/8 scope host lo		{{server_addr}}	{{server_port}}
+i       valid_lft forever preferred_lft forever		{{server_addr}}	{{server_port}}
+i2: sit0@NONE: <NOARP> mtu 1480 qdisc noop state DOWN group default qlen 1000		{{server_addr}}	{{server_port}}
+i    link/sit 0.0.0.0 brd 0.0.0.0		{{server_addr}}	{{server_port}}
+i3: gre0@NONE: <NOARP> mtu 1476 qdisc noop state DOWN group default qlen 1000		{{server_addr}}	{{server_port}}
+i    link/gre 0.0.0.0 brd 0.0.0.0		{{server_addr}}	{{server_port}}
+i4: gretap0@NONE: <BROADCAST,MULTICAST> mtu 1462 qdisc noop state DOWN group default qlen 1000		{{server_addr}}	{{server_port}}
+i    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff		{{server_addr}}	{{server_port}}
+i5: erspan0@NONE: <BROADCAST,MULTICAST> mtu 1450 qdisc noop state DOWN group default qlen 1000		{{server_addr}}	{{server_port}}
+i    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe IP allocation is gone. Upon further inspection on the PowerDNS		{{server_addr}}	{{server_port}}
+icontainer, I realized that since I have		{{server_addr}}	{{server_port}}
+i[Watchtower](https://github.com/containrrr/watchtower) automatically		{{server_addr}}	{{server_port}}
+iupdating images to the latest version, and my building server updated		{{server_addr}}	{{server_port}}
+iPowerDNS's image, the PowerDNS container has been recreated.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince `service` in `network_mode` is, in fact, a convenience function		{{server_addr}}	{{server_port}}
+iprovided by `docker-compose`, and is assigned by container ID on		{{server_addr}}	{{server_port}}
+iDocker level, when PowerDNS container was recreated, the network		{{server_addr}}	{{server_port}}
+inamespace for Bird container is lost as well.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow, if I attempt to restart the Bird container, Docker will show an		{{server_addr}}	{{server_port}}
+ierror about unable to find the container with the original ID. Here		{{server_addr}}	{{server_port}}
+ithe complexity arises: if I run `docker-compose up -d` again, instead		{{server_addr}}	{{server_port}}
+iof recreating containers, `docker-compose` simply tries to start		{{server_addr}}	{{server_port}}
+iexisting containers, which will fail.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTherefore, I need a container that is always running and never updated		{{server_addr}}	{{server_port}}
+ifor the network namespace, and attach PowerDNS and Bird containers,		{{server_addr}}	{{server_port}}
+iwhich may be updated any time, onto the long-running container, to		{{server_addr}}	{{server_port}}
+iavoid issues when updating containers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Scheme 2: Three Containers		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI chose the		{{server_addr}}	{{server_port}}
+i[Busybox container](https://hub.docker.com/_/busybox?tab=tags) to run		{{server_addr}}	{{server_port}}
+iforever since it's small enough and occupies negligible memory space.		{{server_addr}}	{{server_port}}
+iThe latest version of Busybox was 1.31.1 when I was writing this post,		{{server_addr}}	{{server_port}}
+ibut since images of 1.31.1 was still updated periodically, I chose the		{{server_addr}}	{{server_port}}
+iimage for 1.31.0, which was last updated 3 months ago.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI run `tail -f /dev/null` forever with Busybox without it eating CPU		{{server_addr}}	{{server_port}}
+icycles. In addition, I set labels to the container to prevent		{{server_addr}}	{{server_port}}
+iWatchtower from auto-updating it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere is my updated config file:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```yaml		{{server_addr}}	{{server_port}}
+iservices:		{{server_addr}}	{{server_port}}
+i  powerdns-net:		{{server_addr}}	{{server_port}}
+i    image: amd64/busybox:1.31.0		{{server_addr}}	{{server_port}}
+i    container_name: powerdns-net		{{server_addr}}	{{server_port}}
+i    restart: always		{{server_addr}}	{{server_port}}
+i    entrypoint: "tail -f /dev/null"		{{server_addr}}	{{server_port}}
+i    labels:		{{server_addr}}	{{server_port}}
+i      - com.centurylinklabs.watchtower.enable=false		{{server_addr}}	{{server_port}}
+i    depends_on:		{{server_addr}}	{{server_port}}
+i      - docker-ipv6nat		{{server_addr}}	{{server_port}}
+i    ports:		{{server_addr}}	{{server_port}}
+i      - "53:53"		{{server_addr}}	{{server_port}}
+i      - "53:53/udp"		{{server_addr}}	{{server_port}}
+i    networks:		{{server_addr}}	{{server_port}}
+i      default:		{{server_addr}}	{{server_port}}
+i        ipv4_address: 172.18.3.54		{{server_addr}}	{{server_port}}
+i        ipv6_address: fcf9:a876:eddd:c85a:8a93::54		{{server_addr}}	{{server_port}}
+i      anycast_ip:		{{server_addr}}	{{server_port}}
+i        ipv4_address: 172.22.76.109		{{server_addr}}	{{server_port}}
+i        ipv6_address: fdbc:f9dc:67ad:2547::54		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  powerdns:		{{server_addr}}	{{server_port}}
+i    image: xddxdd/powerdns		{{server_addr}}	{{server_port}}
+i    container_name: powerdns		{{server_addr}}	{{server_port}}
+i    restart: always		{{server_addr}}	{{server_port}}
+i    network_mode: "service:powerdns-net"		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - "./conf/powerdns:/etc/powerdns:ro"		{{server_addr}}	{{server_port}}
+i      - "/etc/geoip:/etc/geoip:ro"		{{server_addr}}	{{server_port}}
+i    depends_on:		{{server_addr}}	{{server_port}}
+i      - docker-ipv6nat		{{server_addr}}	{{server_port}}
+i      - powerdns-net		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  powerdns-bird:		{{server_addr}}	{{server_port}}
+i    image: xddxdd/bird		{{server_addr}}	{{server_port}}
+i    container_name: powerdns-bird		{{server_addr}}	{{server_port}}
+i    restart: always		{{server_addr}}	{{server_port}}
+i    network_mode: "service:powerdns-net"		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - "./conf/powerdns/bird-static.conf:/etc/bird-static.conf:ro"		{{server_addr}}	{{server_port}}
+i    cap_add:		{{server_addr}}	{{server_port}}
+i      - NET_ADMIN		{{server_addr}}	{{server_port}}
+i    depends_on:		{{server_addr}}	{{server_port}}
+i      - docker-ipv6nat		{{server_addr}}	{{server_port}}
+i      - powerdns		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+inetworks: [Redacted...]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere the Busybox container will run forever stably to keep the network		{{server_addr}}	{{server_port}}
+inamespace running, and PowerDNS and Bird will attach to it and provide		{{server_addr}}	{{server_port}}
+iservices. Either PowerDNS or Bird can be updated at any time without		{{server_addr}}	{{server_port}}
+iaffecting the existence of the whole network namespace.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs for resource consumptions of Busybox:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# docker stats --no-stream		{{server_addr}}	{{server_port}}
+iCONTAINER ID        NAME                     CPU %               MEM USAGE / LIMIT   MEM %               NET I/O             BLOCK I/O           PIDS		{{server_addr}}	{{server_port}}
+i...		{{server_addr}}	{{server_port}}
+i803b11f02b3a        powerdns-recursor-net    0.00%               384KiB / 734MiB     0.05%               10.3MB / 3.98MB     1.43MB / 0B         1		{{server_addr}}	{{server_port}}
+i...		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe size is merely 384KB and can be simply ignored.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

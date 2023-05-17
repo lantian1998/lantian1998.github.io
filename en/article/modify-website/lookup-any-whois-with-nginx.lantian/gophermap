@@ -1,0 +1,325 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Lookup Any Public WHOIS with this nginx-based Server"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [nginx, WHOIS]		{{server_addr}}	{{server_port}}
+idate: 2021-07-18 01:52:18		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter I		{{server_addr}}	{{server_port}}
+1set up a DN42 WHOIS server with Nginx	/en/article/modify-website/serve-dn42-whois-with-nginx.lantian/	{{server_addr}}	{{server_port}}
+i,iI configured my DN42 Looking Glass to use this service. As my Looking		{{server_addr}}	{{server_port}}
+iGlass is capable of running as a Telegram bot, fellow group members		{{server_addr}}	{{server_port}}
+iare looking up WHOIS information of IPs and domains with it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut soon we noticed a problem. A significant part of members have		{{server_addr}}	{{server_port}}
+iapplied for ASNs and IP ranges on the public Internet after they're		{{server_addr}}	{{server_port}}
+ifamiliar enough with DN42, and they're peering at Internet Exchange		{{server_addr}}	{{server_port}}
+iPoints. Therefore, they often need to lookup some public Internet IPs,		{{server_addr}}	{{server_port}}
+iASNs, and domains, yet none of the Telegram bots in our group can do		{{server_addr}}	{{server_port}}
+iso. It would be quite helpful for us if there exists a WHOIS server		{{server_addr}}	{{server_port}}
+ithat proxies lookups to relevant registries.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iProxying is exactly what Nginx is good at. With some modifications to		{{server_addr}}	{{server_port}}
+iNginx, so it speaks the "one-request-one-response" protocol to its		{{server_addr}}	{{server_port}}
+iupstream, and the help of Lua scripting in OpenResty, we can have a		{{server_addr}}	{{server_port}}
+iWHOIS proxy in a fairly short time.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Modifying Nginx Proxy Logic		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNginx calls the function `ngx_http_proxy_create_request` to create the		{{server_addr}}	{{server_port}}
+irequest header, specifically the `GET /url HTTP/1.1` part, when it		{{server_addr}}	{{server_port}}
+iwants to send one to the upstream.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe logic behind that function can be abstracted as:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```python		{{server_addr}}	{{server_port}}
+idef ngx_http_proxy_create_request():		{{server_addr}}	{{server_port}}
+i    # Join the first line of request (GET xxx)		{{server_addr}}	{{server_port}}
+i    header = 'GET'		{{server_addr}}	{{server_port}}
+i    header += url		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if http_version == '1.1':		{{server_addr}}	{{server_port}}
+i        header += 'HTTP/1.1'		{{server_addr}}	{{server_port}}
+i    else:		{{server_addr}}	{{server_port}}
+i        header += 'HTTP/1.0'		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    # Add other request headers		{{server_addr}}	{{server_port}}
+i    for key, value in request_headers:		{{server_addr}}	{{server_port}}
+i        header += key + ': ' + value		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    # Send the request to upstream		{{server_addr}}	{{server_port}}
+i    send(header)		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNginx itself already supports selecting HTTP version for proxy		{{server_addr}}	{{server_port}}
+irequests, but the only options are HTTP/1.0 (the default) and		{{server_addr}}	{{server_port}}
+iHTTP/1.1. We simply need to add a "one-request-one-response" mode		{{server_addr}}	{{server_port}}
+i(called `plain` mode), where it disables everything but putting in the		{{server_addr}}	{{server_port}}
+iURL:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```python		{{server_addr}}	{{server_port}}
+idef ngx_http_proxy_create_request():		{{server_addr}}	{{server_port}}
+i    # Join the first line of request (GET xxx)		{{server_addr}}	{{server_port}}
+i    if http_version != 'plain':		{{server_addr}}	{{server_port}}
+i        header = 'GET'		{{server_addr}}	{{server_port}}
+i    header += url		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    if http_version == '1.1':		{{server_addr}}	{{server_port}}
+i        header += 'HTTP/1.1'		{{server_addr}}	{{server_port}}
+i    else if http_version == '1.0':		{{server_addr}}	{{server_port}}
+i        header += 'HTTP/1.0'		{{server_addr}}	{{server_port}}
+i    else:		{{server_addr}}	{{server_port}}
+i        pass		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    # Add other request headers		{{server_addr}}	{{server_port}}
+i    if http_version != 'plain':		{{server_addr}}	{{server_port}}
+i        for key, value in request_headers:		{{server_addr}}	{{server_port}}
+i            header += key + ': ' + value		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    # Send the request to upstream		{{server_addr}}	{{server_port}}
+i    send(header)		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe actual patch is available at		{{server_addr}}	{{server_port}}
+i<https://gist.github.com/xddxdd/fed23d2fe5afa00bb609166886e3d206>.		{{server_addr}}	{{server_port}}
+iSpecify `proxy_http_version plain;` to send a `plain` request to the		{{server_addr}}	{{server_port}}
+iupstream WHOIS server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> A Gopher server can be proxied in the same way since Gopher is also		{{server_addr}}	{{server_port}}
+i> a one-request-one-response protocol.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Find Relevant WHOIS Server		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe Internet is split and managed by many different organizations. For		{{server_addr}}	{{server_port}}
+iexample, ASNs and IPs are managed by		{{server_addr}}	{{server_port}}
+i[APNIC, AfriNIC, RIPE, ARIN, and LACNIC, the 5 RIRs](https://en.wikipedia.org/wiki/Regional_Internet_registry),		{{server_addr}}	{{server_port}}
+iwhose regions are divided by continents. Domains are managed by even		{{server_addr}}	{{server_port}}
+imore organizations, such as global top-level domains (`.com`, `.net`,		{{server_addr}}	{{server_port}}
+ietc.), country/region domains (`.us`, `.cn`), and new gTLDs by		{{server_addr}}	{{server_port}}
+icorporations or individual organizations (`.ovh`, `.google`, etc.).		{{server_addr}}	{{server_port}}
+iNeedless to say, each organization runs its own WHOIS server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGood news is that the common `whois` command has lists builtin to find		{{server_addr}}	{{server_port}}
+ithe relevant WHOIS server, including		{{server_addr}}	{{server_port}}
+i[16 bit ASN list](https://github.com/rfc1036/whois/blob/next/as_del_list),		{{server_addr}}	{{server_port}}
+i[32 bit ASN list](https://github.com/rfc1036/whois/blob/next/as32_del_list),		{{server_addr}}	{{server_port}}
+i[IPv4 list](https://github.com/rfc1036/whois/blob/next/ip_del_list),		{{server_addr}}	{{server_port}}
+i[IPv6 list](https://github.com/rfc1036/whois/blob/next/ip6_del_list),		{{server_addr}}	{{server_port}}
+i[Traditional TLD list](https://github.com/rfc1036/whois/blob/next/tld_serv_list),		{{server_addr}}	{{server_port}}
+i[New gTLD list](https://github.com/rfc1036/whois/blob/next/new_gtlds_list)		{{server_addr}}	{{server_port}}
+iand		{{server_addr}}	{{server_port}}
+i[NIC Handle (Registration info at RIRs) list](https://github.com/rfc1036/whois/blob/next/nic_handles_list),		{{server_addr}}	{{server_port}}
+iand we can simply take them for our own use. All the information is		{{server_addr}}	{{server_port}}
+icollected from the website of		{{server_addr}}	{{server_port}}
+i[IANA (Internet Assigned Numbers Authority)](https://en.wikipedia.org/wiki/Internet_Assigned_Numbers_Authority).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Writing Nginx Rules (Regex)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWith the lookup information available, we can write nginx matching		{{server_addr}}	{{server_port}}
+irules for them. Thanks to Nginx's regular expressions, we can tell		{{server_addr}}	{{server_port}}
+idifferent kinds of lookups apart and lookup corresponding lists.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```nginx		{{server_addr}}	{{server_port}}
+i# ASN Lookup		{{server_addr}}	{{server_port}}
+location ~* "^/[Aa]		{{server_addr}}	{{server_port}}
+1Ss	/en/article/modify-website/lookup-any-whois-with-nginx.lantian/[0-9]+	{{server_addr}}	{{server_port}}
+i$" {i    set $asn $1;		{{server_addr}}	{{server_port}}
+i    set_by_lua_block $backend {		{{server_addr}}	{{server_port}}
+i        local asn = tonumber(ngx.var.asn);		{{server_addr}}	{{server_port}}
+i        if asn >= 248 and asn <= 251 then return "whois.ripe.net" end		{{server_addr}}	{{server_port}}
+i        if asn >= 306 and asn <= 371 then return "whois.nic.mil" end		{{server_addr}}	{{server_port}}
+i        -- Skipped over a lot of rules		{{server_addr}}	{{server_port}}
+i        -- Fallback to ARIN by default		{{server_addr}}	{{server_port}}
+i        return "whois.arin.net"		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    proxy_pass http://$backend:43/AS$1;		{{server_addr}}	{{server_port}}
+i    proxy_http_version plain;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# NIC Handle lookup, take ARIN and RIPE for example		{{server_addr}}	{{server_port}}
+ilocation ~* "^/(.*)(-[Aa][Rr][Ii][Nn])$" {		{{server_addr}}	{{server_port}}
+i    set_by_lua $query_upper "return ngx.var.uri:upper():sub(2)";		{{server_addr}}	{{server_port}}
+i    proxy_pass http://whois.arin.net:43/$query_upper;		{{server_addr}}	{{server_port}}
+i    proxy_http_version plain;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+ilocation ~* "^/(.*)(-[Rr][Ii][Pp][Ee])$" {		{{server_addr}}	{{server_port}}
+i    set_by_lua $query_upper "return ngx.var.uri:upper():sub(2)";		{{server_addr}}	{{server_port}}
+i    proxy_pass http://whois.ripe.net:43/$query_upper;		{{server_addr}}	{{server_port}}
+i    proxy_http_version plain;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Domain lookup, take .com for example		{{server_addr}}	{{server_port}}
+ilocation ~* "^/(.*)(\.[Cc][Oo][Mm])$" {		{{server_addr}}	{{server_port}}
+i    set_by_lua $query_lower "return ngx.var.uri:lower():sub(2)";		{{server_addr}}	{{server_port}}
+i    proxy_pass http://whois.verisign-grs.com:43/$query_lower;		{{server_addr}}	{{server_port}}
+i    proxy_http_version plain;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# IP Lookup...?		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWith the rules configured and		{{server_addr}}	{{server_port}}
+1nginx listening on port 43 in plain mode	/en/article/modify-website/serve-dn42-whois-with-nginx.lantian/	{{server_addr}}	{{server_port}}
+i,iwe can lookup ASNs, NIC Handles and domains.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut one important piece is missing: IP lookups. Lua language that came		{{server_addr}}	{{server_port}}
+iwith OpenResty doesn't have an IP parsing function built-in, nor does		{{server_addr}}	{{server_port}}
+iit provide any functionality to tell if an IP is within a range. That		{{server_addr}}	{{server_port}}
+imeans we need to craft our own code, which is both troublesome and		{{server_addr}}	{{server_port}}
+ierror-prone. In addition, with one regular expression for each type of		{{server_addr}}	{{server_port}}
+idomain and NIC Handle, the memory consumption of each nginx worker		{{server_addr}}	{{server_port}}
+irise from 30MB to a whopping 100MB, which made the life of tiny VPSes		{{server_addr}}	{{server_port}}
+ieven harder.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut at least Lua is good at calling functions in shared libraries		{{server_addr}}	{{server_port}}
+i(`.so` libraries on Linux), and we can rewrite the logic in C.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Writing Nginx Rules (Library)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnd here, I created a simple shared library, which provides a few		{{server_addr}}	{{server_port}}
+ilookup functions to convert IP, ASN, domain, or NIC Handle to their		{{server_addr}}	{{server_port}}
+iWHOIS server address.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe library uses libc functions to parse IPs, use		{{server_addr}}	{{server_port}}
+i[a third party LPM (Longest Prefix Matching) library called liblpm](https://github.com/rmind/liblpm)		{{server_addr}}	{{server_port}}
+ito lookup WHOIS server efficiently, and simply scan through lookup		{{server_addr}}	{{server_port}}
+ilist sequentially for ASN, domain, and NIC Handle since we don't need		{{server_addr}}	{{server_port}}
+iTHAT much performance anyway. The library only uses a tiny amount of		{{server_addr}}	{{server_port}}
+imemory, much better than a bunch of regular expressions in Nginx.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe library is available at <https://github.com/xddxdd/libltnginx>,		{{server_addr}}	{{server_port}}
+iproviding 4 lookup functions:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```c		{{server_addr}}	{{server_port}}
+ichar* whois_ip_lookup(char* cidr);		{{server_addr}}	{{server_port}}
+iconst char* whois_nic_handle_lookup(char* name);		{{server_addr}}	{{server_port}}
+iconst char* whois_domain_lookup(char* name);		{{server_addr}}	{{server_port}}
+iconst char* whois_asn_lookup(uint32_t asn);		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThey can be easily called from Lua:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```lua		{{server_addr}}	{{server_port}}
+ilocal ffi       = require "ffi"		{{server_addr}}	{{server_port}}
+ilocal ltnginx   = ffi.load("path/to/libltnginx.so")		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iffi.cdef[[		{{server_addr}}	{{server_port}}
+i    char* whois_ip_lookup(char* cidr);		{{server_addr}}	{{server_port}}
+i    const char* whois_nic_handle_lookup(char* name);		{{server_addr}}	{{server_port}}
+i    const char* whois_domain_lookup(char* name);		{{server_addr}}	{{server_port}}
+i    const char* whois_asn_lookup(uint32_t asn);		{{server_addr}}	{{server_port}}
+i]]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ilocal lantian_nginx = {}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ifunction lantian_nginx.whois_ip_lookup(target)		{{server_addr}}	{{server_port}}
+i    local c_str = ffi.new("char[?]", #target)		{{server_addr}}	{{server_port}}
+i    ffi.copy(c_str, target)		{{server_addr}}	{{server_port}}
+i    return ffi.string(ltnginx.whois_ip_lookup(c_str))		{{server_addr}}	{{server_port}}
+iend		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ifunction lantian_nginx.whois_nic_handle_lookup(target)		{{server_addr}}	{{server_port}}
+i    local c_str = ffi.new("char[?]", #target)		{{server_addr}}	{{server_port}}
+i    ffi.copy(c_str, target)		{{server_addr}}	{{server_port}}
+i    return ffi.string(ltnginx.whois_nic_handle_lookup(c_str))		{{server_addr}}	{{server_port}}
+iend		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ifunction lantian_nginx.whois_domain_lookup(target)		{{server_addr}}	{{server_port}}
+i    local c_str = ffi.new("char[?]", #target)		{{server_addr}}	{{server_port}}
+i    ffi.copy(c_str, target)		{{server_addr}}	{{server_port}}
+i    return ffi.string(ltnginx.whois_domain_lookup(c_str))		{{server_addr}}	{{server_port}}
+iend		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ifunction lantian_nginx.whois_asn_lookup(target)		{{server_addr}}	{{server_port}}
+i    return ffi.string(ltnginx.whois_asn_lookup(tonumber(target)))		{{server_addr}}	{{server_port}}
+iend		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ireturn lantian_nginx		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnd the configuration of nginx can be greatly simplified:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```nginx		{{server_addr}}	{{server_port}}
+iserver {		{{server_addr}}	{{server_port}}
+i    listen 43 plain;		{{server_addr}}	{{server_port}}
+i    listen [::]:43 plain;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    location / {		{{server_addr}}	{{server_port}}
+i        rewrite "^/([0-9]+)$" /AS$1 last;		{{server_addr}}	{{server_port}}
+i        rewrite "^/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$" /$1.$2.$3.$4/32 last;		{{server_addr}}	{{server_port}}
+i        rewrite "^/([0-9a-fA-F:]+)$" /$1/128 last;		{{server_addr}}	{{server_port}}
+i        return 200 "% Lan Tian Nginx-based WHOIS Server\n% GET $request_uri:\n% 404 Not Found\n";		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+    location ~* "^/[Aa]		{{server_addr}}	{{server_port}}
+1Ss	/en/article/modify-website/lookup-any-whois-with-nginx.lantian/[0-9]+	{{server_addr}}	{{server_port}}
+i$" {i        set $asn $1;		{{server_addr}}	{{server_port}}
+i        set_by_lua_block $backend {		{{server_addr}}	{{server_port}}
+i            local lantian_nginx = require "lantian_nginx";		{{server_addr}}	{{server_port}}
+i            return lantian_nginx.whois_asn_lookup(ngx.var.asn);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        proxy_pass http://$backend:43/AS$1;		{{server_addr}}	{{server_port}}
+i        proxy_http_version plain;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    location ~* "^/([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/([0-9]+)$" {		{{server_addr}}	{{server_port}}
+i        set $ip $1;		{{server_addr}}	{{server_port}}
+i        set_by_lua_block $backend {		{{server_addr}}	{{server_port}}
+i            local lantian_nginx = require "lantian_nginx";		{{server_addr}}	{{server_port}}
+i            return lantian_nginx.whois_ip_lookup(ngx.var.ip);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        proxy_pass http://$backend:43/$ip;		{{server_addr}}	{{server_port}}
+i        proxy_http_version plain;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    location ~* "^/([0-9a-fA-F:]+)/([0-9]+)$" {		{{server_addr}}	{{server_port}}
+i        set $ip $1;		{{server_addr}}	{{server_port}}
+i        set_by_lua_block $backend {		{{server_addr}}	{{server_port}}
+i            local lantian_nginx = require "lantian_nginx";		{{server_addr}}	{{server_port}}
+i            return lantian_nginx.whois_ip_lookup(ngx.var.ip);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        proxy_pass http://$backend:43/$ip;		{{server_addr}}	{{server_port}}
+i        proxy_http_version plain;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    location ~* "^/(.*)-([a-zA-Z0-9]+)$" {		{{server_addr}}	{{server_port}}
+i        set_by_lua $query_upper "return ngx.var.uri:upper():sub(2)";		{{server_addr}}	{{server_port}}
+i        set_by_lua_block $backend {		{{server_addr}}	{{server_port}}
+i            local lantian_nginx = require "lantian_nginx";		{{server_addr}}	{{server_port}}
+i            return lantian_nginx.whois_nic_handle_lookup(ngx.var.query_upper);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        proxy_pass http://$backend:43/$query_upper;		{{server_addr}}	{{server_port}}
+i        proxy_http_version plain;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    location ~* "^/(.*)\.([a-zA-Z0-9]+)$" {		{{server_addr}}	{{server_port}}
+i        set_by_lua $query_lower "return ngx.var.uri:lower():sub(2)";		{{server_addr}}	{{server_port}}
+i        set_by_lua_block $backend {		{{server_addr}}	{{server_port}}
+i            local lantian_nginx = require "lantian_nginx";		{{server_addr}}	{{server_port}}
+i            return lantian_nginx.whois_domain_lookup(ngx.var.query_lower);		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i        proxy_pass http://$backend:43/$query_lower;		{{server_addr}}	{{server_port}}
+i        proxy_http_version plain;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWithout all the regular expressions and the small memory requirement		{{server_addr}}	{{server_port}}
+ifor the library, the memory usage of a worker went back to the normal		{{server_addr}}	{{server_port}}
+ivalue of 30MB.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Conclusion		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWith simple modifications, Nginx can be converted to a WHOIS proxy		{{server_addr}}	{{server_port}}
+ithat allows looking up literally anything.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe WHOIS proxy service is running on this site; run		{{server_addr}}	{{server_port}}
+i`whois -h lantian.pub google.com` to try it out.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

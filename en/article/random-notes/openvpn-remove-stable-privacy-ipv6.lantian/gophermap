@@ -1,0 +1,29 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: Remove OpenVPN's Stable-privacy IPv6 Addresses		{{server_addr}}	{{server_port}}
+icategories: "Random Notes"		{{server_addr}}	{{server_port}}
+itags: [OpenVPN, DN42]		{{server_addr}}	{{server_port}}
+idate: 2020-03-21 12:28:40		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOn my VPSes, the TAP network interface created by OpenVPN has a		{{server_addr}}	{{server_port}}
+irandomly-generated IPv6 address with scope `stable-privacy`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis address itself is created randomly to prevent tracking users by		{{server_addr}}	{{server_port}}
+itheir IPv6 addresses. But when building a network in DN42, BGP		{{server_addr}}	{{server_port}}
+ihandshakes may originate from this address (rather than your manually		{{server_addr}}	{{server_port}}
+iassigned link-local address) and fail for mismatching origin/IP.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe solution is to configure the TAP interfaces with sysctl, and		{{server_addr}}	{{server_port}}
+idisable the automatic address generation options. OpenVPN can be		{{server_addr}}	{{server_port}}
+iconfigured to run `sysctl` automatically when creating the interface:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# Add to OpenVPN's config file		{{server_addr}}	{{server_port}}
+iscript-security 2		{{server_addr}}	{{server_port}}
+iup "/bin/sh -c '/sbin/sysctl -w net.ipv6.conf.$dev.autoconf=0 && /sbin/sysctl -w net.ipv6.conf.$dev.accept_ra=0 && /sbin/sysctl -w net.ipv6.conf.$dev.addr_gen_mode=1'"		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDepending on your Linux distribution, you may need to adjust the path		{{server_addr}}	{{server_port}}
+iof `/bin/sh` and `/sbin/sysctl`.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

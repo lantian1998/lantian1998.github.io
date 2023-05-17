@@ -1,0 +1,137 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "nginx 配置并启用SSL和SPDY访问"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [SPDY, nginx, StartSSL, SSL]		{{server_addr}}	{{server_port}}
+idate: 2014-08-08 14:41:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i来自 CloudFlare 博客的最新消息		{{server_addr}}	{{server_port}}
+i（<http://blog.cloudflare.com/google-now-factoring-https-support-into-ranking-cloudflare-on-track-to-make-it-free-and-easy>		{{server_addr}}	{{server_port}}
+i），Google 可能会在算权重的时候把网站支持 SSL 作为加分项目。因此我就给		{{server_addr}}	{{server_port}}
+i我的博客启用了 SSL。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 申请证书		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSSL 在服务器端必须有证书。这个证书最好不要自己生成，否则大多数浏览器都		{{server_addr}}	{{server_port}}
+i会提示证书不受信任。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iStartSSL 是目前唯一一家颁发免费 SSL 证书并且受到大多数浏览器信任的证书		{{server_addr}}	{{server_port}}
+i颁发机构，可以根据 <http://www.freehao123.com/startssl-ssl/> 这篇文章		{{server_addr}}	{{server_port}}
+i进行操作。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过在实际操作中，由于 StartSSL 连接速度较慢，如果按照向导生成证书，中		{{server_addr}}	{{server_port}}
+i途可能卡住，而一旦卡住就要全部重来，我们可以自己生成证书请求，然后提交		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 在你的 Linux 服务器（本例为 Debian 7）上输入以下命令产生一个私钥：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```bash		{{server_addr}}	{{server_port}}
+i  openssl genrsa -out privkey.pem 4096		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 输入以下命令产生证书请求（CSR 文件），其中信息可以乱填，StartSSL 不		{{server_addr}}	{{server_port}}
+i  关心其中信息，他只关心你的私钥是多少。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```bash		{{server_addr}}	{{server_port}}
+i  openssl req -new -key privkey.pem -out cert.csr		{{server_addr}}	{{server_port}}
+i  cat cert.csr		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 把上一步的输出复制。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 按照上面这篇文章操作，执行到这一步时选择 Skip，然后粘贴入你的证书请		{{server_addr}}	{{server_port}}
+i  求，然后下一步。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+- 		{{server_addr}}	{{server_port}}
+IStartSSL	/usr/uploads/16501407479649.gif	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 安装证书		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i完成上面的步骤后，你应该（至少）有两个文件：一个是你的私钥，一个是证书		{{server_addr}}	{{server_port}}
+i文件。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你手动生成证书请求 csr 文件，那么 privkey.pem 就是你的私钥；如果你		{{server_addr}}	{{server_port}}
+i通过网页向导生成，私钥已经在向导过程中给出。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 把你的证书保存为 ssl.crt，以下操作将按照本文件名继续。如果你通过网页		{{server_addr}}	{{server_port}}
+i  向导操作，把你的私钥保存到 ssl.key。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 如果通过网页向导操作，输入以下命令对你的私钥解密，密码是你在网页向导		{{server_addr}}	{{server_port}}
+i  上填写的那个。如果不解密，每次 nginx 启动时都会要求你输入密码。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```bash		{{server_addr}}	{{server_port}}
+i  openssl rsa -in ssl.key -out privkey.pem		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Firefox 在证书验证上比较奇葩，它要求证书文件中保存有这个证书的颁发机		{{server_addr}}	{{server_port}}
+i  构的证书。因此我们要进行如下操作：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```bash		{{server_addr}}	{{server_port}}
+i  wget http://www.startssl.com/certs/ca.pem		{{server_addr}}	{{server_port}}
+i  wget http://www.startssl.com/certs/sub.class1.server.ca.pem		{{server_addr}}	{{server_port}}
+i  cat ssl.crt sub.class1.server.ca.pem ca.pem > ssl-unified.crt		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 此时你获得一个 ssl-unified.crt 文件，把它和 privkey.pem 移动到你喜欢		{{server_addr}}	{{server_port}}
+i  的地方。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- （警告：不要复制到能够通过网页访问来下载的地方，比如把他们放在		{{server_addr}}	{{server_port}}
+i  /var/www 里就是作死行为！本例以放在/root 下为例。）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 编辑你的 nginx 配置文件。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ````bash		{{server_addr}}	{{server_port}}
+i  cd /etc/nginx/sites-enabled```</li><li>```bashnano default #如果你的网站配置文件名不同，请替换。		{{server_addr}}	{{server_port}}
+i  ````		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 在配置文件里你的网站那一段的 listen 80 下面输入：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```bash		{{server_addr}}	{{server_port}}
+i  listen 443 ssl;		{{server_addr}}	{{server_port}}
+i  ssl_certificate /root/ssl-unified.crt;		{{server_addr}}	{{server_port}}
+i  ssl_certificate_key /root/privkey.pem;		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 重启 nginx，安装结束。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```bash		{{server_addr}}	{{server_port}}
+i  service nginx restart		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## SPDY 的安装和启用		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSPDY 是 Google 主导开发的一个网络协议，使用它，可以在一个 SSL 连接内同		{{server_addr}}	{{server_port}}
+i时传输好几路数据。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i比如，打开网页时，如果没有 SPDY，那么浏览器就要同时打开好几路 SSL 连接		{{server_addr}}	{{server_port}}
+i下载数据。问题是，这些连接不是同时打开的，一般情况下网页加载到一半，浏		{{server_addr}}	{{server_port}}
+i览器发现「哎呀我需要这个东西但是还没下载」，才会开新连接下载数据。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i而有了 SPDY，浏览器可以直接在同一个 SSL 连接中下载数据，省去了连接和		{{server_addr}}	{{server_port}}
+iSSL 验证的时间。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 更新 nginx 版本。Debian 软件源里默认的 nginx 不带有 SPDY 功能，需要		{{server_addr}}	{{server_port}}
+i  把 nginx 替换成 nginx-full。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```bash		{{server_addr}}	{{server_port}}
+i  apt-get install nginx-full		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 编辑你的 nginx 配置文件，把		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```bash		{{server_addr}}	{{server_port}}
+i  listen 443 ssl;		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  改成		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ```bash		{{server_addr}}	{{server_port}}
+i  listen 443 ssl spdy;		{{server_addr}}	{{server_port}}
+i  ```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  完事。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i启用后，如果你的网站的图片、CSS、JS 等都从你的服务器上下载，将会较大地		{{server_addr}}	{{server_port}}
+i改善你的网站在 SSL 下的载入速度。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

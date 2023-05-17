@@ -1,0 +1,241 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "在 Leaflet 中合并使用谷歌中国卫星图和高德地图"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [高德地图, Leaflet, Google]		{{server_addr}}	{{server_port}}
+idate: 2016-07-21 10:22:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i前几天用 Leaflet 这个 Javascript 模块制作了一个需要用到地图的项目，但		{{server_addr}}	{{server_port}}
+i是在寻找地图数据源时发现，高德的卫星图在中国大陆以外地区无法放大到较高		{{server_addr}}	{{server_port}}
+i精度，显示该区域无卫星图；而谷歌中国的卫星图上没有街道信息。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i经过一些研究，我发现高德的卫星图分为两个图层：卫星图层和街道图层。而且		{{server_addr}}	{{server_port}}
+i，高德和谷歌中国的地图都使用了天朝的火星坐标系加密，也就是两者的地图可		{{server_addr}}	{{server_port}}
+i以直接叠加而不会错位。将高德的街道层和谷歌中国的卫星层合并，就有了一张		{{server_addr}}	{{server_port}}
+i既能高精度放大、又有街道信息的电子地图。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i演示：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<div id="map" style="height:300px"></div>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<link href="//cdn.bootcss.com/leaflet/1.0.0-rc.1/leaflet.css" rel="stylesheet">		{{server_addr}}	{{server_port}}
+i<script src="//cdn.bootcss.com/leaflet/1.0.0-rc.1/leaflet.js"></script>		{{server_addr}}	{{server_port}}
+i<script>		{{server_addr}}	{{server_port}}
+i        var map = L.map("map", {		{{server_addr}}	{{server_port}}
+i            center: [39.904983,116.427287],		{{server_addr}}	{{server_port}}
+i            zoom: 3,		{{server_addr}}	{{server_port}}
+i            zoomControl: false		{{server_addr}}	{{server_port}}
+i        }).setMaxBounds([[-90,0],[90,360]]);		{{server_addr}}	{{server_port}}
+i        var mapLayers = {		{{server_addr}}	{{server_port}}
+i            '谷歌高德杂交/卫星':L.layerGroup([		{{server_addr}}	{{server_port}}
+i                    L.tileLayer('//www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {		{{server_addr}}	{{server_port}}
+i                    maxZoom: 20,		{{server_addr}}	{{server_port}}
+i                    minZoom: 3,		{{server_addr}}	{{server_port}}
+i                    attribution: "谷歌提供卫星图，高德提供街道图"		{{server_addr}}	{{server_port}}
+i                }),		{{server_addr}}	{{server_port}}
+i                L.tileLayer('//webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}', {		{{server_addr}}	{{server_port}}
+i                    maxZoom: 20,		{{server_addr}}	{{server_port}}
+i                    maxNativeZoom: 18,		{{server_addr}}	{{server_port}}
+i                    minZoom: 3,		{{server_addr}}	{{server_port}}
+i                    attribution: "谷歌提供卫星图，高德提供街道图",		{{server_addr}}	{{server_port}}
+i                    subdomains: "1234",		{{server_addr}}	{{server_port}}
+i                    opacity:0.5		{{server_addr}}	{{server_port}}
+i                })		{{server_addr}}	{{server_port}}
+i            ]).addTo(map),		{{server_addr}}	{{server_port}}
+i            '高德/卫星':L.layerGroup([		{{server_addr}}	{{server_port}}
+i                L.tileLayer('//webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {		{{server_addr}}	{{server_port}}
+i                    maxZoom: 20,		{{server_addr}}	{{server_port}}
+i                    maxNativeZoom: 18,		{{server_addr}}	{{server_port}}
+i                    minZoom: 3,		{{server_addr}}	{{server_port}}
+i                    attribution: "高德地图 AutoNavi.com",		{{server_addr}}	{{server_port}}
+i                    subdomains: "1234"		{{server_addr}}	{{server_port}}
+i                }),		{{server_addr}}	{{server_port}}
+i                L.tileLayer('//webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}', {		{{server_addr}}	{{server_port}}
+i                    maxZoom: 20,		{{server_addr}}	{{server_port}}
+i                    maxNativeZoom: 18,		{{server_addr}}	{{server_port}}
+i                    minZoom: 3,		{{server_addr}}	{{server_port}}
+i                    attribution: "高德地图 AutoNavi.com",		{{server_addr}}	{{server_port}}
+i                    subdomains: "1234",		{{server_addr}}	{{server_port}}
+i                    opacity:0.5		{{server_addr}}	{{server_port}}
+i                })		{{server_addr}}	{{server_port}}
+i            ]),		{{server_addr}}	{{server_port}}
+i            '高德/街道':L.tileLayer('//webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {		{{server_addr}}	{{server_port}}
+i                maxZoom: 20,		{{server_addr}}	{{server_port}}
+i                maxNativeZoom: 18,		{{server_addr}}	{{server_port}}
+i                minZoom: 3,		{{server_addr}}	{{server_port}}
+i                attribution: "高德地图 AutoNavi.com",		{{server_addr}}	{{server_port}}
+i                subdomains: "1234"		{{server_addr}}	{{server_port}}
+i            }),		{{server_addr}}	{{server_port}}
+i            '谷歌/卫星':L.tileLayer('//www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {		{{server_addr}}	{{server_port}}
+i                maxZoom: 20,		{{server_addr}}	{{server_port}}
+i                minZoom: 3,		{{server_addr}}	{{server_port}}
+i                attribution: "谷歌 Google.cn"		{{server_addr}}	{{server_port}}
+i            }),		{{server_addr}}	{{server_port}}
+i            '谷歌/街道':L.tileLayer('//www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}', {		{{server_addr}}	{{server_port}}
+i                maxZoom: 20,		{{server_addr}}	{{server_port}}
+i                minZoom: 3,		{{server_addr}}	{{server_port}}
+i                attribution: "谷歌 Google.cn"		{{server_addr}}	{{server_port}}
+i            }),		{{server_addr}}	{{server_port}}
+i            '智图/街道':L.tileLayer('//map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}', {		{{server_addr}}	{{server_port}}
+i                maxZoom: 20,		{{server_addr}}	{{server_port}}
+i                maxNativeZoom: 16,		{{server_addr}}	{{server_port}}
+i                minZoom: 3,		{{server_addr}}	{{server_port}}
+i                attribution: "智图 GeoQ.cn"		{{server_addr}}	{{server_port}}
+i            })		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i        var layerControl = L.control.layers(mapLayers, {}, {		{{server_addr}}	{{server_port}}
+i            position: 'topright',		{{server_addr}}	{{server_port}}
+i            collapsed: true		{{server_addr}}	{{server_port}}
+i        }).addTo(map);		{{server_addr}}	{{server_port}}
+i        L.control.zoom({		{{server_addr}}	{{server_port}}
+i            zoomInTitle: '放大',		{{server_addr}}	{{server_port}}
+i            zoomOutTitle: '缩小'		{{server_addr}}	{{server_port}}
+i        }).addTo(map);		{{server_addr}}	{{server_port}}
+i</script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i源代码可右键查看，也可以在下面复制，其中地图数据源的 URL 来自		{{server_addr}}	{{server_port}}
+i[htoooth/Leaflet.ChineseTmsProviders](https://github.com/htoooth/Leaflet.ChineseTmsProviders)		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+i<!DOCTYPE html>		{{server_addr}}	{{server_port}}
+i<html>		{{server_addr}}	{{server_port}}
+i  <head>		{{server_addr}}	{{server_port}}
+i    <meta charset="UTF-8" />		{{server_addr}}	{{server_port}}
+i    <title>Leaflet Example</title>		{{server_addr}}	{{server_port}}
+i    <meta		{{server_addr}}	{{server_port}}
+i      name="viewport"		{{server_addr}}	{{server_port}}
+i      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"		{{server_addr}}	{{server_port}}
+i    />		{{server_addr}}	{{server_port}}
+i    <link		{{server_addr}}	{{server_port}}
+i      href="//cdn.bootcss.com/leaflet/1.0.0-rc.1/leaflet.css"		{{server_addr}}	{{server_port}}
+i      rel="stylesheet"		{{server_addr}}	{{server_port}}
+i    />		{{server_addr}}	{{server_port}}
+i    <script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>		{{server_addr}}	{{server_port}}
+i    <script src="//cdn.bootcss.com/leaflet/1.0.0-rc.1/leaflet.js"></script>		{{server_addr}}	{{server_port}}
+i    <style type="text/css">		{{server_addr}}	{{server_port}}
+i      body {		{{server_addr}}	{{server_port}}
+i        padding: 0;		{{server_addr}}	{{server_port}}
+i        margin: 0;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i      html,		{{server_addr}}	{{server_port}}
+i      body,		{{server_addr}}	{{server_port}}
+i      #map {		{{server_addr}}	{{server_port}}
+i        height: 100%;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i    </style>		{{server_addr}}	{{server_port}}
+i  </head>		{{server_addr}}	{{server_port}}
+i  <body>		{{server_addr}}	{{server_port}}
+i    <div id="map"></div>		{{server_addr}}	{{server_port}}
+i    <script>		{{server_addr}}	{{server_port}}
+i      var map = L.map("map", {		{{server_addr}}	{{server_port}}
+i        center: [39.904983, 116.427287],		{{server_addr}}	{{server_port}}
+i        zoom: 3,		{{server_addr}}	{{server_port}}
+i        zoomControl: false,		{{server_addr}}	{{server_port}}
+i      }).setMaxBounds([		{{server_addr}}	{{server_port}}
+i        [-90, 0],		{{server_addr}}	{{server_port}}
+i        [90, 360],		{{server_addr}}	{{server_port}}
+i      ]);		{{server_addr}}	{{server_port}}
+i      var mapLayers = {		{{server_addr}}	{{server_port}}
+i        "谷歌高德杂交/卫星": L.layerGroup([		{{server_addr}}	{{server_port}}
+i          L.tileLayer(		{{server_addr}}	{{server_port}}
+i            "//www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}",		{{server_addr}}	{{server_port}}
+i            {		{{server_addr}}	{{server_port}}
+i              maxZoom: 20,		{{server_addr}}	{{server_port}}
+i              minZoom: 3,		{{server_addr}}	{{server_port}}
+i              attribution: "谷歌提供卫星图，高德提供街道图",		{{server_addr}}	{{server_port}}
+i            }		{{server_addr}}	{{server_port}}
+i          ),		{{server_addr}}	{{server_port}}
+i          L.tileLayer(		{{server_addr}}	{{server_port}}
+i            "//webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}",		{{server_addr}}	{{server_port}}
+i            {		{{server_addr}}	{{server_port}}
+i              maxZoom: 20,		{{server_addr}}	{{server_port}}
+i              maxNativeZoom: 18,		{{server_addr}}	{{server_port}}
+i              minZoom: 3,		{{server_addr}}	{{server_port}}
+i              attribution: "谷歌提供卫星图，高德提供街道图",		{{server_addr}}	{{server_port}}
+i              subdomains: "1234",		{{server_addr}}	{{server_port}}
+i              opacity: 0.5,		{{server_addr}}	{{server_port}}
+i            }		{{server_addr}}	{{server_port}}
+i          ),		{{server_addr}}	{{server_port}}
+i        ]).addTo(map),		{{server_addr}}	{{server_port}}
+i        "高德/卫星": L.layerGroup([		{{server_addr}}	{{server_port}}
+i          L.tileLayer(		{{server_addr}}	{{server_port}}
+i            "//webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",		{{server_addr}}	{{server_port}}
+i            {		{{server_addr}}	{{server_port}}
+i              maxZoom: 20,		{{server_addr}}	{{server_port}}
+i              maxNativeZoom: 18,		{{server_addr}}	{{server_port}}
+i              minZoom: 3,		{{server_addr}}	{{server_port}}
+i              attribution: "高德地图 AutoNavi.com",		{{server_addr}}	{{server_port}}
+i              subdomains: "1234",		{{server_addr}}	{{server_port}}
+i            }		{{server_addr}}	{{server_port}}
+i          ),		{{server_addr}}	{{server_port}}
+i          L.tileLayer(		{{server_addr}}	{{server_port}}
+i            "//webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}",		{{server_addr}}	{{server_port}}
+i            {		{{server_addr}}	{{server_port}}
+i              maxZoom: 20,		{{server_addr}}	{{server_port}}
+i              maxNativeZoom: 18,		{{server_addr}}	{{server_port}}
+i              minZoom: 3,		{{server_addr}}	{{server_port}}
+i              attribution: "高德地图 AutoNavi.com",		{{server_addr}}	{{server_port}}
+i              subdomains: "1234",		{{server_addr}}	{{server_port}}
+i              opacity: 0.5,		{{server_addr}}	{{server_port}}
+i            }		{{server_addr}}	{{server_port}}
+i          ),		{{server_addr}}	{{server_port}}
+i        ]),		{{server_addr}}	{{server_port}}
+i        "高德/街道": L.tileLayer(		{{server_addr}}	{{server_port}}
+i          "//webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",		{{server_addr}}	{{server_port}}
+i          {		{{server_addr}}	{{server_port}}
+i            maxZoom: 20,		{{server_addr}}	{{server_port}}
+i            maxNativeZoom: 18,		{{server_addr}}	{{server_port}}
+i            minZoom: 3,		{{server_addr}}	{{server_port}}
+i            attribution: "高德地图 AutoNavi.com",		{{server_addr}}	{{server_port}}
+i            subdomains: "1234",		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i        ),		{{server_addr}}	{{server_port}}
+i        "谷歌/卫星": L.tileLayer(		{{server_addr}}	{{server_port}}
+i          "//www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}",		{{server_addr}}	{{server_port}}
+i          {		{{server_addr}}	{{server_port}}
+i            maxZoom: 20,		{{server_addr}}	{{server_port}}
+i            minZoom: 3,		{{server_addr}}	{{server_port}}
+i            attribution: "谷歌 Google.cn",		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i        ),		{{server_addr}}	{{server_port}}
+i        "谷歌/街道": L.tileLayer(		{{server_addr}}	{{server_port}}
+i          "//www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}",		{{server_addr}}	{{server_port}}
+i          {		{{server_addr}}	{{server_port}}
+i            maxZoom: 20,		{{server_addr}}	{{server_port}}
+i            minZoom: 3,		{{server_addr}}	{{server_port}}
+i            attribution: "谷歌 Google.cn",		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i        ),		{{server_addr}}	{{server_port}}
+i        "智图/街道": L.tileLayer(		{{server_addr}}	{{server_port}}
+i          "//map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}",		{{server_addr}}	{{server_port}}
+i          {		{{server_addr}}	{{server_port}}
+i            maxZoom: 20,		{{server_addr}}	{{server_port}}
+i            maxNativeZoom: 16,		{{server_addr}}	{{server_port}}
+i            minZoom: 3,		{{server_addr}}	{{server_port}}
+i            attribution: "智图 GeoQ.cn",		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i        ),		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i      var layerControl = L.control		{{server_addr}}	{{server_port}}
+i        .layers(		{{server_addr}}	{{server_port}}
+i          mapLayers,		{{server_addr}}	{{server_port}}
+i          {},		{{server_addr}}	{{server_port}}
+i          {		{{server_addr}}	{{server_port}}
+i            position: "topright",		{{server_addr}}	{{server_port}}
+i            collapsed: true,		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i        )		{{server_addr}}	{{server_port}}
+i        .addTo(map);		{{server_addr}}	{{server_port}}
+i      L.control		{{server_addr}}	{{server_port}}
+i        .zoom({		{{server_addr}}	{{server_port}}
+i          zoomInTitle: "放大",		{{server_addr}}	{{server_port}}
+i          zoomOutTitle: "缩小",		{{server_addr}}	{{server_port}}
+i        })		{{server_addr}}	{{server_port}}
+i        .addTo(map);		{{server_addr}}	{{server_port}}
+i    </script>		{{server_addr}}	{{server_port}}
+i  </body>		{{server_addr}}	{{server_port}}
+i</html>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

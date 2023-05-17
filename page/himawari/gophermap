@@ -1,0 +1,39 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "俯瞰地球（向日葵 8 号卫星图像）"		{{server_addr}}	{{server_port}}
+idate: 1970-01-01 00:00:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i本页面使用 JavaScript 动态更新日本向日葵 8 号地球同步卫星拍摄的图片，		{{server_addr}}	{{server_port}}
+i数据来自<http://himawari8.nict.go.jp/>，10 分钟一更新，有一小时延迟。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i详细信息及实现方法请		{{server_addr}}	{{server_port}}
+至		{{server_addr}}	{{server_port}}
+1/article/modify-website/php-javascript-satellite-earth-picture.lantian	/article/modify-website/php-javascript-satellite-earth-picture.lantian	{{server_addr}}	{{server_port}}
+i查i看。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<p id="himawari-time">加载速度稍慢，请稍候……</p>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<img id="himawari-pic" src="" />		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<script>		{{server_addr}}	{{server_port}}
+i(function(){		{{server_addr}}	{{server_port}}
+i    var today = new Date();		{{server_addr}}	{{server_port}}
+i    // get date for himawari picture		{{server_addr}}	{{server_port}}
+i    t = today.getTime();		{{server_addr}}	{{server_port}}
+i    t = t - t % 600000 - 3600000;		{{server_addr}}	{{server_port}}
+i    today.setTime(t);		{{server_addr}}	{{server_port}}
+i    year = today.getUTCFullYear();		{{server_addr}}	{{server_port}}
+i    month = today.getUTCMonth() + 1;		{{server_addr}}	{{server_port}}
+i    day = today.getUTCDate();		{{server_addr}}	{{server_port}}
+i    hour = today.getUTCHours();		{{server_addr}}	{{server_port}}
+i    minute = today.getUTCMinutes();		{{server_addr}}	{{server_port}}
+i    if(month<10) month = '0' + month;		{{server_addr}}	{{server_port}}
+i    if(day<10) day = '0' + day;		{{server_addr}}	{{server_port}}
+i    if(hour<10) hour = '0' + hour;		{{server_addr}}	{{server_port}}
+i    if(minute<10) minute = '0' + minute;		{{server_addr}}	{{server_port}}
+i    document.getElementById('himawari-time').innerHTML = '图像拍摄时间：'+today.toLocaleString();		{{server_addr}}	{{server_port}}
+i    document.getElementById('himawari-pic').src = 'https://himawari8.nict.go.jp/img/D531106/1d/550/'+year+'/'+month+'/'+day+'/'+hour+minute+'00_0_0.png';		{{server_addr}}	{{server_port}}
+i})();		{{server_addr}}	{{server_port}}
+i</script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

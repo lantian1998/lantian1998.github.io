@@ -1,0 +1,45 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "在「开发者工具」中加上彩蛋"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [JS, 彩蛋]		{{server_addr}}	{{server_port}}
+idate: 2014-08-11 14:18:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/92411407737467.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/92411407737467.png	/usr/uploads/92411407737467.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iChrome 开发者工具里有一个叫「控制台」（Console）的地方，我们可以在这里		{{server_addr}}	{{server_port}}
+i加几句彩蛋，比如：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i欢迎来到 Lan Tian @ Blog。		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你能够看到这几行话，那么你肯定没有女朋友。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这几句话可以通过 Javascript 来输出，实现代码如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```javascript		{{server_addr}}	{{server_port}}
+iif(window.console){		{{server_addr}}	{{server_port}}
+i    var cons = console;		{{server_addr}}	{{server_port}}
+i    if (cons){		{{server_addr}}	{{server_port}}
+i        cons.warn(&#39;%c欢迎来到 Lan Tian @ Blog。&#39;,&#39;color:#09f&#39;);		{{server_addr}}	{{server_port}}
+i        cons.warn(&#39;如果你能够看到这几行话，&#39;);		{{server_addr}}	{{server_port}}
+i        cons.warn(&#39;那么你肯定没有女朋友。&#39;);		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i其中 cons.warn 如果只接受一个参数，那么就在控制台里输出这一句话，如果		{{server_addr}}	{{server_port}}
+i有两个参数而且第一个参数（这句话）以%c 开头，那么第二个参数就是 CSS 代		{{server_addr}}	{{server_port}}
+i码。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i用 cons.warn 会导致输出在最开头有一个黄三角，如果用 cons.log 那么开头		{{server_addr}}	{{server_port}}
+i就什么都没有，如果用 cons.error 那么开头有一个红叉，如图。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/20140811/1407737826162144.png	/usr/uploads/20140811/1407737826162144.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i把这段代码修改后放在你网站的 footer.php 模版里，刷新页面就有这样的效果		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

@@ -1,0 +1,117 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "RoboMaster 开发踩坑日记（2018-05-28 更新）"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [ChibiOS, STM32, RoboMaster, 踩坑]		{{server_addr}}	{{server_port}}
+idate: 2018-03-31 09:44:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i学校组建了一支 RoboMaster 队伍，准备参加今年的比赛。因为是新校区新学生		{{server_addr}}	{{server_port}}
+i，因此我们完全没有之前的参考资料，只能自己一个个踩坑。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以下是我们在软件开发中遇到的一些坑。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i硬件版本：RoboMaster 官方开发板（信仰板）		{{server_addr}}	{{server_port}}
+i芯片型号：STM32F427IIHx		{{server_addr}}	{{server_port}}
+i软件系统：ChibiOS 18.2.0		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 信仰板 HSE 时钟频率为 12MHz 而非常见的 8MHz		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最坑的是信仰板的说明书和硬件原理图上完全没有提到这事。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个问题导致我们用 STM32CubeMX 等软件算出的时钟频率远高于额定频率，并		{{server_addr}}	{{server_port}}
+i导致了如下后果：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 莫名其妙的频率设置失败（设置了在合理范围内的频率，但是板子不响应了，		{{server_addr}}	{{server_port}}
+i  只能短接某个电阻 Reset）		{{server_addr}}	{{server_port}}
+i- USART 时序错误（明明两端波特率一样，但是收发的数据就是乱码，遥控器无		{{server_addr}}	{{server_port}}
+i  法使用）		{{server_addr}}	{{server_port}}
+i- CAN 数据无法应答（明明板子和电机电调都在发数据，示波器能解码出来，但		{{server_addr}}	{{server_port}}
+i  是双方就是不 ACK）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以上问题在重新调整时钟频率后全部解决。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## `while(true);` 发送 CAN 报文必须加延时		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这是一个小问题。CAN 通信时所有设备都在一条总线上，同时只能有一台设备发		{{server_addr}}	{{server_port}}
+i送信息。如果 `while(true);` 发送信息不加延时，会导致其它设备没有机会发		{{server_addr}}	{{server_port}}
+i送信息，开发板自然就收不到它们的回复了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i加个 `chThdSleepMilliseconds(100);` 就能解决这个问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## STM32 不能同时使用 CAN 和 USB		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因为信仰板上的 UART 接口不是裸露的针，是某种接口，而我们没有线，因此我		{{server_addr}}	{{server_port}}
+i们尝试使用 ChibiOS 的 Serial over USB 功能，即通过 USB 接口模拟串口进		{{server_addr}}	{{server_port}}
+i行调试。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在尝试两个小时未果后仔细搜寻资料，发现 CAN 和 USB 不能同时使用，CAN 优		{{server_addr}}	{{server_port}}
+i先级高于 USB。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i而我们必须使用 CAN 和各种电机通信，因此……我们只能继续闪灯调试了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 主线程 `while(true);` 堵死子线程		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i队友把主要逻辑（判断按键，驱动电机等）都写在另一个线程，主线程初始化完		{{server_addr}}	{{server_port}}
+i后就启动那个线程然后 `while(true);` 什么都不干。然后队友发现必须把逻辑		{{server_addr}}	{{server_port}}
+i线程的优先级提升到正常优先级 +2 才能正常执行，否则不运行。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我简单研究后得出结论：ChibiOS 主线程优先级是正常 +1，并且		{{server_addr}}	{{server_port}}
+i`while(true);` 也在消耗 CPU，并且堵死了同等优先级或者更低优先级的其它		{{server_addr}}	{{server_port}}
+i线程。解决方法是把主线程改成		{{server_addr}}	{{server_port}}
+i`while(true) chThdSleepMilliseconds(1000);`，让它去 sleep，让 ChibiOS		{{server_addr}}	{{server_port}}
+i调度其它任务就能解决问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 大疆文档里某几个键顺序写反		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iQ、E、Shift、Ctrl 四个键，以 4 个 bit 一一对应的形式传给开发板，文档的		{{server_addr}}	{{server_port}}
+i顺序是高位到低位 Q、E、Shift、Ctrl，但实测是 Ctrl、Shift、E、Q。（差点		{{server_addr}}	{{server_port}}
+i被车撞飞）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 谜之数据类型转换		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i队友写了机器人底盘的 PID 调速，然后发现只要轮子一动，无论哪个方向，都		{{server_addr}}	{{server_port}}
+i会全速向电机反转方向加速。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i经过两个小时的调试，发现队友有类似下图的代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```c		{{server_addr}}	{{server_port}}
+iuint8_t x = 0xff; // 电机返回数据示例		{{server_addr}}	{{server_port}}
+iuint8_t y = 0x8f; // 返回的数据分成了两个 uint8_t		{{server_addr}}	{{server_port}}
+iint a = (x << 8 | y); // 队友的代码		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i此处 int 为 int32_t。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我们希望得到的值是 0xffffff8f，即 -113；运行上述代码，实际上 C 在前面		{{server_addr}}	{{server_port}}
+i补了 0，得到的 a 是 0x0000ff8f，即 65423。因此 PID 认为电机以非常快的		{{server_addr}}	{{server_port}}
+i速度在运行，并作出了诡异的调节。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iC 这么做是因为 `x << 8` 这一步生成了一个 4 byte 的变量：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```c		{{server_addr}}	{{server_port}}
+iint c = sizeof(x << 8); // c = 4		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后或操作的实际对象是 0x0000ff00 和 0x8f，得 0x0000ff8f。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另外，拼接 uint16_t 时不会出现这样的现象：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```c		{{server_addr}}	{{server_port}}
+iuint16_t x = 0xffff;		{{server_addr}}	{{server_port}}
+iuint16_t y = 0xff8f;		{{server_addr}}	{{server_port}}
+iint64_t a = (x << 16 | y); // a = -113		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因为 x << 16 = 0xffff0000，所以 a = 0xffffff8f = -113。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于原来的问题，修改方法就是把 int 替换成 int16_t：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```c		{{server_addr}}	{{server_port}}
+iint16_t a = (x << 8 | y);		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i此时 a 为 0xff8f，即 -113，符合预期。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

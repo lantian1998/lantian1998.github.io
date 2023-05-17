@@ -1,0 +1,140 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "在 Traceroute 里膜 拜大佬"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [Traceroute, DN42]		{{server_addr}}	{{server_port}}
+idate: 2018-08-15 19:46:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2018/08/2301166997.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 2020-10-11 更新		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i已经有了更好的配置方法，不需要启动一大堆 Docker 容器了。请参阅		{{server_addr}}	{{server_port}}
+《		{{server_addr}}	{{server_port}}
+1优雅地在 Traceroute 里膜拜大佬	/article/creations/traceroute-chain.lantian	{{server_addr}}	{{server_port}}
+i》i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 简介		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTraceroute 是常用的检查网络状况的工具之一，会显示你操作的电脑到指定服		{{server_addr}}	{{server_port}}
+i务器的网络路径上经过的每一个路由器的 IP 地址，类似于这样：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ITraceroute 示例	/usr/uploads/2018/08/2301166997.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i可以看到后两跳的 IP 显示出了对应的域名，这个域名就是 IP 的反向解析记录		{{server_addr}}	{{server_port}}
+i。反向解析记录在 DNS 服务器中以类似 4.3.2.1.in-addr.arpa 域名的 PTR 记		{{server_addr}}	{{server_port}}
+i录形式存在。更多的信息可以参考		{{server_addr}}	{{server_port}}
+《		{{server_addr}}	{{server_port}}
+1在 DN42 中设置 IP 反向解析	/article/modify-website/dn42-ip-reverse-record.lantian	{{server_addr}}	{{server_port}}
+i》i这篇文章。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然而，PTR 记录并不一定要设置成实际的域名，可以设置成任意的字符串，只要		{{server_addr}}	{{server_port}}
+i「和域名长得像」即可。利用这一点，我们可以在一段 Traceroute 中的每一跳		{{server_addr}}	{{server_port}}
+i上写一句话，整段就组成了完整的文章，类似下图：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ITraceroute 文章示例	/usr/uploads/2018/08/1311499371.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i本文均在 DN42 网络中完成，如果你已经加入了 DN42 网络，可以		{{server_addr}}	{{server_port}}
+iping、traceroute 通文中的 IP。但本文并不局限于 DN42，如果你有可以自己		{{server_addr}}	{{server_port}}
+i控制反向解析的公网或内网 IP 段，也可以用相同的方法完成设置。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 准备路由		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i第一步是设置一批路由器，让它们依次把某个 IP 对应的数据包层层转发下去，		{{server_addr}}	{{server_port}}
+i从而在 Traceroute 中产生一条较长、足以写文章的路径。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最原始的方法，就是找几台路由器，用网线串联起来。但是首先，我得有这么多		{{server_addr}}	{{server_port}}
+i路由器；另外，我还得把它们连入 DN42。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i进一步想，Linux 也具有路由功能，也可以在一台服务器上开几台 Linux 虚拟		{{server_addr}}	{{server_port}}
+i机，分别分配 IP 地址，然后在每台上面运行：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iip route add [目标 IP]/32 via [下一个虚拟机的 IP]		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i目标 IP 的流量就会经过每一台虚拟机转发，产生一段路径。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i接下来就要考虑怎么开这些虚拟机了。我的 Kimsufi 服务器上有 ESXi，用		{{server_addr}}	{{server_port}}
+iAlpine Linux 开一排虚拟机也不是很占资源，但是如果这样操作，就需要手动		{{server_addr}}	{{server_port}}
+i配置好几台（本例中是 5 台）虚拟机，太麻烦了！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i换一种思路：Docker 实际上就是一个对 LXC 容器的管理工具，而 LXC 容器都		{{server_addr}}	{{server_port}}
+i拥有独立的网络命名空间，可以独立设置自己的 IP、路由信息，在这个用途中		{{server_addr}}	{{server_port}}
+i完全可以代替完整的 Linux 虚拟机。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i接下来就开始制作 Docker 镜像了。大致思路是基于 Alpine 镜像，然后在启动		{{server_addr}}	{{server_port}}
+i时运行如下脚本：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i#!/bin/sh		{{server_addr}}	{{server_port}}
+iecho Target IP is $TARGET_IP		{{server_addr}}	{{server_port}}
+iTHIS_IP=$(ip addr show dev eth0 | grep inet | cut -d' ' -f6 | cut -d'/' -f1)		{{server_addr}}	{{server_port}}
+iecho My IP is $THIS_IP		{{server_addr}}	{{server_port}}
+iNEXT_IP=$(echo $THIS_IP | awk -F. '{print $1 "." $2 "." $3 "." $4 + 1}')		{{server_addr}}	{{server_port}}
+iif [ $THIS_IP == $NEXT_IP ]; then		{{server_addr}}	{{server_port}}
+i    echo I\'m the target, listening		{{server_addr}}	{{server_port}}
+ielse		{{server_addr}}	{{server_port}}
+i    echo Routing $TARGET_IP to $NEXT_IP		{{server_addr}}	{{server_port}}
+i    ip route add $TARGET_IP/32 via $NEXT_IP		{{server_addr}}	{{server_port}}
+ifi		{{server_addr}}	{{server_port}}
+iping 127.0.0.1 -q		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最后一行的 ping 是让容器一直运行下去，不要退出。完整的 Dockerfile 可以		{{server_addr}}	{{server_port}}
+i在 <https://github.com/xddxdd/dockerfiles/tree/master/route-next> 看到		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后是生成对应的 docker-compose.yml 以便统一管理，示例可以在上述 Repo		{{server_addr}}	{{server_port}}
+i中看到。也可以用上述 Repo 中的 mk-compose.py 工具来快速生成		{{server_addr}}	{{server_port}}
+idocker-compose.yml，但是生成完后仍需手工修改 network 中的网段信息。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后把它传到服务器上 `docker-compose up -d` 启动这批容器。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最后，在运行 Docker 的服务器上执行这条命令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iip route add 172.22.76.102/32 via 172.22.76.98		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i把流量传入第一个 Docker 容器。这时 Traceroute 一下，可以看到数据包的路		{{server_addr}}	{{server_port}}
+i径：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I数据包的路径	/usr/uploads/2018/08/846969415.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 准备文章		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于 PTR 记录只能存在英文，因此我们要先找一篇英文短文。由于 8 月 17 快		{{server_addr}}	{{server_port}}
+i到了，我选了这样一篇文章：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> One should uphold his country』s interest with his life, he should		{{server_addr}}	{{server_port}}
+i> not do things just to pursue his personal gains and he should not		{{server_addr}}	{{server_port}}
+i> evade responsibilities for fear of personal loss.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于上面数据包的路径上总共有 5 跳，因此将文章拆分成 5 段，并删除 PTR		{{server_addr}}	{{server_port}}
+i记录中不允许存在的标点符号：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- one should uphold his country s interest with his life		{{server_addr}}	{{server_port}}
+i- he should not do things		{{server_addr}}	{{server_port}}
+i- just to pursue his personal gains		{{server_addr}}	{{server_port}}
+i- and he should not evade responsibilities		{{server_addr}}	{{server_port}}
+i- for fear of personal loss		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后把空格全部换成英文句点：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- one.should.uphold.his.country.s.interest.with.his.life		{{server_addr}}	{{server_port}}
+i- he.should.not.do.things		{{server_addr}}	{{server_port}}
+i- just.to.pursue.his.personal.gains		{{server_addr}}	{{server_port}}
+i- and.he.should.not.evade.responsibilities		{{server_addr}}	{{server_port}}
+i- for.fear.of.personal.loss		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后一句一句填到路径上各个 IP 的 PTR 反向解析记录里：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IPTR 记录设置	/usr/uploads/2018/08/921227701.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存，等待 DNS 生效后：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ITraceroute 文章示例	/usr/uploads/2018/08/1311499371.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i你在 Traceroute 中就可以看到一篇文章了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

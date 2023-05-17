@@ -1,0 +1,143 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "华为C8815 内置存储分区"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [分区, 华为c8815]		{{server_addr}}	{{server_port}}
+idate: 2014-07-25 16:00:30		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i华为 C8815 手机的内置存储是 4G，但是不代表这 4G 都是你可以使用的，其中		{{server_addr}}	{{server_port}}
+i也包括系统文件和一些杂七杂八的东西。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i安卓手机的存储一般分为以下几个区：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 缓存区（cache），存储安卓系统运行的一些临时文件，这些文件一般总共小		{{server_addr}}	{{server_port}}
+i  于 10M		{{server_addr}}	{{server_port}}
+i- 系统区（system），就是安卓的系统文件，刷机时就是修改其中的内容		{{server_addr}}	{{server_port}}
+i- 数据区（data），存储你安装的 APP 和 APP 的数据		{{server_addr}}	{{server_port}}
+i- 存储卡（sdcard），也就是你在文件管理器里看到的「内置存储」		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i而包括 C8815 在内，一些运营商定制手机还会有 cust 区，存储运营商的定制		{{server_addr}}	{{server_port}}
+i内容。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i手机出厂时就有了默认的分区，但是这个分区不一定最适合用户使用。华为		{{server_addr}}	{{server_port}}
+iC8815 的分区如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 缓存区大概 190M，我前面说了缓存区一般占用小于 10M，我自己使用时用 df		{{server_addr}}	{{server_port}}
+i  命令看到一般是 5M 左右。可以砍了它。不知道华为工程师在想什么。		{{server_addr}}	{{server_port}}
+i- cust 区，里面的东西完全没用，占用 80M。砍。		{{server_addr}}	{{server_port}}
+i- 系统区 1.1G，这个大小已经是相当肥硕了，一般刷机包（比如我用的		{{server_addr}}	{{server_port}}
+i  CM11）zip 文件都是 200-300M 大，解压开来也就 300-400M，没必要啊？但		{{server_addr}}	{{server_port}}
+i  是看一下华为官方刷机包就可以发现，华为官方刷机包有 700M 大，里面内置		{{server_addr}}	{{server_port}}
+i  了一大堆软件，因此才要 1.1G 这个可怕的空间。砍之。		{{server_addr}}	{{server_port}}
+i- 数据区 1.1G，这个一般是要扩大的。		{{server_addr}}	{{server_port}}
+i- 存储卡区 1G，由于 C8815 存储空间小，我们一般插一张 microSD（TF）卡来		{{server_addr}}	{{server_port}}
+i  存数据，一些刷机包甚至带有内外卡交换功能让 SD 卡完全取代内置空间。当		{{server_addr}}	{{server_port}}
+i  然内置空间也有它速度快的优势。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在实际分区时，可以如下分配：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 缓存区 10M。		{{server_addr}}	{{server_port}}
+i- cust 区 10M，不能直接删除，否则刷机会出问题。		{{server_addr}}	{{server_port}}
+i- 系统区 500M 足够，但是最好按照你刷机包解压开的大小+20M 来计算。如果		{{server_addr}}	{{server_port}}
+i  你需要装字体那么空的更多。		{{server_addr}}	{{server_port}}
+i- 存储卡区 100M（有外置 TF 卡）或者 800M-1.5G（无外置 TF 卡）		{{server_addr}}	{{server_port}}
+i- 剩下的做数据区。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以下是分区步骤。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 下载		{{server_addr}}	{{server_port}}
+  		{{server_addr}}	{{server_port}}
+1/article/modify-computer/aroma-file-manager-recovery-mode.lantian	/article/modify-computer/aroma-file-manager-recovery-mode.lantian	{{server_addr}}	{{server_port}}
+i  里的 Aroma 文件管理器，并按照文章中教程进入管理器。		{{server_addr}}	{{server_port}}
+i- 点击菜单（Menu）-命令行（终端）（Terminal），进入命令行。		{{server_addr}}	{{server_port}}
+i- 输入以下命令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ifdisk -l /dev/block/mmcblk0		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i你会看到类似以下的输出：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i/dev/block/mmcblk0p16    50177    60416    81920		{{server_addr}}	{{server_port}}
+i/dev/block/mmcblk0p17    60417    191488    1048576		{{server_addr}}	{{server_port}}
+i/dev/block/mmcblk0p18    191489    338944    1179648		{{server_addr}}	{{server_port}}
+i/dev/block/mmcblk0p19    338945    473088    1073152		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+immcblk0p 后面的那个数字就是分区编号，后面的分别是分区起点、终点、大小		{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i15 号分区是 cache，16 号是 cust，17 号 system，18 号 data，19 号		{{server_addr}}	{{server_port}}
+isdcard。（15 号分区忘记记下来了）（这些数据是华为 C8815 的，不同手机可		{{server_addr}}	{{server_port}}
+i能不同）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i现在要做一些计算。例如上面的 16 号分区，我们要修改成 10M。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i知道它的起始点是 50177，那么终点是(50177+10M\*128)=51457。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下一个分区 17 号的起点是 51457+2=51459。如果用 51458，分区过程中可能会		{{server_addr}}	{{server_port}}
+i报「当前位置已被占用」错误。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i17 号的终点是(51459+500M\*128)=115459。18 号起点 115461。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i19 号分区的起点是(473088-100M\*128)=460288。18 号终点 460286。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以上数据计算时请换成自己对各分区的要求容量，不同手机分区起始点和终止点		{{server_addr}}	{{server_port}}
+i不一样。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i14 号和之前的分区千万不要动！动了出事别找我。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i计算完成，可以开始分区了。输入以下命令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ifdisk /dev/block/mmcblk0		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i输入 d 命令删除分区，然后输入你要删除的分区号，如 19。建议从 19 号一路		{{server_addr}}	{{server_port}}
+i向前删，删到 15 分区。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i输入 n 命令创建分区，从 15 号分区开始输入分区的起点和终点。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i例如上面的操作（修改 16-19 号分区）对应的操作序列如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+id		{{server_addr}}	{{server_port}}
+i19		{{server_addr}}	{{server_port}}
+id		{{server_addr}}	{{server_port}}
+i18		{{server_addr}}	{{server_port}}
+id		{{server_addr}}	{{server_port}}
+i17		{{server_addr}}	{{server_port}}
+id		{{server_addr}}	{{server_port}}
+i16		{{server_addr}}	{{server_port}}
+in		{{server_addr}}	{{server_port}}
+i50177		{{server_addr}}	{{server_port}}
+i51457		{{server_addr}}	{{server_port}}
+in		{{server_addr}}	{{server_port}}
+i51459		{{server_addr}}	{{server_port}}
+i115459		{{server_addr}}	{{server_port}}
+in		{{server_addr}}	{{server_port}}
+i115461		{{server_addr}}	{{server_port}}
+i460286		{{server_addr}}	{{server_port}}
+in		{{server_addr}}	{{server_port}}
+i460288		{{server_addr}}	{{server_port}}
+i473088		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i输入 p 回车查看当前分区表，如果有错可以重复上面的操作修改。如果你删除		{{server_addr}}	{{server_port}}
+i了 14 号及以前的分区，只需要退出终端即可，操作并没有写入手机。然后重进		{{server_addr}}	{{server_port}}
+i终端重新修改就可以了。一定要仔细检查！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i输入 w 回车写入分区表。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i此时 fdisk 已经退出了，你可以拔电池关机然后重进 recovery。或者输入		{{server_addr}}	{{server_port}}
+ireboot recovery 重新进入 recovery。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i双清，进入 U 盘模式，连上电脑格式化存储卡。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i重新刷机。分区操作完成。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果要恢复原来的分区，把华为官方的刷机包放进 SD 卡，关机，按住音量上下		{{server_addr}}	{{server_port}}
+i键开机，将会将手机重新刷回华为官方并且恢复初始分区表。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

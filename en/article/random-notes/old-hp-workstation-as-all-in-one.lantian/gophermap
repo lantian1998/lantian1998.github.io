@@ -1,0 +1,259 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: Notes on Setting Up NAS+Router on Old HP Workstation		{{server_addr}}	{{server_port}}
+icategories: "Random Notes"		{{server_addr}}	{{server_port}}
+itags: [HP, NAS, Router]		{{server_addr}}	{{server_port}}
+idate: 2023-03-26 15:05:19		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI purchased an old HP workstation to use as a NAS and router at my		{{server_addr}}	{{server_port}}
+ihome. This post is a short note of my process of setting it up.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Hardware Choice		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor a NAS, you usually have these hardware choices:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Ready-to-use NAS (e.g. Synology)		{{server_addr}}	{{server_port}}
+i  - Pros: ready to use out of the box.		{{server_addr}}	{{server_port}}
+i  - Cons:		{{server_addr}}	{{server_port}}
+i    - Expensive, to the extent of "free hardware for software		{{server_addr}}	{{server_port}}
+i      purchase".		{{server_addr}}	{{server_port}}
+i    - Harder to customize, when comparing the stock operating system		{{server_addr}}	{{server_port}}
+i      with various Linux distributions.		{{server_addr}}	{{server_port}}
+i- Second-hand servers		{{server_addr}}	{{server_port}}
+i  - Pros:		{{server_addr}}	{{server_port}}
+i    - Cheap. Most servers are thrown away by datacenters once their		{{server_addr}}	{{server_port}}
+i      warranty ends, and are obtained at minimum cost, refurbished and		{{server_addr}}	{{server_port}}
+i      then resold.		{{server_addr}}	{{server_port}}
+i    - Stable. These servers are built to last, and are used in a		{{server_addr}}	{{server_port}}
+i      datacenter with controlled temperature, humidity and no dust.		{{server_addr}}	{{server_port}}
+i  - Cons：		{{server_addr}}	{{server_port}}
+i    - Noise. In order to lower the fan speed, you need to modify		{{server_addr}}	{{server_port}}
+i      system settings, replace with quieter fans, and/or install a		{{server_addr}}	{{server_port}}
+i      separate fan speed controller.		{{server_addr}}	{{server_port}}
+i    - Large (mainly concerning rack-mount servers).		{{server_addr}}	{{server_port}}
+i    - Proprietary parts. Server manufacturers customize their		{{server_addr}}	{{server_port}}
+i      components only for specific models. You will need to purchase		{{server_addr}}	{{server_port}}
+i      these parts at extra cost if you want to extend your system.		{{server_addr}}	{{server_port}}
+i- Second-hand workstations		{{server_addr}}	{{server_port}}
+i  - Pros:		{{server_addr}}	{{server_port}}
+i    - Cheap and stable, just like second-hand servers.		{{server_addr}}	{{server_port}}
+i    - Lower noise. After all, workstations are meant to be used near		{{server_addr}}	{{server_port}}
+i      office desktops rather than datacenters.		{{server_addr}}	{{server_port}}
+i  - Cons:		{{server_addr}}	{{server_port}}
+i    - Proprietary parts, same as second-hand servers.\\		{{server_addr}}	{{server_port}}
+i- DIY from regular PC parts		{{server_addr}}	{{server_port}}
+i  - Pros:		{{server_addr}}	{{server_port}}
+i    - Customize to your exact need.		{{server_addr}}	{{server_port}}
+i  - Cons:		{{server_addr}}	{{server_port}}
+i    - Worse performance-to-price ratio compared to second-hand servers		{{server_addr}}	{{server_port}}
+i      and workstations.		{{server_addr}}	{{server_port}}
+i    - Stability of customer-facing parts may be worse than		{{server_addr}}	{{server_port}}
+i      business-facing servers and workstations.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnd I have these requirements for my NAS:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- I want to use Jellyfin video transcoding, H265 if possible. This		{{server_addr}}	{{server_port}}
+i  requires a 6th gen (Skylake) or newer Intel CPU with integrated		{{server_addr}}	{{server_port}}
+i  graphics, or an NVIDIA graphics card.		{{server_addr}}	{{server_port}}
+i- Other than that, I don't have any needs on performance (except very		{{server_addr}}	{{server_port}}
+i  low power CPUs like Intel Atom series).		{{server_addr}}	{{server_port}}
+i- Low noise. I'm currently living in a studio apartment, and the NAS		{{server_addr}}	{{server_port}}
+i  will be in the same room where I sleep.		{{server_addr}}	{{server_port}}
+i- I don't like ready-to-use NAS operating systems. I want to install		{{server_addr}}	{{server_port}}
+i  NixOS and customize it.		{{server_addr}}	{{server_port}}
+i- As cheap as it can get.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBased on the requirements above, I chose to purchase a second-hand		{{server_addr}}	{{server_port}}
+iworkstation. Since I'm in the United States at the moment, I purchased		{{server_addr}}	{{server_port}}
+ia refurbushed HP workstation on eBay for $50. It's key specifications		{{server_addr}}	{{server_port}}
+iare:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Model: HP Z220 SFF		{{server_addr}}	{{server_port}}
+i- CPU: Intel E3-1225 v2		{{server_addr}}	{{server_port}}
+i- RAM: 4GB DDR3		{{server_addr}}	{{server_port}}
+i- HDD: 250GB Spinning Disk		{{server_addr}}	{{server_port}}
+i- PSU: 240W		{{server_addr}}	{{server_port}}
+i- Three PCI-E slots, one x16, one x4, and one x1.		{{server_addr}}	{{server_port}}
+i- One PCI slot.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Storage		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe first thing to consider for a NAS is data storage.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis workstation has 4 SATA ports, two 3.5 inch HDD slots, and one 5		{{server_addr}}	{{server_port}}
+iinch DVD drive slot (with a DVD drive in it). I removed the original		{{server_addr}}	{{server_port}}
+ihard drive, and installed two brand new 16TB drives as data storage. I		{{server_addr}}	{{server_port}}
+iplan to set them up in a RAID-1 array first, and then expand to RAID-5		{{server_addr}}	{{server_port}}
+iwith an extra drive when I run out of capacity. ZFS doesn't support		{{server_addr}}	{{server_port}}
+iconversion from RAID-1 to RAID-5, and ZFS's kernel module often fails		{{server_addr}}	{{server_port}}
+ion kernel upgrades due to its out-of-mainline status. Btrfs, on the		{{server_addr}}	{{server_port}}
+iother hand, has major stability issues with its RAID-5 feature, and		{{server_addr}}	{{server_port}}
+icould easily cause a data loss. Therefore, I ended up with Btrfs + LVM		{{server_addr}}	{{server_port}}
+iRAID-1, and chose the more flexible LVM for the RAID layer.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI also installed a 180GB Intel 520 SSD as the boot drive. Although		{{server_addr}}	{{server_port}}
+iit's an old drive, it only costs $15, almost as cheap as it gets for		{{server_addr}}	{{server_port}}
+iSSDs on eBay. In addition, it uses MLC NANDs which last longer than		{{server_addr}}	{{server_port}}
+icurrent TLC NANDs. This drive will only hold NixOS's system files (in		{{server_addr}}	{{server_port}}
+i`/nix`), and some configuration files that are backed up to cloud		{{server_addr}}	{{server_port}}
+istorage everyday. Therefore, I'm not worried of data loss of this		{{server_addr}}	{{server_port}}
+idrive.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn addition, I set up [Bees](https://github.com/Zygo/bees) to		{{server_addr}}	{{server_port}}
+ideduplicate data on Btrfs. After RAID-1 of my two drives, I have a		{{server_addr}}	{{server_port}}
+iusable storage space of approximately 14.6TB. To effectly deduplicate		{{server_addr}}	{{server_port}}
+ithem, Bees needs 2GB RAM to create a hash table of data on drive. With		{{server_addr}}	{{server_port}}
+isome additional services running, I quickly ran out of memory with the		{{server_addr}}	{{server_port}}
+ioriginal 4GB RAM. Therefore, I spent an additional $40 on 16GB of DDR3		{{server_addr}}	{{server_port}}
+iECC-UDIMM RAM sticks.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Router		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis workstation will directly connect to the ISP modem, and act as		{{server_addr}}	{{server_port}}
+ithe main router at my home. I don't plan to use OpenWRT, or other		{{server_addr}}	{{server_port}}
+iLinux distributions designed for routers. Instead, I want to set up		{{server_addr}}	{{server_port}}
+ipacket forwarding and NAT directly on NixOS. Enabling packet		{{server_addr}}	{{server_port}}
+iforwarding is just a few lines of sysctl settings:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```nix		{{server_addr}}	{{server_port}}
+i{		{{server_addr}}	{{server_port}}
+i  boot.kernel.sysctl = {		{{server_addr}}	{{server_port}}
+i    "net.ipv4.conf.all.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i    "net.ipv4.conf.default.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i    "net.ipv4.conf.*.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i    "net.ipv6.conf.all.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i    "net.ipv6.conf.default.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i    "net.ipv6.conf.*.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNAT, on the other hand, requires setting up the firewall. I used		{{server_addr}}	{{server_port}}
+iNftables for the purpose, and my (simplified) configuration is:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+itable inet lantian {		{{server_addr}}	{{server_port}}
+i  # LAN IPv4 address range		{{server_addr}}	{{server_port}}
+i  set RESERVED_IPV4 {		{{server_addr}}	{{server_port}}
+i    type ipv4_addr		{{server_addr}}	{{server_port}}
+i    flags constant,interval		{{server_addr}}	{{server_port}}
+i    elements = { 10.0.0.0/8, 172.16.0.0/12,		{{server_addr}}	{{server_port}}
+i                 192.0.0.0/24, 192.0.2.0/24,		{{server_addr}}	{{server_port}}
+i                 192.168.0.0/16, 198.18.0.0/15,		{{server_addr}}	{{server_port}}
+i                 198.51.100.0/24, 203.0.113.0/24,		{{server_addr}}	{{server_port}}
+i                 233.252.0.0/24, 240.0.0.0/4 }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # LAN IPv6 address range		{{server_addr}}	{{server_port}}
+i  set RESERVED_IPV6 {		{{server_addr}}	{{server_port}}
+i    type ipv6_addr		{{server_addr}}	{{server_port}}
+i    flags constant,interval		{{server_addr}}	{{server_port}}
+i    elements = { 64:ff9b::/96,		{{server_addr}}	{{server_port}}
+i                 64:ff9b:1::/48,		{{server_addr}}	{{server_port}}
+i                 2001:2::/48,		{{server_addr}}	{{server_port}}
+i                 2001:20::/28,		{{server_addr}}	{{server_port}}
+i                 2001:db8::/32,		{{server_addr}}	{{server_port}}
+i                 fc00::/7 }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  chain NAT_POSTROUTING {		{{server_addr}}	{{server_port}}
+i    type nat hook postrouting priority srcnat + 5; policy accept;		{{server_addr}}	{{server_port}}
+i    # NAT all packets from LAN IPv4 addresses to WAN		{{server_addr}}	{{server_port}}
+i    ip saddr @RESERVED_IPV4 oifname @INTERFACE_WAN masquerade		{{server_addr}}	{{server_port}}
+i    # NAT all packets from LAN IPv6 addresses to WAN		{{server_addr}}	{{server_port}}
+i    # This only handles packets with a private source IP, not affecting devices with public IPv6		{{server_addr}}	{{server_port}}
+i    ip6 saddr @RESERVED_IPV6 oifname @INTERFACE_WAN masquerade		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, enable MiniUPnPd to allow clients to set up port forwarding as		{{server_addr}}	{{server_port}}
+ineeded:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```nix		{{server_addr}}	{{server_port}}
+i{		{{server_addr}}	{{server_port}}
+i  services.miniupnpd = {		{{server_addr}}	{{server_port}}
+i    enable = true;		{{server_addr}}	{{server_port}}
+i    upnp = true;		{{server_addr}}	{{server_port}}
+i    natpmp = true;		{{server_addr}}	{{server_port}}
+i    internalIPs = ["192.168.0.1"];		{{server_addr}}	{{server_port}}
+i    externalInterface = "eth-wan";		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, set up IP addressing and DHCP server on the LAN port:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```nix		{{server_addr}}	{{server_port}}
+i{		{{server_addr}}	{{server_port}}
+i  systemd.network.networks.eth-lan = {		{{server_addr}}	{{server_port}}
+i    matchConfig.PermanentMACAddress = "12:34:56:12:34:56";		{{server_addr}}	{{server_port}}
+i    address = ["192.168.0.1/24"];		{{server_addr}}	{{server_port}}
+i    networkConfig = {		{{server_addr}}	{{server_port}}
+i      DHCP = "no";		{{server_addr}}	{{server_port}}
+i      DHCPServer = "yes";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i    dhcpServerConfig = {		{{server_addr}}	{{server_port}}
+i      PoolOffset = 10;		{{server_addr}}	{{server_port}}
+i      PoolSize = 200;		{{server_addr}}	{{server_port}}
+i      EmitDNS = "yes";		{{server_addr}}	{{server_port}}
+i      DNS = ["8.8.8.8"];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iApply the config, run `networkctl reload`, and the clients can now		{{server_addr}}	{{server_port}}
+iaccess the Internet.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Video Transcoding		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs a SFF (small form factor) workstation, HP Z220 SFF can only use low		{{server_addr}}	{{server_port}}
+iprofile PCI-E expansion cards (with a height of 8cm) rather than		{{server_addr}}	{{server_port}}
+istandard expansion cards (with a height of 12cm). In addition, the		{{server_addr}}	{{server_port}}
+ipower supply with a mere 240W output has no extra wiring for GPU power		{{server_addr}}	{{server_port}}
+isupply, meaning that I cannot use GPUs with high performance and high		{{server_addr}}	{{server_port}}
+ipower consumption.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInitially I purchased a NVIDIA Quadro P400 for $40, with a TDP of 30W.		{{server_addr}}	{{server_port}}
+iThe performance of this card is extremely weak, similar to the NVIDIA		{{server_addr}}	{{server_port}}
+iGT 1010 which few have heard off. It's even worse than a GT 1030!		{{server_addr}}	{{server_port}}
+iHowever, it comes with the same video encoding/decoding circuits as		{{server_addr}}	{{server_port}}
+ithe entire 10 series GPUs,		{{server_addr}}	{{server_port}}
+i[and has support for H265 10-bit video encoding](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new).		{{server_addr}}	{{server_port}}
+iOther than different GPU core frequency, Quadro P400 has the exact		{{server_addr}}	{{server_port}}
+isame video transcoding performance as other 10 series GPUs. Therefore,		{{server_addr}}	{{server_port}}
+iQuadro P400 is the choice of many NAS DIYers on Reddit.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter obtaining the GPU and testing it, I found that it can, indeed,		{{server_addr}}	{{server_port}}
+itranscode 4K HEVC videos, at a speed of 60 FPS. But once I enable		{{server_addr}}	{{server_port}}
+iJellyfin's tone-mapping feature, the transcoding speed lowers to 10-20		{{server_addr}}	{{server_port}}
+iFPS, causing stuttery video playback. Tone-mapping is used to convert		{{server_addr}}	{{server_port}}
+ithe special color space (like HDR or Dolby Vision) to the standard SDR		{{server_addr}}	{{server_port}}
+icolor space, so they can be correctly displayed on devices without HDR		{{server_addr}}	{{server_port}}
+isupport. Jellyfin's tone-mapping implementation relies on GPU's 3D		{{server_addr}}	{{server_port}}
+iprocessing units, and the Quadro P400 is quite lacking in 3D		{{server_addr}}	{{server_port}}
+iperformance, causing the bottleneck.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI later replaced the GPU with a NVIDIA Tesla P4, with a TDP of 50W.		{{server_addr}}	{{server_port}}
+iAlthough it's a Tesla series card geared towards science computations,		{{server_addr}}	{{server_port}}
+iit still has support for video transcoding, with the same circuits as		{{server_addr}}	{{server_port}}
+i10 series GPUs. This card sells on eBay for around $100, but since		{{server_addr}}	{{server_port}}
+iit's passively cooled, you need to spend an extra $20 on fans and		{{server_addr}}	{{server_port}}
+ishrouds to cool it in a regular workstation.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTesting shows that this GPU can transcode videos to 4K 80Mbps at		{{server_addr}}	{{server_port}}
+iaround 60 FPS, with tone-mapping enabled. This completely satisfies my		{{server_addr}}	{{server_port}}
+irequirement on video transcoding. The only downside is that, with no		{{server_addr}}	{{server_port}}
+istandard computer fan pinouts on the HP Z220 SFF motherboard, I have		{{server_addr}}	{{server_port}}
+ito power the fan with a USB 5V to 12V voltage step-up cable, and run		{{server_addr}}	{{server_port}}
+ithe fan at maximum speed at all time. This creates a bit of noise, but		{{server_addr}}	{{server_port}}
+iI personally find it acceptable.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs a bonus, NVIDIA Tesla P4 also supports NVIDIA GRID, creating		{{server_addr}}	{{server_port}}
+ivirtual GPUs for virtual machines. But NVIDIA GRID requires a special		{{server_addr}}	{{server_port}}
+ihost driver lacking 3D and video transcoding support, causing my		{{server_addr}}	{{server_port}}
+iJellyfin video transcodes to fail. Therefore, I went with the regular		{{server_addr}}	{{server_port}}
+iGPU driver for now.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

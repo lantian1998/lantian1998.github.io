@@ -1,0 +1,328 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" itemscope itemtype="https://schema.org/Article"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="theme-color" content="#bbdefb"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><title>NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy | Lan Tian @ Blog</title><meta name="title" content="NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy | Lan Tian @ Blog"><meta name="keywords" content="Lan,Tian"><meta name="description" content="Lan Tian @ Blog"><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/en/article/modify-website/nixos-initial-config-flake-deploy.lantian"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-website/nixos-initial-config-flake-deploy.lantian" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-website/nixos-initial-config-flake-deploy.lantian" hreflang="en"><script>function addLoadEvent(o){var n=window.onload;"function"!=typeof window.onload?window.onload=o:window.onload=function(){n&&n(),o()}}</script><link rel="stylesheet" href="/assets/style.css?v=6c6e88f"><script defer src="/assets/script.main.bundle.js?v=6c6e88f"></script><meta name="copyright" content="Copyright 2012-2023 Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><meta name="application-name" content="Lan Tian @ Blog"><meta name="msapplication-TileColor" content="#03a9f4"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-navbutton-color" content="#03a9f4"><meta content="name=Lan Tian @ Blog;action-uri=/;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=Posts;action-uri=/en/page/archive;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=Himawari;action-uri=/en/page/himawari;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=DN42;action-uri=/en/page/dn42;icon-uri=/favicon.png" name="msapplication-task"><meta name="theme-color" content="#03a9f4"><meta name="mobile-web-app-capable" content="yes"><meta property="og:url" content="https://lantian.pub/en/article/modify-website/nixos-initial-config-flake-deploy.lantian"><meta property="og:type" content="website"><meta property="og:title" content="NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy | Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/usr/uploads/202110/nixos-social-preview.png"><meta property="og:description" content="List of NixOS Series Posts:NixOS Series 1: Why I fell in loveNixOS Series 2: Basic Config, Nix Flake &amp;amp; Batch DeployRecommended:..."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="en"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/en/article/modify-website/nixos-initial-config-flake-deploy.lantian"><meta name="twitter:title" content="NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy | Lan Tian @ Blog"><meta name="twitter:image" content="https://lantian.pub/usr/uploads/202110/nixos-social-preview.png"><meta name="twitter:description" content="List of NixOS Series Posts:NixOS Series 1: Why I fell in loveNixOS Series 2: Basic Config, Nix Flake &amp;amp; Batch DeployRecommended:..."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy | Lan Tian @ Blog"><meta itemprop="image" content="https://lantian.pub/usr/uploads/202110/nixos-social-preview.png"><meta itemprop="description" content="List of NixOS Series Posts:NixOS Series 1: Why I fell in loveNixOS Series 2: Basic Config, Nix Flake &amp;amp; Batch DeployRecommended:..."><style>.spoiler{display:inline-flex}p.spoiler{display:flex}.spoiler a{pointer-events:none}.spoiler-blur,.spoiler-blur>*{transition:text-shadow .5s ease}.spoiler .spoiler-blur,.spoiler .spoiler-blur>*{color:transparent;background-color:rgba(0,0,0,0);text-shadow:0 0 10px grey;cursor:pointer}.spoiler .spoiler-blur:hover,.spoiler .spoiler-blur:hover>*{text-shadow:0 0 5px grey}.spoiler-box,.spoiler-box>*{transition:color .5s ease,background-color .5s ease}.spoiler .spoiler-box,.spoiler .spoiler-box>*{color:#000;background-color:#000;text-shadow:none}</style><meta name="generator" content="Hexo 6.3.0"></head><body><div id="bg"></div><div id="container" class="container"><nav class="lantian navbar navbar-expand-lg"><div class="container-fluid"><a class="navbar-brand" href="/en">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="lantian-navbar"><ul class="navbar-nav"><li class="nav-item d-none d-lg-block"><a class="nav-link" href="/en/page/archive">Posts</a></li><li class="nav-item d-none d-lg-block"><a class="nav-link" href="/en/page/himawari">Himawari</a></li><li class="nav-item d-none d-lg-block"><a class="nav-link" href="/en/page/dn42">DN42</a></li><li class="nav-item dropdown d-block d-lg-none"><a href="#" class="nav-link dropdown-toggle" id="pages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-fw fa-file"></i> Page <span class="caret"></span></a><ul class="dropdown-menu" aria-labelledby="pages-dropdown"><li><a class="dropdown-item" href="/en/page/archive">Posts</a></li><li><a class="dropdown-item" href="/en/page/himawari">Himawari</a></li><li><a class="dropdown-item" href="/en/page/dn42">DN42</a></li></ul></li></ul><ul class="navbar-nav ms-auto"><li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" id="languages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-fw fa-language"></i> Language <span class="caret"></span></a><ul class="dropdown-menu" aria-labelledby="languages-dropdown"><li><a href="/article/modify-website/nixos-initial-config-flake-deploy.lantian" class="dropdown-item"><span class="flag-icon flag-icon-cn"></span> Chinese</a></li><li><a href="/en/article/modify-website/nixos-initial-config-flake-deploy.lantian" class="dropdown-item"><span class="flag-icon flag-icon-us"></span> English</a></li><li><hr class="dropdown-divider"></li><li><a class="dropdown-item disabled" href="#">Not all pages have translations.</a></li><li><a class="dropdown-item disabled" href="#">You may see 404 - this is normal.</a></li></ul></li><li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" id="color-scheme-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-fw fa-adjust"></i> Night Mode</a><ul class="dropdown-menu" aria-labelledby="color-scheme-dropdown"><li><a id="color-scheme-auto" class="dropdown-item" href="#"><i class="fas fa-fw fa-adjust"></i> Auto</a></li><li><hr class="dropdown-divider"></li><li><a id="color-scheme-light" class="dropdown-item" href="#"><i class="fas fa-fw fa-sun"></i> Light</a></li><li><a id="color-scheme-dark" class="dropdown-item" href="#"><i class="fas fa-fw fa-moon"></i> Dark</a></li></ul></li></ul></div></div></nav><div class="d-flex"><div id="content"><article><div class="d-flex"><div class="post-info-wrap"><div class="post-info"><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-clock"></span><br><small>11-13</small></p><div class="post-meta-value">Published on <span class="badge badge-tag">2021-11-13 00:48</span></div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-file-alt"></span><br><small>Website and Servers</small></p><div class="post-meta-value">Category <a class="badge badge-tag" href="/en/category/modify-website">Website and Servers</a> &nbsp; &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-tag"></span><br><small>1 tags</small></p><div class="post-meta-value">Tags <a class="badge badge-tag" href="/en/tag/NixOS">NixOS</a> &nbsp; &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-qrcode"></span><br><small>QR</small></p><div class="post-meta-value"><img class="qrcode" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADKUlEQVR42u3aQXIbMQwEQP3/0845VdZmBpDiFd17cqlsLps+jADw8Yifr+C5/tvrNa/flezt8Y4HGxsb+0PYCebZJ9eA69+8/jw/rGSdb1bDxsbGPo6dbDcJjDyQZnGY7/MfRmxsbOxfz75+2aacyMueZCfY2NjY2JtYaguVNiz/a4BhY2Nj356dREV+HG0QJgVJvrcX99KwsbGxb8/eNG7u9vNb5tvY2NjYN2Z/lU9bqOSlSD7ine38r5WxsbGxD2K3jZt2Q+2mZ/E53D82Njb2EexNbMwaPddHmTe22vLp0U6hsbGxsT+E3bb42y3ORgXJyLYNrSi3sbGxsT+Q3W40eX17ZWdziEkMf3OU2NjY2AexE1i+dNvo35Qr7Xuf3lTCxsbGPoKdFwn7UmGzct4IK4oWbGxs7A9n76/dtMi8aTWLumh9bGxs7IPYmy/3SQhtLuW0kZkfATY2NvZJ7Flj/R2XeNr202psjI2NjX0QOwmt2Vf/JGbaZlYeYNGusLGxsX8NO2nT5MeUB96sRZW/FxsbG/tU9jta+fXMOR4MbI4bGxsb+wz2/st9OzzIjyY/gnYUgY2NjX0qe1YkvHtAm1zWySMQGxsb+1T25oJOPkKYHc3+iJ+WItjY2NhHsGcvmG0xb0jNBgntIBkbGxv7bHZ7/WV2xSf5pI2u9t+DjY2NfR472e4sHt6x9TZKsbGxsc9jz1r57YWb/bh3Px5+2kvDxsbG/nB226zJL83MrvUkR9/ynv6TsLGxsQ9l5y/Iw2ZfxsxicliQYGNjY38su2W0DaPkiGfj4bpzho2NjX0oe3Ndpl3ntUPl4fgZGxsb+zj2vs3UjgdmA+B9uYKNjY19NrsNsE3xkDP2f/WyO0TY2NjYN2N/lc+sld+OePOyp41bbGxs7PPYsy/07eC2Dbwc/Ko1sbGxsT+dvQ+tTRC2B9oODJ6ujI2NjX0cO2/ltDG2Hye0I96oyYWNjY39i9l5YdB+PouufB1sbGxs7KRZM2vWz2LpB3IbGxsb+8bsHNMODGZXefbjh5f10rCxsbFvz55du2ljrIXNmlb5oBobGxv7CPYfPeDjXxIr7mYAAAAASUVORK5CYII=" alt="QR"></div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-list"></span><br><small>ToC</small></p><div class="post-meta-value"><ol id="quicklink"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#changelog"><span class="toc-text">Changelog</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#basic-config"><span class="toc-text">Basic config</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#that-config-is-a-function"><span class="toc-text">That Config is a Function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#splitting-config-to-many-files"><span class="toc-text">Splitting Config to Many Files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nix-flake"><span class="toc-text">Nix Flake</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#batch-deployment-with-deploy-rs"><span class="toc-text">Batch Deployment with Deploy-RS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#appendix-nixos-on-oracle-arm-server"><span class="toc-text">Appendix: NixOS on Oracle ARM Server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#appendix-further-reading"><span class="toc-text">Appendix: Further Reading</span></a></li></ol></ol></div></div></div></div></div><div class="post-wrap"><h1 class="post-title"><a href="/en/article/modify-website/nixos-initial-config-flake-deploy.lantian" rel="bookmark" title="NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy">NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy</a></h1><div class="post-text"><blockquote><p>List of NixOS Series Posts:</p><ul><li><a href="/en/article/modify-website/nixos-why.lantian/">NixOS Series 1: Why I fell in love</a></li><li><a href="/en/article/modify-website/nixos-initial-config-flake-deploy.lantian/">NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy</a><ul><li>Recommended: <a target="_blank" rel="noopener" href="https://thiscute.world/en/posts/nixos-and-flake-basics/">NixOS &amp; Nix Flakes - A Guide for Beginners</a> by Ryan Yin</li></ul></li><li><a href="/en/article/modify-computer/nixos-packaging.lantian/">NixOS Series 3: Software Packaging 101</a></li><li><a href="/en/article/modify-computer/nixos-impermanence.lantian/">NixOS Series 4: "Stateless" Operating System</a></li></ul></blockquote><p>This is the second post in my NixOS series and mainly focuses on:</p><ul><li>Basic format of NixOS config files and how to edit them</li><li>Flake functionality of Nix package manager</li><li>Deploy-RS deployment tool</li></ul><p>This post assumes that you've installed NixOS with <a target="_blank" rel="noopener" href="https://nixos.org/manual/nixos/stable/index.html#sec-installation">NixOS's official installation manual</a>.</p><h2 id="changelog">Changelog</h2><ul><li>2023-05-10: Add a recommended post: <a target="_blank" rel="noopener" href="https://thiscute.world/en/posts/nixos-and-flake-basics/">NixOS &amp; Nix Flakes - A Guide for Beginners</a> by Ryan Yin.</li><li>2021-12-18: NixOS 21.11 still doesn't come with Flake functionality by default. Relevant information is updated.</li></ul><h2 id="basic-config">Basic config</h2><p>During NixOS's installation process, the <code>nixos-generate-config</code> tool should have generated an initial config file for you under <code>/etc/nixos</code>, with two files <code>configuration.nix</code> and <code>hardware-configuration.nix</code>. Ignore <code>hardware-configuration.nix</code> for the moment, as it's automatically generated based on your hardware and disk partition scheme. Let's open <code>configuration.nix</code>:</p><pre><code class="hljs language-nix"><span class="hljs-comment"># I removed all comments in the file to shorten stuff</span>
+{ config, pkgs, ... }:
+
+{
+  <span class="hljs-attr">imports</span> =
+    [
+      ./hardware-configuration.nix
+    ];
+
+  boot.loader.grub.<span class="hljs-attr">enable</span> = <span class="hljs-literal">true</span>;
+  boot.loader.grub.<span class="hljs-attr">version</span> = <span class="hljs-number">2</span>;
+  boot.loader.grub.<span class="hljs-attr">device</span> = <span class="hljs-string">"/dev/sda"</span>;
+
+  networking.<span class="hljs-attr">useDHCP</span> = <span class="hljs-literal">false</span>;
+  networking.interfaces.enp0s3.<span class="hljs-attr">useDHCP</span> = <span class="hljs-literal">true</span>;
+  networking.interfaces.enp0s8.<span class="hljs-attr">useDHCP</span> = <span class="hljs-literal">true</span>;
+
+  system.<span class="hljs-attr">stateVersion</span> = <span class="hljs-string">"21.05"</span>;
+}
+</code></pre><p>This file defines your whole NixOS operating system, including all software packages and their config. This file is in Nix format, a "functional programming" language created by NixOS's Nix package manager. But since we're doing basic config, we don't need its programming functionalities yet. Let's ignore the first line <code>{ config, pkgs, ... }:</code> for the moment and <strong>treat the rest part as a JSON file</strong>.</p><p>The Nix language has the same 6 data types as JSON: number, boolean, string, object, array, and null. Their format is also quite similar. In addition, the Nix language has a "path" data type:</p><pre><code class="hljs language-nix">{
+  <span class="hljs-comment"># Number</span>
+  <span class="hljs-attr">number</span> = <span class="hljs-number">123456</span>;
+
+  <span class="hljs-comment"># Boolean</span>
+  <span class="hljs-attr">boolean_value</span> = <span class="hljs-literal">true</span>;
+
+  <span class="hljs-comment"># String</span>
+  <span class="hljs-attr">string</span> = <span class="hljs-string">"lantian.pub"</span>;
+
+  <span class="hljs-comment"># Object</span>
+  <span class="hljs-attr">object</span> = {
+    <span class="hljs-attr">a</span> = <span class="hljs-number">1</span>;
+    <span class="hljs-attr">b</span> = <span class="hljs-number">2</span>;
+  };
+  <span class="hljs-comment"># The object can also be defined as this, they're equivalent:</span>
+  object.<span class="hljs-attr">a</span> = <span class="hljs-number">1</span>;
+  object.<span class="hljs-attr">b</span> = <span class="hljs-number">2</span>;
+
+  <span class="hljs-comment"># Array</span>
+  <span class="hljs-attr">array</span> = [
+    <span class="hljs-string">"first element"</span>
+    <span class="hljs-string">"second element"</span>
+
+    <span class="hljs-comment"># Array can store objects:</span>
+    ({
+      <span class="hljs-attr">a</span> = <span class="hljs-number">1</span>;
+      <span class="hljs-attr">b</span> = <span class="hljs-number">2</span>;
+    })
+  ];
+
+  <span class="hljs-comment"># A Path, doesn't have double quotes like a string</span>
+  <span class="hljs-comment">#</span>
+  <span class="hljs-comment"># Note:</span>
+  <span class="hljs-comment">#</span>
+  <span class="hljs-comment"># - A file pointed by a path will be copied to /nix/store when parsing the config,</span>
+  <span class="hljs-comment">#   and that copy will be used instead. A path usually points to a file managed</span>
+  <span class="hljs-comment">#   along with this config, like your handwritten config file for some program.</span>
+  <span class="hljs-comment">#</span>
+  <span class="hljs-comment"># - A file pointed by a string won't be copied, but its contents aren't part of</span>
+  <span class="hljs-comment">#   the config. They aren't managed by Nix and cannot be read by Nix, but the</span>
+  <span class="hljs-comment">#   path itself can be copied to the program's config file and be read by the</span>
+  <span class="hljs-comment">#   program. Usually, for files independent from the config, like the code of</span>
+  <span class="hljs-comment">#   your website.</span>
+  <span class="hljs-attr">file</span> = ./somefile.txt;    <span class="hljs-comment"># Will be copied to /nix/store/[hash]-somefile.txt</span>
+  <span class="hljs-attr">file2</span> = <span class="hljs-string">"./somefile.txt"</span>; <span class="hljs-comment"># Won't be read or processed by Nix</span>
+}
+</code></pre><p>Now suppose we want to install an SSH server for remote login. We can add these two lines of config:</p><pre><code class="hljs language-nix">{ config, pkgs, ... }:
+
+{
+  <span class="hljs-comment"># ...</span>
+
+  <span class="hljs-comment"># Add these two lines</span>
+  services.openssh.<span class="hljs-attr">enable</span> = <span class="hljs-literal">true</span>;
+  services.openssh.<span class="hljs-attr">permitRootLogin</span> = <span class="hljs-string">"yes"</span>;
+
+  <span class="hljs-comment"># Or equivalent to this, using the feature of Nix objects</span>
+  services.<span class="hljs-attr">openssh</span> = {
+    <span class="hljs-attr">enable</span> = <span class="hljs-literal">true</span>;
+    <span class="hljs-attr">permitRootLogin</span> = <span class="hljs-string">"yes"</span>;
+  };
+
+  <span class="hljs-comment"># Or equivalent to this</span>
+  <span class="hljs-attr">services</span> = {
+    <span class="hljs-attr">openssh</span> = {
+      <span class="hljs-attr">enable</span> = <span class="hljs-literal">true</span>;
+      <span class="hljs-attr">permitRootLogin</span> = <span class="hljs-string">"yes"</span>;
+    };
+  };
+
+  <span class="hljs-comment"># ...</span>
+}
+</code></pre><blockquote><p>The line <code>services.openssh.permitRootLogin = "yes";</code> allows password login to the <code>root</code> account. Since I'm using a VM isolated from the Internet, I care more about convenience rather than security. <strong>Don't add this line if your machine is exposed to the Internet!</strong></p></blockquote><p>After you've done editing the config, run <code>nixos-rebuild switch</code> to reconfigure the system. NixOS will read your config file, automatically download OpenSSH, generate its config file and start it, so you can login with SSH on port 22.</p><p>Here's another example where I want to install the <code>nyancat</code> command:</p><pre><code class="hljs language-nix">{ config, pkgs, ... }:
+
+{
+  <span class="hljs-comment"># ...</span>
+
+  <span class="hljs-comment"># Add these lines</span>
+  environment.<span class="hljs-attr">systemPackages</span> = [
+    <span class="hljs-comment"># This is a package definition, is an object instead of a string</span>
+    pkgs.nyancat
+  ];
+
+  <span class="hljs-comment"># Or equivalent to this. The "with" command means definitions in "pkgs"</span>
+  <span class="hljs-comment"># are directly referenced, so your config file can be shorter if you</span>
+  <span class="hljs-comment"># install a lot of packages.</span>
+  environment.<span class="hljs-attr">systemPackages</span> = <span class="hljs-keyword">with</span> pkgs; [
+    nyancat
+  ];
+
+  <span class="hljs-comment"># ...</span>
+}
+</code></pre><p>Run <code>nixos-rebuild switch</code> and <code>nyancat</code> command will be ready:</p><p><img src="../../../../../usr/uploads/202111/nixos-nyancat.png" alt="NixOS nyancat command"></p><p><a target="_blank" rel="noopener" href="https://nixos.org/manual/nixos/unstable/options.html">This document</a> from NixOS official lists all possible options in <code>configuration.nix</code>. Since it lists ALL options, the page is very long, and it's normal for your browser to freeze for a couple of seconds. Instead, you can use <a target="_blank" rel="noopener" href="https://search.nixos.org/options">the Options page of NixOS's official search tool</a> to lookup options:</p><p><img src="../../../../../usr/uploads/202111/nixos-search-options.png" alt="NixOS Official Search: Options"></p><p>Or search for packages at <a target="_blank" rel="noopener" href="https://search.nixos.org/packages">the Packages page</a>:</p><p><img src="../../../../../usr/uploads/202111/nixos-search-packages.png" alt="NixOS Official Search: Packages"></p><h2 id="that-config-is-a-function">That Config is a Function</h2><p>Until now, we've ignored the first line <code>{ config, pkgs, ... }:</code>. In fact, the whole <code>configuration.nix</code> is a Nix function, and <code>config</code> and <code>pkgs</code> are input parameters.</p><p>Here's how NixOS defines functions:</p><pre><code class="hljs language-nix"><span class="hljs-comment"># This is a function, with one input "a" and returns (a+1)</span>
+a: a+<span class="hljs-number">1</span>
+
+<span class="hljs-comment"># This is a function, with one input "a" and returns an object.</span>
+<span class="hljs-comment"># The object has two keys "a" and "b"</span>
+<span class="hljs-comment"># Note that there's no variables in the Nix language!</span>
+<span class="hljs-comment"># Assuming input is a = 1, the return value will be { a = 2; b = 3; }</span>
+<span class="hljs-comment">#                                        instead of { a = 2; b = 4; }</span>
+a: {
+  <span class="hljs-attr">a</span> = a + <span class="hljs-number">1</span>;
+  <span class="hljs-attr">b</span> = a + <span class="hljs-number">2</span>;
+}
+
+<span class="hljs-comment"># This is a function.</span>
+<span class="hljs-comment"># The input is an object with keys "a" and "b".</span>
+<span class="hljs-comment"># The return value is an object with keys "a" and "b".</span>
+<span class="hljs-comment"># Assuming input is { a = 1; b = 2; }, the return value will be { a = 2; b = 1; }</span>
+{ a, b }: {
+  <span class="hljs-attr">a</span> = b;
+  <span class="hljs-attr">b</span> = a;
+}
+
+<span class="hljs-comment"># This is the same function as the last one,</span>
+<span class="hljs-comment"># just with "..." added to the parameter list,</span>
+<span class="hljs-comment"># so, it accepts (and ignores) unknown parameters.</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># Assuming input is { a = 1; b = 2; c = 3; },</span>
+<span class="hljs-comment"># the last function will error out since it doesn't recognize "c",</span>
+<span class="hljs-comment"># but this function will ignore "c" proceed normally</span>
+{ a, b, ... }: {
+  <span class="hljs-attr">a</span> = b;
+  <span class="hljs-attr">b</span> = a;
+}
+</code></pre><p>Back to the config to install <code>nyancat</code>:</p><pre><code class="hljs language-nix">{ config, pkgs, ... }:
+
+{
+  environment.<span class="hljs-attr">systemPackages</span> = [
+    pkgs.nyancat
+  ];
+}
+</code></pre><p>It adds the subobject <code>nyancat</code> of parameter <code>pkgs</code> (also an object) to the list of <code>environment.systemPackages</code>. <code>pkgs</code> is the collection of all packages in the NixOS package repository, defined at <a target="_blank" rel="noopener" href="https://github.com/NixOS/nixpkgs">https://github.com/NixOS/nixpkgs</a>. Similarly, <code>config</code> is the collection of all config parameters. If you want the list of all installed packages, you can use <code>config.environment.systemPackages</code>.</p><blockquote><p>Nix language uses lazy evaluation. NixOS won't do anything right after loading the config file. A config item (e.g. <code>environment.systemPackages</code>) will only have its value parsed (the array, as well as the object <code>pkgs.nyancat</code>) when it's referenced.</p><p>By the way, the Nix language doesn't support circular references. Config like <code>{ a = config.b; b = config.a; }</code> won't work and will error out with <code>infinite recursion encountered</code>.</p></blockquote><h2 id="splitting-config-to-many-files">Splitting Config to Many Files</h2><p>After you've used NixOS for a while, you may have installed a lot of packages and have a very long, hard-to-read config file. NixOS supports importing a config file from another, so you can put a subset the configuration (like the desktop environment, or the Nginx + PHP + MySQL stack, etc.) to a separate file for easier lookup.</p><p>Suppose I want to put the SSH config to another file. First create <code>/etc/nixos/ssh.nix</code>:</p><pre><code class="hljs language-nix">{ config, pkgs, ... }:
+
+{
+  services.openssh.<span class="hljs-attr">enable</span> = <span class="hljs-literal">true</span>;
+  services.openssh.<span class="hljs-attr">permitRootLogin</span> = <span class="hljs-string">"yes"</span>;
+}
+</code></pre><p>The add <code>ssh.nix</code> to <code>imports</code> in <code>/etc/nixos/configuration.nix</code>, and remove previous SSH config statements:</p><pre><code class="hljs language-nix">{ config, pkgs, ... }:
+
+{
+  <span class="hljs-comment"># ...</span>
+  <span class="hljs-attr">imports</span> =
+    [
+      ./hardware-configuration.nix
+      ./ssh.nix
+    ];
+  <span class="hljs-comment"># ...</span>
+}
+</code></pre><p>Then run <code>nixos-rebuild switch</code>. Note that this rebuild neither generated any new stuff nor started/stopped any service, as all we did was move some SSH config statements to another file, with no actual config change.</p><p><img src="../../../../../usr/uploads/202111/nixos-rebuild-noop.png" alt="NixOS Rebuild"></p><p>Here I'll give a brief explanation of how <code>imports</code> works. The function <code>configuration.nix</code> has parameters <code>config</code>, <code>pkgs</code>, and some more we ignored with <code>...</code>. NixOS will use the same parameters (including both used ones and ignored ones) to call every file in <code>imports</code>, and combine the result with the current config file.</p><p>Back to <code>ssh.nix</code>, notice that it never used <code>config</code> nor <code>pkgs</code>, so we can remove even that:</p><pre><code class="hljs language-nix"><span class="hljs-comment"># We can remove "config" and "pkgs"</span>
+{ ... }:
+
+{
+  services.openssh.<span class="hljs-attr">enable</span> = <span class="hljs-literal">true</span>;
+  services.openssh.<span class="hljs-attr">permitRootLogin</span> = <span class="hljs-string">"yes"</span>;
+}
+
+<span class="hljs-comment"># Or even remove all parameters, "imports" is smart enough to handle this</span>
+{
+  services.openssh.<span class="hljs-attr">enable</span> = <span class="hljs-literal">true</span>;
+  services.openssh.<span class="hljs-attr">permitRootLogin</span> = <span class="hljs-string">"yes"</span>;
+}
+</code></pre><h2 id="nix-flake">Nix Flake</h2><p>Since all NixOS configurations are defined by <code>configuration.nix</code>, we can copy the files to another machine, run <code>nixos-rebuild switch</code> and get an exactly same system. I also stated in <a href="/en/article/modify-website/nixos-why.lantian/">the first post of this series</a>:</p><blockquote><p>(...) one important feature of NixOS is managing each and every package and config with a set of Nix config files. Therefore, we can use any tools we like, for example, Ansible, Rsync, or even Git, to manage the config at <code>/etc/nixos</code>. Since this is the only config file we care about, we no longer need a bunch of complicated Ansible playbooks or dozens of Rsync commands. We only need to overwrite <code>/etc/nixos</code>, run <code>nixos-rebuild switch</code>, and call it a day.</p></blockquote><p>Now I'm gonna tell you that <strong>what I said just now was all wrong.</strong></p><p>Up until now I introduced the ways to change your system config and install packages, but I never talked about how to upgrade stuff. This is because NixOS package repositories are managed with another command, <code>nix-channel</code>:</p><p><img src="../../../../../usr/uploads/202111/nixos-channels.png" alt="NixOS nix-channel command"></p><p>Here the <code>nix-channel --list</code> command lists all configured repositories, and <code>nix-channel --update</code> updates them to the latest version. However, <code>nix-channel</code> is not managed with <code>configuration.nix</code>, and there's no way for <code>configuration.nix</code> to define the URLs and revisions of the package repos. Since package repos are constantly updated, this means that two systems installed one month apart may have software version differences, even with the same config. This is contrary to NixOS's "one config for everything" promise.</p><p>To solve this issue, Nix introduced the Flake functionality, which allows defining repo URLs and revisions. First, let's edit <code>configuration.nix</code> followed by <code>nixos-rebuild switch</code> to upgrade the Nix package manager to a beta version supporting Flake:</p><pre><code class="hljs language-nix">{ config, pkgs, ... }:
+
+{
+  <span class="hljs-comment"># ...</span>
+  <span class="hljs-attr">nix</span> = {
+    <span class="hljs-attr">package</span> = pkgs.nixUnstable;
+    <span class="hljs-attr">extraOptions</span> = <span class="hljs-string">''
+      experimental-features = nix-command flakes
+    ''</span>;
+  };
+  <span class="hljs-comment"># ...</span>
+}
+</code></pre><blockquote><p>At the time of writing, NixOS 21.05 is the latest stable version, and its Nix package manager (version 2.3) doesn't enable Flake functionality by default yet. <del>NixOS 21.11 and future versions will have Flake enabled by default, and by then, these config changes will no longer be needed.</del> Due to concerns about significant changes in Nix 2.4, especially about those behaviors incompatible with previous versions, NixOS 21.11 still uses Nix 2.3, which disables Flake by default. See <a target="_blank" rel="noopener" href="https://discourse.nixos.org/t/nix-2-4-and-what-s-next/16257">https://discourse.nixos.org/t/nix-2-4-and-what-s-next/16257</a> and <a target="_blank" rel="noopener" href="https://github.com/NixOS/nixpkgs/pull/147511">https://github.com/NixOS/nixpkgs/pull/147511</a> for the relevant discussion.</p></blockquote><p>Then create a <code>flake.nix</code> file in <code>/etc/nixos</code>. This <code>flake.nix</code> defines a package repo (<code>input</code>), the <code>unstable</code> branch (equivalent to <code>master</code> branch) of <a target="_blank" rel="noopener" href="https://github.com/NixOS/nixpkgs">https://github.com/NixOS/nixpkgs</a>.</p><pre><code class="hljs language-nix">{
+  <span class="hljs-comment"># Description, write anything or even nothing</span>
+  <span class="hljs-attr">description</span> = <span class="hljs-string">"Lan Tian's NixOS Flake"</span>;
+
+  <span class="hljs-comment"># Input config, or package repos</span>
+  <span class="hljs-attr">inputs</span> = {
+    <span class="hljs-comment"># Nixpkgs, NixOS's official repo</span>
+    nixpkgs.<span class="hljs-attr">url</span> = <span class="hljs-string">"github:NixOS/nixpkgs/nixos-unstable"</span>;
+  };
+
+  <span class="hljs-comment"># Output config, or config for NixOS system</span>
+  <span class="hljs-attr">outputs</span> = { self, nixpkgs, ... }@inputs: {
+    <span class="hljs-comment"># Define a system called "nixos"</span>
+    nixosConfigurations.<span class="hljs-string">"nixos"</span> = nixpkgs.lib.nixosSystem {
+      <span class="hljs-attr">system</span> = <span class="hljs-string">"x86_64-linux"</span>;
+      <span class="hljs-attr">modules</span> = [
+        ./configuration.nix
+      ];
+    };
+
+    <span class="hljs-comment"># You can define many systems in one Flake file.</span>
+    <span class="hljs-comment"># NixOS will choose one based on your hostname.</span>
+    <span class="hljs-comment">#</span>
+    <span class="hljs-comment"># nixosConfigurations."nixos2" = nixpkgs.lib.nixosSystem {</span>
+    <span class="hljs-comment">#   system = "x86_64-linux";</span>
+    <span class="hljs-comment">#   modules = [</span>
+    <span class="hljs-comment">#     ./configuration2.nix</span>
+    <span class="hljs-comment">#   ];</span>
+    <span class="hljs-comment"># };</span>
+  };
+}
+</code></pre><p>Then run <code>nix flake update</code>:</p><pre><code class="hljs language-bash">[root@nixos:/etc/nixos]<span class="hljs-comment"># nix flake update</span>
+warning: creating lock file <span class="hljs-string">'/etc/nixos/flake.lock'</span>
+</code></pre><p>A <code>flake.lock</code> JSON file is generated:</p><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">"nodes"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">"nixpkgs"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">"locked"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+        <span class="hljs-attr">"lastModified"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1636623366</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"narHash"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"sha256-jOQMlv9qFSj0U66HB+ujZoapty0UbewmSNbX8+3ujUQ="</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"owner"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"NixOS"</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"repo"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"nixpkgs"</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"rev"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"c5ed8beb478a8ca035f033f659b60c89500a3034"</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"type"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"github"</span>
+      <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"original"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+        <span class="hljs-attr">"owner"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"NixOS"</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"ref"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"nixos-unstable"</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"repo"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"nixpkgs"</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"type"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"github"</span>
+      <span class="hljs-punctuation">}</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"root"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">"inputs"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+        <span class="hljs-attr">"nixpkgs"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"nixpkgs"</span>
+      <span class="hljs-punctuation">}</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"root"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"root"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"version"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">7</span>
+<span class="hljs-punctuation">}</span>
+</code></pre><p><code>flake.lock</code> defines the commit ID and SHA256 checksum for <code>nixpkgs</code>, so even if the config file is copied to another machine, the Nix package manager there will download this specific revision of <code>nixpkgs</code> and install software accordingly, so you'll have exactly the same versions of software.</p><p>Finally, run <code>nixos-rebuild switch</code>. NixOS will automatically prefer <code>flake.nix</code> to <code>configuration.nix</code>, and upgrade (or downgrade) all packages to this specific version. But since we added the <code>configuration.nix</code> file to the <code>modules</code> array in <code>flake.nix</code>, the system configuration will remain unchanged.</p><blockquote><p>If you enabled Flake and manage your files with Git, note that NixOS will ignore files not managed by Git and only read those files previously staged or committed. If you created a new file, remember to stage it, or NixOS will report that the file cannot be found.</p></blockquote><h2 id="batch-deployment-with-deploy-rs">Batch Deployment with Deploy-RS</h2><p>Now we have one machine configured, but as I mentioned in <a href="/en/article/modify-website/nixos-why.lantian/">the first post of this series</a>, I have 10 machines. Of course, I can write an Ansible script to copy the config to <code>/etc/nixos</code> of all nodes and run <code>nixos-rebuild switch</code>, but that approach will have a few problems:</p><ol><li><p>If a package in the repo doesn't have prebuilt binary files, I'll have to run the compilation on each and every machine. But since I use cheap VPSes without many resources available, I can easily run out of RAM or get suspended for excessive CPU usage.</p><p>The package repo of NixOS is somewhat similar to Gentoo. Unlike other Linux distributions, a package being in the repo doesn't equate to it having binary download available. A NixOS "package" is a set of Nix language definitions describing the whole process of download, compilation, and packaging.</p><p>Usually, official NixOS will build software for us and upload them to a Binary Cache. But if we ever change the compilation process (usually some compilation parameters) or create a new package on our own (the process will be explained in a future post), we're on our own.</p></li><li><p>The Nix package manager itself also takes a considerable amount of RAM and CPU resources when parsing config files, especially when the config is complicated.</p></li></ol><p>In an ideal world, I will be able to parse the config on a high-performance machine (like my personal computer or a dedicated server), download or compile all packages and config, and copy them to all machines, so they don't need to spare resources for that... Oh wait, this is what <a target="_blank" rel="noopener" href="https://github.com/serokell/deploy-rs">Deploy-RS</a> exactly does.</p><p>To use Deploy-RS, we need a machine with a Nix installation. Note that I didn't ask you to reinstall your machine into NixOS because the Nix package manager can be installed on another Linux distribution. For example, as I run Arch Linux on my computer, I set up Nix according to the guide on <a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/Nix">Arch Linux Wiki</a>. Users of other distributions can use Nix's official quick installation script:</p><pre><code class="hljs language-bash"><span class="hljs-comment"># Copied from https://nixos.org/download.html</span>
+curl -L https://nixos.org/nix/install | sudo sh
+</code></pre><p>Then we need to enable Flake on this machine:</p><pre><code class="hljs language-bash">nix-env -iA nixpkgs.nixFlakes
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"experimental-features = nix-command flakes"</span> &gt;&gt; /etc/nix/nix.conf
+systemctl restart nix-daemon
+</code></pre><p>Back to <code>flake.nix</code> created in the last part, we need to add the repository of Deploy-RS, as well as SSH connection definitions in <code>outputs</code>:</p><pre><code class="hljs language-nix">{
+  <span class="hljs-attr">description</span> = <span class="hljs-string">"Lan Tian's NixOS Flake"</span>;
+
+  <span class="hljs-attr">inputs</span> = {
+    nixpkgs.<span class="hljs-attr">url</span> = <span class="hljs-string">"github:NixOS/nixpkgs/nixos-unstable"</span>;
+
+    <span class="hljs-comment"># Add these lines</span>
+    <span class="hljs-attr">deploy-rs</span> = {
+      <span class="hljs-attr">url</span> = <span class="hljs-string">"github:serokell/deploy-rs"</span>;
+      inputs.nixpkgs.<span class="hljs-attr">follows</span> = <span class="hljs-string">"nixpkgs"</span>;
+    };
+  };
+
+  <span class="hljs-attr">outputs</span> = { self, nixpkgs, ... }@inputs: {
+    nixosConfigurations.<span class="hljs-string">"nixos"</span> = nixpkgs.lib.nixosSystem {
+      <span class="hljs-attr">system</span> = <span class="hljs-string">"x86_64-linux"</span>;
+      <span class="hljs-attr">modules</span> = [
+        ./configuration.nix
+      ];
+    };
+
+    <span class="hljs-comment"># Add these lines</span>
+    <span class="hljs-attr">deploy</span> = {
+      <span class="hljs-attr">sshUser</span> = <span class="hljs-string">"root"</span>;           <span class="hljs-comment"># SSH login username</span>
+      <span class="hljs-attr">user</span> = <span class="hljs-string">"root"</span>;              <span class="hljs-comment"># Remote username</span>
+      <span class="hljs-attr">sshOpts</span> = [ <span class="hljs-string">"-p"</span> <span class="hljs-string">"2222"</span> ];  <span class="hljs-comment"># SSH parameters, here I specify port 2222</span>
+
+      <span class="hljs-comment"># Auto rollback on deployment failure, recommended off.</span>
+      <span class="hljs-comment">#</span>
+      <span class="hljs-comment"># NixOS deployment can be a bit flaky (especially on unstable)</span>
+      <span class="hljs-comment"># and you may need to deploy twice to succeed, but auto rollback</span>
+      <span class="hljs-comment"># works against that and make your deployments constantly fail.</span>
+      <span class="hljs-attr">autoRollback</span> = <span class="hljs-literal">false</span>;
+
+      <span class="hljs-comment"># Auto rollback on Internet disconnection, recommended off.</span>
+      <span class="hljs-comment">#</span>
+      <span class="hljs-comment"># Rollback when your new config killed the Internet connection,</span>
+      <span class="hljs-comment"># so you don't have to use VNC or IPMI from your service provider.</span>
+      <span class="hljs-comment"># But if you're adjusting firewall or IP settings, chances are</span>
+      <span class="hljs-comment"># although the Internet is down atm, a simple reboot will make everything work.</span>
+      <span class="hljs-comment"># Magic rollback works against that, so you should keep that off.</span>
+      <span class="hljs-attr">magicRollback</span> = <span class="hljs-literal">false</span>;
+
+      <span class="hljs-attr">nodes</span> = {
+        <span class="hljs-string">"nixos"</span> = {
+          <span class="hljs-comment"># Target node's address, either IP, domain, or .ssh/config alias</span>
+          <span class="hljs-attr">hostname</span> = <span class="hljs-string">"192.168.56.105"</span>;
+          profiles.<span class="hljs-attr">system</span> = {
+            <span class="hljs-comment"># Use nixosConfigurations."nixos" defined above</span>
+            <span class="hljs-attr">path</span> = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.<span class="hljs-string">"nixos"</span>;
+          };
+        };
+      };
+    };
+  };
+}
+</code></pre><p>Finally, run <code>nix run github:serokell/deploy-rs -- -s .</code> to execute Deploy-RS and voila.</p><h2 id="appendix-nixos-on-oracle-arm-server">Appendix: NixOS on Oracle ARM Server</h2><p>NixOS also supports the ARM64v8 architecture, the one used by Oracle's ARM cloud servers. Since Oracle ARM cloud servers are basically KVM virtual machines with no special hardware, you can simply use <a target="_blank" rel="noopener" href="https://github.com/elitak/nixos-infect">NixOS-Infect</a> to replace the operating system with NixOS.</p><p>Compared to x86 servers, you simply need to change <code>system</code> to <code>aarch64-linux</code> in <code>flake.nix</code></p><pre><code class="hljs language-nix">{
+  <span class="hljs-comment"># ...</span>
+  <span class="hljs-attr">outputs</span> = { self, nixpkgs, ... }@inputs: {
+    nixosConfigurations.<span class="hljs-string">"oracle-vm-arm"</span> = nixpkgs.lib.nixosSystem {
+      <span class="hljs-attr">system</span> = <span class="hljs-string">"aarch64-linux"</span>;
+      <span class="hljs-attr">modules</span> = [
+        ./configuration-oracle-vm-arm.nix
+      ];
+    };
+  };
+  <span class="hljs-comment"># ...</span>
+}
+</code></pre><p>All other config stays the same as x86 servers. But if you're trying to generate a config locally with Deploy-RS, you'll encounter an error saying your current machine doesn't support the ARM architecture. To fix this, we can install <code>qemu-user-static</code> and relevant <code>binfmt</code> config, so the local system can emulate ARM architecture programs.</p><p>For Arch Linux, you need to install <a target="_blank" rel="noopener" href="https://aur.archlinux.org/packages/qemu-user-static/">qemu-user-static</a> and <a target="_blank" rel="noopener" href="https://aur.archlinux.org/packages/binfmt-qemu-static-all-arch/">binfmt-qemu-static-all-arch</a> from AUR.</p><p>For Debian, you need to install <a target="_blank" rel="noopener" href="https://packages.debian.org/sid/qemu-user-static">qemu-user-static</a>.</p><p>After that, you need to edit <code>/etc/nix/nix.conf</code> and add this line of config, to tell Nix package manager that this machine is capable of running ARM programs:</p><pre><code class="hljs language-bash">extra-platforms = aarch64-linux arm-linux
+</code></pre><p>Finally, restart Nix Daemon <code>systemctl restart nix-daemon</code>, and Deploy-RS will work.</p><h2 id="appendix-further-reading">Appendix: Further Reading</h2><p>In this post, we've configured a basic NixOS installation with almost zero extra software. For installing and configuring software, I recommend you to read Ryan Yin's <a target="_blank" rel="noopener" href="https://thiscute.world/en/posts/nixos-and-flake-basics/">NixOS &amp; Nix Flakes - A Guide for Beginners</a>. His post provides some example configurations for commonly used software.</p><p>You can also read these documents to have a better understanding of NixOS's config syntax, the Flake functionality, and Deploy-RS.</p><ul><li>NixOS Syntax<ul><li><a target="_blank" rel="noopener" href="https://nixos.wiki/wiki/Nix_Expression_Language">NixOS.Wiki: Nix Expression Language</a></li><li><a target="_blank" rel="noopener" href="https://medium.com/@MrJamesFisher/nix-by-example-a0063a1a4c55">Nix By Example</a></li></ul></li><li>Flake Functionality<ul><li><a target="_blank" rel="noopener" href="https://nixos.wiki/wiki/Flakes">NixOS.Wiki: Flakes</a></li></ul></li><li>Deploy-RS<ul><li><a target="_blank" rel="noopener" href="https://github.com/serokell/deploy-rs">GitHub: Deploy-RS</a></li></ul></li></ul><p>You can also refer to my config files released on GitHub:</p><ul><li><a target="_blank" rel="noopener" href="https://github.com/xddxdd/nixos-config/tree/9ed2eff8e4e6054151558f3d5909f3ef2af9b288">Initial commit</a><ul><li>Finished the basic config and Nix Flake parts.</li></ul></li><li><a target="_blank" rel="noopener" href="https://github.com/xddxdd/nixos-config/tree/79c6f5b45d7ff574ecefb594ed76715715906cec">general: add deploy-rs script, change SSH port to 2222</a><ul><li>Finished configuration of Deploy-RS.</li></ul></li></ul></div><div class="clearfix" id="post-navi"><div class="float-end text-end"><a href="/en/article/modify-website/nixos-why.lantian" title="NixOS Series 1: Why I fell in love">NixOS Series 1: Why I fell in love</a><br>Next post &raquo;</div><div class="float-start text-start position-absolute">&laquo; Previous post<br><a href="/en/article/chat/how-i-nuked-my-btrfs-partition.lantian" title="I Moved My SSD to My New Laptop. This is What Happened To My Btrfs Data">I Moved My SSD to My New Laptop. This is What Happened To My Btrfs Data</a></div></div><div id="waline"></div><script>var waline_config={el:"#waline",serverURL:window.location.origin,path:"/en/article/modify-website/nixos-initial-config-flake-deploy.lantian",lang:"en-US",requiredMeta:["nick","mail"],login:"disable",emoji:["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"]}</script></div></div></article></div><aside class="d-none d-xl-block"><section class="widget"><h3>Latest posts</h3><ul class="list-unstyled"><li>05-12 <a href="/en/article/modify-website/how-to-kill-the-dn42-network.lantian">How to Kill the DN42 Network (Updated 2023-05-12)</a></li><li>05-08 <a href="/en/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian">NVIDIA GPU Passthrough on an Optimus MUXed Laptop (Updated 2023-05)</a></li><li>04-17 <a href="/en/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian">Fix China Telecom 4G Roaming on AOSP ROM by Changing APN</a></li><li>03-26 <a href="/en/article/random-notes/old-hp-workstation-as-all-in-one.lantian">Notes on Setting Up NAS+Router on Old HP Workstation</a></li><li>01-14 <a href="/en/article/modify-computer/nixos-impermanence.lantian">NixOS Series 4: &#34;Stateless&#34; Operating System</a></li><li>06-21 <a href="/en/article/modify-computer/nixos-packaging.lantian">NixOS Series 3: Software Packaging 101</a></li><li>04-04 <a href="/en/article/modify-computer/reverse-engineered-linux-driver-for-hp-omen-macro-keys.lantian">Reverse Engineered Linux Driver for HP OMEN Macro Keys</a></li><li>02-06 <a href="/en/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian">Low-cost GeoDNS with NS1 and UptimeRobot/Freshping</a></li><li>12-15 <a href="/en/article/chat/how-i-nuked-my-btrfs-partition.lantian">I Moved My SSD to My New Laptop. This is What Happened To My Btrfs Data</a></li><li>11-13 <a href="/en/article/modify-website/nixos-initial-config-flake-deploy.lantian">NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy</a></li><li>10-11 <a href="/en/article/modify-website/nixos-why.lantian">NixOS Series 1: Why I fell in love</a></li><li>08-29 <a href="/en/article/modify-website/replace-jenkins-with-drone-ci.lantian">Replace Jenkins with Drone CI</a></li><li>07-18 <a href="/en/article/modify-website/lookup-any-whois-with-nginx.lantian">Lookup Any Public WHOIS with this nginx-based Server</a></li><li>05-02 <a href="/en/article/modify-website/dn42-experimental-network-2020.lantian">DN42 Experimental Network: Intro and Registration (Updated 2022-12)</a></li><li>04-19 <a href="/en/article/modify-website/serve-dn42-whois-with-nginx.lantian">Setting up DN42 WHOIS Server with Nginx</a></li></ul></section><section class="widget"><h3>Latest comments</h3><ul class="list-unstyled" id="recent-comments"><li><a href="#">Loading...</a></li></ul></section><section class="widget"><h3>Others</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-rss"></i> <a href="/rss2.xml" target="_blank">RSS Feed</a> | <a href="/feed.xml" target="_blank">Atom</a> | <a href="/feed.json" target="_blank">JSON</a></li><li><i class="fas fa-fw fa-globe"></i> <a href="https://stats.uptimerobot.com/BLK6VsRkR" target="_blank">Server Status</a></li><li><i class="fas fa-fw fa-sitemap"></i> <a href="https://lg.lantian.pub" target="_blank">DN42 Looking Glass</a></li></ul></section><section class="widget"><h3>Links</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://0x7f.cc">0x7f Blog 🐑</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="http://foreverblog.cn">10 Year&#39;s Promise (Forever Blog)</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://alanyhq.com">Alanyhq</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://blog.baoshuo.ren/?utm_source=friends">Baoshuo&#39;s Blog</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://blog.cas7.moe">Blog of Moecast</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://jerryxiao.cc">JerryXiao</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://sangsir.com">SangSir</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://snli.org">Shucheng Li</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://yuetau.net">YuetAu&#39;s Spot</a></li></ul></section></aside></div><footer class="lantian clearfix"><div id="copyright" class="float-end text-end"><i class="fas fa-copyright"></i> 2012-2023 Lan Tian @ Blog<br><small>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> @ 2023-05-17 15:12</small></div></footer></div></body></html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" itemscope itemtype="https://schema.org/Article"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="theme-color" content="#bbdefb"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><title>制作只有 4KB 大小的永久挂起程序 | Lan Tian @ Blog</title><meta name="title" content="制作只有 4KB 大小的永久挂起程序 | Lan Tian @ Blog"><meta name="keywords" content="Lan,Tian"><meta name="description" content="Lan Tian @ Blog"><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/article/modify-website/4kb-infinite-sleep-docker-image.lantian"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-website/4kb-infinite-sleep-docker-image.lantian" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-website/4kb-infinite-sleep-docker-image.lantian" hreflang="en"><script>function addLoadEvent(o){var n=window.onload;"function"!=typeof window.onload?window.onload=o:window.onload=function(){n&&n(),o()}}</script><link rel="stylesheet" href="/assets/style.css?v=6c6e88f"><script defer src="/assets/script.main.bundle.js?v=6c6e88f"></script><meta name="copyright" content="Copyright 2012-2023 Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><meta name="application-name" content="Lan Tian @ Blog"><meta name="msapplication-TileColor" content="#03a9f4"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-navbutton-color" content="#03a9f4"><meta content="name=Lan Tian @ Blog;action-uri=/;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=文章们;action-uri=/page/archive;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=俯瞰地球;action-uri=/page/himawari;icon-uri=/favicon.png" name="msapplication-task"><meta content="name=DN42;action-uri=/page/dn42;icon-uri=/favicon.png" name="msapplication-task"><meta name="theme-color" content="#03a9f4"><meta name="mobile-web-app-capable" content="yes"><meta property="og:url" content="https://lantian.pub/article/modify-website/4kb-infinite-sleep-docker-image.lantian"><meta property="og:type" content="website"><meta property="og:title" content="制作只有 4KB 大小的永久挂起程序 | Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/apple-touch-icon.png"><meta property="og:description" content="在我的网络配置中，部分 Docker 容器的服务需要用 Anycast 的方式实现高可用，例如 DNS。在之前的文章中，我的做法是，..."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="zh"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/article/modify-website/4kb-infinite-sleep-docker-image.lantian"><meta name="twitter:title" content="制作只有 4KB 大小的永久挂起程序 | Lan Tian @ Blog"><meta name="twitter:image" content="https://lantian.pub/apple-touch-icon.png"><meta name="twitter:description" content="在我的网络配置中，部分 Docker 容器的服务需要用 Anycast 的方式实现高可用，例如 DNS。在之前的文章中，我的做法是，..."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="制作只有 4KB 大小的永久挂起程序 | Lan Tian @ Blog"><meta itemprop="image" content="https://lantian.pub/apple-touch-icon.png"><meta itemprop="description" content="在我的网络配置中，部分 Docker 容器的服务需要用 Anycast 的方式实现高可用，例如 DNS。在之前的文章中，我的做法是，..."><style>.spoiler{display:inline-flex}p.spoiler{display:flex}.spoiler a{pointer-events:none}.spoiler-blur,.spoiler-blur>*{transition:text-shadow .5s ease}.spoiler .spoiler-blur,.spoiler .spoiler-blur>*{color:transparent;background-color:rgba(0,0,0,0);text-shadow:0 0 10px grey;cursor:pointer}.spoiler .spoiler-blur:hover,.spoiler .spoiler-blur:hover>*{text-shadow:0 0 5px grey}.spoiler-box,.spoiler-box>*{transition:color .5s ease,background-color .5s ease}.spoiler .spoiler-box,.spoiler .spoiler-box>*{color:#000;background-color:#000;text-shadow:none}</style><meta name="generator" content="Hexo 6.3.0"></head><body><div id="bg"></div><div id="container" class="container"><nav class="lantian navbar navbar-expand-lg"><div class="container-fluid"><a class="navbar-brand" href="/">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="lantian-navbar"><ul class="navbar-nav"><li class="nav-item d-none d-lg-block"><a class="nav-link" href="/page/archive">文章们</a></li><li class="nav-item d-none d-lg-block"><a class="nav-link" href="/page/himawari">俯瞰地球</a></li><li class="nav-item d-none d-lg-block"><a class="nav-link" href="/page/dn42">DN42</a></li><li class="nav-item dropdown d-block d-lg-none"><a href="#" class="nav-link dropdown-toggle" id="pages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-fw fa-file"></i> 页面 <span class="caret"></span></a><ul class="dropdown-menu" aria-labelledby="pages-dropdown"><li><a class="dropdown-item" href="/page/archive">文章们</a></li><li><a class="dropdown-item" href="/page/himawari">俯瞰地球</a></li><li><a class="dropdown-item" href="/page/dn42">DN42</a></li></ul></li></ul><ul class="navbar-nav ms-auto"><li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" id="languages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-fw fa-language"></i> Language <span class="caret"></span></a><ul class="dropdown-menu" aria-labelledby="languages-dropdown"><li><a href="/article/modify-website/4kb-infinite-sleep-docker-image.lantian" class="dropdown-item"><span class="flag-icon flag-icon-cn"></span> Chinese</a></li><li><a href="/en/article/modify-website/4kb-infinite-sleep-docker-image.lantian" class="dropdown-item"><span class="flag-icon flag-icon-us"></span> English</a></li><li><hr class="dropdown-divider"></li><li><a class="dropdown-item disabled" href="#">Not all pages have translations.</a></li><li><a class="dropdown-item disabled" href="#">You may see 404 - this is normal.</a></li></ul></li><li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" id="color-scheme-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-fw fa-adjust"></i> 夜间模式</a><ul class="dropdown-menu" aria-labelledby="color-scheme-dropdown"><li><a id="color-scheme-auto" class="dropdown-item" href="#"><i class="fas fa-fw fa-adjust"></i> 自动</a></li><li><hr class="dropdown-divider"></li><li><a id="color-scheme-light" class="dropdown-item" href="#"><i class="fas fa-fw fa-sun"></i> 浅色</a></li><li><a id="color-scheme-dark" class="dropdown-item" href="#"><i class="fas fa-fw fa-moon"></i> 深色</a></li></ul></li></ul></div></div></nav><div class="d-flex"><div id="content"><article><div class="d-flex"><div class="post-info-wrap"><div class="post-info"><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-clock"></span><br><small>12-27</small></p><div class="post-meta-value">发布于 <span class="badge badge-tag">2020-12-27 23:39</span></div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-file-alt"></span><br><small>网站与服务端</small></p><div class="post-meta-value">分类 <a class="badge badge-tag" href="/category/modify-website">网站与服务端</a> &nbsp; &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-tag"></span><br><small>1 标签</small></p><div class="post-meta-value">标签 <a class="badge badge-tag" href="/tag/Docker">Docker</a> &nbsp; &nbsp;</div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-qrcode"></span><br><small>二维码</small></p><div class="post-meta-value"><img class="qrcode" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACvElEQVR42u3ay24bMRAEQP//TzuXHGIYkrpnSFsBak/Gel/FA2fU5MdHfHx+O/49/+jKj/L4/uTn7zp24OHh4a0//dGjH73gMzjaK58PWfEEPDw8vGu8ZJpOSM+n+HaA8u95eB4PDw/vDXiz4Zhdn7fyeHh4eP8Xb9aI5wEEHh4e3nvy8hY5jwmS9jpvpq9nLXh4eHhdUvoxa39/6+8r63t4eHh461X1drLOG+Vk0t8Ulb934eHh4V3gtZHrPthtm+C2XcbDw8P7GV4bKySRbtvx5tsRDoS5eHh4eGte/omzxf62QT/VrOPh4eHd4LUvy+tMG0ZsFuRexBB4eHh4F3jtj/9ZfFDXq1HpqkcODw8Pb5IJ1M3xLNhtt1Ilg7JaAMPDw8Nb8PYT8b4Y5JurZuUKDw8P7yzv7KLXLJhoQ97iZwAeHh7e0f8mN+Tn8+k+3wSQlIfVAhgeHh7epEc9sBCVxxkbdvscPDw8vBu8fIKeMW48oS4GeHh4eNd4ycLSZmEs3y4w21LwIozAw8PDO8prJ+h8aPIG/Wz88aWlxsPDw7vAa1+chAWzNn1fkB6GEXh4eHjXeJsFqjxoaDcrtHFGXbvw8PDwSt5ssp5Ft/kw5Xc9vB4PDw/vAu/Up5xtiJNYJLkXDw8P7x5vE0a0Ie+mCOXbsPDw8PB+i9eWhFmp2G//evHNeHh4eD/Cy8PT4WQ9Kif5+SirxsPDw7vAqx+02BaQRAztBlY8PDy8G7zP8ng+TrOmPGnN27LxZX0PDw8P7yivnXA38UG7MauNPDblBA8PD6/lbRa9NqVlHwq/+K2Ah4eHd5k3e2XSZG+Wu4b5Ch4eHt5b8pKgdhb15sHESo+Hh4f3BrzkxXlRaRfSDrfUeHh4eKPtqnkTvN9aOls8i+7Fw8PDu8Br+9JZg3sqJt6HF3h4eHgL3h/pMbtgeit4bAAAAABJRU5ErkJggg==" alt="二维码"></div></div></div><div class="post-meta-wrap"><div class="post-meta"><p><span class="fas fa-list"></span><br><small>目录</small></p><div class="post-meta-value"><ol id="quicklink"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80%E7%9B%B4%E6%8E%A5%E7%94%A8-musl--%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91%E5%81%9A%E4%B8%80%E4%B8%AA"><span class="toc-text">方案一：直接用 Musl + 静态编译做一个</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C%E6%B1%87%E7%BC%96"><span class="toc-text">方案二：汇编！</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%B8%89%E6%BA%90%E4%BB%A3%E7%A0%81%E7%BA%A7%E8%B0%83%E7%94%A8-musl"><span class="toc-text">方案三：源代码级调用 Musl</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%86%E8%BF%99%E4%B8%80%E5%88%87%E5%80%BC%E5%BE%97%E5%90%97"><span class="toc-text">但这一切值得吗？</span></a></li></ol></ol></div></div></div></div></div><div class="post-wrap"><h1 class="post-title"><a href="/article/modify-website/4kb-infinite-sleep-docker-image.lantian" rel="bookmark" title="制作只有 4KB 大小的永久挂起程序">制作只有 4KB 大小的永久挂起程序</a></h1><div class="post-text"><p>在我的网络配置中，部分 Docker 容器的服务需要用 Anycast 的方式实现高可用，例如 DNS。<a href="/article/modify-website/docker-share-network-namespace-bird-high-availability.lantian/">在之前的文章中</a>，我的做法是，创建了一个 Busybox 容器运行 <code>tail -f /dev/null</code> 这条命令，永久挂起，不占用 CPU 也永远不会退出，来维持一份网络命名空间给服务程序和 BIRD 共享。</p><p>用人话说就是：我自己发明了一遍 Kubernetes 的 Pod。</p><blockquote><p>我不使用 K8S，因为我的节点都是独立的，不组成集群，因此不使用 K8S 的集群功能，另外它的配置也比较复杂。</p></blockquote><p>但是我转念一想，为了网络命名空间建一个 Busybox 容器好像有些大材小用，我还需要手动配置一个 Entrypoint。如果有一个极小的 Docker 镜像，唯一干的事情是等待，那就更好了。</p><h2 id="方案一直接用-musl--静态编译做一个">方案一：直接用 Musl + 静态编译做一个</h2><p>最容易想到的方法就是写一个死循环的 C 程序，不断的用 <code>sleep</code> 之类命令等待。Linux 系统中，Glibc、Musl 等 C 语言运行库提供了一个 <code>pause</code> 函数，暂停程序运行直到程序收到了外部信号。</p><p>所以我写了一个死循环调用 <code>pause</code>：</p><pre><code class="hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
+        <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>) pause();
+}
+</code></pre><p>然后把它静态链接到 Musl。不要用 Glibc，<a href="/article/modify-website/static-build-tiny-docker-images.lantian/">原因我在上次制作微型 Docker 镜像时讲了</a>：</p><pre><code class="hljs language-bash">musl-gcc sleep.c -Os -static -o <span class="hljs-built_in">sleep</span>
+</code></pre><p>然后我们得到了一个 17KB 大小的可执行文件：</p><pre><code class="hljs language-bash">&gt; <span class="hljs-built_in">ls</span> -alh <span class="hljs-built_in">sleep</span>
+-rwxr-xr-x 1 lantian lantian 17K Dec 27 22:27 <span class="hljs-built_in">sleep</span>
+</code></pre><p>已经挺小了，Busybox 的镜像要 1MB 多一点。但是我们还可以做得更好。</p><h2 id="方案二汇编">方案二：汇编！</h2><p>如果我们反编译一下刚才的 <code>sleep</code> 程序，可以看到一大堆函数：</p><pre><code class="hljs language-bash">&gt; objdump -x <span class="hljs-built_in">sleep</span>
+
+<span class="hljs-built_in">sleep</span>:     file format elf64-x86-64
+<span class="hljs-built_in">sleep</span>
+architecture: i386:x86-64, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x000000000040103a
+
+Program Header:
+    LOAD off    0x0000000000000000 vaddr 0x0000000000400000 paddr 0x0000000000400000 align 2**12
+         filesz 0x0000000000000190 memsz 0x0000000000000190 flags r--
+    LOAD off    0x0000000000001000 vaddr 0x0000000000401000 paddr 0x0000000000401000 align 2**12
+         filesz 0x00000000000006d5 memsz 0x00000000000006d5 flags r-x
+    LOAD off    0x0000000000002000 vaddr 0x0000000000402000 paddr 0x0000000000402000 align 2**12
+         filesz 0x0000000000000040 memsz 0x0000000000000040 flags r--
+    LOAD off    0x0000000000002fe8 vaddr 0x0000000000403fe8 paddr 0x0000000000403fe8 align 2**12
+         filesz 0x0000000000000040 memsz 0x00000000000002c8 flags rw-
+   STACK off    0x0000000000000000 vaddr 0x0000000000000000 paddr 0x0000000000000000 align 2**4
+         filesz 0x0000000000000000 memsz 0x0000000000000000 flags rw-
+   RELRO off    0x0000000000002fe8 vaddr 0x0000000000403fe8 paddr 0x0000000000403fe8 align 2**0
+         filesz 0x0000000000000018 memsz 0x0000000000000018 flags r--
+
+Sections:
+Idx Name          Size      VMA               LMA               File off  Algn
+  0 .init         00000003  0000000000401000  0000000000401000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .text         000006c2  0000000000401010  0000000000401010  00001010  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .fini         00000003  00000000004016d2  00000000004016d2  000016d2  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  3 .rodata       0000000a  0000000000402000  0000000000402000  00002000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  4 .eh_frame     00000030  0000000000402010  0000000000402010  00002010  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  5 .init_array   00000008  0000000000403fe8  0000000000403fe8  00002fe8  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .fini_array   00000008  0000000000403ff0  0000000000403ff0  00002ff0  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+  7 .got          00000008  0000000000403ff8  0000000000403ff8  00002ff8  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+  8 .got.plt      00000018  0000000000404000  0000000000404000  00003000  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .data         00000010  0000000000404018  0000000000404018  00003018  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+ 10 .bss          00000270  0000000000404040  0000000000404040  00003028  2**5
+                  ALLOC
+ 11 .comment      00000012  0000000000000000  0000000000000000  00003028  2**0
+                  CONTENTS, READONLY
+SYMBOL TABLE:
+0000000000401000 l    d  .init  0000000000000000 .init
+0000000000401010 l    d  .text  0000000000000000 .text
+00000000004016d2 l    d  .fini  0000000000000000 .fini
+0000000000402000 l    d  .rodata        0000000000000000 .rodata
+0000000000402010 l    d  .eh_frame      0000000000000000 .eh_frame
+0000000000403fe8 l    d  .init_array    0000000000000000 .init_array
+0000000000403ff0 l    d  .fini_array    0000000000000000 .fini_array
+0000000000403ff8 l    d  .got   0000000000000000 .got
+0000000000404000 l    d  .got.plt       0000000000000000 .got.plt
+0000000000404018 l    d  .data  0000000000000000 .data
+0000000000404040 l    d  .bss   0000000000000000 .bss
+0000000000000000 l    d  .comment       0000000000000000 .comment
+0000000000000000 l    <span class="hljs-built_in">df</span> *ABS*  0000000000000000 exit.lo
+0000000000401353 l     F .text  0000000000000001 dummy
+0000000000401354 l     F .text  0000000000000023 libc_exit_fini
+0000000000000000 l    <span class="hljs-built_in">df</span> *ABS*  0000000000000000 sleep.c
+0000000000000000 l    <span class="hljs-built_in">df</span> *ABS*  0000000000000000 Scrt1.c
+0000000000000000 l    <span class="hljs-built_in">df</span> *ABS*  0000000000000000 crtstuff.c
+0000000000401080 l     F .text  0000000000000000 deregister_tm_clones
+00000000004010b0 l     F .text  0000000000000000 register_tm_clones
+00000000004010f0 l     F .text  0000000000000000 __do_global_dtors_aux
+0000000000404040 l     O .bss   0000000000000001 completed.0
+0000000000403ff0 l     O .fini_array    0000000000000000 __do_global_dtors_aux_fini_array_entry
+0000000000401140 l     F .text  0000000000000000 frame_dummy
+0000000000403fe8 l     O .init_array    0000000000000000 __frame_dummy_init_array_entry
+0000000000000000 l    <span class="hljs-built_in">df</span> *ABS*  0000000000000000 __libc_start_main.lo
+0000000000401149 l     F .text  0000000000000001 dummy
+000000000040114a l     F .text  0000000000000001 dummy1
+00000000004012c9 l     F .text  0000000000000020 libc_start_init
+00000000004012e9 l     F .text  000000000000002e libc_start_main_stage2
+0000000000000000 l    <span class="hljs-built_in">df</span> *ABS*  0000000000000000 __init_tls.lo
+000000000040148c l     F .text  0000000000000185 static_init_tls
+0000000000404100 l     O .bss   0000000000000030 main_tls
+0000000000404140 l     O .bss   0000000000000168 builtin_tls
+0000000000000000 l    <span class="hljs-built_in">df</span> *ABS*  0000000000000000 __syscall_cp.lo
+0000000000401695 l     F .text  000000000000001a sccp
+0000000000000000 l    <span class="hljs-built_in">df</span> *ABS*  0000000000000000 crtstuff.c
+000000000040203c l     O .eh_frame      0000000000000000 __FRAME_END__
+0000000000000000 l    <span class="hljs-built_in">df</span> *ABS*  0000000000000000 
+0000000000403ff8 l       .fini_array    0000000000000000 __fini_array_end
+0000000000403ff0 l       .fini_array    0000000000000000 __fini_array_start
+0000000000403ff0 l       .init_array    0000000000000000 __init_array_end
+0000000000404000 l     O .got.plt       0000000000000000 _GLOBAL_OFFSET_TABLE_
+0000000000403fe8 l       .init_array    0000000000000000 __init_array_start
+00000000004042a8 g     O .bss   0000000000000004 .hidden __thread_list_lock
+0000000000401377 g     F .text  0000000000000029 pause
+000000000040114b g     F .text  000000000000017e .hidden __init_libc
+0000000000401630 g     F .text  0000000000000033 .hidden __syscall_ret
+0000000000404060 g     O .bss   0000000000000008 .hidden __hwcap
+0000000000401663 g     F .text  0000000000000000 memcpy
+0000000000404028 g     O .data  0000000000000000 .hidden __TMC_END__
+0000000000401695  w    F .text  000000000000001a .hidden __syscall_cp_c
+0000000000404080 g     O .bss   0000000000000068 .hidden __libc
+0000000000404018 g     O .data  0000000000000000 .hidden __dso_handle
+00000000004016b4 g     F .text  0000000000000000 .hidden __set_thread_area
+000000000040140b g     F .text  0000000000000081 .hidden __copy_tls
+00000000004040e8  w    O .bss   0000000000000008 _environ
+00000000004016c4  w    F .text  000000000000000e .hidden ___errno_location
+00000000004040e8 g     O .bss   0000000000000008 __environ
+0000000000401611 g     F .text  0000000000000016 _Exit
+000000000040148c  w    F .text  0000000000000185 .hidden __init_tls
+0000000000401000 g       .init  0000000000000000 _init
+0000000000401353  w    F .text  0000000000000001 .hidden __funcs_on_exit
+0000000000401663 g       .text  0000000000000000 .hidden __memcpy_fwd
+00000000004040e8  w    O .bss   0000000000000008 environ
+00000000004040e8  w    O .bss   0000000000000008 ___environ
+0000000000404058 g     O .bss   0000000000000008 __progname
+000000000040103a g       .text  0000000000000000 _start
+0000000000401050 g     F .text  0000000000000024 _start_c
+0000000000404058  w    O .bss   0000000000000008 program_invocation_short_name
+00000000004012c9  w    F .text  0000000000000020 .hidden __libc_start_init
+00000000004013a0 g     F .text  000000000000006b .hidden __init_tp
+000000000040114a  w    F .text  0000000000000001 .hidden __init_ssp
+0000000000404028 g       .bss   0000000000000000 __bss_start
+0000000000401032 g     F .text  0000000000000008 main
+0000000000401353  w    F .text  0000000000000001 __stdio_exit
+00000000004016af g     F .text  0000000000000005 .hidden __syscall_cp
+00000000004016d2 g       .fini  0000000000000000 _fini
+0000000000401354  w    F .text  0000000000000023 .hidden __libc_exit_fini
+0000000000404028 g       .data  0000000000000000 _edata
+00000000004042b0 g       .bss   0000000000000000 _end
+00000000004016c4 g     F .text  000000000000000e __errno_location
+0000000000401010 g     F .text  0000000000000022 <span class="hljs-built_in">exit</span>
+0000000000401317 g     F .text  000000000000003c __libc_start_main
+0000000000404050  w    O .bss   0000000000000008 program_invocation_name
+0000000000404024 g     O .data  0000000000000004 .hidden __default_stacksize
+0000000000404020 g     O .data  0000000000000004 .hidden __default_guardsize
+0000000000404048 g     O .bss   0000000000000008 .hidden __sysinfo
+0000000000404050 g     O .bss   0000000000000008 __progname_full
+</code></pre><p>这是因为 Musl 的一部分在静态链接时被带进来了。但是一个除了永远挂起外，不干任何其它事的程序，也不需要这些 Musl 的函数。那么可不可以把它们都删掉？</p><p>可以，一种方法就是直接用汇编直接去调用 pause 对应的系统调用。不用一看到汇编就发慌，我们的程序只有六行：</p><pre><code class="hljs language-c">.text
+.global _start
+_start:
+    mov $<span class="hljs-number">34</span>, %rax
+    syscall
+    jmp _start
+</code></pre><ul><li>第一行表示把下面的代码放在 Linux ELF 可执行文件的 <code>.text</code> 段（即可执行代码段）。</li><li>第二行和第三行定义了一个 <code>_start</code> 函数。<ul><li>虽然我们写 C 程序时主函数是 <code>main</code>，但是 Linux 运行程序时执行的第一个函数其实不是它，而是从 C 语言标准库中复制来的 <code>_start</code> 函数，它会在加载一些环境配置（例如解析命令行参数）后，再调用我们写的 <code>main</code> 函数。但我们不需要 C 标准库帮我们干这些，我们只要不停地挂起自己就可以。</li></ul></li><li>第四行和第五行调用了编号为 34 的系统调用，对应 Linux 的 <code>pause</code> 系统调用，就是先前提到的、挂起自身直到收到外部信号为止的调用。</li><li>第六行跳回 <code>_start</code> 函数开头，成为一个死循环。</li></ul><p>把它「编译」（其实与编译 C 等语言的过程不同，只需要翻译成机器码）：</p><pre><code class="hljs language-bash">as sleep.asm -o sleep.obj
+ld -s -o <span class="hljs-built_in">sleep</span> sleep.obj
+</code></pre><p>我们就获得了一个 4.3 KB 的可执行文件，而且可以正常的一直挂起。</p><p>但问题又来了：我们刚才的代码和可执行文件只支持 x86_64 指令集。我还有树莓派和 Tinker Board，也要支持 ARM。万一后续我遇到了只支持 x86 32 位指令集的机器，或者未来 RISC-V 崛起，我还得为每个架构装一个汇编器，写一次汇编代码。</p><p>更麻烦的是，Linux 在不同的架构下系统调用的编号是不同的，每个架构都得去查一次系统调用表。</p><p>有没有简单一点的方案？</p><h2 id="方案三源代码级调用-musl">方案三：源代码级调用 Musl</h2><p>还记得刚才提到的 Musl 等 C 标准库吗？它们的作用之一就是包装 Linux 的系统调用给程序使用，这样我们写程序时就不用用汇编来做系统调用了。如果我们能复用它们包装调用的代码，并且去掉其它的我们不需要的东西，不是更好？</p><p>我们先下载一份 Musl 的代码：</p><pre><code class="hljs language-bash">wget https://musl.libc.org/releases/musl-1.2.1.tar.gz
+tar xvf musl-1.2.1.tar.gz
+<span class="hljs-built_in">mv</span> musl-1.2.1 musl
+</code></pre><p>Musl 的代码里，<code>arch</code> 文件夹下就有不同架构系统调用的汇编代码，内联在 C 文件里。例如 x86_64 的代码在 <code>arch/x86_64/syscall_arch.h</code>：</p><pre><code class="hljs language-c"><span class="hljs-type">static</span> __inline <span class="hljs-type">long</span> __syscall0(<span class="hljs-type">long</span> n)
+{
+        <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> ret;
+        __asm__ __volatile__ (<span class="hljs-string">"syscall"</span> : <span class="hljs-string">"=a"</span>(ret) : <span class="hljs-string">"a"</span>(n) : <span class="hljs-string">"rcx"</span>, <span class="hljs-string">"r11"</span>, <span class="hljs-string">"memory"</span>);
+        <span class="hljs-keyword">return</span> ret;
+}
+</code></pre><p>另外，<code>cat arch/x86_64/bits/syscall.h.in</code> 里还有系统调用的编号表：</p><pre><code class="hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> __NR_pause 34</span>
+</code></pre><p>这两个文件都没有额外的依赖，可以直接 include。因此我们可以写出这样的代码：</p><blockquote><p><code>pause</code> 系统调用不是在所有指令集上都支持的，这时我会使用 <code>sched_yield</code> 告知系统把 CPU 分给其它程序。这相比 <code>pause</code> 会多占一些 CPU。</p><p>和汇编一样，这里直接写一个 <code>_start</code> 函数，我们不需要 C 标准库的其它东西。</p></blockquote><pre><code class="hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"bits/syscall.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"syscall_arch.h"</span></span>
+
+<span class="hljs-type">void</span> _start() {
+    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>) {
+<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> SYS_pause</span>
+        __syscall0(SYS_pause);
+<span class="hljs-meta">#<span class="hljs-keyword">else</span></span>
+        __syscall0(SYS_sched_yield);
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+    }
+}
+</code></pre><p>然后编译：</p><pre><code class="hljs language-bash"><span class="hljs-comment"># 从 Musl 的编译指令里抄来的，替换 syscall.h.in 里的名称为更常用的名称</span>
+sh -c <span class="hljs-string">"sed -n -e s/__NR_/SYS_/p &lt; musl/arch/x86_64/bits/syscall.h.in &gt;&gt; musl/arch/x86_64/bits/syscall.h"</span>
+gcc -Os -static -nostdlib -Imusl/arch/x86_64 -o <span class="hljs-built_in">sleep</span> sleep.c
+</code></pre><p>我们得到了一个 8.9 KB 的 <code>sleep</code> 文件：</p><pre><code class="hljs language-bash">&gt; <span class="hljs-built_in">ls</span> -alh <span class="hljs-built_in">sleep</span>
+-rwxr-xr-x 1 lantian lantian 8.9K Dec 27 23:00 <span class="hljs-built_in">sleep</span>
+</code></pre><p>这还不是极限，汇编程序可以做到 4.3 KB，C 程序也可以做到相近的程度。我们 <code>objdump -x sleep</code> 看一下 ELF Section：</p><pre><code class="hljs language-bash">Sections:
+Idx Name          Size      VMA               LMA               File off  Algn
+  0 .note.gnu.build-id 00000024  0000000000400158  0000000000400158  00000158  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         0000000c  0000000000401000  0000000000401000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .eh_frame     0000002c  0000000000402000  0000000000402000  00002000  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .comment      00000012  0000000000000000  0000000000000000  0000202c  2**0
+                  CONTENTS, READONLY
+</code></pre><p><code>sleep</code> 文件中有四个部分，其中只有 <code>.text</code> 是我们需要的，因此我们要去除别的部分。GCC 可以用 <code>-Wl,--build-id=none</code> 参数去掉 <code>.note.gnu.build-id</code>，用 <code>-fno-asynchronous-unwind-tables</code> 去掉 <code>.eh_frame</code>：</p><pre><code class="hljs language-bash">gcc -Os -static -nostdlib -Imusl/arch/x86_64 -Wl,--build-id=none -fno-asynchronous-unwind-tables -o <span class="hljs-built_in">sleep</span> sleep.c
+</code></pre><p>此时文件大小 4.7 KB。我们再去掉 <code>.comment</code> 部分：</p><pre><code class="hljs language-bash">strip -s -R <span class="hljs-string">".comment"</span> <span class="hljs-built_in">sleep</span>
+</code></pre><p>此时文件只有 4.3 KB，与汇编版本完全相同。我们反编译看下：</p><pre><code class="hljs language-bash">&gt; objdump -D <span class="hljs-built_in">sleep</span>
+
+<span class="hljs-built_in">sleep</span>:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000401000 &lt;.text&gt;:
+  401000:       ba 22 00 00 00          mov    <span class="hljs-variable">$0x22</span>,%edx
+  401005:       48 89 d0                mov    %rdx,%rax
+  401008:       0f 05                   syscall
+  40100a:       eb f9                   jmp    0x401005
+</code></pre><p>和刚才写的汇编代码基本上是一个东西。如果用 hexdump 看一下，可以看到文件中有大量的 0，但是这些空间已经没法精简了，因为 x86 下内存的一页就是 4KB，ELF Section 要向 4KB 对齐。</p><p>最后把刚才的过程全部写进 Dockerfile，做成镜像就可以了。<a target="_blank" rel="noopener" href="https://github.com/xddxdd/dockerfiles/tree/eecbb766176852ead16a6066017772161c59e502/dockerfiles/sleep/template.Dockerfile">Dockerfile 可以在我的这个 commit 看到。</a></p><h2 id="但这一切值得吗">但这一切值得吗？</h2><p>好问题，我也想知道。</p></div><div class="clearfix" id="post-navi"><div class="float-end text-end"><a href="/article/modify-website/static-build-tiny-docker-images.lantian" title="静态编译制作微型 Docker 镜像">静态编译制作微型 Docker 镜像</a><br>下一篇文章 &raquo;</div><div class="float-start text-start position-absolute">&laquo; 上一篇文章<br><a href="/article/modify-website/serve-gopher-with-nginx.lantian" title="用 nginx 建立 Gopher 网站">用 nginx 建立 Gopher 网站</a></div></div><div id="waline"></div><script>var waline_config={el:"#waline",serverURL:window.location.origin,path:"/article/modify-website/4kb-infinite-sleep-docker-image.lantian",lang:"zh-CN",requiredMeta:["nick","mail"],login:"disable",emoji:["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"]}</script></div></div></article></div><aside class="d-none d-xl-block"><section class="widget"><h3>最新文章</h3><ul class="list-unstyled"><li>05-12 <a href="/article/modify-website/how-to-kill-the-dn42-network.lantian">如何引爆 DN42 网络（2023-05-12 更新）</a></li><li>05-08 <a href="/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian">Optimus MUXed 笔记本上的 NVIDIA 虚拟机显卡直通（2023-05 更新）</a></li><li>04-17 <a href="/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian">修改 APN 解决 AOSP ROM 上中国电信无法 4G 漫游问题</a></li><li>03-26 <a href="/article/random-notes/old-hp-workstation-as-all-in-one.lantian">老款 HP 工作站配置 NAS + 软路由笔记</a></li><li>01-14 <a href="/article/modify-computer/nixos-impermanence.lantian">NixOS 系列（四）：「无状态」操作系统</a></li><li>06-21 <a href="/article/modify-computer/nixos-packaging.lantian">NixOS 系列（三）：软件打包，从入门到放弃</a></li><li>04-04 <a href="/article/modify-computer/reverse-engineered-linux-driver-for-hp-omen-macro-keys.lantian">用逆向工程方式给惠普暗影精灵宏按键编写 Linux 驱动</a></li><li>02-06 <a href="/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian">用 NS1 和 UptimeRobot/Freshping 组建超低价 GeoDNS</a></li><li>12-15 <a href="/article/chat/how-i-nuked-my-btrfs-partition.lantian">我把硬盘换到了新电脑上，这是 Btrfs 上的数据发生的变化</a></li><li>11-13 <a href="/article/modify-website/nixos-initial-config-flake-deploy.lantian">NixOS 系列（二）：基础配置，Nix Flake，和批量部署</a></li><li>10-11 <a href="/article/modify-website/nixos-why.lantian">NixOS 系列（一）：我为什么心动了</a></li><li>08-29 <a href="/article/modify-website/replace-jenkins-with-drone-ci.lantian">用 Drone CI 替换掉 Jenkins</a></li><li>07-18 <a href="/article/modify-website/lookup-any-whois-with-nginx.lantian">用 nginx 搭建能查询任意公网 WHOIS 的服务器</a></li><li>05-02 <a href="/article/modify-website/dn42-experimental-network-2020.lantian">DN42 实验网络介绍及注册教程（2022-12 更新）</a></li><li>04-19 <a href="/article/modify-website/serve-dn42-whois-with-nginx.lantian">将 nginx 用作 DN42 WHOIS 服务器</a></li></ul></section><section class="widget"><h3>最新评论</h3><ul class="list-unstyled" id="recent-comments"><li><a href="#">Loading...</a></li></ul></section><section class="widget"><h3>其它功能</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-rss"></i> <a href="/rss2.xml" target="_blank">RSS 订阅</a> | <a href="/feed.xml" target="_blank">Atom</a> | <a href="/feed.json" target="_blank">JSON</a></li><li><i class="fas fa-fw fa-globe"></i> <a href="https://stats.uptimerobot.com/BLK6VsRkR" target="_blank">服务器状态</a></li><li><i class="fas fa-fw fa-sitemap"></i> <a href="https://lg.lantian.pub" target="_blank">DN42 节点状态</a></li></ul></section><section class="widget"><h3>友情链接</h3><ul class="list-unstyled"><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://0x7f.cc">0x7f Blog 🐑</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://alanyhq.com">Alanyhq</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://blog.cas7.moe">Blog of Moecast</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://jerryxiao.cc">JerryXiao</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://snli.org">Shucheng Li</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://sangsir.com">SangSir | 艺术界的一朵奇葩</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://yuetau.net">YuetAu&#39;s Spot</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="https://blog.baoshuo.ren/?utm_source=friends">宝硕博客</a></li><li><i class="fas fa-fw fa-link"></i> <a target="_blank" href="http://foreverblog.cn">十年之约</a></li></ul></section></aside></div><footer class="lantian clearfix"><div id="copyright" class="float-end text-end"><i class="fas fa-copyright"></i> 2012-2023 Lan Tian @ Blog<br><small>基于 <a href="https://hexo.io/" target="_blank">Hexo</a> 构建 @ 2023-05-17 15:12</small></div></footer></div></body></html>

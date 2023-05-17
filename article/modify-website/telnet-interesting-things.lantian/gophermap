@@ -1,0 +1,83 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "在 Telnet 中显示有趣的东西"		{{server_addr}}	{{server_port}}
+icategories: 网站与服务端		{{server_addr}}	{{server_port}}
+itags: [Telnet]		{{server_addr}}	{{server_port}}
+idate: 2016-07-27 16:42:00		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTelnet 是 1969 年发布的最古老的网络协议之一，却经久不衰，因为它实现简		{{server_addr}}	{{server_port}}
+i单，也可以用来实现一些有趣的用途。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i网络上有人开发出可以在 Telnet 终端中观看的彩虹猫（Nyancat），还有在		{{server_addr}}	{{server_port}}
+iTelnet 中观看的星球大战。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<img src="/usr/uploads/2016/07/3175903277.png" alt="屏幕快照 2016-07-27 下午4.33.48.png" />		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<img src="/usr/uploads/2016/07/43160460.png" alt="屏幕快照 2016-07-27 下午4.31.49.png" />		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<img src="/usr/uploads/2016/07/1644335517.png" alt="屏幕快照 2016-07-27 下午4.31.56.png" />		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在你的终端中输入以下内容，就可以看到 ASCII 字符版星球大战：（Windows 7		{{server_addr}}	{{server_port}}
+i及以上用户需要先到控制面板-程序与功能-添加删除 Windows 功能里选中		{{server_addr}}	{{server_port}}
+iTelnet 客户端功能才能使用）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+itelnet towel.blinkenlights.nl		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i输入以下内容就可以看到彩虹猫：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+itelnet nyancat.dakko.us		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我们也可以在自己的服务器上建立一个类似的 Telnet 服务，让它显示自己定义		{{server_addr}}	{{server_port}}
+i的内容。我们以在终端中显示黑客帝国数字雨的 CMatrix 软件为例，说明如何		{{server_addr}}	{{server_port}}
+i建立这个服务。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 登陆到你的 Debian 服务器上，输入下面的命令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iapt-get install openbsd-inetd telnetd cmatrix		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i并等待安装完成。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 创建 /opt/cmatrix.sh ，输入如下内容：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i#!/bin/sh		{{server_addr}}	{{server_port}}
+icmatrix -abu 2		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 编辑 /etc/inetd.conf ，在末尾追加以下内容：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+itelnet stream tcp nowait nobody /usr/sbin/tcpd /usr/sbin/in.telnetd -L /opt/cmatrix.sh		{{server_addr}}	{{server_port}}
+itelnet stream tcp6 nowait nobody /usr/sbin/tcpd /usr/sbin/in.telnetd -L /opt/cmatrix.sh		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 重启 inetd 服务：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+iservice inetd restart		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后，在你的电脑上输入 telnet «你的服务器地址»，就可以看到黑客帝国的数		{{server_addr}}	{{server_port}}
+i字雨效果了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i<img src="/usr/uploads/2016/07/40895505.png" alt="屏幕快照 2016-07-27 下午4.40.59.png" />		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我也在自己的服务器上做了设置，输入以下命令可以看到彩虹猫：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+itelnet lantian.pub 2001		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i输入以下命令可以看到数字雨：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+itelnet lantian.pub 2002		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

@@ -1,0 +1,218 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Setting up DN42 WHOIS Server with Nginx"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [nginx, WHOIS, DN42]		{{server_addr}}	{{server_port}}
+idate: 2021-04-19 02:12:15		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn my previous post,		{{server_addr}}	{{server_port}}
+"		{{server_addr}}	{{server_port}}
+1Setting up Gopher Site with Nginx	/en/article/modify-website/serve-gopher-with-nginx.lantian/	{{server_addr}}	{{server_port}}
+i",iI mentioned that the Gopher service is a byproduct of my original		{{server_addr}}	{{server_port}}
+iplan: modifying Nginx into a WHOIS server for DN42. This post will		{{server_addr}}	{{server_port}}
+iexplore into details of that process.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## The WHOIS Protocol		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, we can find a WHOIS server to observe its response. Choose the		{{server_addr}}	{{server_port}}
+iWHOIS server for `.pub` domain as an example, and run		{{server_addr}}	{{server_port}}
+i`telnet whois.nic.pub 43`:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# Type following line and hit enter		{{server_addr}}	{{server_port}}
+ilantian.pub		{{server_addr}}	{{server_port}}
+i# WHOIS server responded with:		{{server_addr}}	{{server_port}}
+iDomain Name: lantian.pub		{{server_addr}}	{{server_port}}
+iRegistry Domain ID: c69e5ccf9d834900be26f88fddc5c9e4-DONUTS		{{server_addr}}	{{server_port}}
+iRegistrar WHOIS Server: whois.dnspod.cn		{{server_addr}}	{{server_port}}
+iRegistrar URL: https://www.dnspod.cn		{{server_addr}}	{{server_port}}
+iUpdated Date: 2021-01-07T14:09:11Z		{{server_addr}}	{{server_port}}
+iCreation Date: 2016-10-23T08:36:41Z		{{server_addr}}	{{server_port}}
+iRegistry Expiry Date: 2029-10-23T08:36:41Z		{{server_addr}}	{{server_port}}
+iRegistrar: DNSPod, Inc.		{{server_addr}}	{{server_port}}
+i# Snip		{{server_addr}}	{{server_port}}
+i# Then WHOIS server closes connection		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis is exactly the same as Gopher, another protocol that creates one		{{server_addr}}	{{server_port}}
+iresponse to each request. Therefore, I can simply reuse my Gopher		{{server_addr}}	{{server_port}}
+icodebase for my WHOIS server instead of adding extra modifications.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Categorizing Queries		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince our nginx already had support for WHOIS, all we have to do is to		{{server_addr}}	{{server_port}}
+iadd data. However, "adding data" to a WHOIS server is not an easy		{{server_addr}}	{{server_port}}
+itask. Take the [DN42 Registry](https://git.dn42.dev/dn42/registry) for		{{server_addr}}	{{server_port}}
+iexample. Its data is categorized into:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `as-block`: Range of ASN, defining allocation policies.		{{server_addr}}	{{server_port}}
+i- `as-set`: Group of ASNs, managed by each AS individually. It's used		{{server_addr}}	{{server_port}}
+i  to label peered AS and downstream customers for automated routing		{{server_addr}}	{{server_port}}
+i  policy generation on the Internet, but is not that useful in DN42.		{{server_addr}}	{{server_port}}
+i- `aut-num`: Information for the AS itself.		{{server_addr}}	{{server_port}}
+i- `dns`: Domains.		{{server_addr}}	{{server_port}}
+i- `inet6num`: **Allocation** of IPv6 address blocks. This is not the		{{server_addr}}	{{server_port}}
+i  same as routing information.		{{server_addr}}	{{server_port}}
+i- `inetnum`: Allocation of IPv4 addresses blocks.		{{server_addr}}	{{server_port}}
+i- `key-cert`: User's GPG keys. Users can store their GPG public keys		{{server_addr}}	{{server_port}}
+i  here, if the use of a keyserver is unfeasible or impossible.		{{server_addr}}	{{server_port}}
+i- `mntner`: Information of network maintainers.		{{server_addr}}	{{server_port}}
+i- `organisation`: Information of organizations. For example, there's a		{{server_addr}}	{{server_port}}
+i  professor participating in DN42, who asks his students to peer in		{{server_addr}}	{{server_port}}
+i  DN42 as networking practices. He can form an organization with his		{{server_addr}}	{{server_port}}
+i  students in this case.		{{server_addr}}	{{server_port}}
+i- `person`: Information of users. What's different from `mntner` it		{{server_addr}}	{{server_port}}
+i  that `person` is more focused on contact information.		{{server_addr}}	{{server_port}}
+i- `registry`: Information of registries. A "registry", including RIPE		{{server_addr}}	{{server_port}}
+i  or APNIC, manages IP and ASN. Information of interconnected networks		{{server_addr}}	{{server_port}}
+i  is also here, for example ChaosVPN and NeoNetwork.		{{server_addr}}	{{server_port}}
+i- `role`: User role information for permission granting purposes.		{{server_addr}}	{{server_port}}
+i  Rarely used in DN42.		{{server_addr}}	{{server_port}}
+i- `route`: **Routing** information for IPv4 blocks. An IP block can be		{{server_addr}}	{{server_port}}
+i  split to smaller blocks for announcements.		{{server_addr}}	{{server_port}}
+i- `route6`: Routing information for IPv6 blocks.		{{server_addr}}	{{server_port}}
+i- `route-set`: Defines the IP space of DN42.		{{server_addr}}	{{server_port}}
+i- `schema`: Defines file format in the registry.		{{server_addr}}	{{server_port}}
+i- `tinc-key`: Public keys of Tinc VPN.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen users perform a query, they will only provide the query target		{{server_addr}}	{{server_port}}
+iitself, not category/type information. Example queries are		{{server_addr}}	{{server_port}}
+i`lantian.dn42`, `172.22.76.185` or `LANTIAN-MNT`. Luckily, files in		{{server_addr}}	{{server_port}}
+ithe DN42 registry are named after conventions different for each type,		{{server_addr}}	{{server_port}}
+iso a query type can be inferred, and we will know which folder to		{{server_addr}}	{{server_port}}
+icheck.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Of course, no one's stopping you from putting everything into a		{{server_addr}}	{{server_port}}
+i> single folder. It will definitely create a mess, though.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo I wrote a tiny bit of regular expressions:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+irewrite "^/([0-9]{1})$" /aut-num/AS424242000$1 last;		{{server_addr}}	{{server_port}}
+irewrite "^/([0-9]{2})$" /aut-num/AS42424200$1 last;		{{server_addr}}	{{server_port}}
+irewrite "^/([0-9]{3})$" /aut-num/AS4242420$1 last;		{{server_addr}}	{{server_port}}
+irewrite "^/([0-9]{4})$" /aut-num/AS424242$1 last;		{{server_addr}}	{{server_port}}
+irewrite "^/([Aa][Ss]|)([0-9]+)$" /aut-num/AS$2 last;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+irewrite "^/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/([0-9]+)$" /inetnum/$1.$2.$3.$4_$5 last;		{{server_addr}}	{{server_port}}
+irewrite "^/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$" /inetnum/$1.$2.$3.$4_32 last;		{{server_addr}}	{{server_port}}
+irewrite "^/([0-9a-fA-F:]+)/([0-9]+)$" /inet6num/$1_$2 last;		{{server_addr}}	{{server_port}}
+irewrite "^/([0-9a-fA-F:]+)$" /inet6num/$1_128 last;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+irewrite "^/([^/]+)-([Dd][Nn]42)$" /person/$1-DN42 last;		{{server_addr}}	{{server_port}}
+irewrite "^/([^/]+)-([Mm][Nn][Tt])$" /mntner/$1-MNT last;		{{server_addr}}	{{server_port}}
+irewrite "^/([^/]+)-([Ss][Cc][Hh][Ee][Mm][Aa])$" /schema/$1-SCHEMA last;		{{server_addr}}	{{server_port}}
+irewrite "^/([Oo][Rr][Gg])-(.+)$" /organisation/ORG-$2 last;		{{server_addr}}	{{server_port}}
+irewrite "^/([Ss][Ee][Tt])-(.+)-([Tt][Ii][Nn][Cc])$" /tinc-keyset/SET-$2-TINC last;		{{server_addr}}	{{server_port}}
+irewrite "^/([^/]+)-([Tt][Ii][Nn][Cc])$" /tinc-key/$1-TINC last;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+irewrite "^/([Rr][Ss])-(.+)$" /route-set/RS-$2 last;		{{server_addr}}	{{server_port}}
+irewrite "^/([Aa][Ss])([0-9]+)-([Aa][Ss])([0-9]+)$" /as-block/$1$2-$3$4 last;		{{server_addr}}	{{server_port}}
+rewrite "^/[Aa]		{{server_addr}}	{{server_port}}
+1Ss	/en/article/modify-website/serve-dn42-whois-with-nginx.lantian/.+	{{server_addr}}	{{server_port}}
+i$" /as-set/AS$1 last;i		{{server_addr}}	{{server_port}}
+irewrite "^/([^/]+)$" /dns/$1 last;		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWe aren't done yet, since the ext4 filesystem of Linux is case		{{server_addr}}	{{server_port}}
+isensitive. If a file is named `LANTIAN-MNT` in the registry, you will		{{server_addr}}	{{server_port}}
+iget 404 when you look for `lantian-mnt`. The WHOIS client in Linux,		{{server_addr}}	{{server_port}}
+ifor example, converts all queries to lower case. Therefore, we have to		{{server_addr}}	{{server_port}}
+iconvert upper/lower case for each folder, for example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> I'm using Lua here since Nginx itself isn't capable of transforming		{{server_addr}}	{{server_port}}
+i> upper/lower cases.		{{server_addr}}	{{server_port}}
+i>		{{server_addr}}	{{server_port}}
+i> You will need to replace Nginx with		{{server_addr}}	{{server_port}}
+i> [OpenResty](https://openresty.org) to use Lua.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+ilocation ~* "^/(dns)/(.*)$" {		{{server_addr}}	{{server_port}}
+i    set_by_lua $uri_norm "return '/' .. ngx.arg[1]:lower() .. '/' .. ngx.arg[2]:lower()" $1 $2;		{{server_addr}}	{{server_port}}
+i    try_files $uri_norm $uri =404;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ilocation ~* "^/(aut-num|person|mntner|schema|organisation|tinc-keyset|tinc-key|as-set|route-set|as-block)/(.*)$" {		{{server_addr}}	{{server_port}}
+i    set_by_lua $uri_norm "return '/' .. ngx.arg[1]:lower() .. '/' .. ngx.arg[2]:upper()" $1 $2;		{{server_addr}}	{{server_port}}
+i    try_files $uri_norm $uri =404;		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Matching Smallest IP Block		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe regular expressions and case conversion can handle many of the		{{server_addr}}	{{server_port}}
+icontents in the registry, but the most important piece is missing: IP		{{server_addr}}	{{server_port}}
+iaddresses. The user may be looking up single IP addresses or IP		{{server_addr}}	{{server_port}}
+iblocks, and the WHOIS server needs to return the information for a		{{server_addr}}	{{server_port}}
+ilarger (or equal) IP block containing the target IP. Suppose we have		{{server_addr}}	{{server_port}}
+ithree IP blocks in our registry:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `192.168.0.0/16`		{{server_addr}}	{{server_port}}
+i- `192.168.16.0/20`		{{server_addr}}	{{server_port}}
+i- `192.168.18.0/24`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUsers should get different responses when looking up different IPs and		{{server_addr}}	{{server_port}}
+iblocks:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `192.168.18.18` -> `192.168.18.0/24`		{{server_addr}}	{{server_port}}
+i- `192.168.18.18/24` -> `192.168.18.0/24`		{{server_addr}}	{{server_port}}
+i- `192.168.18.18/20` -> `192.168.16.0/20`		{{server_addr}}	{{server_port}}
+i- `192.168.17.1` -> `192.168.16.0/20`		{{server_addr}}	{{server_port}}
+i- `192.168.17.1/16` -> `192.168.0.0/16`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSuch logic cannot be implemented in simple regular expressions and		{{server_addr}}	{{server_port}}
+icase conversions. We need more complicated logic in Lua, with the		{{server_addr}}	{{server_port}}
+ifollowing steps:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```graphviz		{{server_addr}}	{{server_port}}
+idigraph {		{{server_addr}}	{{server_port}}
+i    S[shape=box,label="Start"]		{{server_addr}}	{{server_port}}
+i    A[shape=box,label="Calc first IP in block"]		{{server_addr}}	{{server_port}}
+i    B[shape=box,label="Decrease block size n from user input size (default 32)"]		{{server_addr}}	{{server_port}}
+i    C[shape=box,label="Only keep first n bits in IP, zero other bits"]		{{server_addr}}	{{server_port}}
+i    D[shape=diamond,label="IP/size file exists?"]		{{server_addr}}	{{server_port}}
+i    E[shape=box,label="Return file contents"]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i    S -> A		{{server_addr}}	{{server_port}}
+i    A -> B		{{server_addr}}	{{server_port}}
+i    B -> C		{{server_addr}}	{{server_port}}
+i    C -> D		{{server_addr}}	{{server_port}}
+i    D -> E[label="Yes"]		{{server_addr}}	{{server_port}}
+i    D -> B[label="No"]		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn other words, we're bruteforcing from /32, /31, and so on, until we		{{server_addr}}	{{server_port}}
+igot the target. This is not an efficient approach, but what's good is		{{server_addr}}	{{server_port}}
+ithat it doesn't need any preprocessing or caching on the registry		{{server_addr}}	{{server_port}}
+idata.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe code is available at		{{server_addr}}	{{server_port}}
+i[this GitHub Gist](https://gist.github.com/xddxdd/53efacf5b750c0f38759beff8e7b070d).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Final Effects		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+My WHOIS server is deployed to 		{{server_addr}}	{{server_port}}
+1all my DN42 nodes	/en/page/dn42/	{{server_addr}}	{{server_port}}
+i,iwhich can be queried over either the Internet or DN42:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```bash		{{server_addr}}	{{server_port}}
+i# User command input		{{server_addr}}	{{server_port}}
+iwhois -h 185.186.147.110 "172.22.76.185"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Returned WHOIS results		{{server_addr}}	{{server_port}}
+i% Lan Tian Nginx-based WHOIS Server Lua Logic		{{server_addr}}	{{server_port}}
+i% GET /172.22.76.185		{{server_addr}}	{{server_port}}
+iinetnum:            172.22.76.184 - 172.22.76.191		{{server_addr}}	{{server_port}}
+inetname:            LANTIAN-IPV4		{{server_addr}}	{{server_port}}
+idescr:              Lan Tian's IP space		{{server_addr}}	{{server_port}}
+iremarks:            My network is open to peering; see https://lantian.pub/page/dn42		{{server_addr}}	{{server_port}}
+iremarks:            or directly contact me at b980120@hotmail.com		{{server_addr}}	{{server_port}}
+icountry:            CN		{{server_addr}}	{{server_port}}
+i# Snip		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou may have a try yourself, to lookup DN42 IPs, domains, and users		{{server_addr}}	{{server_port}}
+iwith the WHOIS server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

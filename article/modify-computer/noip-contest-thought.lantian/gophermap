@@ -1,0 +1,80 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "NOIP复赛有感"		{{server_addr}}	{{server_port}}
+icategories: 计算机与客户端		{{server_addr}}	{{server_port}}
+itags: [OI]		{{server_addr}}	{{server_port}}
+idate: 2012-11-10 22:21:10		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNOIP 真是一年比一年水。之前被 XJOJ 上的题狂虐，这次终于轮到我虐题了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先是星期五。上午整个年级疯传 XXY 要救我们出去上课。然后我们去找班主		{{server_addr}}	{{server_port}}
+i任请假。然后我们 AC 了。中午吃完饭，坐上家长的车，去 XJ。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i车上我爸告诉我，他给我装了 Win8，让我试一下。我一打开，x64……话说我的声		{{server_addr}}	{{server_port}}
+i卡在 Win8 x64 下有 Bug 不能用……然后到了 XJ，下 x86 ISO，重装。一边重装		{{server_addr}}	{{server_port}}
+i一边拿出我的诺基亚 N81 逛 XJOJ……		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i话说刚到 XJ，电子阅览室人满为患，我一看就看到 JC 和 DZY 两个去虐提高组		{{server_addr}}	{{server_port}}
+i的牛，他们提早两天就把学校给 root 了，然后把自己给 unlock 了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i话说 xuejun-wireless 真的是一天比一天神犇，没事给你搞个无法访问		{{server_addr}}	{{server_port}}
+iInternet，以前苦于网线太短，这次带了一根超长的延长线，本来想着解决问题		{{server_addr}}	{{server_port}}
+i了，谁知发现 XJ 的网线接触不良……Orz		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i装完系统。我一边下各种驱动一边刷 OJ。这次放了一份奇异的比赛，可是我不		{{server_addr}}	{{server_port}}
+i想做，因为我不想失去信心……果断交样例。4 道题总共得了 10 分……		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i晚上又是一场比赛。我把前两道水题给刷了，后两题不想做了。结果数据太弱		{{server_addr}}	{{server_port}}
+i，200……		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i第二天早上到 XJ，又是一场比赛，XXY 已经去十四中陪提高组的人欢乐去了。		{{server_addr}}	{{server_port}}
+i然后我们就看着空白的比赛欢乐。（一道题都没有！）欢乐到 10 点，XXY 回来		{{server_addr}}	{{server_port}}
+i了，骂了我们一通，然后把题目都加上去了。然后 10 分不解释。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i11 点，一群人吃饭去了。然后 XXY 大吼一声：「不要去吃饭！去十四中吃！」		{{server_addr}}	{{server_port}}
+i然后我们集体无语。然后我们等那群人到 11：40。然后 XXY 让我们自己去买东		{{server_addr}}	{{server_port}}
+i西吃，12：00 回来，结果我们等到 12：06。顺便用这 20 分钟从		{{server_addr}}	{{server_port}}
+ixuejun-wireless 拉了个完美解码看视频。车上一群人建 WiFi 玩。还有各种娱		{{server_addr}}	{{server_port}}
+i乐活动。还有各种 3G，各种 2G，各种 G。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i到十四中，一下车就看到 JC 和 DZY。我马上拿出手机拍了一张，结果尼玛糊了		{{server_addr}}	{{server_port}}
+i……然后我们去领了一个宣传包，里面是资料，还有一把伞。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后我们去食堂吃饭。我看到饭菜就把自己的饭券送人了，靠 11：40 的胖子烧		{{server_addr}}	{{server_port}}
+i饼撑着。胖子烧饼是一家很经典的店，真的。然后去十四中礼堂。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i礼堂里各种欢乐，各种刷微博。我们看了十四中运动会的录像。我们还听一个小		{{server_addr}}	{{server_port}}
+i盆友唱歌，那频率让 WiFi 都自愧不如。WiFi 是 2.4Ghz，你懂的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后我们进场了。老师在黑板上写密码，竟然是收入翻番 2020……去年的「明年		{{server_addr}}	{{server_port}}
+i来提高组」被狠狠鄙视了。话说什么时候 CCF 可以激情地搞个汉字密码。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i解开包，果断把所有东西移到 E 盘（无还原），Win+R，cmd，e:\，cd		{{server_addr}}	{{server_port}}
+iZJ-xxxx，md xxx。一通 md，各种文件夹全建好了。再把 pdf 拷进去。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i打开 pdf，第一题是给两个质数的积，让你求比较大的那个。RSA 表示路过。暴		{{server_addr}}	{{server_port}}
+i搜有压力，但是打一个 27k 的表是个不错的选择。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i第二题是寻宝，一层层上楼，还要算密码什么的。果断模拟，压数据范围时时间		{{server_addr}}	{{server_port}}
+i无鸭梨。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i做到这儿工作人员开始发水和蛋糕，自带可乐路过。不一会儿，一个女生的声音		{{server_addr}}	{{server_port}}
+i传来：「老师，这瓶水打不开，KAO。」全教室 Pending 3 秒钟。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i第三题是放花，放 100 多种花。网上有人说是 DP，我不觉得。先是暴搜，数据		{{server_addr}}	{{server_port}}
+imax 时果断 TLE。然后突然想到可以记忆化（步步高升），果断记忆化秒杀之。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i第四题是 Bug。使者学习文化，还要避开学过文化的国家和各种排斥。明显是		{{server_addr}}	{{server_port}}
+iDijkstra 之类的，但是我们赛前忙着背快排，01 包，冒泡排……暴搜，只能过		{{server_addr}}	{{server_port}}
+i30%……然后我干脆在程序里加上判断，数据太大直接 writeln(-1)，至少会好看		{{server_addr}}	{{server_port}}
+i很多。个人觉得 WA 比 TLE 漂亮。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后一起加上文件 IO，然后再用注释附上数据生成器和旧版本，拷进自己的文		{{server_addr}}	{{server_port}}
+i件夹，然后开始看 Pascal 的技术文档。去年比赛时我也是这样干的。有人玩扫		{{server_addr}}	{{server_port}}
+i雷。有人玩蜘蛛纸牌。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i比赛结束了，我一出考场就开手机发微博。话说今年考场没信号屏蔽，去年考场		{{server_addr}}	{{server_port}}
+i信号屏蔽，结果我忘了关手机，然后手机没电了……发完微博，一路往下走，和同		{{server_addr}}	{{server_port}}
+i学和家长会合。Game Over。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

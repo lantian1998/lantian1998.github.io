@@ -1,0 +1,110 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Bird-lg in Go (Bird Looking Glass)"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: [Bird-lg]		{{server_addr}}	{{server_port}}
+idate: 2019-01-08 23:40:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2019/01/2163803638.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## What's BIRD? And What's Bird-lg?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBIRD is a popular BGP routing software used on Linux. I mainly use		{{server_addr}}	{{server_port}}
+1Bird in the DN42 network	/article/modify-website/join-dn42-experimental-network.lantian	{{server_addr}}	{{server_port}}
+i,ito establish connections with other users.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i[Bird-lg](https://github.com/sileht/bird-lg) is a Python 2 based		{{server_addr}}	{{server_port}}
+iprogram developed by GitHub user sileht. It provides a web interface		{{server_addr}}	{{server_port}}
+ito show the status of BIRD routing software on each server, as well as		{{server_addr}}	{{server_port}}
+iquery routes to specified IPs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Why Rewrite in Go?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Bird-lg is based on Python 2 and Flask and takes more memory		{{server_addr}}	{{server_port}}
+i  (20-30MB).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Bird-lgproxy also takes around 20MB and is required on every server.		{{server_addr}}	{{server_port}}
+i  On the 512MB VPS where this site is hosted, there had been multiple		{{server_addr}}	{{server_port}}
+i  cases where memory ran out, and the on-disk SWAP was too slow. In		{{server_addr}}	{{server_port}}
+i  this case, Docker, Nginx, MySQL, PHP would crash one after one, and		{{server_addr}}	{{server_port}}
+i  a reboot would be necessary.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- The rewritten version in Go takes only 6 MB.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Bird-lg queries status of multiple servers in **series** rather than		{{server_addr}}	{{server_port}}
+i  parallel. Sometimes when the network condition was being subpar, or		{{server_addr}}	{{server_port}}
+i  ZeroTier One had a glitch, it would take a long time to read all the		{{server_addr}}	{{server_port}}
+i  statuses.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- The rewritten version in Go uses Goroutines to query multiple		{{server_addr}}	{{server_port}}
+i  servers in **parallel** rather than serial. Page loading latency is		{{server_addr}}	{{server_port}}
+i  reduced by magnitudes when there are many servers or when the		{{server_addr}}	{{server_port}}
+i  network is bad.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- This is also my practice in programming in Go.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## What Functionalities are Done?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor Bird-lgproxy the following things are done:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Sending requests to Bird		{{server_addr}}	{{server_port}}
+i- Running Traceroute and returning the result		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor Bird-lg the following things are done:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Basic status display:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+  		{{server_addr}}	{{server_port}}
+IBasic Status Display	/usr/uploads/2019/01/2163803638.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Querying route information to specified IP:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+  		{{server_addr}}	{{server_port}}
+IQuerying Route Information to Specified IP	/usr/uploads/2019/01/3361004803.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- IP & ASN highlighting in results, and WHOIS lookups:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+  		{{server_addr}}	{{server_port}}
+IWHOIS Domain Queries	/usr/uploads/2019/01/2074591260.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+  		{{server_addr}}	{{server_port}}
+IWHOIS ASN Queries	/usr/uploads/2019/01/1327536764.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Traceroute (which shows a routing issue to DN42 right now):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+  		{{server_addr}}	{{server_port}}
+ITraceroute Output	/usr/uploads/2019/01/408903664.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## What Aren't Done?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCompared to the		{{server_addr}}	{{server_port}}
+i[Bird-lg in Python](https://github.com/sileht/bird-lg), Bird-lgproxy		{{server_addr}}	{{server_port}}
+ilacks the following functionalities:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- IP source restriction		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBird-lg lacks:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Query history on the right of the page		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI don't implement these features since I don't need them. For example,		{{server_addr}}	{{server_port}}
+iI simply set Bird-lgproxy to listen on a specific network interface		{{server_addr}}	{{server_port}}
+iand use this as a way of source restriction.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Demonstration		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iProject site & Source code: <https://github.com/xddxdd/bird-lg-go>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSimply `go build` in the corresponding directory. Use `-h` parameter		{{server_addr}}	{{server_port}}
+ito see available parameter items. The program doesn't have a		{{server_addr}}	{{server_port}}
+iconfiguration file, and all configuration is done via parameters.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDemo site: <https://lg.lantian.pub>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI also modified the Python bird-lg and added parallel requests with		{{server_addr}}	{{server_port}}
+i`grequests`. The project is available at		{{server_addr}}	{{server_port}}
+i<https://github.com/xddxdd/bird-lg>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBy the way, the Go Bird-lgproxy is a direct replacement for Python		{{server_addr}}	{{server_port}}
+iBird-lgproxy, and can work together with the Python Bird-lg.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.

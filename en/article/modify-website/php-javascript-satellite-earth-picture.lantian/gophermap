@@ -1,0 +1,133 @@
+i---		{{server_addr}}	{{server_port}}
+ititle: "Show Earth Satellite Images with PHP and Javascript"		{{server_addr}}	{{server_port}}
+icategories: "Website and Servers"		{{server_addr}}	{{server_port}}
+itags: ["Himawari 8"]		{{server_addr}}	{{server_port}}
+idate: 2016-06-14 22:40:00		{{server_addr}}	{{server_port}}
+iimage: /usr/uploads/2016/06/1359531479.png		{{server_addr}}	{{server_port}}
+i---		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> The Himawari 8 weather satellite is one of the Himawari satellites		{{server_addr}}	{{server_port}}
+i> made by JAXA, weighs around 3500kg and has an expected lifespan of		{{server_addr}}	{{server_port}}
+i> over 15 years. The satellite was successfully launched on October 7,		{{server_addr}}	{{server_port}}
+i> 2014 with the H2A rocket and is mainly used to monitor storm clouds,		{{server_addr}}	{{server_port}}
+i> tsunamis, and active volcanos.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter launch, in addition to preventing natural disasters, Japan also		{{server_addr}}	{{server_port}}
+ireleased photos taken by the satellite on the Internet, which can be		{{server_addr}}	{{server_port}}
+idownloaded by enthusiasts. The photo is released on the official		{{server_addr}}	{{server_port}}
+iwebsite at <http://himawari8.nict.go.jp/>m and is updated every 10th		{{server_addr}}	{{server_port}}
+iminute (like 9:30, 9:40...), with a 30-minute delay (the photo you see		{{server_addr}}	{{server_port}}
+iat 10:00 is taken at 9:30).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext, we're going to investigate how to obtain these pictures. With		{{server_addr}}	{{server_port}}
+ithe network monitor functionality of the browser, we can see the		{{server_addr}}	{{server_port}}
+irequest URL:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2016/06/1359531479.png	/usr/uploads/2016/06/1359531479.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn this case, the URL is		{{server_addr}}	{{server_port}}
+i`http://himawari8-dl.nict.go.jp/himawari8/img/D531106/2d/550/2016/06/14/140000_0_1.png`.		{{server_addr}}	{{server_port}}
+iThere are a few important parameters:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 2d		{{server_addr}}	{{server_port}}
+i  - For image resolution. 2d means that the full image is split to 2x2		{{server_addr}}	{{server_port}}
+i    grids of 550px x 550px each, or a total of 1100px x 1100px. By the		{{server_addr}}	{{server_port}}
+i    way the website provides resolutions up to 20d, or 11000px x		{{server_addr}}	{{server_port}}
+i    11000px. Of course, don't try this unless you have an extremely		{{server_addr}}	{{server_port}}
+i    fat Internet pipe.		{{server_addr}}	{{server_port}}
+i- 2016/06/14		{{server_addr}}	{{server_port}}
+i  - The date.		{{server_addr}}	{{server_port}}
+i- 140000		{{server_addr}}	{{server_port}}
+i  - UTC time for the picture. The image accessible at the URL is taken		{{server_addr}}	{{server_port}}
+i    at 14:00 UTC and released at 14:30 UTC.		{{server_addr}}	{{server_port}}
+i- 0_1		{{server_addr}}	{{server_port}}
+i  - Image coordinate in the grid. The two parameters are column and		{{server_addr}}	{{server_port}}
+i    row indexes, starting from 0. In this case, the image from the		{{server_addr}}	{{server_port}}
+i    first column, second row is requested.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWith knowledge of the uses of the parameters, we can start coding. The		{{server_addr}}	{{server_port}}
+ifollowing PHP code outputs 4 images in a 2d grid in a table.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i```php		{{server_addr}}	{{server_port}}
+i<?php		{{server_addr}}	{{server_port}}
+ifunction getHimawariUrl($d = 1,$x = 0, $y = 0){		{{server_addr}}	{{server_port}}
+i    date_default_timezone_set('UTC');		{{server_addr}}	{{server_port}}
+i    $pictime = time() - time() % 600 - 1800;		{{server_addr}}	{{server_port}}
+i    $date = date('Y/m/d/Hi',$pictime);		{{server_addr}}	{{server_port}}
+i    return "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/".$d."d/550/".$date."00_".$x."_".$y.".png";		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+ifunction writeHimawariTable($d=1){		{{server_addr}}	{{server_port}}
+i    echo '<table style="margin:0;padding:0;cell-spacing:0">';		{{server_addr}}	{{server_port}}
+i    for($i=0;$i<$d;$i++){		{{server_addr}}	{{server_port}}
+i        echo '<tr>';		{{server_addr}}	{{server_port}}
+i            for ($j=0;$j<$d;$j++){		{{server_addr}}	{{server_port}}
+i                echo '<td><img src="'.getHimawariUrl($d,$j,$i).'" /></td>';		{{server_addr}}	{{server_port}}
+i            }		{{server_addr}}	{{server_port}}
+i        echo '</tr>';		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    echo '</table>';		{{server_addr}}	{{server_port}}
+i}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iwriteHimawariTable(2);		{{server_addr}}	{{server_port}}
+i?>		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe following Javascript (needs jQuery) outputs an 1d image, result		{{server_addr}}	{{server_port}}
+can be seen 		{{server_addr}}	{{server_port}}
+1here	/en/page/himawari/	{{server_addr}}	{{server_port}}
+i:i		{{server_addr}}	{{server_port}}
+i```html		{{server_addr}}	{{server_port}}
+i<script>		{{server_addr}}	{{server_port}}
+i  $(document).ready(function () {		{{server_addr}}	{{server_port}}
+i    var today = new Date();		{{server_addr}}	{{server_port}}
+i    // get date for himawari picture		{{server_addr}}	{{server_port}}
+i    t = today.getTime();		{{server_addr}}	{{server_port}}
+i    t = t - (t % 600000) - 1800000;		{{server_addr}}	{{server_port}}
+i    today.setTime(t);		{{server_addr}}	{{server_port}}
+i    year = today.getUTCFullYear();		{{server_addr}}	{{server_port}}
+i    month = today.getUTCMonth() + 1;		{{server_addr}}	{{server_port}}
+i    day = today.getUTCDate();		{{server_addr}}	{{server_port}}
+i    hour = today.getUTCHours();		{{server_addr}}	{{server_port}}
+i    minute = today.getUTCMinutes();		{{server_addr}}	{{server_port}}
+i    if (month < 10) month = "0" + month;		{{server_addr}}	{{server_port}}
+i    if (day < 10) day = "0" + day;		{{server_addr}}	{{server_port}}
+i    if (hour < 10) hour = "0" + hour;		{{server_addr}}	{{server_port}}
+i    if (minute < 10) minute = "0" + minute;		{{server_addr}}	{{server_port}}
+i    $("#himawari-time").text(today.toLocaleString());		{{server_addr}}	{{server_port}}
+i    $("#himawari-pic").attr(		{{server_addr}}	{{server_port}}
+i      "src",		{{server_addr}}	{{server_port}}
+i      "//himawari.xuyh0120.win/1d/550/" +		{{server_addr}}	{{server_port}}
+i        year +		{{server_addr}}	{{server_port}}
+i        "/" +		{{server_addr}}	{{server_port}}
+i        month +		{{server_addr}}	{{server_port}}
+i        "/" +		{{server_addr}}	{{server_port}}
+i        day +		{{server_addr}}	{{server_port}}
+i        "/" +		{{server_addr}}	{{server_port}}
+i        hour +		{{server_addr}}	{{server_port}}
+i        minute +		{{server_addr}}	{{server_port}}
+i        "00_0_0.webp"		{{server_addr}}	{{server_port}}
+i    );		{{server_addr}}	{{server_port}}
+i  });		{{server_addr}}	{{server_port}}
+i</script>		{{server_addr}}	{{server_port}}
+i<p id="himawari-time">Loading...</p>		{{server_addr}}	{{server_port}}
+i<img id="himawari-pic" src="" />		{{server_addr}}	{{server_port}}
+i```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhile using the images, please note that since the satellite photo		{{server_addr}}	{{server_port}}
+iproject is non-profit, there is no guarantee for availability. It is		{{server_addr}}	{{server_port}}
+ipossible that an API change or excess bandwidth consumption will kill		{{server_addr}}	{{server_port}}
+ithe website. Other projects that use the images here, including		{{server_addr}}	{{server_port}}
+i[EarthLiveSharp](https://github.com/bitdust/EarthLiveSharp) and		{{server_addr}}	{{server_port}}
+i[Mantou Earth (Chinese Page)](http://www.coolapk.com/apk/ooo.oxo.apps.earth),		{{server_addr}}	{{server_port}}
+ihave their own CDNs to reduce the load on original servers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTherefore I built my own CDN that caches images and converts them to		{{server_addr}}	{{server_port}}
+iWebP. To support WebP on IE and Firefox, you may read		{{server_addr}}	{{server_port}}
+1this post	/en/article/modify-website/ie-firefox-webp-support.lantian	{{server_addr}}	{{server_port}}
+i.i		{{server_addr}}	{{server_port}}
+iThe source website, `himawari8-dl.nict.go.jp`, can be simply CNAMEd to		{{server_addr}}	{{server_port}}
+iyour own domain, where you can add a CDN to it. Therefore, please pay		{{server_addr}}	{{server_port}}
+iattention to the request frequency, and set up your own CDN if		{{server_addr}}	{{server_port}}
+ipossible.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+.
