@@ -1,0 +1,90 @@
+iIPv4 is currently the most widely supported network protocol, where		{{server_host}}	{{server_port}}
+icomputers are identified by IP addresses. Theoretically, it can		{{server_host}}	{{server_port}}
+iaccommodate up to		{{server_host}}	{{server_port}}
+inetwork devices (IPv4: 8 hexadecimal digits). Unfortunately, these		{{server_host}}	{{server_port}}
+iaddresses have been exhausted, and it's truly a mystery how major ISPs		{{server_host}}	{{server_port}}
+iallocate limited IP addresses to an infinite number of computers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIPv6 is far more impressive, with each address containing 32		{{server_host}}	{{server_port}}
+ihexadecimal digits, allowing for		{{server_host}}	{{server_port}}
+inetwork devices. These IP addresses will be more than sufficient		{{server_host}}	{{server_port}}
+ibefore humanity perishes due to Earth's inability to sustain us. This		{{server_host}}	{{server_port}}
+iprotocol is championed by major internet companies including Google,		{{server_host}}	{{server_port}}
+iDNSPod, and others. However, currently in China, IPv6 seems to be used		{{server_host}}	{{server_port}}
+ionly in universities, while ordinary households are limited to IPv4.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Note: Even universities have incomplete implementations.		{{server_host}}	{{server_port}}
+iInternationally, IPv4 and IPv6 are generally supported simultaneously,		{{server_host}}	{{server_port}}
+ibut within China's education network, only IPv6 is available.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs IPv6 resources become increasingly abundant, we can leverage		{{server_host}}	{{server_port}}
+isoftware solutions to access IPv6 before Chinese ISPs take action.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1. Miredo (Teredo) Section		{{server_host}}	{{server_port}}
+iMiredo appears to be a program developed by an open-source		{{server_host}}	{{server_port}}
+iorganization to achieve IPv4-IPv6 interoperability. Later, the		{{server_host}}	{{server_port}}
+iprotocol was adopted by Microsoft and integrated into Windows 7, with		{{server_host}}	{{server_port}}
+iMicrosoft also donating a server. Miredo can enable basic IPv4-IPv6		{{server_host}}	{{server_port}}
+iinteroperability, but due to its extremely limited nodes, speeds are		{{server_host}}	{{server_port}}
+ipainfully slow.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iModify the content to the following:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe three ServerAddresses listed are the only remaining available		{{server_host}}	{{server_port}}
+iservers: the first is Microsoft's, the second is the default		{{server_host}}	{{server_port}}
+i(maintained by the open-source community), and the third is of unknown		{{server_host}}	{{server_port}}
+iorigin.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThese servers are geographically distant from China, resulting in slow		{{server_host}}	{{server_port}}
+ispeeds. They can barely open Google and struggle with Baidu, making		{{server_host}}	{{server_port}}
+ithem suitable only for demonstration purposes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter modification, execute:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLook for a network device named "teredo" – that's the one.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2. gogoCLIENT Section		{{server_host}}	{{server_port}}
+igogoCLIENT was developed by the gogo6 website, which specializes in		{{server_host}}	{{server_port}}
+iselling IPv6-compatible devices. They created gogoCLIENT and made it		{{server_host}}	{{server_port}}
+iopen-source. The drawback is that nodes remain scarce. Another issue:		{{server_host}}	{{server_port}}
+ithe gogo6 package in Ubuntu's repositories doesn't work, and manual		{{server_host}}	{{server_port}}
+icompilation consistently fails.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, I installed an XP virtual machine using QEMU:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen download gogoCLIENT (requires registration):		{{server_host}}	{{server_port}}
+hhttp://www.gogo6.com/profile/gogoCLIENT	URL:http://www.gogo6.com/profile/gogoCLIENT	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstall it in the virtual machine. After installation, open		{{server_host}}	{{server_port}}
+igogoCLIENT, change the Server Address to "hg.tfn.net.tw", and click		{{server_host}}	{{server_port}}
+iConnect. Soon, you'll be connected to the IPv6 network. I recommend		{{server_host}}	{{server_port}}
+ithis method because gogo6 has more servers than Miredo. The Taiwanese		{{server_host}}	{{server_port}}
+iserver above offers fast speeds. Official alternatives include		{{server_host}}	{{server_port}}
+imontreal.freenet6.net (Montreal), amsterdam.freenet6.net (Amsterdam),		{{server_host}}	{{server_port}}
+iand taiwan.freenet6.net (Taiwan, which I couldn't connect to). Note:		{{server_host}}	{{server_port}}
+iThe first two require a username/password, obtainable via gogo6		{{server_host}}	{{server_port}}
+iregistration (separate from account credentials).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, we'll route IPv6 to the host. First, solve QEMU autostart. To		{{server_host}}	{{server_port}}
+iavoid a large window on the screen, I chose a VNC background desktop:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConnect to the VM using Remmina and install the proxy software Apache.		{{server_host}}	{{server_port}}
+i(CCProxy doesn't support IPv6.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, install Apache 1.3. Then stop Apache 1.3 via the service		{{server_host}}	{{server_port}}
+imanager, delete all files in C:\Program Files\Apache Group\Apache, and		{{server_host}}	{{server_port}}
+ireplace them with the following:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote: The original Apache version has poor IPv6 support. Download my		{{server_host}}	{{server_port}}
+imodified Apache 1.3 version, preconfigured for HTTP proxy.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDownload:		{{server_host}}	{{server_port}}
+1/usr/uploads/2013/04/1343548325.7z	/usr/uploads/2013/04/1343548325.7z	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStart the service via the service manager. It should work immediately.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSet your host browser's proxy to HTTP 127.0.0.1:1080 and visit		{{server_host}}	{{server_port}}
+hwww.kame.net	URL:http://www.kame.net	{{server_host}}	{{server_port}}
+i. The turtle animation should move – if not, your configuration has		{{server_host}}	{{server_port}}
+iissues.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

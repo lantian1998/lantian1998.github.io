@@ -1,0 +1,31 @@
+iMost people use passwords to log into a Linux shell remotely. Not only		{{server_host}}	{{server_port}}
+iis it tedious, but if you use the same password everywhere and		{{server_host}}	{{server_port}}
+iencounter an incident like the CSDN 6 million password leak, your VPS		{{server_host}}	{{server_port}}
+iis essentially compromised. Therefore, we can replace passwords with a		{{server_host}}	{{server_port}}
+imore convenient and secure method: RSA-encrypted certificate files.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, we need to generate a certificate.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAt this point, your `.ssh` directory should contain two new files:		{{server_host}}	{{server_port}}
+i`id_rsa.pub` and `id_rsa`. The latter is your private key—keep it		{{server_host}}	{{server_port}}
+isecure—while the former is your public key, which can be shared		{{server_host}}	{{server_port}}
+ipublicly. Next, we'll configure our VPS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUpload your `id_rsa.pub` to the server's `~/.ssh` directory using		{{server_host}}	{{server_port}}
+iFileZilla or WinSCP, and rename it to `authorized_keys`. Note that		{{server_host}}	{{server_port}}
+ithis file must be placed under the target user's `.ssh` directory		{{server_host}}	{{server_port}}
+i(e.g., `/root/.ssh` for root, `/home/lantian/.ssh` for lantian). Then		{{server_host}}	{{server_port}}
+iadjust the OpenSSH settings:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iModify the following settings:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter saving, run `service ssh restart`. Disconnect and reconnect via		{{server_host}}	{{server_port}}
+iSSH—if you log in with just your username, it's successful. If		{{server_host}}	{{server_port}}
+iprompted for a password, review the previous steps. Once confirmed,		{{server_host}}	{{server_port}}
+iyou can further enhance security by disabling password login:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor added security, log in via SSH and set the `authorized_keys` file		{{server_host}}	{{server_port}}
+ipermissions to `600` and the `.ssh` directory to `700`. On your local		{{server_host}}	{{server_port}}
+imachine, similarly set both key files to `600` and the `.ssh`		{{server_host}}	{{server_port}}
+idirectory to `700`. This significantly improves security.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

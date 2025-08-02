@@ -1,0 +1,26 @@
+IHitokoto	/usr/uploads/2013/08/1999601044.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHitokoto是一个一句话吐槽网站。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i所谓一句话吐槽，就是用一句话的方式，记录自己的所说、所做、所想，并与别人		{{server_host}}	{{server_port}}
+i分
+享。Hitokoto就提供了一个让大家分享吐槽的网站。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是很明显，这篇文章的目的不是讲这个。我讲的是他的API，也就是在自己网站		{{server_host}}	{{server_port}}
+i上显示这
+些吐槽。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1.PHP服务器端拉取		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i提示：这种方法我不建议，因为拖慢页面加载速度，如果你服务器不在北美或加拿		{{server_host}}	{{server_port}}
+i大
+（Hitokoto主站在加拿大）更是这样。如果你的网站刚好遭到CC……在你的上传		{{server_host}}	{{server_port}}
+i下载都被占满
+的时候，你就节哀顺变吧。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.Javascript客户端拉取		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这种方法我喜欢，让客户端自己去读取数据，既省时间，又省服务器资源。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i演示：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

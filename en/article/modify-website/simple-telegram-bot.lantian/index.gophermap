@@ -1,0 +1,156 @@
+iBased on the requests of		{{server_host}}	{{server_port}}
+hDN42 Telegram Group	URL:https://t.me/Dn42Chat	{{server_host}}	{{server_port}}
+imembers, I
+plan to add Telegram Bot support to my		{{server_host}}	{{server_port}}
+1Bird Looking Glass	/en/article/modify-website/go-bird-looking-glass.lantian	{{server_host}}	{{server_port}}
+i,
+so it is easier for them to look up whois information, testing		{{server_host}}	{{server_port}}
+inetworks and
+finding sources of route leaks. The bot is supposed to		{{server_host}}	{{server_port}}
+irecognize commands
+starting with `/`, and respond to the message.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMy Looking Glass is written in Go, so at the beginning, I looked for		{{server_host}}	{{server_port}}
+iTelegram
+Bot APIs in the Go language. However, those popular API		{{server_host}}	{{server_port}}
+ilibraries all use the
+same scheme for handling requests:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Telegram server sends a callback to my own server;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- My program handles the request and may send multiple requests		{{server_host}}	{{server_port}}
+iactively to the
+Telegram server, authenticated with a locally		{{server_host}}	{{server_port}}
+iconfigured Token;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Finally, the program actively sends a request to the Telegram server		{{server_host}}	{{server_port}}
+ito send
+the response.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhile powerful, this scheme is a bit too complicated, and I don't need		{{server_host}}	{{server_port}}
+ithe extra
+functionalities anyway. I rather prefer to use		{{server_host}}	{{server_port}}
+hthe other way provided by Telegram	URL:https://core.telegram.org/bots/faq#how-can-i-make-requests-in-response-to-updates	{{server_host}}	{{server_port}}
+i,
+by directly responding to the callback HTTP request:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Telegram server sends a callback to my own server;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- My program handles the request and replies to the callback request		{{server_host}}	{{server_port}}
+idirectly to
+send the response message.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlthough this has the limitation of one reply (or action) per request		{{server_host}}	{{server_port}}
+i(or
+message), this is enough for me, considering that my bot only		{{server_host}}	{{server_port}}
+ineeds to reply
+once anyway. In addition, this scheme has the following		{{server_host}}	{{server_port}}
+ibenefits:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Extremely easy to program, and no dependency on third-party		{{server_host}}	{{server_port}}
+ilibraries.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The server no longer needs the token, which reduces needed		{{server_host}}	{{server_port}}
+iconfiguration
+efforts and improved security. It's also much easier to		{{server_host}}	{{server_port}}
+iconfigure multiple
+bots which perform different tasks based on		{{server_host}}	{{server_port}}
+icallback URLs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- No CPU cycle, network bandwidth, and latency spent on the extra		{{server_host}}	{{server_port}}
+iHTTP
+requests.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iParsing Callback Requests		{{server_host}}	{{server_port}}
+iTelegram's callback requests are sent as JSON attached to the body of		{{server_host}}	{{server_port}}
+iHTTP POST
+requests. Telegram's official document provided an example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs a bot that only cares about the command itself, we only need to		{{server_host}}	{{server_port}}
+iextract the
+following information from the request:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `message/message_id`: ID of the message, needed to reply/quote the		{{server_host}}	{{server_port}}
+ioriginal
+message.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `message/chat/id`: ID of the chat window.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `message/text`: Command from the user.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCompared to Python, which parses JSON directly and formats it into a		{{server_host}}	{{server_port}}
+i`dict`,
+Go's approach is more complicated, where we have to set up		{{server_host}}	{{server_port}}
+idata structures to
+store the needed messages. Therefore the following		{{server_host}}	{{server_port}}
+istructure is needed:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd this function is used to handle requests from the `net/http`		{{server_host}}	{{server_port}}
+iserver:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iExtracting Command Arguments		{{server_host}}	{{server_port}}
+iWhen a Telegram user calls a bot, based on user input differences, the		{{server_host}}	{{server_port}}
+icommand
+may contain extra parameters or the Telegram ID of the bot		{{server_host}}	{{server_port}}
+iitself. Suppose we're
+calling the `/traceroute` command, the input may		{{server_host}}	{{server_port}}
+ibe any of:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUser command (		{{server_host}}	{{server_port}}
+i`message/text`		{{server_host}}	{{server_port}}
+iCommand		{{server_host}}	{{server_port}}
+iArgument		{{server_host}}	{{server_port}}
+i`/traceroute`		{{server_host}}	{{server_port}}
+i`traceroute`		{{server_host}}	{{server_port}}
+iNone		{{server_host}}	{{server_port}}
+i`/traceroute lantian.pub`		{{server_host}}	{{server_port}}
+i`traceroute`		{{server_host}}	{{server_port}}
+i`lantian.pub`		{{server_host}}	{{server_port}}
+i`/traceroute@lantian_lg_bot`		{{server_host}}	{{server_port}}
+i`traceroute`		{{server_host}}	{{server_port}}
+iNone		{{server_host}}	{{server_port}}
+i`/traceroute@lantian_lg_bot lantian.pub`		{{server_host}}	{{server_port}}
+i`traceroute`		{{server_host}}	{{server_port}}
+i`lantian.pub`		{{server_host}}	{{server_port}}
+iSo while parsing we need to consider all possibilities:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConstruct Reply		{{server_host}}	{{server_port}}
+iThe response message to Telegram's callback is also a JSON, containing		{{server_host}}	{{server_port}}
+ithe
+following contents:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `method`: Type of response, hardcoded to `sendMessage` in my case.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `chat_id`: ID of the chat window, same as the request.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `text`: Content of the message, set in the processing logic as		{{server_host}}	{{server_port}}
+ineeded.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `reply_to_message_id`: ID of the message to be replied, set to		{{server_host}}	{{server_port}}
+i`message_id` in
+request.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `parse_mode`: Set to `Markdown` so Telegram parses your message as		{{server_host}}	{{server_port}}
+iMarkdown.
+Or remove if you don't want this.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe structure in Go is:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen serialize JSON and output it as an HTTP request. Note that you		{{server_host}}	{{server_port}}
+ishould set
+`Content-Type: application/json`, or Telegram won't parse		{{server_host}}	{{server_port}}
+ithis JSON, nor would
+it perform any operation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFull example		{{server_host}}	{{server_port}}
+iAll code above are taken from by		{{server_host}}	{{server_port}}
+1Bird Looking Glass Written in Go	/en/article/modify-website/go-bird-looking-glass.lantian	{{server_host}}	{{server_port}}
+i,
+with the full code available at:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Latest version:		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/bird-lg-go/blob/master/frontend/telegram_bot.go	URL:https://github.com/xddxdd/bird-lg-go/blob/master/frontend/telegram_bot.go	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Version when writing this post:		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/bird-lg-go/blob/c262ee3bdf26b963d6320483cae856f186a1f59b/frontend/telegram_bot.go	URL:https://github.com/xddxdd/bird-lg-go/blob/c262ee3bdf26b963d6320483cae856f186a1f59b/frontend/telegram_bot.go	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

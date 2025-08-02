@@ -1,0 +1,26 @@
+iThe resource minification effect of W3 Total Cache is excellent - it		{{server_host}}	{{server_port}}
+ieven minifies HTML. Just look at my webpage source code: line breaks		{{server_host}}	{{server_port}}
+iare removed, and the minification is extremely effective. However, at		{{server_host}}	{{server_port}}
+ithe end of the page, there's an added comment by W3 Total Cache:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor someone like me who pursues speed, this not only unnecessarily		{{server_host}}	{{server_port}}
+iincreases the webpage size but, more importantly, it annoys me		{{server_host}}	{{server_port}}
+iwhenever I see it. Therefore, I decided to tackle W3 Total Cache and		{{server_host}}	{{server_port}}
+iremove the code that generates this comment.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI first searched on Google and found someone mentioning it's around		{{server_host}}	{{server_port}}
+iline 2000+ in `w3-total-cache/lib/W3/Plugin/TotalCache.php`. But when		{{server_host}}	{{server_port}}
+iI opened the file, it was only 800 lines long - nowhere near 2000		{{server_host}}	{{server_port}}
+ilines! Continued searching yielded no results, so I had to investigate		{{server_host}}	{{server_port}}
+imyself. I started scanning through this PHP file until I found this		{{server_host}}	{{server_port}}
+isection:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i"Add footer comment" - this block of code, you've got trouble coming.		{{server_host}}	{{server_port}}
+iThis is exactly what generates the comment at the end of the HTML, and		{{server_host}}	{{server_port}}
+iI certainly can't let it stay.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you want to remove it, you can directly delete this code block. But		{{server_host}}	{{server_port}}
+iif you're worried about breaking the plugin, you can add `/*` before		{{server_host}}	{{server_port}}
+ithe code and `*/` after it - these are PHP comment markers. If you		{{server_host}}	{{server_port}}
+iever want to restore it, just remove these two symbols.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,58 @@
+i		{{server_host}}	{{server_port}}
+i- It's the year 2020. Why are you still using OpenVZ 6 VPSes?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Because they only cost one dollar per year.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince the kernel of OpenVZ 6 is extremely old (Linux 2.6.32), newer		{{server_host}}	{{server_port}}
+isystems
+cannot function normally on an old kernel, so I had to stick		{{server_host}}	{{server_port}}
+ito Debian 8 with my
+previous OpenVZ VPSes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut I found a		{{server_host}}	{{server_port}}
+hmodified Glibc (C language runtime library)	URL:https://github.com/sdwru/glibc-debian-10/releases	{{server_host}}	{{server_port}}
+ithat allows running Debian 10 normally on OpenVZ 6.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWARNING		{{server_host}}	{{server_port}}
+iI don't guarantee that the steps below are suitable for all OpenVZ		{{server_host}}	{{server_port}}
+iVPSes, nor do
+I ensure the safety/integrity of this Glibc (I didn't		{{server_host}}	{{server_port}}
+ilook into its
+modifications, but speaking of security, the end-of-life		{{server_host}}	{{server_port}}
+iOpenVZ 6 is probably
+the farthest thing from security).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBackup your data		{{server_host}}	{{server_port}}
+i, since in worst scenarios, you need to reinstall the OS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSteps		{{server_host}}	{{server_port}}
+iThe author only provided DEB packages, but among them are debug		{{server_host}}	{{server_port}}
+isymbols, etc.,
+that normal users don't need, so I don't recommend		{{server_host}}	{{server_port}}
+irunning `dpkg -i *.deb`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe author suggests to build a simple package repository locally		{{server_host}}	{{server_port}}
+ibefore using
+it, with the following steps:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhile following the steps above, I also uploaded the packages to my		{{server_host}}	{{server_port}}
+iserver. You
+may use them directly, but it's a bit dangerous since the		{{server_host}}	{{server_port}}
+ipackages aren't
+digitally signed:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter adding the repo, follow the normal Debian upgrade sequence, but		{{server_host}}	{{server_port}}
+idon't
+reboot yet (actually, you can't):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow `hold` the Glibc package, or disallow apt from upgrading it		{{server_host}}	{{server_port}}
+iautomatically:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter the upgrade process finishes, nothing should happen when you		{{server_host}}	{{server_port}}
+itype `reboot`
+and enter. Now you just need to reboot the server in		{{server_host}}	{{server_port}}
+iyour provider's control
+panel.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IDebian 10 Running on OpenVZ 6 Kernel	/usr/uploads/202003/debian-10-on-openvz-6.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

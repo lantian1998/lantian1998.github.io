@@ -1,0 +1,26 @@
+iBilibili		{{server_host}}	{{server_port}}
+i上从来不乏各路大神的作品，包括各类原创音乐、翻唱，还有带感的鬼畜。有时
+		{{server_host}}	{{server_port}}
+i我们想把它们保存到一些能放音乐+歌词，但不能放视频的设备上（比如某些		{{server_host}}	{{server_port}}
+iMP3），或者
+把它们作为 BGM 在后台播放并在桌面上显示歌词。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i问题是，许多优秀的作品是无法在主流音乐软件里找到的，即使某些作品能在音乐		{{server_host}}	{{server_port}}
+i软件里找
+到（例如传说和 B		{{server_host}}	{{server_port}}
+i站有一腿的网易云音乐），某些作品一时也没有歌词可用（尤其是新作
+品）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是，当你打开 B		{{server_host}}	{{server_port}}
+i站的弹幕，有许多野生字幕君已经做好了底端弹幕。我们只需要将这些
+弹幕的时		{{server_host}}	{{server_port}}
+i间轴和内容提取出来，就可以快速生成歌词文件（如 LRC）了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我用 Python 写了一个小程序来帮我干这事。这个程序可以在		{{server_host}}	{{server_port}}
+ihttps://github.com/xddxdd/bilibili-danmaku2lrc		{{server_host}}	{{server_port}}
+i下载到。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i要注意的是，这个小程序依赖 Python Requests 模块，需要先输入以下代码安装：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i程序运行示例如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

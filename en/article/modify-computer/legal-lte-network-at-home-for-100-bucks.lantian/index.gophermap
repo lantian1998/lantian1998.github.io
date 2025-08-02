@@ -1,0 +1,755 @@
+iYes, you read that right. Without the need for Faraday cages or		{{server_host}}	{{server_port}}
+isignal-blocking measures, you can build a legal LTE network at home		{{server_host}}	{{server_port}}
+i(in the US) for around $100, capable of transmitting continuously		{{server_host}}	{{server_port}}
+i24/7.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Regarding "legal": I am not a lawyer or a wireless expert. Based		{{server_host}}	{{server_port}}
+ion my research into the relevant policies and regulations, my entire		{{server_host}}	{{server_port}}
+isetup should be legal. However, I take no responsibility if you		{{server_host}}	{{server_port}}
+iencounter any legal issues after following the instructions in this		{{server_host}}	{{server_port}}
+ipost.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCBRS Band: Unlicensed LTE/5G Band in the US		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe challenge in building your own LTE network lies not in the		{{server_host}}	{{server_port}}
+itechnology but in legally acquiring radio spectrum resources. On the		{{server_host}}	{{server_port}}
+isoftware side, as early as 2014, solutions like		{{server_host}}	{{server_port}}
+hsrsRAN	URL:https://www.srslte.com/	{{server_host}}	{{server_port}}
+ibased on SDR (Software Defined Radio) for LTE transmission were		{{server_host}}	{{server_port}}
+iavailable, along with open-source core network software like		{{server_host}}	{{server_port}}
+hMagma	URL:https://magmacore.org/	{{server_host}}	{{server_port}}
+iand		{{server_host}}	{{server_port}}
+hOpen5GS	URL:https://open5gs.org/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, when it comes to radio spectrum, the frequencies used by LTE		{{server_host}}	{{server_port}}
+iand 5G mobile networks fall within licensed bands. To use them		{{server_host}}	{{server_port}}
+ilegally, you must apply to the local radio regulatory authority and		{{server_host}}	{{server_port}}
+ipay expensive spectrum usage fees (usually based on coverage area and		{{server_host}}	{{server_port}}
+ilocal population). Unless you live in a sparsely populated area, most		{{server_host}}	{{server_port}}
+ienthusiasts will be stopped at this step. If you transmit without		{{server_host}}	{{server_port}}
+iauthorization, you will interfere with operators using the same		{{server_host}}	{{server_port}}
+ifrequency, and the affected operators have a strong incentive to		{{server_host}}	{{server_port}}
+icollaborate with enforcement agencies to locate the source of		{{server_host}}	{{server_port}}
+iinterference and heavily fine you.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn 2017, however, the Federal Communications Commission (FCC) opened		{{server_host}}	{{server_port}}
+ithe 3550-3700 MHz band to the public, known as the CBRS (Citizens		{{server_host}}	{{server_port}}
+iBroadband Radio Service) band. Anyone who meets simple restrictions		{{server_host}}	{{server_port}}
+ican transmit on this band without prior authorization. Since this band		{{server_host}}	{{server_port}}
+icorresponds to LTE band 48 and 5G band n48, you can transmit LTE or 5G		{{server_host}}	{{server_port}}
+isignals on this band, allowing phones that support band 48 to connect,		{{server_host}}	{{server_port}}
+ithereby legally establishing your own LTE/5G network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf many devices transmit on the same band without coordination, severe		{{server_host}}	{{server_port}}
+isignal interference will occur, rendering the band unusable for		{{server_host}}	{{server_port}}
+ieveryone. To address this, CBRS introduced the SAS system (Spectrum		{{server_host}}	{{server_port}}
+iAccess System) to manage all radio devices transmitting on the CBRS		{{server_host}}	{{server_port}}
+iband. SAS categorizes CBRS users into three levels:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Incumbent Access: Users who were authorized to use this band before		{{server_host}}	{{server_port}}
+i2017 have the highest priority. These are typically satellite control		{{server_host}}	{{server_port}}
+istations and US Navy radars. If these users transmit on the CBRS band,		{{server_host}}	{{server_port}}
+iall other users must yield.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Priority Access: Users who have obtained priority usage rights for		{{server_host}}	{{server_port}}
+iportions of the CBRS band through auctions have a lower priority than		{{server_host}}	{{server_port}}
+iincumbent users but higher than all other users.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- General Authorized Access: All other users without prior		{{server_host}}	{{server_port}}
+iauthorization have the lowest priority and must yield to all other		{{server_host}}	{{server_port}}
+iusers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAll CBRS band users, except the US Navy, must obtain authorization		{{server_host}}	{{server_port}}
+ifrom SAS before starting transmission, allowing SAS to dynamically		{{server_host}}	{{server_port}}
+iadjust frequency allocations in different areas to prevent mutual		{{server_host}}	{{server_port}}
+iinterference. For interference from US Navy radars, SAS uses signal		{{server_host}}	{{server_port}}
+ireceivers installed along the US coast to determine if the US Navy is		{{server_host}}	{{server_port}}
+iusing the band.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, with a LTE/5G base station that supports the CBRS band and		{{server_host}}	{{server_port}}
+ican connect to SAS to obtain frequency allocations, you can legally		{{server_host}}	{{server_port}}
+itransmit signals and build your own mobile network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut where can you buy such a device?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBuying a Used Base Station on eBay		{{server_host}}	{{server_port}}
+iAfter the CBRS band was opened, it attracted the interest of many		{{server_host}}	{{server_port}}
+icompanies.		{{server_host}}	{{server_port}}
+hAs of today, 95 companies have joined the CBRS Alliance	URL:https://ongoalliance.org/members/	{{server_host}}	{{server_port}}
+i, including the big three US operators AT&T, T-Mobile, and Verizon,		{{server_host}}	{{server_port}}
+iSAS system operators Google and Federated Wireless, and base station		{{server_host}}	{{server_port}}
+iequipment manufacturers Baicells and Sercomm, among others.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnother company called Nova Labs was also interested in CBRS. Nova		{{server_host}}	{{server_port}}
+iLabs operates a virtual network operator (MVNO) called Helium Mobile,		{{server_host}}	{{server_port}}
+iproviding services through T-Mobile's mobile network. To achieve lower		{{server_host}}	{{server_port}}
+icosts and lower plan prices than other virtual operators, they:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Sold Wi-Fi hotspots and CBRS base stations dedicated to the Helium		{{server_host}}	{{server_port}}
+iMobile network, allowing users to share their existing broadband		{{server_host}}	{{server_port}}
+iconnection.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Prioritized Helium Mobile users to use these Wi-Fi hotspots and CBRS		{{server_host}}	{{server_port}}
+ibase stations, bypassing T-Mobile to reduce data traffic costs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Issued a digital currency called HNT, and used HNT to pay for		{{server_host}}	{{server_port}}
+itraffic cost on Wi-Fi hotspots and CBRS base stations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, Nova Labs could never solve the stability issues of roaming		{{server_host}}	{{server_port}}
+ito CBRS base stations and eventually abandoned the CBRS network		{{server_host}}	{{server_port}}
+ientirely in March 2025, fully transitioning to using Wi-Fi hotspots.		{{server_host}}	{{server_port}}
+iThe CBRS base stations, originally costing thousands of dollars, were		{{server_host}}	{{server_port}}
+ireplaced and now listed on eBay for around $60 each. After flashing		{{server_host}}	{{server_port}}
+iback to the original firmware and unlocking the management interface,		{{server_host}}	{{server_port}}
+ithese base stations can connect to core networks built with Magma,		{{server_host}}	{{server_port}}
+iOpen5GS, etc., and transmit for your own LTE network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hSearch for "CBRS" on eBay	URL:https://www.ebay.com/sch/i.html?_nkw=cbrs&_sacat=0&_sop=15	{{server_host}}	{{server_port}}
+ito find many CBRS base stations from the Helium Mobile network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote that Helium Mobile sells two types of CBRS base stations:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Indoor base stations produced by Sercomm, branded by FreedomFi or		{{server_host}}	{{server_port}}
+iMosoLabs, model `SCE4255W`, characterized by the FreedomFi or MosoLabs		{{server_host}}	{{server_port}}
+ilogo on the casing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IFreedomFi/Sercomm Indoor Base Station Appearance	/usr/uploads/202504/cbrs-indoor-radio.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Image source: Amazon)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Outdoor base stations produced by Baicells, model `Nova 430h`,		{{server_host}}	{{server_port}}
+icharacterized by the orange Baicells logo on the casing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IBaicells Outdoor Base Station Appearance	/usr/uploads/202504/cbrs-outdoor-radio.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Image source: Amazon)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you are deploying at home,		{{server_host}}	{{server_port}}
+iyou must buy an indoor base station		{{server_host}}	{{server_port}}
+i, not an outdoor one. The differences between the two are:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Indoor base stations can only be used indoors. They can easily		{{server_host}}	{{server_port}}
+iconnect to SAS without additional steps.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Outdoor base stations can only be used outdoors. They have higher		{{server_host}}	{{server_port}}
+iSAS authorization fees, and require a CBRS Alliance-authorized		{{server_host}}	{{server_port}}
+iinstaller to check the installation before transmission can begin. If		{{server_host}}	{{server_port}}
+iyou want to install an outdoor base station but can't find an		{{server_host}}	{{server_port}}
+iauthorized installer,		{{server_host}}	{{server_port}}
+hyou can also spend $600 to get certified as an authorized installer	URL:https://www.coursera.org/learn/google-cbrs-cpi-training	{{server_host}}	{{server_port}}
+i, valid for 3 years, and then you can approve your own base stations		{{server_host}}	{{server_port}}
+iand install as many base stations as you want.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI didn't want to spend $600 on a certification that has little other		{{server_host}}	{{server_port}}
+iuse, so I bought an indoor base station directly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUnlocking the Management Interface of the Indoor Base Station		{{server_host}}	{{server_port}}
+iWhen you buy a FreedomFi/Sercomm SCE4255W indoor base station from		{{server_host}}	{{server_port}}
+ieBay, plug it in and turn it on, you'll find you can't connect to the		{{server_host}}	{{server_port}}
+ibase station's web management interface to change its configuration.		{{server_host}}	{{server_port}}
+iThis was done to prevent base station owners from messing with the		{{server_host}}	{{server_port}}
+isettings, which could affect network stability, but it also prevents		{{server_host}}	{{server_port}}
+ius from using the base station elsewhere.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, these base stations connect to a central server to get		{{server_host}}	{{server_port}}
+iconfigurations via the HTTP-based TR-069 protocol, a term you might be		{{server_host}}	{{server_port}}
+ifamiliar with if you've ever modified your model or router provided by		{{server_host}}	{{server_port}}
+iISP. We can hijack the default control server address to our own		{{server_host}}	{{server_port}}
+icontrol server, allowing us to freely modify the base station's		{{server_host}}	{{server_port}}
+iconfiguration.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you plan to use Magma to build your core network, you can skip this		{{server_host}}	{{server_port}}
+istep. Magma comes with a TR-069 server that can send configurations to		{{server_host}}	{{server_port}}
+ithe base station, and engineers from Helium Mobile and FreedomFi have		{{server_host}}	{{server_port}}
+ialready added support for this base station to Magma, so we can later		{{server_host}}	{{server_port}}
+ihijack the base station's control server `acs.freedomfi.com` to Magma		{{server_host}}	{{server_port}}
+ivia DNS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you plan to use Open5GS or other software that doesn't support		{{server_host}}	{{server_port}}
+iTR-069 to build your core network, you can use my script to simulate a		{{server_host}}	{{server_port}}
+iTR-069 server and send the command to enable the web management		{{server_host}}	{{server_port}}
+iinterface to the base station:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Download the `tr069.py` script from		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/freedomfi-cbrs-enable-webui	URL:https://github.com/xddxdd/freedomfi-cbrs-enable-webui	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install Python 3, then run `python3 tr069.py`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Modify your router's DNS settings to hijack the IP of		{{server_host}}	{{server_port}}
+i`acs.freedomfi.com` to the IP of the computer running the `tr069.py`		{{server_host}}	{{server_port}}
+iscript. My router uses OpenWRT, so I can add a rule in the Dnsmasq		{{server_host}}	{{server_port}}
+iconfiguration page: `/acs.freedomfi.com/192.168.4.2`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Unbox the base station, connect it with an Ethernet cable, and plug		{{server_host}}	{{server_port}}
+iin the power.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Wait a moment, and you should see a large amount of XML output in		{{server_host}}	{{server_port}}
+ithe window running the `tr069.py` script, which are the commands sent		{{server_host}}	{{server_port}}
+iby the base station to the server. If you aren't receiving any		{{server_host}}	{{server_port}}
+irequests, check if the DNS configuration is correct and if there's a		{{server_host}}	{{server_port}}
+ifirewall on your computer blocking port 8443.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- When you see output containing `cwmp:SetParameterValuesResponse`, it		{{server_host}}	{{server_port}}
+imeans the web management interface has been successfully enabled. The		{{server_host}}	{{server_port}}
+icomplete output should look like this:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter enabling the management interface, you can access the base		{{server_host}}	{{server_port}}
+istation's management interface via HTTPS, like		{{server_host}}	{{server_port}}
+i`https://192.168.1.123/`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IIndoor Base Station Login Interface	/usr/uploads/202504/sercomm-login.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe default username and password are `sc_femto` and `tsFid2wz` (from		{{server_host}}	{{server_port}}
+iHelium Mobile's Discord:		{{server_host}}	{{server_port}}
+hlink	URL:https://discord.com/channels/404106811252408320/836735476659912754/1355330850232995861	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IIndoor Base Station Management Interface	/usr/uploads/202504/sercomm-status.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPurchasing Programmable SIM Cards		{{server_host}}	{{server_port}}
+iAfter building your LTE network, you'll need some SIM cards with your		{{server_host}}	{{server_port}}
+inetwork's configuration programmed on them to allow phones to connect		{{server_host}}	{{server_port}}
+ito your network. Since the information on regular SIM cards is		{{server_host}}	{{server_port}}
+ihardcoded during production, you can't just buy any SIM card; you must		{{server_host}}	{{server_port}}
+iuse programmable SIM cards.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSearch for `Programmable SIM` on shopping websites like Amazon and		{{server_host}}	{{server_port}}
+iAliexpress to find these cards, for example:		{{server_host}}	{{server_port}}
+hhttps://www.amazon.com/s?k=Programmable+SIM	URL:https://www.amazon.com/s?k=Programmable+SIM	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IProgrammable SIM Card Appearance	/usr/uploads/202504/programmable-sim-card.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Image source: Amazon)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI bought a set of SIM cards on Amazon for $38.99, which included 5		{{server_host}}	{{server_port}}
+iprogrammable SIM cards, a card programmer, a USB drive with Windows		{{server_host}}	{{server_port}}
+icard-programming software, and an adapter from Micro SIM/Nano SIM to		{{server_host}}	{{server_port}}
+ifull-size SIM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBuilding a Magma Core Network		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo build your own LTE network, you first need a core network. The LTE		{{server_host}}	{{server_port}}
+icore network mainly manages user device (e.g., phone) authentication		{{server_host}}	{{server_port}}
+iinformation and controls billing, traffic throttling, and other		{{server_host}}	{{server_port}}
+ifunctions.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMagma is an open-source 4G/5G core network developed by Meta		{{server_host}}	{{server_port}}
+i(Facebook), running on Docker/Kubernetes. It can quickly scale		{{server_host}}	{{server_port}}
+ihorizontally to support large amounts of mobile network traffic and		{{server_host}}	{{server_port}}
+ican run on low-spec devices like Raspberry Pi to provide simple		{{server_host}}	{{server_port}}
+inetwork services.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince I don't need the complex container orchestration features of		{{server_host}}	{{server_port}}
+iKubernetes, I chose to build Magma's components using Docker.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> I referenced the following materials during the configuration		{{server_host}}	{{server_port}}
+iprocess:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Core network (Orchestrator and NMS) part:		{{server_host}}	{{server_port}}
+h[Study Note] How To Install Magma Core (Orchestrator)	URL:https://hackmd.io/@RaffieWinata/rJ5oHgk3a#1-Install-Orchestrator-and-NMS	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Core network (Orchestrator and NMS) part:		{{server_host}}	{{server_port}}
+hHow To Configure Magma Orchestrator & NMS - RakWireless	URL:https://learn.rakwireless.com/hc/en-us/articles/26476385758615-How-To-Configure-Magma-Orchestrator-NMS	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Access Gateway part:		{{server_host}}	{{server_port}}
+hInstall Docker-based Access Gateway on Ubuntu - Magma	URL:https://magma.github.io/magma/docs/lte/deploy_install_docker	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBuilding the Magma Core Network (Orchestrator and NMS)		{{server_host}}	{{server_port}}
+iFirst, prepare a system to run the core network. I chose to create a		{{server_host}}	{{server_port}}
+ivirtual machine on Proxmox VE. After installation, the system services		{{server_host}}	{{server_port}}
+iand Magma together use about 4GB of memory, so a virtual machine with		{{server_host}}	{{server_port}}
+iabout 8GB of memory should be sufficient.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI installed Ubuntu 24.04, but other systems should theoretically work		{{server_host}}	{{server_port}}
+ias well.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, install Docker and Docker-compose.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, execute the following operations:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, in your local browser, visit		{{server_host}}	{{server_port}}
+hhttps://magma-test.magma.test	URL:https://magma-test.magma.test	{{server_host}}	{{server_port}}
+i(or `magma-test.[your own domain]`), and you should see the login		{{server_host}}	{{server_port}}
+iinterface. If you see an address not found error, confirm that the		{{server_host}}	{{server_port}}
+idomain is resolving correctly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Login Interface	/usr/uploads/202504/magma-login.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLog in with the default username `admin@magma.test` and password		{{server_host}}	{{server_port}}
+i`password1234`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the left `Network` tab, add a network and fill in the following:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Config` tab, `Network ID` and `Network Name` can be filled		{{server_host}}	{{server_port}}
+iin arbitrarily.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Add Network Interface	/usr/uploads/202504/magma-add-network.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Epc` tab, change MCC to `315`, MNC to `010`, and TAC to `1`.		{{server_host}}	{{server_port}}
+iMCC/MNC are the codes for mobile operators, for example, AT&T's		{{server_host}}	{{server_port}}
+iMCC/MNC is `310/410`, and T-Mobile's is `310/260`. `315/010` is the		{{server_host}}	{{server_port}}
+icode specifically allocated for CBRS networks, and all mobile networks		{{server_host}}	{{server_port}}
+ion the CBRS band can use it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Add Network Interface Epc Tab	/usr/uploads/202504/magma-add-network-epc.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Ran` tab, change `Bandwidth` to 20 MHz for the fastest		{{server_host}}	{{server_port}}
+ispeed. Select `Band Type` as `TDD` because the LTE 48/5G n48 band uses		{{server_host}}	{{server_port}}
+iTDD time-division multiplexing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Fill in EARFCNDL with `55540`, which represents the 3580 MHz		{{server_host}}	{{server_port}}
+ifrequency point within the CBRS band, but the CBRS base station will		{{server_host}}	{{server_port}}
+iactually use the frequency allocated by SAS, not the one specified		{{server_host}}	{{server_port}}
+ihere.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Keep all other configurations at their defaults.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Add Network Interface Ran Tab	/usr/uploads/202504/magma-add-network-ran.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter completing the above configuration, you now have an LTE core		{{server_host}}	{{server_port}}
+inetwork. However, your base station cannot directly connect to the		{{server_host}}	{{server_port}}
+icore network; it needs another component: the Access Gateway (AGW).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBuilding the Magma Access Gateway (AGW)		{{server_host}}	{{server_port}}
+iMagma's Access Gateway manages the base station and forwards the base		{{server_host}}	{{server_port}}
+istation's data traffic to the internet. Note that Magma's core network		{{server_host}}	{{server_port}}
+ionly manages user information and does not handle data traffic, and		{{server_host}}	{{server_port}}
+ithe traffic from the Access Gateway does not pass through the core		{{server_host}}	{{server_port}}
+inetwork.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, prepare a system to run the Access Gateway. This system needs		{{server_host}}	{{server_port}}
+ito be configured with two network interfaces, where `eth0` is used for		{{server_host}}	{{server_port}}
+iremote management and connecting to the core network, and `eth1` is		{{server_host}}	{{server_port}}
+iused for connecting to the base station. If you're using a separate		{{server_host}}	{{server_port}}
+icomputer, you'll need to plug the base station's Ethernet cable into		{{server_host}}	{{server_port}}
+ithe `eth1` interface later, and Magma will automatically configure		{{server_host}}	{{server_port}}
+iDHCP to allow the base station to connect to the Access Gateway.		{{server_host}}	{{server_port}}
+iHowever, since I'm using a virtual machine on Proxmox VE, I chose to		{{server_host}}	{{server_port}}
+iplace the additional `eth1` interface in a VLAN and set up the		{{server_host}}	{{server_port}}
+icorresponding VLAN and IP on the main router. This way, I can ping the		{{server_host}}	{{server_port}}
+i`eth1` IP from any machine on my local network, meaning the base		{{server_host}}	{{server_port}}
+istation can be plugged into any port on my main switch.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis system must be installed with Ubuntu 20.04 because the Magma		{{server_host}}	{{server_port}}
+iAccess Gateway installation modifies many system configurations, and		{{server_host}}	{{server_port}}
+ithese modifications are only supported on Ubuntu 20.04.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter installation, the system services and Magma together use about		{{server_host}}	{{server_port}}
+i1GB of memory, so a virtual machine with about 2-4GB of memory should		{{server_host}}	{{server_port}}
+ibe sufficient.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, install Docker and Docker-compose.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, execute the following operations:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iReturn to the core network management interface at		{{server_host}}	{{server_port}}
+hhttps://magma-test.magma.test	URL:https://magma-test.magma.test	{{server_host}}	{{server_port}}
+i(or `magma-test.[your own domain]`), go to the left `Equipment` tab,		{{server_host}}	{{server_port}}
+iand ensure the network you created earlier is selected in the top		{{server_host}}	{{server_port}}
+iright corner.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iClick the `Add New` button in the top right to add the Access Gateway,		{{server_host}}	{{server_port}}
+iand fill in the following:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Config` tab, `Gateway Name` and `Gateway ID` can be filled		{{server_host}}	{{server_port}}
+iin arbitrarily.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Config` tab, fill in `Hardware UUID` with the `Hardware ID`		{{server_host}}	{{server_port}}
+iyou obtained from the Access Gateway.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Config` tab, fill in `Challenge Key` with the `Challenge		{{server_host}}	{{server_port}}
+ikey` you obtained from the Access Gateway.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Keep all other configurations at their defaults.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Add Access Gateway Interface	/usr/uploads/202504/magma-add-agw.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter saving, wait a moment, and the management interface should show		{{server_host}}	{{server_port}}
+ithe status of this Access Gateway as `Health` being `Good`. If the		{{server_host}}	{{server_port}}
+istatus remains `Bad`, try rebooting the Access Gateway or check the		{{server_host}}	{{server_port}}
+iDNS on the Access Gateway to ensure `magma.test` (or your domain)		{{server_host}}	{{server_port}}
+ipoints to the core network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Access Gateway Status Interface	/usr/uploads/202504/magma-agw-status.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConnecting the Base Station to the Magma Access Gateway		{{server_host}}	{{server_port}}
+iPick up your CBRS base station and look at the label on the back,		{{server_host}}	{{server_port}}
+iwhich should have a serial number like `2112CW5012345`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the core network management interface, go to the left `Equipment`		{{server_host}}	{{server_port}}
+itab, then to the `eNodeB` tab. Click the `Add New` button in the top		{{server_host}}	{{server_port}}
+iright to add the base station, and fill in the following:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Config` tab, `Name` can be filled in arbitrarily.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Config` tab, fill in `Serial number` with the serial number		{{server_host}}	{{server_port}}
+ifrom the base station's label.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Add Base Station Interface	/usr/uploads/202504/magma-add-enodeb.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Ran` tab,		{{server_host}}	{{server_port}}
+ido not select		{{server_host}}	{{server_port}}
+i`eNodeB Managed Externally` (disallow Magma from managing the base		{{server_host}}	{{server_port}}
+istation).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Ran` tab, select `Device Class` as `FreedomFi One` (for		{{server_host}}	{{server_port}}
+iFreedomFi/Sercomm's indoor base station).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Ran` tab, fill in `Cell ID` with `0` (increment by one for		{{server_host}}	{{server_port}}
+ieach additional base station).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Ran` tab, select `Bandwidth` as 20 MHz for the fastest		{{server_host}}	{{server_port}}
+ispeed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Ran` tab, fill in `PCI` with `100` (increment by one for		{{server_host}}	{{server_port}}
+ieach additional base station).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Ran` tab, fill in `TAC` with `1`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `Ran` tab, select `Transmit` as `Enabled` (enable		{{server_host}}	{{server_port}}
+itransmission).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Add Base Station Interface Ran Tab 1	/usr/uploads/202504/magma-add-enodeb-ran-1.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Add Base Station Interface Ran Tab 2	/usr/uploads/202504/magma-add-enodeb-ran-2.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlthough we've added the base station to Magma, since the base station		{{server_host}}	{{server_port}}
+idevice defaults to connecting to Helium Mobile's server for		{{server_host}}	{{server_port}}
+iconfiguration, it still can't connect to our Access Gateway properly.		{{server_host}}	{{server_port}}
+iTherefore, we need to hijack the base station's control server		{{server_host}}	{{server_port}}
+i`acs.freedomfi.com` to the `eth1` IP address of Magma access gateway		{{server_host}}	{{server_port}}
+ivia DNS. Modify your router's DNS settings to hijack the IP of		{{server_host}}	{{server_port}}
+i`acs.freedomfi.com` to the `eth1` IP of the machine running the Access		{{server_host}}	{{server_port}}
+iGateway. My router uses OpenWRT, so I can add a rule in the Dnsmasq		{{server_host}}	{{server_port}}
+iconfiguration page: `/acs.freedomfi.com/192.168.4.2`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdditionally, because the port number of the TR-069 server on the		{{server_host}}	{{server_port}}
+iMagma Access Gateway is different from Helium Mobile's, we need to		{{server_host}}	{{server_port}}
+imodify the port number and some other configurations on the Access		{{server_host}}	{{server_port}}
+iGateway.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOn the Access Gateway, edit `nano /etc/magma/enodebd.yml` and make the		{{server_host}}	{{server_port}}
+ifollowing changes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter saving the configuration file, reboot the entire Access Gateway		{{server_host}}	{{server_port}}
+isystem. I found during testing that restarting individual Docker		{{server_host}}	{{server_port}}
+icontainers on the Access Gateway can cause strange issues, such as the		{{server_host}}	{{server_port}}
+ibase station not being able to connect to the Access Gateway. A full		{{server_host}}	{{server_port}}
+ireboot can resolve most strange issues.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWait a moment, and the core network management interface should show		{{server_host}}	{{server_port}}
+ithe status of this base station as `Health` being `Good`. If the		{{server_host}}	{{server_port}}
+istatus remains `Bad`, try rebooting the Access Gateway.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Base Station Status Interface	/usr/uploads/202504/magma-enodeb-status.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you added the indoor base station's serial number to		{{server_host}}	{{server_port}}
+i`web_ui_enable_list` to enable the management interface, you can now		{{server_host}}	{{server_port}}
+iaccess the base station's management interface via HTTPS, like		{{server_host}}	{{server_port}}
+i`https://192.168.1.123/`. The default username and password are		{{server_host}}	{{server_port}}
+i`sc_femto` and `tsFid2wz` (from Helium Mobile's Discord:		{{server_host}}	{{server_port}}
+hlink	URL:https://discord.com/channels/404106811252408320/836735476659912754/1355330850232995861	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConnecting the Base Station to SAS		{{server_host}}	{{server_port}}
+iAt this point, the base station is connected to your core network, but		{{server_host}}	{{server_port}}
+isince it hasn't connected to the CBRS SAS system (Spectrum Access		{{server_host}}	{{server_port}}
+iSystem) and obtained frequency authorization, it still won't transmit		{{server_host}}	{{server_port}}
+iLTE signals.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe need to register an account with a SAS system and register our base		{{server_host}}	{{server_port}}
+istation to obtain frequency authorization.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI used		{{server_host}}	{{server_port}}
+hGoogle SAS	URL:https://cloud.google.com/products/spectrum-access-system	{{server_host}}	{{server_port}}
+i, a SAS system run by Google Cloud. Google SAS is currently the		{{server_host}}	{{server_port}}
+ieasiest SAS system to register with; other vendors' SAS systems		{{server_host}}	{{server_port}}
+iusually require contacting sales and signing enterprise-level service		{{server_host}}	{{server_port}}
+icontracts to use. Moreover, Google SAS is extremely affordable; at the		{{server_host}}	{{server_port}}
+itime of writing,		{{server_host}}	{{server_port}}
+hthe price for indoor base stations is $2.64 per month per unit, and for outdoor base stations, it's $13.15 per month per unit	URL:https://cloud.google.com/products/spectrum-access-system#pricing	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou need to register a Google Cloud account first, then visit the		{{server_host}}	{{server_port}}
+hSAS configuration page in the console	URL:https://console.cloud.google.com/spectrum-access	{{server_host}}	{{server_port}}
+iand follow these steps to configure:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Determine your latitude and longitude. If you use an Android phone,		{{server_host}}	{{server_port}}
+iyou can download the		{{server_host}}	{{server_port}}
+hGPS Status & Toolbox	URL:https://play.google.com/store/apps/details?id=com.eclipsim.gpsstatus2	{{server_host}}	{{server_port}}
+iapp from Google Play to view your latitude and longitude. If you use		{{server_host}}	{{server_port}}
+ian iPhone, you can view your latitude and longitude from the built-in		{{server_host}}	{{server_port}}
+iCompass app.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the console, select the "Add Site" button at the top (the one		{{server_host}}	{{server_port}}
+iwith a plus sign), and click anywhere on the map. A sidebar will pop		{{server_host}}	{{server_port}}
+iup on the right, asking you to enter information about your base		{{server_host}}	{{server_port}}
+istation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IGoogle SAS Add Site Button	/usr/uploads/202504/google-sas-add-button.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- First, switch to the first tab on the right sidebar (Location) and		{{server_host}}	{{server_port}}
+ienter your correct latitude and longitude. It doesn't need to be very		{{server_host}}	{{server_port}}
+iprecise; the base station itself will upload its GPS location.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IGoogle SAS Enter Latitude and Longitude Interface	/usr/uploads/202504/google-sas-enter-location.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Then, switch to the second tab (Base Station Information) and fill		{{server_host}}	{{server_port}}
+iin the following:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `CBSD category` should be `A` for indoor base stations and `B` for		{{server_host}}	{{server_port}}
+ioutdoor base stations, based on your actual situation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `FCC ID` should be the FCC ID on the base station's label.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `Serial number` should be the serial number on the base station's		{{server_host}}	{{server_port}}
+ilabel.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `Device type` should be `Indoor` (indoor) or `Outdoor` (outdoor),		{{server_host}}	{{server_port}}
+ibased on your actual situation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Air Interface`, select `E_UTRA` (corresponding to LTE) for		{{server_host}}	{{server_port}}
+i`Radio technology`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Antenna`, fill in `Height` with your GPS altitude.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Antenna`, select `Height type` as `AMSL` (height referenced		{{server_host}}	{{server_port}}
+ito sea level).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Antenna`, fill in `Azimuth` with the compass direction the		{{server_host}}	{{server_port}}
+ibase station faces.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- For FreedomFi/Sercomm indoor base stations, since the antenna		{{server_host}}	{{server_port}}
+itransmits in 360 degrees, the direction doesn't matter, so you can		{{server_host}}	{{server_port}}
+idirectly enter `0`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Antenna`, fill in `Mech downtilt` with the degree of downward		{{server_host}}	{{server_port}}
+itilt of the base station; if there's no tilt, you can directly enter		{{server_host}}	{{server_port}}
+i`0`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Antenna`, fill in `Horiz accuracy` with `10`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Antenna`, fill in `Vert accuracy` with `3`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- You also need to fill in the following based on the base station's		{{server_host}}	{{server_port}}
+idata sheet. If you're using a FreedomFi/Sercomm indoor base station,		{{server_host}}	{{server_port}}
+iyou can directly copy my configuration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `Max EIRP` should be `29` for FreedomFi/Sercomm indoor base		{{server_host}}	{{server_port}}
+istations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Antenna`, `Max gain` should be `5` for FreedomFi/Sercomm		{{server_host}}	{{server_port}}
+iindoor base stations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Antenna`, `Beamwidth` should be `360` for FreedomFi/Sercomm		{{server_host}}	{{server_port}}
+iindoor base stations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Antenna`, `Azimuth` should be `360` for FreedomFi/Sercomm		{{server_host}}	{{server_port}}
+iindoor base stations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Measurement capability`, for FreedomFi/Sercomm indoor base		{{server_host}}	{{server_port}}
+istations, do not check `RX w/ grant`, but check `RX w/o grant`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Air Interface`, `Supported spec` should be `FFS` for		{{server_host}}	{{server_port}}
+iFreedomFi/Sercomm indoor base stations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- You can leave the rest of the configurations blank; click `Ready for		{{server_host}}	{{server_port}}
+iCPI`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- At this point, the page will display "The new configuration must be		{{server_host}}	{{server_port}}
+isigned by a CPI before the CBSD registers with the SAS." (The base		{{server_host}}	{{server_port}}
+istation needs to be approved by a Certified Professional Installer		{{server_host}}	{{server_port}}
+i(CPI) before it can register with the SAS again). If you're installing		{{server_host}}	{{server_port}}
+ian indoor base station, you can ignore this. But if you're installing		{{server_host}}	{{server_port}}
+ian outdoor base station, you'll need to find a Certified Professional		{{server_host}}	{{server_port}}
+iInstaller to approve the configuration, or		{{server_host}}	{{server_port}}
+hspend $600 to get certified as a CPI	URL:https://www.coursera.org/learn/google-cbrs-cpi-training	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IGoogle SAS Base Station Information Interface 1	/usr/uploads/202504/google-sas-radio-info-1.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IGoogle SAS Base Station Information Interface 2	/usr/uploads/202504/google-sas-radio-info-2.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iReboot the base station: unplug the power from your base station, wait		{{server_host}}	{{server_port}}
+ia few seconds, then plug it back in. After a few minutes, once the		{{server_host}}	{{server_port}}
+ibase station has started up and completed GPS positioning, the Google		{{server_host}}	{{server_port}}
+iSAS configuration page should show some yellow-highlighted `Active		{{server_host}}	{{server_port}}
+iconfig value`, indicating that these configurations differ from what		{{server_host}}	{{server_port}}
+iyou entered. You can ignore them.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSwitch to the `Status` tab to view the device status; you should see		{{server_host}}	{{server_port}}
+ithe base station status as `Authorized` and the corresponding		{{server_host}}	{{server_port}}
+ifrequency allocation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAt this point, check the base station's indicator lights; the leftmost		{{server_host}}	{{server_port}}
+iLTE status indicator light should be a steady blue, indicating that		{{server_host}}	{{server_port}}
+iit's now transmitting LTE signals. This completes the base station		{{server_host}}	{{server_port}}
+iconfiguration.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTake out your phone, select any SIM card, turn off the "Automatic		{{server_host}}	{{server_port}}
+iNetwork Selection" option, and the phone will automatically search for		{{server_host}}	{{server_port}}
+inearby mobile networks. If your phone supports LTE band 48, you should		{{server_host}}	{{server_port}}
+isee a network named 315010, which is the signal transmitted by your		{{server_host}}	{{server_port}}
+ibase station.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iProgramming SIM Cards		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWith the LTE network in place, the next step is to program your		{{server_host}}	{{server_port}}
+inetwork's authentication information onto the SIM cards, allowing		{{server_host}}	{{server_port}}
+iphones to connect to your network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen I bought the programmable SIM cards, the seller provided Windows		{{server_host}}	{{server_port}}
+icard-programming software compatible with these SIM cards. I tried		{{server_host}}	{{server_port}}
+iusing pySim to program the cards on Linux, but the resulting SIM cards		{{server_host}}	{{server_port}}
+icouldn't connect to the network for authentication, so I used Windows		{{server_host}}	{{server_port}}
+ifor this step.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInsert the SIM card programmer into your computer and insert a		{{server_host}}	{{server_port}}
+iprogrammable SIM card into the programmer.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOpen the card-programming software, first click the `Read Card` button		{{server_host}}	{{server_port}}
+iin the top right to attempt to read the card's information, ensuring		{{server_host}}	{{server_port}}
+ithe programmer is connected properly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, in the `LTE/WCDMA Parameter` section on the right, enter the		{{server_host}}	{{server_port}}
+ifollowing information:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select `IMSI15` and enter `3150109999XXXXX`, where the first ten		{{server_host}}	{{server_port}}
+idigits are fixed, and the last five can be numbered arbitrarily.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The first six digits `315010` are the MCC/MNC for CBRS networks.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The next four digits `9999` are the IBN (IMSI Block Number) within		{{server_host}}	{{server_port}}
+ithe CBRS network; `9999` is the test number reserved for CBRS. The		{{server_host}}	{{server_port}}
+icomplete IBN allocation table can be found on the		{{server_host}}	{{server_port}}
+hCBRS Assignments	URL:https://imsiadmin.com/assignments/cbrs/	{{server_host}}	{{server_port}}
+iwebpage.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The last five digits can be any number you choose.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Ensure the `AD` field value is `00000003`. If it's different, click		{{server_host}}	{{server_port}}
+ithe edit button on the right and ensure the MNC length is set to 3.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `KI` and `OPC` fields, enter a random 32-character		{{server_host}}	{{server_port}}
+ihexadecimal string for each. These strings are the authentication keys		{{server_host}}	{{server_port}}
+ifor the SIM card and cannot be read back once written to the SIM card.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Keep a backup of the `KI` and `OPC` values; you'll need to enter		{{server_host}}	{{server_port}}
+ithem into the Magma core network management page later.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click the `Auto` button next to `PLMNwAct`, and the four input		{{server_host}}	{{server_port}}
+ifields on the left should automatically fill with the values shown in		{{server_host}}	{{server_port}}
+ithe image.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Change the `SPN` to the operator name you want to display on your		{{server_host}}	{{server_port}}
+iphone, for example, `Lan Tian Mobile`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, click the `Write Card` button in the top right to program the		{{server_host}}	{{server_port}}
+icard.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you want to program multiple SIM cards, follow the same process,		{{server_host}}	{{server_port}}
+ibut ensure that the `IMSI15`, `KI`, and `OPC` values are different for		{{server_host}}	{{server_port}}
+ieach card.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ISIM card programming software interface	/usr/uploads/202504/write-sim-card.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCreating a Data Plan		{{server_host}}	{{server_port}}
+iReturn to the core network management interface at		{{server_host}}	{{server_port}}
+hhttps://magma-test.magma.test	URL:https://magma-test.magma.test	{{server_host}}	{{server_port}}
+i(or `magma-test.[your own domain]`), go to the left `Traffic` tab,		{{server_host}}	{{server_port}}
+ithen to the top `APNs` tab, and click `Create New APN` to create an		{{server_host}}	{{server_port}}
+iAPN.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter `internet` for `APN ID`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- For `Max Required Bandwidth`, enter `1000000000` (1 Gbps, far		{{server_host}}	{{server_port}}
+iexceeding the speed LTE can provide) for both upload and download.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select `IPV4V6` for `PDN Type`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Keep all other configurations at their defaults.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Add APN Interface	/usr/uploads/202504/magma-add-apn.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, click the top `Data Plans` tab and click `Create New Data Plan`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- You can enter any value for `Data Plan ID`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Keep both `Download` and `Upload` set to `Unlimited`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Add Data Plan Interface	/usr/uploads/202504/magma-add-data-plan.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAt this point, the data plan is created, and you can start registering		{{server_host}}	{{server_port}}
+iSIM cards.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRegistering SIM Cards		{{server_host}}	{{server_port}}
+iGo to the left `Subscriber` tab in the management interface, then		{{server_host}}	{{server_port}}
+iclick `Manage Subscribers` - `Add Subscribers`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor each SIM card you want to add, click the `Add New Row` button in		{{server_host}}	{{server_port}}
+ithe top right and enter the SIM card's information:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the `IMSI` field, first enter `IMSI`, then the `IMSI15` you used		{{server_host}}	{{server_port}}
+iwhen programming the card. For example: `IMSI315010999925470`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- You can enter any value for `Subscriber Name`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter the `KI` you used when programming the card in the `Auth Key`		{{server_host}}	{{server_port}}
+ifield.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter the `OPC` you used when programming the card in the `Auth OPC`		{{server_host}}	{{server_port}}
+ifield.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select `ACTIVE` for `Service` to enable the SIM card.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select the data plan you created earlier for `Data Plan`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select the APN you created earlier for `Active APNs`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click the checkmark on the right to save.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IMagma Add SIM Card Interface	/usr/uploads/202504/magma-add-sim.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAt this point, your SIM card is successfully registered with the Magma		{{server_host}}	{{server_port}}
+icore network, and after a brief data synchronization, it will be ready		{{server_host}}	{{server_port}}
+ifor use.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConnecting a Phone to the Network		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInsert the SIM card into your phone. I used an iPhone SE 2022 for		{{server_host}}	{{server_port}}
+itesting.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter inserting the SIM card and waiting a moment, the iPhone		{{server_host}}	{{server_port}}
+iconnected to my base station, showing full signal strength in the top		{{server_host}}	{{server_port}}
+ileft corner, with the network displayed as `315 010`, which is the		{{server_host}}	{{server_port}}
+iMCC/MNC for CBRS:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IiPhone Network Status	/usr/uploads/202504/iphone-non-public-network-en.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing Speedtest to measure the speed, I achieved a download speed of		{{server_host}}	{{server_port}}
+i100 Mbps and an upload speed of 10 Mbps:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IiPhone Speedtest	/usr/uploads/202504/iphone-speedtest.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI also tried an Android phone, a Motorola Edge+ 2023. Although this		{{server_host}}	{{server_port}}
+iphone could see my LTE network, it couldn't connect to it properly,		{{server_host}}	{{server_port}}
+ieven with the same SIM card that worked on the iPhone. Further		{{server_host}}	{{server_port}}
+iinvestigation is needed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConclusion		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe total cost of all the equipment and services I used to build this		{{server_host}}	{{server_port}}
+iLTE network (excluding sales tax) is as follows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Proxmox VE host for running virtual machines, my existing equipment:		{{server_host}}	{{server_port}}
+i$0		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- FreedomFi/Sercomm indoor base station: $49 + shipping $12.3 = $61.3		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Programmable SIM cards and card programmer: $38.99		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Google SAS: $2.64/month, calculated for one month		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Total cost: $102.93		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis price is not expensive for a Homelabber, far below the		{{server_host}}	{{server_port}}
+itraditional belief that building an LTE network costs hundreds or		{{server_host}}	{{server_port}}
+ithousands of dollars, and all the equipment and services can be easily		{{server_host}}	{{server_port}}
+ipurchased.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,454 @@
+iLast semester, the school offered a digital systems course, which		{{server_host}}	{{server_port}}
+iinvolves
+development on FPGAs. At the end of the course, we need to		{{server_host}}	{{server_port}}
+igather in groups and
+achieve some complicated functionality with the		{{server_host}}	{{server_port}}
+iflexible architecture of FPGA,
+such as creating a game or running a		{{server_host}}	{{server_port}}
+iconvoluted neural network. We are free to
+add extra functionalities as		{{server_host}}	{{server_port}}
+iwe wish.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOur group has done a game similar to Raiden, or controlling a fighter		{{server_host}}	{{server_port}}
+ijet and
+attacking enemies with bullets. In addition to course		{{server_host}}	{{server_port}}
+irequirements, we
+implemented these extra functionalities:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A 640x480 VGA framebuffer with 16-bit color depth, stored on SRAM		{{server_host}}	{{server_port}}
+ichip		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Naturally, Simplified Chinese fonts are included (full UTF-8 Chinese		{{server_host}}	{{server_port}}
+irange,
+but without punctuation marks, since they are out of that range		{{server_host}}	{{server_port}}
+iand we're
+kinda lazy)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Fast screen scrolling by adjusting Y offset (for flying effects)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SRAM controller and chip are working at 2x bus frequency, so both		{{server_host}}	{{server_port}}
+ithe CPU
+and the VGA controller can access data simultaneously without		{{server_host}}	{{server_port}}
+icompetition or
+lockups		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Up to 8 jets (friend + enemy), fully customizable image (no palette		{{server_host}}	{{server_port}}
+ior
+indexing involved), free movement across the screen		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Up to 56 bullets (friend + enemy), customizable size and color, free		{{server_host}}	{{server_port}}
+imovement
+across the screen		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Loop playback of background music (~5min) with WM8731 sound chip, 2		{{server_host}}	{{server_port}}
+ichannels,
+16-bit depth, 8000Hz sample rate		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Used a module provided by course (written by former students) but		{{server_host}}	{{server_port}}
+ihad
+pitfalls; will be discussed later		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Internet connection with Marvell 88E1111 chip and RJ45 connectors,		{{server_host}}	{{server_port}}
+ifor
+uploading gameplay records and downloading rankings		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Used open source code on GitHub for data transmission
+(		{{server_host}}	{{server_port}}
+ihttps://github.com/alexforencich/verilog-ethernet		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Custom MDIO communication code for modifying network chip registers		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- LwIP as TCP/IP protocol stack		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- User input via USB keyboard, connected to onboard USB chip		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Since the keyboards in our lab are unstable, we used a separate CPU		{{server_host}}	{{server_port}}
+ifor
+controlling the keyboard so they can be reset and debugged		{{server_host}}	{{server_port}}
+iseparately. The
+main CPU can also be reset less frequently		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere is the demonstration video (in Chinese):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe used the `DE2-115` development board with an FPGA chip of
+`Cyclone		{{server_host}}	{{server_port}}
+iIV EP4CE115F29C7`, and `Quartus Prime 18.1 Free Edition` as		{{server_host}}	{{server_port}}
+idevelopment
+software.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThie post is a record of problems I encountered and resolved when		{{server_host}}	{{server_port}}
+iimplementing
+the extra features.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAcademic Integrity Alert & Open Source		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWARNING:		{{server_host}}	{{server_port}}
+iThis post does not contain any materials covered in the course, and
+is		{{server_host}}	{{server_port}}
+iNOT HELPFUL		{{server_host}}	{{server_port}}
+ito other projects except the final project. If you referenced
+this		{{server_host}}	{{server_port}}
+ipost or our code, you		{{server_host}}	{{server_port}}
+iMUST		{{server_host}}	{{server_port}}
+ilist it in your report, or you may be
+punished for plagiarism.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe open-sourced the code at		{{server_host}}	{{server_port}}
+ihttps://github.com/xddxdd/zjui-ece385-final		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNetworking		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe implemented networking on the development board to upload gameplay		{{server_host}}	{{server_port}}
+irecords
+and generate score rankings. It is the extra feature we		{{server_host}}	{{server_port}}
+iconsider the most
+important. This part involves pitfalls we had with		{{server_host}}	{{server_port}}
+ithe following components:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Intel Triple Speed Ethernet IP (The 10/100/100M Adaptive Ethernet		{{server_host}}	{{server_port}}
+imodule that
+comes with Quartus)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Ethernet IP by GitHub User		{{server_host}}	{{server_port}}
+iAlex Forencich		{{server_host}}	{{server_port}}
+ihttps://github.com/alexforencich/verilog-ethernet		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- LwIP Embedded TCP/IP Protocol Stack
+(		{{server_host}}	{{server_port}}
+ihttps://savannah.nongnu.org/projects/lwip/		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIntel Triple Speed Ethernet IP Won't Work		{{server_host}}	{{server_port}}
+iDE2-115 development board comes with 2 Marvell 88E1111 network		{{server_host}}	{{server_port}}
+ichips,
+corresponding to the 2 RJ45 ethernet jacks. While interfacing		{{server_host}}	{{server_port}}
+iwith the chip, we
+found that Quartus has provided an Ethernet IP with		{{server_host}}	{{server_port}}
+ia rich list of options, and
+went for it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe had to admit that such official Intel IPs have comprehensive		{{server_host}}	{{server_port}}
+ifunctionalities,
+such as support for various interfaces such as GMII		{{server_host}}	{{server_port}}
+iand RGMII, built-in FIFO
+buffers, easy MDIO communication with		{{server_host}}	{{server_port}}
+iEthernet chip, and a lot of stuff we
+didn't need. But when we added		{{server_host}}	{{server_port}}
+ithe IP and tried to use it, no data was sent from
+the Ethernet chip,		{{server_host}}	{{server_port}}
+iTX LED wasn't blinking, and despite that RX LED was blinking,
+no data		{{server_host}}	{{server_port}}
+iwas received. It still wouldn't work even if we followed the		{{server_host}}	{{server_port}}
+iofficial
+Intel guide		{{server_host}}	{{server_port}}
+iftp://ftp.intel.com/pub/fpgaup/pub/Intel_Material/17.0/Tutorials/DE2-1		{{server_host}}	{{server_port}}
+i15/Using_Triple_Speed_Ethernet.pdf		{{server_host}}	{{server_port}}
+istep by step.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter debugging for as long as 3 days, we found that this Ethernet IP		{{server_host}}	{{server_port}}
+iby Intel
+needs to be paid for. Since we apparently didn't do that, the		{{server_host}}	{{server_port}}
+iIP worked in trial
+mode, and would only work when		{{server_host}}	{{server_port}}
+ithe development board was connected to PC		{{server_host}}	{{server_port}}
+iand		{{server_host}}	{{server_port}}
+ithe Licensing window was open on Quartus Programming UI		{{server_host}}	{{server_port}}
+i. In any other
+circumstance, it would disable itself by not sending		{{server_host}}	{{server_port}}
+iany data and not processing
+any received data.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOut of rage and frustration, we decided to replace it with an		{{server_host}}	{{server_port}}
+iopen-source IP on
+GitHub, the second one listed above. While the IP is		{{server_host}}	{{server_port}}
+iopen source and free, it
+does have its pitfalls; read on.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLacking MDIO Support with Open Source Module		{{server_host}}	{{server_port}}
+iMarvell 88E1111 Ethernet chip has an MDIO interface, providing		{{server_host}}	{{server_port}}
+iread/write access
+to 32 registers. They are used to set link speed		{{server_host}}	{{server_port}}
+i(10/100/1000M), obtain
+connection status (plugged in or not), etc. But		{{server_host}}	{{server_port}}
+iwe dug into the open-source IP
+and found no trace of MDIO support.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIntel does provide an independent MDIO module free of charge, but it		{{server_host}}	{{server_port}}
+iworks with
+a newer protocol version of Clause 45, and cannot		{{server_host}}	{{server_port}}
+icommunicate with the chip
+normally, which speaks older Clause 22.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo we managed to create our own.		{{server_host}}	{{server_port}}
+ihttps://github.com/xddxdd/zjui-ece385-final/blob/master/comp/lantian_m		{{server_host}}	{{server_port}}
+idio/lantian_mdio.sv		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis module directly exposes MDIO registers on Avalon-MM memory bus,		{{server_host}}	{{server_port}}
+iand allows
+direct memory operations on them.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOpen Source IP Receives but Doesn't Send, TX LED Not Blinking		{{server_host}}	{{server_port}}
+iNow we have received packets on the FPGA, which means we are close to		{{server_host}}	{{server_port}}
+isuccess.
+But we did a packet capture with Wireshark on the computer		{{server_host}}	{{server_port}}
+iconnected to the
+other end and got nothing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf the TX LED doesn't blink, it means that the data transferred from		{{server_host}}	{{server_port}}
+iFPGA to
+Ethernet chip is corrupted, and the Ethernet chip will not		{{server_host}}	{{server_port}}
+isend anything it
+doesn't recognize. Investigation shows that the `IFG		{{server_host}}	{{server_port}}
+iDelay` parameter of the
+Open Source IP is set incorrectly. This		{{server_host}}	{{server_port}}
+iparameter controls the number of gap
+cycles between two Ethernet		{{server_host}}	{{server_port}}
+iframes over the cable, and is usually set to 12. We
+had removed the		{{server_host}}	{{server_port}}
+iparameter previously and ignored it...		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOpen Source IP Receives but Doesn't Send, TX LED Blinking		{{server_host}}	{{server_port}}
+i... And we're here, adding that parameter.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter a 3-hour reading of the code of the Open Source IP, we found		{{server_host}}	{{server_port}}
+ithat it
+requires data from the same packet to be sent continuously,		{{server_host}}	{{server_port}}
+inot accepting delay
+in any of the cycles. The 1000Mb Ethernet module		{{server_host}}	{{server_port}}
+iruns at 125 MHz and sends 8
+bits of data to the Ethernet chip every		{{server_host}}	{{server_port}}
+itime, but our CPU and DMA run at 50 MHz
+and also send 8 bits each		{{server_host}}	{{server_port}}
+icycle. Therefore the Open Source IP needs to wait for
+data, and when		{{server_host}}	{{server_port}}
+ithis happens, it simply tells the Ethernet chip that "data		{{server_host}}	{{server_port}}
+iis
+corrupted". Ethernet chip on the FPGA board proceeds to send the		{{server_host}}	{{server_port}}
+i"corrupted"
+signal, and the computer network card on the other end		{{server_host}}	{{server_port}}
+isilently drops the packet
+before the operating system is aware of		{{server_host}}	{{server_port}}
+ianything.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe solution is also simple: the DMA module supports 32-bit width on		{{server_host}}	{{server_port}}
+ithe sender
+side, so 32-bit width is used with DMA and input side of		{{server_host}}	{{server_port}}
+iFIFO (output side
+connected to Open Source IP is still 8 bits). We		{{server_host}}	{{server_port}}
+ialso increased the DMA FIFO
+buffer size a bit out of stability		{{server_host}}	{{server_port}}
+iconsiderations and simple convenience. This
+time, the bandwidth of DMA		{{server_host}}	{{server_port}}
+iis increased from 400 Mbps to 1600 Mbps, and the Open
+Source IP no		{{server_host}}	{{server_port}}
+ilonger needs to wait for data.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAudio		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince a WM8731 driver module written by former students is provided on		{{server_host}}	{{server_port}}
+ithe
+course website, we thought adding audio was pretty easy.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe were wrong.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAudio Chip Outputs Noise		{{server_host}}	{{server_port}}
+iIn the operating systems course I took in the previous semester		{{server_host}}	{{server_port}}
+i(previous to
+this FPGA course), I added Sound Blaster 16 sound card		{{server_host}}	{{server_port}}
+isupport to our group's
+operating system. At the beginning I designed		{{server_host}}	{{server_port}}
+ithe interface of the sound module
+to be the same as SB16, providing a		{{server_host}}	{{server_port}}
+imemory region where audio data is stored,
+and triggering an interrupt		{{server_host}}	{{server_port}}
+iwhenever half of the data is read.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd the audio chip output only noise.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe thought that this interface was too complicated and did it again		{{server_host}}	{{server_port}}
+iwith DMA and
+FIFO, similar to Ethernet.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStill only noise.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe began to read through the driver module, but the module is written		{{server_host}}	{{server_port}}
+iin VHDL, a
+totally different language from SystemVerilog taught in the		{{server_host}}	{{server_port}}
+icourse. The design
+is also quite weird, as we traced an input signal		{{server_host}}	{{server_port}}
+iand found that it ended up
+unused!?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe finally discovered that a signal, which we expect to be an 8000 Hz		{{server_host}}	{{server_port}}
+ipulse
+signal (equal to sample rate) that indicates ready for the next		{{server_host}}	{{server_port}}
+isample point, is
+not what we thought it to be.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe had to find our own 8000 Hz signal source, and we saw Intel's		{{server_host}}	{{server_port}}
+iInterval Timer
+IP.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor the sake of simplicity (and laziness), we added an 8000 Hz		{{server_host}}	{{server_port}}
+iinterrupt to the
+main CPU and outputted the audio signal via PIO in		{{server_host}}	{{server_port}}
+ithe interrupt handler. Simple
+but effective.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Our finished game doesn't consume a lot of CPU cycles and can		{{server_host}}	{{server_port}}
+ihandle
+interrupts at such high frequency.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe CPU handled one interrupt and stopped.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe read through the datasheet of Interval Timer and found we need to		{{server_host}}	{{server_port}}
+iwrite to a
+register after each interrupt.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter one rich day of debugging, we finally heard beautiful music		{{server_host}}	{{server_port}}
+icoming from
+our board.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iVideo		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe video part is the difficult part of the whole project. We began		{{server_host}}	{{server_port}}
+iwith a pure
+frame buffer without sprites, yet our mere 50 MHz		{{server_host}}	{{server_port}}
+iFREE		{{server_host}}	{{server_port}}
+iCPU core, without
+cache, pipelining, or instruction prediction,		{{server_host}}	{{server_port}}
+icouldn't handle the workload of
+refreshing each pixel. Here the		{{server_host}}	{{server_port}}
+iproblem came:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFPS Less Than 1		{{server_host}}	{{server_port}}
+iYes, that's how bad the performance went. Due to the limitation of		{{server_host}}	{{server_port}}
+iSRAM (10 ns
+per operation, or 100 MHz; bus at 50 MHz max since SRAM		{{server_host}}	{{server_port}}
+ihas double the frequency
+with the multiplexer module), we cannot		{{server_host}}	{{server_port}}
+ioverclock it anymore.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe were not going to try the paid version of CPU IP, since we were		{{server_host}}	{{server_port}}
+iscared of
+what happened with our Ethernet module.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe thought compiler optimizations might do something and added `-O2`.		{{server_host}}	{{server_port}}
+iFPS
+instantly increased to around 7-8.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFPS Less Than 30		{{server_host}}	{{server_port}}
+iBut this is definitely not enough for a shooter game. The minimum		{{server_host}}	{{server_port}}
+iacceptable FPS
+is 30, and reaching 60 will be the best. Because of		{{server_host}}	{{server_port}}
+ithis, we had to build a
+sprite system, where each object could be		{{server_host}}	{{server_port}}
+imoved quickly by modifying its
+coordinates. Thanks to this, we reached		{{server_host}}	{{server_port}}
+ia framerate of 60, and the game could be
+played normally.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn addition, we added a DMA controller to the architecture. The DMA		{{server_host}}	{{server_port}}
+icontroller
+is a dedicated module for memory copy, and is much more		{{server_host}}	{{server_port}}
+iefficient than the		{{server_host}}	{{server_port}}
+iFREE		{{server_host}}	{{server_port}}
+iCPU.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut we're not done yet:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i64 Sprites Cause Logical Timeouts		{{server_host}}	{{server_port}}
+iFighter jets and bullets have their transparency. When processing each		{{server_host}}	{{server_port}}
+ipixel, a
+long combinational logic processing each layer is required.		{{server_host}}	{{server_port}}
+iThis means that the
+logic cannot properly finish in 40 ns (or 25 MHz,		{{server_host}}	{{server_port}}
+ithe pixel frequency of 640x480
+VGA), and the VGA output may have		{{server_host}}	{{server_port}}
+iartifacts.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe ended up with a tree-shaped design. Since the Cyclone IV FPGA has 4		{{server_host}}	{{server_port}}
+iinput
+LUTs, we designed such a structure:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- All 64 objects are split into 32 groups. Transparency is handled in		{{server_host}}	{{server_port}}
+ieach
+group, and 32 outputs are generated;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Split 32 outputs into 16 groups and repeat;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Split 16 outputs into 8 groups and repeat;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Split 8 outputs into 4 groups and repeat;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Split 4 outputs into 2 groups and repeat;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Process the last 2 outputs and generate the final output.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe combinational logic path is reduced from 64 comparisons to 6.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStoring Data to SDRAM		{{server_host}}	{{server_port}}
+iLastly, we need a way to store all the data, including fighter		{{server_host}}	{{server_port}}
+ijets,
+backgrounds, and audio data, to SDRAM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the course, we are suggested to use the `DE2-115 Control Panel`,		{{server_host}}	{{server_port}}
+iwhich loads
+a custom program to the FPGA and writes to SDRAM. But in a		{{server_host}}	{{server_port}}
+iprevious homework, we
+found that the data on SDRAM may be randomly		{{server_host}}	{{server_port}}
+icorrupted after switching back to
+our own programs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhat we did was write to the SDRAM when we uploaded the program to the		{{server_host}}	{{server_port}}
+iCPU.
+Create a new ELF section in the `BSP Editor` in Eclipse, name it		{{server_host}}	{{server_port}}
+ianything
+starting with a dot, such as `.resources`, but not the same		{{server_host}}	{{server_port}}
+iname as anything in
+`Platform Designer`. Then, assign it to be stored		{{server_host}}	{{server_port}}
+iin SDRAM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iArrays can be created similar to this:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe array will be uploaded to and stored in SDRAM in this case. Since		{{server_host}}	{{server_port}}
+ino extra
+programming on the FPGA itself is required, there is no risk		{{server_host}}	{{server_port}}
+iof data damage.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iKeyboard		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlthough this part is covered by course materials, the USB keyboard		{{server_host}}	{{server_port}}
+iwas
+extremely unstable when we simply followed the guides. We often		{{server_host}}	{{server_port}}
+ihad to reset the
+keyboard dozens of times so it could be recognized,		{{server_host}}	{{server_port}}
+ibut when it works, it works
+stably until the next reset.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAvoid Reset's Interference of Debugging		{{server_host}}	{{server_port}}
+iThe first thing we thought of was to split the reset functionality of		{{server_host}}	{{server_port}}
+ithe main
+program and the USB keyboard part to debug them individually.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo be precise, we created an individual CPU that is solely used to		{{server_host}}	{{server_port}}
+icommunicate
+with the keyboard. The keyboard CPU and the USB chip are		{{server_host}}	{{server_port}}
+ireset with an
+individual button, so it will not interfere with the		{{server_host}}	{{server_port}}
+imain program. The two CPUs
+communicate with a dual-port on-chip memory		{{server_host}}	{{server_port}}
+iwithout locking mechanisms
+(unnecessary since it's write-only on one		{{server_host}}	{{server_port}}
+iend and read-only on the other end).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAvoid Reset's Interference of Muscle Health		{{server_host}}	{{server_port}}
+iWe added a timeout to the USB CPU's program. The CPU will reset itself		{{server_host}}	{{server_port}}
+iif it
+cannot connect to the keyboard after a time period.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iActual testing shows that it is helpful, but not much. But since we		{{server_host}}	{{server_port}}
+iwere unable
+to solve the USB keyboard issue (even the professor		{{server_host}}	{{server_port}}
+icouldn't fix it), we had to
+live with such a workaround.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,117 @@
+iPS: After publishing the article for the first time, I realized I		{{server_host}}	{{server_port}}
+iforgot to configure the connection between nginx and php5-fpm. When I		{{server_host}}	{{server_port}}
+itried to connect to my VPS to check the settings, I opened the		{{server_host}}	{{server_port}}
+iterminal, pressed the up arrow and Enter, only to discover my last		{{server_host}}	{{server_port}}
+icommand was "exit"...		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPS2: Folks using port 22 on VPS should be cautious – you might get		{{server_host}}	{{server_port}}
+idisconnected mid-command. Switch to another port like 2222. (So 2-ish)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPS3: Today I set up a Debian 6 test environment on VirtualBox and		{{server_host}}	{{server_port}}
+idiscovered Lighttpd has plugin functionality... Revised accordingly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor a VPS, resources like CPU and disk space are usually sufficient		{{server_host}}	{{server_port}}
+ifor running a personal blog like mine. The real headache is		{{server_host}}	{{server_port}}
+iinsufficient memory. A VPS provider might allocate one CPU core from		{{server_host}}	{{server_port}}
+ithe host machine to dozens of VPS instances (though only the most		{{server_host}}	{{server_port}}
+iunscrupulous would do this), but if your host has 4GB RAM, you can		{{server_host}}	{{server_port}}
+inever allocate twenty 256MB VPS instances – that would require 5GB.		{{server_host}}	{{server_port}}
+iPlus, the host system needs to run virtualization technologies like		{{server_host}}	{{server_port}}
+iOpenVZ and management interfaces like HyperVM, so you can't even		{{server_host}}	{{server_port}}
+iallocate sixteen instances (exactly 4GB).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor us VPS users, when you get a VPS, you must ruthlessly optimize its		{{server_host}}	{{server_port}}
+imemory usage. Otherwise, once memory maxes out, your VPS becomes		{{server_host}}	{{server_port}}
+iuseless. My Host1Free VPS has 128MB RAM and 640MB Swap (which feels		{{server_host}}	{{server_port}}
+ipractically useless). For that 128MB, careful optimization is		{{server_host}}	{{server_port}}
+iessential. Those with 64MB or even 32MB VPS face even more tragic		{{server_host}}	{{server_port}}
+isituations. (PS: I think people buying such VPS have too much money to		{{server_host}}	{{server_port}}
+iburn)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1. OS Selection		{{server_host}}	{{server_port}}
+iFor a Linux VPS, you can choose Debian, Ubuntu, CentOS, Gentoo, etc.		{{server_host}}	{{server_port}}
+iEach distro has its pros: Debian has older but practical software		{{server_host}}	{{server_port}}
+i(native repo's PHP doesn't even include FPM), Ubuntu has tons of		{{server_host}}	{{server_port}}
+isoftware, CentOS's repos... well, they're great for practicing GCC		{{server_host}}	{{server_port}}
+icompilation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAmong distros, Debian feels most memory-efficient. I recall once		{{server_host}}	{{server_port}}
+irunning a full system with nginx+php-fastcgi+mysql using just 10MB		{{server_host}}	{{server_port}}
+iRAM. When I tried CentOS, the built-in OpenSSH was sluggish, and I		{{server_host}}	{{server_port}}
+icouldn't get used to yum and compiling. Ubuntu's repos are too bloated		{{server_host}}	{{server_port}}
+i– each `apt-get update` took over 5 minutes due to Host1Free's 100KB/s		{{server_host}}	{{server_port}}
+inetwork throttle. Ultimately, I installed Debian 6.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSide note: Installing a 64-bit OS on a VPS will make your memory usage		{{server_host}}	{{server_port}}
+iexplode. Only consider this if you have ≥512MB RAM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2. Web Server Selection		{{server_host}}	{{server_port}}
+iThe three most famous Linux server software are: Nginx, Apache,		{{server_host}}	{{server_port}}
+iLighttpd. Apache is the oldest and most powerful – with plugins it		{{server_host}}	{{server_port}}
+isupports PHP, Mono (ASP.NET on Linux), and even basic FTP servers. But		{{server_host}}	{{server_port}}
+ifor small-memory VPS, "powerful" is irrelevant. We need simplicity,		{{server_host}}	{{server_port}}
+ispeed, and memory efficiency.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLighttpd is a streamlined server. It		{{server_host}}	{{server_port}}
+ilacks plugin functionality with all modules compiled directly into the		{{server_host}}	{{server_port}}
+icode		{{server_host}}	{{server_port}}
+i(correction: Lighttpd has basic plugin functionality), making it		{{server_host}}	{{server_port}}
+ifaster. But it doesn't suit my workflow, so I haven't researched it		{{server_host}}	{{server_port}}
+ideeply.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNginx is more feature-rich than Lighttpd while maintaining better		{{server_host}}	{{server_port}}
+imemory efficiency. Some claim that where Apache chokes at 1,000		{{server_host}}	{{server_port}}
+iconcurrent connections, Nginx handles 100,000 effortlessly. This might		{{server_host}}	{{server_port}}
+ibe exaggerated, but Nginx's performance is undeniable. Apache uses the		{{server_host}}	{{server_port}}
+i`select` network model: when a packet arrives, it scans all		{{server_host}}	{{server_port}}
+iconnections to find a match – inefficient by design. Nginx's `epoll`		{{server_host}}	{{server_port}}
+imodel maintains a lookup table for instant packet matching.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNginx's lack of plugins also saves memory. I've run the LNMP stack in		{{server_host}}	{{server_port}}
+i10MB RAM. The downside? No built-in PHP support – it requires FastCGI		{{server_host}}	{{server_port}}
+iforwarding. This creates 1-2 persistent processes that become major		{{server_host}}	{{server_port}}
+imemory consumers, depending on your site's traffic.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i3. System Component Selection		{{server_host}}	{{server_port}}
+iA VPS's core components are: Shell, OpenSSH, and log management.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDebian 6 defaults to Bash. It's powerful but memory-hungry like		{{server_host}}	{{server_port}}
+iApache. For light users like me (1-2 shells), it's fine, but some		{{server_host}}	{{server_port}}
+iusers open 6+ shells at once – that could eat half your RAM. Solution:		{{server_host}}	{{server_port}}
+iswitch shells.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMany recommend pdksh – tiny but functional. As before: power is		{{server_host}}	{{server_port}}
+iuseless; adequacy is key.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor SSH, all distros include OpenSSH. Its drawback: when logging in as		{{server_host}}	{{server_port}}
+iroot, it spawns one new SSH process; non-root logins spawn two. Most		{{server_host}}	{{server_port}}
+iusers (unlike my lazy root approach) will see significant memory		{{server_host}}	{{server_port}}
+ioverhead. OpenSSH also supports SFTP. DropBear is a lightweight		{{server_host}}	{{server_port}}
+ialternative without SFTP, but it avoids spawning multiple processes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDebian 6 uses sysklogd for logging – very lightweight. Debian 5 users		{{server_host}}	{{server_port}}
+iaren't so lucky (default rsyslog is bloated). Fix: `apt-get install		{{server_host}}	{{server_port}}
+isysklogd && apt-get remove rsyslog`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i4. Blog Platform Selection		{{server_host}}	{{server_port}}
+iAmong PHP platforms, WordPress is unmatched. Its plugins and		{{server_host}}	{{server_port}}
+icustomization let it power anything from blogs to corporate sites. But		{{server_host}}	{{server_port}}
+ithrough its evolution to v3.5.1, WP became bloated – even loading the		{{server_host}}	{{server_port}}
+iadmin panel consumes 30MB+ RAM, straining small VPS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAn alternative is Typecho. This Chinese-built platform is just 300KB		{{server_host}}	{{server_port}}
+ivs. WP's 5MB... Its reduced plugin support boosts speed. Most		{{server_host}}	{{server_port}}
+iimportantly: it saves memory.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOptimization Walkthrough		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install Debian 6, SSH in.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install pdksh:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRe-login to apply.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install DropBear:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install LEMP Stack:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

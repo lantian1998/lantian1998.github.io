@@ -1,0 +1,96 @@
+iSince switching from OpenVZ-based VPS to KVM-based VPS, I've been		{{server_host}}	{{server_port}}
+iusing Docker to deploy essential services like nginx, MariaDB, and PHP		{{server_host}}	{{server_port}}
+ifor my websites. This approach not only simplifies restarting and		{{server_host}}	{{server_port}}
+imanaging configurations for individual services (by mapping all		{{server_host}}	{{server_port}}
+iconfiguration directories together using volumes) but also streamlines		{{server_host}}	{{server_port}}
+iservice upgrades.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor example, my blog's VPS has limited resources, with memory usage		{{server_host}}	{{server_port}}
+iconsistently around 80% recently. When updating nginx or adding		{{server_host}}	{{server_port}}
+imodules, compiling directly on this VPS would be slow and risk		{{server_host}}	{{server_port}}
+icrashing the site due to insufficient memory. With Docker, I can build		{{server_host}}	{{server_port}}
+iimages on other resource-rich VPS machines or my local computer, push		{{server_host}}	{{server_port}}
+ithem to Docker Hub, then pull and run them on the production VPS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, my nginx image size remained around 200 MB (as shown on		{{server_host}}	{{server_port}}
+iDocker Hub, excluding base image size, smaller than local `docker		{{server_host}}	{{server_port}}
+iimage` output), significantly larger than necessary. Since the VPS had		{{server_host}}	{{server_port}}
+isufficient disk space and I lacked time earlier, I ignored this issue.		{{server_host}}	{{server_port}}
+iNow with free time, I investigated thoroughly, modified the		{{server_host}}	{{server_port}}
+iDockerfile, and reduced the image size to 17 MB.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMerging RUN Commands		{{server_host}}	{{server_port}}
+iUpon opening the Dockerfile, I immediately spotted a basic mistake:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDuring image builds, Docker creates a "layer" for each instruction,		{{server_host}}	{{server_port}}
+istacking them to form the final image.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe first RUN command creates a layer containing nginx dependencies		{{server_host}}	{{server_port}}
+iand temporary apt-get files. The subsequent compilation in the second		{{server_host}}	{{server_port}}
+iRUN operates on a new layer above the dependency layer, leaving the		{{server_host}}	{{server_port}}
+ioriginal dependency files untouched. Even if I later run `apt-get		{{server_host}}	{{server_port}}
+iclean`, it only marks files for deletion in the top layer—the files		{{server_host}}	{{server_port}}
+ipersist in the dependency layer.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe solution is to chain both RUN commands using `&&` and backslashes		{{server_host}}	{{server_port}}
+ito combine them into a single layer. I initially separated these		{{server_host}}	{{server_port}}
+icommands during testing to reuse downloaded dependencies while		{{server_host}}	{{server_port}}
+idebugging compilation issues, but forgot to revert this after testing!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter merging, the image size immediately decreased by 25 MB. Though		{{server_host}}	{{server_port}}
+i175 MB was an improvement, it remained excessive.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing Alpine as the Base Image		{{server_host}}	{{server_port}}
+iI previously used Debian due to familiarity and tools like apt-get,		{{server_host}}	{{server_port}}
+ibut its ~125 MB base image is bulky. Alpine Linux—a ~5 MB distro		{{server_host}}	{{server_port}}
+iwidely adopted in Docker—became my choice for size reduction.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, I replaced `FROM debian:stretch` with `FROM alpine` (using the		{{server_host}}	{{server_port}}
+ilatest version; specify if version-sensitive).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, I mapped Debian dependencies to Alpine equivalents using apk:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOriginal Debian dependencies:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlpine equivalent:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe `--no-cache` flag fetches packages directly from repositories		{{server_host}}	{{server_port}}
+i(like `apt-get update`) and auto-clears caches (like `apt-get clean`).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSimilarly, I adjusted dependency removal. Original Debian cleanup:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlpine cleanup:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis reduced the image to 17 MB! Local `docker images` shows 39.6 MB		{{server_host}}	{{server_port}}
+iincluding Alpine—dramatically smaller. The savings come not just from		{{server_host}}	{{server_port}}
+iAlpine's size but also its lightweight musl C library.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iApplying the Same Optimization to Other Images		{{server_host}}	{{server_port}}
+iAfter optimizing nginx, I applied similar changes to other images.		{{server_host}}	{{server_port}}
+iFirst, PHP-FPM—I couldn't use the official image due to needing many		{{server_host}}	{{server_port}}
+iPHP modules.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOriginal Debian installation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlpine equivalent:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote: Alpine's PHP packages omit some defaults (e.g., php7-ctype,		{{server_host}}	{{server_port}}
+iphp7-tokenizer). Omitting these causes errors in apps like Typecho.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis reduced the Docker Hub size from 90 MB to 25 MB—a quarter of the		{{server_host}}	{{server_port}}
+ioriginal local size.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor MariaDB, I used the prebuilt		{{server_host}}	{{server_port}}
+ibianjp/mariadb-alpine		{{server_host}}	{{server_port}}
+iinstead of creating my own. It's fully compatible with the official		{{server_host}}	{{server_port}}
+iDebian-based image—I only changed the image name in		{{server_host}}	{{server_port}}
+idocker-compose.yml.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConclusion		{{server_host}}	{{server_port}}
+iThese optimizations saved ~1 GB on my VPS—significant for its small		{{server_host}}	{{server_port}}
+idisk.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPush/pull operations also accelerated, especially beneficial for my		{{server_host}}	{{server_port}}
+iHong Kong VPS with slow Docker Hub speeds. Smaller images enable		{{server_host}}	{{server_port}}
+ifaster version testing and quicker rollbacks during issues.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

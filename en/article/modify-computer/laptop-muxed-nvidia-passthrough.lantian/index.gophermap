@@ -1,0 +1,882 @@
+iA year ago, to simultaneously browse webpages and write codes on my		{{server_host}}	{{server_port}}
+iArch Linux
+installation and use Windows to run tasks infeasible on		{{server_host}}	{{server_port}}
+iLinux (such as gaming),		{{server_host}}	{{server_port}}
+1I tried GPU passthrough on my Lenovo R720 gaming laptop	/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian/	{{server_host}}	{{server_port}}
+i.
+But since that laptop has an Optimus MUXless architecture (as		{{server_host}}	{{server_port}}
+imentioned in that
+post), its dedicated GPU doesn't have output ports,		{{server_host}}	{{server_port}}
+iand the integrated GPU is in
+charge of all the displays. Therefore,		{{server_host}}	{{server_port}}
+isevere limitations exist for that setup,
+and I eventually gave up on		{{server_host}}	{{server_port}}
+iit.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut now, I've purchased a new laptop. The HDMI output port on this		{{server_host}}	{{server_port}}
+ilaptop is
+directly connected to its NVIDIA dedicated graphics card, or		{{server_host}}	{{server_port}}
+iin other words, it
+has an Optimus MUXed architecture. Since there is a		{{server_host}}	{{server_port}}
+iway to make the virtual
+machine aware of a "monitor on the dedicated		{{server_host}}	{{server_port}}
+iGPU", most functionalities work
+normally. I am finally able to create		{{server_host}}	{{server_port}}
+ia GPU passthrough setup that works
+long-term.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iChangelog		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 2023-05-08: Update some contents for new version of Looking Glass		{{server_host}}	{{server_port}}
+iB6.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 2022-01-26: The PCIe power-saving patch isn't effective.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPreparation		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBefore following steps in this post, you need to prepare:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A laptop with the Optimus MUXed architecture. My laptop is a HP		{{server_host}}	{{server_port}}
+iOMEN
+17t-ck000 (i7-11800H, RTX 3070).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2022-01) My operating system is Arch Linux, with the latest		{{server_host}}	{{server_port}}
+iupdates.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2023-05) My operating system is now NixOS while writing this		{{server_host}}	{{server_port}}
+iupdate. Most
+of the steps, however, should still apply to other Linux		{{server_host}}	{{server_port}}
+idistros.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- It's recommended to turn off Secure Boot, but you likely did it		{{server_host}}	{{server_port}}
+ianyway
+since you installed Linux. Theoretically, Secure Boot may cause		{{server_host}}	{{server_port}}
+ilimitations
+on the PCIe passthrough functionality.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Set up a virtual machine of Windows 10 or Windows 11 with		{{server_host}}	{{server_port}}
+iLibvirt
+(Virt-Manager). I'm using Windows 11.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- My VM boots in UEFI (OVMF) mode, but theoretically, this guide will		{{server_host}}	{{server_port}}
+ialso
+work with BIOS (SeaBIOS) mode. There are no steps that		{{server_host}}	{{server_port}}
+ispecifically require
+UEFI boot mode.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou MUST turn off Secure Boot in the VM! Or some drivers won't work!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Windows 11 installer will check whether Secure Boot is enabled.		{{server_host}}	{{server_port}}
+iWith
+Secure Boot off, the installer might prompt that the computer		{{server_host}}	{{server_port}}
+iis
+incompatible, and refuse to install Windows. You can follow the		{{server_host}}	{{server_port}}
+isteps in
+this post to fix the problem:		{{server_host}}	{{server_port}}
+hhttps://www.tomshardware.com/how-to/bypass-windows-11-tpm-requirement	URL:https://www.tomshardware.com/how-to/bypass-windows-11-tpm-requirement	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Set up the emulated QXL graphics card first, so you get video output		{{server_host}}	{{server_port}}
+ifrom
+the VM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (Optional) Depending on the video output ports on your computer,		{{server_host}}	{{server_port}}
+ipurchase an
+HDMI, DP, or USB Type-C dummy plug. You can get one for a		{{server_host}}	{{server_port}}
+ifew bucks on
+Amazon.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2023-05) Or you can choose to install a virtual monitor driver.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IHDMI Dummy Plug	/usr/uploads/202201/hdmi-dummy-plug.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (Optional) A USB keyboard and mouse combo.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA reminder before we begin:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Multiple reboots of the host OS is required, and your host OS may		{{server_host}}	{{server_port}}
+icrash! Back
+up your data.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- You don't need to download any NVIDIA driver manually. Windows will		{{server_host}}	{{server_port}}
+ido it for
+you automatically.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If it doesn't, don't go any further than downloading the driver EXE		{{server_host}}	{{server_port}}
+iand
+double-clicking.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNever		{{server_host}}	{{server_port}}
+i-  specify the exact driver to be used in Device Manager.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Debugging will be harder if you do this.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPurchasing A New Optimus MUXed Laptop		{{server_host}}	{{server_port}}
+iIf you are interested in GPU passthrough and are looking for a new		{{server_host}}	{{server_port}}
+ilaptop, you
+can refer to my guidelines.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe prerequisites for laptop GPU passthrough is:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The NVIDIA GPU itself must be capable of video output		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- There is at least one video output directly connected to that GPU		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, it's extremely rare for a laptop manufacturer to mention the		{{server_host}}	{{server_port}}
+iport
+connection schemes on their product pages, so we have to infer		{{server_host}}	{{server_port}}
+ifrom more common
+specifications:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Prefer a laptop with a MUX switch, aka ones that can switch their		{{server_host}}	{{server_port}}
+iinternal
+screen onto the dedicated GPU. In this case, the dedicated		{{server_host}}	{{server_port}}
+iGPU must be
+capable of video output, and there's a high chance that		{{server_host}}	{{server_port}}
+ithe manufacturer
+connected the chassis video outputs to the dedicated		{{server_host}}	{{server_port}}
+iGPU:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Common examples are: 2020 and 2021 Lenovo Legion series, HP OMEN		{{server_host}}	{{server_port}}
+iseries,
+and Dell G15.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI do not guarantee that this list is accurate!		{{server_host}}	{{server_port}}
+i-  Do your own research or
+ask a sales agent to make sure.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Or choose a laptop with a mid-range to high-end graphics card. For		{{server_host}}	{{server_port}}
+iNVIDIA
+GPUs the model number needs to end with 60 or larger.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- It's common for mid to top-tier NVIDIA GPUs to have video		{{server_host}}	{{server_port}}
+ioutput
+functionality, and the manufacturer is likely to connect		{{server_host}}	{{server_port}}
+ichassis video
+ports to them.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Do not purchase a laptop with a GPU that ends in 50 or lower, like		{{server_host}}	{{server_port}}
+ian RTX
+3050 or GTX 1650 Ti. They very likely don't support video		{{server_host}}	{{server_port}}
+ioutput.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Take advantage of unconditional return policies.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Since manufacturers won't advertise or won't even care much about		{{server_host}}	{{server_port}}
+itheir
+video output connections, we have to guess from the		{{server_host}}	{{server_port}}
+ispecifications and
+advertising pages. Therefore, it's possible that		{{server_host}}	{{server_port}}
+iyou followed every rule
+above yet got a laptop that doesn't support		{{server_host}}	{{server_port}}
+iGPU passthrough. In this case,
+you may consider returning or reselling		{{server_host}}	{{server_port}}
+iit.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In some countries, laptop manufacturers will only accept an		{{server_host}}	{{server_port}}
+iunconditional
+return if the preinstalled Windows and Office are never		{{server_host}}	{{server_port}}
+iactivated online.
+However, the latest Windows 11 requires you to		{{server_host}}	{{server_port}}
+iactivate online in its
+first-boot setup wizard. You may consider		{{server_host}}	{{server_port}}
+itrying GPU passthrough with a
+Linux installation on your USB drive		{{server_host}}	{{server_port}}
+ibefore activating Windows.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAbout Intel GVT-g Virtual GPUs		{{server_host}}	{{server_port}}
+i5th to 9th-Gen Intel integrated graphics support virtualizing the GPU		{{server_host}}	{{server_port}}
+iitself, or
+in other words, splitting it into several virtual GPUs. The		{{server_host}}	{{server_port}}
+ivirtual GPUs can be
+passed through into VMs so they get GPU		{{server_host}}	{{server_port}}
+iacceleration, while the host can still
+display stuff on the very same		{{server_host}}	{{server_port}}
+iGPU.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, the GVT-g driver in Linux doesn't support 10th-Gen or newer		{{server_host}}	{{server_port}}
+iIntel CPUs,
+and		{{server_host}}	{{server_port}}
+hIntel has no plan to support them	URL:https://github.com/intel/gvt-linux/issues/126	{{server_host}}	{{server_port}}
+i.
+In addition, the GVT-g virtual GPU cannot form an Optimus		{{server_host}}	{{server_port}}
+iconfiguration with an
+NVIDIA GPU, so it isn't useful anyway.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThat's why we're ignoring GVT-g and focusing on the NVIDIA GPU in this		{{server_host}}	{{server_port}}
+iguide.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(2023-05) About Intel SR-IOV Virtual GPUs		{{server_host}}	{{server_port}}
+i11th-Gen and later Intel integrated graphics support another form		{{server_host}}	{{server_port}}
+iof
+virtualization: SR-IOV. Intel has		{{server_host}}	{{server_port}}
+hofficially released the source code to the kernel module with SR-IOV	URL:https://github.com/intel/linux-intel-lts/tree/lts-v5.15.49-adl-linux-220826T092047Z/drivers/gpu/drm/i915	{{server_host}}	{{server_port}}
+i,
+but it isn't merged into Linux mainline as of now.		{{server_host}}	{{server_port}}
+hThere's a third party project that ports the code into a DKMS module	URL:https://github.com/strongtz/i915-sriov-dkms	{{server_host}}	{{server_port}}
+i,
+but success rate is not high according to reports in Issues section.		{{server_host}}	{{server_port}}
+iI tried it
+with my i7-11800H and didn't succeed. Therefore, this time		{{server_host}}	{{server_port}}
+iwe will not try
+SR-IOV on Intel GPUs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSteps		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStop Host OS from Tampering with NVIDIA GPU		{{server_host}}	{{server_port}}
+i> Most of the content is the same as		{{server_host}}	{{server_port}}
+1my post in 2021	/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian/	{{server_host}}	{{server_port}}
+i> .		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe NVIDIA driver on the Host OS will hold control of the dGPU, and		{{server_host}}	{{server_port}}
+istop VM from
+using it. Therefore you need to replace the driver with		{{server_host}}	{{server_port}}
+i`vfio-pci`, built solely
+for PCIe passthrough.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere are the steps for disabling the NVIDIA driver and passing control		{{server_host}}	{{server_port}}
+ito the
+PCIe passthrough module:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Run `lspci -nn | grep NVIDIA` and obtain an output similar to:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Here `[10de:249d]` is the vendor ID and device ID of the dGPU, where		{{server_host}}	{{server_port}}
+i`10de`
+means this device is manufactured by NVIDIA, and `249d` means		{{server_host}}	{{server_port}}
+ithis is a
+RTX 3070. `228b` is the audio output on the HDMI port, which		{{server_host}}	{{server_port}}
+ishould also be
+taken over by `vfio-pci`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Create `/etc/modprobe.d/lantian.conf` with the following content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- This configures `vfio-pci`, the kernel module responsible for		{{server_host}}	{{server_port}}
+iPCIe
+passthrough, to manage the dGPU. `ids` is the vendor ID and		{{server_host}}	{{server_port}}
+idevice ID of the
+device to be passed through.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Modify `/etc/mkinitcpio.conf`, add the following contents to		{{server_host}}	{{server_port}}
+i`MODULES`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- And remove anything related to NVIDIA drivers (such as `nvidia`), or		{{server_host}}	{{server_port}}
+imake
+sure they're listed after VFIO drivers. Now PCIe passthrough		{{server_host}}	{{server_port}}
+imodule will take
+control of the dGPU in the early booting process,		{{server_host}}	{{server_port}}
+ipreventing NVIDIA drivers
+from taking control.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Run `mkinitcpio -P` to update the initramfs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Reboot.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(2023-05) If you're using NixOS, you can use the following config:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSetting up NVIDIA dGPU Passthrough		{{server_host}}	{{server_port}}
+1my post in 2021	/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian/	{{server_host}}	{{server_port}}
+i,
+I mentioned a lot of configurations to circumvent restrictions of		{{server_host}}	{{server_port}}
+ithe NVIDIA
+driver. But		{{server_host}}	{{server_port}}
+hsince version 465, NVIDIA lifted most of the restrictions	URL:https://nvidia.custhelp.com/app/answers/detail/a_id/5173	{{server_host}}	{{server_port}}
+i,
+so theoretically, you pass a GPU into the VM, and everything should		{{server_host}}	{{server_port}}
+ijust work.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut that's just the theory.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI still recommend everyone to follow all the steps and hide the		{{server_host}}	{{server_port}}
+iVM
+characteristics, because:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2022-01) Not all restructions are lifted for laptops.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAt least in my tests, an incorrect PCIe bus address for the GPU and		{{server_host}}	{{server_port}}
+ithe
+absence of a battery still causes passthrough to fail, and the		{{server_host}}	{{server_port}}
+idriver will
+error out with the infamous code 43.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2023-05) In the attempt today, the PCIe bus address and absence of		{{server_host}}	{{server_port}}
+ibattery
+no longer affects outcome of GPU passthrough.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Even if NVIDIA driver isn't detecting VMs, the programs you run		{{server_host}}	{{server_port}}
+imight. Hiding
+VM characteristics increases the chance to run them		{{server_host}}	{{server_port}}
+isuccessfully.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Examples include online games with anti-cheat systems, or		{{server_host}}	{{server_port}}
+icommercial
+software that require online activation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd here we start:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Unlike the Optimus MUXless architecture, I didn't manually extract		{{server_host}}	{{server_port}}
+ithe
+graphic card's BIOS nor modify the UEFI firmware, and everything		{{server_host}}	{{server_port}}
+ijust works.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you cannot install the GPU driver after passing it into the		{{server_host}}	{{server_port}}
+iVM,
+including the cases that Windows won't automatically install them,		{{server_host}}	{{server_port}}
+ior
+NVIDIA's official installer errors out saying lack of compatible		{{server_host}}	{{server_port}}
+idevices,
+you likely will still need to extract your GPU's video BIOS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- To double-check, open Device Manager in the VM, and look at the		{{server_host}}	{{server_port}}
+iHardware
+ID, which looks like		{{server_host}}	{{server_port}}
+i`PCI\VEN_10DE&DEV_1C8D&SUBSYS_39D117AA&REV_A1`. If
+`SUBSYS` is		{{server_host}}	{{server_port}}
+ifollowed by a sequence of zeros, then the GPU video BIOS is
+missing,		{{server_host}}	{{server_port}}
+iand you need the manual steps.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Refer to		{{server_host}}	{{server_port}}
+1my post last year	/en/article/modify-computer/laptop-intel-nvidia-optimus-passthrough.lantian/	{{server_host}}	{{server_port}}
+i,
+specifically the NVIDIA GPU passthrough section, for detailed steps.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Modify your VM configuration, `virsh edit Windows`, and make the		{{server_host}}	{{server_port}}
+ifollowing
+changes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The ssdt1.dat is an ACPI table, and it emulates a fully-charged		{{server_host}}	{{server_port}}
+ibattery. It
+corresponds to the Base64 below. It can be converted to a		{{server_host}}	{{server_port}}
+ibinary file with		{{server_host}}	{{server_port}}
+hBase64 decoding website	URL:https://base64.guru/converter/decode/file	{{server_host}}	{{server_port}}
+1downloaded from this site	/usr/uploads/202007/ssdt1.dat	{{server_host}}	{{server_port}}
+i. Place it in the
+root folder.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Modify permissions for the shared memory.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Modify `/etc/apparmor.d/local/abstractions/libvirt-qemu` and add		{{server_host}}	{{server_port}}
+ithis
+line:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Then execute `sudo systemctl restart apparmor` to restart AppArmor.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Create `/etc/tmpfiles.d/looking-glass.conf` with the following		{{server_host}}	{{server_port}}
+icontents,
+replacing `lantian` to your username:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Then execute
+`sudo systemd-tmpfiles		{{server_host}}	{{server_port}}
+i/etc/tmpfiles.d/looking-glass.conf --create` to
+make it effective.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Start the VM and wait a while. Windows will automatically install		{{server_host}}	{{server_port}}
+iNVIDIA
+drivers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If Device Manager shows the GPU with an exclamation sign and error		{{server_host}}	{{server_port}}
+icode 43,
+you need to check if you've missed any steps and if you've		{{server_host}}	{{server_port}}
+iconfigured
+everything correctly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2022-01)		{{server_host}}	{{server_port}}
+iSwitch Device Manager to		{{server_host}}	{{server_port}}
+i`Device by Connection`		{{server_host}}	{{server_port}}
+iand verify
+that the NVIDIA GPU is at Bus 1, Slot 0, Function 0. The		{{server_host}}	{{server_port}}
+iparent PCIe port
+to the dGPU should be at Bus 0, Slot 1, Function 0.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf they don't match, you need to reallocate PCIe addresses with		{{server_host}}	{{server_port}}
+ithe
+method above.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2023-05) This step is no longer needed in my attempt today.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If the OS didn't automatically install the NVIDIA driver, and your		{{server_host}}	{{server_port}}
+imanually
+downloaded driver installer also shows that the system is		{{server_host}}	{{server_port}}
+iincompatible, you
+need to check the properties of the GPU device.		{{server_host}}	{{server_port}}
+iCheck if there is a
+sequence of zeros after `SUBSYS` in its Hardware		{{server_host}}	{{server_port}}
+iID.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If there is, refer to step 1.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Turn off the virtual machine and restart it.		{{server_host}}	{{server_port}}
+iThis is not just a reboot.		{{server_host}}	{{server_port}}
+iConfirm in the device manager that the GPU is working.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you get code 43 this time, check if you have the emulated battery		{{server_host}}	{{server_port}}
+iin
+step 2.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- I tried first on Windows 10 LTSC 2019 and got this error. Since I		{{server_host}}	{{server_port}}
+ididn't
+have the emulated battery set up, I cannot confirm if it's		{{server_host}}	{{server_port}}
+ian
+incompatibility between the NVIDIA driver and the OS or the lack		{{server_host}}	{{server_port}}
+iof
+battery. I recommend using the latest versions of Windows 10 or		{{server_host}}	{{server_port}}
+iWindows 11.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Do either one of the following steps:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2022-01) Plug your HDMI dummy plug into your laptop, and the VM		{{server_host}}	{{server_port}}
+ishould
+detect a new monitor.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2023-05) Install a virtual monitor driver:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Download the virtual monitor driver from		{{server_host}}	{{server_port}}
+hge9/IddSampleDriver	URL:https://github.com/ge9/IddSampleDriver	{{server_host}}	{{server_port}}
+i, and
+decompress it to `C:\IddSampleDriver`. Note that you must not		{{server_host}}	{{server_port}}
+imove the
+folder anywhere else!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open `C:\IddSampleDriver\option.txt`. You'll see the number 1 on		{{server_host}}	{{server_port}}
+ithe
+first line (don't change it), followed by a list of resolutions		{{server_host}}	{{server_port}}
+iand
+refresh rates. Only keep the one resolution and refresh rate entry		{{server_host}}	{{server_port}}
+iyou
+want, and remove all other items.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open Device Manager, select "Action - Add Legacy Hardware", click		{{server_host}}	{{server_port}}
+i"Let
+me pick from a list... - All Devices - Have disk", choose the		{{server_host}}	{{server_port}}
+ifile
+`C:\IddSampleDriver\IddSampleDriver.inf`, and complete		{{server_host}}	{{server_port}}
+ithe
+installation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Windows should now detect a new monitor.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In my testing, while using the virtual monitor driver, I saw		{{server_host}}	{{server_port}}
+isome
+corrupted pixels on the Looking Glass display. As long as you		{{server_host}}	{{server_port}}
+ican
+obtain an HDMI dummy plug, I would recommend it over the		{{server_host}}	{{server_port}}
+ivirtual
+monitor driver.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2023-05) Now the newer version of Looking Glass will install		{{server_host}}	{{server_port}}
+iIVSHMEM driver
+automatically (the driver for shared memory between VM		{{server_host}}	{{server_port}}
+iand host). You no
+longer need to install it manually. These manual		{{server_host}}	{{server_port}}
+iinstallation steps are kept
+for reference only:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2022-01) Download this Virtio driver, copy it into the VM, and		{{server_host}}	{{server_port}}
+iextract
+it.		{{server_host}}	{{server_port}}
+iYou MUST use this copy, as no other copies have the IVSHMEM
+driver!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hhttps://fedorapeople.org/groups/virt/virtio-win/direct-downloads/upstream-virtio/virtio-win10-prewhql-0.1-161.zip	URL:https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/upstream-virtio/virtio-win10-prewhql-0.1-161.zip	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open Device Manager in the VM, and find
+`System devices - PCI		{{server_host}}	{{server_port}}
+istandard RAM controller`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Right-click and select "Update driver"		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click "Browse my computer for drivers"		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click "Let me pick from a list of device drivers on my computer"		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click "Have disk" button		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Navigate to `Virtio Drivers/Win10/amd64/ivshmem.inf` file		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click next to install the driver. The device's name should change		{{server_host}}	{{server_port}}
+ito
+`IVSHMEM`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install		{{server_host}}	{{server_port}}
+hLooking Glass	URL:https://looking-glass.io/downloads	{{server_host}}	{{server_port}}
+i, a tool to
+transfer the display output from the VM to the host.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Our dummy plug is going to be the only monitor the VM can see. If we		{{server_host}}	{{server_port}}
+idon't
+install looking glass, we won't be able to see the VM desktop.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click "Windows Host Binary" on the link above, double click in the		{{server_host}}	{{server_port}}
+iVM to
+install it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2023-05) If you followed the steps from 2022-01, you won't be able		{{server_host}}	{{server_port}}
+ito see
+the startup screen while the VM is booting, and before Looking		{{server_host}}	{{server_port}}
+iGlass starts.
+Therefore, I recommend disabling the QXL virtual adapter		{{server_host}}	{{server_port}}
+iin Device Manager.
+The following older steps are kept for reference		{{server_host}}	{{server_port}}
+ipurpose only.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2022-01) Turn off the VM and run `virsh edit Windows` to edit the		{{server_host}}	{{server_port}}
+iVM
+config.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Find `<video><model type="qxl" ...></video>`, change `type` to		{{server_host}}	{{server_port}}
+i`none` to
+disable the QXL emulated GPU:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install Looking Glass client on the host. Arch Linux users can		{{server_host}}	{{server_port}}
+isimply
+install `looking-glass` from AUR. Run `looking-glass-client` to		{{server_host}}	{{server_port}}
+istart the
+client.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Back to Virt-Manager, close the window of the VM (the window that		{{server_host}}	{{server_port}}
+ishows the
+VM desktop and changes VM configurations), right-click on		{{server_host}}	{{server_port}}
+ithe VM on
+Virt-Manager's main window, and select Run.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In a moment, you should see the VM's display on Looking Glass		{{server_host}}	{{server_port}}
+iclient. Now
+the GPU passthrough setup is complete.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPerformance and Experience Optimizations		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlthough GPU passthrough is done, there is still room for user		{{server_host}}	{{server_port}}
+iexperience
+optimization. Particularly:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2022-01)		{{server_host}}	{{server_port}}
+iLooking Glass can relay keyboard and mouse events, but not audio,
+so		{{server_host}}	{{server_port}}
+iwe can't hear the VM;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2023-05) The latest Looking Glass can relay audio now.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2022-01)		{{server_host}}	{{server_port}}
+iLooking Glass may miss a few keystrokes from time to time;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2023-05) The latest Looking Glass can relay keyboard and mouse		{{server_host}}	{{server_port}}
+ievents
+reliably now.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- There is a host kernel module for IVSHMEM, which improves Looking		{{server_host}}	{{server_port}}
+iGlass
+performance with its DMA mode;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- After VM shutdown, the GPU is set to PCIe D3hot mode. It still		{{server_host}}	{{server_port}}
+iconsumes
+around 10 watts of power, which is undesirable for battery		{{server_host}}	{{server_port}}
+ilife.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe will fix the problems one by one.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGet Audio Output from VM		{{server_host}}	{{server_port}}
+i(2023-05) The latest Looking Glass can relay audio now. These steps		{{server_host}}	{{server_port}}
+iare kept for
+reference only.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhile Virt-Manager can connect to the VM with SPICE protocol to get		{{server_host}}	{{server_port}}
+ithe VM's
+sound output, Looking Glass also relays keyboard and mouse		{{server_host}}	{{server_port}}
+ievents through SPICE.
+Since the VM only accepts one simultaneous SPICE		{{server_host}}	{{server_port}}
+iconnection, we cannot get the
+audio output with Virt-Manager.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe can install		{{server_host}}	{{server_port}}
+hScream	URL:https://github.com/duncanthrax/scream	{{server_host}}	{{server_port}}
+i, a virtual sound
+card software in Windows, to transfer audio output		{{server_host}}	{{server_port}}
+iover the network. A Scream
+client can be run on the host to receive		{{server_host}}	{{server_port}}
+ithe audio signal.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDownload the Scream installer from		{{server_host}}	{{server_port}}
+hits download page	URL:https://github.com/duncanthrax/scream/releases	{{server_host}}	{{server_port}}
+ion the VM,
+extract it, run `Install-x64.bat` as administrator to		{{server_host}}	{{server_port}}
+iinstall the driver, and
+reboot.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstall the Scream client on the host. Arch Linux users can install		{{server_host}}	{{server_port}}
+ithe `scream`
+package from AUR.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOpen a terminal on the host and run `scream -v`. Test by playing some		{{server_host}}	{{server_port}}
+isound in
+the VM. If you can't hear anything, try specifying the		{{server_host}}	{{server_port}}
+inetwork interface to the
+VM, like `scream -i virbr0 -v`, where		{{server_host}}	{{server_port}}
+i`virbr0` is the default NAT network for
+Virt-Manager, and the network		{{server_host}}	{{server_port}}
+iinterface between the VM and the host.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, you can create a SystemD service to run the Scream client		{{server_host}}	{{server_port}}
+iconveniently
+later. Create `~/.config/systemd/user/scream.service`		{{server_host}}	{{server_port}}
+iwith the following
+content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou will only need to run `systemctl --user start scream` in the		{{server_host}}	{{server_port}}
+ifuture.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPassthrough Keyboard & Mouse Operations		{{server_host}}	{{server_port}}
+iThe latest Looking Glass can relay keyboard and mouse events reliably		{{server_host}}	{{server_port}}
+inow. These
+steps are kept for reference only.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe relay of the keyboard and mouse in Looking Glass isn't very		{{server_host}}	{{server_port}}
+istable, as
+misses of operation can happen from time to time.		{{server_host}}	{{server_port}}
+iTherefore, if you want to play
+some games in the VM, you need a more		{{server_host}}	{{server_port}}
+ireliable way to pass your keyboard and
+mouse into the VM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe have two options: letting Libvirt capture the keyboard and mouse		{{server_host}}	{{server_port}}
+ievents or
+simply pass your keyboard and mouse into the VM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Capturing Keyboard and Mouse Events.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- On Linux, all keyboard and mouse operations are passed to the		{{server_host}}	{{server_port}}
+idesktop
+environment via the `evdev` (or `Event Device`) framework.		{{server_host}}	{{server_port}}
+iLibvirt can
+capture your operations and pass them to the VM. In		{{server_host}}	{{server_port}}
+iaddition, Libvirt can
+switch the control between the host and the VM		{{server_host}}	{{server_port}}
+iwhenever you press Left Ctrl
+and the Right Ctrl, so you can operate on		{{server_host}}	{{server_port}}
+iboth the host and the VM with one
+keyboard-mouse combo.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- First run `ls -l /dev/input/by-path` on the host to see your present		{{server_host}}	{{server_port}}
+i`evdev`
+devices. I have these ones for example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Those with `event-mouse` are mouses, and the `event-kbd` ones are		{{server_host}}	{{server_port}}
+ikeyboards.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Then, run `virsh edit Windows` to edit the VM config. Add these into		{{server_host}}	{{server_port}}
+ithe
+`<devices>` section:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Start the VM, and you should notice that your keyboard and mouse		{{server_host}}	{{server_port}}
+iaren't
+working on the host. They're captured by the VM. Press Left		{{server_host}}	{{server_port}}
+iCtrl + Right Ctrl
+to return control to the host. Press again to		{{server_host}}	{{server_port}}
+icontrol the VM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Now we can disable the keyboard and mouse relay of Looking Glass.		{{server_host}}	{{server_port}}
+iCreate
+`/etc/looking-glass-client.ini` with the following content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- USB Keyboard and Mouse Passthrough		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Capturing keyboard and mouse operations doesn't always work. For		{{server_host}}	{{server_port}}
+iexample, my
+touchpad cannot be captured properly, as I can't move the		{{server_host}}	{{server_port}}
+icursor in the VM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you also encountered the issue and you have a USB keyboard and		{{server_host}}	{{server_port}}
+imouse
+combo, you can pass them into the VM and use them specifically		{{server_host}}	{{server_port}}
+ifor it. USB
+passthrough to VM is a mature technology, so the chance of		{{server_host}}	{{server_port}}
+irunning into
+problems is very low.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Simply click `Add Hardware - USB Host Device` in Virt-Manager and		{{server_host}}	{{server_port}}
+iselect your
+keyboard and mouse.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAccelerating Looking Glass with Kernel Modules		{{server_host}}	{{server_port}}
+i> Most of the content in this section is from		{{server_host}}	{{server_port}}
+hhttps://looking-glass.io/docs/B6/module/	URL:https://looking-glass.io/docs/B6/module/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLooking Glass provides a kernel module for the IVSHMEM shared memory		{{server_host}}	{{server_port}}
+idevice. It
+allows Looking Glass to read the display output efficiently		{{server_host}}	{{server_port}}
+iwith DMA to improve
+the framerate.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install Linux kernel header files and DKMS, or the packages		{{server_host}}	{{server_port}}
+iof
+`linux-headers` and `dkms` on Arch Linux.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install `looking-glass-module-dkms` from AUR.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Set up an Udev rule: create `/etc/udev/rules.d/99-kvmfr.rules` with		{{server_host}}	{{server_port}}
+ithe
+following content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Replace `lantian` with your own username.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Configure the memory size: create		{{server_host}}	{{server_port}}
+i`/etc/modprobe.d/looking-glass.conf` with
+the following content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Load the module automatically on boot:		{{server_host}}	{{server_port}}
+icreate
+`/etc/modules-load.d/looking-glass.conf` with a single line of		{{server_host}}	{{server_port}}
+i`kvmfr`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Run `sudo modprobe kvmfr` to load the module. Now a `kvmfr0` device		{{server_host}}	{{server_port}}
+ishould
+appear under `/dev`, and this is the memory device for Looking		{{server_host}}	{{server_port}}
+iGlass.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Edit `/etc/apparmor.d/local/abstractions/libvirt-qemu` and add this		{{server_host}}	{{server_port}}
+iline:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- It allows the VM to access the device. Run `sudo systemctl restart		{{server_host}}	{{server_port}}
+iapparmor`
+to restart AppArmor.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Run `virsh edit Windows` to change the VM's configuration：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Delete `<shmem>` section from `<devices>`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Add these lines under `<qemu:commandline>`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Start the VM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Change `/etc/looking-glass-client.ini` and add the following		{{server_host}}	{{server_port}}
+icontent:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Start Looking Glass. You should see the VM display now.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (2023-05) If you use NixOS, you can directly use the config below:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCutting Power to GPU When Unused		{{server_host}}	{{server_port}}
+i2022-01-26 Update: testing shows that the NVIDIA GPU still isn't		{{server_host}}	{{server_port}}
+icompletely
+shut down after applying the patch. The power draw is the		{{server_host}}	{{server_port}}
+isame as before. This
+section is now invalid.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> This section only applies to 20-series of NVIDIA GPUs or newer.		{{server_host}}	{{server_port}}
+iThey can shut
+themselves down with the NVIDIA official drivers. The		{{server_host}}	{{server_port}}
+i10-series or older GPUs
+don't support this feature.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> This section involves compiling a kernel yourself, and		{{server_host}}	{{server_port}}
+iusing an patch
+without extensive inspection or testing		{{server_host}}	{{server_port}}
+i> . Not intended for novice users.
+Evaluate the risks yourself.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen you aren't using the VM, the `vfio-pci` driver in charge of		{{server_host}}	{{server_port}}
+iPCIe
+passthrough sets the device to the `D3` mode, aka the power		{{server_host}}	{{server_port}}
+isaving mode of PCIe
+devices. But there are two types of `D3` modes:		{{server_host}}	{{server_port}}
+i`D3hot`, where the device is
+still powered, and `D3cold`, where the		{{server_host}}	{{server_port}}
+idevice is shut off completely. Currently,
+the `vfio-pci` driver in the		{{server_host}}	{{server_port}}
+ikernel only supports `D3hot`, and the NVIDIA GPU
+will still consume		{{server_host}}	{{server_port}}
+iaround 10 watts of power since its chip power isn't cut. This
+impacts		{{server_host}}	{{server_port}}
+ithe battery life of laptops.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAn NVIDIA engineer posted a patchset for `vfio-pci`'s `D3cold` support		{{server_host}}	{{server_port}}
+ion the
+Linux kernel mailing list. With this patchset, the NVIDIA GPU		{{server_host}}	{{server_port}}
+iwill be shut down
+completely when the VM is off. It saves power for		{{server_host}}	{{server_port}}
+iyour battery.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe patchset can be found at		{{server_host}}	{{server_port}}
+hhttps://lore.kernel.org/lkml/20211115133640.2231-1-abhsahu@nvidia.com/T/	URL:https://lore.kernel.org/lkml/20211115133640.2231-1-abhsahu@nvidia.com/T/	{{server_host}}	{{server_port}}
+i,
+which consists of three patches. I combined the three patches and		{{server_host}}	{{server_port}}
+iuploaded the
+result to		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/pkgbuild/blob/master/linux-xanmod-lantian/0007-vfio-pci-d3cold.patch	URL:https://github.com/xddxdd/pkgbuild/blob/master/linux-xanmod-lantian/0007-vfio-pci-d3cold.patch	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPatching kernel is relatively simple for Arch Linux. Most kernel		{{server_host}}	{{server_port}}
+iPKGBUILDs in
+AUR can apply patches automatically. All you have to do		{{server_host}}	{{server_port}}
+iis to download the
+PKGBUILD for a kernel and add the patch to its		{{server_host}}	{{server_port}}
+i`source` section. See my commit
+for an example:		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/pkgbuild/commit/406adb7bf5657cfe07bb17ff561d11ed97ebab39	URL:https://github.com/xddxdd/pkgbuild/commit/406adb7bf5657cfe07bb17ff561d11ed97ebab39	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDO NOTE that this patch doesn't guarantee stability.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBased on mailing list discussions:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- It's an RFC patch, aka a testing patch. There is a big `[RFC]` on		{{server_host}}	{{server_port}}
+ithe title
+of the e-mails.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If the GPU driver in the VM ever attempts to switch the GPU to		{{server_host}}	{{server_port}}
+i`D3cold` mode,
+with this patch, there are risks of resetting the GPU,		{{server_host}}	{{server_port}}
+ilosing all states, and
+crashing the VM. Although I have never		{{server_host}}	{{server_port}}
+iencountered such problems in my
+experience, you should be aware of the		{{server_host}}	{{server_port}}
+ipossible outcomes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The developer only tested some GPUs from NVIDIA. It does not		{{server_host}}	{{server_port}}
+iguarantee
+support for other PCIe devices.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUse this at your own risk.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iReferences		{{server_host}}	{{server_port}}
+iHuge thanks to previous explorers on the topic of GPU passthrough.		{{server_host}}	{{server_port}}
+iWithout their
+efforts, this post won't have existed in the first		{{server_host}}	{{server_port}}
+iplace.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere are the sources I referenced when I did my configuration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- NVIDIA dGPU passthrough		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- GitHub Misairu-G's NVIDIA Optimus MUXed passthrough guide		{{server_host}}	{{server_port}}
+hhttps://gist.github.com/Misairu-G/616f7b2756c488148b7309addc940b28	URL:https://gist.github.com/Misairu-G/616f7b2756c488148b7309addc940b28	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Reddit r/VFIO's emulated battery patch		{{server_host}}	{{server_port}}
+hhttps://www.reddit.com/r/VFIO/comments/ebo2uk/nvidia_geforce_rtx_2060_mobile_success_qemu_ovmf/	URL:https://www.reddit.com/r/VFIO/comments/ebo2uk/nvidia_geforce_rtx_2060_mobile_success_qemu_ovmf/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Arch Linux Wiki		{{server_host}}	{{server_port}}
+hhttps://wiki.archlinux.org/title/PCI_passthrough_via_OVMF	URL:https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Looking Glass Documentation		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Installation Docs		{{server_host}}	{{server_port}}
+hhttps://looking-glass.io/docs/B6/install/	URL:https://looking-glass.io/docs/B6/install/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Kernel Module Docs		{{server_host}}	{{server_port}}
+hhttps://looking-glass.io/docs/B6/module/	URL:https://looking-glass.io/docs/B6/module/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Virtual Monitor Driver		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The one used in this post, with ability to customize resolution and		{{server_host}}	{{server_port}}
+irefresh
+rate		{{server_host}}	{{server_port}}
+hhttps://github.com/ge9/IddSampleDriver	URL:https://github.com/ge9/IddSampleDriver	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The original version with fixed list of resolution and refresh rate		{{server_host}}	{{server_port}}
+hhttps://github.com/roshkins/IddSampleDriver	URL:https://github.com/roshkins/IddSampleDriver	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- VFIO D3cold Patch		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- News report from Phoronix		{{server_host}}	{{server_port}}
+hhttps://www.phoronix.com/scan.php?page=news_item&px=NVIDIA-Runtime-PM-VFIO-PCI	URL:https://www.phoronix.com/scan.php?page=news_item&px=NVIDIA-Runtime-PM-VFIO-PCI	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Link to Linux kernel mailing list		{{server_host}}	{{server_port}}
+hhttps://lore.kernel.org/lkml/20211115133640.2231-1-abhsahu@nvidia.com/T/	URL:https://lore.kernel.org/lkml/20211115133640.2231-1-abhsahu@nvidia.com/T/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAppendix: Final Libvirt XML File		{{server_host}}	{{server_port}}

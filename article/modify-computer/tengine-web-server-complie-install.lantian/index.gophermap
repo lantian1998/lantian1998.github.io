@@ -1,0 +1,21 @@
+iTengine是阿里巴巴基于nginx开发的一款高性能网页服务器，除了保留nginx原有		{{server_host}}	{{server_port}}
+i的高性能
+特性外，还增加了这堆东西：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i虽然对于普通用户没什么区别，但是拿来玩玩还是不错的，听说土豆还是56已经用		{{server_host}}	{{server_port}}
+i上
+Tengine了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i下面是编译步骤。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i插一句：因为Tengine是模块化的，所以自然地我们就把模块多开一点，反正动态加		{{server_host}}	{{server_port}}
+i载。如
+果看哪个模块不顺眼不想要，把对应的with。。。删掉就可以。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果configure报错，一般是少libxxx，直接到新立得软件包管理去搜就行了。安		{{server_host}}	{{server_port}}
+i装时要安
+装-dev包，原始包也会自动安装。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i安装完成。命令行输入nginx启动。Tengine配置与nginx类似，可以参考nginx相		{{server_host}}	{{server_port}}
+i关文档。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

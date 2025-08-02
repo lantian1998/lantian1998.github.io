@@ -1,0 +1,42 @@
+iWindows Azure		{{server_host}}	{{server_port}}
+i是微软提供的类似AWS的虚拟机。由于天朝云计算服务数据不能和国外共享
+的规		{{server_host}}	{{server_port}}
+i定，Azure在中国专门开了一家叫世纪互联的公司运营，现在有华东和华北两个数		{{server_host}}	{{server_port}}
+i据中
+心。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAzure现在没有看到有限制试用时间，在网上查询了一下，貌似没有时间限制。试		{{server_host}}	{{server_port}}
+i用服务器
+限制每个用户每月最多3000		{{server_host}}	{{server_port}}
+iCPU小时（大内存服务器1500小时），也就是可以保证4核的服
+务器运行1个月不关		{{server_host}}	{{server_port}}
+i机。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我很早之前申请了激活码，现在在邮箱突然收到了申请的激活码，还写着“7天内不		{{server_host}}	{{server_port}}
+i激活，激
+活码失效”，那么我就激活了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i创建虚拟机时可以选择Server2012R2，Server2012，Server2008R2，Ubuntu，CentOS		{{server_host}}	{{server_port}}
+i等等，
+我选择了Server2012R2，4核7GB内存，华东机房。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这是管理面板。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2014/05/1498285805.png	/usr/uploads/2014/05/1498285805.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i点下面的连接可以下载一个RDP文件，双击就可以连接你的服务器。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i连接后，服务器桌面右上角有一些服务器相关信息。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2014/05/1140965806.png	/usr/uploads/2014/05/1140965806.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i服务器操作很快，基本上感觉不到网络延迟，4核7GB的内存也可以满足我们跑基本		{{server_host}}	{{server_port}}
+i上任何程
+序。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2014/05/222836011.png	/usr/uploads/2014/05/222836011.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i由于服务器禁止外网Ping，没法测速，同时因为服务器没有独立IP，也没法绑定网		{{server_host}}	{{server_port}}
+i站。但是
+综合来说，作为免费的虚拟机，这配置已经非常强悍了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,32 @@
+iToday on		{{server_host}}	{{server_port}}
+iAdvanced Blog		{{server_host}}	{{server_port}}
+i, I discovered a stunning webpage background effect where dynamic		{{server_host}}	{{server_port}}
+ilines form triangles and other geometric patterns that respond to		{{server_host}}	{{server_port}}
+imouse movements.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo implement this on your own site, simply add the following code		{{server_host}}	{{server_port}}
+ibefore `</body>`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRefresh the page to see the effect. If it doesn't appear, verify the		{{server_host}}	{{server_port}}
+iplacement – this code		{{server_host}}	{{server_port}}
+imust not		{{server_host}}	{{server_port}}
+ibe inserted between `<head>` and `</head>`!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, this introduces an issue: when server-to-user speeds are slow		{{server_host}}	{{server_port}}
+i(e.g., during peak-hour network congestion between China and the US),		{{server_host}}	{{server_port}}
+ithe browser won't detect the need to load this JavaScript until		{{server_host}}	{{server_port}}
+ireaching the code's position near the page bottom. Consequently, this		{{server_host}}	{{server_port}}
+iJavaScript only begins downloading after page rendering completes,		{{server_host}}	{{server_port}}
+isignificantly delaying overall load times.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo resolve this, add the following code between `<head>` and `</head>`		{{server_host}}	{{server_port}}
+iat the beginning:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis instructs the browser to prioritize downloading the script during		{{server_host}}	{{server_port}}
+iinitial `<head>` parsing, substantially improving load performance.		{{server_host}}	{{server_port}}
+iDeveloper tools will show that despite being placed at the page		{{server_host}}	{{server_port}}
+ibottom, the script now loads concurrently with `<head>` resources		{{server_host}}	{{server_port}}
+iafter this optimization.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe final implementation can be observed on this site.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

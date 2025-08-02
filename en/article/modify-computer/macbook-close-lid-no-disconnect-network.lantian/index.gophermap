@@ -1,0 +1,59 @@
+iIn the past, when I didn't use my computer, I'd simply close the lid.		{{server_host}}	{{server_port}}
+iThe screen would turn off while Thunder continued downloading files		{{server_host}}	{{server_port}}
+iand QQ stayed online. Perfect! :-)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, when you close the lid on a Macbook, it enters true standby		{{server_host}}	{{server_port}}
+imode—the internet disconnects, and you can forget about QQ or Thunder.		{{server_host}}	{{server_port}}
+iQQ can still be kept online via mobile, but Thunder...		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEven using your phone consumes battery. The phone needs charging, but		{{server_host}}	{{server_port}}
+iafter some time in standby, the Macbook automatically hibernates. When		{{server_host}}	{{server_port}}
+ihibernating, the USB ports lose power, so your phone stops charging.		{{server_host}}	{{server_port}}
+iI've never woken up to a fully charged phone. This bug must be fixed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo I searched online and found a software called Sleepless. As the		{{server_host}}	{{server_port}}
+iname suggests, it prevents your computer from going into standby or		{{server_host}}	{{server_port}}
+ihibernation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDownload:		{{server_host}}	{{server_port}}
+hhttp://bbs.weiphone.com/read-htm-tid-2578204.html	URL:http://bbs.weiphone.com/read-htm-tid-2578204.html	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter downloading and extracting, you'll get an APP file. Drag it to		{{server_host}}	{{server_port}}
+iyour Applications folder, then open it via Launchpad.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince this is paid software with ads in the free version, two windows		{{server_host}}	{{server_port}}
+iappear upon launch: one with ads and another for quick Sleepless		{{server_host}}	{{server_port}}
+ishutdown. Both can be closed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ISleepless Quick Close Window	/usr/uploads/2013/07/897756688.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter launching, a lightbulb icon appears in the menu bar. Click it to		{{server_host}}	{{server_port}}
+iopen the menu.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ISleepless Menu	/usr/uploads/2013/07/1522386294.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe menu has four options from top to bottom:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Prevent idle standby, keep display on (can be disabled in settings)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Prevent idle standby, but turn display off (also configurable in		{{server_host}}	{{server_port}}
+isettings)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Prevent standby when lid is closed, but turn display off		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Prevent standby when lid is closed, and keep display on (who would		{{server_host}}	{{server_port}}
+ichoose this???)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iJust select the third option. Now try closing and reopening your		{{server_host}}	{{server_port}}
+iMacbook lid—does QQ stay connected?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor convenience, set it to launch at startup: Drag the app from		{{server_host}}	{{server_port}}
+iLaunchpad to the Dock, right-click the icon > Options > Open at Login.		{{server_host}}	{{server_port}}
+iYou can then remove the Dock icon.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote: The unregistered version shows ads, and no working crack seems		{{server_host}}	{{server_port}}
+iavailable. If annoyed, you could buy a registration code ($9.50), but		{{server_host}}	{{server_port}}
+ithat's pricey. I'd rather just close the ad window manually.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ISleepless Ad	/usr/uploads/2013/07/2078725271.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

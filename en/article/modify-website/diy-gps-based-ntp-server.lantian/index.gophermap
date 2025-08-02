@@ -1,0 +1,180 @@
+iWhat is NTP		{{server_host}}	{{server_port}}
+iNTP (Network Time Protocol) is the most widely used internet time		{{server_host}}	{{server_port}}
+isynchronization protocol. Common operating systems like Windows,		{{server_host}}	{{server_port}}
+imacOS, and Linux come with built-in NTP clients that connect to remote		{{server_host}}	{{server_port}}
+iservers to obtain the current time. For example, Windows' Internet		{{server_host}}	{{server_port}}
+itime synchronization feature is based on NTP:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Image source: Internet)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBy default, Windows connects to `time.windows.com`, an NTP server		{{server_host}}	{{server_port}}
+imaintained by Microsoft. However, this server performs poorly in		{{server_host}}	{{server_port}}
+imainland China. Located in the US, it suffers from high and unstable		{{server_host}}	{{server_port}}
+ilatency, making it difficult for NTP clients to obtain accurate time.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAre there NTP servers in mainland China? Yes, but not many:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- cn.pool.ntp.org		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- An NTP server pool project maintained by		{{server_host}}	{{server_port}}
+iwww.pool.ntp.org		{{server_host}}	{{server_port}}
+i, with servers provided by volunteers. DNS load balancing distributes		{{server_host}}	{{server_port}}
+irequests across different servers in various regions.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- As of September 16, 2019, there are 63 servers in the CN pool		{{server_host}}	{{server_port}}
+i(though not all are located domestically).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Additional servers can be accessed via `0.cn.pool.ntp.org`,		{{server_host}}	{{server_port}}
+i`1.cn.pool.ntp.org`, etc.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- cn.ntp.org.cn		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- An NTP server pool maintained by V2EX user qiuai, with some servers		{{server_host}}	{{server_port}}
+iself-hosted and others provided by volunteers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The website		{{server_host}}	{{server_port}}
+iwww.ntp.org.cn		{{server_host}}	{{server_port}}
+iis currently undergoing ICP filing, but the NTP service remains		{{server_host}}	{{server_port}}
+iavailable.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- ntp.ntsc.ac.cn		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- NTP server operated by the National Time Service Center of the		{{server_host}}	{{server_port}}
+iChinese Academy of Sciences.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- ntp[1-7].aliyun.com		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Alibaba Cloud's NTP servers, totaling 7 servers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Previously used domains like `time.pool.aliyun.com` and		{{server_host}}	{{server_port}}
+i`time[1-7].aliyun.com` may still work.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- time[1-5].cloud.tencent.com		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Tencent Cloud's NTP servers, totaling 5 servers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPurposes of Building Your Own NTP Server		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSpecialized environments requiring extreme time precision		{{server_host}}	{{server_port}}
+i- :		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Finance (e.g., high-frequency trading)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Aerospace		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Scientific research		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Cross-region data synchronization		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEnsuring time service availability		{{server_host}}	{{server_port}}
+i- :		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Self-hosted servers are more reliable than volunteer-maintained NTP		{{server_host}}	{{server_port}}
+iservers		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Avoid service disruptions due to server failures or attacks		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Maintain device time synchronization during internet outages		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIt's fun, isn't it?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRequired Equipment and Materials		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A Linux computer with a serial port:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Raspberry Pi is a great choice (Raspberry Pi 0 costs ~¥60 on Taobao		{{server_host}}	{{server_port}}
+iif only used for NTP)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Or a desktop computer with a USB-to-serial adapter (e.g., CH340		{{server_host}}	{{server_port}}
+imodule, ~¥5 on Taobao)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- I used a Tinker Board. For GPS module configuration (optional), a		{{server_host}}	{{server_port}}
+iserial adapter was also used (see image below)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A GPS module:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you used smartphones (e.g., Nokia Symbian) or navigators (Windows		{{server_host}}	{{server_port}}
+iCE) for navigation ~10 years ago, you might have a USB/Bluetooth GPS		{{server_host}}	{{server_port}}
+ireceiver that can be reused.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Otherwise, search Taobao for ATGM336H (tri-band GPS/BeiDou/GLONASS		{{server_host}}	{{server_port}}
+imodule, ~¥30):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Currently (Sept 2019) the cheapest tri-band module on Taobao		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Some sellers label it as dual-band (GPS/BeiDou), but GLONASS can be		{{server_host}}	{{server_port}}
+ienabled via configuration software		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The model I purchased is shown below		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A high-gain active GPS antenna:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Not needed if you live on a rooftop or can place the module outdoors		{{server_host}}	{{server_port}}
+iwithout obstructions		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHighly recommended		{{server_host}}	{{server_port}}
+i-  if placing near a window or indoors, as ceramic antennas struggle		{{server_host}}	{{server_port}}
+ito acquire satellites		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Costs ~¥10 on Taobao (see image below)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- For SMA connector antennas (like above) with ATGM336H's IPX port,		{{server_host}}	{{server_port}}
+ibuy an SMA-to-IPX adapter cable.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Female-to-female Dupont wires for connecting GPS module to computer:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Available for a few yuan on Taobao.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGPS Module Installation and Configuration		{{server_host}}	{{server_port}}
+iFirst, connect the GPS module's serial port. The ATGM336H operates at		{{server_host}}	{{server_port}}
+i3.3V, so it can connect directly to Tinker Board:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Module VCC → Pin 17 (3.3V power)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Module GND → Pin 20 (ground)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Module RX → Pin 8 (UART1 TX)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Module TX → Pin 10 (UART1 RX)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Module PPS → Pin 22		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLog into Tinker Board (I used Armbian OS). Run `armbian-config`,		{{server_host}}	{{server_port}}
+ienable all `uart` options under		{{server_host}}	{{server_port}}
+iSystem > Hardware		{{server_host}}	{{server_port}}
+i, then reboot.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstall gpsd to process GPS data:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEdit `/etc/default/gpsd` with these settings:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis enables gpsd, specifies the serial port (`ttyS1`), starts		{{server_host}}	{{server_port}}
+ipositioning immediately, and prevents configuration changes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStart gpsd:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRun `cgps` to view location and satellite status:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNTP Server Configuration		{{server_host}}	{{server_port}}
+iDisable the basic systemd-timesyncd client:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstall the full-featured NTP server:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd GPS configuration to `/etc/ntp.conf`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStart the NTP service:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCheck status with `ntpq -pn`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAreas for Improvement		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNot utilizing high-precision PPS signal		{{server_host}}	{{server_port}}
+i- :		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Armbian kernel for Tinker Board lacks PPS support.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Requires kernel recompilation or user-space processing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUpdate: This issue was resolved in a follow-up article. Click here:		{{server_host}}	{{server_port}}
+i/article/modify-website/diy-ntp-pps-on-tinker-board.lantian		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

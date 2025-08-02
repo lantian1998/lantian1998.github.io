@@ -1,0 +1,45 @@
+iAroma File Manager is a remarkable file manager because it operates		{{server_host}}	{{server_port}}
+iwithin the Recovery environment.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSometimes, modifying a single file can corrupt the Android system,		{{server_host}}	{{server_port}}
+ipreventing it from booting. The typical solution is to reflash the		{{server_host}}	{{server_port}}
+iROM, but this results in data loss and erases all previous system		{{server_host}}	{{server_port}}
+imodifications.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAroma File Manager allows you to delete or replace problematic files		{{server_host}}	{{server_port}}
+ito restore your system.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPrerequisites		{{server_host}}	{{server_port}}
+i: Your phone's Recovery environment must be CWM-based. It does not		{{server_host}}	{{server_port}}
+iwork with stock official recovery or TWRP. MIUI touchscreen recovery		{{server_host}}	{{server_port}}
+icompatibility is untested.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The downloaded file is a ZIP package (link provided below). Place it		{{server_host}}	{{server_port}}
+ion your SD card.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Power off your phone. Press and hold the Volume Up + Power buttons.		{{server_host}}	{{server_port}}
+iWhen the manufacturer logo appears, release the Power button but keep		{{server_host}}	{{server_port}}
+iholding Volume Up until entering Recovery mode. (Some models use		{{server_host}}	{{server_port}}
+iVolume Down + Power – check your device forum for specifics).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Follow standard flashing procedures to install the Aroma File		{{server_host}}	{{server_port}}
+iManager ZIP package. After the installation prompt, you'll enter the		{{server_host}}	{{server_port}}
+ifile management interface.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Image from XDA forums)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe touchscreen interface supports file operations like deletion and		{{server_host}}	{{server_port}}
+icopying. When finished, tap		{{server_host}}	{{server_port}}
+iMenu → Exit		{{server_host}}	{{server_port}}
+ito return to Recovery for further flashing or rebooting.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOriginal post:		{{server_host}}	{{server_port}}
+hhttp://forum.xda-developers.com/showthread.php?t=1646108	URL:http://forum.xda-developers.com/showthread.php?t=1646108	{{server_host}}	{{server_port}}
+i(Find aromafm-1.91.zip in post #2)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iChinese localized version:		{{server_host}}	{{server_port}}
+hhttp://pan.baidu.com/s/1o6sNMxc	URL:http://pan.baidu.com/s/1o6sNMxc	{{server_host}}	{{server_port}}
+i(Based on existing localization with Adobe's open-source Source Han		{{server_host}}	{{server_port}}
+iSans font added and error corrections applied. Original localization		{{server_host}}	{{server_port}}
+isource unavailable)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

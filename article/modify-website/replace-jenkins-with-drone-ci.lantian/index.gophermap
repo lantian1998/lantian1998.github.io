@@ -1,0 +1,213 @@
+iJenkins 是一款免费开源的		{{server_host}}	{{server_port}}
+iCI/CD（持续集成、部署）软件，被广泛应用在各种场景
+中。Jenkins		{{server_host}}	{{server_port}}
+i的主要优势在于其包罗万象的插件，可以完成各种任务，例如自动执行		{{server_host}}	{{server_port}}
+hSCP	URL:https://plugins.jenkins.io/scp/	{{server_host}}	{{server_port}}
+hAnsible	URL:https://plugins.jenkins.io/ansible/	{{server_host}}	{{server_port}}
+i等部署，		{{server_host}}	{{server_port}}
+hCppcheck	URL:https://plugins.jenkins.io/cppcheck/	{{server_host}}	{{server_port}}
+i等代码分
+析，		{{server_host}}	{{server_port}}
+hTelegram	URL:https://plugins.jenkins.io/telegram-notifications/	{{server_host}}	{{server_port}}
+h钉钉	URL:https://plugins.jenkins.io/dingding-notifications/	{{server_host}}	{{server_port}}
+i等
+状态通知。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我之前也将 Jenkins 用于大量任务的自动化执行，例
+如		{{server_host}}	{{server_port}}
+h我的 Dockerfile 镜像	URL:https://github.com/xddxdd/dockerfiles	{{server_host}}	{{server_port}}
+i的自动更新，你正
+在浏览的 Hexo 博客的部署，甚至还
+有		{{server_host}}	{{server_port}}
+h原神自动签到	URL:https://github.com/y1ndan/genshinhelper	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是 Jenkins 是一款拥有悠久历史的 CI，其前身 Hudson 早在 2005		{{server_host}}	{{server_port}}
+i年就发布了。因
+此，Jenkins 执行任务时依然是传统的直接执行命令，而非使用		{{server_host}}	{{server_port}}
+iDocker 容器等现代化的方
+式。这意味着 CI 执行的成功与否很大程度上依赖		{{server_host}}	{{server_port}}
+iWorker		{{server_host}}	{{server_port}}
+i主机的系统环境。例如，前段时
+间我租了一台配置更高的服务器，由于重新搭建		{{server_host}}	{{server_port}}
+i了环境，导致 CI		{{server_host}}	{{server_port}}
+i执行过程中出现一堆莫名
+其妙的问题，花了一个星期才全部发现解决。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i此外，Jenkins 用 Java 写成，因此它的内存占用相当恐怖，一个 Jenkins		{{server_host}}	{{server_port}}
+i实例的内存占
+用可以达到 1GB		{{server_host}}	{{server_port}}
+i以上，导致它完全没法用在低配置的主机上，即使是最简单的任务也不
+行。而且，		{{server_host}}	{{server_port}}
+iJenkins		{{server_host}}	{{server_port}}
+i强大的插件功能却难以用配置文件的方式调用。有很多插件都没有实现
+通过		{{server_host}}	{{server_port}}
+iJenkinsfile 配置参数的功能，遇到这种插件只能在 Jenkins		{{server_host}}	{{server_port}}
+i网页上逐个配置，麻
+烦、容易出错。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i相比之下，		{{server_host}}	{{server_port}}
+hDrone	URL:https://www.drone.io/	{{server_host}}	{{server_port}}
+i这款基于容器的 CI 是一个更现代化的选
+择。Drone 推荐使用		{{server_host}}	{{server_port}}
+h基于 Docker 容器的 Worker（官方称为 Runner）	URL:https://readme.drone.io/runner/docker/overview/	{{server_host}}	{{server_port}}
+i。
+由于使用容器作为运行环境，Drone		{{server_host}}	{{server_port}}
+i可以发挥容器的最大优势：运行环境的一致性。只要容
+器镜像一致，就可以保证		{{server_host}}	{{server_port}}
+iCI		{{server_host}}	{{server_port}}
+i的命令每次都在相同环境下执行，输出的结果也将是稳定的。
+当然，如果你的脚		{{server_host}}	{{server_port}}
+i本无论如何无法在容器中运行，Drone 也提
+供		{{server_host}}	{{server_port}}
+h直接执行命令	URL:https://readme.drone.io/runner/exec/overview/	{{server_host}}	{{server_port}}
+i或
+是		{{server_host}}	{{server_port}}
+h在 DigitalOcean 云服务器中运行	URL:https://readme.drone.io/runner/digitalocean/overview/	{{server_host}}	{{server_port}}
+i的
+Runner。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDrone 还有很多其它的优势：Drone 使用 Go 语言写成，其内存占用仅是 Jenkins		{{server_host}}	{{server_port}}
+i的十分
+之一；Drone 的配置文件语言是 YAML 或者 Jsonnet，不需要像 Jenkins		{{server_host}}	{{server_port}}
+i一样学一种专用
+语言；		{{server_host}}	{{server_port}}
+hDrone 的插件	URL:http://plugins.drone.io/	{{server_host}}	{{server_port}}
+i虽然相比 Jenkins 较少，但全部都是
+Docker		{{server_host}}	{{server_port}}
+i容器，可以统一在配置文件中调用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iJenkins		{{server_host}}	{{server_port}}
+iDrone		{{server_host}}	{{server_port}}
+i运行环境		{{server_host}}	{{server_port}}
+iWorker 系统环境		{{server_host}}	{{server_port}}
+i可选 Docker 容器，Worker 系统环境，DigitalOcean 云服务器		{{server_host}}	{{server_port}}
+i配置文件		{{server_host}}	{{server_port}}
+i专用语言 Jenkinsfile		{{server_host}}	{{server_port}}
+i通用语言 YAML/Jsonnet		{{server_host}}	{{server_port}}
+i插件数量		{{server_host}}	{{server_port}}
+i多，1836 个（本文写成日）		{{server_host}}	{{server_port}}
+i少，102 个		{{server_host}}	{{server_port}}
+i插件配置		{{server_host}}	{{server_port}}
+i主要在网页端，只有少量能通过配置文件		{{server_host}}	{{server_port}}
+i统一在配置文件中		{{server_host}}	{{server_port}}
+i开发语言		{{server_host}}	{{server_port}}
+iJava		{{server_host}}	{{server_port}}
+i内存占用		{{server_host}}	{{server_port}}
+i多，1GB 左右		{{server_host}}	{{server_port}}
+i少，100MB 左右		{{server_host}}	{{server_port}}
+i安装 Drone		{{server_host}}	{{server_port}}
+i作为一款容器化的 CI，Drone 本体也是一个 Docker		{{server_host}}	{{server_port}}
+i容器，通过环境变量的方式进行配
+置。Drone 可以对接		{{server_host}}	{{server_port}}
+hGitHub	URL:https://readme.drone.io/server/provider/github/	{{server_host}}	{{server_port}}
+hGitLab	URL:https://readme.drone.io/server/provider/gitlab/	{{server_host}}	{{server_port}}
+hGitea	URL:https://readme.drone.io/server/provider/gitea/	{{server_host}}	{{server_port}}
+hBitBucket	URL:https://readme.drone.io/server/provider/bitbucket-cloud/	{{server_host}}	{{server_port}}
+i，请参照
+链接中的官方文档进行配置。但是一个 Drone		{{server_host}}	{{server_port}}
+i实例只能同时对接其中一个。如果你像我一
+样需要同时接 GitHub 和自己的		{{server_host}}	{{server_port}}
+iGitea，就需要运行两套 Drone。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你准备将 Drone 用于部署，你需要一种方法把部署密钥传进		{{server_host}}	{{server_port}}
+iDrone。我用的是		{{server_host}}	{{server_port}}
+hVault	URL:https://www.vaultproject.io/	{{server_host}}	{{server_port}}
+i这款密钥管理软
+件，		{{server_host}}	{{server_port}}
+hDrone 官方提供了 Vault 的支持	URL:https://docs.drone.io/secret/external/vault/	{{server_host}}	{{server_port}}
+i。
+当然，你也可以把密钥直接存在 Drone		{{server_host}}	{{server_port}}
+i中，但不能在网页端直接操作，而是必
+须		{{server_host}}	{{server_port}}
+h使用 Drone 的命令行工具	URL:https://readme.drone.io/secret/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i以下是我的配置供参考，部署了 Vault、Drone：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i基本的 Drone 自动构建与部署		{{server_host}}	{{server_port}}
+i搭建完 Drone 后，下一步是添加构建任务。这里我以部署我的 Hexo 博客为例。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我的博客本身有一套部署脚本，执行以下任务：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 安装 node_modules		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `hexo generate`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `hexo deploy` 到 GitHub Pages 上（作为备用）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 把所有图片都转一遍 WebP，所有静态资源都提前用 Gzip、Brotli 压缩好		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 把生成的文件用 Ansible 批量 Rsync 到所有服务器上		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i此外，由于我的博客用了 Dependabot 来更新依赖包，Dependabot 时不时会发起		{{server_host}}	{{server_port}}
+iPull
+Request。显然，处理 Pull Request 时不能执行部署的步骤，只能尝试		{{server_host}}	{{server_port}}
+igenerate 一下看
+会不会失败。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i于是我们可以先写一个最基本的配置，保存为 `.drone.yaml`：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这一段配置可以生成出静态网页文件，可以尝试运行 `hexo		{{server_host}}	{{server_port}}
+ideploy`，但是由于缺少		{{server_host}}	{{server_port}}
+iSSH
+密钥不会部署成功。由于显而易见的原因，我不会推荐你把 SSH		{{server_host}}	{{server_port}}
+i密钥直接写死在配置文件
+中。你应该将密钥添加到 Vault（或者 Drone		{{server_host}}	{{server_port}}
+i的密钥存储中），然后在配置文件中调用：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这样 CI 容器中就有 SSH 密钥文件，可以通过 SSH 连接 GitHub		{{server_host}}	{{server_port}}
+i或者其它部署目标了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是这里还有一个问题：每次构建启动时，容器里都是一个干净的环境，也就是没		{{server_host}}	{{server_port}}
+i有
+`node_modules`，也就意味着每次构建时都要花大量时间下载		{{server_host}}	{{server_port}}
+i这个黑洞		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i好消息是 Drone		{{server_host}}	{{server_port}}
+i提供了一个插件，可以把过程中的文件夹打包缓存，下次部署时解压使
+用：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i此外，部署失败时，可以通过 Telegram 插件发送通知：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这样我们就有了一个带部署、带缓存、带 Telegram 通知的 Drone 配置。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i矩阵构建（Matrix Build）		{{server_host}}	{{server_port}}
+i有的时候我们需要在多种不同的环境下测试程序，例如		{{server_host}}	{{server_port}}
+iPython
+2.7/3.6/3.7/3.8/3.9，GCC/Clang 等等。Drone 支持 Jsonnet		{{server_host}}	{{server_port}}
+i配置文件格式，可以批量定
+义任务。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+h以我的 route-chain 项目为例	URL:https://github.com/xddxdd/route-chain/blob/master/.drone.jsonnet	{{server_host}}	{{server_port}}
+i，
+此处作为例子简化了部分内容：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i保存为 `.drone.jsonnet`，然后在 Drone 中将配置文件名从 `.drone.yaml`		{{server_host}}	{{server_port}}
+i改为
+`.drone.jsonnet` 即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i提前退出构建		{{server_host}}	{{server_port}}
+i在矩阵构建中，有的时候我们不需要运行所有的任务。例
+如		{{server_host}}	{{server_port}}
+h我的 Dockerfiles 仓库	URL:https://github.com/xddxdd/dockerfiles	{{server_host}}	{{server_port}}
+i，我不需要每次提
+交都重新构建所有的 14（个镜像）乘以 8（种架构）共 112		{{server_host}}	{{server_port}}
+i种情况。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i好在 Drone 支持提前终止构建流水线，只要在某个步骤退出时将返回码设置成		{{server_host}}	{{server_port}}
+i78，类似这
+样：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i实际例子可
+以		{{server_host}}	{{server_port}}
+h在 Dockerfiles 仓库的这个 commit 看到	URL:https://github.com/xddxdd/dockerfiles/blob/4268d0f076ee76efdff670e2f9b0dae5961a968f/.drone.jsonnet	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i不过由于 Drone 使用容器构建，容器本身启动的速度就有点慢，启动 112		{{server_host}}	{{server_port}}
+i条流水线本身就
+要消耗十几分钟的时间，即使任务立即退出。因
+此，		{{server_host}}	{{server_port}}
+h我后来将 Dockerfiles 仓库调整成了一个架构一条流水线	URL:https://github.com/xddxdd/dockerfiles/blob/master/.drone.jsonnet	{{server_host}}	{{server_port}}
+i，
+每条流水线根据 commit 消息判断要构建哪些镜像，这样只需要启动 8		{{server_host}}	{{server_port}}
+i条流水线，空跑耗
+时不会太长。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

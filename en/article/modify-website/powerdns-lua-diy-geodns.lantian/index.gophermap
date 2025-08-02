@@ -1,0 +1,151 @@
+iPreviously, if you wanted to build your own authoritative DNS system		{{server_host}}	{{server_port}}
+ifor a website, the (almost) only option was PowerDNS with its GeoIP		{{server_host}}	{{server_port}}
+ibackend. However, the GeoIP backend uses YAML configuration files and		{{server_host}}	{{server_port}}
+icannot work with databases like MySQL. This meant having to manually		{{server_host}}	{{server_port}}
+iset up a cross-server file synchronization system instead of using		{{server_host}}	{{server_port}}
+imore mature database synchronization technologies.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFortunately, PowerDNS added support for Lua records in its latest 4.2		{{server_host}}	{{server_port}}
+iversion. Lua is a programming language specifically designed for		{{server_host}}	{{server_port}}
+i"embedding functionality into other programs," which you may have		{{server_host}}	{{server_port}}
+iencountered in nginx (as a plugin). Lua record support enables		{{server_host}}	{{server_port}}
+iPowerDNS to return different responses based on user query requests,		{{server_host}}	{{server_port}}
+ithus implementing GeoDNS functionality for regional resolution.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUpdating PowerDNS		{{server_host}}	{{server_port}}
+iThe latest PowerDNS 4.2 version isn't included in the Debian 10		{{server_host}}	{{server_port}}
+isoftware repository. You'll need to download it from the Debian		{{server_host}}	{{server_port}}
+iUnstable repository. However, since PowerDNS depends on numerous new		{{server_host}}	{{server_port}}
+ilibrary files—including essential system libraries—installing via		{{server_host}}	{{server_port}}
+icommands like `apt-get install -t unstable pdns-server` would upgrade		{{server_host}}	{{server_port}}
+isome core system files to Unstable versions.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn this situation, Docker is the best solution. Since we only need to		{{server_host}}	{{server_port}}
+idownload PowerDNS from the Debian repository without compiling it		{{server_host}}	{{server_port}}
+iourselves, we can create the image with just a few lines:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe final Dockerfile I used (partial) can be found on		{{server_host}}	{{server_port}}
+hmy GitHub	URL:https://github.com/xddxdd/dockerfiles/blob/53295f2641dce30072f0f2ac5dd631e1f0b35687/dockerfiles/powerdns-bird/template.Dockerfile	{{server_host}}	{{server_port}}
+i. Note that this Dockerfile includes Bird BGP and requires GPP		{{server_host}}	{{server_port}}
+iprocessing to generate the complete version (details can be found in		{{server_host}}	{{server_port}}
+1this article	/en/article/modify-website/gpp-preprocess-dockerfile-include-if.lantian/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguring the GeoIP Database		{{server_host}}	{{server_port}}
+iPowerDNS uses the MaxMind GeoIP database for IP geographical		{{server_host}}	{{server_port}}
+iinformation. Although MaxMind provides a free, lower-precision IP		{{server_host}}	{{server_port}}
+igeolocation database (GeoLite) for personal use, starting December 30,		{{server_host}}	{{server_port}}
+i2019, MaxMind began requiring GeoLite users to register an account and		{{server_host}}	{{server_port}}
+iobtain a license key to download the database. The steps are as		{{server_host}}	{{server_port}}
+ifollows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Go to the		{{server_host}}	{{server_port}}
+hGeoLite 2 Databases page	URL:https://dev.maxmind.com/geoip/geoip2/geolite2/	{{server_host}}	{{server_port}}
+i, click the yellow button at the bottom to register. This process		{{server_host}}	{{server_port}}
+irequires email verification and cannot be done through a proxy (since		{{server_host}}	{{server_port}}
+ithat's what they specialize in).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the account details page, click `My License Key` on the left to		{{server_host}}	{{server_port}}
+imanage license keys.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click `Generate License Key` to create a new key.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Fill in a key description and select the key version as shown in the		{{server_host}}	{{server_port}}
+iimage, then confirm with the blue button:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ILicense version selection	/usr/uploads/202001/maxmind-license-version.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- After submission, note two important pieces of information to fill		{{server_host}}	{{server_port}}
+iin the configuration file later:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `Account/User ID`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `License Key`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, you can use MaxMind's official `geoipupdate` tool to		{{server_host}}	{{server_port}}
+iautomatically update the database. First, install it on Debian:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen create the folder `/etc/geoip` and modify `/etc/GeoIP.conf` (note		{{server_host}}	{{server_port}}
+icapitalization) with the following content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRun `geoipupdate` to update the database automatically, with files		{{server_host}}	{{server_port}}
+istored in `/etc/geoip`. Set up automatic updates via Cron:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguring and Starting PowerDNS		{{server_host}}	{{server_port}}
+iTo enable GeoIP functionality, modify PowerDNS's configuration file.		{{server_host}}	{{server_port}}
+iOpen `pdns.conf` and make the following changes based on your existing		{{server_host}}	{{server_port}}
+iworking PowerDNS configuration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen start PowerDNS. If your host system is Debian Unstable, simply		{{server_host}}	{{server_port}}
+irun:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor Docker users, here's a reference for `docker-compose.yml`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdding Lua Resolution Records		{{server_host}}	{{server_port}}
+iIn modern DNS resolution systems, DNS servers typically inform		{{server_host}}	{{server_port}}
+iupstream servers of the user's IP step by step (known as EDNS),		{{server_host}}	{{server_port}}
+iallowing servers to assign the nearest server address based on the		{{server_host}}	{{server_port}}
+iuser's IP.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn PowerDNS Lua, the user's IP address is available as the variable		{{server_host}}	{{server_port}}
+i`bestwho`. However, if the user's DNS server doesn't inform upstream		{{server_host}}	{{server_port}}
+iservers of the user's address, `bestwho` will point to the DNS		{{server_host}}	{{server_port}}
+iserver's address.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, let's demonstrate how to use `bestwho`. Create a record of type		{{server_host}}	{{server_port}}
+i`LUA` with the following content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe initial `A` indicates the record type to return. The following		{{server_host}}	{{server_port}}
+istring is a small Lua program: if the source IP is IPv4, it returns		{{server_host}}	{{server_port}}
+ithe user's IP; otherwise, it returns `0.0.0.0` to indicate failure.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSimilarly, we can create an IPv6 version. Create another record with		{{server_host}}	{{server_port}}
+ithe same name and type `LUA`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOr use a TXT record to return connection information with port		{{server_host}}	{{server_port}}
+inumbers:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOr use a LOC record to return the geographical location inferred by		{{server_host}}	{{server_port}}
+iGeoIP:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAll these features can be seen at `whoami.lantian.pub`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Note: Cloudflare's 1.1.1.1 server intentionally disables EDNS, so it		{{server_host}}	{{server_port}}
+idisplays Cloudflare's server address here)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguring GeoDNS		{{server_host}}	{{server_port}}
+iNow that we understand how PowerDNS Lua works, we can configure		{{server_host}}	{{server_port}}
+iregional resolution records. PowerDNS provides a convenient function		{{server_host}}	{{server_port}}
+i`pickclosest` that automatically selects the nearest server from an IP		{{server_host}}	{{server_port}}
+ilist for the user. For example, the current A record for `lantian.pub`		{{server_host}}	{{server_port}}
+iis:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`pickclosest` also works for AAAA records:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(The above servers are located in: Hong Kong, Los Angeles, New York,		{{server_host}}	{{server_port}}
+iand France respectively)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis way, users from different regions get different resolution		{{server_host}}	{{server_port}}
+iresults:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGlobal ping latency also improves significantly. Achieving sub-100ms		{{server_host}}	{{server_port}}
+ilatency worldwide with a single server would be impossible:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IKeyCDN Global Ping Tool Results	/usr/uploads/202001/geodns-global-ping.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCountry-Based Resolution		{{server_host}}	{{server_port}}
+iInstead of selecting the nearest server based on geographical		{{server_host}}	{{server_port}}
+ilocation, a better approach is country-based resolution—for example,		{{server_host}}	{{server_port}}
+ithe common setup of direct connections within China and using		{{server_host}}	{{server_port}}
+iCloudflare abroad. PowerDNS provides a useful function for this:		{{server_host}}	{{server_port}}
+i`country`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTest from inside and outside China:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSlightly modifying this code allows distributing traffic between China		{{server_host}}	{{server_port}}
+iand overseas to different servers for A, AAAA, CNAME, etc.:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iReferences		{{server_host}}	{{server_port}}
+iFind more functions in PowerDNS's official documentation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hLua Records - PowerDNS Authoritative Server Documentation	URL:https://doc.powerdns.com/authoritative/lua-records/index.html	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

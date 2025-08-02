@@ -1,0 +1,82 @@
+i（题图来自：		{{server_host}}	{{server_port}}
+h维基百科 - 对数	URL:https://zh.wikipedia.org/zh-cn/%E5%AF%B9%E6%95%B0	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i起因		{{server_host}}	{{server_port}}
+i由于一个有点离谱的原因（计算 VPS 间的物理距离来估算网络延迟），我		{{server_host}}	{{server_port}}
+1用 Nix 实现了一个有点离谱的三角函数库	/article/modify-computer/nix-trigonometric-math-library-from-zero.lantian/	{{server_host}}	{{server_port}}
+i。我把三角函数库		{{server_host}}	{{server_port}}
+h发布到 GitHub 上	URL:https://github.com/xddxdd/nix-math	{{server_host}}	{{server_port}}
+i后，发现居然有人用！看来我的需求也不算太离谱。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在仓库的 Issues 里，		{{server_host}}	{{server_port}}
+h有用户建议我给这个数学库添加一些指数/对数函数支持	URL:https://github.com/xddxdd/nix-math/issues/1	{{server_host}}	{{server_port}}
+i，例如 `exp`，`ln`，`pow` 和 `log`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因为从零开始实现这些基础函数也挺有趣的，所以我就抽空研究了一下。这四个		{{server_host}}	{{server_port}}
+i函数中，有些难度的是 `exp` 和 `ln`。`pow` 和 `log`		{{server_host}}	{{server_port}}
+i都可以用另外两个函数转化出来：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i对数函数 ln		{{server_host}}	{{server_port}}
+i学习过小学二年级的我们都知道，当		{{server_host}}	{{server_port}}
+i时，以自然底数 `e` 为底的对数函数		{{server_host}}	{{server_port}}
+i可以用如下的泰勒级数求得：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i上次实现三角函数时，我就写过了基于泰勒级数求		{{server_host}}	{{server_port}}
+i函数结果的代码。因此我们只需要将代码抄过来，改掉计算数列中某一项的公式		{{server_host}}	{{server_port}}
+i即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i（公式来自：		{{server_host}}	{{server_port}}
+h维基百科	URL:https://en.wikipedia.org/wiki/Logarithm#Taylor_series	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i虽然这个泰勒级数可以处理		{{server_host}}	{{server_port}}
+i的范围，但经过测试，当		{{server_host}}	{{server_port}}
+i接近范围两端时，需要计算的项数会变得过多，导致 Nix 报栈溢出错误：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i经过测试，当		{{server_host}}	{{server_port}}
+i时计算项数可以接受，因此我只在这个区间内使用泰勒级数进行计算。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i对于超过这个范围的输入，就需要转化到这个区间内再进行计算：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i时的计算方法适用于整个		{{server_host}}	{{server_port}}
+i区间，因此为了保持计算方法一致，我就对这个区间的输入全部使用这个方法了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i接下来只需要实现根据输入范围使用不同算法的逻辑就可以了：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i有了自然对数函数		{{server_host}}	{{server_port}}
+i后，我们自然就可以实现以任意数为底的对数函数		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i自然指数函数 exp		{{server_host}}	{{server_port}}
+i有了对数函数，我们还需要另一块拼图：自然指数函数		{{server_host}}	{{server_port}}
+i。自然指数函数的泰勒展开式是：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i显然这个泰勒展开式永不收敛，因此我们不能一项项地计算结果然后求和。所以		{{server_host}}	{{server_port}}
+i我们可以使用和上一篇文章中计算		{{server_host}}	{{server_port}}
+i时相同的方法，用多项式回归来拟合自然指数函数的曲线。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i那么我们要拟合哪一段呢？当		{{server_host}}	{{server_port}}
+i时，我们可以直接计算绝对值指数的倒数		{{server_host}}	{{server_port}}
+i。而因为我们已经有了计算整数次幂的函数 `_pow_int`，因此当		{{server_host}}	{{server_port}}
+i时，我们可以将		{{server_host}}	{{server_port}}
+i分拆为整数和小数两个部分，分别计算：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因此，我们只需要在		{{server_host}}	{{server_port}}
+i上拟合自然指数函数就可以了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i由于我们不知道多项式回归使用几项时获得最佳结果，我用 Python 和 Numpy		{{server_host}}	{{server_port}}
+i写了一个简单的脚本，从 1 项到 100		{{server_host}}	{{server_port}}
+i项都试一次，然后选取误差最小的拟合结果：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i对照同样基于多项式回归的		{{server_host}}	{{server_port}}
+i函数，就可以实现		{{server_host}}	{{server_port}}
+i函数：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i浮点次幂指数函数 pow		{{server_host}}	{{server_port}}
+i有了以上函数，我们就可以用		{{server_host}}	{{server_port}}
+i计算浮点次幂了。唯一要注意的就是各种特殊情况：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i总结		{{server_host}}	{{server_port}}
+i以上对数和指数函数（和一些额外的数学函数）可以在我的 GitHub 获取：		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-math	URL:https://github.com/xddxdd/nix-math	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你使用 Nix Flake，可以用以下方式使用这些函数：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

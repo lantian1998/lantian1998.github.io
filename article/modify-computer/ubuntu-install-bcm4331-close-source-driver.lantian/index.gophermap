@@ -1,0 +1,13 @@
+iUbuntu 系统对于大量设备都可以做到安装即用，因为 Ubuntu		{{server_host}}	{{server_port}}
+i内置了许多开源社区提供的
+驱动。问题是，开源驱动相对于官方驱动有稳定性差		{{server_host}}	{{server_port}}
+i、性能差的问题，而闭源驱动由于版权
+问题不能集成在安装光盘内，因此一般安		{{server_host}}	{{server_port}}
+i装完 Ubuntu 后就要立即联网安装闭源驱动。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i正如知乎网友邓博元所
+说：		{{server_host}}	{{server_port}}
+hhttp://www.zhihu.com/question/22776909	URL:http://www.zhihu.com/question/22776909	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i执行完成后重启电脑即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

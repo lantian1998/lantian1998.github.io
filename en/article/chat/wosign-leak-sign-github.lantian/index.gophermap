@@ -1,0 +1,7 @@
+iJust saw on V2EX that someone exploited a vulnerability in WoSign's		{{server_host}}	{{server_port}}
+icertificate
+issuance system to successfully issue a certificate for		{{server_host}}	{{server_port}}
+iGitHub's main domain.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hhttps://crt.sh/?id=29647048	URL:https://crt.sh/?id=29647048	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

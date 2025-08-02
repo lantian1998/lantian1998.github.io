@@ -1,0 +1,49 @@
+iApp Inventor is a simple Android programming tool developed by MIT. By		{{server_host}}	{{server_port}}
+idragging and dropping objects on a webpage and setting up code in a		{{server_host}}	{{server_port}}
+iflowchart-like manner, you can generate your own Android applications.		{{server_host}}	{{server_port}}
+iIf you install App Inventor's companion software on your Android phone		{{server_host}}	{{server_port}}
+ior tablet, you can modify the interface on your computer and see		{{server_host}}	{{server_port}}
+ichanges reflected instantly on your mobile device.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMIT provides an online version of App Inventor accessible through		{{server_host}}	{{server_port}}
+iemail registration. However, their website runs on Google App Engine.		{{server_host}}	{{server_port}}
+iAs we all know, Google's services have poor accessibility in China.		{{server_host}}	{{server_port}}
+iTherefore, it's best to install it locally for uninterrupted		{{server_host}}	{{server_port}}
+iprogramming.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Download the source code		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, you'll need a GitHub account. Visit		{{server_host}}	{{server_port}}
+hhttps://github.com/mit-cml/appinventor-sources	URL:https://github.com/mit-cml/appinventor-sources	{{server_host}}	{{server_port}}
+iand click "Fork" in the top-right corner.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, open a terminal in Ubuntu and enter:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iVisit		{{server_host}}	{{server_port}}
+hhttps://cloud.google.com/appengine/downloads	URL:https://cloud.google.com/appengine/downloads	{{server_host}}	{{server_port}}
+ito download Google App Engine SDK for Java. Extract it, rename the		{{server_host}}	{{server_port}}
+ifolder to `appengine-java-sdk`, and copy it to the		{{server_host}}	{{server_port}}
+i`appinventor-sources` directory created earlier.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Start compiling		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCompilation takes 2-10 minutes. On my 3rd-gen i5 CPU, it took 3		{{server_host}}	{{server_port}}
+iminutes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Launch on Linux		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCreate `start.sh` with the following content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRun in terminal:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWait about 1 minute for startup, then access App Inventor at		{{server_host}}	{{server_port}}
+hhttp://127.0.0.1:8888	URL:http://127.0.0.1:8888	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Launch on Windows (interface only, no APK build server)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstall JRE on Windows. Create `start.bat` in the		{{server_host}}	{{server_port}}
+i`appinventor-sources` folder with:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDouble-click to run. After 1 minute, access		{{server_host}}	{{server_port}}
+hhttp://127.0.0.1:8888	URL:http://127.0.0.1:8888	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

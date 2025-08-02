@@ -1,0 +1,52 @@
+iWarning: Due to my oversight, there was a mistake in a line of the SAE		{{server_host}}	{{server_port}}
+iCDN index.php code. Please refer to the comment in the code below to		{{server_host}}	{{server_port}}
+icorrect it, otherwise it will cause issues with fetching remote		{{server_host}}	{{server_port}}
+iimages.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMost people host their blogs abroad for reasons I won't elaborate on.		{{server_host}}	{{server_port}}
+iHowever, SAE and BAE servers are located in China and offer fast		{{server_host}}	{{server_port}}
+ispeeds (though SAE, being in the China Telecom Access Network,		{{server_host}}	{{server_port}}
+iexperiences occasional instability). Therefore, we can use them to		{{server_host}}	{{server_port}}
+iaccelerate our blogs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Building CDN with SAE		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis method uses SaeLayerCDN, available in SAE's App Store for		{{server_host}}	{{server_port}}
+ione-click installation. After installation, just modify a few simple		{{server_host}}	{{server_port}}
+isettings. What puzzles me is why something achievable in a single PHP		{{server_host}}	{{server_port}}
+ifile was split into five files with object-oriented programming!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI've removed large portions of redundant code and consolidated it into		{{server_host}}	{{server_port}}
+ione PHP file.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstallation method: Create an application on SAE, create a storage		{{server_host}}	{{server_port}}
+inamed "cache", create a code repository in code management, and create		{{server_host}}	{{server_port}}
+ithe following files in code editing:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- config.yaml content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- index.php content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSave, then change all URLs for images, videos, and other content you		{{server_host}}	{{server_port}}
+iwant to serve via SAE from your original site to the secondary domain		{{server_host}}	{{server_port}}
+iprovided by SAE.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Building CDN with BAE		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThere's no ready-made code for this, so I adapted the SAE version.		{{server_host}}	{{server_port}}
+iUnfortunately, BAE's official documentation has issues, which caused		{{server_host}}	{{server_port}}
+ime significant troubleshooting.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCreate a BAE application of type "PC Iframe", then enable BAE hosting.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCreate a bucket in cloud storage with a name of your choice.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd a URL routing rule in app configuration: "/(.*)" (without quotes),		{{server_host}}	{{server_port}}
+iexecuting index.php.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCreate a file named index.php in code management with the following		{{server_host}}	{{server_port}}
+icontent:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSave. I've already deployed this setup and will upload the data		{{server_host}}	{{server_port}}
+ishortly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

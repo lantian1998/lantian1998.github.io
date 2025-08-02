@@ -1,0 +1,22 @@
+iToday when connecting to an Azure China virtual machine, I noticed		{{server_host}}	{{server_port}}
+iextremely slow login response. Even with a good network environment,		{{server_host}}	{{server_port}}
+iit took over ten seconds to display the password prompt.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter searching on Google, I discovered the issue was caused by DNS		{{server_host}}	{{server_port}}
+ireverse lookup.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOpenSSH performs a reverse lookup on your IP during login to determine		{{server_host}}	{{server_port}}
+iif your IP is on the system's blacklist. However, China Telecom		{{server_host}}	{{server_port}}
+idoesn't provide reverse lookup for residential IP addresses, causing		{{server_host}}	{{server_port}}
+iOpenSSH to wait until the lookup times out before establishing the		{{server_host}}	{{server_port}}
+iconnection.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe solution is simply to disable reverse lookup.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf the connection remains slow after this configuration, try the		{{server_host}}	{{server_port}}
+ifollowing settings:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter applying these settings, SSH connections now complete within 2		{{server_host}}	{{server_port}}
+iseconds - a significant improvement compared to the previous 10+		{{server_host}}	{{server_port}}
+isecond wait time.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

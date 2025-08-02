@@ -1,0 +1,263 @@
+iDN42, aka Decentralized Network 42, is a large VPN network. Unlike		{{server_host}}	{{server_port}}
+itraditional
+VPNs, DN42 uses a lot of technology involved in Internet		{{server_host}}	{{server_port}}
+ibackbones (such as BGP)
+and is a great simulation of a realistic		{{server_host}}	{{server_port}}
+inetwork environment.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn a previous post		{{server_host}}	{{server_port}}
+i, I joined DN42 and connected most of my
+VPSes to it. (The ones left		{{server_host}}	{{server_port}}
+iare OpenVZ VPSes without Tun/Tap support.) I knew
+from the beginning		{{server_host}}	{{server_port}}
+ithat DN42 has its own domain name system. For example, DN42's
+wiki (		{{server_host}}	{{server_port}}
+ihttps://wiki.dn42.us/Home		{{server_host}}	{{server_port}}
+i) can be accessed as		{{server_host}}	{{server_port}}
+ihttps://internal.dn42		{{server_host}}	{{server_port}}
+iin DN42. I didn't register a domain back then since I
+didn't have		{{server_host}}	{{server_port}}
+itime, and I didn't have much knowledge of DN42. I finished		{{server_host}}	{{server_port}}
+ithe
+registration this month and would like to share my experience.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBuilding Authoritative DNS		{{server_host}}	{{server_port}}
+iAn authoritative DNS is responsible for a domain's records. For		{{server_host}}	{{server_port}}
+iexample, the
+domain for this blog, `lantian.pub`, has authoritative		{{server_host}}	{{server_port}}
+iservers
+`lv3ns[1-4].ffdns.net` from CloudXNS. While registering		{{server_host}}	{{server_port}}
+idomains on the Internet,
+we can use existing free DNS services, such		{{server_host}}	{{server_port}}
+ias Cloudflare or CloudXNS. But in
+DN42, although there were people		{{server_host}}	{{server_port}}
+iproviding such services, communication over IRC
+is usually required. I		{{server_host}}	{{server_port}}
+ifound it not worth the hassle and decided to self-host
+one.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBind or PowerDNS is usually used when setting up an authoritative DNS		{{server_host}}	{{server_port}}
+iserver on
+Linux. Bind stores DNS records as files, which are a bit		{{server_host}}	{{server_port}}
+ihard to manage when
+synchronization across servers is needed. For		{{server_host}}	{{server_port}}
+iPowerDNS though, in addition to
+files, the records can also be stored		{{server_host}}	{{server_port}}
+iin a database like MySQL. By the way,
+PowerDNS also provides its own		{{server_host}}	{{server_port}}
+isynchronization mechanisms.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince I never succeeded in setting up PowerDNS's native sync, and I		{{server_host}}	{{server_port}}
+ihaven't
+figured out why, I simply set up a MySQL source/replica		{{server_host}}	{{server_port}}
+ireplication.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> The server serving "standard" data is called "Primary DNS server /		{{server_host}}	{{server_port}}
+iMySQL
+replication source", and other servers synchronizing from it		{{server_host}}	{{server_port}}
+iare called
+"Secondary DNS server / MySQL replica".		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSetting up DNS: MySQL Master/Slave Sync		{{server_host}}	{{server_port}}
+iFirst, install a MySQL in each server, and add these lines to		{{server_host}}	{{server_port}}
+i`my.cnf`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen login to the source MySQL server with phpMyAdmin, and set the		{{server_host}}	{{server_port}}
+iserver to
+source (master) on the "Replication" page, and create a user		{{server_host}}	{{server_port}}
+ifor replication
+(with permissions of `REPLICATION SLAVE` and		{{server_host}}	{{server_port}}
+i`REPLICATION CLIENT`).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen you've finished the setup, you should see a similar status as:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe "File" is the filename for the MySQL binary log, and "Position" is		{{server_host}}	{{server_port}}
+ithe
+current line position. Record these two values.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, shut down MySQL on all servers. Use `rsync` or similar tools to		{{server_host}}	{{server_port}}
+icopy the
+database to replica servers, replacing the data directories.		{{server_host}}	{{server_port}}
+iThen restart all
+MySQL services. If you don't have much database		{{server_host}}	{{server_port}}
+iwrites, like for a personal
+blog, you may try to do this without		{{server_host}}	{{server_port}}
+ishutting down the source server, but keep
+in mind that in this case,		{{server_host}}	{{server_port}}
+ithe copied data may be corrupted.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen use phpMyAdmin to log on to replica MySQL servers. Since I met a		{{server_host}}	{{server_port}}
+istrange
+problem while setting up a replica with its wizards, I'm		{{server_host}}	{{server_port}}
+iexecuting an SQL
+instead:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen go to the "Replication" page, click "See slave status table", and		{{server_host}}	{{server_port}}
+iconfirm
+that `Slave_IO_Running` and `Slave_SQL_Running` are both		{{server_host}}	{{server_port}}
+i`Yes`. Now the
+replication is up and running.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSetting up DNS: Configuring PowerDNS		{{server_host}}	{{server_port}}
+iAfter done with the database, we can set up PowerDNS. First, create a		{{server_host}}	{{server_port}}
+iuser and
+database in MySQL for PowerDNS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, install PowerDNS. Since I'm a Docker user, I simply downloaded		{{server_host}}	{{server_port}}
+iand started
+a container with `docker-compose`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere PowerDNS may fail to start, telling you that some columns are too		{{server_host}}	{{server_port}}
+ilong when
+creating the `comments` table. This is because of a		{{server_host}}	{{server_port}}
+iconfiguration change with
+MySQL, causing a behavior change. These		{{server_host}}	{{server_port}}
+icolumns may be up to 64000 bytes long,
+which won't fit in the data		{{server_host}}	{{server_port}}
+itable.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstead of changing the database config, we can simply reduce the		{{server_host}}	{{server_port}}
+ilength from
+64000 to 16000, for example, and manually create the		{{server_host}}	{{server_port}}
+itables:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> This schema may be out of date for newer PowerDNS. See		{{server_host}}	{{server_port}}
+hhttps://doc.powerdns.com/authoritative/backends/generic-mysql.html	URL:https://doc.powerdns.com/authoritative/backends/generic-mysql.html	{{server_host}}	{{server_port}}
+i> 
+for the latest schema, and change length accordingly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow PowerDNS will start successfully, but right now it isn't serving		{{server_host}}	{{server_port}}
+iany
+records.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSetting up DNS: Installing PowerAdmin		{{server_host}}	{{server_port}}
+iPowerAdmin is a control panel for PowerDNS, which can be obtained from		{{server_host}}	{{server_port}}
+ihttps://github.com/poweradmin/poweradmin		{{server_host}}	{{server_port}}
+i. Simply follow its installation
+wizard.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLog in to the main menu after installation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iClick "Add Master Zone", where you need to add your domains. Enter		{{server_host}}	{{server_port}}
+iyour domain
+in the "Zone Name" box, and submit.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBack to the main menu, click on "List Zones", followed by the edit		{{server_host}}	{{server_port}}
+ibutton to the
+left of each domain, to enter this interface. Here I'll		{{server_host}}	{{server_port}}
+itake `lantian.dn42`, my
+DN42 domain, for example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInitially, after installing PowerAdmin, the SOA record will not		{{server_host}}	{{server_port}}
+icontain a
+similar record as `ns1.lantian.dn42`, which doesn't fit with		{{server_host}}	{{server_port}}
+iDN42's recommended
+practices. I set my SOA record to "ns1.lantian.dn42		{{server_host}}	{{server_port}}
+ilantian.lantian.dn42 0 28800
+7200 604800 60", and a detailed		{{server_host}}	{{server_port}}
+iexplanation of each field is:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `ns1.lantian.dn42`: Name of the main DNS server, usually the domain		{{server_host}}	{{server_port}}
+iname of
+the server you're operating on.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `lantian.lantian.dn42`: Mailbox of the DNS server administrator,		{{server_host}}	{{server_port}}
+iwith `@` at
+symbol replaced with `.` dot symbol. Here this value		{{server_host}}	{{server_port}}
+iimplies
+`lantian@lantian.dn42`. This doesn't have to be a real address		{{server_host}}	{{server_port}}
+iin DN42.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `0`: Record version ID, used to determine if records are changed if		{{server_host}}	{{server_port}}
+iAXFR is
+used. Since we use MySQL replication, this is not that		{{server_host}}	{{server_port}}
+iimportant. Set to 0
+tells PowerDNS to manage it automatically without		{{server_host}}	{{server_port}}
+imanual intervention.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `28800`: Refresh time, the interval for the secondary DNS server to		{{server_host}}	{{server_port}}
+ipull from
+the primary server with AXFR. Not important here.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `7200`: Retry time, time to wait if a previous AXFR attempt failed.		{{server_host}}	{{server_port}}
+iAlso not
+important here.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `604800`: Expiration time, time for a secondary DNS server to serve		{{server_host}}	{{server_port}}
+irecords
+since the last successful AXFR. After this period of time, the		{{server_host}}	{{server_port}}
+isecondary DNS
+server will stop serving this zone. Also not important		{{server_host}}	{{server_port}}
+ihere.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `60`: Minimal TTL for all records. Minimum time to refresh record		{{server_host}}	{{server_port}}
+idata.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iClick on the edit button to the left of SOA record, set the values,		{{server_host}}	{{server_port}}
+iand save.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen we need to set NS records, specifying that your domain will be		{{server_host}}	{{server_port}}
+iserved by
+these DNS servers. I will configure 3 servers,		{{server_host}}	{{server_port}}
+i`ns[1-3].lantian.dn42`. An NS
+record is necessary for each of them:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSubmit each one.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, set the A records, to specify that the domain points to a		{{server_host}}	{{server_port}}
+ispecific
+server:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow the primary PowerDNS has been set up. With MySQL replication in		{{server_host}}	{{server_port}}
+iplace, your
+configuration has been synced to other servers. Simply		{{server_host}}	{{server_port}}
+iinstall PowerDNS on each
+of them.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, `dig` your own server as a test:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRegister Domain at DN42		{{server_host}}	{{server_port}}
+iDN42 had an upgrade recently, replacing the old Monotone repository		{{server_host}}	{{server_port}}
+iwith Git.
+First, register an account at		{{server_host}}	{{server_port}}
+ihttps://git.dn42.us/explore/repos		{{server_host}}	{{server_port}}
+i, Fork		{{server_host}}	{{server_port}}
+idn42/registry		{{server_host}}	{{server_port}}
+i, and Clone it to your local computer.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, DN42 requires Git Commits to be GPG signed. I'm using GPG		{{server_host}}	{{server_port}}
+iKeychain on
+Mac. The procedures are: creating a key, uploading pubkey		{{server_host}}	{{server_port}}
+ito a public GPG server
+such as SKS, and copy the Fingerprint.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen configure `git` so it will automatically sign each commit:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince I'm already a DN42 user and have my own MNT handles, I need to		{{server_host}}	{{server_port}}
+iedit
+`data/mntner/LANTIAN-MNT` and add my GPG fingerprint to it:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen create `data/dns/lantian.dn42`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(2020-03-22 Update: originally this line was also present:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut it was removed in an update in Nov 2018.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI made this update since one user in Telegram Group had problems with		{{server_host}}	{{server_port}}
+ithis.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen `git add`, `git commit`, `git push`, send a Pull Request and wait		{{server_host}}	{{server_port}}
+ifor
+merging, and fix for any possible errors as admins request.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince DN42 uses Anycast DNS, anyone can host a DNS recursive server.		{{server_host}}	{{server_port}}
+iWith
+different people polling updates from the central registry at		{{server_host}}	{{server_port}}
+idifferent
+intervals, it may take up to a week for your domain to fully		{{server_host}}	{{server_port}}
+iwork.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, we've registered a domain in DN42. Now you can set up your		{{server_host}}	{{server_port}}
+iwebsite,
+mail, IRC, game server, or whatever you want.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

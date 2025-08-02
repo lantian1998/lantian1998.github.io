@@ -1,0 +1,27 @@
+IHitokoto	/usr/uploads/2013/08/1999601044.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHitokoto is a one-sentence quotation website.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe so-called "one-sentence quotation" is a way to record what you		{{server_host}}	{{server_port}}
+isaid, did, or thought in a single sentence and share it with others.		{{server_host}}	{{server_port}}
+iHitokoto provides a platform for everyone to share these quotations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut obviously, the purpose of this article isn't about that. I'll		{{server_host}}	{{server_port}}
+ifocus on its API – how to display these quotations on your own		{{server_host}}	{{server_port}}
+iwebsite.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- PHP Server-Side Fetch		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote: I don't recommend this method as it slows down page loading,		{{server_host}}	{{server_port}}
+iespecially if your server isn't in North America or Canada (Hitokoto's		{{server_host}}	{{server_port}}
+imain server is in Canada). If your website happens to suffer a CC		{{server_host}}	{{server_port}}
+iattack... when your upload/download bandwidth is saturated, you'll		{{server_host}}	{{server_port}}
+ihave no choice but to accept the consequences.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Javascript Client-Side Fetch		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI prefer this method. It lets the client fetch data directly, saving		{{server_host}}	{{server_port}}
+iboth time and server resources.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDemo:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

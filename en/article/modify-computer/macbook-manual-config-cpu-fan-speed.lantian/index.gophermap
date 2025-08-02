@@ -1,0 +1,55 @@
+iWhen designing products, Apple always strives to make devices as thin		{{server_host}}	{{server_port}}
+ias possible. For phones, this isn't a major issue, but for laptops,		{{server_host}}	{{server_port}}
+ithinner designs often lead to hotter machines!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf the CPU consistently operates at high temperatures, it will age		{{server_host}}	{{server_port}}
+ifaster, shortening its lifespan and requiring earlier replacement.		{{server_host}}	{{server_port}}
+iTherefore, monitoring CPU temperature is crucial.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI noticed this issue while watching videos on Bilibili – my Macbook's		{{server_host}}	{{server_port}}
+iexhaust vents were extremely hot. I immediately realized I needed		{{server_host}}	{{server_port}}
+itemperature monitoring software.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThat's when I found		{{server_host}}	{{server_port}}
+hsmcFanControl	URL:http://www.eidac.de/?p=243	{{server_host}}	{{server_port}}
+i, a tool that monitors CPU temperature and controls fan speed. It		{{server_host}}	{{server_port}}
+idisplays real-time CPU temperature and fan RPM in the menu bar.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter downloading the .app file, right-click any Dock icon (except		{{server_host}}	{{server_port}}
+iFinder, window icons, Downloads, or Trash), select Options > Show in		{{server_host}}	{{server_port}}
+iFinder, then drag the app into the folder. Launch it via Launchpad.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IsmcFanControl Menu Bar Screenshot	/usr/uploads/2013/07/445511655.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince I'm on macOS 10.9 and the software officially supports up to		{{server_host}}	{{server_port}}
+i10.8, it showed a compatibility warning. But in my tests, it worked		{{server_host}}	{{server_port}}
+iperfectly on 10.9. Note: Don't run other fan control software		{{server_host}}	{{server_port}}
+isimultaneously to avoid conflicts.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUpon opening, I saw alarming readings: CPU at 90°C with fans at only		{{server_host}}	{{server_port}}
+i2000 RPM. What's going on here!!!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMy previous Asus laptop would automatically max out fans at 80°C,		{{server_host}}	{{server_port}}
+icooling the CPU to 70°C within 30 seconds. That's proper CPU		{{server_host}}	{{server_port}}
+iprotection. Apple, what were you thinking!!!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI clicked the menu icon and opened Preferences.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IsmcFanControl Menu	/usr/uploads/2013/07/1980939657.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the main interface, I clicked "+" to create a "Max Speed" profile,		{{server_host}}	{{server_port}}
+idragging the slider to 6200 RPM.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IsmcFanControl Settings	/usr/uploads/2013/07/1127560382.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWithin 10 seconds, the fans roared to life. After a minute, CPU		{{server_host}}	{{server_port}}
+itemperature dropped to 65°C.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, running fans at maximum speed long-term accelerates wear. I		{{server_host}}	{{server_port}}
+iset a "Higher RPM" profile at 5000 RPM, which maintains my Macbook at		{{server_host}}	{{server_port}}
+ia safe 65°C during testing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow, whenever the CPU exceeds 70°C, I activate Max Speed until it		{{server_host}}	{{server_port}}
+icools to ~65°C, then switch to Higher RPM. The noise is noticeable,		{{server_host}}	{{server_port}}
+ibut machine safety comes first.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,182 @@
+iDuring the Chinese Spring Festival, my dad gave me an Edifier M120		{{server_host}}	{{server_port}}
+iBluetooth
+speaker. This speaker is not one of these high-end models		{{server_host}}	{{server_port}}
+ifeaturing dedicated
+bass speakers or professional Bluetooth audio		{{server_host}}	{{server_port}}
+icodecs such as aptX and LDAC; it's
+just a unit with two ordinary		{{server_host}}	{{server_port}}
+ispeakers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> With that said, I doubt I can hear any difference with those		{{server_host}}	{{server_port}}
+iadvanced codecs
+on a portable speaker anyway.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut when I played some music with my phone connected to it, I realized		{{server_host}}	{{server_port}}
+ithat it
+does have some bass output. Speaking of bass, I'm impressed by		{{server_host}}	{{server_port}}
+ia JBL Charge 4
+speaker bought by one of my classmates. As a portable		{{server_host}}	{{server_port}}
+ispeaker that costs $150,
+it has a dedicated bass unit with astonishing		{{server_host}}	{{server_port}}
+ipower. Then I began to think that,
+although my speaker costs a mere		{{server_host}}	{{server_port}}
+i$20 (converted from CNY), is it possible to
+improve its bass		{{server_host}}	{{server_port}}
+iperformance with software methods to make it somewhat similar
+to the		{{server_host}}	{{server_port}}
+iCharge 4? I immediately tried ViPER4Audio FX, the all-in-one sound		{{server_host}}	{{server_port}}
+ieffect
+solution on Android, and increased the bass level in Dynamic		{{server_host}}	{{server_port}}
+iSystem. While the
+bass was enhanced indeed, the output from the		{{server_host}}	{{server_port}}
+ispeaker became distorted. Whenever
+the speaker played a drum beat, the		{{server_host}}	{{server_port}}
+ivolume of that speaker was lowered for a
+short amount of time. This is		{{server_host}}	{{server_port}}
+icaused by the mechanical limits of the speaker
+itself.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI had planned to modify the speaker, but after a quick search on		{{server_host}}	{{server_port}}
+iTaobao, I only
+found those large, expensive units for large, expensive		{{server_host}}	{{server_port}}
+ispeakers sitting in
+rooms. In addition, the coronavirus pandemic		{{server_host}}	{{server_port}}
+iimpacted the express delivery
+service, so even if I ordered one right		{{server_host}}	{{server_port}}
+iaway, it's up to the universe to decide
+when it will arrive.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen I came up with an idea. A single speaker is limited mechanically		{{server_host}}	{{server_port}}
+ifrom
+playing non-distorted high pitch along with a strong bass beat.		{{server_host}}	{{server_port}}
+iBut since my
+speaker unit has two individual speakers for two		{{server_host}}	{{server_port}}
+ichannels, what would happen if
+I played bass through one of them and		{{server_host}}	{{server_port}}
+itreble through the other one?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd here comes the sound effect plugin.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNotes		{{server_host}}	{{server_port}}
+iThis sound effect plugin is intended for audio devices with		{{server_host}}	{{server_port}}
+iall conditions met
+below		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A "speaker" rather than a "headphone" or an "earphone"		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Since the plugin will send bass through one channel and treble		{{server_host}}	{{server_port}}
+ithrough the
+other, it's meaningless for headphones		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Speakers for both channels placed together		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If they are too far apart, you will feel that the bass and treble		{{server_host}}	{{server_port}}
+iare coming
+from different places, hindering your experience.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- No dedicated bass unit		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If it has one, the manufacturer likely had done everything this		{{server_host}}	{{server_port}}
+iplugin does,
+to split bass to the dedicated unit		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (Usually) inexpensive		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If your speaker is pricey (like a JBL Charge 4), it usually has		{{server_host}}	{{server_port}}
+isuperior
+bass effects anyway. Increasing bass further with this plugin		{{server_host}}	{{server_port}}
+imay damage
+your hearing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstallation & Usage		{{server_host}}	{{server_port}}
+iThe sound effect plugin can be downloaded from my GitHub,		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/ladspa	URL:https://github.com/xddxdd/ladspa	{{server_host}}	{{server_port}}
+i. Right now
+(2020-02-18), there is only one plugin in the repo, the		{{server_host}}	{{server_port}}
+ifrequency splitter and
+bass booster we're talking about, but I may add		{{server_host}}	{{server_port}}
+imore plugins if I want.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIt can be installed just like any CMake project:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince it's a standard LADSPA plugin, it can be used by any music		{{server_host}}	{{server_port}}
+iplayer
+supporting LADSPA, for example, Audacious:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAudacious Load LADSPA Plugin	/usr/uploads/202002/ladspa-audacity.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere `Split Frequency` stands for the split frequency for bass and		{{server_host}}	{{server_port}}
+itreble. With
+the settings in the picture, any sound lower than 100 Hz		{{server_host}}	{{server_port}}
+iwill go through one
+channel and be enhanced, while those higher than		{{server_host}}	{{server_port}}
+i100 Hz will go through the
+other channel. `Bass Boost` is the factor		{{server_host}}	{{server_port}}
+iby which bass enhances. For example, 1
+means no increase, and "5"		{{server_host}}	{{server_port}}
+imeans that the bass signal is multiplied by 5.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs an alternative, you may also use PulseAudio to apply it to all		{{server_host}}	{{server_port}}
+isoftware. Add
+the following instructions to the end of		{{server_host}}	{{server_port}}
+i`/etc/pulse/default.pa`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere 80 and 5 are for `Split Frequency` and `Bass Boost` individually.		{{server_host}}	{{server_port}}
+iThen
+restart PulseAudio:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen select Splitfreq as the default output device in the sound		{{server_host}}	{{server_port}}
+isettings.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlgorithms		{{server_host}}	{{server_port}}
+iThis sound effect plugin will randomly select a channel (corresponding		{{server_host}}	{{server_port}}
+ito a
+speaker) as bass output and the other as treble output. This		{{server_host}}	{{server_port}}
+ihappens at plugin
+load time (usually when the player starts or		{{server_host}}	{{server_port}}
+iPulseAudio starts). It prevents
+unbalanced speaker output if you've		{{server_host}}	{{server_port}}
+iused the plugin for too long and a speaker
+begins to wear.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Although I don't think this has a high chance of happening, better		{{server_host}}	{{server_port}}
+ibe safe
+than sorry.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe plugin first takes the mean of input sound signal to mix the		{{server_host}}	{{server_port}}
+isignal to mono
+channel, since there's not much difference anyway on a		{{server_host}}	{{server_port}}
+iportable speaker. Then
+the signal passes through a low-pass filter,		{{server_host}}	{{server_port}}
+iwith the threshold set to the value
+of `Split Frequency`, to obtain		{{server_host}}	{{server_port}}
+ithe bass signal. Treble signal is obtained by
+subtracting the bass		{{server_host}}	{{server_port}}
+isignal from the input. The low-pass filter implementation
+is copied		{{server_host}}	{{server_port}}
+ifrom		{{server_host}}	{{server_port}}
+hLADSPA's Official Examples	URL:https://www.ladspa.org/ladspa_sdk/download.html	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen the bass signal is multiplied by `Bass Boost` as enhancement, and		{{server_host}}	{{server_port}}
+ioutput to
+the bass channel. The treble signal goes to the treble		{{server_host}}	{{server_port}}
+ichannel without any
+enhancement.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEffects		{{server_host}}	{{server_port}}
+iWith this plugin, the bass output on my speaker significantly		{{server_host}}	{{server_port}}
+iimproves. In
+addition, with the separation of bass and treble, there		{{server_host}}	{{server_port}}
+iis no significant
+distortion or volume change on the treble side.		{{server_host}}	{{server_port}}
+iTherefore, my music experience
+is greatly improved.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAbout parameter selection, on my Edifier M120, the best settings		{{server_host}}	{{server_port}}
+iare
+`Split Frequency` set to 80 and `Bass Boost` set to 5. Since you		{{server_host}}	{{server_port}}
+i(almost)
+definitely are using another speaker, you need to tune the		{{server_host}}	{{server_port}}
+ibest parameters by
+yourself.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,22 @@
+iOn my VPSes, the TAP network interface created by OpenVPN has		{{server_host}}	{{server_port}}
+ia
+randomly-generated IPv6 address with scope `stable-privacy`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis address itself is created randomly to prevent tracking users by		{{server_host}}	{{server_port}}
+itheir IPv6
+addresses. But when building a network in DN42, BGP		{{server_host}}	{{server_port}}
+ihandshakes may originate
+from this address (rather than your manually		{{server_host}}	{{server_port}}
+iassigned link-local address) and
+fail for mismatching origin/IP.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe solution is to configure the TAP interfaces with sysctl, and		{{server_host}}	{{server_port}}
+idisable the
+automatic address generation options. OpenVPN can be		{{server_host}}	{{server_port}}
+iconfigured to run `sysctl`
+automatically when creating the interface:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDepending on your Linux distribution, you may need to adjust the path		{{server_host}}	{{server_port}}
+iof
+`/bin/sh` and `/sbin/sysctl`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

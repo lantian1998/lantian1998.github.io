@@ -1,0 +1,64 @@
+iSince I have multiple architecture devices running Docker (including		{{server_host}}	{{server_port}}
+ix86 servers, Raspberry Pi, Tinker Board), for each commonly used		{{server_host}}	{{server_port}}
+isoftware, I		{{server_host}}	{{server_port}}
+ineed to build an image for each different architecture		{{server_host}}	{{server_port}}
+i. Previously, my approach was to maintain a separate Dockerfile for		{{server_host}}	{{server_port}}
+ieach architecture,		{{server_host}}	{{server_port}}
+isimilar to this		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou can see that each Dockerfile is almost identical except for the		{{server_host}}	{{server_port}}
+ibase image referenced in the FROM instruction. While this management		{{server_host}}	{{server_port}}
+imethod simplifies writing build scripts (travis.yml) by allowing		{{server_host}}	{{server_port}}
+idirect `docker build` commands for each, the drawback is obvious:		{{server_host}}	{{server_port}}
+ievery time the software version updates or I decide to add/remove a		{{server_host}}	{{server_port}}
+ifeature, I have to modify multiple Dockerfiles.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTwo days ago while researching, I discovered a Docker feature: Build		{{server_host}}	{{server_port}}
+iArgs, which allows passing parameters during the build process. So I		{{server_host}}	{{server_port}}
+idecided to modify my build scripts to consolidate Dockerfiles for		{{server_host}}	{{server_port}}
+idifferent architectures.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing Build Args		{{server_host}}	{{server_port}}
+iIn a Dockerfile, use the ARG command to define a build argument, which		{{server_host}}	{{server_port}}
+ican be used like environment variables defined by ENV:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen use it during build like this:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThere are two pitfalls with ARG: First, ARG cannot define multiple		{{server_host}}	{{server_port}}
+ivariables in one line like ENV; each must be declared separately.		{{server_host}}	{{server_port}}
+iSecond, due to Docker's multi-stage builds, all arguments are reset		{{server_host}}	{{server_port}}
+iafter each FROM command, requiring re-declaration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConsolidating Dockerfiles		{{server_host}}	{{server_port}}
+iDuring consolidation, I standardized on Alpine-based images, so I		{{server_host}}	{{server_port}}
+iuniformly used the		{{server_host}}	{{server_port}}
+imultiarch/alpine		{{server_host}}	{{server_port}}
+iimage series as the base. Their tags follow an "architecture-version"		{{server_host}}	{{server_port}}
+iformat, making the architecture portion suitable for an ARG parameter.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDifferent systems/languages use varying architecture naming		{{server_host}}	{{server_port}}
+iconventions, for example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- My convention: amd64, i386, arm32v7, arm64v8		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Multiarch convention: amd64, i386, armhf, aarch64		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Golang convention: amd64, 386, arm, arm64		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI used three build arguments to map these. Since conditional logic is		{{server_host}}	{{server_port}}
+ichallenging in Dockerfiles, I handled the conversion in bash before		{{server_host}}	{{server_port}}
+ipassing the values. Here's how I converted to Multiarch naming:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen I replaced architecture names with variables in the Dockerfile.		{{server_host}}	{{server_port}}
+iAn example can be		{{server_host}}	{{server_port}}
+iseen here		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUnified Building		{{server_host}}	{{server_port}}
+iI still use Travis for image building. Since the architecture list		{{server_host}}	{{server_port}}
+iremains unchanged, I only needed to modify the build command from "one		{{server_host}}	{{server_port}}
+iDockerfile per architecture" to "same Dockerfile with different		{{server_host}}	{{server_port}}
+iparameters":		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWith this setup, images can now be built for each architecture		{{server_host}}	{{server_port}}
+inormally while significantly simplifying maintenance.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

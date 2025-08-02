@@ -1,0 +1,85 @@
+i		{{server_host}}	{{server_port}}
+i- 今年是 9102 年了吗？		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 是的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i为什么要这样做		{{server_host}}	{{server_port}}
+i我手上有一块树莓派 3B 和一块华硕的 Tinker Board。有的时候，因为 Wi-Fi		{{server_host}}	{{server_port}}
+i爆炸/配置
+出错/`pacman -Syu`		{{server_host}}	{{server_port}}
+i滚挂系统之类的原因会导致其中一块板子断网。通过连接两块板子的
+串口，再在		{{server_host}}	{{server_port}}
+i上面建立拨号上网连接，就可以在一块板子 Wi-Fi		{{server_host}}	{{server_port}}
+i或有线网中断时，从另一块
+板子上 SSH 上去解决问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i（另外买树莓派不折腾 GPIO 的话，还不如买个 x86 的凌动小主机之类的玩）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i怎么操作		{{server_host}}	{{server_port}}
+i硬件方面，将两端的串口连接起来。树莓派的串口是第 8 根针发送，第 10		{{server_host}}	{{server_port}}
+i根针接收，可
+以在		{{server_host}}	{{server_port}}
+ipinout.xyz		{{server_host}}	{{server_port}}
+i网站查到。Tinker Board 的串口也是 8 发送 10		{{server_host}}	{{server_port}}
+i接收。用两根杜
+邦线将树莓派的针 8 连接到 Tinker Board 的针		{{server_host}}	{{server_port}}
+i10，将树莓派的针 10 连接到 Tinker
+Board 的针 8。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果两块板子使用不同的电源供电（比如我），需要第三根杜邦线将两块板的 GND		{{server_host}}	{{server_port}}
+i连起
+来。原因是两侧的板子都将自己 GND		{{server_host}}	{{server_port}}
+i针上的电压作为标准电压，读取的是发送/接收针相对
+于 GND		{{server_host}}	{{server_port}}
+i的电压差，而不同电源输出的 GND		{{server_host}}	{{server_port}}
+i会有较大的差别，可能导致双方对信号的“理解”
+不同。所以将两块板子的 GND		{{server_host}}	{{server_port}}
+i连接后，标准电压被统一，两块板子对信号就能“达成共识
+”。对于树莓派和		{{server_host}}	{{server_port}}
+iTinker Board，连接两侧的针 6 即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i软件方面，先在两端安装 pppd 软件：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后启动 pppd：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ipppd 参数解释：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- -detach：让程序保持在前台运行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- noauth：不验证用户名密码。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- /dev/ttyS1：串口在 Linux 下的设备文件，树莓派 3B 和 Tinker Board		{{server_host}}	{{server_port}}
+i默认都是
+ttyS1。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i1000000：波特率，每秒发送的比特数，理论上波特率越高速度越快，但硬件也有支		{{server_host}}	{{server_port}}
+i持上
+限。常用的波特率有：9600，38400，115200 等。经我测试 1000000		{{server_host}}	{{server_port}}
+i是我这两块板子能
+稳定通信的最大波特率。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 172.18.233.1:172.18.233.2：这一端的 IP 和对面的 IP。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- local：禁用“modem control lines”（根据		{{server_host}}	{{server_port}}
+iPPPD(8) manual page		{{server_host}}	{{server_port}}
+i），是硬件流控
+的一种。硬件流控可以告知对方自己是否准备好接收/发送数据。		{{server_host}}	{{server_port}}
+i如果不加，pppd 会等待
+modem 给出“准备好了”的信号，但因为树莓派和 Tinker		{{server_host}}	{{server_port}}
+iBoard 都不支持硬件流控，pppd
+永远不会收到这个信号，所以禁用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- nocrtscts：也是禁用硬件流控。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+ixonxoff：启用软件流控，通过在串口上给出特定信号来告知对方准备好接收/发送		{{server_host}}	{{server_port}}
+i数据。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i随后两块板子就可以 ping 通对方了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i速度怎么样		{{server_host}}	{{server_port}}
+i1000000 波特率下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iemmmm……也就够 SSH 用用了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

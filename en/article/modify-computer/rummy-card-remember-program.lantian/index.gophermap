@@ -1,0 +1,88 @@
+iIn English class, our foreign teacher introduced us to the card game		{{server_host}}	{{server_port}}
+iRummy. This game has no official rules, so there are many variations		{{server_host}}	{{server_port}}
+iamong players.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe rules our teacher taught us are as follows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe game requires at least one deck of playing cards, depending on the		{{server_host}}	{{server_port}}
+inumber of players, with all jokers removed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAt the start, each player is dealt 7 cards. After dealing, flip the		{{server_host}}	{{server_port}}
+itop card from the deck and place it aside.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDuring each player's turn, they must perform the following actions:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Choose to take the top card from the face-down deck or take any		{{server_host}}	{{server_port}}
+inumber of cards from the face-up discard pile.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen taking cards from the discard pile, you must use the bottommost		{{server_host}}	{{server_port}}
+icard you picked up during this turn according to condition 2 below.		{{server_host}}	{{server_port}}
+i(Cannot keep it in hand or discard it)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- When the cards in your hand meet the following conditions, you can		{{server_host}}	{{server_port}}
+iplace them on your table:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.1. At least 3 cards of the same suit forming a sequence, e.g., ♣A23,		{{server_host}}	{{server_port}}
+i♠10JQ, ♥QKA. (KA2 doesn't count)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.2. 3 or 4 cards with the same rank but different suits.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor example, ♠3, ♥3, ♣3 is valid, but ♠3, ♠3, ♥3 is invalid. The		{{server_host}}	{{server_port}}
+ilatter case can only occur when using multiple decks.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.3. Having a card that can extend sequences or same-rank groups as		{{server_host}}	{{server_port}}
+idescribed in 2.1 and 2.2.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- When you play a card that makes a sequence or same-rank group		{{server_host}}	{{server_port}}
+iimpossible to extend further, all players turn face-down (Closed) the		{{server_host}}	{{server_port}}
+icards on their table belonging to that sequence or group.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor example, when using one deck, if there's a sequence ♣A2345 and a		{{server_host}}	{{server_port}}
+isame-rank group ♠6, ♥6, ♣6 on the table. The sequence cannot be		{{server_host}}	{{server_port}}
+iextended in either direction and should be closed. If a player later		{{server_host}}	{{server_port}}
+iplays ♦6, that same-rank group should also be closed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Discard one card from your hand by placing it on top of the discard		{{server_host}}	{{server_port}}
+ipile. Ensure all cards in the discard pile remain visible to all		{{server_host}}	{{server_port}}
+iplayers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- All players may now check your discarded card. If it can extend		{{server_host}}	{{server_port}}
+isequences or same-rank groups as described in 2.1 and 2.2, other		{{server_host}}	{{server_port}}
+iplayers can call "Rummy" to claim the card and play it immediately.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The game ends when a player discards their last card, or when the		{{server_host}}	{{server_port}}
+idraw pile is exhausted and no player can use cards from the discard		{{server_host}}	{{server_port}}
+ipile according to the rules.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Scoring: Each card on the table: 2-9 = 5 points, 10-K = 10 points, A		{{server_host}}	{{server_port}}
+i= 15 points.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEach card remaining in hand: 2-9 = -5 points, 10-K = -10 points, A =		{{server_host}}	{{server_port}}
+i-15 points.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA not so obvious dividing line		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn actual gameplay, with many players, it's impossible to ensure		{{server_host}}	{{server_port}}
+ieveryone sees the discard pile and cards on the table, leading to		{{server_host}}	{{server_port}}
+ifrequent "Rummy" situations. I've been caught several times. Thus, I		{{server_host}}	{{server_port}}
+icreated a card counting program to track the game state.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince it needs to work on both computers and phones, this program is		{{server_host}}	{{server_port}}
+iweb-based using Javascript. There are two versions.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe first version is for single-deck games, offering card tracking,		{{server_host}}	{{server_port}}
+iseparate display of sequences/same-rank groups, and Rummy alerts.		{{server_host}}	{{server_port}}
+hAccess this version here.	URL:https://lab.xuyh0120.win/rummy.htm	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe second version supports multi-deck games, tracks cards, and allows		{{server_host}}	{{server_port}}
+iadding multiple same-suit sequences, but lacks Rummy alerts.		{{server_host}}	{{server_port}}
+hAccess this version here.	URL:https://lab.xuyh0120.win/rummy-log.htm	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Classmates considered Rummy alerts cheating, so I removed it. I only		{{server_host}}	{{server_port}}
+ineed program assistance for multi-deck games with many players, so I		{{server_host}}	{{server_port}}
+ikept the Rummy alert in the first version since I don't use it there.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs usual, view the source code via right-click. Note that PageSpeed		{{server_host}}	{{server_port}}
+icompresses the code significantly. You may need Javascript formatting		{{server_host}}	{{server_port}}
+itools for readability.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

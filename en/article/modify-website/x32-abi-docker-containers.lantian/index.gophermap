@@ -1,0 +1,230 @@
+iHistory of x86 & x86_64, and x32 ABI		{{server_host}}	{{server_port}}
+iMost of the personal computers and servers we use nowadays use the		{{server_host}}	{{server_port}}
+ix86_64
+architecture, whose specification was released by AMD in 2000		{{server_host}}	{{server_port}}
+iand the first
+processor released in 2003. Since x86_64 is a 64-bit		{{server_host}}	{{server_port}}
+iarchitecture, in x86_64,
+each register in the CPU can hold 64 bits of		{{server_host}}	{{server_port}}
+idata (or 8 bytes). Before x86_64
+went popular, most computers used		{{server_host}}	{{server_port}}
+iIntel processors, and the corresponding x86
+architecture / ISA, a		{{server_host}}	{{server_port}}
+i32-bit architecture whose registers hold 32 bit of data
+(or 4 bytes).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOne significant improvement of the 64-bit architecture is the improved		{{server_host}}	{{server_port}}
+imemory
+addressing ability. Computers usually follow such a routine		{{server_host}}	{{server_port}}
+iwhile accessing the
+memory: write the memory address to be accessed		{{server_host}}	{{server_port}}
+iinto a register, then send the
+content of that register onto the		{{server_host}}	{{server_port}}
+imemory address bus. Because of this, 32-bit
+computers can only		{{server_host}}	{{server_port}}
+irepresent memory addresses up to 32 bits, or
+`2 ^ 32 = 4294967296`		{{server_host}}	{{server_port}}
+iaddresses (bytes) in total, or `4 GB`. 64-bit computers on
+the other		{{server_host}}	{{server_port}}
+ihand can represent `2 ^ 64 = 18446744073709551616` bytes, or
+`16 EB =		{{server_host}}	{{server_port}}
+i16384 PB = 16777216 TB`. In order to simplify circuit design		{{server_host}}	{{server_port}}
+iand
+increase maximum performance, only 48 bits are used in the current		{{server_host}}	{{server_port}}
+ix86_64
+architecture, so up to `2 ^ 48 = 281474976710656` bytes or `256		{{server_host}}	{{server_port}}
+iTB` can be
+accessed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn addition, compared to x86, x86_64 also increased the number of		{{server_host}}	{{server_port}}
+iavailable
+registers, from 8 in x86 (EAX, EBX, ECX, EDX, ESI, EDI, ESP,		{{server_host}}	{{server_port}}
+iEBP) to 16 (RAX,
+RBX, RCX, RDX, RSI, RDI, RSP, RBP, R8, R9, R10, R11,		{{server_host}}	{{server_port}}
+iR12, R13, R14, R15). Also,
+compared to x86, which passes function		{{server_host}}	{{server_port}}
+iparameters in stacks, x86_64 will put the
+first 6 parameters in		{{server_host}}	{{server_port}}
+iregisters (RDI, RSI, RDX, RCX, R8, R9). The changes above
+mean that		{{server_host}}	{{server_port}}
+ix86_64 decreased the number of memory accesses compared to x86,		{{server_host}}	{{server_port}}
+iand
+since memory is much slower than CPU registers, while running the		{{server_host}}	{{server_port}}
+isame program,
+x86_64 will have a performance advantage over x86.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut x86_64 does have its disadvantages. Since x86_64 represents memory		{{server_host}}	{{server_port}}
+iaddresses
+in 64 bits, memory pointers will consume more memory space		{{server_host}}	{{server_port}}
+icompared to x86.
+Suppose we have a binary tree program with the		{{server_host}}	{{server_port}}
+ifollowing data structure:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis structure will take only 12 bytes (2 x 4 byte pointers + 4 byte		{{server_host}}	{{server_port}}
+iint) on
+x86, but 20 bytes (pointers are 8 bytes now) on x86_64, a		{{server_host}}	{{server_port}}
+i66.7% increase.
+Therefore, for database applications whose		{{server_host}}	{{server_port}}
+ifunctionality relies on tree
+structures and pointers, their memory		{{server_host}}	{{server_port}}
+iconsumption will grow significantly. This
+is why people say "64 bit		{{server_host}}	{{server_port}}
+ioperating systems use more RAM" at the era of Vista
+and Windows 7.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut don't forget that x86_64 CPUs were first available in 2003 when		{{server_host}}	{{server_port}}
+iDDR2 memory
+was first released, and people count memory in megabytes.		{{server_host}}	{{server_port}}
+iThe memory consumption
+increase in x86_64 is, therefore, a huge		{{server_host}}	{{server_port}}
+iobstacle. When the memory space is less
+than 4 GB, and the problem of		{{server_host}}	{{server_port}}
+iaddressing limitation is not present, what if we
+can use the extra		{{server_host}}	{{server_port}}
+ix86_64 registers for performance, yet with 320-it memory
+addresses in		{{server_host}}	{{server_port}}
+ix86 to save memory?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd there comes the x32 ABI, with its relation to x86 and x86_64		{{server_host}}	{{server_port}}
+ibelow:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ix86		{{server_host}}	{{server_port}}
+ix32		{{server_host}}	{{server_port}}
+ix86_64		{{server_host}}	{{server_port}}
+iMemory address bits		{{server_host}}	{{server_port}}
+iMemory limit / process		{{server_host}}	{{server_port}}
+i4 GB		{{server_host}}	{{server_port}}
+i4 GB		{{server_host}}	{{server_port}}
+i128 TB		{{server_host}}	{{server_port}}
+iMemory limit / OS		{{server_host}}	{{server_port}}
+i4 GB (excl. PAE)		{{server_host}}	{{server_port}}
+i128 TB		{{server_host}}	{{server_port}}
+i128 TB		{{server_host}}	{{server_port}}
+iRegisters		{{server_host}}	{{server_port}}
+iPassing Function Params		{{server_host}}	{{server_port}}
+iStack		{{server_host}}	{{server_port}}
+iRegisters		{{server_host}}	{{server_port}}
+iRegisters		{{server_host}}	{{server_port}}
+iIn Linux, the first discussion of x32 ABI went out on August 27, 2011.		{{server_host}}	{{server_port}}
+iDeveloper
+Hans Peter Anvin posted on the mailing list that he was		{{server_host}}	{{server_port}}
+ideveloping the x32 ABI
+for Linux. x32 ABI was merged into mainline		{{server_host}}	{{server_port}}
+ikernel since Linux 3.4, released on
+May 20, 2012.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLinux's x32 implementation consists of a standard x86_64 Linux kernel		{{server_host}}	{{server_port}}
+iand the
+x32 architecture applications running on top, and because of		{{server_host}}	{{server_port}}
+ithis, all processes
+accumulated can utilize more than 4 GB of memory,		{{server_host}}	{{server_port}}
+ibut not any one of the
+processes alone.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLinux's x32 architecture was not successful, perhaps caused by the		{{server_host}}	{{server_port}}
+ifollowing
+reasons:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- It was released too late. In 2011 the popular memory capacity had		{{server_host}}	{{server_port}}
+igreatly
+increased. Windows 7 has been released for 2 years (July 22,		{{server_host}}	{{server_port}}
+i2009), and
+Google Chrome, the memory hog, has been around for 3 years		{{server_host}}	{{server_port}}
+i(September 2,
+2008). There isn't much necessity going through all the		{{server_host}}	{{server_port}}
+ihassle for a small
+amount of memory decrease.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Lack of support from giants. Since services from tech giants have to		{{server_host}}	{{server_port}}
+iprocess
+a large number of requests, 4 GB per process was not enough		{{server_host}}	{{server_port}}
+ifor them.
+Compared to spending manpower on x32, they would rather		{{server_host}}	{{server_port}}
+ipurchase tons of
+memory sticks for their servers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Lack of application optimization. Quite a few programs (ex. OpenSSL,		{{server_host}}	{{server_port}}
+iFirefox)
+disabled their assembly optimizations to work normally on		{{server_host}}	{{server_port}}
+ix32, whose extra
+CPU consumption canceled out the performance		{{server_host}}	{{server_port}}
+iimprovement of x32.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut for personal users with a 512 MB or 1GB memory VPS, who care more		{{server_host}}	{{server_port}}
+ion RAM
+usage rather than CPU, the benefit of x32 is what they need.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing x32 ABI and Docker Images		{{server_host}}	{{server_port}}
+iTo use x32 ABI, you practically have to use Debian. Debian is the only		{{server_host}}	{{server_port}}
+iLinux
+distribution that still supports x32, as far as I know. I will		{{server_host}}	{{server_port}}
+iassume you are
+running Debian 10.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst you need a kernel that supports x32 ABI, or the latest		{{server_host}}	{{server_port}}
+istandard		{{server_host}}	{{server_port}}
+ix86_64
+kernel (not the "cloud" variant) from Debian Unstable. Run the		{{server_host}}	{{server_port}}
+ifollowing
+commands:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen you need to enable the x32 ABI support of the kernel, so it can		{{server_host}}	{{server_port}}
+iunderstand
+system calls with 32-bit pointer length from x32		{{server_host}}	{{server_port}}
+iapplications. Edit
+`/etc/default/grub` and add `syscall.x32=y` to the		{{server_host}}	{{server_port}}
+ikernel startup command-line:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen run `update-grub` to update `/boot/grub/grub.cfg` the boot		{{server_host}}	{{server_port}}
+iconfiguration,
+then `reboot`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter reboot run `cat /proc/cmdline` and check that `syscall.x32=y` is		{{server_host}}	{{server_port}}
+ithere.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, you will need a runtime environment for x32, including basic		{{server_host}}	{{server_port}}
+iLinux
+commands and apt-get. In fact, what you need is a Debian Linux		{{server_host}}	{{server_port}}
+iwith x32
+architecture. You may simply use my Docker image, which		{{server_host}}	{{server_port}}
+iupdates every week:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iManually Packing x32 Docker Image		{{server_host}}	{{server_port}}
+iThe Docker image above is created with the following steps, which you		{{server_host}}	{{server_port}}
+imay follow
+yourself and manage your own updates:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen you can do `FROM xddxdd/debian-x32` and add other stuff on top.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI have some x32 Docker images in my		{{server_host}}	{{server_port}}
+hmulti-architecture Dockerfile project	URL:https://github.com/xddxdd/dockerfiles	{{server_host}}	{{server_port}}
+ithat can either serve as an example or be directly used.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDo I Recommend x32?		{{server_host}}	{{server_port}}
+iRealistically speaking, I don't recommend using the x32 ABI for the		{{server_host}}	{{server_port}}
+ifollowing
+reasons:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Lack of software support		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Take Debian x32 as an example, a lot of programs (such as MariaDB)		{{server_host}}	{{server_port}}
+iis not
+available in the repository, and you have to compile your own		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Once you met a strange problem or bug (although I haven't), don't		{{server_host}}	{{server_port}}
+iexpect
+any tech support available		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- No guaranteed performance improvement		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Like what I said, OpenSSL disabled assembly optimizations for x32,		{{server_host}}	{{server_port}}
+iwhich
+slowed down encryption and decryption and canceled out the		{{server_host}}	{{server_port}}
+ibenefits of x32		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- To save memory, you'd better directly use an x86 32-bit program or		{{server_host}}	{{server_port}}
+iDocker
+image		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut x32 is worth trying for tinkering purposes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,26 @@
+i由于某些原因，我希望从手机里通过FTP访问电脑上的文件。而Mac OS		{{server_host}}	{{server_port}}
+iX一直内置了FTP和
+SSH服务，因此我希望把他们启用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i点左上角苹果图标-系统偏好设置-共享，选中左侧远程登录的复选框，同时确认你		{{server_host}}	{{server_port}}
+i的用户名
+在允许登录的列表里。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在手机的ES文件浏览器里选择SFTP方式连接，输入电脑的IP和你的用户名密码就		{{server_host}}	{{server_port}}
+i可以连接
+了。但是实际使用中，由于SFTP是基于SSH的协议，安全要求高，也就是		{{server_host}}	{{server_port}}
+i传输速度慢，仅
+100KB/S左右，连保证正常播放视频都不能做到。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i旧版本Mac里在共享中可以启用FTP方式共享文件，但是在新版系统中这个选项被		{{server_host}}	{{server_port}}
+i删除了，但
+是内置的FTP服务器一直保留，我们只需要打开实用工具-终端，用一行		{{server_host}}	{{server_port}}
+i命令启用它就可以
+了：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i过程中需要输入你的密码，注意输入时是不显示的，连星号也没有。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i回车后，在手机里选择FTP方式，同样输入电脑内网IP和用户名密码，连接成功，实		{{server_host}}	{{server_port}}
+i际使用
+中可以做到1MB/S的速度。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

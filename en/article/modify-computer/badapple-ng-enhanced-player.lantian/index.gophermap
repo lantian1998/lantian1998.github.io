@@ -1,0 +1,23 @@
+iUPDATE: If encountering issues like failure to open or runtime error		{{server_host}}	{{server_port}}
+i2, please check the instructions at		{{server_host}}	{{server_port}}
+1Bad Apple Command Line Art Version	/en/article/modify-computer/bad-apple-command-line-art.lantian	{{server_host}}	{{server_port}}
+iregarding data files!!!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMy previous		{{server_host}}	{{server_port}}
+1Bad Apple Command Line Art Version	/en/article/modify-computer/bad-apple-command-line-art.lantian	{{server_host}}	{{server_port}}
+iwas successfully reposted by classmate WotorDho and enhanced with		{{server_host}}	{{server_port}}
+idelay calibration to maintain consistent FPS when system lags.		{{server_host}}	{{server_port}}
+iHowever, he used a custom XCrt unit from his Wenlan Killer project,		{{server_host}}	{{server_port}}
+iwhich contains redundant code and is hard to understand.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter studying XCrt, I modified my player to achieve the same effect		{{server_host}}	{{server_port}}
+i(theoretically with better performance).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdditionally, I optimized the Telnet transmission that previously		{{server_host}}	{{server_port}}
+iwasted bandwidth by sending full frames. The new version only updates		{{server_host}}	{{server_port}}
+ichanged pixels, significantly reducing data transfer. I call this Bad		{{server_host}}	{{server_port}}
+iApple NG (Next Generation). The Telnet demo on VPS will be updated		{{server_host}}	{{server_port}}
+ilater.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSource code:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

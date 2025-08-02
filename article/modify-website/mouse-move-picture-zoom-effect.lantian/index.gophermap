@@ -1,0 +1,33 @@
+i鼠标移过图片放大显示效果 - Original by		{{server_host}}	{{server_port}}
+hMaomihz	URL:http://maomihz.com	{{server_host}}	{{server_port}}
+i, Modified
+by		{{server_host}}	{{server_port}}
+hLan Tian	URL:https://lantian.pub	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i昨天晚上		{{server_host}}	{{server_port}}
+hMaomihz	URL:http://maomihz.com	{{server_host}}	{{server_port}}
+i让我帮他改一段jQuery，实现鼠标移上去自动显
+示高清大图的效果。一开始有两		{{server_host}}	{{server_port}}
+i个Bug，一个是鼠标移到大图框上时，大图会闪来闪去，另
+一个就是图片会超出屏		{{server_host}}	{{server_port}}
+i幕上边界。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我的修改，		{{server_host}}	{{server_port}}
+i就是把大图放到小图底下去，然后给小图设定半透明效果。超出上边界的判断
+非		{{server_host}}	{{server_port}}
+i常容易，写了个max函数就搞定了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i下面放jQuery：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i对应的CSS：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i网页调用方法：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i截图：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I特效截图	/usr/uploads/2013/06/1260012588.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i下载：（用的是Win8那两朵花）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+1样例包	/usr/uploads/2013/06/3009674103.zip	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

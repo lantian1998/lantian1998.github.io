@@ -1,0 +1,170 @@
+i黑色星期五已经过了，相信有一些读者新买了一些特价的		{{server_host}}	{{server_port}}
+iVPS、云服务器等，并且想在 VPS
+上安装 NixOS。但是由于 NixOS 的知名度不如		{{server_host}}	{{server_port}}
+iCentOS、Debian、Ubuntu 等老牌 Linux 发
+行版，几乎没有 VPS		{{server_host}}	{{server_port}}
+i服务商提供预装 NixOS 的磁盘镜像，只能由用户使用以下方法之一手
+动安装：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 自行挂载 NixOS 的安装 ISO 镜像，然后手动格盘安装。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i由于你可以在 NixOS 安装镜像的环境中随意操作 VPS		{{server_host}}	{{server_port}}
+i的硬盘，这种方法自由度最高，可以
+任意对硬盘进行分区，指定文件系统格式。但		{{server_host}}	{{server_port}}
+i是，使用这种方法前，你的主机商需要在以下
+三项前提中满足任意一项：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 主机商直接提供 NixOS 的 ISO 镜像挂载（即使是很老的版本）；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 主机商允许用户上传自定义 ISO 镜像，此时你可以直接上传一份 NixOS		{{server_host}}	{{server_port}}
+i的安装 ISO；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 主机商提供启动		{{server_host}}	{{server_port}}
+hnetboot.xyz	URL:https://netboot.xyz/	{{server_host}}	{{server_port}}
+i（一个可以通过网络安装多种
+Linux 发行版的工具）的方式，并且你的 VPS		{{server_host}}	{{server_port}}
+i内存超过 1GB，有足够空间让
+netboot.xyz 将 NixOS		{{server_host}}	{{server_port}}
+i的安装镜像解压到内存中。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我这次就购买了一台内存刚好为 1GB 的 VPS，没有足够内存解压 NixOS 23.05		{{server_host}}	{{server_port}}
+i的镜像，因
+此无法使用 netboot.xyz 启动 NixOS		{{server_host}}	{{server_port}}
+i安装环境。同时由于我的主机商也不提供自定义镜像
+功能，我也无法通过光盘启		{{server_host}}	{{server_port}}
+i动 NixOS 安装程序。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 使用		{{server_host}}	{{server_port}}
+hNixOS-Infect	URL:https://github.com/elitak/nixos-infect	{{server_host}}	{{server_port}}
+hNixOS-Anywhere	URL:https://github.com/nix-community/nixos-anywhere	{{server_host}}	{{server_port}}
+i等工具，直接
+替换运行在 VPS 上的操作系统。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNixOS-Infect 工具的原理是在本地系统上安装 Nix		{{server_host}}	{{server_port}}
+iDaemon，再使用它构建一个完整的
+NixOS 系统，最后将原系统的启动项替换成		{{server_host}}	{{server_port}}
+iNixOS 的。由于这种方法不需要在内存中解压
+NixOS		{{server_host}}	{{server_port}}
+i的完整安装镜像，这种方法更适合小内存的		{{server_host}}	{{server_port}}
+iVPS。但这种方法的缺点是无法自定义分
+区结构和文件系统类型。只能使用 VPS		{{server_host}}	{{server_port}}
+i服务商的默认分区配置。对于使用 Btrfs/ZFS 以及		{{server_host}}	{{server_port}}
+1Impermanence	/article/modify-computer/nixos-impermanence.lantian/	{{server_host}}	{{server_port}}
+i等非标准分
+区方案/文件系统的用户不友好。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i而 NixOS-Anywhere 的原理是通过 Linux 内核的 `kexec`		{{server_host}}	{{server_port}}
+i功能替换当前运行的内核，直接
+启动到内存中的 NixOS 的安装镜像，本质原理与		{{server_host}}	{{server_port}}
+inetboot.xyz 大致相同，因此也与
+netboot.xyz 一样需要较大的内存空间。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 先 NixOS-Infect，再在恢复环境中手动调整分区		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i对于类似的小内存 VPS，我曾经使用的方法是，先使用 NixOS-Infect		{{server_host}}	{{server_port}}
+i安装一个普通的
+NixOS，然后部署一份开启了 Btrfs 和 Impermanence		{{server_host}}	{{server_port}}
+i的配置，然后重启到恢复环境，在恢
+复环境中调整分区、转换分区格式。这种方		{{server_host}}	{{server_port}}
+i法能用，但是很麻烦，而且一旦中间一步操作出
+错，很难修复系统，只能从头开始		{{server_host}}	{{server_port}}
+i。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- ……还有别的方法吗？		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最近 NixOS 社区发布了一款工具		{{server_host}}	{{server_port}}
+hDisko	URL:https://github.com/nix-community/disko	{{server_host}}	{{server_port}}
+i，
+它的原本用途是在 NixOS 安装环境中自动对硬盘进行分区，从而实现用 Nix		{{server_host}}	{{server_port}}
+i配置文件声明
+式管理硬盘分区。但是，这款工具也提供了根据给定的分区表和		{{server_host}}	{{server_port}}
+iNixOS 配置，自动生成磁
+盘镜像的功能。那么，我们就可以配置好		{{server_host}}	{{server_port}}
+iBtrfs/ZFS/Impermanence，生成对应的磁盘镜
+像，再在 VPS 上直接用 `dd`		{{server_host}}	{{server_port}}
+i命令写入硬盘，就可以简单地安装 NixOS 了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i由于这种方法对 VPS 上运行的恢复环境几乎没有要求（有网络和 `dd`		{{server_host}}	{{server_port}}
+i命令就可以），我
+们可以启动到占用内存很小的 Alpine Linux		{{server_host}}	{{server_port}}
+i发行版，然后通过网络传输磁盘镜像写入 VPS
+硬盘。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i准备 NixOS 配置		{{server_host}}	{{server_port}}
+i在开始这个方法前，我们需要准备一份简单的 NixOS		{{server_host}}	{{server_port}}
+i配置，包含最基础的引导、网
+络、root 密码、SSH		{{server_host}}	{{server_port}}
+i密钥等配置，以保证你后续可以部署完整的配置。当然你也可以直接
+使用一份完		{{server_host}}	{{server_port}}
+i整的 NixOS 配置，只不过稍后创建的磁盘镜像体积会更大。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我准备的配置文件如下，存为 `configuration.nix`：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后，准备一份 `flake.nix`，用 Flake 的方式管理 nixpkgs		{{server_host}}	{{server_port}}
+i的版本，并同时引入
+Impermanence 等我使用的模块：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这个系统配置现在是无法构建的，因为我们还没有配置文件系统。如果你现在用
+		{{server_host}}	{{server_port}}
+i`nixos-rebuild build --flake .#bootstrap` 试图构建，会遇到以下错误：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i所以接下来，我们就要加入 Disko 模块，以及分区表和文件系统的配置。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i配置镜像中的分区（开启 Impermanence）		{{server_host}}	{{server_port}}
+i> 如果你不使用 Impermanence 等将 root 分区放在 tmpfs		{{server_host}}	{{server_port}}
+i上的方案，请跳到下一小节。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i修改 `flake.nix` 引入 Disko 模块：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i接下来，我们就要通过 Disko		{{server_host}}	{{server_port}}
+i模块提供的配置选项，配置磁盘镜像中的分区了。修改
+`configuration.nix`，加		{{server_host}}	{{server_port}}
+i入以下配置：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i配置镜像中的分区（普通安装）		{{server_host}}	{{server_port}}
+i> 如果你使用 Impermanence 等将 root 分区放在 tmpfs		{{server_host}}	{{server_port}}
+i上的方案，请参照上一小节并跳
+过这一小节。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i与上一小节一样，修改 `flake.nix` 引入 Disko 模块：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i接下来，我们就要通过 Disko		{{server_host}}	{{server_port}}
+i模块提供的配置选项，配置磁盘镜像中的分区了。修改
+`configuration.nix`，加		{{server_host}}	{{server_port}}
+i入以下配置：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i生成磁盘镜像		{{server_host}}	{{server_port}}
+i修改 `flake.nix` 添加一个“软件包”，调用 Disko 的生成磁盘镜像功能：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后运行 `nix build .#image`。稍等片刻，磁盘镜像就会生成在		{{server_host}}	{{server_port}}
+i`result/main.raw` 路
+径下。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i将磁盘镜像上传到 VPS		{{server_host}}	{{server_port}}
+i在 VPS 上启动救援系统，或者 Alpine Linux 等轻量化系统。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你的救援系统有 SSH 服务端，可以使用下列命令上传镜像：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你的救援系统没有 SSH，可以使用下列命令：		{{server_host}}	{{server_port}}
+i（注意：没有加密！）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i等待命令执行结束，然后重启 VPS。此时你应该就进入了已经安装好的 NixOS		{{server_host}}	{{server_port}}
+i系统了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i扩展分区大小		{{server_host}}	{{server_port}}
+i由于我们创建的磁盘镜像大小只有 2GB，`dd` 完成后的镜像不会占满 VPS		{{server_host}}	{{server_port}}
+i的硬盘空间，需
+要手动扩展分区。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i运行 `fdisk /dev/sda`，删除第三个 `/nix`（或者		{{server_host}}	{{server_port}}
+i`/`）分区，然后重新创建，保证分区
+起始位置不变，分区结束位置扩展到硬盘结尾		{{server_host}}	{{server_port}}
+i。如果看到擦除文件系统头部信息的提示，不
+要擦除！		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后运行文件系统对应的命令扩展文件系统的大小。ext4		{{server_host}}	{{server_port}}
+i分区可以使用
+`resize2fs /dev/sda3`。Btrfs 分区可以使用 `btrfs		{{server_host}}	{{server_port}}
+ifilesystem resize max /nix`（或
+者 `/`）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

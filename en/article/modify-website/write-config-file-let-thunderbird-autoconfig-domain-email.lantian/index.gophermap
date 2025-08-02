@@ -1,0 +1,61 @@
+iMany people have set up email systems on their own domain names. I		{{server_host}}	{{server_port}}
+ialso use Zoho's domain email service for my main site lantian.pub.		{{server_host}}	{{server_port}}
+iHowever, a major drawback of using domain email is that it's difficult		{{server_host}}	{{server_port}}
+ito remember server addresses for POP3, IMAP, SMTP, etc. When		{{server_host}}	{{server_port}}
+ireinstalling systems or email clients requires reconfiguration, you		{{server_host}}	{{server_port}}
+ihave to log back into the email system to check server addresses,		{{server_host}}	{{server_port}}
+iwhich is quite troublesome.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you use the Thunderbird email client, you may notice during account		{{server_host}}	{{server_port}}
+isetup that Thunderbird has a "Retrieve settings from email provider"		{{server_host}}	{{server_port}}
+iprocess. This essentially requests an XML document from the domain's		{{server_host}}	{{server_port}}
+iweb server containing email server configurations. By manually		{{server_host}}	{{server_port}}
+icreating this configuration file and hosting it on your web server,		{{server_host}}	{{server_port}}
+iyou can enable automatic Thunderbird configuration.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCreating the Configuration File		{{server_host}}	{{server_port}}
+iThe configuration file stores information such as POP3, IMAP, and SMTP		{{server_host}}	{{server_port}}
+iserver addresses, port numbers, and usernames. For the Zoho email		{{server_host}}	{{server_port}}
+isystem used by this site, the configuration file is as follows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis XML file records domain names, ports, encryption methods, and		{{server_host}}	{{server_port}}
+iauthentication methods for IMAP, POP3, and SMTP servers. If you also		{{server_host}}	{{server_port}}
+iuse Zoho, simply replace `lantian.pub` with your domain.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor other email systems, replace the server addresses accordingly.		{{server_host}}	{{server_port}}
+iHowever, you might encounter "incorrect username/password" errors		{{server_host}}	{{server_port}}
+iafter replacement. This occurs because email clients may send		{{server_host}}	{{server_port}}
+icredentials in plaintext or MD5-encrypted form. If the server doesn't		{{server_host}}	{{server_port}}
+isupport a specific method, issues arise.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo determine supported authentication methods:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open Thunderbird and select "Manual config" in account setup		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter server details and set "Authentication" to "Autodetect":		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click "Re-test":		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe authentication field will update:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- "Normal password" = plaintext → `password-cleartext` in XML		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- "Encrypted password" = MD5 encryption → `password-encrypted`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor advanced configurations, refer to Mozilla's official articles:		{{server_host}}	{{server_port}}
+iAutoconfiguration in Thunderbird		{{server_host}}	{{server_port}}
+iAutoconfig: How to create a configuration file		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUploading the Configuration File		{{server_host}}	{{server_port}}
+iThunderbird checks these two locations for configurations:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i`http://autoconfig.yourdomain.com/mail/config-v1.1.xml?emailaddress=[y		{{server_host}}	{{server_port}}
+iour-email]`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `http://yourdomain.com/.well-known/autoconfig/mail/config-v1.1.xml`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPlace the file in either location. When successfully configured,		{{server_host}}	{{server_port}}
+iThunderbird will show:		{{server_host}}	{{server_port}}
+i(Note the prompt: "Configuration found at email provider")		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,655 @@
+iOne characteristic of NixOS is that all binary applications and		{{server_host}}	{{server_port}}
+ilibraries are
+stored in `/nix/store` directory and managed by Nix		{{server_host}}	{{server_port}}
+ipackage manager. This means
+that NixOS doesn't conform to		{{server_host}}	{{server_port}}
+hthe FHS standard of Linux	URL:https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard	{{server_host}}	{{server_port}}
+i,
+and there's not even a dynamic library loader like		{{server_host}}	{{server_port}}
+i`ld-linux-x86-64.so.2` in
+`/lib` or `/lib64`, let alone other shared		{{server_host}}	{{server_port}}
+ilibraries like `libc.so`. Therefore,
+unless the program is statically		{{server_host}}	{{server_port}}
+ilinked, binaries compiled for other Linux
+distros will not run on		{{server_host}}	{{server_port}}
+iNixOS at all.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, to use a program not packaged in Nixpkgs yet on NixOS, the		{{server_host}}	{{server_port}}
+ibest way
+is to package it yourself by writing a packaging script in		{{server_host}}	{{server_port}}
+iNix, and add the
+package definition to `configuration.nix`, in order		{{server_host}}	{{server_port}}
+ito install it to the system.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThere are three good news and two bad news when it comes to NixOS		{{server_host}}	{{server_port}}
+ipackaging. The
+good news are:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Nixpkgs, ot the software repository for NixOS, provides a ton of		{{server_host}}	{{server_port}}
+ifunctions
+for automation. For many open source softwares written in		{{server_host}}	{{server_port}}
+ipopular programming
+languages (including C/C++, Python, Go, Node.js,		{{server_host}}	{{server_port}}
+iRust, etc., but not Java),
+you only need to call an existing function		{{server_host}}	{{server_port}}
+iand specify the download source of
+the source code. Nixpkgs will		{{server_host}}	{{server_port}}
+iautomatically detect the packaging system, pass
+in correct parameters,		{{server_host}}	{{server_port}}
+iand package it for you.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Nixpkgs also provides existing automated solutions for binary		{{server_host}}	{{server_port}}
+idistributed
+software (commonly seen in closed-source software):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- One is Autopatchelf, which automatically modifies the library paths		{{server_host}}	{{server_port}}
+iin the
+binary, and points them to `/nix/store`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The other is Bubblewrap, or `steam-run` based on Bubblewrap, that		{{server_host}}	{{server_port}}
+ican
+emulate an FHS-compliant environment. As the name suggests,		{{server_host}}	{{server_port}}
+i`steam-run`
+mainly focuses on the Steam gaming platform and the games		{{server_host}}	{{server_port}}
+ion it, but it can
+also be used for other closed-source software.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Nix package manager run the packaging process in an isolated		{{server_host}}	{{server_port}}
+ienvironment. You
+can think of it as a Docker container, with no		{{server_host}}	{{server_port}}
+inetworking access, no
+escalated privileges, and no access to		{{server_host}}	{{server_port}}
+ifilesystem except a few designated
+ones. All attempts to access		{{server_host}}	{{server_port}}
+iexternal paths or Internet will fail; the
+compilation can only proceed		{{server_host}}	{{server_port}}
+iwith explicitly specified dependencies in the
+Nix packaging script.		{{server_host}}	{{server_port}}
+iTherefore, the packaged program is guaranteed to have
+no dependency on		{{server_host}}	{{server_port}}
+iexternal files.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd the bad news are:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Software developers may not know Linux better than packagers.		{{server_host}}	{{server_port}}
+iDevelopers may
+hardcode paths in codes and compilation scripts, and		{{server_host}}	{{server_port}}
+imake assumptions that
+are only true in FHS compliant environments.		{{server_host}}	{{server_port}}
+iWhen this happens, you need to
+write patches and fix the paths		{{server_host}}	{{server_port}}
+iyourself, so the program can correctly
+compile and run on NixOS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- When, for some reason, you cannot use an existing function, you need		{{server_host}}	{{server_port}}
+ito
+prepare yourself for a long debugging journey:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Developer organized the source code in a strange way (like		{{server_host}}	{{server_port}}
+i`osdlyrics`), or
+used a non-standard compilation procedure		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Program actively detects its execution environment (like WeChat for		{{server_host}}	{{server_port}}
+iUOS)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Program actively detects changes to itself (like SVP video		{{server_host}}	{{server_port}}
+iinterpolation
+software)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA few months ago, I replaced my daily driver distro from Arch Linux to		{{server_host}}	{{server_port}}
+iNixOS,
+and I've packaged quite a few programs on NixOS. This post will		{{server_host}}	{{server_port}}
+iexplain the
+packaging procedures in NixOS as well as frequent problems		{{server_host}}	{{server_port}}
+iand solutions,
+starting from the easier ones.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPreparation		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, I strongly recommend you to install NixOS and only package on		{{server_host}}	{{server_port}}
+iNixOS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Although you can package software with Nix on non-NixOS operating		{{server_host}}	{{server_port}}
+isystems, the
+produced software may still have runtime dependencies on		{{server_host}}	{{server_port}}
+ithe FHS structure,
+causing incompatibilities on NixOS. Of course, if		{{server_host}}	{{server_port}}
+iyou're only packaging for
+yourself, and have no plan to share the		{{server_host}}	{{server_port}}
+ipackages, you can safely ignore this.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In addition, you need to use		{{server_host}}	{{server_port}}
+hHome-Manager	URL:https://github.com/nix-community/home-manager	{{server_host}}	{{server_port}}
+i, a program that
+manages config files in your Home directory with a		{{server_host}}	{{server_port}}
+iNix-language config file,
+to install Nix-packaged software on a		{{server_host}}	{{server_port}}
+inon-NixOS system. You need to do your
+own research on how to use this		{{server_host}}	{{server_port}}
+iprogram.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing Packaging Template from NUR		{{server_host}}	{{server_port}}
+iNUR is a Nix software repository managed by individual users, similar		{{server_host}}	{{server_port}}
+ito AUR of
+Arch Linux. NUR provides a ready-to-use template that can be		{{server_host}}	{{server_port}}
+iused to centrally
+manage your packages.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGo to		{{server_host}}	{{server_port}}
+hnur-packages-template	URL:https://github.com/nix-community/nur-packages-template	{{server_host}}	{{server_port}}
+ion GitHub, click "Use this template" and create a repository. You will		{{server_host}}	{{server_port}}
+istore all
+your custom packages in that new repository.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> If you want to publish your packages to NUR, you need to send a		{{server_host}}	{{server_port}}
+iPull Request
+to		{{server_host}}	{{server_port}}
+hNUR's main repository	URL:https://github.com/nix-community/NUR	{{server_host}}	{{server_port}}
+i>  and add the
+URL to your own repository. However, even if you		{{server_host}}	{{server_port}}
+idon't do that, you can still
+use your own repository.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, clone your repository.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you don't use Nix Flake, you can run the following command to		{{server_host}}	{{server_port}}
+ibuild the
+example package from the template:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you use Flake, you can run the following commands:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, add your own repository in your NixOS config.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you don't use Nix Flake, add the following definitions		{{server_host}}	{{server_port}}
+ito
+`configuration.nix`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Replace `https://github.com/nix-community/nur-packages-template`		{{server_host}}	{{server_port}}
+iwith your
+repository URL.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Now you can use your own packages in the form		{{server_host}}	{{server_port}}
+iof
+`pkgs.myRepo.example-package`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you use Nix Flake, add the following definitions to the `inputs`		{{server_host}}	{{server_port}}
+isection in
+`flake.nix`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Replace `nix-community/nur-packages-template` with your repository		{{server_host}}	{{server_port}}
+iURL.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Then, in the `output` section in `flake.nix`, for each of		{{server_host}}	{{server_port}}
+iyour
+`nixosConfigurations` definition, add a module for the systems:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Now you can use your own packages in the form		{{server_host}}	{{server_port}}
+iof
+`pkgs.myRepo.example-package`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd Packages Straight to NixOS Config		{{server_host}}	{{server_port}}
+iOf course, instead of using the template from NUR, you can put your		{{server_host}}	{{server_port}}
+ipackage
+definitions along with your NixOS config files.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAssuming you have this packaging definition as `example-package.nix`:		{{server_host}}	{{server_port}}
+i(From		{{server_host}}	{{server_port}}
+hhttps://github.com/nix-community/nur-packages-template/blob/master/pkgs/example-package/default.nix	URL:https://github.com/nix-community/nur-packages-template/blob/master/pkgs/example-package/default.nix	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou can use the `pkgs.callPackage` function to use it in		{{server_host}}	{{server_port}}
+i`configuration.nix`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you want to build just this package, you can use the following		{{server_host}}	{{server_port}}
+icommand:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPhases in Packaging		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlthough you can		{{server_host}}	{{server_port}}
+hpackage directly with Nix package manager's `builtins.derivation` function	URL:https://scrive.github.io/nix-workshop/04-derivations/04-raw-derivation.html	{{server_host}}	{{server_port}}
+i,
+we usually use the `stdenv.mkDerivation` function to generate a Nix		{{server_host}}	{{server_port}}
+ipackage
+definition, since it's much easier. Contrary to		{{server_host}}	{{server_port}}
+i`builtins.derivation`,
+`stdenv.mkDerivation` splits the packaging		{{server_host}}	{{server_port}}
+iprocess to 7 phases:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Unpack phase		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In this step, `stdenv.mkDerivation` automatically unpacks the source		{{server_host}}	{{server_port}}
+icode
+archive specified by `src`. For example, if your archive is in		{{server_host}}	{{server_port}}
+i`.tar.gz`
+format, it automatically runs `tar xf`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- But `stdenv.mkDerivation` doesn't recognize all archive types, for		{{server_host}}	{{server_port}}
+iexample
+`.zip`. In this case, you need to specify the unpack command		{{server_host}}	{{server_port}}
+iyourself:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `stdenv.mkDerivation` requires that the source code resides in a		{{server_host}}	{{server_port}}
+itop-level
+folder in the archive. It automatically `cd`s into that		{{server_host}}	{{server_port}}
+ifolder after
+unpack.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Patch phase		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In this step, `stdenv.mkDerivation` applies all `patches` in		{{server_host}}	{{server_port}}
+isequential
+order. This can be used to fix the incompatibilities		{{server_host}}	{{server_port}}
+ibetween some programs
+and NixOS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Configure phase		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- This is equivalent to running `./configure` or		{{server_host}}	{{server_port}}
+i`cmake`.
+`stdenv.mkDerivation` automatically detects the packaging		{{server_host}}	{{server_port}}
+isystem and calls
+the appropriate commands, or, when no relevant config		{{server_host}}	{{server_port}}
+ifiles exist,
+automatically skips the phase.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- It's worth noting that, to use `cmake`, you need to add an		{{server_host}}	{{server_port}}
+iadditional line
+of `nativeBuildInputs = [ cmake ];` to add CMake into		{{server_host}}	{{server_port}}
+ithe packaging
+environment.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- You can add configuration parameters with `configureFlags` or		{{server_host}}	{{server_port}}
+i`cmakeFlags`,
+to enable or disable functionalities of the program.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Build phase		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- This is equivalent to running `make`. You can specify the arguments		{{server_host}}	{{server_port}}
+ito
+`make` with `makeFlags`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Check phase		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- This phase executes the unit tests in the source directory, to		{{server_host}}	{{server_port}}
+iensure that
+the program functions correctly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- You can skip this step with `doCheck = false;`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install phase		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- This is equivalent to running `make install`, which copies the		{{server_host}}	{{server_port}}
+icompilation
+results to the relevant folder in Nix store.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The whole building process happens in a temporary folder, rather		{{server_host}}	{{server_port}}
+ithan in
+Nix store. Therefore, such a copy is necessary.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- When you specify the installation commands yourself, the target path		{{server_host}}	{{server_port}}
+iis
+stored in variable `$out`. `$out` can be either a directory		{{server_host}}	{{server_port}}
+icontaining
+files, or simply a file.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Fixup phase		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- This step cleans up the results in Nix store by, for example,		{{server_host}}	{{server_port}}
+istripping
+debug symbols.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Autopatchelf Hook, a hook that automatically replaces `.so` paths		{{server_host}}	{{server_port}}
+ifor
+closed-source programs, is executed in this step.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- You can disable this step with `dontFixup = true;`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor each phase, the command to be executed, or the pre/post command		{{server_host}}	{{server_port}}
+ihooks, can
+be specified. Take the install phase for example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIt might be hard to understand the steps just by reading their		{{server_host}}	{{server_port}}
+idefinitions, so I
+will give a few examples with detailed explanations.		{{server_host}}	{{server_port}}
+iIn addition, I will also
+show a few specific functions for popular		{{server_host}}	{{server_port}}
+iprogramming languages, like
+`buildPythonPackage` for Python and		{{server_host}}	{{server_port}}
+i`buildGoModule` for Go. All the examples are
+from		{{server_host}}	{{server_port}}
+hmy NUR repository	URL:https://github.com/xddxdd/nur-packages	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iExamples: Open Source Software		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPackaging open source software tends to be easy, since in the process,		{{server_host}}	{{server_port}}
+iNix
+package manager will adjust the environment variables so that the		{{server_host}}	{{server_port}}
+icompiler can
+find the libraries in other directories in Nix store.		{{server_host}}	{{server_port}}
+iTherefore, all generated
+binary files are linked to libraries in Nix		{{server_host}}	{{server_port}}
+istore, rather than ones in `/usr` or
+similar paths, so they can be		{{server_host}}	{{server_port}}
+iused directly on NixOS. In addition, even if a
+hardcoded path appears		{{server_host}}	{{server_port}}
+iin the open source software, you can change the path by
+creating a		{{server_host}}	{{server_port}}
+ipatch in the packaging process, to make it work on NixOS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEasy: LibOQS (C++, CMake, Automated)		{{server_host}}	{{server_port}}
+iLet's take a look at the most simple one: LibOQS.		{{server_host}}	{{server_port}}
+hLibOQS provides implementations for various post-quantum cryptography, and can be used for post-quantum support for OpenSSL or BoringSSL	URL:https://github.com/open-quantum-safe/liboqs	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince LibOQS is built by CMake and has no dependencies itself, almost		{{server_host}}	{{server_port}}
+iall the
+work can be automatically done by `stdenv.mkDerivations`. All		{{server_host}}	{{server_port}}
+iwe need to do is
+to specify a few extra arguments for CMake:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen run the following command. Nix package manager will build the		{{server_host}}	{{server_port}}
+ipackage
+automatically, and link the output to `results` in the current		{{server_host}}	{{server_port}}
+idirectory.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMedium: OpenSSL OQS Provider (C, Has Dependencies)		{{server_host}}	{{server_port}}
+iWith LibOQS ready, we can package		{{server_host}}	{{server_port}}
+hOpenSSL OQS Provider, an encryption/decryption engine for OpenSSL 3.0 that adds post-quantum cryptography	URL:https://github.com/open-quantum-safe/oqs-provider	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis package mainly demonstrates the difference between		{{server_host}}	{{server_port}}
+i`nativeBuildInputs` and
+`buildInputs`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `nativeBuildInputs` are only used during packaging. They're usually		{{server_host}}	{{server_port}}
+iused to
+generate config files or compilation scripts. During cross		{{server_host}}	{{server_port}}
+icompilation
+(compiling for a device of another architecture),		{{server_host}}	{{server_port}}
+i`nativeBuildInputs` will
+have the same architecture as the device		{{server_host}}	{{server_port}}
+irunning the build, rather than the
+target device. For example, if		{{server_host}}	{{server_port}}
+iyou're building for ARM Raspberry Pi on a x86
+PC, `nativeBuildInputs`		{{server_host}}	{{server_port}}
+iwill have architecture x86.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `buildInputs` are used both in packaging and in program execution.		{{server_host}}	{{server_port}}
+iAll
+dependent libraries go in here. These dependencies have the same		{{server_host}}	{{server_port}}
+iarchitecture
+as the target device. As an example, `liboqs` required		{{server_host}}	{{server_port}}
+iby
+`openssl-oqs-provider` must have the same architecture (both x86 or		{{server_host}}	{{server_port}}
+iboth ARM).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHard: OSDLyrics (Python & C++, Two-Stage Build)		{{server_host}}	{{server_port}}
+iNext, let's take a look at		{{server_host}}	{{server_port}}
+hOSDLyrics, a desktop lyrics software	URL:https://github.com/osdlyrics/osdlyrics	{{server_host}}	{{server_port}}
+i.
+On the first glance, this software is easy to package, as the		{{server_host}}	{{server_port}}
+iofficial
+installation instruction is only four lines:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, things become more difficult as Python is involved in		{{server_host}}	{{server_port}}
+icompilation.
+OSDLyrics consists of two parts, Python and C++, and the		{{server_host}}	{{server_port}}
+iC++ part will call the
+Python libraries. As the result, the official		{{server_host}}	{{server_port}}
+iinstallation script will copy the
+Python module to Python's		{{server_host}}	{{server_port}}
+i`site-packages` directory. But since Python's
+installation directory		{{server_host}}	{{server_port}}
+iis read only for OSDLyrics on Nix, the installation
+cannot proceed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, we need to package the Python module independently:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen add the module to the Python environment used by OSDLyrics:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, package its C++ part:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe final complete definition is:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iExamples: Closed Source Software (& Binary Distributed Ones)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCompared to open source software, packaging closed source ones tend to		{{server_host}}	{{server_port}}
+ibe more
+difficult. These closed source software usually distribute		{{server_host}}	{{server_port}}
+ionly the binary
+files, which are compiled for those traditional Linux		{{server_host}}	{{server_port}}
+idistros adhering to FHS
+standard directory structures, like CentOS,		{{server_host}}	{{server_port}}
+iDebian, Ubuntu, etc. As we don't
+have the source code, we can only		{{server_host}}	{{server_port}}
+imodify the binary files, replacing all the FHS
+standard paths with		{{server_host}}	{{server_port}}
+iones from Nix store.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFortunately, Nixpkgs provides a number of schemes for different		{{server_host}}	{{server_port}}
+iscenarios, and
+many closed source software can be packaged		{{server_host}}	{{server_port}}
+isuccessfully.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEasy: Bilibili-linux (Unpack DEB, Electron)		{{server_host}}	{{server_port}}
+iLet's take a look at an easy scenario: Electron based software. Here I		{{server_host}}	{{server_port}}
+iuse the
+example of		{{server_host}}	{{server_port}}
+hBilibili-linux, the official Bilibili Windows desktop client ported to Linux	URL:https://github.com/msojocs/bilibili-linux	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlthough compared to traditional GTK or Qt programs, Electron programs		{{server_host}}	{{server_port}}
+iconsume
+more power and disk space, and install dozens of Chromiums in		{{server_host}}	{{server_port}}
+ieach and every PC,
+resulting in a market share of over 1000%, their		{{server_host}}	{{server_port}}
+iease of porting should not be
+ignored. The Bilibili-linux client is		{{server_host}}	{{server_port}}
+iimplemented in pure Javascript, and
+there's no binary files in the		{{server_host}}	{{server_port}}
+ipackage, except for Electron. Therefore, we can
+take its Javascript		{{server_host}}	{{server_port}}
+icode, and simply run it with the system-wide Electron.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMedium: DingTalk (Auto Patch Binaries, Finding Dependencies)		{{server_host}}	{{server_port}}
+iOf course, not all closed source software are built with Electron. For		{{server_host}}	{{server_port}}
+ithe ones
+with binary files, we need to modify them by changing all the		{{server_host}}	{{server_port}}
+idependent library
+paths to ones in Nix store. Nixpkgs offers an		{{server_host}}	{{server_port}}
+ieasy-to-use tool called
+`autoPatchelfHook`, that searches for all the		{{server_host}}	{{server_port}}
+ibinaries in the package, modifies
+them all. It will error out when a		{{server_host}}	{{server_port}}
+idependency isn't met, which is useful for
+debugging.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOur example this time will be the Linux client for DingTalk. It uses		{{server_host}}	{{server_port}}
+iGTK as its
+UI framework. Since we have no idea of its dependencies, we		{{server_host}}	{{server_port}}
+ifirst create a
+packaging template:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen we try to build the package. It fails, as expected:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLet's run the command above to see the complete log:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`autoPatchelf` already listed all missing libraries, and we need to		{{server_host}}	{{server_port}}
+ifind the
+relevant packages one by one, and add them to the		{{server_host}}	{{server_port}}
+i`buildInputs` of the package.
+You can search for packages on		{{server_host}}	{{server_port}}
+hNixOS Search	URL:https://search.nixos.org/packages	{{server_host}}	{{server_port}}
+ibased on your experience, or use		{{server_host}}	{{server_port}}
+hnix-index, a tool to search for packages with filenames	URL:https://github.com/bennofs/nix-index	{{server_host}}	{{server_port}}
+i,
+to speed up the process.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter all dependencies are met, the definition for DingTalk looks		{{server_host}}	{{server_port}}
+ilike:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHard: SVP (Integrity Check, Bubblewrap)		{{server_host}}	{{server_port}}
+iAlthough some closed source software like dingtalk are troublesome to		{{server_host}}	{{server_port}}
+ipackage,
+requiring manually searching for all dependencies and		{{server_host}}	{{server_port}}
+irepeated testing, the
+software itself will not create more obstacles		{{server_host}}	{{server_port}}
+ifor you. Other closed source
+ones, to avoid being cracked, will check		{{server_host}}	{{server_port}}
+itheir own integrities, and refuse to
+start if their binary files are		{{server_host}}	{{server_port}}
+iever changed.		{{server_host}}	{{server_port}}
+hSVP video interpolation software	URL:https://www.svp-team.com/get/	{{server_host}}	{{server_port}}
+i, for example,
+is one of them.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`autoPatchelfHook` is a no-no for such software. We have to switch to		{{server_host}}	{{server_port}}
+ianother
+way, by creating a FHS-compliant virtual environment, placing		{{server_host}}	{{server_port}}
+iall libraries in
+the correct paths, and starting the program in this		{{server_host}}	{{server_port}}
+ienvironment. The most
+commonly used software for this purpose is		{{server_host}}	{{server_port}}
+hBubblewrap	URL:https://github.com/containers/bubblewrap	{{server_host}}	{{server_port}}
+i. It's originally designed
+to sandbox programs from sensitive data,		{{server_host}}	{{server_port}}
+ibut that sandbox can be the virtual
+environment we need today.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLet's get straight to the packaging definition of SVP:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHard: WeChat-UOS (Environment Check, Steam-run)		{{server_host}}	{{server_port}}
+iAnother program that checks its execution environment is WeChat client		{{server_host}}	{{server_port}}
+ifor UOS.
+Although it's just an Electron app and should be easy to		{{server_host}}	{{server_port}}
+ipackage, it comes with
+a library that checks UOS license files. If the		{{server_host}}	{{server_port}}
+icheck fails, you won't be able
+to login. Therefore, we still need to		{{server_host}}	{{server_port}}
+icreate a virtual environment and put the
+license files in the correct		{{server_host}}	{{server_port}}
+ilocations, so that we can use WeChat.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere I demonstrate another simple packaging tool: `steam-run`.		{{server_host}}	{{server_port}}
+i`steam-run` calls
+Bubblewrap internally, but as its name suggests,		{{server_host}}	{{server_port}}
+iit's originally built for the
+Steam client and all the games on Steam,		{{server_host}}	{{server_port}}
+iso it includes quite a few commonly
+used libraries in its default		{{server_host}}	{{server_port}}
+ienvironment, and therefore can run many closed
+source programs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhile `steam-run` is handy, it includes a lot of libraries to support		{{server_host}}	{{server_port}}
+ithe vast
+number of Steam games. Using `steam-run` for simple programs		{{server_host}}	{{server_port}}
+iis putting fine
+timber to petty use. I recommend you to package simple		{{server_host}}	{{server_port}}
+iprograms with Bubblewrap,
+and only handle the larger, complicated ones		{{server_host}}	{{server_port}}
+iwith `steam-run`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iExamples: Special Packages		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere close to the end, I will demonstrate packaging some special		{{server_host}}	{{server_port}}
+istuff.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFont: Hoyo-Glyphs		{{server_host}}	{{server_port}}
+iFonts are packages in NixOS. You just need to place the TTF files in		{{server_host}}	{{server_port}}
+ithe
+package's `$out/share/fonts/opentype` folder.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere I use Hoyo-Glyphs for demonstration.		{{server_host}}	{{server_port}}
+hIt's a font project created by miHoYo game lovers, that imitates the constructed scripts in miHoYo games, including Genshin Impact, Star Rail, and ZZZ	URL:https://github.com/SpeedyOrc-C/Hoyo-Glyphs	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, add the package to the font configuration of NixOS to use		{{server_host}}	{{server_port}}
+ithem:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGo Package: Konnect		{{server_host}}	{{server_port}}
+iThe next thing I'll demonstrate is packaging Go programs. Nixpkgs		{{server_host}}	{{server_port}}
+iprovides a
+`buildGoModule` function that packages Go programs almost		{{server_host}}	{{server_port}}
+icompletely
+automatically. However, there remains one issue with		{{server_host}}	{{server_port}}
+i`buildGoModule`: since Go
+building process involves downloading		{{server_host}}	{{server_port}}
+idependencies in `vendor` directory from
+the Internet, `buildGoModule`		{{server_host}}	{{server_port}}
+iwill calculate the hash of the whole `vendor`
+directory, which must be		{{server_host}}	{{server_port}}
+ispecified on packaging.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDon't know how to calculate the hash here? Comment it out (or change a		{{server_host}}	{{server_port}}
+ifew
+characters) and build the package, and Nix will raise an error and		{{server_host}}	{{server_port}}
+ishow the
+correct hash.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere I'm demonstrating with		{{server_host}}	{{server_port}}
+hKonnect, an OpenID SSO service with LDAP backend support	URL:https://github.com/Kopano-dev/konnect	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou don't need to specify any compilation commands, as `buildGoModule`		{{server_host}}	{{server_port}}
+idoes
+everything for you.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSimilarly, many popular languages like Python, NodeJS and Rust have		{{server_host}}	{{server_port}}
+itheir own
+packaging functions,		{{server_host}}	{{server_port}}
+hwhich can be found on NixOS Wiki	URL:https://nixos.wiki/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> One notable exception is Java, since the popular Maven build		{{server_host}}	{{server_port}}
+isystem doesn't
+support pinning dependencies to a specific version.		{{server_host}}	{{server_port}}
+iDependencies may change
+between two builds, which violates the		{{server_host}}	{{server_port}}
+irequirements of Nix.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iKernel: linux-xanmod-lantian		{{server_host}}	{{server_port}}
+iFinally, I'll show you the steps of customizing the Linux kernel. As		{{server_host}}	{{server_port}}
+iusual,
+Nixpkgs provides a convenience function called `buildLinux`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`config.nix` stores your custom kernel configs. Nixpkgs will apply		{{server_host}}	{{server_port}}
+iyour changes
+on top of		{{server_host}}	{{server_port}}
+hthe default kernel config of NixOS	URL:https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel/common-config.nix	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConclusion		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSoftware packaging has always been difficult. In the packaging		{{server_host}}	{{server_port}}
+iprocess, you
+often need to consider all dependencies of the software,		{{server_host}}	{{server_port}}
+iand try repeatedly
+whilst adjusting parameters. Compared to other		{{server_host}}	{{server_port}}
+idistros, packaging in NixOS (and
+Nixpkgs) may seem complicated at		{{server_host}}	{{server_port}}
+ifirst, but is actually easy:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Many repetitive work are automated with functions;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Packaging is isolated from the main OS, no worries of package		{{server_host}}	{{server_port}}
+ibreaking for
+others because of residuals or missing dependencies.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn this post, I demonstrated a few common packaging scenarios,		{{server_host}}	{{server_port}}
+iincluding open
+source and closed source ones. But since I only shown a		{{server_host}}	{{server_port}}
+ilimited number of
+examples, they certainly do not cover all scenarios		{{server_host}}	{{server_port}}
+iyou may run into, so you're
+likely required to do your own research:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hNixOS Wiki	URL:https://nixos.wiki/	{{server_host}}	{{server_port}}
+i-  provides packaging guides for many popular
+programming languages,		{{server_host}}	{{server_port}}
+ias well as special cases (like Qt).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hNixpkgs	URL:https://github.com/NixOS/nixpkgs	{{server_host}}	{{server_port}}
+i-  itself is a large package
+repository with definitions for over		{{server_host}}	{{server_port}}
+i80,000 packages, which serves as a
+reference.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hNUR	URL:https://nur.nix-community.org/	{{server_host}}	{{server_port}}
+i-  is package repositories managed by Nix
+users, similar to AUR.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAll packaging examples in this post are from		{{server_host}}	{{server_port}}
+hmy NUR repository	URL:https://github.com/xddxdd/nur-packages	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

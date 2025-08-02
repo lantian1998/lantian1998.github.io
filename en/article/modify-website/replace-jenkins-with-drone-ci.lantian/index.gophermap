@@ -1,0 +1,236 @@
+iJenkins is a free and open-source CI/CD software widely used in all		{{server_host}}	{{server_port}}
+ikinds of
+scenarios. The main advantage of Jenkins is its grand		{{server_host}}	{{server_port}}
+icollection of plugins
+capable of all sorts of jobs, including		{{server_host}}	{{server_port}}
+ideploying with		{{server_host}}	{{server_port}}
+hSCP	URL:https://plugins.jenkins.io/scp/	{{server_host}}	{{server_port}}
+hAnsible	URL:https://plugins.jenkins.io/ansible/	{{server_host}}	{{server_port}}
+i, analyzing code with		{{server_host}}	{{server_port}}
+hCppcheck	URL:https://plugins.jenkins.io/cppcheck/	{{server_host}}	{{server_port}}
+i, and notifying job status with		{{server_host}}	{{server_port}}
+hTelegram	URL:https://plugins.jenkins.io/telegram-notifications/	{{server_host}}	{{server_port}}
+hDingTalk	URL:https://plugins.jenkins.io/dingding-notifications/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPreviously I also used Jenkins for automation of numerous jobs, like		{{server_host}}	{{server_port}}
+irebuilding		{{server_host}}	{{server_port}}
+hmy Docker images	URL:https://github.com/xddxdd/dockerfiles	{{server_host}}	{{server_port}}
+i, deploying the blog
+you're visiting right now, and even		{{server_host}}	{{server_port}}
+hauto sign-in to Genshin Impact	URL:https://github.com/y1ndan/genshinhelper	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut Jenkins is a CI with a long history, and its predecessor Hudson		{{server_host}}	{{server_port}}
+iwas released
+back in 2005. Therefore, Jenkins executes commands		{{server_host}}	{{server_port}}
+idirectly when it comes to
+running jobs instead of using modern		{{server_host}}	{{server_port}}
+iapproaches such as containers. This means
+that whether a CI pipeline		{{server_host}}	{{server_port}}
+isucceeds will largely depend on the environment of
+the Worker host.		{{server_host}}	{{server_port}}
+iFor example, I rented a dedicated server with higher specs. As
+I		{{server_host}}	{{server_port}}
+irebuilt my whole environment, I was greeted with a number of weird		{{server_host}}	{{server_port}}
+iissues,
+which took me about a week to find out and fix.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn addition, Jenkins is written in Java, hence its high memory		{{server_host}}	{{server_port}}
+iconsumption. A
+Jenkins instance can take as much as 1GB RAM, which		{{server_host}}	{{server_port}}
+imakes it impossible for a
+low specs server to run even the simplest		{{server_host}}	{{server_port}}
+itasks. In addition, it's hard to use
+all the awesomeness of Jenkins		{{server_host}}	{{server_port}}
+iplugins from a configuration file. A lot of
+plugins didn't implement		{{server_host}}	{{server_port}}
+ithe functionality of setting parameters from a
+Jenkinsfile, and such		{{server_host}}	{{server_port}}
+iplugins can only be configured one-by-one on the Jenkins
+webpage,		{{server_host}}	{{server_port}}
+iwhich is a complicated and error-prone process.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBy comparison,		{{server_host}}	{{server_port}}
+hDrone	URL:https://www.drone.io/	{{server_host}}	{{server_port}}
+ithe container-based CI is a
+relatively modern approach. Drone		{{server_host}}	{{server_port}}
+irecommends its		{{server_host}}	{{server_port}}
+hDocker-container-based Worker (called Runner by the Drone folks)	URL:https://readme.drone.io/runner/docker/overview/	{{server_host}}	{{server_port}}
+i.
+As containers are used as execution environments, Drone fully		{{server_host}}	{{server_port}}
+iexploits the
+advantage of containers: consistency. As long as the		{{server_host}}	{{server_port}}
+icontainer image is
+consistent, you can be sure that those CI commands		{{server_host}}	{{server_port}}
+iwill be executed under the
+same environment every time, and its output		{{server_host}}	{{server_port}}
+ishould be stable. Of course, if your
+script cannot run in a container		{{server_host}}	{{server_port}}
+iby any means, Drone also has runners for		{{server_host}}	{{server_port}}
+hexecuting commands directly on host	URL:https://readme.drone.io/runner/exec/overview/	{{server_host}}	{{server_port}}
+hin a DigitalOcean cloud server	URL:https://readme.drone.io/runner/digitalocean/overview/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDrone also has a lot of other advantages: Drone is written in Go,		{{server_host}}	{{server_port}}
+iusing
+one-tenth the memory of Jenkins; Drone's configuration files are		{{server_host}}	{{server_port}}
+iwritten in YAML
+or Jsonnet, unlike the special language of		{{server_host}}	{{server_port}}
+iJenkinsfile; Although the number of		{{server_host}}	{{server_port}}
+hDrone's plugins	URL:http://plugins.drone.io/	{{server_host}}	{{server_port}}
+iis comparatively smaller to Jenkins,
+all of them are Docker containers		{{server_host}}	{{server_port}}
+iand can be used from the configuration file.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iJenkins		{{server_host}}	{{server_port}}
+iDrone		{{server_host}}	{{server_port}}
+iEnvironment		{{server_host}}	{{server_port}}
+iWorker's host		{{server_host}}	{{server_port}}
+iYour choice: Docker container, Worker's host, or DigitalOcean cloud		{{server_host}}	{{server_port}}
+iserver		{{server_host}}	{{server_port}}
+iConfig syntax		{{server_host}}	{{server_port}}
+iSpecial language: Jenkinsfile		{{server_host}}	{{server_port}}
+iGeneric YAML/Jsonnet		{{server_host}}	{{server_port}}
+iPlugins		{{server_host}}	{{server_port}}
+iMore, 1836 (as of this is written)		{{server_host}}	{{server_port}}
+iLess, 102		{{server_host}}	{{server_port}}
+iPlugin config		{{server_host}}	{{server_port}}
+iWeb-based, some available through config file		{{server_host}}	{{server_port}}
+iAll in config file		{{server_host}}	{{server_port}}
+iProgramming Language		{{server_host}}	{{server_port}}
+iJava		{{server_host}}	{{server_port}}
+iMemory Usage		{{server_host}}	{{server_port}}
+iMore, around 1GB		{{server_host}}	{{server_port}}
+iLess, around 100MB		{{server_host}}	{{server_port}}
+iInstall Drone		{{server_host}}	{{server_port}}
+iAs a containerized CI, Drone itself is a Docker container and is		{{server_host}}	{{server_port}}
+iconfigured
+through environment variables. Drone can be connected to		{{server_host}}	{{server_port}}
+hGitHub	URL:https://readme.drone.io/server/provider/github/	{{server_host}}	{{server_port}}
+hGitLab	URL:https://readme.drone.io/server/provider/gitlab/	{{server_host}}	{{server_port}}
+hGitea	URL:https://readme.drone.io/server/provider/gitea/	{{server_host}}	{{server_port}}
+hBitBucket	URL:https://readme.drone.io/server/provider/bitbucket-cloud/	{{server_host}}	{{server_port}}
+i, please
+refer to the linked official documents for guides. However,		{{server_host}}	{{server_port}}
+ione Drone instance
+can only connect to one of them. If you are like		{{server_host}}	{{server_port}}
+ime, who needs CI on both GitHub
+and my own Gitea instance, you will		{{server_host}}	{{server_port}}
+ineed two sets of Drone.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you plan to use Drone for deploying, you will need some way to pass		{{server_host}}	{{server_port}}
+iyour
+deployment keys to Drone. I use secret management software		{{server_host}}	{{server_port}}
+hVault	URL:https://www.vaultproject.io/	{{server_host}}	{{server_port}}
+hwith official support from Drone	URL:https://docs.drone.io/secret/external/vault/	{{server_host}}	{{server_port}}
+i.
+Of course, you can simply store your secrets in Drone, but not		{{server_host}}	{{server_port}}
+ithrough its web
+UI. You must		{{server_host}}	{{server_port}}
+huse Drone's command-line tool for that	URL:https://readme.drone.io/secret/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere is my configuration with Vault and Drone for reference:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBasic Drone CI/CD		{{server_host}}	{{server_port}}
+iAfter setting up Drone, the next step is to add a task. Here I'll use		{{server_host}}	{{server_port}}
+ithe
+example of deploying my Hexo blog.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI already have a set of deployment scripts for the following tasks:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install node_modules		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `hexo generate`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `hexo deploy` to GitHub Pages (as a backup)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Convert all images to WebP, and Gzip and Brotli compress all static		{{server_host}}	{{server_port}}
+iresources		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Rsync generated files to all of my nodes with Ansible		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn addition, since my blog uses Dependabot to update dependencies		{{server_host}}	{{server_port}}
+iautomatically,
+Dependabot may create pull requests from time to time.		{{server_host}}	{{server_port}}
+iObviously, the pull
+requests shouldn't be deployed to my nodes. The CI		{{server_host}}	{{server_port}}
+ishould just try generating
+the files and see if it fails.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo here comes the most basic form of our configuration, written		{{server_host}}	{{server_port}}
+ito
+`.drone.yaml`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis config will generate the static files and attempt `hexo deploy`,		{{server_host}}	{{server_port}}
+ibut it
+will fail since it doesn't have the SSH keys. For obvious		{{server_host}}	{{server_port}}
+ireason I won't
+recommend adding your SSH key directly to the config.		{{server_host}}	{{server_port}}
+iYou should instead add it
+to Vault (or Drone's secret storage), and		{{server_host}}	{{server_port}}
+iuse it from the config file:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow we have SSH keys in the CI containers, and it will be able to		{{server_host}}	{{server_port}}
+iconnect to
+GitHub or other deployment targets via SSH.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut another problem exists: every time the build is started, the		{{server_host}}	{{server_port}}
+icontainer is in
+a clean state without `node_modules`, which means a		{{server_host}}	{{server_port}}
+iconsiderable amount of time
+is needed to download		{{server_host}}	{{server_port}}
+ithis blackhole		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe good news is that Drone provides a plugin to cache intermediate		{{server_host}}	{{server_port}}
+idirectories
+and decompress them on the next build:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe can also have Telegram notifications on build failures:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow we have a Drone configuration with deployments, caching, and		{{server_host}}	{{server_port}}
+iTelegram
+notifications.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMatrix Build		{{server_host}}	{{server_port}}
+iSometimes we need to test our programs on different environments, such		{{server_host}}	{{server_port}}
+ias Python
+2.7/3.6/3.7/3.8/3.9, GCC/Clang, etc. Drone supports the		{{server_host}}	{{server_port}}
+iJsonnet configuration
+format to define jobs in batches.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hTake my route-chain project for example	URL:https://github.com/xddxdd/route-chain/blob/master/.drone.jsonnet	{{server_host}}	{{server_port}}
+i,
+some contents are removed/simplified for demonstration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSave the config to `.drone.jsonnet`, and change the config file name		{{server_host}}	{{server_port}}
+ifrom
+`.drone.yaml` to `.drone.jsonnet`, and you're good to go.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAborting Build Early		{{server_host}}	{{server_port}}
+iSometimes we don't need to run all jobs in a Matrix Build. For		{{server_host}}	{{server_port}}
+iexample, I don't
+need to rebuild all Docker images on every commit to		{{server_host}}	{{server_port}}
+imy		{{server_host}}	{{server_port}}
+hDockerfiles repository	URL:https://github.com/xddxdd/dockerfiles	{{server_host}}	{{server_port}}
+i, specifically 14
+(images) multiplied by 8 (architectures) to 112		{{server_host}}	{{server_port}}
+ijobs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFortunately, Drone supports aborting a pipeline early, just quit at		{{server_host}}	{{server_port}}
+isome step
+with exit code 78 like this:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAn actual example can be found		{{server_host}}	{{server_port}}
+hat this commit in my Dockerfiles repo	URL:https://github.com/xddxdd/dockerfiles/blob/4268d0f076ee76efdff670e2f9b0dae5961a968f/.drone.jsonnet	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut since Drone runs builds in containers, and containers are somewhat		{{server_host}}	{{server_port}}
+islow to
+start, handling 112 pipelines alone needs tens of minutes,		{{server_host}}	{{server_port}}
+ieven if all jobs quit
+immediately. Therefore,		{{server_host}}	{{server_port}}
+hI adjusted the Dockerfiles repo configuration to run one pipeline for each architecture	URL:https://github.com/xddxdd/dockerfiles/blob/master/.drone.jsonnet	{{server_host}}	{{server_port}}
+i,
+and to determine the images to be built from the commit message. In		{{server_host}}	{{server_port}}
+ithis case,
+only 8 pipelines are needed, and the execution time for an		{{server_host}}	{{server_port}}
+iempty job won't be
+too long.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

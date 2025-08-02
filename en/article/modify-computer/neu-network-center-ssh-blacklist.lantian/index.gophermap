@@ -1,0 +1,21 @@
+iThe Network Center of Northeastern University provides an SSH		{{server_host}}	{{server_port}}
+iblacklist on its official website, which records IP addresses detected		{{server_host}}	{{server_port}}
+iusing port scanning tools on SSH ports. This system appears to be		{{server_host}}	{{server_port}}
+ibased on statistics collected from their own honeypot servers. They		{{server_host}}	{{server_port}}
+ialso offer a downloadable hosts.deny file corresponding to the		{{server_host}}	{{server_port}}
+iblacklist, allowing users to automatically update the SSH blacklist		{{server_host}}	{{server_port}}
+iand block these scanners (preventing them from logging in) using		{{server_host}}	{{server_port}}
+ischeduling tools like cron.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIt's unclear exactly when this system was implemented, but it has been		{{server_host}}	{{server_port}}
+ioperational for at least two years. Additionally, the blocking		{{server_host}}	{{server_port}}
+iduration for these IP addresses appears to be 60 days from their last		{{server_host}}	{{server_port}}
+idetection.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsage method: Install cron on your server and run the following		{{server_host}}	{{server_port}}
+icommands to set up the script:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis script will connect to the Northeastern University Network Center		{{server_host}}	{{server_port}}
+iservers hourly, download the latest hosts.deny file, and apply it to		{{server_host}}	{{server_port}}
+iyour system.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

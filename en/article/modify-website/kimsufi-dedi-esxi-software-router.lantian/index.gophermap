@@ -1,0 +1,153 @@
+iKimsufi is a budget brand under French company OVH, specializing in		{{server_host}}	{{server_port}}
+irenting high-performance servers at extremely affordable prices. I		{{server_host}}	{{server_port}}
+ipersonally rent the KS-4C model, featuring an i5-2400 processor, 16GB		{{server_host}}	{{server_port}}
+iRAM, 2TB HDD, 100Mbps unmetered bandwidth, for just 13 euros/month.		{{server_host}}	{{server_port}}
+iIts exceptional value makes it perfect for running virtual machines		{{server_host}}	{{server_port}}
+ifor experiments.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iVMware ESXi (now also called vSphere Hypervisor) and Proxmox VE are		{{server_host}}	{{server_port}}
+itwo popular operating systems specifically designed for		{{server_host}}	{{server_port}}
+ivirtualization, both available for free. Crucially, Kimsufi's control		{{server_host}}	{{server_port}}
+ipanel offers one-click installations for both systems. However, during		{{server_host}}	{{server_port}}
+imy usage, I found that Proxmox VE frequently suffered from		{{server_host}}	{{server_port}}
+iunresponsive remote VM connections (VNC black screens) or keystroke		{{server_host}}	{{server_port}}
+iloss (especially critical during password entry) under poor network		{{server_host}}	{{server_port}}
+iconditions, so I switched to ESXi.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis led to another issue: ESXi isn't a full-fledged Linux/FreeBSD		{{server_host}}	{{server_port}}
+isystem and lacks comprehensive NAT functionality, meaning it can't run		{{server_host}}	{{server_port}}
+imultiple VMs behind one IP address with port forwarding. However,		{{server_host}}	{{server_port}}
+isince Kimsufi provides both IPv4 and IPv6 addresses, we can assign the		{{server_host}}	{{server_port}}
+iIPv4 to a VM while configuring ESXi to use IPv6, then set up that VM		{{server_host}}	{{server_port}}
+ito handle NAT.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis is precisely what we'll accomplish in this article.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhy I Wrote This Article		{{server_host}}	{{server_port}}
+iBecause I encountered numerous issues during configuration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The command-line online upgrade method for ESXi 5.0 no longer works		{{server_host}}	{{server_port}}
+iand throws errors;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- While ESXi 6's web interface is convenient for daily VM management		{{server_host}}	{{server_port}}
+i(no client required), it contains bugs when configuring ESXi network		{{server_host}}	{{server_port}}
+isettings.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalling ESXi		{{server_host}}	{{server_port}}
+iThe ESXi version provided by Kimsufi is extremely outdated (5.0),		{{server_host}}	{{server_port}}
+iwhile the latest version at the time of writing was 6.7. Therefore, we		{{server_host}}	{{server_port}}
+imust upgrade immediately after installation. However, due to VMware's		{{server_host}}	{{server_port}}
+ipolicy changes, the following online upgrade method no longer works:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRunning this command on ESXi 5.0 results in XML format errors. Thus,		{{server_host}}	{{server_port}}
+iwe must use an offline installation package for local upgrading. But		{{server_host}}	{{server_port}}
+iESXi's wget doesn't support HTTPS, requiring an intermediate VPS for		{{server_host}}	{{server_port}}
+itransfer.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDetailed steps:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Connect via a proxy VPS (Shadowsocks) since VMware's download site		{{server_host}}	{{server_port}}
+iverifies IP addresses.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Visit		{{server_host}}	{{server_port}}
+ihttps://my.vmware.com/group/vmware/patch#search		{{server_host}}	{{server_port}}
+i, select ESXi 6.0.0 (5.0 cannot upgrade directly to 6.5), click search		{{server_host}}	{{server_port}}
+ito view patches:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Scroll down to find any patch with a filename like		{{server_host}}	{{server_port}}
+i`update-from-esxi6.0-6.0_update03`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Copy the download link, wget it on the VPS. After downloading, start		{{server_host}}	{{server_port}}
+ian HTTP server on the VPS, then wget again from ESXi.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click the KBxxxxxx link in the third column (KB2148155 in the image		{{server_host}}	{{server_port}}
+iabove).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Scroll down to the Image Profiles section on the new page:		{{server_host}}	{{server_port}}
+iThe name like `ESXi-6.0.0-20170202001-standard` is the target version		{{server_host}}	{{server_port}}
+iname.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Run in ESXi's SSH:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iExample:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPress Enter to execute the upgrade, then reboot.
+8. Return to Step 2,		{{server_host}}	{{server_port}}
+iselect version 6.5.0 (no 6.7 upgrade file available at writing time),		{{server_host}}	{{server_port}}
+irepeat the process.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter completing these steps, we have ESXi version 6.5.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguring IPv6		{{server_host}}	{{server_port}}
+iOur goal is to assign IPv6 to ESXi and IPv4 to VMs. However, ESXi's		{{server_host}}	{{server_port}}
+iweb interface fails to save network settings properly, requiring CLI		{{server_host}}	{{server_port}}
+ioperations:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Log into ESXi, enable IPv6 and reboot:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enable IPv6 on the default NIC:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Assuming your server's IPv6 is `2001:41d0:1:234::1`, your gateway is		{{server_host}}	{{server_port}}
+i`2001:41d0:1:2ff:ff:ff:ff:ff` (refer to Kimsufi's IPv6 tutorials). Add		{{server_host}}	{{server_port}}
+itwo IPv6 addresses: your assigned IP and a random address in the same		{{server_host}}	{{server_port}}
+i/64 subnet to allow gateway recognition:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Set default gateway:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Ping from another IPv6-enabled VPS to confirm connectivity before		{{server_host}}	{{server_port}}
+iproceeding.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If your local network lacks IPv6, consider using Cloudflare to proxy		{{server_host}}	{{server_port}}
+ithe server's IPv6 address for easier management.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalling Software Router		{{server_host}}	{{server_port}}
+iI use pfSense as the software router. First download the pfSense ISO		{{server_host}}	{{server_port}}
+ito ESXi (HTTP supported, no proxy needed):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the web panel:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Go to Networking > Virtual Switches, create a new vSwitch.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under Port Groups, create a port group connected to this switch		{{server_host}}	{{server_port}}
+i(this will be the internal network for VMs):		{{server_host}}	{{server_port}}
+iTo allow ESXi to join the internal network:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Create another port group connected to the same switch:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under VMkernel NICs, create a virtual NIC connected to this port		{{server_host}}	{{server_port}}
+igroup with "Management" service:		{{server_host}}	{{server_port}}
+iCopy the physical NIC's MAC address from the Physical NICs page. Since		{{server_host}}	{{server_port}}
+ithe datacenter binds IPs to MACs, we'll configure the VM to spoof the		{{server_host}}	{{server_port}}
+iserver's MAC address.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCreate the VM normally. Note:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Set the first NIC's MAC to match the physical NIC, connecting it to		{{server_host}}	{{server_port}}
+i"VM Network" (external network).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If connected via IPv4, ESXi management will disconnect briefly when		{{server_host}}	{{server_port}}
+ithe router boots (normal during IP conflict).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The router can now ping externally but TCP connections will reset.		{{server_host}}	{{server_port}}
+iNext, disable ESXi's IPv4 to resolve the conflict.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDisabling IPv4		{{server_host}}	{{server_port}}
+i⚠️ High-risk operation! If IPv6 isn't working and IPv4 is disabled,		{{server_host}}	{{server_port}}
+ithe server becomes inaccessible (requires reinstall)! Double-check		{{server_host}}	{{server_port}}
+iIPv6 functionality first!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFrom an IPv6-enabled VPS, SSH into the server and run:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe software router should now have normal internet access.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo connect ESXi to the internal network:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the web panel (VMkernel NICs), modify the manually created vNIC's		{{server_host}}	{{server_port}}
+iIP to match the internal network:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Run in ESXi SSH:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iExample:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iESXi can now access IPv4 sites through the software router.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

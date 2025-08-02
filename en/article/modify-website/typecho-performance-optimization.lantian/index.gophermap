@@ -1,0 +1,95 @@
+iTo implement features like Lightbox and code highlighting, I added		{{server_host}}	{{server_port}}
+ipost-processing code to my blog theme that performs an additional		{{server_host}}	{{server_port}}
+ilayer of processing on the HTML output after Typecho's Markdown		{{server_host}}	{{server_port}}
+iconversion. However, due to the large number of historical articles on		{{server_host}}	{{server_port}}
+imy blog and my use of different editors over time (WordPress editor,		{{server_host}}	{{server_port}}
+iBaidu UEditor, etc.), my processing logic became quite complex to		{{server_host}}	{{server_port}}
+iensure compatibility with older articles. Combined with the limited		{{server_host}}	{{server_port}}
+iperformance of my budget VPS, this resulted in longer webpage loading		{{server_host}}	{{server_port}}
+itimes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI added the following line to my nginx configuration to output		{{server_host}}	{{server_port}}
+iserver-side processing time in HTTP headers:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInitially, this value was around 0.25, meaning each page took about		{{server_host}}	{{server_port}}
+i250ms to process on the server. About a year ago (		{{server_host}}	{{server_port}}
+iMarch 11, 2018, "Significantly Optimized Blog Theme Performance"		{{server_host}}	{{server_port}}
+i), I overhauled the post-processing logic with these key changes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Originally, I used multiple regular expressions to match and replace		{{server_host}}	{{server_port}}
+icontent line by line for historical article compatibility. I		{{server_host}}	{{server_port}}
+iconsolidated some regex patterns and directly modified the original		{{server_host}}	{{server_port}}
+iHTML of articles in the database to reduce unnecessary rendering work.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Many Typecho functions directly echo output instead of returning		{{server_host}}	{{server_port}}
+ivalues. I previously used `ob_start` and `ob_get_flush` to capture		{{server_host}}	{{server_port}}
+ioutput, which was inefficient. After studying Typecho's code, I		{{server_host}}	{{server_port}}
+idiscovered I could directly access rendered content via		{{server_host}}	{{server_port}}
+i`$this->content` in themes, and most required parameters could be		{{server_host}}	{{server_port}}
+iobtained similarly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter these optimizations, LT-Latency dropped to 0.1 – a significant		{{server_host}}	{{server_port}}
+iimprovement, but still insufficient. I then decided to implement Redis		{{server_host}}	{{server_port}}
+icaching.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhere is the Time Spent?		{{server_host}}	{{server_port}}
+iPHP's Xdebug extension provides profiling functionality to detail		{{server_host}}	{{server_port}}
+ifunction execution times. First, install Xdebug via your package		{{server_host}}	{{server_port}}
+imanager:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf unavailable in packages, compile from source (		{{server_host}}	{{server_port}}
+iXdebug website		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen enable Xdebug in php.ini with:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe first line specifies Xdebug's installation path. Lines 2-3 disable		{{server_host}}	{{server_port}}
+iprofiling by default but enable it via trigger (activated by specific		{{server_host}}	{{server_port}}
+iHTTP headers). Line 4 sets the profiling output directory.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, install the "Xdebug Helper" extension in Chrome. Select		{{server_host}}	{{server_port}}
+i"Profile" in the extension menu and refresh the page to generate a		{{server_host}}	{{server_port}}
+i`cachegrind` report in the specified directory. Open these reports		{{server_host}}	{{server_port}}
+iwith Kcachegrind or Qcachegrind.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn my case, significant time was spent on sidebar widgets (~40%),		{{server_host}}	{{server_port}}
+iTypecho's Markdown rendering (15%), and my post-processing functions		{{server_host}}	{{server_port}}
+i(10%). I added Redis caching to these components.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iImplementation Details		{{server_host}}	{{server_port}}
+iWhile Typecho has caching plugins like TpCache, they often failed to		{{server_host}}	{{server_port}}
+iauto-refresh caches after article updates or new comments. They also		{{server_host}}	{{server_port}}
+ionly cached the Markdown rendering layer, not covering my		{{server_host}}	{{server_port}}
+ipost-processing functions.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI wanted to cache using the article's original Markdown hash as the		{{server_host}}	{{server_port}}
+ikey and the fully processed HTML as the value. However, themes can't		{{server_host}}	{{server_port}}
+idirectly access raw Markdown content without core modifications that		{{server_host}}	{{server_port}}
+imight break future updates.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe solution came from the		{{server_host}}	{{server_port}}
+iTypecho Parsedown		{{server_host}}	{{server_port}}
+iplugin, which replaces Typecho's built-in HyperDown parser with		{{server_host}}	{{server_port}}
+iParsedown. Crucially, its Plugin.php contains:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis allowed caching with the raw Markdown hash as key and rendered		{{server_host}}	{{server_port}}
+ioutput as value. My post-processing layer could then cache its results		{{server_host}}	{{server_port}}
+isimilarly. This approach requires no cache invalidation – unchanged		{{server_host}}	{{server_port}}
+icontent keeps the same hash, while changed content automatically gets		{{server_host}}	{{server_port}}
+inew cache entries.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor the heavy-load sidebar, I cached the HTML directly with a		{{server_host}}	{{server_port}}
+i10-minute TTL.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI implemented these Redis get/set functions:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo simplify integration, I created a wrapper for caching function I/O:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iApplied to existing functions:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter caching, homepage LT-Latency stabilized at ~0.04 (due to many		{{server_host}}	{{server_port}}
+iarticles) – another 50% reduction. Inner page latency can drop to		{{server_host}}	{{server_port}}
+i0.015 (15ms). Combined with InstantClick, pages load nearly instantly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Though recent network instability in China might currently mask these		{{server_host}}	{{server_port}}
+iimprovements)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

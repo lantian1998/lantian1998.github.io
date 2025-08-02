@@ -1,0 +1,35 @@
+iAndroid		{{server_host}}	{{server_port}}
+i系统有着用户可直接操作的存储空间，用户可以很方便地管理自己的文件（相比
+i		{{server_host}}	{{server_port}}
+iOS		{{server_host}}	{{server_port}}
+i而言）。但是某些软件也会在存储空间根目录直接建立大量的文件夹，影响了用户		{{server_host}}	{{server_port}}
+i的文
+件管理，并对强迫症人群造成了极大的威胁。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i于是我写了一个 Xposed 插件。插件 Hook 了 Android 的 File		{{server_host}}	{{server_port}}
+i类，当有程序尝试用		{{server_host}}	{{server_port}}
+iFile
+类读取或写入根目录的文件或文件夹，插件会检测这个文件或文件夹是否存		{{server_host}}	{{server_port}}
+i在。如果存在，
+那么插件不做任何操作；如果不存在，那么插件就将操作重定向到		{{server_host}}	{{server_port}}
+i`/Android/files` 文件
+夹下。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i相比于		{{server_host}}	{{server_port}}
+iXInternalSD，这样操作的优点是可以对付某些不自律的应用。这些应用不使用
+A		{{server_host}}	{{server_port}}
+indroid 系统函数获取存储路径，而是直接将文件保存到 `/sdcard`		{{server_host}}	{{server_port}}
+i之类的通用路
+径，XInternalSD 只修改了获取到的存储路径，因此无能为力。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i相比于 SD		{{server_host}}	{{server_port}}
+i重定向，这样操作免除了复杂的配置。用户只需要在装上插件时把文件管理应用
+		{{server_host}}	{{server_port}}
+i拉白名单，然后把根目录下不想要的文件夹删除或移动到 `/Android/files`		{{server_host}}	{{server_port}}
+i即可。如果今
+后想让某个程序将数据保存在根目录下的某个文件夹，同样直接建		{{server_host}}	{{server_port}}
+i立文件夹即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i项目地址：		{{server_host}}	{{server_port}}
+ihttps://github.com/xddxdd/lantian-nolitter		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

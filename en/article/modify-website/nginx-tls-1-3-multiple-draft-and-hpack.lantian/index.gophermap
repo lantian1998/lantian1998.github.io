@@ -1,0 +1,71 @@
+iIt has been 11 months since I last		{{server_host}}	{{server_port}}
+ienabled TLS 1.3		{{server_host}}	{{server_port}}
+ifor nginx. After nearly a year, many nginx-related programs and		{{server_host}}	{{server_port}}
+ipatches have undergone significant changes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- OpenSSL has released beta versions of 1.1.1, with the latest being		{{server_host}}	{{server_port}}
+i1.1.1-pre8 (Beta 6) at the time of writing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- nginx has been updated to version 1.15.1.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Bugs in nginx's HPACK patch (HTTP header compression) have been		{{server_host}}	{{server_port}}
+ifixed by subsequent patches. Using the original HPACK patch causes		{{server_host}}	{{server_port}}
+iabnormal website access, manifesting as protocol errors when		{{server_host}}	{{server_port}}
+iattempting to load subsequent pages after the first.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A developer has		{{server_host}}	{{server_port}}
+ireleased an OpenSSL patch		{{server_host}}	{{server_port}}
+ienabling the latest OpenSSL to simultaneously support TLS 1.3 draft		{{server_host}}	{{server_port}}
+iversions 23, 26, and 28.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Lets Encrypt certificates now include Certificate Transparency		{{server_host}}	{{server_port}}
+iinformation by default, eliminating the need for nginx-ct.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Since July 1, 2018, TLS 1.0 is no longer recommended.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, I have reconfigured nginx's compilation and runtime		{{server_host}}	{{server_port}}
+isettings to meet the needs of the modern era.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDockerfile		{{server_host}}	{{server_port}}
+iI continue to deploy nginx using Docker. Compared to the previous		{{server_host}}	{{server_port}}
+iDockerfile, the new version mainly updates component versions and adds		{{server_host}}	{{server_port}}
+iseveral patches, with no major structural changes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo save space, I've uploaded the Dockerfile to		{{server_host}}	{{server_port}}
+ihttps://github.com/xddxdd/dockerfiles/blob/master/nginx/Dockerfile		{{server_host}}	{{server_port}}
+i. You can also use `docker pull xddxdd/nginx` directly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis Dockerfile includes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- nginx 1.15.1		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- OpenSSL 1.1.1-pre8		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- kn007's combined patch for SPDY, HPACK, and Dynamic TLS Record		{{server_host}}	{{server_port}}
+i(project		{{server_host}}	{{server_port}}
+ihere		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Fix patch for kn007's HPACK patch		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Brotli compression algorithm		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- hakasenyang's TLS 1.3 multi-draft support patch (project		{{server_host}}	{{server_port}}
+ihere		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- nginx headers-more module		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguration Changes		{{server_host}}	{{server_port}}
+iFirst, disable TLS 1.0:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSecond, because OpenSSL has modified numerous cipher suite names,		{{server_host}}	{{server_port}}
+iusing the previous ssl_ciphers configuration would cause		{{server_host}}	{{server_port}}
+iERR_SSL_VERSION_OR_CIPHER_MISMATCH errors (indicating no mutually		{{server_host}}	{{server_port}}
+isupported ciphers). Update ssl_ciphers as follows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhat's Next?		{{server_host}}	{{server_port}}
+iRestart nginx. You can now access the site using:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- TLS 1.3 draft 23 via the latest stable Chrome/Firefox		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- TLS 1.3 draft 28 via the latest development Chrome/Firefox		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

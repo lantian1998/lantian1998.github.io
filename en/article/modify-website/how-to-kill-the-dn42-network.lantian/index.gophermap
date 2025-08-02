@@ -1,0 +1,576 @@
+iDN42, aka Decentralized Network 42, is a large, decentralized		{{server_host}}	{{server_port}}
+iVPN-based network.
+You can read more about DN42 in this post:		{{server_host}}	{{server_port}}
+1DN42 Experimental Network: Intro and Registration	/en/article/modify-website/dn42-experimental-network-2020.lantian/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> DN42 is an		{{server_host}}	{{server_port}}
+iexperimental network		{{server_host}}	{{server_port}}
+i> , where everyone helps everyone. Nobody is
+going to blame you if		{{server_host}}	{{server_port}}
+iyou screwed up. You may seek help at DN42's		{{server_host}}	{{server_port}}
+hIRC channel	URL:https://wiki.dn42.us/services/IRC	{{server_host}}	{{server_port}}
+i> ,		{{server_host}}	{{server_port}}
+hmailing list	URL:https://wiki.dn42.us/contact#contact_mailing-list	{{server_host}}	{{server_port}}
+i>  or the		{{server_host}}	{{server_port}}
+hunofficial Telegram group	URL:https://t.me/Dn42Chat	{{server_host}}	{{server_port}}
+i> .		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince DN42 is a network for experimentation, a lot of relatively		{{server_host}}	{{server_port}}
+iinexperienced
+users also participate in it. Therefore, occasionally an		{{server_host}}	{{server_port}}
+iinexperienced user may
+misconfigure his/her system and impact the		{{server_host}}	{{server_port}}
+iwhole DN42 network or even shut it
+down.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs a more experienced user, here I will teach new users about some		{{server_host}}	{{server_port}}
+ioperations
+that can kill the network and about defense against such		{{server_host}}	{{server_port}}
+imisconfigurations that
+everyone can set up against peers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> WARNING: You should not actually perform these operations in DN42.		{{server_host}}	{{server_port}}
+iYou should
+focus more on protecting yourself against them.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Malicious actions will make you kicked from DN42.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe stories are based on		{{server_host}}	{{server_port}}
+ireal disasters		{{server_host}}	{{server_port}}
+iin the Telegram group and IRC
+channel.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iChangelog		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 2023-05-12: Add contents for a routing loop caused by modifying BGP		{{server_host}}	{{server_port}}
+ilocal
+preference.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 2020-08-27: Format changes, add full IRC logs, add another netmask		{{server_host}}	{{server_port}}
+ierror
+content, and add content on missing digit in ASN.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 2020-07-13: Add an IPv6 netmask error in the registry and Bird's		{{server_host}}	{{server_port}}
+iconflicts
+between different protocols.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 2020-05-30：Initial version, including OSPF, Babel, and route flaps.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOSPF is Fun		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou just joined DN42 and plan to connect all of your servers. You've		{{server_host}}	{{server_port}}
+ialready
+peered with a few others on several of your nodes, but you		{{server_host}}	{{server_port}}
+ihaven't finished on
+your internal routing yet.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo you plan to configure OSPF. You opened Bird's configuration file		{{server_host}}	{{server_port}}
+iand added a
+protocol:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSatisfied, you copied the config file to every server and ran `bird		{{server_host}}	{{server_port}}
+iconfigure`.
+You checked and confirmed that every server obtained		{{server_host}}	{{server_port}}
+iroutes from each other via
+OSPF.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSuddenly a message box pops up on your IRC client / Telegram. You		{{server_host}}	{{server_port}}
+iclicked on it:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCongratulations! You've successfully hijacked (part of) DN42.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhat's Going On		{{server_host}}	{{server_port}}
+iWhen your server peers with others via BGP protocol, each route		{{server_host}}	{{server_port}}
+icontains path
+information, including the origin as well as the list of		{{server_host}}	{{server_port}}
+inodes it went through.
+For example, the route `172.22.76.184/29` may		{{server_host}}	{{server_port}}
+ihave the path information of
+`4242422547 -> 4242422601 -> 424242****`,		{{server_host}}	{{server_port}}
+iwhere `4242422547` is the origin (me
+by the way), and `4242422601` is		{{server_host}}	{{server_port}}
+iyour neighbor (Burble here, as an example).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut since your internal networking uses OSPF, which has no idea what		{{server_host}}	{{server_port}}
+iBGP paths
+are, it doesn't preserve them while passing routes around.		{{server_host}}	{{server_port}}
+iNow another node of
+yours obtained `172.22.76.184/29` via OSPF, yet		{{server_host}}	{{server_port}}
+iwithout any path information. It
+will then proceed to announce the		{{server_host}}	{{server_port}}
+iroute with your own ASN to your peers, causing
+a hijack.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere is a graph of what's going on:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBabel is Fun, Too		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThose in the Telegram group are really nice guys. As they help you in		{{server_host}}	{{server_port}}
+ifixing the
+problem, they also recommended Babel to you:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Babel automatically selects the shortest path by latency.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Babel is extremely simple to configure.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut they don't recommend Bird's built-in Babel support since it		{{server_host}}	{{server_port}}
+idoesn't support
+selecting paths by latency.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou are persuaded, removed the OSPF configuration, and installed		{{server_host}}	{{server_port}}
+iBabeld. Soon
+each of your nodes is getting Babel routes. You waited		{{server_host}}	{{server_port}}
+ifor a few minutes. No
+sign of catastrophe yet.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut you do notice that Bird isn't announcing the routes via BGP. The		{{server_host}}	{{server_port}}
+iTelegram
+guys instigated you to enable the `learn` option of Bird's		{{server_host}}	{{server_port}}
+ikernel protocol:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou do this. A few minutes later, you are called out again by people		{{server_host}}	{{server_port}}
+iin IRC and
+Telegram. Yes, you hijacked other's networks. Again.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhat's Going On		{{server_host}}	{{server_port}}
+iIt is actually the same problem as the OSPF one since Babel also		{{server_host}}	{{server_port}}
+idropped all BGP
+path information while passing routes around. However,		{{server_host}}	{{server_port}}
+iBird ignores routing
+information installed to the system by other		{{server_host}}	{{server_port}}
+irouting software by default, until
+you enabled `learn`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCorrect Way to Do This		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Always remember: Interior Gateway Protocols, including OSPF, Babel,		{{server_host}}	{{server_port}}
+ietc,
+should never process BGP routing information. BGP routing should		{{server_host}}	{{server_port}}
+ibe handled
+solely by BGP.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- There are multiple schemes to configure BGP in a network. You may		{{server_host}}	{{server_port}}
+irefer to:		{{server_host}}	{{server_port}}
+1Bird BGP Confederation: Configuration and Emulation	/en/article/modify-website/bird-confederation.lantian	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Similarly, interior routes should not be passed to BGP, unless you		{{server_host}}	{{server_port}}
+iown each
+and every IP that you're using internally on DN42.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- So you should set BGP's `export filter` to this in Bird:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDefensive Measures		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The best countermeasure is ROA, or Route Origin Authorization. It		{{server_host}}	{{server_port}}
+irestricts
+the source ASN of each route.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- For DN42, ROA configuration is generated automatically based on		{{server_host}}	{{server_port}}
+iregistry
+data. They can be downloaded from		{{server_host}}	{{server_port}}
+hDN42 Wiki's Bird Config Page	URL:https://wiki.dn42.us/howto/Bird#route-origin-authorization	{{server_host}}	{{server_port}}
+i,
+and can be automatically updated with a cron job.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you don't want to configure ROA, you may try to peer with more		{{server_host}}	{{server_port}}
+ipeople.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Since BGP chooses the path with the least number of ASes, if you're		{{server_host}}	{{server_port}}
+idirectly
+connected to a lot of people, your network will prefer these		{{server_host}}	{{server_port}}
+idirect routes
+even if someone is hijacking.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- But this		{{server_host}}	{{server_port}}
+idoesn't guarantee		{{server_host}}	{{server_port}}
+ifull defense against the problem, for
+example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The path from the hijacker to you is shorter than the real AS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The path from the hijacker and from real AS is of equal length, and		{{server_host}}	{{server_port}}
+iyour
+routing software chooses one randomly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- You have DN42 Community Filter, and for some reason, prefers		{{server_host}}	{{server_port}}
+ithe
+hijacker's route over the real ones.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRoute Flapping		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRoute flapping is a whole range of errors that cause one problem: they		{{server_host}}	{{server_port}}
+icause the
+BGP routing software to frequently switch (or flap) the best		{{server_host}}	{{server_port}}
+iroute they chose.
+Since the best route gets announced to other nodes		{{server_host}}	{{server_port}}
+ivia peering, the flapping
+sets off a chained reaction, where multiple		{{server_host}}	{{server_port}}
+iconnected nodes will flap together
+for one node's mistake. Eventually,		{{server_host}}	{{server_port}}
+ithe problem will be distributed to the whole
+network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis process consumes a significant amount of bandwidth or traffic.		{{server_host}}	{{server_port}}
+iSince many
+people in DN42 use cheap VPSes for nodes, there are only		{{server_host}}	{{server_port}}
+itwo possible outcomes
+eventually:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Your peer found out about the abnormal traffic and cut the peering		{{server_host}}	{{server_port}}
+ito you.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Your hosting provider (or even your peer's provider) found out of		{{server_host}}	{{server_port}}
+iyour high
+bandwidth consumption (or using up your traffic limit) and		{{server_host}}	{{server_port}}
+ishut down the VPS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn addition, route flapping may cause severe impacts:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If the problematic AS peered with many other ASes, even if you		{{server_host}}	{{server_port}}
+idisconnected
+from it, the route flap may still be passed from another		{{server_host}}	{{server_port}}
+iAS to your AS again.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- To fix the problem of one problematic AS, you may have to cut off		{{server_host}}	{{server_port}}
+imultiple
+ASes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor example, one user in the Telegram group had a misconfiguration		{{server_host}}	{{server_port}}
+iwhile
+transitioning from Full-mesh + Direct connections to Multihop.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+II Always Love Niantic Network	/usr/uploads/202008/i-love-niantic-network.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHe didn't disconnect BGP in the process, and the Babel configuration		{{server_host}}	{{server_port}}
+ierror
+caused large amounts of routes to be announced and withdrawn.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBecause of the chain reaction and the number of peerings the guy has		{{server_host}}	{{server_port}}
+iset up,
+multiple large ASes had to disconnect from each other to		{{server_host}}	{{server_port}}
+icontrol the problem
+(before he woke up).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> By the way, this guy had a number of similar accidents before at a		{{server_host}}	{{server_port}}
+ismaller
+scale, which this margin is too narrow to contain.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCase Review		{{server_host}}	{{server_port}}
+iDefensive Measures		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The best solution is Route Dampening, which restricts the number of		{{server_host}}	{{server_port}}
+irouting
+updates to be accepted in a time range.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- But Bird doesn't support this. You'd have to put up with it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Alternatively, you can monitor your nodes with Prometheus, Grafana,		{{server_host}}	{{server_port}}
+ietc., so
+you get an alarm that something's off and handle it manually.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- But obviously, if you aren't online at that time, you may have		{{server_host}}	{{server_port}}
+ialready used
+a few gigs of traffic before you're aware.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Next solution is to rate-limit the peering connection.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Since there is almost no application that requires lots of bandwidth		{{server_host}}	{{server_port}}
+iin
+DN42, this is a viable solution that ensures safety.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- But the downside is also obvious: degradation of performance.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you're rich enough, get a server with uncapped traffic.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHow Long is That IP Block?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince it's the year 2020, you plan to add an IPv6 block to your		{{server_host}}	{{server_port}}
+inetwork. With		{{server_host}}	{{server_port}}
+1my DN42 registration guide	/en/article/modify-website/dn42-experimental-network-2020.lantian	{{server_host}}	{{server_port}}
+i,
+you registered yourself a IPv6 block, which quickly got merged to		{{server_host}}	{{server_port}}
+iregistry.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFrom your perspective, everything is normal. Yet on the other side of		{{server_host}}	{{server_port}}
+ithe
+planet, a message pops up on one person's phone/computer that his		{{server_host}}	{{server_port}}
+iDN42 ROA
+generator is malfunctioning. He opens the registry page,		{{server_host}}	{{server_port}}
+ifacepalms, and commits
+this change:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IErrorneous IPv6 Block in DN42 Registry	/usr/uploads/202007/dn42-registry-error.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hhttps://git.dn42.dev/dn42/registry/commit/9f45ee31cdea4a997d59a262c4a8ac8eb3cbd1f1	URL:https://git.dn42.dev/dn42/registry/commit/9f45ee31cdea4a997d59a262c4a8ac8eb3cbd1f1	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhat's Going On		{{server_host}}	{{server_port}}
+iThis user added a IPv6 block, `fd37:03b3:cae6:5158::/48`. Since an		{{server_host}}	{{server_port}}
+iIPv6 address
+consists of 32 hex numbers (128 bits total), and this		{{server_host}}	{{server_port}}
+iblock defined the first 16
+digits (or 64 bits), the corresponding		{{server_host}}	{{server_port}}
+inetmask should be `/64` or higher.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut for some reason, this error wasn't detected by DN42 Registry's		{{server_host}}	{{server_port}}
+ischema
+checker, nor by the admin who inspected and merged the change,		{{server_host}}	{{server_port}}
+iso it
+successfully ended up in the registry.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLater, the ROA generator found the erroneous IP block while parsing		{{server_host}}	{{server_port}}
+ithe registry
+and crashed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd It Happened Again		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IErrorneous IPv6 Block Happened Again	/usr/uploads/202008/dn42-registry-error.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hhttps://git.dn42.dev/dn42/registry/commit/00f90f592a35e325152ce28157f64d3fca7c8d7d	URL:https://git.dn42.dev/dn42/registry/commit/00f90f592a35e325152ce28157f64d3fca7c8d7d	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCorrect Way to Do This		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- While registering for an IP block, the user should check the		{{server_host}}	{{server_port}}
+ivalidity of
+netmasks and address blocks.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The DN42 Registry schema checker, or the admin performing the merge		{{server_host}}	{{server_port}}
+ioperation,
+should have found out the problem.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- ROA generator should skip the problematic record and properly handle		{{server_host}}	{{server_port}}
+ithe rest
+of the data instead of crashing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFortunately, except that the ROA update was delayed by a few hours,		{{server_host}}	{{server_port}}
+ithis error
+didn't impact the network itself much.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDefensive Measures		{{server_host}}	{{server_port}}
+iSince the decentralized nature of DN42 as it's born, you can write		{{server_host}}	{{server_port}}
+iyour own ROA
+generator as a backup.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Although my ROA generator also failed this time...		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe reason is that different implementations may have minor		{{server_host}}	{{server_port}}
+idifferences even
+though they do the same thing. When such a bug on		{{server_host}}	{{server_port}}
+iinput content arises, some
+implementations may survive.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBird Protocol Fights		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe story starts with my friend Joe... Fine. The story starts with me.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince my network is connected to both DN42 and NeoNetwork, as well as		{{server_host}}	{{server_port}}
+imy
+internal network with a private IP range, to prevent announcing my		{{server_host}}	{{server_port}}
+iinternal
+network to DN42 and NeoNetwork, I did this:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- All routes from the Kernel protocol (from OS routing table) and the		{{server_host}}	{{server_port}}
+iDirect
+protocol (from network interface addresses) are labeled with a		{{server_host}}	{{server_port}}
+iBGP community.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Routes with the community are filtered in exterior peerings with		{{server_host}}	{{server_port}}
+iDN42 and
+NeoNetwork.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- This way, my internal IPs won't be announced to other networks, but		{{server_host}}	{{server_port}}
+isince my
+DN42 and NeoNetwork IP blocks are configured in Static		{{server_host}}	{{server_port}}
+iprotocol, they won't be
+impacted.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInitially, everything looked normal, until a few days later when some		{{server_host}}	{{server_port}}
+iusers on
+Telegram found that my looking glass bot times out on any IP		{{server_host}}	{{server_port}}
+iin DN42.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhat's Going On		{{server_host}}	{{server_port}}
+iInitially, everything is indeed normal, and my IP block		{{server_host}}	{{server_port}}
+i`172.22.76.184/29` is
+announced correctly. Until Direct protocol		{{server_host}}	{{server_port}}
+iperformed a refresh and obtained
+`172.22.76.184/29` from one of the		{{server_host}}	{{server_port}}
+inetwork interfaces, and sent the route to
+Bird routing table again.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe new route overwrote the previous route, and since it comes from		{{server_host}}	{{server_port}}
+iDirect
+protocol, it's labeled with the community and wasn't		{{server_host}}	{{server_port}}
+ibroadcasted. Static
+protocol, on the other hand, is indeed "static",		{{server_host}}	{{server_port}}
+iand won't overwrite the route
+again.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAt this time, I effectively stopped announcing my IP range. No wonder		{{server_host}}	{{server_port}}
+iI cannot
+receive any packets coming back to my nodes now.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCorrect Way to Do This		{{server_host}}	{{server_port}}
+iIn Bird, you should avoid getting the same route entry from multiple		{{server_host}}	{{server_port}}
+irouting
+protocols, as they overwrite each other and may cause		{{server_host}}	{{server_port}}
+iunexpected behavior.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI finally chose to limit Direct protocol to my internal IP range with		{{server_host}}	{{server_port}}
+ia filter,
+so it won't overwrite my DN42 ranges again.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNeed Better Glasses?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA new user registered an ASN:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IErrorneous ASN in DN42 Registry	/usr/uploads/202008/dn42-asn-error.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis is what happened to DN42:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Telegram Group: (Translation available below the image)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ITelegram Reactions	/usr/uploads/202008/dn42-asn-error-response.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Translation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- IRC：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Justice Has Arrived:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IErrorneous Commit Reverted	/usr/uploads/202008/dn42-asn-error-correction.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDefensive Measures		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Just have fun, as this is so rare:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- But while having fun, remember to point out the problem on IRC.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Double-check your peer's information when peering.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Check		{{server_host}}	{{server_port}}
+hDN42 New ASN	URL:https://t.me/DN42new	{{server_host}}	{{server_port}}
+i, a Telegram channel that notifies
+of new DN42 ASNs, in your free		{{server_host}}	{{server_port}}
+itime.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBe Careful of BGP Local Preferences		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen I was helping others debugging their network in the DN42 Telegram		{{server_host}}	{{server_port}}
+igroup, I
+suddenly noticed a routing loop between two of my nodes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI logged onto these two nodes, and indeed, the VirMach node did choose		{{server_host}}	{{server_port}}
+iBuyVM's
+route as the preferred path, and the BuyVM node did the same		{{server_host}}	{{server_port}}
+ifor VirMach's
+route.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIsn't BGP supposed to prevent loops? Why are these two nodes choosing		{{server_host}}	{{server_port}}
+ithe route
+from each other?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhat's Going On		{{server_host}}	{{server_port}}
+iThe problem involves 4 nodes from 3 ASes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iKSKB is the source for the route `fd28:cb8f:4c92::/48`. He broadcasted		{{server_host}}	{{server_port}}
+ithe route
+to Lutoma, as well as my VirMach node. Lutoma then		{{server_host}}	{{server_port}}
+ibroadcased the route to my
+BuyVM node.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAll my nodes have		{{server_host}}	{{server_port}}
+i`add path yes;`		{{server_host}}	{{server_port}}
+ioption turned on		{{server_host}}	{{server_port}}
+i, which means my nodes
+will exchange all received routes, rather than		{{server_host}}	{{server_port}}
+ionly the preferred ones written
+into kernel routing table. Therefore,		{{server_host}}	{{server_port}}
+ias far as the BuyVM node concerns, it can
+choose from two paths to the		{{server_host}}	{{server_port}}
+isource:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe same applies for my VirMach node:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGenerally speaking, the VirMach node should prefer the direct route to		{{server_host}}	{{server_port}}
+iKSKB,
+instead of the path through my BuyVM node and Lutoma's node, for		{{server_host}}	{{server_port}}
+ia total of 2
+hops (hops aren't counted for iBGP within the same AS).		{{server_host}}	{{server_port}}
+iNow regardless of the
+next hop BuyVM node prefers, either Lutoma's		{{server_host}}	{{server_port}}
+inode or my VirMach node, it will
+have a reachable path rather than a		{{server_host}}	{{server_port}}
+irouting loop.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe problem is that		{{server_host}}	{{server_port}}
+iI manually adjusted route preferences with a BIRD
+filter		{{server_host}}	{{server_port}}
+hDN42 has a standard set of BGP communities to mark the source region of each route.	URL:https://wiki.dn42.dev/howto/Bird-communities	{{server_host}}	{{server_port}}
+iTo reduce network latency, I used the following algorithm (simplified)		{{server_host}}	{{server_port}}
+ito adjust
+my route preferences:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen the problem happened, the original route from KSKB don't have		{{server_host}}	{{server_port}}
+isource region
+community set up.		{{server_host}}	{{server_port}}
+iHowever, Lutoma's network was set up incorrectly, and added
+source		{{server_host}}	{{server_port}}
+iregion community to KSKB's route as well		{{server_host}}	{{server_port}}
+i, and with the same region as
+my VirMach node. (According to the		{{server_host}}	{{server_port}}
+istandard of DN42, networks should only add
+source region communities		{{server_host}}	{{server_port}}
+ito their own routes, not to routes received from other
+networks.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow my BuyVM node calculated the following route preferences, and		{{server_host}}	{{server_port}}
+ichose the
+route through my VirMach node:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYet my VirMach node chose the route through BuyVM:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd now we have a routing loop.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCorrect Way to Do This		{{server_host}}	{{server_port}}
+iFor this problem to appear, all three requirements must be met:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`add paths yes;`		{{server_host}}	{{server_port}}
+ioption is turned on		{{server_host}}	{{server_port}}
+i- , so that secondary routes are sent
+to other nodes as well. If this		{{server_host}}	{{server_port}}
+ioption wasn't turned on, as soon as the BuyVM
+node choose the VirMach		{{server_host}}	{{server_port}}
+inode as the next hop, it won't broadcast its route
+through Lutoma to		{{server_host}}	{{server_port}}
+ithe VirMach node. Then, the VirMach node will only have the
+option of		{{server_host}}	{{server_port}}
+isending traffic directly to KSKB.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Route preference algorithm		{{server_host}}	{{server_port}}
+ipreferring secondary routes over primary routes
+from other nodes		{{server_host}}	{{server_port}}
+i. Therefore, if we want to keep `add paths yes;` option on,
+while		{{server_host}}	{{server_port}}
+idesigning the iBGP route preference algorithm, we need to		{{server_host}}	{{server_port}}
+iguarantee
+that routes from the same node		{{server_host}}	{{server_port}}
+ihave their priorities in the same order as
+that node		{{server_host}}	{{server_port}}
+i, so that the primary routes will always be used over		{{server_host}}	{{server_port}}
+isecondary
+routes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Routes passing Lutoma's network were incorrectly updated with the		{{server_host}}	{{server_port}}
+inew BGP
+community, causing the change of route priority orders.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMy solution to the problem is to no longer recalculate route priority		{{server_host}}	{{server_port}}
+ifor those
+received from iBGP. Instead, I will always use the priority		{{server_host}}	{{server_port}}
+ivalue calculated by
+the edge node receiving the route, and passed over		{{server_host}}	{{server_port}}
+ialong with the route
+announcement over iBGP, to guarantee that the		{{server_host}}	{{server_port}}
+iorder of primary and secondary
+routes never change.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

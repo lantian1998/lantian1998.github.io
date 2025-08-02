@@ -1,0 +1,54 @@
+iToday, after tinkering for half a day, I successfully ported Bad Apple		{{server_host}}	{{server_port}}
+ito my VPS's Telnet service using the		{{server_host}}	{{server_port}}
+1command-line animation version	/en/article/modify-computer/bad-apple-command-line-art.lantian	{{server_host}}	{{server_port}}
+iI published earlier.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo view it yourself:		{{server_host}}	{{server_port}}
+i`telnet xuyh0120.tk` or `telnet 5.175.156.249`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRound 1. Porting to SSH		{{server_host}}	{{server_port}}
+iSince I originally promised a classmate I'd implement this via SSH, I		{{server_host}}	{{server_port}}
+istarted there. First, I uploaded Bad Apple to my VPS at		{{server_host}}	{{server_port}}
+i`/opt/badapple`, which contains two files: `badapple` and		{{server_host}}	{{server_port}}
+i`badapple.in` (the resource file with a modified extension).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen testing via SSH, I encountered Error 2 (resource file not found).		{{server_host}}	{{server_port}}
+iI recompiled locally (the VPS lacks FPC), changed paths from relative		{{server_host}}	{{server_port}}
+ito absolute, re-uploaded, and successfully displayed the animation		{{server_host}}	{{server_port}}
+iupon reconnecting.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, I needed to automatically disconnect users after playback. A		{{server_host}}	{{server_port}}
+iclassmate suggested `pkill -9 sshd`—effective but disruptive to		{{server_host}}	{{server_port}}
+iconcurrent viewers. However, I discovered that OpenSSH automatically		{{server_host}}	{{server_port}}
+iterminates the connection when my Pascal program exits.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSSH's powerful features posed security risks. For example, its		{{server_host}}	{{server_port}}
+ibuilt-in SFTP bypasses the shell. I disabled it by commenting out the		{{server_host}}	{{server_port}}
+irelevant line in `/etc/ssh/sshd_config`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI also disabled TCP/IP port forwarding by adding:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLater, I found SCP file transfer—deeply integrated with SSH and		{{server_host}}	{{server_port}}
+iimpossible to disable—forcing me to abandon SSH and delete the user.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRound 2. Porting to Telnet		{{server_host}}	{{server_port}}
+iTry `telnet towel.blinkenlights.nl` on your machine (safe, but Vista+		{{server_host}}	{{server_port}}
+iusers may not see effects). This inspired me to replicate the		{{server_host}}	{{server_port}}
+iASCII-art experience via Telnet.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInitially, Telnet required authentication via the `badapple` user. To		{{server_host}}	{{server_port}}
+iachieve password-free access like the Star Wars demo, I studied		{{server_host}}	{{server_port}}
+i`telnetd` and discovered its `-L` parameter for custom login programs.		{{server_host}}	{{server_port}}
+iAfter unsuccessful attempts via `xinetd`, I leveraged the default		{{server_host}}	{{server_port}}
+ilogin path:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis replaces the login shell with Bad Apple, starting playback		{{server_host}}	{{server_port}}
+iimmediately upon connection. Like SSH, Telnet disconnects		{{server_host}}	{{server_port}}
+iautomatically after playback.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe result is impressive—despite a brief "Debian GNU Linux 6.0"		{{server_host}}	{{server_port}}
+iheader, the core objective is achieved. Mission complete.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDemo		{{server_host}}	{{server_port}}
+i: `telnet xuyh0120.tk` or `telnet 5.175.156.249`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

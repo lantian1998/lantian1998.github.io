@@ -1,0 +1,339 @@
+iPreface		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe mobile phone I'm using today is Motorola Edge+ 2023, an Android		{{server_host}}	{{server_port}}
+iphone. To
+better customize my phone's functionalities, I unlocked its		{{server_host}}	{{server_port}}
+ibootloader, and
+obtained root privileges, in order to install LSPosed		{{server_host}}	{{server_port}}
+iand various LSPosed based
+plugins.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe root mechanism I'm using is		{{server_host}}	{{server_port}}
+hKernelSU	URL:https://kernelsu.org/	{{server_host}}	{{server_port}}
+i, which works
+by modifying the Linux kernel to grant and only grant		{{server_host}}	{{server_port}}
+iroot permissions to
+certain apps. Although KernelSU provides official		{{server_host}}	{{server_port}}
+iGKI kernel images that work on
+most phones, I also flashed LineageOS		{{server_host}}	{{server_port}}
+ionto my phone, which is not compatible
+with GKI images. Therefore, I		{{server_host}}	{{server_port}}
+ihave to compile my own kernel.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince modifying the kernel's binary image is difficult, we usually		{{server_host}}	{{server_port}}
+iobtain the
+kernel source code under the GPLv2 license from the phone		{{server_host}}	{{server_port}}
+imanufacturer, modify
+it according to		{{server_host}}	{{server_port}}
+hKernelSU's official guide	URL:https://kernelsu.org/guide/how-to-integrate-for-non-gki.html	{{server_host}}	{{server_port}}
+i,
+and compile it into a full kernel.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Note: There is a new root mechanism		{{server_host}}	{{server_port}}
+hAPatch	URL:https://apatch.dev/	{{server_host}}	{{server_port}}
+i>  that works
+by modifying kernel binary image directly, and		{{server_host}}	{{server_port}}
+iachieves similar effects to
+KernelSU. I never use APatch, but it's		{{server_host}}	{{server_port}}
+iworth a try if you don't want to
+compile your own kernel.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince KernelSU is widely used, some developers created GitHub Actions		{{server_host}}	{{server_port}}
+iWorkflows,
+such as		{{server_host}}	{{server_port}}
+hhttps://github.com/xiaoleGun/KernelSU_Action	URL:https://github.com/xiaoleGun/KernelSU_Action	{{server_host}}	{{server_port}}
+i. They can automatically
+patch the kernel source code and compile the		{{server_host}}	{{server_port}}
+ikernel. However, as I tried some of
+these workflows, I found a few		{{server_host}}	{{server_port}}
+iproblems:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- These workflows will install multiple compilers alongside each		{{server_host}}	{{server_port}}
+iother,
+including the GCC that comes with GitHub Actions,		{{server_host}}	{{server_port}}
+iAndroid-specific		{{server_host}}	{{server_port}}
+hARM32 GCC	URL:https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/	{{server_host}}	{{server_port}}
+iand		{{server_host}}	{{server_port}}
+hARM64 GCC	URL:https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9	{{server_host}}	{{server_port}}
+iprovided by Google, and		{{server_host}}	{{server_port}}
+hClang	URL:https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/	{{server_host}}	{{server_port}}
+i.
+If the compilation parameters are not set correctly, different parts		{{server_host}}	{{server_port}}
+iof the
+kernel may be compiled with different compilers, creating a		{{server_host}}	{{server_port}}
+ikernel that is
+unstable or wouldn't boot at all.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- These workflows only run on GitHub Actions and are difficult to		{{server_host}}	{{server_port}}
+idebug locally.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- These workflows usually run on schedule or are manually triggered by		{{server_host}}	{{server_port}}
+iusers. If
+they run on schedule, they recompile kernels even if there		{{server_host}}	{{server_port}}
+iare no source code
+changes, wasting compute resources. If they are		{{server_host}}	{{server_port}}
+imanually triggered, users may
+not get the latest kernel updates in		{{server_host}}	{{server_port}}
+itime.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince I have been using NixOS recently, I naturally thought of using		{{server_host}}	{{server_port}}
+ithe Nix
+package manager to solve these problems:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Nix creates an isolated environment when building packages, with		{{server_host}}	{{server_port}}
+ionly the
+compilers I specified. This prevents issues caused by mixing		{{server_host}}	{{server_port}}
+icompilers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Nix package manager can run either locally on Linux, or on GitHub		{{server_host}}	{{server_port}}
+iActions.
+Since it creates the same isolated environment anywhere, I		{{server_host}}	{{server_port}}
+ican test the flow
+locally first, and then upload it to GitHub, and		{{server_host}}	{{server_port}}
+iconfidently have Actions
+automatically compile updated kernels.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Nix also records all source code versions (actually source code		{{server_host}}	{{server_port}}
+iSHA256s) and
+the compilation commands when building packages. If		{{server_host}}	{{server_port}}
+ineither the source code
+nor the compilation command changes, Nix can		{{server_host}}	{{server_port}}
+ireuse the last compilation
+results without repeating the work.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, I created a set of Nix-based scripts (actually Nix		{{server_host}}	{{server_port}}
+iDerivations), to
+compile the kernel for my phone.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsage		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI uploaded the script to GitHub:		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder	URL:https://github.com/xddxdd/nix-kernelsu-builder	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis script can automatically apply KernelSU and SusFS patches to your		{{server_host}}	{{server_port}}
+ikernel
+source code, compile it, and generate an AnyKernel-based		{{server_host}}	{{server_port}}
+ipackage you can flash
+in Recovery.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter installing the Nix package manager, you can fork the repository,		{{server_host}}	{{server_port}}
+imodify
+`kernel.nix` to contain kernel of your phone, and build the		{{server_host}}	{{server_port}}
+ikernel with
+`nix build .#[Kernel name]`. The configuration details are		{{server_host}}	{{server_port}}
+ilisted in the README
+of the repo.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you're using		{{server_host}}	{{server_port}}
+hFlake.parts	URL:https://flake.parts/	{{server_host}}	{{server_port}}
+i, you can also use my repo as
+a Flake.parts module:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iKey Details		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, I wll explain some key parts of the compilation scripts.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPreparing a Compiler		{{server_host}}	{{server_port}}
+iThe first thing to prepare for compiling kernel is to get a compiler.		{{server_host}}	{{server_port}}
+iThe usual
+compiler for Android kernels is Clang, but the kernel for		{{server_host}}	{{server_port}}
+isome older devices
+might be too old for Clang, and GCC must be used in		{{server_host}}	{{server_port}}
+ithis case.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iClang compiler is easy to get. Nixpkgs already has Clang packaged in		{{server_host}}	{{server_port}}
+iit, and you
+can run `nix run nixpkgs#clang -- --version` to see the		{{server_host}}	{{server_port}}
+ilatest Clang version:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iClang itself supports cross compilation, and can produce ARM32 and		{{server_host}}	{{server_port}}
+iARM64
+binaries directly on x86_64 devices, without additional		{{server_host}}	{{server_port}}
+itoolchains. Therefore,
+the Clang compiler in Nixpkgs can be used		{{server_host}}	{{server_port}}
+idirectly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThings get more complicated with GCC for older kernels. Nixpkgs		{{server_host}}	{{server_port}}
+ialready removed
+older GCCs, and as of now (Feb 2025) the oldest GCC in		{{server_host}}	{{server_port}}
+iNixpkgs is 9.5.0. In
+addition, GCC by default only supports compiling		{{server_host}}	{{server_port}}
+iprograms to the same platform.
+A special GCC and toolchains is needed		{{server_host}}	{{server_port}}
+ifor cross compiling ARM32/ARM64 kernels.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere I decided to take a short cut: I directly packaged Google's GCC		{{server_host}}	{{server_port}}
+icompiler
+into Nix packages, so that they can be provided to the		{{server_host}}	{{server_port}}
+icompilation environment.
+Although Google has deleted the older GCC		{{server_host}}	{{server_port}}
+icompilers from their servers, there
+are backups available on GitHub		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere is the package for ARM32 GCC:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd here is the package for ARM64 GCC:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iObtain Kernel and KernelSU Sources		{{server_host}}	{{server_port}}
+iWith the compiler ready, the next step is to obtain source code for		{{server_host}}	{{server_port}}
+iboth the
+kernel and KernelSU. Since I'm using LineageOS, I can		{{server_host}}	{{server_port}}
+idirectly download kernel
+source code from LineageOS's GitHub		{{server_host}}	{{server_port}}
+irepository:		{{server_host}}	{{server_port}}
+hhttps://github.com/LineageOS/android_kernel_motorola_sm8550	URL:https://github.com/LineageOS/android_kernel_motorola_sm8550	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> You can also look for kernel source code from the manufacturer's		{{server_host}}	{{server_port}}
+iwebsite.
+Since the Linux kernel is licensed under GPLv2, all phone		{{server_host}}	{{server_port}}
+imanufacturers must
+open source their modified kernel source code.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the Nix package manager, you can use `fetchFromGitHub` to download		{{server_host}}	{{server_port}}
+ikernel
+source code from GitHub:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut this gives you the kernel source code at the commit specified by		{{server_host}}	{{server_port}}
+i`rev`
+argument, with no automatic updates. To fix this, we can use		{{server_host}}	{{server_port}}
+hNvfetcher	URL:https://github.com/berberman/nvfetcher	{{server_host}}	{{server_port}}
+ito automatically get the
+latest commit. First create a		{{server_host}}	{{server_port}}
+i`nvfetcher.toml` file:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd then run Nvfetcher: `nix run github:berberman/nvfetcher`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNvfetcher will download the latest commit based on your configuration,		{{server_host}}	{{server_port}}
+iand write
+it to `_sources/generated.nix`. Now you can use the kernel		{{server_host}}	{{server_port}}
+isource code from this
+file:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe can use the same approach for KernelSU, but since KernelSU only		{{server_host}}	{{server_port}}
+isupports GKI
+kernels starting from 1.0, we can only use the last		{{server_host}}	{{server_port}}
+iversion 0.9.5 still has
+support for other kernels:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut now there is a KernelSU Fork		{{server_host}}	{{server_port}}
+hKernelSU-Next	URL:https://github.com/rifsxd/KernelSU-Next	{{server_host}}	{{server_port}}
+ithat supports both GKI
+and non-GKI kernels, so we can use it for the		{{server_host}}	{{server_port}}
+ilatest features:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPatch Kernel Source Code		{{server_host}}	{{server_port}}
+iWith kernel source code and KernelSU ready, the next step is to follow		{{server_host}}	{{server_port}}
+hKernelSU's official guide	URL:https://kernelsu.org/guide/how-to-integrate-for-non-gki.html	{{server_host}}	{{server_port}}
+ito modify the kernel. What I did is just converting the steps into		{{server_host}}	{{server_port}}
+iBash scripts
+and put them in the Nix files.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe only thing worth mentioning is that KernelSU will try to obtain		{{server_host}}	{{server_port}}
+ithe commit
+count with Git, which is the version number you see in		{{server_host}}	{{server_port}}
+iKernelSU manager. But
+because of a limitation by Nix package manager,		{{server_host}}	{{server_port}}
+ithere is no Git-related
+information in the downloaded source code.		{{server_host}}	{{server_port}}
+iTherefore, we need to modify
+KernelSU's scripts to use the commit		{{server_host}}	{{server_port}}
+icount we obtained earlier:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe full source code can be found at		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/patch-kernel-src.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/patch-kernel-src.nix	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Optional) SusFS Patches		{{server_host}}	{{server_port}}
+hSusFS	URL:https://gitlab.com/simonpunk/susfs4ksu	{{server_host}}	{{server_port}}
+iis an additional set of kernel
+patches. It hides certain system file		{{server_host}}	{{server_port}}
+ichanges after obtaining root permission,
+and make them only visible to		{{server_host}}	{{server_port}}
+iapps with root permission and the system itself,
+making it difficult		{{server_host}}	{{server_port}}
+ifor apps to detect root existence and refuse to start.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAgain, following		{{server_host}}	{{server_port}}
+hSusFS's README	URL:https://gitlab.com/simonpunk/susfs4ksu	{{server_host}}	{{server_port}}
+iis
+enough:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe full source code can be found at		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/patch-kernel-src.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/patch-kernel-src.nix	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEnable KernelSU Related Options		{{server_host}}	{{server_port}}
+iAfter adding KernelSU patches, we als need to enable the relevant		{{server_host}}	{{server_port}}
+ioptions in
+`defconfig`, so that we make sure KernelSU functionalities		{{server_host}}	{{server_port}}
+iare actually added to
+the compiled kernel:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe full command can be found at		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/kernel-config-cmd.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/kernel-config-cmd.nix	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCompiling the Kernel		{{server_host}}	{{server_port}}
+iNext step is to compile the kernel image based on the patched source		{{server_host}}	{{server_port}}
+icode.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you're using GCC as the compiler, you will need to add the		{{server_host}}	{{server_port}}
+iGoogle-provided
+compilers to the compilation environment, and specify		{{server_host}}	{{server_port}}
+ithe compiler prefix in the
+flags:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe full command can be found at		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-kernel-gcc.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-kernel-gcc.nix	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you're using Clang as the compiler, you can directly use the Clang		{{server_host}}	{{server_port}}
+i`stdenv`
+in Nixpkgs, and specify using LLVM and `lld` in compilation		{{server_host}}	{{server_port}}
+iflags:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe full command can be found at		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-kernel-clang.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-kernel-clang.nix	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGenerating AnyKernel Flashable Package		{{server_host}}	{{server_port}}
+hAnyKernel	URL:https://github.com/osm0sis/AnyKernel3	{{server_host}}	{{server_port}}
+iis an Android flashable
+package template that can flash the given		{{server_host}}	{{server_port}}
+ikernel image into the phone. One
+advantage of AnyKernel is that it		{{server_host}}	{{server_port}}
+ionly modifies the kernel image, while leaving
+other startup commands		{{server_host}}	{{server_port}}
+iin Initramfs intact, including startup commands of the
+Android system		{{server_host}}	{{server_port}}
+iitself and Magisk (if installed).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing AnyKernel itself is very simple: Just modify the parameters		{{server_host}}	{{server_port}}
+iin
+`anykernel.sh` based on your phone's situation, and package the		{{server_host}}	{{server_port}}
+ikernel files
+along with AnyKernel files into a `zip` compressed		{{server_host}}	{{server_port}}
+iarchive.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe only thing to note is that the original AnyKernel only supports		{{server_host}}	{{server_port}}
+inon-GKI
+devices, and will fail on GKI devices. The KernelSU team		{{server_host}}	{{server_port}}
+iprovides a		{{server_host}}	{{server_port}}
+hmodified AnyKernel	URL:https://github.com/Kernel-SU/AnyKernel3	{{server_host}}	{{server_port}}
+ithat is the exact
+opposite: It only supports GKI devices, and will		{{server_host}}	{{server_port}}
+ifail on non-GKI devices. Use
+the one according to your need.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI added both AnyKernel variants to `nvfetcher.toml` to be used later"		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe full packaging code can be found at		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-anykernel-zip.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-anykernel-zip.nix	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Optional) Generating boot.img		{{server_host}}	{{server_port}}
+iIf you can't or don't want to use AnyKernel, such as if your device		{{server_host}}	{{server_port}}
+idoesn't have
+a third party recovery, you can find a `boot.img` for		{{server_host}}	{{server_port}}
+iyour device, replace the
+kernel in it, and leave the other parts		{{server_host}}	{{server_port}}
+iintact. This can achieve the same effect
+as if you used AnyKernel.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe full packaging code can be found at		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-boot-img.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-boot-img.nix	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

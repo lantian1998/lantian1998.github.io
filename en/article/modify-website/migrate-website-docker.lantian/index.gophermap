@@ -1,0 +1,100 @@
+iDocker is a container management software for Linux. Each container is		{{server_host}}	{{server_port}}
+ifunctionally similar to an OpenVZ VPS, allowing isolation of		{{server_host}}	{{server_port}}
+iapplications on a server. This isolation enables different versions of		{{server_host}}	{{server_port}}
+ithe same software or conflicting applications to run on the same		{{server_host}}	{{server_port}}
+iserver. For example, MySQL 5.7, MySQL 5.6, and MariaDB 10.1 can run		{{server_host}}	{{server_port}}
+isimultaneously in three separate Docker containers on one server.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, Docker surpasses OpenVZ in its more flexible Linux kernel		{{server_host}}	{{server_port}}
+iversion requirements. OpenVZ kernels remain stuck at 2.6.32 (stable)		{{server_host}}	{{server_port}}
+iand 3.10 (development), while Docker runs on any Linux kernel above		{{server_host}}	{{server_port}}
+i3.10. My server currently uses Linux kernel 4.9 (for BBR support),		{{server_host}}	{{server_port}}
+iwhich clearly cannot run OpenVZ but works perfectly with Docker.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnother advantage of Docker is its comprehensive image repository and		{{server_host}}	{{server_port}}
+iautomation tools. With OpenVZ, I had to log into each VPS individually		{{server_host}}	{{server_port}}
+ito configure networks, run `apt-get`, and perform regular backups.		{{server_host}}	{{server_port}}
+iWith Docker, I can directly use pre-built software images (no need for		{{server_host}}	{{server_port}}
+i`apt-get`) and map data folders directly to the host machine		{{server_host}}	{{server_port}}
+i(eliminating separate backups).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDocker also provides Docker Compose, which allows configuring multiple		{{server_host}}	{{server_port}}
+icontainers via a configuration file for rapid deployment and removal.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalling Docker and Docker Compose		{{server_host}}	{{server_port}}
+iI use Debian 8, which allows direct installation from Docker's		{{server_host}}	{{server_port}}
+iofficial repository.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMigrating Using Existing Images		{{server_host}}	{{server_port}}
+iMy server originally ran: Nginx, PHP7.0-FPM, MariaDB, Memcached,		{{server_host}}	{{server_port}}
+iRedis, and SS. For unified management, I migrated them using Docker		{{server_host}}	{{server_port}}
+iimages.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI stored all data in `/srv`, so I created a `docker-compose.yml` file		{{server_host}}	{{server_port}}
+iin this directory. This is Docker Compose's configuration file. The		{{server_host}}	{{server_port}}
+ibasic format is as follows: (Content after # is my explanatory note		{{server_host}}	{{server_port}}
+iand doesn't exist in the original file)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, we'll create a `docker-compose.yml` to run the MariaDB image and		{{server_host}}	{{server_port}}
+iimport data. (Content after # is my note)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, stop the original MariaDB: `service mysql stop` (no seamless		{{server_host}}	{{server_port}}
+imigration considered)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMove the data folder: `mv /var/lib/mysql /srv/mysql`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, load the configuration: `docker-compose up -d`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMariaDB is now running in Docker!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRedis and Memcached can be migrated similarly using their official		{{server_host}}	{{server_port}}
+iimages.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCreating an Image from apt-get Installed Software		{{server_host}}	{{server_port}}
+iPHP7.0-FPM is more complex. The official PHP-FPM image uses unusual		{{server_host}}	{{server_port}}
+icompilation flags and configuration paths that differ from my DotDeb		{{server_host}}	{{server_port}}
+iinstallation. To avoid issues, I created a custom Docker image.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBuilding Docker images requires only basic bash knowledge. Create a		{{server_host}}	{{server_port}}
+inew folder, then add a Dockerfile with the following structure:		{{server_host}}	{{server_port}}
+i(Comments after # are mine)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor this image, I need to: add DotDeb repository, run `apt-get`, add		{{server_host}}	{{server_port}}
+icustom configs, expose ports, and set the startup command. My		{{server_host}}	{{server_port}}
+iDockerfile:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPrepare files:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBuild the image:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd to `docker-compose.yml`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBuilding a Custom Software Image		{{server_host}}	{{server_port}}
+iMy Nginx setup is more complex due to custom patches: HTTP2/SPDY,		{{server_host}}	{{server_port}}
+iGoogle PageSpeed, Certificate Transparency, and Brotli compression.		{{server_host}}	{{server_port}}
+iSince no existing image fits, I compiled my own.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe solution: convert all compilation commands into a Dockerfile. Use		{{server_host}}	{{server_port}}
+ivariables for version numbers to simplify updates:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMy Dockerfile:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCritical issue: Nginx runs in background by default, causing Docker to		{{server_host}}	{{server_port}}
+iterminate the container. Solution via `start.sh`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`tail -F` keeps the container running by continuously monitoring logs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBuild the image:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd to `docker-compose.yml`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConclusion		{{server_host}}	{{server_port}}
+iWe've set up MariaDB, PHP-FPM, and Nginx containers. They can now be		{{server_host}}	{{server_port}}
+imanaged uniformly via:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Start: `docker-compose up -d`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Stop: `docker-compose down`
+This greatly simplifies deployment and		{{server_host}}	{{server_port}}
+imaintenance.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

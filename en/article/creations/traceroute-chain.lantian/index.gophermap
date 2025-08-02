@@ -1,0 +1,195 @@
+iTraceroute is one of the popular tools for network inspection. It		{{server_host}}	{{server_port}}
+ishows the IP
+addresses of routers on the route from your computer to a		{{server_host}}	{{server_port}}
+idestination server,
+similar to:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ITraceroute Example	/usr/uploads/2018/08/2301166997.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDomains are shown on the last 2 hops, which is the IP's reverse DNS		{{server_host}}	{{server_port}}
+irecord.
+Reverse DNS records exist as PTR records in the format		{{server_host}}	{{server_port}}
+iof
+`4.3.2.1.in-addr.arpa`. For more information, you may refer to		{{server_host}}	{{server_port}}
+1Setting IP Reverse Records in DN42	/en/article/modify-website/dn42-ip-reverse-record.lantian	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNaturally, where there are characters, there will be stories shown in		{{server_host}}	{{server_port}}
+ithem. Two
+years ago,		{{server_host}}	{{server_port}}
+1I set up a bunch of Docker containers, and modified and chained their routing tables, so they create the path needed for showing the essay	/en/article/modify-computer/worship-in-traceroute.lantian	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing a lot of containers isn't elegant enough, and is a management		{{server_host}}	{{server_port}}
+iburden,
+especially if the path is long. A better solution is creating		{{server_host}}	{{server_port}}
+ia virtual network
+interface with a program, and reply corresponding		{{server_host}}	{{server_port}}
+ipackets directly based on
+incoming Traceroute packets. In addition to		{{server_host}}	{{server_port}}
+iresource and management burden
+savings, this can be easily adapted in		{{server_host}}	{{server_port}}
+imore complex scenarios if necessary.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo I made such a program available at		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/route-chain	URL:https://github.com/xddxdd/route-chain	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsage		{{server_host}}	{{server_port}}
+iFirst, make sure your system supports TUN/TAP. Except for a small		{{server_host}}	{{server_port}}
+inumber of
+OpenVZ or LXC containers, you're good to go.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter downloading the source code, `make`, and `make install`, and		{{server_host}}	{{server_port}}
+irun
+`route-chain 192.168.0.1/24 192.0.0.1/24 fc00::/64 fd00::/64`. You		{{server_host}}	{{server_port}}
+imay add an
+arbitrary number of addresses as parameters.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe addresses in the parameters are assigned to		{{server_host}}	{{server_port}}
+ithe host		{{server_host}}	{{server_port}}
+i, and the virtual
+path is calculated as +1, +2 to the host address.		{{server_host}}	{{server_port}}
+iFor example, if I run
+`route-chain 172.22.76.97/29`, this will		{{server_host}}	{{server_port}}
+igenerate a chain of routes of 97-102,
+with 97 being the host. This		{{server_host}}	{{server_port}}
+icreates the same result as I did 2 years ago with
+Docker containers:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ITraceroute Results	/usr/uploads/2018/08/1311499371.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(I'm simply reusing the screenshot from 2 years ago)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHow It Works		{{server_host}}	{{server_port}}
+iTraceroute achieves its goal by sending out packets with small TTLs,		{{server_host}}	{{server_port}}
+iand
+receiving TTL timeout information replied by routers en route.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA packet's TTL specifies the maximum number of routers it can pass		{{server_host}}	{{server_port}}
+ithrough. For
+example, a fresh packet sent from your computer usually		{{server_host}}	{{server_port}}
+ihas a TTL of 64. After
+passing through your Wi-Fi router, it becomes		{{server_host}}	{{server_port}}
+i63. After passing the ISP router
+connected to your house, it becomes		{{server_host}}	{{server_port}}
+i62, and it goes so on. When the TTL reaches
+0 on a router, it will		{{server_host}}	{{server_port}}
+idrop the packet and reply an		{{server_host}}	{{server_port}}
+iICMP Time Exceeded		{{server_host}}	{{server_port}}
+ipacket
+along with its IP.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, a Traceroute tool will use the replies. It initially sends		{{server_host}}	{{server_port}}
+ia packet
+with TTL 1 to the destination. The packet will time out on		{{server_host}}	{{server_port}}
+iyour Wi-Fi router,
+which will reply an		{{server_host}}	{{server_port}}
+iICMP Time Exceeded		{{server_host}}	{{server_port}}
+imessage. Traceroute will then send a
+packet with TTL 2, which gets		{{server_host}}	{{server_port}}
+ireplied at the ISP router. This repeats until the
+target is reached.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, all we have to do when simulating a path is decide the		{{server_host}}	{{server_port}}
+isource IP of		{{server_host}}	{{server_port}}
+iICMP Time Exceeded		{{server_host}}	{{server_port}}
+imessages based on incoming TTLs. My program calculates the
+source IP		{{server_host}}	{{server_port}}
+iby adding the TTL to preconfigured host IP.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn addition, when a Traceroute packet reaches its destination, the		{{server_host}}	{{server_port}}
+idestination
+should reply an		{{server_host}}	{{server_port}}
+iICMP Port Unreachable		{{server_host}}	{{server_port}}
+ipacket, telling the sender that this
+port is closed, and no program		{{server_host}}	{{server_port}}
+ican handle the data. If		{{server_host}}	{{server_port}}
+iICMP Time Exceeded		{{server_host}}	{{server_port}}
+iis
+still used as a reply, Traceroute would continue to probe the route		{{server_host}}	{{server_port}}
+iinstead of
+stopping here.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOptimization		{{server_host}}	{{server_port}}
+iAlthough optimization is unnecessary for this purpose, as you usually		{{server_host}}	{{server_port}}
+idon't see
+hundreds of MBs of incoming Traceroute traffic every day,		{{server_host}}	{{server_port}}
+ithis does not mean the
+program		{{server_host}}	{{server_port}}
+ican't		{{server_host}}	{{server_port}}
+ibe optimized.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Reduce the number of memory copies		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- I'm not the first to write such a program, but all similar programs		{{server_host}}	{{server_port}}
+iI've seen
+copies packets for multiple times in the memory, which is		{{server_host}}	{{server_port}}
+iunnecessary. Two
+memory copies are necessary while using TUN/TAP, one		{{server_host}}	{{server_port}}
+ifor receiving a packet
+and one for sending it back. Apart from that,		{{server_host}}	{{server_port}}
+imy program makes zero copies of
+packet data:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Memory space before the beginning packet is reserved. When replying		{{server_host}}	{{server_port}}
+ito		{{server_host}}	{{server_port}}
+iICMP Time Exceeded		{{server_host}}	{{server_port}}
+ipackets, according to RFC requirements, the first 28
+bytes (for IPv4)		{{server_host}}	{{server_port}}
+ior 48 bytes (IPv6) must be included (not considering IP
+Options).		{{server_host}}	{{server_port}}
+iSince I reserved space, I don't need to copy the packet elsewhere
+for		{{server_host}}	{{server_port}}
+iextra space at the beginning. Instead, I can simply add the ICMP		{{server_host}}	{{server_port}}
+iheader
+right before the incoming packet and send it back.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- While replying to		{{server_host}}	{{server_port}}
+iICMP Echo		{{server_host}}	{{server_port}}
+ipackets, all I have to do is swap the
+source/destination address and		{{server_host}}	{{server_port}}
+iupdate the packet type. There's no need to
+generate a new packet and		{{server_host}}	{{server_port}}
+icopy payloads around.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Incremental checksumming		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- IP packets include checksums for detection and discard of		{{server_host}}	{{server_port}}
+iproblematic packets
+to avoid transmission errors. The checksum is		{{server_host}}	{{server_port}}
+icalculated with		{{server_host}}	{{server_port}}
+hOne's Complement	URL:https://en.wikipedia.org/wiki/Ones%27_complement	{{server_host}}	{{server_port}}
+i, by
+adding the whole packet as a `uint16_t` array and inverting every		{{server_host}}	{{server_port}}
+ibit. We can
+use this characteristic to prevent re-checksumming the		{{server_host}}	{{server_port}}
+iwhole packet. For
+example, when replying to Pings, we swap the		{{server_host}}	{{server_port}}
+isource/destination address and
+change the packet type. Swapping		{{server_host}}	{{server_port}}
+isource/destination address has no impact on
+the sum of the packet, so		{{server_host}}	{{server_port}}
+iit causes no change on checksum. Changing packet
+type, on the other		{{server_host}}	{{server_port}}
+ihand, is replacing a fixed value with another fixed value
+(8 to 0 for		{{server_host}}	{{server_port}}
+iIPv4 or 128 to 129 for IPv6), and is a constant change to		{{server_host}}	{{server_port}}
+ithe
+checksum. We can simply update the checksum with the constant		{{server_host}}	{{server_port}}
+ichange.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- No `malloc` in the main loop		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Except for a small memory allocation for initializing and parsing		{{server_host}}	{{server_port}}
+iparameters,
+when the program is looping through packets, it uses a		{{server_host}}	{{server_port}}
+ifixed and preallocated
+memory space to avoid performance issues caused		{{server_host}}	{{server_port}}
+iby allocating and freeing
+memory dynamically.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOf course, there is still further optimization possible for this		{{server_host}}	{{server_port}}
+iprogram:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Support TUN/TAP's multithreaded packet handling (Multiqueue), which		{{server_host}}	{{server_port}}
+iallows
+multiple cores to respond to packets simultaneously.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

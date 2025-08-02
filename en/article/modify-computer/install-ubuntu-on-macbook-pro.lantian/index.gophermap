@@ -1,0 +1,108 @@
+iThe macOS is indeed beautiful and smooth. However, VirtualBox runs		{{server_host}}	{{server_port}}
+iterribly slow on it, and many functions that are simple to implement		{{server_host}}	{{server_port}}
+ion Windows or Ubuntu require significant effort on Mac. Additionally,		{{server_host}}	{{server_port}}
+iI've seen online articles showing that Ubuntu scores much higher than		{{server_host}}	{{server_port}}
+imacOS in UnixBench tests. Therefore, I decided to install Ubuntu on my		{{server_host}}	{{server_port}}
+iMacbook.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter researching, I found my Macbook is a mid-2012 model (Macbook		{{server_host}}	{{server_port}}
+i9-2). According to Ubuntu's official wiki, Ubuntu can only coexist		{{server_host}}	{{server_port}}
+iwith macOS on this model – it cannot be installed alone, otherwise		{{server_host}}	{{server_port}}
+iboot issues will occur.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSeriously? Mac's bootloader and OS are separate!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGParted in Ubuntu's live environment shows macOS created three		{{server_host}}	{{server_port}}
+ipartitions: a 200MB FAT32 EFI boot partition, an HFS+ formatted system		{{server_host}}	{{server_port}}
+ipartition, and a ~600MB HFS+ recovery partition. Our task is to		{{server_host}}	{{server_port}}
+ireplace the macOS system and recovery partitions with Ubuntu		{{server_host}}	{{server_port}}
+ipartitions.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1. Installing the Boot Manager		{{server_host}}	{{server_port}}
+iSince the Macbook's default bootloader might not start Ubuntu (though		{{server_host}}	{{server_port}}
+iI tested it could work directly), we need to install a third-party		{{server_host}}	{{server_port}}
+iboot manager: rEFInd. rEFInd is a boot manager that enables EFI-based		{{server_host}}	{{server_port}}
+icomputers to boot various OSes – essentially designed for Macbooks, as		{{server_host}}	{{server_port}}
+iother PCs' EFI can usually be disabled. Only Macbooks are this		{{server_host}}	{{server_port}}
+iproblematic.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (In macOS) Download rEFInd and unzip:		{{server_host}}	{{server_port}}
+hhttp://sourceforge.net/projects/refind/files/0.8.3/refind-bin-0.8.3.zip/download	URL:http://sourceforge.net/projects/refind/files/0.8.3/refind-bin-0.8.3.zip/download	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open Launchpad > Utilities > Terminal, type `cd "` (cd + space +		{{server_host}}	{{server_port}}
+idouble quote). Don't press Enter yet.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Drag the unzipped rEFInd folder icon into the Terminal to auto-fill		{{server_host}}	{{server_port}}
+iits path.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type a closing double quote and press Enter.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter your password (no visual feedback) and press Enter.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Reboot; you should see a boot selector with rEFInd branding.		{{server_host}}	{{server_port}}
+iInstallation successful.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2. Creating Ubuntu Boot Media		{{server_host}}	{{server_port}}
+iBurn the Ubuntu ISO to a DVD, or use UltraISO on Windows/in a VM to		{{server_host}}	{{server_port}}
+iwrite the ISO to a USB drive.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i3. Repairing Partition Table		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In macOS Disk Utility, shrink your macOS partition and create a new		{{server_host}}	{{server_port}}
+ipartition in the freed space.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Insert boot media, reboot, hold Alt (Option), select "Windows" and		{{server_host}}	{{server_port}}
+ipress Enter.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Ubuntu installer will launch; select "Try Ubuntu".		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Search for GParted in Unity, format the new partition as ext4 and		{{server_host}}	{{server_port}}
+iapply changes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Shut down, remove boot media, boot into macOS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Download GPT Fdisk:		{{server_host}}	{{server_port}}
+hhttp://sourceforge.net/projects/gptfdisk/	URL:http://sourceforge.net/projects/gptfdisk/	{{server_host}}	{{server_port}}
+iand install.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In Terminal:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type `r` > Enter, then `p` > Enter to view partitions (typically		{{server_host}}	{{server_port}}
+ipartition 2 is macOS, 4 is Ubuntu's future partition).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type `h` > Enter. Input `2 4` (partition numbers) > Enter.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type `y` > Enter, then `AF` > Enter (set partition type). Then `n`		{{server_host}}	{{server_port}}
+ito skip boot flag.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type `y` > Enter, then `83` > Enter, then `n` > Enter.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- rEFInd doesn't require boot flags, so no need to set.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type `w` > Enter to write changes. gdisk will exit automatically.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Reboot holding Alt (Option), select "Windows" to start Ubuntu		{{server_host}}	{{server_port}}
+iinstallation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i4. Beginning Installation		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In Ubuntu installer, choose "Try Ubuntu" again, then launch GParted.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Delete all partitions except the 200MB EFI partition, then set up		{{server_host}}	{{server_port}}
+ipartitions as desired.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Launch Ubuntu installer, follow normal steps. Select "Something		{{server_host}}	{{server_port}}
+ielse" for manual partitioning.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- After installation, Ubuntu should boot normally.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i5. Configuring rEFInd		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In Ubuntu:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Change `timeout` to `-1` to skip the 20-second boot menu delay.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThat's it – installation complete!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

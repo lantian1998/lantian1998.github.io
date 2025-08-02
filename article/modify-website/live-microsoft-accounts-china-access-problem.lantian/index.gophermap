@@ -1,0 +1,39 @@
+i2014年10月4日晚上，从中国访问微软账户登陆页面均会跳出SSL证书无效提示，如		{{server_host}}	{{server_port}}
+i图：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/46671412433584.png	/usr/uploads/46671412433584.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i以上复制自		{{server_host}}	{{server_port}}
+iChrome，由“颁发者公用名仅为域名”和“hotmai.com”（没有l）可以看出，这是
+一次		{{server_host}}	{{server_port}}
+iSSL中间人攻击事件。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i假证书内容如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i同时，也有反馈称login.windows.net出现同样问题，经过DNS查询，发现DNS没有受		{{server_host}}	{{server_port}}
+i到污
+染。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/26971412433584.png	/usr/uploads/26971412433584.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i上图左：Google DNS，通过TCP查询，右：114DNS，通过UDP查询		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/96551412433589.png	/usr/uploads/96551412433589.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i经过测试，通过 Windows Azure		{{server_host}}	{{server_port}}
+i中国版建立的SSH隧道进行访问，没有出现问题。上左图为
+本地查询结果，右图为		{{server_host}}	{{server_port}}
+iAzure中国版查询结果，再次证实DNS没出问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/59401412433590.png	/usr/uploads/59401412433590.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i经过tcping测试
+（		{{server_host}}	{{server_port}}
+hhttps://github.com/jlyo/tcping	URL:https://github.com/jlyo/tcping	{{server_host}}	{{server_port}}
+i）到443端口的
+连接明显遭到劫持，毕竟ping		{{server_host}}	{{server_port}}
+ilogin.live.com的延迟也有200ms左右，10ms内做出响应是绝
+对不可能的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i大约晚上10：30左右，问题已经消失，到login.live.com的SSL连接恢复正常。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

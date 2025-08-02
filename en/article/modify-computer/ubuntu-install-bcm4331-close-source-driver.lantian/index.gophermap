@@ -1,0 +1,13 @@
+iThe Ubuntu system supports a wide range of devices out-of-the-box		{{server_host}}	{{server_port}}
+ibecause it includes numerous open-source drivers provided by the		{{server_host}}	{{server_port}}
+icommunity. However, open-source drivers often suffer from stability		{{server_host}}	{{server_port}}
+iand performance issues compared to official drivers. Due to licensing		{{server_host}}	{{server_port}}
+irestrictions, closed-source drivers cannot be bundled with the		{{server_host}}	{{server_port}}
+iinstallation media, so users typically need to install them		{{server_host}}	{{server_port}}
+iimmediately after setting up Ubuntu.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs noted by Zhihu user Deng Boyuan:		{{server_host}}	{{server_port}}
+hhttp://www.zhihu.com/question/22776909	URL:http://www.zhihu.com/question/22776909	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iReboot your computer after executing these commands.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

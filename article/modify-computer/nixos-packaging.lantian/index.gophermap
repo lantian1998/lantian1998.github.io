@@ -1,0 +1,535 @@
+iNixOS 的一大特点是，系统所有的二进制程序和库文件都在 `/nix/store`		{{server_host}}	{{server_port}}
+i目录中，由 Nix
+包管理器管理。这也意味着，NixOS 不符合		{{server_host}}	{{server_port}}
+hLinux 的 FHS 标准	URL:https://zh.wikipedia.org/wiki/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E6%A0%87%E5%87%86	{{server_host}}	{{server_port}}
+i，
+它的 `/lib` 或 `/lib64` 目录下不存在类似 `ld-linux-x86-64.so.2`		{{server_host}}	{{server_port}}
+i之类的库文件动态
+加载器，更不存在 `libc.so`		{{server_host}}	{{server_port}}
+i之类的库文件。因此，除非静态链接，否则为其它 Linux		{{server_host}}	{{server_port}}
+i下
+编译的二进制文件将完全无法在 NixOS 下运行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i所以，要在 NixOS 上使用尚不存在于 Nixpkgs 仓库中的软件，最佳方案是自己用		{{server_host}}	{{server_port}}
+iNix 语
+言写一份打包脚本，给这个软件打一个包，然后把打包定义加入		{{server_host}}	{{server_port}}
+i`configuration.nix`
+中，从而安装到系统上。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i关于 NixOS 的软件打包，有三个好消息和两个坏消息。好消息是：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Nixpkgs，也就是 NixOS		{{server_host}}	{{server_port}}
+i的软件仓库，提供了大量的打包自动化函数，对于很多使用常
+见编程语言的开源		{{server_host}}	{{server_port}}
+i软件（包括 C/C++，Python，Go，Node.js，Rust		{{server_host}}	{{server_port}}
+i等，但不包括
+Java），你只需要调用现成的函数，指定一下源码的下载方式，Nixpkg		{{server_host}}	{{server_port}}
+is 就能自动检测
+软件的打包系统，自动传入合适的参数并完成软件打包。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 对于以二进制方式分发的软件（常见于闭源软件），Nixpkgs		{{server_host}}	{{server_port}}
+i也提供了现成的自动化解
+决方案：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一种是		{{server_host}}	{{server_port}}
+iAutopatchelf，自动修改二进制文件中的库文件路径，将其指向
+`/nix/store`		{{server_host}}	{{server_port}}
+i中。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 另一种是 Bubblewrap，或者基于 Bubblewrap 的 `steam-run`，模拟一个符合		{{server_host}}	{{server_port}}
+iFHS
+标准的运行环境。顾名思义，`steam-run` 主要针对的是 Steam		{{server_host}}	{{server_port}}
+i游戏平台以及它上面
+的游戏，但它也可以用于其它闭源软件。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Nix		{{server_host}}	{{server_port}}
+i包管理器会在一个隔离的环境中进行软件打包，你可以粗略地理解成一个断网，限		{{server_host}}	{{server_port}}
+i
+制权限，只允许访问固定路径的 Docker		{{server_host}}	{{server_port}}
+i容器。在编译过程中，访问外部路径或者联网
+的尝试全部会失败，只能使用 Nix		{{server_host}}	{{server_port}}
+i编译脚本中事先指定的依赖。因此，打包出来的程序
+将完全不依赖其它文件。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i坏消息是：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 开发者不一定比打包者更懂		{{server_host}}	{{server_port}}
+iLinux。开发者可能会在代码和编译脚本里写死各种路径，
+做出各种只符合 FHS		{{server_host}}	{{server_port}}
+i标准的假设。此时就需要你手动写补丁，纠正这些路径，让程序可
+以在 NixOS		{{server_host}}	{{server_port}}
+i上正常编译运行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i一旦你遇到了不能使用现成函数的情况，包括下列情况，你就得做好“一杯茶，一包		{{server_host}}	{{server_port}}
+i烟，
+一个 Bug 调一天”的准备：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 开发者使用了一些奇怪的源码目录结构（例如		{{server_host}}	{{server_port}}
+i`osdlyrics`），或者非标准的编译方
+式		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 程序主动检测运行环境（例如 UOS 版微信客户端）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 程序主动检测对它本身的修改（例如 SVP 视频补帧软件）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我在几个月前将日常使用的发行版从 Arch Linux 换成了		{{server_host}}	{{server_port}}
+iNixOS，在使用过程中打了很多
+NixOS		{{server_host}}	{{server_port}}
+i软件包。本文将从简单的打包开始一步步推进，介绍 NixOS		{{server_host}}	{{server_port}}
+i打包的方法，遇到的常
+见问题以及应对策略。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i准备工作		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i首先，强烈建议你安装好 NixOS 操作系统，并在 NixOS 上进行打包。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 虽然在非 NixOS 的操作系统上也可以用 Nix		{{server_host}}	{{server_port}}
+i包管理器打包软件，但打包出的软件在运行
+过程中可能还会残留有对 FHS		{{server_host}}	{{server_port}}
+i标准目录的依赖，从而导致它们无法正常在 NixOS		{{server_host}}	{{server_port}}
+i上使
+用。当然，如果你打包只是自用，只考虑自己的运行环境，那可以忽略这条。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 此外，要在非 NixOS 的操作系统上安装 Nix 打包的软件，你需要使用		{{server_host}}	{{server_port}}
+hHome Manager	URL:https://github.com/nix-community/home-manager	{{server_host}}	{{server_port}}
+i，一个通过 Nix 语
+言的配置文件来管理你的 Home		{{server_host}}	{{server_port}}
+i目录下的软件配置文件的工具。你需要自行研究，或者查
+阅其它人的相关文章。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i使用 NUR 的打包模版		{{server_host}}	{{server_port}}
+iNUR 是 Nix 的由用户自行管理的软件仓库，类似于 Arch Linux 的 AUR。NUR		{{server_host}}	{{server_port}}
+i提供了一份
+现成的 Nix		{{server_host}}	{{server_port}}
+i仓库模版，你可以方便地统一添加、管理自己的软件包。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在 GitHub 上，访问		{{server_host}}	{{server_port}}
+hnur-packages-template	URL:https://github.com/nix-community/nur-packages-template	{{server_host}}	{{server_port}}
+i，
+点击“Use this		{{server_host}}	{{server_port}}
+itemplate”用这个模版建立一个仓库。之后，你可以将所有软件包统一保存
+在你		{{server_host}}	{{server_port}}
+i新建的仓库。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> 如果要将自己的软件包发布到 NUR，你需要向		{{server_host}}	{{server_port}}
+hNUR 的主仓库	URL:https://github.com/nix-community/NUR	{{server_host}}	{{server_port}}
+i> 发起 Pull Request，将你自
+己的仓库地址加进去。但即使你不发 Pull		{{server_host}}	{{server_port}}
+iRequest，也完全可以直接使用自己的仓库。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后，把你的仓库 Clone 下来。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 对于不使用 Nix Flake 的用户，运行以下命令可以对 `example-package`		{{server_host}}	{{server_port}}
+i这个模版自带
+的示例软件包进行打包：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 对于使用 Flake 的用户，运行以下命令：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后，在你的 NixOS 配置中添加自己的仓库。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 对于不使用 Nix Flake 的用户，在 `configuration.nix` 中添加如下定义：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 将 `https://github.com/nix-community/nur-packages-template`		{{server_host}}	{{server_port}}
+i替换成你的仓库地
+址。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这样操作后，你就能用类似于 `pkgs.myRepo.example-package`		{{server_host}}	{{server_port}}
+i的方式使用你打的包
+了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 对于使用 Nix Flake 的用户，在 `flake.nix` 中的 `inputs`		{{server_host}}	{{server_port}}
+i一节中添加如下定义：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 将 `nix-community/nur-packages-template` 替换成你的仓库地址。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 然后，在 `flake.nix` 中的 `output` 一节，你的 `nixosConfigurations`		{{server_host}}	{{server_port}}
+i定义中，为
+每个系统添加一个 module：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这样操作后，你就能用类似于 `pkgs.myRepo.example-package`		{{server_host}}	{{server_port}}
+i的方式使用你打的包
+了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i直接在 NixOS 配置文件中添加软件包		{{server_host}}	{{server_port}}
+i当然，你也可以不使用 NUR 的模版，而是直接把打包定义和 NixOS		{{server_host}}	{{server_port}}
+i的配置文件放在一起。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i假设你有这样一个打包定义，保存成 `example-package.nix`：（来自		{{server_host}}	{{server_port}}
+hhttps://github.com/nix-community/nur-packages-template/blob/master/pkgs/example-package/default.nix	URL:https://github.com/nix-community/nur-packages-template/blob/master/pkgs/example-package/default.nix	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i你可以在 `configuration.nix` 中使用 `pkgs.callPackage` 函数来调用它：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你要单独尝试构建这个软件包，你可以使用以下命令：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i打包流程		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i虽然你可
+以		{{server_host}}	{{server_port}}
+h直接调用 Nix 包管理器内置的 `builtins.derivation` 函数进行打包	URL:https://scrive.github.io/nix-workshop/04-derivations/04-raw-derivation.html	{{server_host}}	{{server_port}}
+i，
+但我们一般用更为方便的 `stdenv.mkDerivation` 函数来生成一个 Nix		{{server_host}}	{{server_port}}
+i包管理器的打包定
+义。相比于		{{server_host}}	{{server_port}}
+i`builtins.derivation`，`stdenv.mkDerivation` 将打包过程分成了 7		{{server_host}}	{{server_port}}
+i个步
+骤（Phase）：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 解压（Unpack phase）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在这一步中，`stdenv.mkDerivation` 会自动解压 `src`		{{server_host}}	{{server_port}}
+i参数指定的源码包。例如如
+果你的源码包是 `.tar.gz` 格式的，就会自动调用		{{server_host}}	{{server_port}}
+i`tar xf`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 但 `stdenv.mkDerivation` 不能识别所有压缩格式，例如 `.zip`		{{server_host}}	{{server_port}}
+i就不行，需要手动
+指定解压命令：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `stdenv.mkDerivation` 要求源码包的顶层是一个文件夹，解压完成后会自动		{{server_host}}	{{server_port}}
+i`cd`
+进去。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 打补丁（Patch phase）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在这一步中，`stdenv.mkDerivation` 会按顺序应用 `patches`		{{server_host}}	{{server_port}}
+i列表中的所有补丁。
+这一步可以用来解决一部分软件和 NixOS 的不兼容问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 配置（Configure phase）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这一步相当于运行 `./configure` 或者 `cmake`。`stdenv.mkDerivation`		{{server_host}}	{{server_port}}
+i会自动检
+测打包方案并调用相应命令，或者当相应配置文件不存在时，自动跳过		{{server_host}}	{{server_port}}
+i这一步。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 需要注意的是，要调用 `cmake`，你需要额外加一行
+`nativeBuildInputs = [		{{server_host}}	{{server_port}}
+icmake ];` 把 CMake 加入打包环境中。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 你可以用 `configureFlags` 或者 `cmakeFlags`		{{server_host}}	{{server_port}}
+i添加配置参数，例如启用/禁用软件
+的功能。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 编译（Build phase）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这一步相当于运行 `make`。你可以用 `makeFlags` 添加传给 `make`		{{server_host}}	{{server_port}}
+i的参数。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 测试（Check phase）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这一步会运行源码中自带的测试用例，以保证软件功能正确。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 你可以用 `doCheck = false;` 禁用这一步。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 安装（Install phase）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这一步相当于运行 `make install`，将编译结果复制到 Nix store		{{server_host}}	{{server_port}}
+i的相应文件夹
+中。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 整个构建过程是在临时文件夹中，而不是 Nix store		{{server_host}}	{{server_port}}
+i中进行的，因此需要这一步将文
+件复制过去。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 当你手动指定安装命令时，目标路径存在变量 `$out` 中。`$out`		{{server_host}}	{{server_port}}
+i可以是存放有文件
+的文件夹，也可以直接是一个文件。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 额外修补（Fixup phase）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这一步会对 Nix store 中的结果做一些清理，例如去除调试符号等。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Autopatchelf Hook，一个自动替换闭源软件 `.so` 的路径的		{{server_host}}	{{server_port}}
+iHook，就是在这一步运
+行的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 你可以用 `dontFixup = true;` 禁用这一步。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i每一个步骤都可以手动指定对应的命令，或者在原有命令之前或之后额外增加命		{{server_host}}	{{server_port}}
+i令。以安装
+这一步为例：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i只看这些步骤的解释可能有些抽象，因此接下来我会给出一些实例，并给出详细解		{{server_host}}	{{server_port}}
+i释。此
+外，我的实例中还会涉及 Nixpkgs		{{server_host}}	{{server_port}}
+i提供的对于几种常用编程语言的专用打包函数，例如
+Python 的		{{server_host}}	{{server_port}}
+i`buildPythonPackage`，Go 的 `buildGoModule` 等等。这些实例都来
+自		{{server_host}}	{{server_port}}
+h我的 NUR 软件源	URL:https://github.com/xddxdd/nur-packages	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i实例：开源软件		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i开源软件的打包往往都比较容易，因为在打包过程中，Nix		{{server_host}}	{{server_port}}
+i包管理器会调整好环境变量，让
+编译器找到存放在 Nix store		{{server_host}}	{{server_port}}
+i中其它路径的库文件，所以生成的二进制文件都会链接到
+Nix store		{{server_host}}	{{server_port}}
+i的库文件中，不依赖 `/usr` 等路径下的其它文件，可以直接在 NixOS		{{server_host}}	{{server_port}}
+i上使
+用，此外，即使开源软件中出现路径写死等情况，你在打包过程中也可以写一		{{server_host}}	{{server_port}}
+i个补丁，把路
+径修改掉，从而让它能在 NixOS 下正常工作。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i简单：LibOQS（C++，CMake，自动化构建）		{{server_host}}	{{server_port}}
+i首先我们来看一个最简单的例
+子：LibOQS。		{{server_host}}	{{server_port}}
+hLibOQS 提供了多种后量子加密算法的实现，可以用来给 OpenSSL 或 BoringSSL 提供后量子加密支持	URL:https://github.com/open-quantum-safe/liboqs	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLibOQS 使用 CMake		{{server_host}}	{{server_port}}
+i构建，并且本身没有任何依赖，因此基本上所有工作都可以由
+`stdenv.mkDerivat		{{server_host}}	{{server_port}}
+iions` 自动完成，我们只需要为 CMake 指定几个额外的参数：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后运行下面这行命令，Nix		{{server_host}}	{{server_port}}
+i包管理器就会自动构建这个软件包，并把输出链接到当前目录
+的 `results`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i中等：openssl-oqs-provider（C，增加依赖）		{{server_host}}	{{server_port}}
+i有了 LibOQS，我们可以再打包一个		{{server_host}}	{{server_port}}
+hOpenSSL OQS Provider，一个 OpenSSL 3.0 的加解密引擎，可以把后量子加密算法加入 OpenSSL 3.0 中	URL:https://github.com/open-quantum-safe/oqs-provider	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这个包主要用来展示 `nativeBuildInputs` 和 `buildInputs` 的区别：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `nativeBuildInputs`		{{server_host}}	{{server_port}}
+i只有在构建时用到，一般用来生成一些配置文件或者编译脚本。在
+交叉编译（给		{{server_host}}	{{server_port}}
+i其它架构的设备编译软件）时，`nativeBuildInputs`		{{server_host}}	{{server_port}}
+i的架构会和运行编译
+的设备相同，而不是和目标设备相同。例如用 x86 电脑给		{{server_host}}	{{server_port}}
+iARM 树莓派编译
+时，`nativeBuildInputs` 的架构会是 x86。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `buildInputs`		{{server_host}}	{{server_port}}
+i在构建和最终运行软件时都会用到。所有的依赖库都会放到这里。这些依
+赖的		{{server_host}}	{{server_port}}
+i架构和目标设备相同，例如 `openssl-oqs-provider` 依赖的 `liboqs`		{{server_host}}	{{server_port}}
+i必然和它是
+同一架构的（都是 x86 或者都是 ARM）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i困难：OSDLyrics（Python 和 C++，两轮构建）		{{server_host}}	{{server_port}}
+i接下来我们来看		{{server_host}}	{{server_port}}
+hOSDLyrics，一个桌面歌词软件	URL:https://github.com/osdlyrics/osdlyrics	{{server_host}}	{{server_port}}
+i。这个包表
+面上看起来很好打，官方给出的编译命令就是下面几行：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是编译命令里出现了 Python，这就比较麻烦了。OSDLyrics 由 Python 和 C++		{{server_host}}	{{server_port}}
+i两部分组
+成，其中 C++ 部分会调用 Python 的库。因此，官方的编译脚本会把		{{server_host}}	{{server_port}}
+iOSDLyrics 的
+Python 模块安装到 Python 的 `site-packages`		{{server_host}}	{{server_port}}
+i文件夹中。但是在 Nix 中，对于
+OSDLyrics 这个软件包来说，Python		{{server_host}}	{{server_port}}
+i的安装目录是只读的，自然无法安装这个模块。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因此我们需要先给 Python 模块部分单独打个包：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后把这个模块加入 OSDLyrics 最终使用的 Python 环境：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最终才能打包它的 C++ 部分：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最终完整的定义如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i实例：闭源软件（以及以二进制形式分发的软件）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i比起开源软件，给闭源软件打包就比较困难了。这些闭源软件往往只提供二进制		{{server_host}}	{{server_port}}
+i文件，而这
+些二进制文件往往是提供给传统的、使用 FHS 标准目录结构的		{{server_host}}	{{server_port}}
+iLinux 发行版的，例如
+CentOS、Debian、Ubuntu		{{server_host}}	{{server_port}}
+i等。由于我们没有源代码，我们只能想办法在二进制文件上动手
+术，在二进制文		{{server_host}}	{{server_port}}
+i件中查找 FHS 标准路径，并把它们全部替换成 Nix store 的路径。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i幸运的是，针对不同的情况，Nixpkgs		{{server_host}}	{{server_port}}
+i提供了好几种方案，让多数的闭源软件都能打包成
+功。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i简单：Bilibili-linux（解压 DEB 包，Electron）		{{server_host}}	{{server_port}}
+i首先我们看一个简单的情况：基于 Electron 的软
+件。		{{server_host}}	{{server_port}}
+h这里以 Bilibili-linux 为例，它是基于哔哩哔哩官方的桌面客户端移植到 Linux 系统的版本	URL:https://github.com/msojocs/bilibili-linux	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i虽然 Electron 软件相比传统的基于 GTK 或 Qt		{{server_host}}	{{server_port}}
+i的桌面软件耗电大，占用空间多，而且会
+让每台电脑中都装上十来个		{{server_host}}	{{server_port}}
+iChromium，让它的市场占有率飙升到 1000%		{{server_host}}	{{server_port}}
+i以上，但它的移植
+便捷性不容忽视。Bilibili-linux 这个客户端是使用纯		{{server_host}}	{{server_port}}
+iJavascript 实现的，软件包里除
+了 Electron		{{server_host}}	{{server_port}}
+i之外，没有任何其它的二进制文件。因此我们可以取出它的 Javascript		{{server_host}}	{{server_port}}
+i代
+码，然后直接用系统的 Electron 运行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i中等：DingTalk（自动 Patch 二进制，查找依赖）		{{server_host}}	{{server_port}}
+i当然，不是所有闭源软件都用的是 Electron		{{server_host}}	{{server_port}}
+i方案。对于有二进制文件的闭源软件，我们就
+需要在二进制文件上动刀了，把它		{{server_host}}	{{server_port}}
+i的依赖库文件全部改成 Nix store 里的库。Nixpkgs 提
+供了一个方便的工具		{{server_host}}	{{server_port}}
+i`autoPatchelfHook`，它会搜索软件包里的所有二进制，并修改所有
+的依赖路径，		{{server_host}}	{{server_port}}
+i当有依赖路径没被满足时会自动报错，方便调试。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我们这次用的例子是 DingTalk，钉钉的 Linux 客户端，它使用 GTK		{{server_host}}	{{server_port}}
+i作为界面框架。由于
+我们一开始不知道钉钉有什么依赖，我们先编写一个大致的		{{server_host}}	{{server_port}}
+i打包模版：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后尝试打包。不出所料，报错了：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我们运行上面这行命令查看完整的日志：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`autoPatchelfHook`		{{server_host}}	{{server_port}}
+i已经列出了所有缺失的库文件，接下来，我们需要一个一个查找这些
+库文件对应		{{server_host}}	{{server_port}}
+i的软件包，并把它们加入软件包的依赖 `buildInputs`		{{server_host}}	{{server_port}}
+i中。你可以根据自己的
+经验在		{{server_host}}	{{server_port}}
+hNixOS Search	URL:https://search.nixos.org/packages	{{server_host}}	{{server_port}}
+i上查找软件包，也可以使
+用		{{server_host}}	{{server_port}}
+hnix-index，一个根据文件名搜包的工具	URL:https://github.com/bennofs/nix-index	{{server_host}}	{{server_port}}
+i，
+来加快查找速度。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后添加完后，DingTalk 包的定义是这样的：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i困难：SVP（程序检测自身完整性，Bubblewrap）		{{server_host}}	{{server_port}}
+i以钉钉客户端为例的闭源软件虽然打包麻烦，需要手动查找所有的依赖库，反复测		{{server_host}}	{{server_port}}
+i试，但至
+少软件本身不会给你下绊子。有些闭源软件为了防止破解，会检测自身		{{server_host}}	{{server_port}}
+i的完整性，只要自己
+的二进制文件被修改就拒绝启动，例如		{{server_host}}	{{server_port}}
+hSVP 视频补帧软件	URL:https://www.svp-team.com/get/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i对于这些软件，`autoPatchelfHook`		{{server_host}}	{{server_port}}
+i自然用不了了。因此我们只能换成另一种办法：生成
+一个符合 FHS		{{server_host}}	{{server_port}}
+i标准的虚拟环境，把所有的库文件放在虚拟环境中对应的路径，然后在虚拟
+环境		{{server_host}}	{{server_port}}
+i中启动软件。最常用的创建虚拟环境的软件是		{{server_host}}	{{server_port}}
+hBubblewrap	URL:https://github.com/containers/bubblewrap	{{server_host}}	{{server_port}}
+i，它原本的用途是把软件放在
+沙盒中，阻止它读取敏感数据，但这个沙盒正好也可		{{server_host}}	{{server_port}}
+i以是我们要用的虚拟环境。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我们直接来看 SVP 的打包定义：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i困难：WeChat-UOS（程序检测运行环境，Steam-run）		{{server_host}}	{{server_port}}
+i另一个会检测运行环境的是 UOS 版微信客户端。虽然它本身是一个 Electron		{{server_host}}	{{server_port}}
+i应用，打包
+应该很简单，但是它自带了一个库文件，包含有检测 UOS		{{server_host}}	{{server_port}}
+i系统授权文件的逻辑，检测失败
+就拒绝你登录。因此，我们依然需要构造一个虚		{{server_host}}	{{server_port}}
+i拟环境，把 UOS 的授权文件放到对应的位
+置，才能正常使用微信。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这里展示 Nixpkgs 中的一个便捷打包工具：`steam-run`。`steam-run`		{{server_host}}	{{server_port}}
+i本身就是调用的
+Bubblewrap，但是顾名思义，`steam-run` 原本是用来运行		{{server_host}}	{{server_port}}
+iSteam 客户端和 Steam		{{server_host}}	{{server_port}}
+i上的游
+戏的，因此它的默认环境包含了大量常用的库文件，很多闭源软件都能用		{{server_host}}	{{server_port}}
+i它跑起来。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`steam-run` 虽然好用，但因为它为了支持大量的 Steam		{{server_host}}	{{server_port}}
+i游戏默认引入了大量的库文件，
+如果只为了运行一些简单的程序，不免有些大材		{{server_host}}	{{server_port}}
+i小用。因此我建议，对于简单的软件尽量用
+Bubblewrap		{{server_host}}	{{server_port}}
+i手动打包，对于复杂的软件再用 `steam-run`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i实例：特殊软件包		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后，我演示几种特殊软件的打包。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i字体：Hoyo-Glyphs		{{server_host}}	{{server_port}}
+iNixOS 中的字体也是一个个软件包，只要把 TTF		{{server_host}}	{{server_port}}
+i文件放进软件包的
+`$out/share/fonts/opentype` 文件夹就可以了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这里我用		{{server_host}}	{{server_port}}
+hHoyo-Glyphs 演示，它是一个由米哈游游戏爱好者创建的字体项目，模仿了米哈游的原神、星穹铁道、绝区零等游戏内的架空文字	URL:https://github.com/SpeedyOrc-C/Hoyo-Glyphs	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后把这个软件包加入 NixOS 的字体配置（或者 Home-Manager		{{server_host}}	{{server_port}}
+i的字体配置），就可以使
+用了：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGo 软件包：Konnect		{{server_host}}	{{server_port}}
+i接下来我演示一下 Go 软件包的打包。Nixpkgs 提供了 `buildGoModule`		{{server_host}}	{{server_port}}
+i函数，可以几乎
+全自动地给 Go 语言软件打包。但是 `buildGoModule`		{{server_host}}	{{server_port}}
+i存在一个问题：由于 Go 语言程序
+需要联网下载 `vendor` 目录下的依赖，因此		{{server_host}}	{{server_port}}
+i`buildGoModule` 会计算整个 `vendor`		{{server_host}}	{{server_port}}
+i目
+录的校验码，这个校验码需要在打包时手动给出。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i校验码不会算怎么办？老方法，先注释掉（或者随便改几个字），然后构建这个软件
+		{{server_host}}	{{server_port}}
+i包，Nix 会报错，并提示你正确的校验码。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这里我演示的软件是		{{server_host}}	{{server_port}}
+hKonnect，一个 OpenID 单点登录服务，支持 LDAP 后端	URL:https://github.com/Kopano-dev/konnect	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i你不需要指定任何的编译命令，`buildGoModule` 会自动完成一切。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i类似的，Python，NodeJS，Rust 等多种语言的项目都有它们对应的打包函
+数，		{{server_host}}	{{server_port}}
+h具体用法可以在 NixOS Wiki 查找	URL:https://nixos.wiki/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> 但是不包括 Java，因为 Java 常用的 Maven		{{server_host}}	{{server_port}}
+i构建系统不支持把依赖固定在某一个版本，
+因此两次编译的依赖可能会发生变		{{server_host}}	{{server_port}}
+i化，违反了 Nix 的初衷。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i内核：linux-xanmod-lantian		{{server_host}}	{{server_port}}
+i最后，我演示一下如何自定义 Linux 内核。Nixpkgs 照例提供了方便的		{{server_host}}	{{server_port}}
+i`buildLinux` 函
+数：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`config.nix` 存放你自定义的配置，Nixpkgs 会在		{{server_host}}	{{server_port}}
+hNixOS 默认内核配置	URL:https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel/common-config.nix	{{server_host}}	{{server_port}}
+i的
+基础上应用你的修改。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i总结		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i软件打包一向是困难的，在打包过程中，你往往需要考虑软件的所有依赖，并且调		{{server_host}}	{{server_port}}
+i整参数反
+复尝试。相比于其它发行版，NixOS（以及		{{server_host}}	{{server_port}}
+iNixpkgs）的打包看起来复杂，但实际上是比较
+容易的：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 大量的重复工作被以函数的形式自动化；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i打包环境与主系统隔离，不用担心系统上的残留库文件产生冲突，也不用担心少指		{{server_host}}	{{server_port}}
+i定依赖
+导致其他人无法使用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i本文中我展示了常见的几种打包情况，包括开源软件和闭源软件。但因为我展示		{{server_host}}	{{server_port}}
+i的样本很
+少，无法覆盖到你会遇到的所有情况，因此更多时候还是需要你去自行		{{server_host}}	{{server_port}}
+i查阅资料：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hNixOS Wiki	URL:https://nixos.wiki/	{{server_host}}	{{server_port}}
+i-  上有多种常见编程语言的打包教程，以及一些特殊
+情况的介绍（例如 Qt）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hNixpkgs	URL:https://github.com/NixOS/nixpkgs	{{server_host}}	{{server_port}}
+i-  本身就是一个大型的软件包仓库，存放
+了 8		{{server_host}}	{{server_port}}
+i万多个软件包的定义，也可以作为参考。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hNUR	URL:https://nur.nix-community.org/	{{server_host}}	{{server_port}}
+i-  是 Nix 用户个人管理的软件包仓库，类似于
+AUR。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i本文所有的打包样例都来
+自		{{server_host}}	{{server_port}}
+h我的 NUR 仓库	URL:https://github.com/xddxdd/nur-packages	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

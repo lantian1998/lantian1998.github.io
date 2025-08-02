@@ -1,0 +1,20 @@
+iAs we all know, CAPTCHAs exist to prevent machines from brute-forcing		{{server_host}}	{{server_port}}
+ipasswords or spamming comments with advertisements. Typically, a		{{server_host}}	{{server_port}}
+iCAPTCHA consists of 4 digits with some interference lines to thwart		{{server_host}}	{{server_port}}
+ibrute-force attacks as much as possible.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe problem is... there's also a kind of absurd CAPTCHA in this world.		{{server_host}}	{{server_port}}
+iImage source:		{{server_host}}	{{server_port}}
+hhttp://imbushuo.net/archives/58	URL:http://imbushuo.net/archives/58	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI just want to say: What's the point of this CAPTCHA? Any random		{{server_host}}	{{server_port}}
+iprogram could extract and auto-fill it. According to imbushuo:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHe actually wrote a program that logged in successfully without even		{{server_host}}	{{server_port}}
+isending back the CAPTCHA!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis CAPTCHA is truly "impressive." Then I saw this push notification		{{server_host}}	{{server_port}}
+ifrom WooYun Vulnerability Platform on WeChat:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWooYun, you win.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

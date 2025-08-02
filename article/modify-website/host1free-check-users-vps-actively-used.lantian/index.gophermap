@@ -1,0 +1,41 @@
+iHost1Free送VPS的活动已经搞了好一段时间了，总共上了30多台服务器，划出了总		{{server_host}}	{{server_port}}
+i共30000
+台VPS（超售严重啊……免费的忍忍吧），引来超级大批用户注册，最重要的		{{server_host}}	{{server_port}}
+i是官方不歧视景
+德镇用户注册。但是景德镇的人有一个特点，就是拿到之后玩，		{{server_host}}	{{server_port}}
+i玩烦了就把它放在一边不
+管，或者是自己又搞到了其他的VPS（比如EC2，还有早几		{{server_host}}	{{server_port}}
+i个月可以弄到VPS.me），就再也不
+去用它了。但是Host1Free总体比较敬业，每次		{{server_host}}	{{server_port}}
+i服务器down掉，都会把所有的VPS都开起来，
+于是那些没人用的VPS，一个就是128M		{{server_host}}	{{server_port}}
+i内存+640M Swap，浪费资源。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i于是Host1Free想了一个奇葩的方法检查用户是否活跃使用，关机！大概上个星期		{{server_host}}	{{server_port}}
+i四晚上，
+所有VPS全部被关机。同时Host1Free发邮件通知所有用户，赶紧到Solus		{{server_host}}	{{server_port}}
+iVM里开启VPS，否则
+过几天就要被干掉了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i上个星期回到家，我想折腾VPS，结果连不上，到SolusVM里发现VPS关机了，于是我		{{server_host}}	{{server_port}}
+i就开启
+了它（我以为Host1Free抽风了），折腾了一会儿。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i结果今天我偶然点开Thunderbird看了一下，就看到Host1Free的这封邮件：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最危险的是，这篇文章居然是我在垃圾邮件箱里找到的！还好我的VPS已经开机，并		{{server_host}}	{{server_port}}
+i且在活
+跃使用（折腾）。这时我突然想到imbushuo，他也有一个Host1Free		{{server_host}}	{{server_port}}
+iVPS，但是他后来折腾
+EC2去了。不如帮他检查一下。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i他的VPS绑了		{{server_host}}	{{server_port}}
+hhttp://preview.imbushuo.net	URL:http://preview.imbushuo.net	{{server_host}}	{{server_port}}
+i，我打开网
+页，果然是CloudFlare的AlwaysOnline页面，然后我用微博通知他启动		{{server_host}}	{{server_port}}
+iVPS。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我也提醒一下大家（虽然我的博客没什么人看），大家一定要赶紧开启VPS（不想再		{{server_host}}	{{server_port}}
+i折腾的
+除外），免得自己的数据挂掉。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

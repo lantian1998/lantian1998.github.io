@@ -1,0 +1,35 @@
+ieMule is a well-known P2P protocol where users can search for other		{{server_host}}	{{server_port}}
+ieMule users online and access desired resources.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe eMule protocol consists of two parts: ED2K and KAD. ED2K operates		{{server_host}}	{{server_port}}
+isimilarly to BitTorrent, requiring clients to maintain a server list.		{{server_host}}	{{server_port}}
+iDuring downloads, clients connect to servers to obtain lists of other		{{server_host}}	{{server_port}}
+iusers before establishing connections - much like Tracker servers in		{{server_host}}	{{server_port}}
+iBitTorrent. The unique aspect is the KAD network, which allows direct		{{server_host}}	{{server_port}}
+iuser searches without servers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, KAD searches are slow due to the inefficiency of scanning IPs		{{server_host}}	{{server_port}}
+iindividually. eMule addresses this by allowing KAD exchange through		{{server_host}}	{{server_port}}
+iED2K: clients discover peers via ED2K, exchange KAD contacts, connect		{{server_host}}	{{server_port}}
+ithrough KAD, and repeat. But repeated connections still consume		{{server_host}}	{{server_port}}
+isignificant time.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA clever solution emerged: continuously downloading a specific file		{{server_host}}	{{server_port}}
+iallows constant KAD exchange, accelerating source discovery. The trick		{{server_host}}	{{server_port}}
+iis preventing completion while keeping the file small. Research		{{server_host}}	{{server_port}}
+irevealed eMule divides files into ~9.28MB blocks. Users then created		{{server_host}}	{{server_port}}
+ifiles slightly larger than 9.28MB, sharing only the excess portion		{{server_host}}	{{server_port}}
+iwhile blocking access to the first block.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis forces eMule to persistently search for sources and KAD users to		{{server_host}}	{{server_port}}
+icomplete the download. Simultaneously, leveraging A4AF (Ask for		{{server_host}}	{{server_port}}
+iAnother File) reveals additional sources for your downloads. This		{{server_host}}	{{server_port}}
+itechnique creates "headless files" - so named because their initial		{{server_host}}	{{server_port}}
+isegment lacks sources.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThus, eMule users created and shared various headless files:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsage is simple: add all files to eMule for downloading. Set their		{{server_host}}	{{server_port}}
+ipriority to low to prevent excessive source-searching from interfering		{{server_host}}	{{server_port}}
+iwith normal downloads.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,31 @@
+i今天在		{{server_host}}	{{server_port}}
+i进阶博客		{{server_host}}	{{server_port}}
+i看到了一个酷炫的网页背景效果，背景上会有动态的线组合成三角
+形等各种图形		{{server_host}}	{{server_port}}
+i，并且会对用户鼠标移动作出响应。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i要在自己的网站上加入这个效果，很简单，在 `</body>` 之前加入这段代码：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i刷新网页，效果就有了。如果没有看到效果，请检查你加的位置，这段代码不能加		{{server_host}}	{{server_port}}
+i在
+`<head>` 和 `</head>` 之间！		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但这样就产生了一个问题：在服务器到用户速度较慢的时候（比如晚上中美链路抽		{{server_host}}	{{server_port}}
+i风的时
+候），用户浏览器在加载到上面这段代码所在的位置，也就是页面底部之前		{{server_host}}	{{server_port}}
+i，无法得知它要
+加载这个 Javascript。也就是说，这段 Javascript		{{server_host}}	{{server_port}}
+i要在页面加载完毕后才会开始下载，
+而这会显著拖慢网页的总体加载速度。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i所以，我们要在开头 `<head>` 和 `</head>` 之间再加入如下代码：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这会让浏览器在加载完		{{server_host}}	{{server_port}}
+i`<head>`，也就是加载页面顶端之前，就知道要去下载这段代码，
+可以有效地提升		{{server_host}}	{{server_port}}
+i加载速度。在开发者工具中可以看到，这段代码尽管放在页面底部，但在经
+过如		{{server_host}}	{{server_port}}
+i上设置后，会和放在 `<head>` 里的 Javascript 一起加载。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最终设置的效果可以在本站看到。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

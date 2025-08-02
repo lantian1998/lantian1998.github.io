@@ -1,0 +1,29 @@
+iTranslation Notes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTitle		{{server_host}}	{{server_port}}
+i- : "我感受到了来自百度深深的恶意" → "I Felt the Deep Malice from		{{server_host}}	{{server_port}}
+iBaidu"		{{server_host}}	{{server_port}}
+i(Captures the emotional tone and specifies "Baidu" as the source of		{{server_host}}	{{server_port}}
+imalice)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCategories		{{server_host}}	{{server_port}}
+i- : "一图流" → "One-Picture Post"		{{server_host}}	{{server_port}}
+i(Common translation for image-focused blog/forum content)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTags		{{server_host}}	{{server_port}}
+i- : "[百度]" → "[Baidu]"		{{server_host}}	{{server_port}}
+i(Proper noun retained without translation)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStructure Preservation		{{server_host}}	{{server_port}}
+i- :		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Frontmatter formatting (e.g., `---`, key-value pairs) unchanged		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Image path (`/usr/uploads/...`) and HTML tag syntax preserved		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Untranslated elements: date format, image filename (`wow.PNG`),		{{server_host}}	{{server_port}}
+itechnical paths		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAll non-text elements (dates, URLs, filenames) remain intact per		{{server_host}}	{{server_port}}
+iMarkdown preservation rules.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

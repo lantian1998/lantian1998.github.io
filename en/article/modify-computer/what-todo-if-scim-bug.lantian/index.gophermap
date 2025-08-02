@@ -1,0 +1,28 @@
+iOn Ubuntu 12.10, I dislike using the default ibus. Neither fcitx nor		{{server_host}}	{{server_port}}
+iscim in the software repositories include a Pinyin package, so I		{{server_host}}	{{server_port}}
+idownloaded the Google Pinyin module for scim, compiled and installed		{{server_host}}	{{server_port}}
+iit myself.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, during use, scim frequently malfunctions. The symptom is that		{{server_host}}	{{server_port}}
+ino matter which input field I click, scim fails to recognize it and		{{server_host}}	{{server_port}}
+ithinks Chinese input isn't possible there. This forces me to type in		{{server_host}}	{{server_port}}
+iEnglish.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDuring one such malfunction, I was chatting with a classmate via		{{server_host}}	{{server_port}}
+ipywebqq. When scim crashed, the subsequent conversation was conducted		{{server_host}}	{{server_port}}
+ientirely in Pinyin. It wasn't until the other party stopped responding		{{server_host}}	{{server_port}}
+ithat I took the chance to log out and log back in, restoring scim.		{{server_host}}	{{server_port}}
+iToday, while writing an essay on my computer, scim malfunctioned		{{server_host}}	{{server_port}}
+iagain.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI really didn't want to log out, so I opened the terminal to check		{{server_host}}	{{server_port}}
+iscim's commands.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI discovered the `-d` command-line option, which I guessed was for		{{server_host}}	{{server_port}}
+ilaunching scim. Then it occurred to me: if scim has crashed, why not		{{server_host}}	{{server_port}}
+ikill it and restart? So I entered the following command:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter execution, scim disappeared. When I pressed Ctrl+Space, scim		{{server_host}}	{{server_port}}
+ireappeared. Clicking in LibreOffice, all language and symbol options		{{server_host}}	{{server_port}}
+ibecame available. The problem was solved.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

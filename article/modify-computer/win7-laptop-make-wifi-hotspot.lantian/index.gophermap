@@ -1,0 +1,50 @@
+i先扯几句。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1.搬家了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.刚刚来装了网络，接口在客厅。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i3.客厅没空调。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i手上设备情况：两台笔记本电脑（分别Macbook，Win7），一只手机（貌似没用）。要求		{{server_host}}	{{server_port}}
+i：
+用Win7笔记本发射无线网络。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i尝试Macbook，结果只能发射Adhoc热点，我的安卓手机不认。尝试Win7自带网络创		{{server_host}}	{{server_port}}
+i建，也是
+Adhoc，手机不认，Macbook虽然认出但是无法连接。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i背景介绍完毕，正文开始。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1.开始菜单-程序-附件，右键以管理员权限打开，开始输入命令。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ilantian改成自己想要的网络名，lantian.pub改成自己的密码，不能少于8位。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.打开网络共享中心，找到多出来的一个无线网络，应该有Microsoft Virtual		{{server_host}}	{{server_port}}
+iWiFi
+Miniport Adapter的字样，把它改个名字，比如“WiFi		{{server_host}}	{{server_port}}
+i热点”（不改也可以，自己分清楚）
+如果这个网络被禁用，那么启用它。如果没有多		{{server_host}}	{{server_port}}
+i出来，见文末PS。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i3.检查所有网络连接，IP设置全部改成自动分配IP。（可以先不做，但是不做的后		{{server_host}}	{{server_port}}
+i果是等会
+可能会出现错误）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i4.右键点击连外网的连接（如果是ADSL就是“宽带连接”，是局域网就是“本地连接”		{{server_host}}	{{server_port}}
+i），属
+性-共享-允许其它用户通过此计算机的 Internet		{{server_host}}	{{server_port}}
+i连接来连接，打上勾，家庭网络连接选择
+“WiFi 热点”（就是刚才多出来的网络）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果出现英文提示“Internet Connection Sharing cannot be		{{server_host}}	{{server_port}}
+ienabled...”，执行第3步。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i5.命令提示符继续输入：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i开启完成，现在其它设备都可以联网了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPS：如果没有出现这个无线网络，请用驱动精灵驱动人生等等将你的无线网卡驱动		{{server_host}}	{{server_port}}
+i更新到最
+新。如果还是不行，你的网卡不支持，放弃吧。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

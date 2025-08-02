@@ -1,0 +1,25 @@
+iBilibili is never short of amazing works from talented creators,		{{server_host}}	{{server_port}}
+iincluding original music, covers, and captivating "guichu" remixes.		{{server_host}}	{{server_port}}
+iSometimes we want to save these to devices that can play music with		{{server_host}}	{{server_port}}
+ilyrics but not video (like certain MP3 players), or use them as		{{server_host}}	{{server_port}}
+ibackground music while displaying lyrics on our desktop.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe problem is, many excellent works can't be found in mainstream		{{server_host}}	{{server_port}}
+imusic apps. Even when available (e.g., on NetEase Cloud Music, rumored		{{server_host}}	{{server_port}}
+ito have close ties with Bilibili), some tracks lack lyrics—especially		{{server_host}}	{{server_port}}
+inew releases.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut when you turn on Bilibili's danmaku, you'll find many volunteer		{{server_host}}	{{server_port}}
+i"subtitle masters" have created bottom-aligned danmaku. By extracting		{{server_host}}	{{server_port}}
+ithe timestamps and content of these danmaku, we can quickly generate		{{server_host}}	{{server_port}}
+ilyric files (like LRC).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI wrote a small Python program to automate this. You can download it		{{server_host}}	{{server_port}}
+iat:		{{server_host}}	{{server_port}}
+ihttps://github.com/xddxdd/bilibili-danmaku2lrc		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote: This tool requires the Python Requests module. Install it first		{{server_host}}	{{server_port}}
+iwith:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iExample usage:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

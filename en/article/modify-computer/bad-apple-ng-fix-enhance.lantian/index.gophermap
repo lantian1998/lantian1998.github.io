@@ -1,0 +1,19 @@
+iThis update fixes several issues.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The frame rate statistics were actually incorrect (due to my		{{server_host}}	{{server_port}}
+ibrain-fart code), and the frame rate remained at 20 FPS throughout the		{{server_host}}	{{server_port}}
+ientire video. The FPS statistics have now been changed to processing		{{server_host}}	{{server_port}}
+idelay. (PS: The program automatically adjusts for processing delay.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Some users reported that it did not run properly on 64-bit OS. It		{{server_host}}	{{server_port}}
+iwas likely an int64 issue. Now it has been changed to longint, and the		{{server_host}}	{{server_port}}
+iissue should be resolved.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Added a statistics feature (you can turn it off by changing the		{{server_host}}	{{server_port}}
+ithird line from stat=true to stat=false).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iData file download:		{{server_host}}	{{server_port}}
+1/usr/uploads/2013/03/badapple.7z	/usr/uploads/2013/03/badapple.7z	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSource code: (compile with FPC 2.6 by yourself)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

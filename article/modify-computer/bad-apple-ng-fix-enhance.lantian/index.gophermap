@@ -1,0 +1,19 @@
+i这次更新修正了几个错误。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1.帧率统计功能实际上是错误的（我脑抽写出的代码），全片过程中帧率一般维持		{{server_host}}	{{server_port}}
+i在20FPS
+不变。现已将FPS统计改成处理延时。（PS：对于处理延时，程序自动调节		{{server_host}}	{{server_port}}
+i）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.有TX反馈说64位OS下运行不正常，八成是int64的问题，现在已经全部改成longi		{{server_host}}	{{server_port}}
+int，问题
+应该解决。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i3.加了个统计功能（把第三行stat=true改成stat=false可以关掉）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i数据文件下
+载：		{{server_host}}	{{server_port}}
+1/usr/uploads/2013/03/badapple.7z	/usr/uploads/2013/03/badapple.7z	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i源码：（自己用FPC 2.6编译）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

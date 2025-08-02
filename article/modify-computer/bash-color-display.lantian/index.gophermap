@@ -1,0 +1,7 @@
+iLinux 默认的 Bash		{{server_host}}	{{server_port}}
+i命令行总是黑底白字，有些单调。但我们可以通过加几行命令，让
+Bash		{{server_host}}	{{server_port}}
+i以彩色显示信息，不仅美观，而且可以突出重点内容。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i编辑你的Home目录下的.profile文件：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

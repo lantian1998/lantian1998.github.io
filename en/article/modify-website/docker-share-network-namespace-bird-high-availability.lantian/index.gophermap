@@ -1,0 +1,149 @@
+iAt exactly one year ago, I		{{server_host}}	{{server_port}}
+1set up an Anycast service with Docker in the DN42 network	/en/article/modify-website/dn42-docker-anycast-dns.lantian	{{server_host}}	{{server_port}}
+i.
+Back then, I customized the container's image and added a Bird		{{server_host}}	{{server_port}}
+iinstallation to
+it, then put in a config file to broadcast Anycast		{{server_host}}	{{server_port}}
+iroutes via OSPF. However, as
+time went by, a few problems were		{{server_host}}	{{server_port}}
+iexposed:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The process of installing Bird takes time. Instead of installing		{{server_host}}	{{server_port}}
+iBird with
+`apt-get`, since		{{server_host}}	{{server_port}}
+1my Dockerfiles need to support multiple architectures	/en/article/modify-website/gpp-preprocess-dockerfile-include-if.lantian	{{server_host}}	{{server_port}}
+i,
+and Bird isn't available in some architecture's repos for Debian.		{{server_host}}	{{server_port}}
+iAnd since
+my building server is AMD64, and		{{server_host}}	{{server_port}}
+1is running images of other architectures with `qemu-user-static`	/en/article/modify-computer/build-arm-docker-image-on-x86-docker-hub-travis-automatic-build.lantian	{{server_host}}	{{server_port}}
+i,
+a lot of instruction translation is needed in the image building and		{{server_host}}	{{server_port}}
+isoftware
+compilation progress, which is extremely inefficient. It may		{{server_host}}	{{server_port}}
+itake more than 2
+hours to build an image for different architectures,		{{server_host}}	{{server_port}}
+iwhile if I installed it
+with Bird, it will take less than 5 minutes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Customizing image also takes time. Since both the target application		{{server_host}}	{{server_port}}
+i(such as
+PowerDNS) and Bird need to be run simultaneously, I cannot		{{server_host}}	{{server_port}}
+isimply use the
+target app as the ENTRYPOINT. Adding other managing		{{server_host}}	{{server_port}}
+isoftware (supervisord,
+s6-supervise, tini, or a custom Bash script)		{{server_host}}	{{server_port}}
+iadds extra complexity to the
+image (and therefore increases chances of		{{server_host}}	{{server_port}}
+ierror), and other factors such as
+signals, return values and zombie		{{server_host}}	{{server_port}}
+iprocesses need to be taken into account.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRecently when I was reading		{{server_host}}	{{server_port}}
+h`docker-compose`'s reference document	URL:https://docs.docker.com/compose/compose-file/compose-file-v2/	{{server_host}}	{{server_port}}
+i,
+I realized that `network_mode`, or the container's network scheme,		{{server_host}}	{{server_port}}
+ican be set to
+`container:[ID]` or `service:[name]`, which means		{{server_host}}	{{server_port}}
+imultiple containers can share
+the same namespace, and therefore the		{{server_host}}	{{server_port}}
+isame IP allocations and routes. This means
+I can create an individual		{{server_host}}	{{server_port}}
+iBird container, attach it to the application
+container's network		{{server_host}}	{{server_port}}
+inamespace, to achieve Anycast without modifying the original
+container		{{server_host}}	{{server_port}}
+iimage.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iScheme 1: Two Containers		{{server_host}}	{{server_port}}
+iThe most straightforward solution is using two containers, one for		{{server_host}}	{{server_port}}
+iapplication
+and one for Bird. Using PowerDNS as an example, this is my		{{server_host}}	{{server_port}}
+iconfig file:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere I set all networking-related configuration (including IP and		{{server_host}}	{{server_port}}
+iports) on the
+PowerDNS container, and set `network_mode:		{{server_host}}	{{server_port}}
+iservice:powerdns` on the Bird
+container, so they share the network		{{server_host}}	{{server_port}}
+inamespace. Here `NET_ADMIN` capability is
+still required by Bird to		{{server_host}}	{{server_port}}
+ihandle the broadcasting and routing, but no longer
+assigned to		{{server_host}}	{{server_port}}
+iPowerDNS. Hence security is improved a bit?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen run `docker-compose up -d` to start both containers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd Problem Arises		{{server_host}}	{{server_port}}
+iNot long has passed before the host cannot receive OSPF broadcasts		{{server_host}}	{{server_port}}
+ifrom the Bird
+container anymore. I entered the Bird container, did		{{server_host}}	{{server_port}}
+isome checks, and saw:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe IP allocation is gone. Upon further inspection on the PowerDNS		{{server_host}}	{{server_port}}
+icontainer, I
+realized that since I have		{{server_host}}	{{server_port}}
+hWatchtower	URL:https://github.com/containrrr/watchtower	{{server_host}}	{{server_port}}
+iautomatically updating
+images to the latest version, and my building		{{server_host}}	{{server_port}}
+iserver updated PowerDNS's image,
+the PowerDNS container has been		{{server_host}}	{{server_port}}
+irecreated.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince `service` in `network_mode` is, in fact, a convenience function		{{server_host}}	{{server_port}}
+iprovided
+by `docker-compose`, and is assigned by container ID on		{{server_host}}	{{server_port}}
+iDocker level, when
+PowerDNS container was recreated, the network		{{server_host}}	{{server_port}}
+inamespace for Bird container is
+lost as well.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow, if I attempt to restart the Bird container, Docker will show an		{{server_host}}	{{server_port}}
+ierror about
+unable to find the container with the original ID. Here		{{server_host}}	{{server_port}}
+ithe complexity arises:
+if I run `docker-compose up -d` again, instead		{{server_host}}	{{server_port}}
+iof recreating containers,
+`docker-compose` simply tries to start		{{server_host}}	{{server_port}}
+iexisting containers, which will fail.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, I need a container that is always running and never updated		{{server_host}}	{{server_port}}
+ifor the
+network namespace, and attach PowerDNS and Bird containers,		{{server_host}}	{{server_port}}
+iwhich may be updated
+any time, onto the long-running container, to		{{server_host}}	{{server_port}}
+iavoid issues when updating
+containers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iScheme 2: Three Containers		{{server_host}}	{{server_port}}
+iI chose the		{{server_host}}	{{server_port}}
+hBusybox container	URL:https://hub.docker.com/_/busybox?tab=tags	{{server_host}}	{{server_port}}
+ito
+run forever since it's small enough and occupies negligible memory		{{server_host}}	{{server_port}}
+ispace. The
+latest version of Busybox was 1.31.1 when I was writing		{{server_host}}	{{server_port}}
+ithis post, but since
+images of 1.31.1 was still updated periodically,		{{server_host}}	{{server_port}}
+iI chose the image for 1.31.0,
+which was last updated 3 months ago.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI run `tail -f /dev/null` forever with Busybox without it eating CPU		{{server_host}}	{{server_port}}
+icycles. In
+addition, I set labels to the container to prevent		{{server_host}}	{{server_port}}
+iWatchtower from auto-updating
+it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere is my updated config file:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere the Busybox container will run forever stably to keep the network		{{server_host}}	{{server_port}}
+inamespace
+running, and PowerDNS and Bird will attach to it and provide		{{server_host}}	{{server_port}}
+iservices. Either
+PowerDNS or Bird can be updated at any time without		{{server_host}}	{{server_port}}
+iaffecting the existence of
+the whole network namespace.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs for resource consumptions of Busybox:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe size is merely 384KB and can be simply ignored.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

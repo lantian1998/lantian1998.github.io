@@ -1,0 +1,100 @@
+i		{{server_host}}	{{server_port}}
+i- 今年真的是 9102 年了吗？		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 是的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i出于怀旧的目的，我想尝试一下在 Windows 2000		{{server_host}}	{{server_port}}
+i等旧操作系统中拨号上网。当然，在
+2019		{{server_host}}	{{server_port}}
+i年绝大部分人都已经不会有使用电话线的调制解调器，甚至不会知道曾经有它存		{{server_host}}	{{server_port}}
+i在。
+现在的电脑也早已没有了电话线接口，ISP 也不再提供拨号上网服务。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hDoge Microsystems 的这篇文章	URL:https://dogemicrosystems.ca/wiki/Dial_up_server	{{server_host}}	{{server_port}}
+i提
+供了自建拨号上网 ISP 的一种方法。文章作者购买了硬件电话 Modem，使用		{{server_host}}	{{server_port}}
+iAsterisk 建
+立了基于 SIP 的网络电话交换网，然后使用 Analog Telephone		{{server_host}}	{{server_port}}
+iAdapter（ATA，模拟电话
+转 SIP 网络电话的设备）将 Modem		{{server_host}}	{{server_port}}
+i连接上交换网。同时作者使用 Linux 下的 mgetty 操
+作 Modem，结合 pppd		{{server_host}}	{{server_port}}
+i提供了一个 PPP 拨号服务。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这样操作的主要问题是：一整套设备太贵，而且也占地方。这个作者用来拨号的是		{{server_host}}	{{server_port}}
+i一台物理
+的 Windows 98		{{server_host}}	{{server_port}}
+i主机，而不是像我一样使用虚拟机。如果我采用类似的方案，我还需要各种
+转换		{{server_host}}	{{server_port}}
+i线以及 Hub 才能将所有设备连上主机，并且还要在虚拟机软件中设置直通。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我更倾向于用软件模拟 Modem		{{server_host}}	{{server_port}}
+i的串口指令操作。现在的虚拟机软件（例如
+VirtualBox、QEMU		{{server_host}}	{{server_port}}
+i等）都可以将串口转发到 TCP 端口或者 Linux		{{server_host}}	{{server_port}}
+i下的命名管道，而模拟
+软件仅需要提供二者之一即可。我选择的是		{{server_host}}	{{server_port}}
+hNandhp 的 ATduck	URL:https://github.com/nandhp/atduck	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+1《树莓派 3B 折腾笔记：串口拨号上网》	/article/modify-computer/raspberry-pi-3b-ppp-dial-ethernet.lantian/	{{server_host}}	{{server_port}}
+i这
+篇文章不同的是，这篇文章中的通信基于“裸 PPP 协议”，完全没有 Modem		{{server_host}}	{{server_port}}
+i的部分；而本文
+中模拟的是一个完整的、兼容 Hayes 协议的调制解调器。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i安装 ATduck		{{server_host}}	{{server_port}}
+iATduck 本身安装简单，但是它依赖 Perl 的 IO-Pty 模块，以及 Slirp		{{server_host}}	{{server_port}}
+i软件。Slirp 可以
+在一个 TTY 上模拟一个 SLIP 或者 PPP		{{server_host}}	{{server_port}}
+i协议的服务端，ATduck 本身只实现了 Modem 的部
+分，联网部分都交由 Slirp。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是由于显而易见的原因，Slirp 已经很少用到了。Arch Linux		{{server_host}}	{{server_port}}
+i的软件源里根本没有，甚
+至连 AUR 里都没有。根据		{{server_host}}	{{server_port}}
+hWikipedia 的 Slirp 页面	URL:https://en.wikipedia.org/wiki/Slirp	{{server_host}}	{{server_port}}
+i显示，Slirp 的部分
+维护交由 Debian 维护者进行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因此，我基于 Debian Buster 做了一个 ATduck 的 Docker 镜像。镜像开了 TCP		{{server_host}}	{{server_port}}
+i5555 端
+口，将 VirtualBox 等的虚拟串口指向这里即可。镜像的 Dockerfile		{{server_host}}	{{server_port}}
+i可
+以		{{server_host}}	{{server_port}}
+h在这里看到	URL:https://github.com/xddxdd/dockerfiles/blob/master/dockerfiles/atduck/template.Dockerfile	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i直接用 docker-compose 启动：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后在 VirtualBox 中如图配置：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IVirtualBox 配置虚拟串口	/usr/uploads/2019/12/atduck-virtualbox-config.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i配置 Windows 2000		{{server_host}}	{{server_port}}
+iWindows 2000 启动后，会自动找到一个 Unknown		{{server_host}}	{{server_port}}
+iModem（未知调制解调器）。我们要进入
+设备管理器，装上兼容 Hayes		{{server_host}}	{{server_port}}
+i调制解调器协议的驱动。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在安装驱动界面，选择手动选择驱动（不要自动识别），然后选择 Hayes 厂家的		{{server_host}}	{{server_port}}
+iHayes
+Compatible 9600 驱动，如图：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IWindows 2000 驱动选择	/usr/uploads/2019/12/atduck-win2000-driver.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i驱动安装完成后，添加拨号网络连接，拨号号码设置成 5555，协议选择		{{server_host}}	{{server_port}}
+iPPP，用户名密码
+任意填写。ATduck 在识别到这个号码后，会自动启动 Slirp		{{server_host}}	{{server_port}}
+i来模拟 PPP 握手过程。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IWindows 2000 拨号连接配置	/usr/uploads/2019/12/atduck-dialup-config.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i双击拨号上网，整个流程就结束了：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IWindows 2000 拨号成功	/usr/uploads/2019/12/atduck-win2000-success.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i一点小问题		{{server_host}}	{{server_port}}
+iATduck 还是有一点小 Bug		{{server_host}}	{{server_port}}
+i的。如果你断开了拨号连接，第二次拨号时可能会失败。似乎是
+ATduck		{{server_host}}	{{server_port}}
+i没有正确识别到挂断的命令。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

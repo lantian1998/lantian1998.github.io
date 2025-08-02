@@ -1,0 +1,68 @@
+iDN42, short for Decentralized Network 42, is a large-scale VPN		{{server_host}}	{{server_port}}
+inetwork. Unlike traditional VPNs, DN42 utilizes technologies commonly		{{server_host}}	{{server_port}}
+ideployed on internet backbones (such as BGP), making it an excellent		{{server_host}}	{{server_port}}
+isimulation of a real-world network environment.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ia previous article		{{server_host}}	{{server_port}}
+i, I joined the DN42 network, registered my own domain in		{{server_host}}	{{server_port}}
+ianother article		{{server_host}}	{{server_port}}
+i, and set up my own DNS server. Later, in		{{server_host}}	{{server_port}}
+ithis article		{{server_host}}	{{server_port}}
+i, I configured IPv4 reverse DNS. At that time, due to some outdated		{{server_host}}	{{server_port}}
+iinformation on the DN42 Wiki, I mistakenly believed IPv6 reverse DNS		{{server_host}}	{{server_port}}
+icouldn't be configured. However, I've since confirmed it's possible		{{server_host}}	{{server_port}}
+ithrough experimentation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince the setup process is largely similar, this article will share		{{server_host}}	{{server_port}}
+isignificant overlap (copy-pasted content) with the earlier IPv4 guide.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSetting Up DNS Servers for the IP Range		{{server_host}}	{{server_port}}
+iThe first step is to delegate reverse DNS resolution for all your IP		{{server_host}}	{{server_port}}
+iranges to your own DNS servers. My servers are ns[1-2].lantian.dn42,		{{server_host}}	{{server_port}}
+iand both can be specified.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the IPv4 article, I reused existing settings. But because my IPv6		{{server_host}}	{{server_port}}
+iDNS configuration had issues, I had to submit a Pull Request to update		{{server_host}}	{{server_port}}
+ithe IPv6 DNS servers, while also updating the IPv4 entries.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter cloning the DN42 data repository, add these lines to your IP		{{server_host}}	{{server_port}}
+irange file:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe entire file should look like this:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, `git add`, `git commit`, submit a Pull Request, and wait for		{{server_host}}	{{server_port}}
+iboth the merge and recursive DNS propagation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSetting Up PowerDNS		{{server_host}}	{{server_port}}
+iWhile waiting, you can prepare the DNS server. Following		{{server_host}}	{{server_port}}
+ithis article		{{server_host}}	{{server_port}}
+i, we assume you already have a PowerDNS server. Reverse IP resolution		{{server_host}}	{{server_port}}
+iuses a special domain format.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince IPv6 provides abundant addresses (everyone gets a /48 block in		{{server_host}}	{{server_port}}
+iDN42), there's no need for subnet suffixes like "/29" in IPv4. The		{{server_host}}	{{server_port}}
+ispecial domain format for IPv6 is `[reversed IP].ip6.arpa`. For		{{server_host}}	{{server_port}}
+iexample, my fdbc:f9dc:67ad::/48 corresponds to		{{server_host}}	{{server_port}}
+i`d.a.7.6.c.d.9.f.c.b.d.f.ip6.arpa`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd this domain to PowerDNS as shown:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, create PTR records for each IP. For instance, the record for		{{server_host}}	{{server_port}}
+i`fdbc:f9dc:67ad::8b:c606:ba01` would be		{{server_host}}	{{server_port}}
+i`1.0.a.b.6.0.6.c.b.8.0.0.0.0.0.0.0.0.0.0.d.a.7.6.c.d.9.f.c.b.d.f.ip6.a		{{server_host}}	{{server_port}}
+irpa`, configured as:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iManual conversion is error-prone (easy to miss zeros). A shortcut is		{{server_host}}	{{server_port}}
+ito run `dig -x fdbc:f9dc:67ad::8b:c606:ba01` on Linux/Mac, which		{{server_host}}	{{server_port}}
+ioutputs:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe `QUESTION SECTION` displays the PTR record name for the IPv6		{{server_host}}	{{server_port}}
+iaddress:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn this case:		{{server_host}}	{{server_port}}
+i`1.0.a.b.6.0.6.c.b.8.0.0.0.0.0.0.0.0.0.0.d.a.7.6.c.d.9.f.c.b.d.f.ip6.a		{{server_host}}	{{server_port}}
+irpa`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter DN42's recursive DNS propagates, verify using `dig -x [IP]		{{server_host}}	{{server_port}}
+i@172.23.0.53`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

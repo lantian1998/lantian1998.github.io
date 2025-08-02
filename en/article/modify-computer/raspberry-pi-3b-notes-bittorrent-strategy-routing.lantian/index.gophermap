@@ -1,0 +1,115 @@
+iLet's get straight to the point this time. (Actually, I'm not sure how		{{server_host}}	{{server_port}}
+ito start.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalling Transmission for PT		{{server_host}}	{{server_port}}
+iAs a compact computer that can freely connect to various sensors, the		{{server_host}}	{{server_port}}
+iRaspberry Pi offers high playability. Even if you don't want to		{{server_host}}	{{server_port}}
+iconnect a bunch of sensors to the GPIO (or like me, think additional		{{server_host}}	{{server_port}}
+isensors are temporarily unnecessary), you can leverage its low-power		{{server_host}}	{{server_port}}
+icharacteristics to run it 24/7 for tasks that don't require heavy CPU		{{server_host}}	{{server_port}}
+icomputation but take a long time to complete due to other		{{server_host}}	{{server_port}}
+ifactors—like... background downloading.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMy university has an intranet PT (Private Tracker) site. A PT site is		{{server_host}}	{{server_port}}
+ia platform for releasing BT seeds, but it adds user management		{{server_host}}	{{server_port}}
+ifeatures on top of traditional BT. By restricting client types and		{{server_host}}	{{server_port}}
+ienforcing upload ratio requirements, it solves issues like leeching		{{server_host}}	{{server_port}}
+i(downloading without uploading, e.g., Xunlei) and rapid seed		{{server_host}}	{{server_port}}
+iexpiration (due to lack of seeders) in traditional BT.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThese requirements mean PT users often need to run downloads/uploads		{{server_host}}	{{server_port}}
+ifor extended periods—exactly what the Raspberry Pi excels at.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the		{{server_host}}	{{server_port}}
+iprevious article		{{server_host}}	{{server_port}}
+i, I set up a simple NAS. Building on that, installing a BT client		{{server_host}}	{{server_port}}
+iallows me to run PT. This PT site only allows Deluge, Rufus,		{{server_host}}	{{server_port}}
+iTransmission, and rTorrent on Linux. I initially tried Deluge, but the		{{server_host}}	{{server_port}}
+isite flagged that the latest Deluge 1.3.13 from Raspbian's repo wasn't		{{server_host}}	{{server_port}}
+iallowed. They recommended Deluge 1.3.3 from Debian 7's repo, but		{{server_host}}	{{server_port}}
+ilikely due to Debian 9's systemd base, the old version failed to start		{{server_host}}	{{server_port}}
+iafter installation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo I chose Transmission. First, apt-get:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen edit `/etc/transmission-daemon/settings.json`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, run `service transmission-daemon start`. Access the web		{{server_host}}	{{server_port}}
+iinterface at [Raspberry Pi IP]:9091 to upload torrents, adjust speed		{{server_host}}	{{server_port}}
+ilimits, etc.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdjustments for Campus Network Environment		{{server_host}}	{{server_port}}
+iAs mentioned in the		{{server_host}}	{{server_port}}
+iprevious article		{{server_host}}	{{server_port}}
+i, my university provides one wired network and two Wi-Fi networks with		{{server_host}}	{{server_port}}
+ithese characteristics:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Wired network: 1.5M speed limit, web-based login, accessible by		{{server_host}}	{{server_port}}
+iother devices on the LAN		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Wireless network: 1.5M speed limit, web-based login, inaccessible to		{{server_host}}	{{server_port}}
+iother wireless devices (Wi-Fi isolation, still accessible via wired		{{server_host}}	{{server_port}}
+iconnection)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- eduroam: No speed limit, WPA2 Enterprise login, inaccessible to		{{server_host}}	{{server_port}}
+iother wireless devices (Wi-Fi isolation, still accessible via wired		{{server_host}}	{{server_port}}
+iconnection)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince the Raspberry Pi has both wired and wireless NICs, the optimal		{{server_host}}	{{server_port}}
+isetup is:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Raspberry Pi uses eduroam for PT downloads		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- I manage it via the wired NIC's IP from my computer		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut if you connect both interfaces simultaneously, you'll notice only		{{server_host}}	{{server_port}}
+ione NIC has traffic—the other can't even ping. This happens because		{{server_host}}	{{server_port}}
+iwhen the Linux kernel receives a connection request (e.g., TCP SYN),		{{server_host}}	{{server_port}}
+iit doesn't "return via the same path." Instead, it uses the routing		{{server_host}}	{{server_port}}
+itable to decide which NIC to respond from. This causes responses from		{{server_host}}	{{server_port}}
+ithe wireless NIC to be sent for requests arriving via the wired NIC,		{{server_host}}	{{server_port}}
+iwhich get dropped due to isolation policies or IP mismatches.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe need policy routing to enforce "return via the incoming path."		{{server_host}}	{{server_port}}
+iPolicy routing directs packets matching specific conditions (e.g.,		{{server_host}}	{{server_port}}
+iarriving via a certain NIC) to a dedicated routing table instead of		{{server_host}}	{{server_port}}
+ithe main one. I used this before in "		{{server_host}}	{{server_port}}
+iConfiguring Hurricane Electric IPv6 Tunnel on OpenVZ, Enabling Full		{{server_host}}	{{server_port}}
+iAddress Pool with Native IPv6		{{server_host}}	{{server_port}}
+i." Though that was for IPv6, Linux's IPv4/IPv6 commands are		{{server_host}}	{{server_port}}
+isimilar—just tweak as needed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, check routes with `route`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote the two default routes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- eth0 (wired) gateway: 10.106.65.1		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- wlan0 (wireless) gateway: 10.107.128.1		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen check IPs with `ip addr`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iKey details:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Wired IP: 10.106.65.213/24 → Subnet: 10.106.65.0/24		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Wireless IP: 10.107.134.208/20 → Subnet: 10.107.128.0/20		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEdit `/etc/iproute2/rt_tables` to add dedicated routing tables:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSet up policy routing:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd these four commands to `/etc/rc.local` for auto-start. If they		{{server_host}}	{{server_port}}
+ifail at boot, add `sleep 5` before them—network services may not be		{{server_host}}	{{server_port}}
+iready.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, Linux prioritizes the wired NIC due to lower metric. To		{{server_host}}	{{server_port}}
+iprioritize wireless instead, edit `/etc/dhcpcd.conf`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iReboot. Now all traffic prefers the wireless NIC.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinal Result		{{server_host}}	{{server_port}}
+iAll downloads on the Pi use the unlimited eduroam Wi-Fi. I manage SSH,		{{server_host}}	{{server_port}}
+iTransmission, and file sharing via the slower wired IP (1.5M is		{{server_host}}	{{server_port}}
+isufficient for 1080p video streaming).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

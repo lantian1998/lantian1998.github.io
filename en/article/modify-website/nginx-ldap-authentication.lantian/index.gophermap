@@ -1,0 +1,52 @@
+iMy various servers host different services, each with its own		{{server_host}}	{{server_port}}
+iusername/password system, making unified management difficult. If my		{{server_host}}	{{server_port}}
+ipassword were compromised in the future, changing them individually		{{server_host}}	{{server_port}}
+iwould be extremely tedious. Therefore, I want to use a dedicated		{{server_host}}	{{server_port}}
+iservice to manage usernames and passwords, with all other services		{{server_host}}	{{server_port}}
+iobtaining authentication information from it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLDAP is one of the commonly used authentication protocols. Not only do		{{server_host}}	{{server_port}}
+imany applications natively support it (including Jenkins, pfSense,		{{server_host}}	{{server_port}}
+ietc.), but through plugins, nginx can also support it, adding unified		{{server_host}}	{{server_port}}
+iauthentication management to any web-based service.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdding the Plugin		{{server_host}}	{{server_port}}
+iIf your nginx is compiled from source, adding the LDAP plugin only		{{server_host}}	{{server_port}}
+irequires three steps:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `apk add openldap-dev`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `git clone https://github.com/kvspb/nginx-auth-ldap.git`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `./configure --add-module=/path/to/nginx-auth-ldap`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI still deploy nginx using Docker. The Dockerfile can be found at		{{server_host}}	{{server_port}}
+ihttps://github.com/xddxdd/dockerfiles/blob/210f0f82c7bc1c0c3697d329b73		{{server_host}}	{{server_port}}
+iea31abea6b14a/nginx/Dockerfile		{{server_host}}	{{server_port}}
+i, where the compilation parameters can be referenced.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguring Authentication		{{server_host}}	{{server_port}}
+iAfter installing the plugin, first add an `ldap_server` configuration		{{server_host}}	{{server_port}}
+iblock in the http section of nginx.conf. To prevent a single point of		{{server_host}}	{{server_port}}
+ifailure from taking down the entire authentication service, I		{{server_host}}	{{server_port}}
+itemporarily used JumpCloud's LDAP service with the following		{{server_host}}	{{server_port}}
+iconfiguration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen add the following content to the server block or location block		{{server_host}}	{{server_port}}
+iyou want to protect:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis enables authentication using the specified LDAP server.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote: The LDAP authentication plugin conflicts with the http_addition		{{server_host}}	{{server_port}}
+iplugin. The specific symptom is that when both `auth_ldap` and		{{server_host}}	{{server_port}}
+i`add_after_body` are enabled in the same location, after successful		{{server_host}}	{{server_port}}
+iusername/password authentication, nginx fails to send webpage data,		{{server_host}}	{{server_port}}
+icausing the browser to spin until timeout. The temporary solution is		{{server_host}}	{{server_port}}
+ito disable `add_after_body`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter these steps, LDAP authentication will be enabled for the		{{server_host}}	{{server_port}}
+ispecified address. By using nginx as a reverse proxy for other		{{server_host}}	{{server_port}}
+iinternal services and blocking direct external access to those		{{server_host}}	{{server_port}}
+iservices, you can uniformly protect and authenticate these services		{{server_host}}	{{server_port}}
+iwith LDAP.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

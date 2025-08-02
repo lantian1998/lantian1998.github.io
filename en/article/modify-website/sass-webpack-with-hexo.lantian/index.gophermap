@@ -1,0 +1,63 @@
+iWhy Use Sass and Webpack		{{server_host}}	{{server_port}}
+iSass is a superset of CSS that extends CSS syntax with numerous		{{server_host}}	{{server_port}}
+ifeatures, including rule nesting, variable definition, includes, and		{{server_host}}	{{server_port}}
+imathematical operations. Key functionalities can be explored in the		{{server_host}}	{{server_port}}
+hOfficial Getting Started Guide	URL:https://sass-lang.com/guide	{{server_host}}	{{server_port}}
+i. Sass originally used the .sass file extension with a YAML-like		{{server_host}}	{{server_port}}
+istructure that wasn't fully compatible with traditional CSS. The		{{server_host}}	{{server_port}}
+icurrent Sass format (.scss) maintains full CSS compatibility.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI use Sass for two primary reasons: First, for clearer CSS rule		{{server_host}}	{{server_port}}
+imanagement. For example, when I have CSS rules that only apply to the		{{server_host}}	{{server_port}}
+iwebsite header, I can group them within a single block:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSecond, to reduce CSS file size during page loading. Although my site		{{server_host}}	{{server_port}}
+iuses Bootstrap, I only utilize a small portion of its features (grid		{{server_host}}	{{server_port}}
+isystem, navigation bar, and dropdowns). By selectively including		{{server_host}}	{{server_port}}
+icomponents, unnecessary CSS isn't loaded. Additionally, I've		{{server_host}}	{{server_port}}
+icustomized Bootstrap's colors and shapes using `!important` overrides,		{{server_host}}	{{server_port}}
+iwhich adds extra code.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn my .scss files, I define global control colors and font sizes while		{{server_host}}	{{server_port}}
+iselectively including Bootstrap's .scss files. By commenting out		{{server_host}}	{{server_port}}
+iunused features, the final CSS file size is significantly reduced.		{{server_host}}	{{server_port}}
+iSass also compiles CSS into a single minified file for server		{{server_host}}	{{server_port}}
+ideployment.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSimilarly, I use Webpack to eliminate unused Bootstrap JavaScript		{{server_host}}	{{server_port}}
+ifeatures and compress/merge JS code into a single file. Another		{{server_host}}	{{server_port}}
+iadvantage is that Sass and Webpack integrate with npm, allowing me to		{{server_host}}	{{server_port}}
+iupdate frameworks like Bootstrap and use them consistently across Sass		{{server_host}}	{{server_port}}
+iand Webpack JS files.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing Sass and Webpack in Hexo		{{server_host}}	{{server_port}}
+iHexo, as a popular static site generator, has numerous plugins. I use		{{server_host}}	{{server_port}}
+hhexo-renderer-sass	URL:https://github.com/knksmith57/hexo-renderer-sass	{{server_host}}	{{server_port}}
+iand		{{server_host}}	{{server_port}}
+hhexo-webpack	URL:https://github.com/cowsay-blog/hexo-webpack	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor Sass, since I need to include framework code installed via npm, I		{{server_host}}	{{server_port}}
+iadd the following to my theme's `_config.yml` to direct Sass to the		{{server_host}}	{{server_port}}
+inode_modules folder:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor Bootstrap, first install via npm:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen include in your styles.scss file:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor Webpack, since some JS modules depend on jQuery but lack proper		{{server_host}}	{{server_port}}
+iWebpack loading instructions, create a `webpack.config.js` file in		{{server_host}}	{{server_port}}
+iyour theme directory (same level as `_config.yml`). Use Webpack's		{{server_host}}	{{server_port}}
+iProvidePlugin to inject jQuery:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis configuration uses `assets/script.js` as the entry point and		{{server_host}}	{{server_port}}
+ioutputs to `assets/script.bundle.js`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo import Bootstrap's dropdown module (with jQuery and Popper.js		{{server_host}}	{{server_port}}
+idependencies) in `script.js`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOther modules follow the same pattern.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, update your theme's head section to load the generated files:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRun `hexo generate` to build.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

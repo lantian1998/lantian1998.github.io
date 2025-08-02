@@ -1,0 +1,25 @@
+iThe most frustrating part of website development is having your		{{server_host}}	{{server_port}}
+ipainstakingly crafted templates ripped off using developer tools, as		{{server_host}}	{{server_port}}
+iChrome Dev Tools and Firebug possess immense power. (No explanation		{{server_host}}	{{server_port}}
+ineeded)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDeveloper tools were once invincible, until this piece of JS emerged.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hhttp://publicdn.cdn.duapp.com/js/wqnmlgb.min.js	URL:http://publicdn.cdn.duapp.com/js/wqnmlgb.min.js	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSource code + author information:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis JS automatically detects if developer tools (Firebug, Chrome Dev		{{server_host}}	{{server_port}}
+iTools, etc.) are open in your browser. When triggered, it forcibly		{{server_host}}	{{server_port}}
+iredirects the page to about:blank to prevent malicious code theft.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsage:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Baidu Cloud CDN		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Provided by zntec.cn		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOf course, if your blog isn't concerned about code theft, skip this.		{{server_host}}	{{server_port}}
+iMy blog pages allow normal access to developer tools - feel free to		{{server_host}}	{{server_port}}
+iinspect the code... (Truth be told, I need to use them myself too)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

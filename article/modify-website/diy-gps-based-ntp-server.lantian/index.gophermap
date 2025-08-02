@@ -1,0 +1,197 @@
+iNTP 是什么		{{server_host}}	{{server_port}}
+iNTP（Network Time		{{server_host}}	{{server_port}}
+iProtocol）是目前使用最广泛的互联网时间同步协议。我们常用的
+Windows、mac		{{server_host}}	{{server_port}}
+iOS、Linux 等都自带了 NTP		{{server_host}}	{{server_port}}
+i客户端，可以连接远程服务器获取当前的时间。
+例如，Windows 的 Internet		{{server_host}}	{{server_port}}
+i时间同步功能就是基于 NTP：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i（图片来自网络）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWindows 默认会连接到 time.windows.com 这台由微软维护的 NTP		{{server_host}}	{{server_port}}
+i服务器同步时间。但
+是，默认的这台服务器在国内并不好用。这台服务器位于美		{{server_host}}	{{server_port}}
+i国，到国内的延迟很大并且容易
+波动，因此 NTP 客户端也很难得出准确的时间。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i那么中国大陆有没有 NTP 服务器呢？有，但是不多：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- cn.pool.ntp.org		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 由		{{server_host}}	{{server_port}}
+iwww.pool.ntp.org		{{server_host}}	{{server_port}}
+i维护的 NTP 服务器池项目，所有服务器由志愿者提供，在
+各个地区通过 DNS		{{server_host}}	{{server_port}}
+i负载均衡到不同的服务器上。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 现在（2019 年 9 月 16 日）共有 63 台服务器位于 CN		{{server_host}}	{{server_port}}
+i池内（但不是所有的服务器都
+在国内）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 可以通过 0.cn.pool.ntp.org，1.cn.pool.ntp.org 等方式获得更多的服务器		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- cn.ntp.org.cn		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- V2EX 网友 qiuai 维护的 NTP		{{server_host}}	{{server_port}}
+i服务器池，似乎部分服务器是自行维护的，部分是志愿
+者提供		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 目前网站		{{server_host}}	{{server_port}}
+iwww.ntp.org.cn		{{server_host}}	{{server_port}}
+i正在备案，但 NTP 仍然可用		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- ntp.ntsc.ac.cn		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 中科院国家授时中心的 NTP 服务器		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- ntp[1-7].aliyun.com		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 阿里云的 NTP 服务器，共有 7 台服务器		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 之前的域名是 time.pool.aliyun.com 以及		{{server_host}}	{{server_port}}
+itime[1-7].aliyun.com，似乎现在还可以
+使用		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- time[1-5].cloud.tencent.com		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 腾讯云的 NTP 服务器，共有 5 台服务器		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i自建 NTP 服务器的用途		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 特殊环境对时间精度有极高要求：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 金融（高频交易？）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 航空航天		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 科研		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 跨地区数据同步		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 保证时间服务的可用性：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 比起依赖志愿者的 NTP 服务器，自建更加可靠		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 避免单台服务器由于故障、受攻击等下线		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在互联网中断时仍然可以保持各设备时间同步		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这很有趣，不是吗？		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i需要的设备、材料		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一台运行 Linux 系统的电脑，要求带有串口		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 树莓派就是个不错的选择，如果你只是为了 NTP 服务器，树莓派 0		{{server_host}}	{{server_port}}
+i就不错（淘宝上大
+概 60 块钱一个）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 或者一台台式电脑，加上一个 USB 转串口模块（淘宝上 5 块钱一个，关键词		{{server_host}}	{{server_port}}
+iCH340）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我是连接 Tinker Board 使用，但为了配置 GPS		{{server_host}}	{{server_port}}
+i模块（非必须）也用到了串口模块，
+是下图这个		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一个 GPS 模块		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果你在大概 10		{{server_host}}	{{server_port}}
+i年前用过当时的智能手机（诺基亚塞班系统）或者导航仪（Windows
+CE）进行导航，		{{server_host}}	{{server_port}}
+i你可能会有一个 USB 或者蓝牙的 GPS 接收器，你可以直接拿来用		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果没有，那就淘宝搜索 ATGM336H（GPS/北斗/GLONASS 三模模块，大概 30		{{server_host}}	{{server_port}}
+i块钱一
+个）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我用的就是这个，目前（2019 年 9 月 16 日）淘宝上能找到的最便宜的三模		{{server_host}}	{{server_port}}
+iGPS
+模块		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 部分商家会标成 GPS/北斗 双模模块，但如果需要的话 GLONASS		{{server_host}}	{{server_port}}
+i可以通过配置软件
+自行打开		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我买的是下图这个		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一根带较高增益的有源 GPS 天线		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果你家住楼顶，或者准备把 GPS 模块放阳台等无遮挡处，可以不需要		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果你家不在楼顶，并且你准备把模块放在窗边甚至室内，		{{server_host}}	{{server_port}}
+i强烈建议		{{server_host}}	{{server_port}}
+i购买一根天
+线，否则会很难搜到星		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i需要的是看起来比较大个的天线，不是某些模块附送的迷你陶瓷天线，那种天线没		{{server_host}}	{{server_port}}
+i什么
+用		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 天线淘宝上大概 10 块钱一根，我买的是下图这个		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果你买的是类似上图的 SMA 接头天线，由于 ATGM336H 使用 IPX		{{server_host}}	{{server_port}}
+i接头，你还需要买
+一根 SMA 转 IPX 的转换线		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一些母对母杜邦线，用于连接 GPS 模块与电脑		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 淘宝上几块钱就能买一大堆		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGPS 模块安装及配置		{{server_host}}	{{server_port}}
+i第一步是把 GPS 的串口连接上。ATGM336H 模块的电压是		{{server_host}}	{{server_port}}
+i3.3V，因此可以直接连接 Tinker
+Board：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 模块 VCC 连接 17 针 3.3V 供电		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 模块 GND 连接 20 针地线		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 模块 RX 连接 8 针串口 1 的 TX		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 模块 TX 连接 10 针串口 1 的 RX		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 模块 PPS 连接 22 针		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后登录 Tinker Board 开始安装软件，我用的是 Armbian 系统。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i首先运行 `armbian-config`，在 System - Hardware 中开启 uart		{{server_host}}	{{server_port}}
+i开头的所有选项（所有
+串口），然后重启。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后安装 gpsd，负责接收 GPS 模块的定位信息		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后编辑 `/etc/default/gpsd`，按如下所示修改配置：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i上述配置启用了 gpsd，指定了 GPS 所在的串口（ttyS1），让 gpsd		{{server_host}}	{{server_port}}
+i一启动就立即开始定
+位，并且禁止 gpsd 修改模块设置。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i启动 gpsd：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后运行 cgps，可以看到位置与搜星情况：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNTP 服务器配置		{{server_host}}	{{server_port}}
+i首先禁用 systemd-timesyncd，系统自带的功能比较简单的 NTP 客户端：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后安装全功能的 ntp 服务端：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在 `/etc/ntp.conf` 中添加 GPS 相关的配置：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后启动 NTP 服务端：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i运行 `ntpq -pn` 查看状态：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i还需改进的地方		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 没有利用上高精度的 PPS 信号		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Tinker Board 的 Armbian 内核没有 PPS 对应的配置，		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 需要重新编译内核，或者用用户态的程序处理		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i更新：以上问题已经在后续文章中解决，点击链接进
+入：		{{server_host}}	{{server_port}}
+i/article/modify-website/diy-ntp-pps-on-tinker-board.lantian		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

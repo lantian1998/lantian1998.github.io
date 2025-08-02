@@ -1,0 +1,55 @@
+iRecently, I suddenly noticed that the daily emails from my self-built		{{server_host}}	{{server_port}}
+iBaidu Tieba check-in system had stopped, though the check-ins were		{{server_host}}	{{server_port}}
+istill happening normally. When I checked the Mailgun interface, the		{{server_host}}	{{server_port}}
+istatus was all red:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe logs showed a long list of bounce messages sent to my Outlook		{{server_host}}	{{server_port}}
+imailbox, such as:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe error indicated that Mailgun's entire AS (Autonomous System) had		{{server_host}}	{{server_port}}
+ibeen blacklisted by Outlook. It was now completely unusable.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe good news is that many email service providers offer similar		{{server_host}}	{{server_port}}
+iservices to Mailgun, such as SendGrid. I quickly registered an account		{{server_host}}	{{server_port}}
+ion their website, enabled SMTP, and connected my Tieba check-in		{{server_host}}	{{server_port}}
+isystem, NextCloud, and other services without any issues.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe bad news is that my blog uses		{{server_host}}	{{server_port}}
+iCommentGun		{{server_host}}	{{server_port}}
+i, which I specifically developed for Mailgun, and it needed		{{server_host}}	{{server_port}}
+imodifications to work with SendGrid.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOriginally, I considered modifying the plugin to create something like		{{server_host}}	{{server_port}}
+i"CommentGrid," but each email service provider has a different API. If		{{server_host}}	{{server_port}}
+ithese providers get blacklisted by Outlook one after another... the		{{server_host}}	{{server_port}}
+isituation would be too chaotic to handle.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnother piece of good news is that these email providers generally		{{server_host}}	{{server_port}}
+isupport SMTP for sending emails. This means I could use CommentToMail.		{{server_host}}	{{server_port}}
+iThe downside is that this plugin is outdated and often fails in		{{server_host}}	{{server_port}}
+ivarious scenarios (e.g., when the website uses SSL or when the email		{{server_host}}	{{server_port}}
+iprovider's SSL certificate expires).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, enduring short-term pain is better than long-term suffering.		{{server_host}}	{{server_port}}
+iInstead of creating multiple "Comment"-prefixed plugins, I decided to		{{server_host}}	{{server_port}}
+ifix CommentToMail once and for all. Based on discussions		{{server_host}}	{{server_port}}
+ihere		{{server_host}}	{{server_port}}
+iwith Wang Wangjie and my own modifications from CommentGun, I finally		{{server_host}}	{{server_port}}
+ipatched CommentToMail.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iList of changes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Removed asynchronous sending (it caused many email delivery		{{server_host}}	{{server_port}}
+ifailures)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Updated PHPMailer and disabled SSL certificate verification (some		{{server_host}}	{{server_port}}
+iemail providers have misconfigured SMTP; enabling verification causes		{{server_host}}	{{server_port}}
+iissues)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince asynchronous sending was removed, slow connections to the SMTP		{{server_host}}	{{server_port}}
+iserver could delay website loading. My solution was to install Postfix		{{server_host}}	{{server_port}}
+ion the VPS to relay emails.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, the GitHub project address:		{{server_host}}	{{server_port}}
+ihttps://github.com/xddxdd/typecho-commenttomail		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

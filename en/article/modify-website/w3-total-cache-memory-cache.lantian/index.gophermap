@@ -1,0 +1,46 @@
+iW3 Total Cache uses disk-based caching by default. For shared hosting		{{server_host}}	{{server_port}}
+iusers, this may be the only option available. However, VPS users have		{{server_host}}	{{server_port}}
+isignificantly more flexibility, especially when using VPS providers		{{server_host}}	{{server_port}}
+iwith efficient overselling techniques (Host1Free?) where disk speeds		{{server_host}}	{{server_port}}
+iare relatively slow. In such cases, you can leverage your surplus		{{server_host}}	{{server_port}}
+imemory for caching.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI've set up three WordPress test sites on SAE, OpenShift, and		{{server_host}}	{{server_port}}
+iHost1Free VPS respectively. Among these, only the VPS allows for full		{{server_host}}	{{server_port}}
+icustomization, making it our focus today. (Note: SAE's file read/write		{{server_host}}	{{server_port}}
+irestrictions prevent W3 Total Cache from even saving configurations.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdditionally, W3TC supports PHP Opcode caching solutions (such as Zend		{{server_host}}	{{server_port}}
+iOptimizer (not Zend Guard), eAccelerator, XCache, APC, etc.) as an		{{server_host}}	{{server_port}}
+ialternative memory caching method, though with slightly reduced		{{server_host}}	{{server_port}}
+iperformance.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Installing Memcache Server and PHP Components		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBy default, Memcache allocates up to 64MB memory (not constantly used		{{server_host}}	{{server_port}}
+i- this is a maximum limit). Actual usage depends on stored data. For		{{server_host}}	{{server_port}}
+itypical traffic (~1000 IPs), it rarely exceeds 20MB. If your VPS has		{{server_host}}	{{server_port}}
+ionly 64MB RAM, edit `/etc/memcached.conf` and change `-m 64` to `-m		{{server_host}}	{{server_port}}
+i16` or similar. Remember to restart with `service memcached restart`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Configuring W3TC		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNavigate to		{{server_host}}	{{server_port}}
+iWP Admin > Performance > General Settings		{{server_host}}	{{server_port}}
+i. Change all cache methods to		{{server_host}}	{{server_port}}
+iMemcached		{{server_host}}	{{server_port}}
+i. If options appear grayed out, your Memcache setup requires		{{server_host}}	{{server_port}}
+iverification. After selecting Memcached for all sections, save		{{server_host}}	{{server_port}}
+isettings and purge caches.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Using Opcode Component Caching		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDuring testing, W3TC failed to recognize eAccelerator properly, so I		{{server_host}}	{{server_port}}
+iinstalled XCache:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWP Admin > Performance > General Settings		{{server_host}}	{{server_port}}
+i, switch all cache methods to		{{server_host}}	{{server_port}}
+iOpcode: XCache		{{server_host}}	{{server_port}}
+i. Grayed-out options indicate XCache misconfiguration. Select XCache		{{server_host}}	{{server_port}}
+ifor all sections, save settings, and purge caches to complete.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

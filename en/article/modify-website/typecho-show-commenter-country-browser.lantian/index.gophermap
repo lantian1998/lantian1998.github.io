@@ -1,0 +1,31 @@
+iDue to the scarcity of plugins for Typecho, I couldn't find one that		{{server_host}}	{{server_port}}
+idisplays commenters' countries and browsers, so I had to implement it		{{server_host}}	{{server_port}}
+imyself.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe code is modified from the WordPress plugin Show UserAgent.		{{server_host}}	{{server_port}}
+iDownload page:		{{server_host}}	{{server_port}}
+hhttps://wordpress.org/plugins/show-useragent/	URL:https://wordpress.org/plugins/show-useragent/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPrerequisite: Your theme uses custom comment code instead of Typecho's		{{server_host}}	{{server_port}}
+idefault comment display. Generally, themes meeting this requirement		{{server_host}}	{{server_port}}
+iwill have code like the following in comments.php or functions.php:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter downloading the Show UserAgent plugin, extract it. Rename the		{{server_host}}	{{server_port}}
+i"flags" folder to "country", the "browsers" folder to "browser", and		{{server_host}}	{{server_port}}
+ithe "ip2c" folder to "lib". Upload these to your theme folder on the		{{server_host}}	{{server_port}}
+iserver. (Renaming is optional, but I did it according to personal		{{server_host}}	{{server_port}}
+ipreference. You can also modify the path in the code below.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInsert this long piece of code into your theme's functions.php:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iReplace all instances of `http://cdn.lantian.lt/usr/themes/hybridside`		{{server_host}}	{{server_port}}
+iin the code with your theme folder's URL.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn your theme's custom comment code, insert the following where you		{{server_host}}	{{server_port}}
+iwant to display the commenter's country:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInsert the following where you want to display the operating system		{{server_host}}	{{server_port}}
+iand browser:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter making these modifications, test the results.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

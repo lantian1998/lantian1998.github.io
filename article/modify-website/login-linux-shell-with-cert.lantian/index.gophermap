@@ -1,0 +1,34 @@
+i一般人远程登录Linux		{{server_host}}	{{server_port}}
+iShell都是敲密码，烦不说，一旦你的密码在全世界都一样，再遇到
+CSDN		{{server_host}}	{{server_port}}
+i600万密码大泄漏的事件，你的VPS也差不多完了。所以我们可以用一种更加方便		{{server_host}}	{{server_port}}
+i和安
+全的方式替代密码，也就是RSA加密的证书文件。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i首先，我们要生成一个证书。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这时你的.ssh目录里应该多出来id_rsa.pub和id_rsa，其中后一个文件保管好，是		{{server_host}}	{{server_port}}
+i你的密
+码，前一个是你的公钥，可以全世界去发布。然后我们要设置一下我们的V		{{server_host}}	{{server_port}}
+iPS。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i首先用FileZilla或者WinSCP把你的id_rsa.pub上传到服务器的~/.ssh里，并重命		{{server_host}}	{{server_port}}
+i名为
+authorized_keys，注意你想用哪个用户登录就copy到哪个用户的.ssh下，比		{{server_host}}	{{server_port}}
+i如用root登，
+就是/root/.ssh，用lantian登就是/home/lantian/.ssh。然后要在		{{server_host}}	{{server_port}}
+iOpenSSH里做一点设置。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i改下面的内容：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i存盘后service ssh		{{server_host}}	{{server_port}}
+irestart，然后可以断掉SSH再次连接，如果只输用户名就连接成功，那
+么就OK了，		{{server_host}}	{{server_port}}
+i如果还要输密码，就回去检查你前面的操作步骤。OK后还可以做一点修改，就是
+		{{server_host}}	{{server_port}}
+i禁止密码登录，更加安全。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后为了安全起见，请登上SSH，把authorized_keys文件权限改成600，.ssh目录改		{{server_host}}	{{server_port}}
+i成700，
+对于你本机则把两个密钥改成600，.ssh改成700。这样就安全多了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

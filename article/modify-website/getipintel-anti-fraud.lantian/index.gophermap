@@ -1,0 +1,95 @@
+i没人知道在网络上和你聊天的是一个人还是一条狗。网络的匿名性给网络欺诈带		{{server_host}}	{{server_port}}
+i来了很大方
+便。前几年，有几位学生站长联盟里的站长邮件地址泄露，有好事者		{{server_host}}	{{server_port}}
+i就挂上		{{server_host}}	{{server_port}}
+iGo^_^Agent
+用他们的常用网名和邮件地址辱骂联盟里其它博客的博主，闹得鸡飞		{{server_host}}	{{server_port}}
+i狗跳。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i人人都会开的 Akismet 明显没起到什么作用，事后屏蔽 IP		{{server_host}}	{{server_port}}
+i也起不到什么作用（那个捣乱
+的人都是打一枪就跑）。而当时流行的一些反欺诈		{{server_host}}	{{server_port}}
+i服务，比如 MaxMind，都要高额的使用
+费，不是普通站长承担得起的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但现在，时代不同了！		{{server_host}}	{{server_port}}
+hGetIPIntel	URL:http://getipintel.net/	{{server_host}}	{{server_port}}
+i是一位机器学习和网络安
+全方向的美国研究生的项目。它使用机器学习技术，综		{{server_host}}	{{server_port}}
+i合考虑一个 IP 的各项数据，从而判
+断来自某个 IP 的访客是不是开启了		{{server_host}}	{{server_port}}
+iVPN，TOR 一类代理。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这个服务不需要你付任何费用（但接受捐赠），甚至不需要手动注册。你只需要在		{{server_host}}	{{server_port}}
+i请求他们
+的 API		{{server_host}}	{{server_port}}
+i时带上你的邮件地址，然后回复可能会发给你的验证邮件即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这个服务有 4 种模式：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1.只检查某个 IP 是不是已知的 VPN，TOR 等服务器的		{{server_host}}	{{server_port}}
+iIP。这种模式简单粗暴，响应最
+快，官方称时间在 60ms		{{server_host}}	{{server_port}}
+i以内（不含网络延迟）。根据我的测试，我手上几台 VPS 的		{{server_host}}	{{server_port}}
+iIP
+都被直接屏蔽了，估计是把这些数据中心的 IP 都拉黑了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2016/10/577727895.png	/usr/uploads/2016/10/577727895.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i（图中 IP 是我的 AlphaRacks 洛杉矶 VPS 的 IP）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.启用一些动态检查。根据我的理解，就是检查常见的 VPN		{{server_host}}	{{server_port}}
+i以及代理服务器的端口有没有
+开放。官方称时间在 130ms 以内。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i3.启用更多的检查，包括判断某个 IP		{{server_host}}	{{server_port}}
+i是不是一台肉鸡（被黑客控制的计算机）。官方同样
+称时间在 130ms		{{server_host}}	{{server_port}}
+i以内，但误报率可能更高。官方同时建议等 5 秒后再进行一次判断。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i4.全面检查，并强制等待检查结束。这个模式下响应时间就可能高达 5s		{{server_host}}	{{server_port}}
+i了。因此不推荐在
+前端页面中使用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i由此看来，模式 3 其实就是先返回模式 2 的数据，然后在后台进行一次模式 4		{{server_host}}	{{server_port}}
+i检查。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i说了那么多，要怎么用呢？根据模式不同：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i模式 1（仅黑名单）：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i模式 2（一些动态检查）：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i模式 3（更多动态检查）：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i模式 4（全面检查）：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i请求会返回一个数字，范围 0-1（如果小于 0 就是出错了）。如果数字为 1 就是		{{server_host}}	{{server_port}}
+iIP 被拉
+黑了，其它 0-1 之间的数字代表这个用户开了代理的可能性。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2016/10/3429481723.png	/usr/uploads/2016/10/3429481723.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i（图中 IP 是我家的 IP，后几位被我隐去了）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i以 PHP 请求，进行模式 1 检查为例：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你的 PHP 服务器是在代理服务器之后，你有可能要把 REMOTE_ADDR		{{server_host}}	{{server_port}}
+i改成
+HTTP_X_FORWARDED_FOR。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGetIPIntel 的服务开启了		{{server_host}}	{{server_port}}
+iCloudFlare，所以海外服务器基本上不用担心速度影响（除非你
+开模式 4		{{server_host}}	{{server_port}}
+i）。我目前是开了模式		{{server_host}}	{{server_port}}
+i1，对开了代理的访客隐藏了评论框。稍后我可能会写一
+个 Typecho		{{server_host}}	{{server_port}}
+i插件，从根源上阻止他们提交评论。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i哦对了，如果你的网站被土啬了，那么千万不要开启这个服务，否则大陆的访客都		{{server_host}}	{{server_port}}
+i会懵逼
+的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i官方介绍网页：		{{server_host}}	{{server_port}}
+hhttp://getipintel.net/	URL:http://getipintel.net/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

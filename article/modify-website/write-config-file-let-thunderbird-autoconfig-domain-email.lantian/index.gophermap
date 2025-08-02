@@ -1,0 +1,79 @@
+i许多人在自己的网站域名上设置了邮箱系统，我也在主站 lantian.pub		{{server_host}}	{{server_port}}
+i的域名上使用了
+Zoho		{{server_host}}	{{server_port}}
+i的域名邮箱。不过使用域名邮箱的一大缺点是，你很难记住邮件系统的
+POP3、IM		{{server_host}}	{{server_port}}
+iAP、SMTP		{{server_host}}	{{server_port}}
+i等服务器地址，一旦出现重装系统、重装邮件客户端等情况，需要重新
+配置时，就		{{server_host}}	{{server_port}}
+i不得不再登上邮件系统去查看服务器地址，非常麻烦。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i不过，如果你用的是 Thunderbird		{{server_host}}	{{server_port}}
+i邮件客户端，在设置账户时，你可能注意
+到，Thunderbird		{{server_host}}	{{server_port}}
+i在添加账户时，会有一个“从邮件服务商获取设置”的过程。这个过程实质
+上就是		{{server_host}}	{{server_port}}
+i从这个域名的网站服务器上请求一份 XML		{{server_host}}	{{server_port}}
+i文档，其中记录了邮件服务器的设置。因
+此，只要手动编写这份配置文件，并将它		{{server_host}}	{{server_port}}
+i放在网站服务器上，就可以实现 Thunderbird 下
+的自动配置了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i创建配置文件		{{server_host}}	{{server_port}}
+i配置文件中保存了 POP3、IMAP、SMTP		{{server_host}}	{{server_port}}
+i服务器的地址、端口号、用户名等信息。对于本站使
+用的 Zoho		{{server_host}}	{{server_port}}
+i邮件系统，配置文件如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i可以看到，这个 XML 文件记录了 IMAP、POP3、SMTP		{{server_host}}	{{server_port}}
+i三个服务器的域名、端口、加密方
+式、认证方式。如果你也使用 Zoho		{{server_host}}	{{server_port}}
+i系统，把上面的 lantian.pub 替换成你自己的域名，
+就可以直接拿去用了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你使用的是其它邮件系统，就要把对应的邮件服务器地址替换进去。但是，替		{{server_host}}	{{server_port}}
+i换后也可
+能会遇到问题，提示“用户名密码错误”。这是因为邮件客户端在发送用		{{server_host}}	{{server_port}}
+i户名密码的时候，可
+能以明文方式发送，也可能进行 MD5		{{server_host}}	{{server_port}}
+i加密后再发送。如果服务器不支持某种方式，就会出
+问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i那么如何知道邮件服务器支持的认证方式呢？打开		{{server_host}}	{{server_port}}
+iThunderbird，在添加账户界面选择“手
+动配置”，填入服务器配置，然后在“认证 /		{{server_host}}	{{server_port}}
+iAuthentication”一栏全部选择“自动检测 /
+Autodetect”，如图：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后点击下面的“重新测试 / Re-test”，稍等片刻：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i认证方式一栏就会发生变化。“普通密码 / Normal password”		{{server_host}}	{{server_port}}
+i就是明文方式发送密码，对
+应 XML 文件 authentication 字段的		{{server_host}}	{{server_port}}
+ipassword-cleartext 值；“加密密码 / Encrypted
+password” 就是 MD5		{{server_host}}	{{server_port}}
+i加密，对应 password-encrypted。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你需要更复杂的配置，请参考 Mozilla 官方的		{{server_host}}	{{server_port}}
+iAutoconfiguration in
+Thunderbird		{{server_host}}	{{server_port}}
+iAutoconfig: How to create a configuration file		{{server_host}}	{{server_port}}
+i两篇文
+章。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i上传配置文件		{{server_host}}	{{server_port}}
+iThunderbird 获取配置文件时，会尝试两个地址：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hhttp://autoconfig.你的域名.com/mail/config-v1.1.xml?emailaddress=[你的邮箱	URL:http://autoconfig.你的域名.com/mail/config-v1.1.xml?emailaddress=[你的邮箱	{{server_host}}	{{server_port}}
+i- ]		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hhttp://你的域名.com/.well-known/autoconfig/mail/config-v1.1.xml	URL:http://你的域名.com/.well-known/autoconfig/mail/config-v1.1.xml	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因此将配置文件放在上述任选一处的位置即可。正确配置完成后的效果如下：（注		{{server_host}}	{{server_port}}
+i意
+Thunderbird 的提示“从邮件服务商获得配置 / Configuration found at		{{server_host}}	{{server_port}}
+iemail
+provider”）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i/usr/uploads/2018/06/1206081669.png		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

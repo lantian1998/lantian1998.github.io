@@ -1,0 +1,58 @@
+iBuyPass 是挪威的一家 CA，提供数字证书、安全认证产品等多种服务。最近		{{server_host}}	{{server_port}}
+iBuyPass 上线
+了基于 ACME 的自动签发证书服务，类似于 Let's		{{server_host}}	{{server_port}}
+iEncrypt，这项服务称为 BuyPass GO。
+与 Let's Encrypt		{{server_host}}	{{server_port}}
+i主要的不同点在于他们的证书每次签发有效期是 180 天，比 Let's
+Encrypt		{{server_host}}	{{server_port}}
+i的长一倍。所以如果你需要给你的服务手动换证书，BuyPass		{{server_host}}	{{server_port}}
+i的证书会好一些。另
+外 BuyPass		{{server_host}}	{{server_port}}
+i暂不支持签发泛域名证书（俗称野卡？），只能将需要的域名一个个列出来。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i（不过我觉得如果需要手动换证书，还是申请 TrustAsia		{{server_host}}	{{server_port}}
+i之类的一年有效期的好一点）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i申请证书		{{server_host}}	{{server_port}}
+i我使用		{{server_host}}	{{server_port}}
+iacme.sh		{{server_host}}	{{server_port}}
+i这个工具来申请证书。第一步是注册用户。与 Let's Encrypt 不
+同，BuyPass		{{server_host}}	{{server_port}}
+i要求在注册时提供一个有效的邮箱：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你的域名有 CAA 记录，限制哪些 CA 能签发证书，那就添加一条
+`0 issue		{{server_host}}	{{server_port}}
+ibuypass.com`，允许 BuyPass 给你签发证书。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后申请，我这里使用的是 DNS 验证，服务商是 CloudXNS：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我之前在这里遇到了诡异的问题，在 Getting new-authz 这一步服务器返回了		{{server_host}}	{{server_port}}
+i500 错误。
+结果我试着重新运行了注册账户的命令就可以了……		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后证书就申请完成可以用了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i效果		{{server_host}}	{{server_port}}
+i证书在 Chrome 里显示如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSSLLabs 测出来的结果如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我申请了一张 RSA 和一张 ECC 证书，其中 ECC 证书的中级证书还是 RSA。RSA		{{server_host}}	{{server_port}}
+i中级证书
+需要由网站服务器发给客户端，意味着网站服务器要发送更多的数据，		{{server_host}}	{{server_port}}
+i理想状态下应该有
+ECC 的中级证书。不过 Let's Encrypt 也给 ECC 证书加		{{server_host}}	{{server_port}}
+iRSA 中级证书，所以还算可以接
+受。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我自己的测试站点在		{{server_host}}	{{server_port}}
+ihttps://buypass-ssl.lantian.pub		{{server_host}}	{{server_port}}
+i，可以自行查看效果。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i总结		{{server_host}}	{{server_port}}
+iBuyPass 除了有效期长以外相比 Let's Encrypt 没有很大的优点，而由于 ACME		{{server_host}}	{{server_port}}
+i证书都是
+自动续期，有效期长不能算是很大的优点。它更大的意义在于如果有一		{{server_host}}	{{server_port}}
+i天 Let's Encrypt
+挂了，我们可以用 BuyPass 来救急。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

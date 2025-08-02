@@ -1,0 +1,28 @@
+iInterested readers can count how many tab characters are in the code		{{server_host}}	{{server_port}}
+isnippet above. This is just a small excerpt from cn.wordpress.org.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDuring HTML programming, to make code clear and understandable for		{{server_host}}	{{server_port}}
+iwebsite owners and technicians, developers often add hierarchical		{{server_host}}	{{server_port}}
+iindentation using tabs or spaces. However, for end-users, these tabs		{{server_host}}	{{server_port}}
+iand spaces are useless. Therefore, in the website's output, we should		{{server_host}}	{{server_port}}
+ieliminate all these elements, including even line breaks—except for		{{server_host}}	{{server_port}}
+iline breaks within `textarea` and `pre` content, which you'll		{{server_host}}	{{server_port}}
+iunderstand need to be preserved.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA foreign expert developed an HTML Minify PHP file that can		{{server_host}}	{{server_port}}
+iautomatically remove these bandwidth-wasting elements. However, the		{{server_host}}	{{server_port}}
+ioriginal PHP execution efficiency was low because it included a		{{server_host}}	{{server_port}}
+ifeature to convert absolute paths to relative paths, which took longer		{{server_host}}	{{server_port}}
+ithan the time needed to remove the content. Therefore, I modified the		{{server_host}}	{{server_port}}
+icode by removing this feature. Other modifications were also made, all		{{server_host}}	{{server_port}}
+isacrificing minor functionality to accelerate code execution.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsage: Save this code as `html-minify.php`, upload it to the same		{{server_host}}	{{server_port}}
+idirectory as your theme template's `index.php`, and add the following		{{server_host}}	{{server_port}}
+iline at the very top of your template's `header.php`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSave the file, and you're done.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBelow is my modified code: (For the original version, please visit		{{server_host}}	{{server_port}}
+hhttp://github.com/stevenvachon/html-minify/	URL:http://github.com/stevenvachon/html-minify/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

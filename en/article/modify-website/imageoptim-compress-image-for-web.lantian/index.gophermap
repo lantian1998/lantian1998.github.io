@@ -1,0 +1,61 @@
+iFirst off, I did a quick search online. It seems that all MacBook		{{server_host}}	{{server_port}}
+iseries, whether Pro or Air, regardless of the OS version, have CPU		{{server_host}}	{{server_port}}
+ioverheating issues, especially when watching Flash. According to		{{server_host}}	{{server_port}}
+ionline reviews, the highest recorded temperature for a MacBook is 101		{{server_host}}	{{server_port}}
+idegrees Celsius. Next time I need to boil water, I'll just use it. As		{{server_host}}	{{server_port}}
+ifor frying an egg, the temperature might not be sufficient yet, but		{{server_host}}	{{server_port}}
+ithere's still room for improvement.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLaptops are also called "lap-top computers." Next time, see who dares		{{server_host}}	{{server_port}}
+ito put an Apple laptop on their lap when it's running at full load.		{{server_host}}	{{server_port}}
+iOh, and don't forget to delete smcFanControl—don't think I don't know		{{server_host}}	{{server_port}}
+iyou've cranked the fan speed to the maximum.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i---------- End of Rant, Main Content Begins ----------		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA website cannot lack images, except for the Wenlan Kill official		{{server_host}}	{{server_port}}
+iwebsite.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IScreenshot of Wenlan Kill Official Website	/usr/uploads/2013/07/622061787.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe author of Wenlan Kill said he's planning to style his personal		{{server_host}}	{{server_port}}
+iwebsite like a command prompt. To that, I can only say two words:		{{server_host}}	{{server_port}}
+ihehe.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLarge images can severely impact webpage loading speed. If your server		{{server_host}}	{{server_port}}
+iis in Hong Kong, Singapore, or China Telecom, and it's a		{{server_host}}	{{server_port}}
+ismall-bandwidth machine like 1M or 2M, then your loading speed is		{{server_host}}	{{server_port}}
+idefinitely not going to be good. Therefore, we need to compress		{{server_host}}	{{server_port}}
+iimages.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCompressing images includes several methods:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Remove photo metadata, such as EXIF in JPEGs. This records camera		{{server_host}}	{{server_port}}
+iinformation and is completely useless when displayed on a webpage.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Reduce the number of colors, mainly for PNG's indexed colors. Since		{{server_host}}	{{server_port}}
+isome colors are indistinguishable to the human eye, it's better to		{{server_host}}	{{server_port}}
+imerge them into one color to reduce the image size.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Reduce resolution. This doesn't mean reducing the number of pixels,		{{server_host}}	{{server_port}}
+ibut rather the dots per inch (DPI), such as 72 dpi or 300 dpi. Regular		{{server_host}}	{{server_port}}
+imonitors are 72 dpi, so higher values are useless and can be stripped.		{{server_host}}	{{server_port}}
+iNote: This doesn't consider Retina displays. For Retina, simply		{{server_host}}	{{server_port}}
+imultiply the image width and height by 0.5, and the problem is solved.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThere are many online tools and local tools for this. However, on Mac,		{{server_host}}	{{server_port}}
+ithe most powerful one is ImageOptim. It's a combination of multiple		{{server_host}}	{{server_port}}
+itools that can compress images layer by layer to achieve maximum		{{server_host}}	{{server_port}}
+icompression, with (almost) no visible difference to the naked eye.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe main interface is as follows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IImageOptim	/usr/uploads/2013/07/2934219930.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsage is super simple: drag images or a folder containing images into		{{server_host}}	{{server_port}}
+iit, and the original images will be automatically replaced with the		{{server_host}}	{{server_port}}
+ioptimized versions. Remember to back up your files.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDownload:		{{server_host}}	{{server_port}}
+hhttp://imageoptim.com/	URL:http://imageoptim.com/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

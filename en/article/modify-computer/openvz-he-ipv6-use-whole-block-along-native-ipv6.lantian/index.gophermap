@@ -1,0 +1,84 @@
+iAlphaRacks is a cost-effective hosting provider, offering VPS with 1		{{server_host}}	{{server_port}}
+iCPU, 512MB RAM, and 10GB storage for just $9.9/year. However, this		{{server_host}}	{{server_port}}
+iprovider is quite stingy with IPv6 addresses, requiring users to		{{server_host}}	{{server_port}}
+ijustify their need for IPv6. It's said they provide up to 20		{{server_host}}	{{server_port}}
+iaddresses? But they may not allocate the full amount. For example,		{{server_host}}	{{server_port}}
+iwhen I explained I needed IPv6 to serve IPv6-only users, the provider		{{server_host}}	{{server_port}}
+ireplied:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> We've added 1 IPv6 address to your VPS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA single IPv6 address is insufficient for my needs. Fortunately,		{{server_host}}	{{server_port}}
+iHurricane Electric in the US offers		{{server_host}}	{{server_port}}
+hIPv6 tunneling services	URL:https://tunnelbroker.net/	{{server_host}}	{{server_port}}
+i, providing each user with 5 tunnels. Each tunnel includes a /64		{{server_host}}	{{server_port}}
+iaddress pool, and users can instantly activate a /48 address pool with		{{server_host}}	{{server_port}}
+ione click.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDespite this generous service, using it on OpenVZ VPS requires extra		{{server_host}}	{{server_port}}
+ieffort. OpenVZ kernels are often version 2.6.32, which lacks native		{{server_host}}	{{server_port}}
+itunnel support. The newer 3.10 kernel that supports this feature has		{{server_host}}	{{server_port}}
+ijust been released, and many providers haven't updated yet.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEnabling HE Tunnel on OpenVZ		{{server_host}}	{{server_port}}
+iWe need a third-party utility that converts Hurricane Electric tunnels		{{server_host}}	{{server_port}}
+iinto Tun/Tap tunnels (similar to OpenVPN's network adapter in Windows)		{{server_host}}	{{server_port}}
+iand configures them on the server. Download and install as follows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen create `/etc/init.d/ipv6tb` and input the startup script below		{{server_host}}	{{server_port}}
+i(adapted from		{{server_host}}	{{server_port}}
+hhttps://www.cybermilitia.net/2013/07/22/ipv6-tunnel-on-openvz/	URL:https://www.cybermilitia.net/2013/07/22/ipv6-tunnel-on-openvz/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Note: Replace the IP addresses accordingly)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen execute:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe tunnel will activate. However, you'll notice two issues:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Although you have an entire /64 (and possibly /48) pool, only		{{server_host}}	{{server_port}}
+iaddresses ending with ::1 are usable;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The VPS's native IPv6 stops working as all traffic routes through		{{server_host}}	{{server_port}}
+ithe tunnel.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe'll resolve these step by step.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEnabling the Entire Address Pool		{{server_host}}	{{server_port}}
+iLinux kernel supports an AnyIP feature, allowing you to assign entire		{{server_host}}	{{server_port}}
+iaddress ranges to a network interface without manual configuration.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs an aside, a /64 address pool contains 18,446,744,073,709,551,616		{{server_host}}	{{server_port}}
+iIPs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEnable it with:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter execution, all IPs in your address pool become usable.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing Native IPv6 and Tunnel Simultaneously		{{server_host}}	{{server_port}}
+iWhen multiple IPv6 connections coexist on a VPS, you'll find only one		{{server_host}}	{{server_port}}
+iworks at a time. Linux routes response packets through the default		{{server_host}}	{{server_port}}
+iinterface instead of the originating path.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFortunately, Linux supports policy-based routing. Configure it as		{{server_host}}	{{server_port}}
+ifollows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Create routing table and stop existing tunnel:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Replace the contents of `/etc/init.d/ipv6tb` with the following		{{server_host}}	{{server_port}}
+i(modified from		{{server_host}}	{{server_port}}
+hhttp://itkia.com/ipv6-policy-routing-linux-gotchas/	URL:http://itkia.com/ipv6-policy-routing-linux-gotchas/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Restart the tunnel:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (Optional) Auto-start on boot: Edit `/etc/rc.local`, add before		{{server_host}}	{{server_port}}
+i`exit 0`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter modification, the file should resemble:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2016/08/3015453537.png	/usr/uploads/2016/08/3015453537.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe tunnel will now auto-start. This configuration allows peaceful		{{server_host}}	{{server_port}}
+icoexistence between IPv6 tunnel and native IPv6. System operations		{{server_host}}	{{server_port}}
+i(e.g., software updates) use native IPv6 instead of the tunnel,		{{server_host}}	{{server_port}}
+isignificantly improving stability and speed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

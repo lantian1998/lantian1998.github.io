@@ -1,0 +1,25 @@
+i做网站最烦的就是辛辛苦苦做的模板被人用开发者工具扒去了，因为Chrome Dev		{{server_host}}	{{server_port}}
+iTool和
+Firebug都有超级牛力。（不解释）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i开发者工具曾经是无敌的，直到这段JS出现。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hhttp://publicdn.cdn.duapp.com/js/wqnmlgb.min.js	URL:http://publicdn.cdn.duapp.com/js/wqnmlgb.min.js	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i源代码+作者信息：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这个JS会自动检测你的浏览器有没有调试工具打开（Firebug，Chrome Dev		{{server_host}}	{{server_port}}
+iTool，etc），
+一旦打开会强行将你的网页跳到about:blank，防止不怀好意的人扒		{{server_host}}	{{server_port}}
+i你代码。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i调用方法：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1.百度云CDN		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.zntec.cn站长提供		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i当然如果你的博客不怕被扒代码就不用加了，我的博客页面都可以正常打开开发		{{server_host}}	{{server_port}}
+i者工具，欢
+迎扒代码……（其实还有个原因是我也要用）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

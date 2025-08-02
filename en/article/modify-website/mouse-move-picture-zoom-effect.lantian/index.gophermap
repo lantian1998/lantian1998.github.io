@@ -1,0 +1,30 @@
+iImage zoom effect on hover - Original by		{{server_host}}	{{server_port}}
+hMaomihz	URL:http://maomihz.com	{{server_host}}	{{server_port}}
+i, Modified by		{{server_host}}	{{server_port}}
+hLan Tian	URL:https://lantian.pub	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLast night		{{server_host}}	{{server_port}}
+hMaomihz	URL:http://maomihz.com	{{server_host}}	{{server_port}}
+iasked me to modify a jQuery script to achieve an automatic HD image		{{server_host}}	{{server_port}}
+idisplay effect when hovering over thumbnails. There were two initial		{{server_host}}	{{server_port}}
+ibugs: the enlarged image would flicker when hovering over the frame,		{{server_host}}	{{server_port}}
+iand the image would exceed the top edge of the screen.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMy solution was to place the enlarged image under the thumbnail and		{{server_host}}	{{server_port}}
+iset a semi-transparent effect for the thumbnail. The top-edge overflow		{{server_host}}	{{server_port}}
+iissue was easily resolved by implementing a max() function.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere's the jQuery code:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCorresponding CSS:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHTML implementation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iScreenshot:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IEffect Preview	/usr/uploads/2013/06/1260012588.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDownload sample (using the two flowers from Windows 8):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+1Sample Package	/usr/uploads/2013/06/3009674103.zip	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

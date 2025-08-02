@@ -1,0 +1,21 @@
+iGetIPIntel 的介绍可以
+在		{{server_host}}	{{server_port}}
+1刚刚这篇文章	/article/modify-website/getipintel-anti-fraud.lantian	{{server_host}}	{{server_port}}
+i看到。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我写了一个 Typecho		{{server_host}}	{{server_port}}
+i的插件，可以阻止使用代理的访客评论，或者把他们的评论丢进垃圾
+箱。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i功能：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 多种模式选择（仅黑名单，快速检查，全面检查）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 多种处理措施（人工审核，丢垃圾箱，提交失败）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 自定义阈值		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i插件可以在		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/typecho-getipintel	URL:https://github.com/xddxdd/typecho-getipintel	{{server_host}}	{{server_port}}
+i下载到。把 GetIPIntel 文件夹丢到 usr/plugins 文件夹下面就行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

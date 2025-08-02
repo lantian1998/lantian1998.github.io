@@ -1,0 +1,44 @@
+iSaw this on Bilibili,		{{server_host}}	{{server_port}}
+hav1020723	URL:http://www.bilibili.tv/video/av1020723/	{{server_host}}	{{server_port}}
+i. I might create a PHP version later.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe original program was in Java and wouldn't run on my computer		{{server_host}}	{{server_port}}
+i(unknown reason). I translated the source code to Pascal.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Java version:		{{server_host}}	{{server_port}}
+i> Program:		{{server_host}}	{{server_port}}
+hhttp://pan.baidu.com/s/1sjtZs1v	URL:http://pan.baidu.com/s/1sjtZs1v	{{server_host}}	{{server_port}}
+i> Source code:		{{server_host}}	{{server_port}}
+hhttp://pan.baidu.com/s/1ntmFSLV	URL:http://pan.baidu.com/s/1ntmFSLV	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPascal version source code:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlgorithm explanation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst initialize three arrays: `id` records a person's partner, `sz`		{{server_host}}	{{server_port}}
+irecords relationship chain length, `lead` marks whether someone is a		{{server_host}}	{{server_port}}
+ichain head.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInitially set all `id` to self, `sz` to 1, `lead` to 1 (true).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iScan all people using random numbers. If someone meets pairing		{{server_host}}	{{server_port}}
+iconditions (random number within love rate), randomly assign an		{{server_host}}	{{server_port}}
+iopposite-sex partner. The original author used a Gaussian algorithm -		{{server_host}}	{{server_port}}
+iJava's version required square roots while Pascal's doesn't. I added		{{server_host}}	{{server_port}}
+isquare roots during translation and spent 30 minutes debugging an		{{server_host}}	{{server_port}}
+iinfinite loop.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen establishing relationships:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Find both individuals' relationship chain roots (e.g., 1→2→3 and		{{server_host}}	{{server_port}}
+i31→32)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Link roots (3→32) to form complex relationships (pentagonal here)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Combine chain lengths, set first chain to point to second		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Remove first chain's head flag		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, scan the `sz` array to output group counts by relationship		{{server_host}}	{{server_port}}
+icomplexity.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

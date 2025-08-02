@@ -1,0 +1,45 @@
+iYesterday afternoon, I got home and opened Feedly, and saw an article		{{server_host}}	{{server_port}}
+iabout Typecho 0.9 on		{{server_host}}	{{server_port}}
+hJiang's Blog	URL:http://www.zntec.cn/archives/typecho-0-9.html	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhat? Typecho actually updated in my lifetime!? I immediately opened		{{server_host}}	{{server_port}}
+ithe		{{server_host}}	{{server_port}}
+hTypecho Official Website	URL:http://typecho.org	{{server_host}}	{{server_port}}
+iand saw that clean default theme of TE. I remember the official site		{{server_host}}	{{server_port}}
+ididn't look like this before.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ITypecho Official Website	/usr/uploads/2013/10/2214168162.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe post started with just one sentence: "Yes, you haven't entered the		{{server_host}}	{{server_port}}
+iwrong website. This simple place is indeed the official website of		{{server_host}}	{{server_port}}
+iTypecho."...		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo I immediately downloaded, updated, and installed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe update method is simple: log in to FTP, delete the `admin` and		{{server_host}}	{{server_port}}
+i`var` directories and `index.php`, upload these files from version		{{server_host}}	{{server_port}}
+i0.9, and then update the database in the backend.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen I opened the login page, I instantly felt it was high-end, grand,		{{server_host}}	{{server_port}}
+iand classy.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ILogin Interface	/usr/uploads/2013/10/1883541722.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIt's said that TE 0.9 added a Markdown editor, which can be enabled in		{{server_host}}	{{server_port}}
+ithe personal panel. Even though I won't use it, I still took a look.		{{server_host}}	{{server_port}}
+iThe personal panel is also high-end, grand, and classy.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IPersonal Panel	/usr/uploads/2013/10/467160611.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iArticle editing interface. It somewhat resembles WordPress.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IArticle Editing Interface	/usr/uploads/2013/10/1758541712.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHTML5 image upload, finally saying goodbye to Flash. It even supports		{{server_host}}	{{server_port}}
+idrag and drop.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IImage Upload	/usr/uploads/2013/10/1274762080.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnyway, after a year, TE finally made a move. Next, we just wait for		{{server_host}}	{{server_port}}
+iTE to be perfected.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

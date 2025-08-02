@@ -1,0 +1,121 @@
+iFor Android phone users, almost everyone knows that connecting your		{{server_host}}	{{server_port}}
+iphone to a computer via USB allows it to function as a USB drive for		{{server_host}}	{{server_port}}
+ifile storage. But did you know that an Android phone can also be used		{{server_host}}	{{server_port}}
+ito boot Linux on a computer?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, let's discuss computer booting.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen you press the power button, components like the CPU and memory		{{server_host}}	{{server_port}}
+ireceive power and begin executing a pre-installed program on the		{{server_host}}	{{server_port}}
+imotherboard called BIOS. BIOS then starts your operating system in the		{{server_host}}	{{server_port}}
+ifollowing ways:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- It searches devices in the boot order sequence (optical drive, hard		{{server_host}}	{{server_port}}
+idisk, network, etc.) as configured. If a bootable device is found, it		{{server_host}}	{{server_port}}
+iexecutes the code on that device to start the system.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you press the boot menu key (usually Esc or F12) to manually		{{server_host}}	{{server_port}}
+iselect the hardware, BIOS executes the code on that hardware.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If BIOS supports UEFI boot and has UEFI settings configured, it		{{server_host}}	{{server_port}}
+iautomatically invokes the UEFI bootloader saved with the settings or		{{server_host}}	{{server_port}}
+ithe specified UEFI boot file. This method is more advanced and won't		{{server_host}}	{{server_port}}
+ibe discussed here. However, if your computer came pre-installed with		{{server_host}}	{{server_port}}
+iWindows 8 or is a Mac, you're likely booting via UEFI.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the first two methods, BIOS reads the device's MBR (a program code		{{server_host}}	{{server_port}}
+istored on the device, unrelated to partitions like C:, D:, E:). If no		{{server_host}}	{{server_port}}
+iMBR exists, it searches for an active partition (marked as "active")		{{server_host}}	{{server_port}}
+ior the only available partition, then boots from the PBR (partition		{{server_host}}	{{server_port}}
+iboot record, invisible in File Explorer). If unsuccessful, BIOS		{{server_host}}	{{server_port}}
+idisplays a "no operating system" error.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen an Android phone is connected to a computer:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If your phone supports a MicroSD card, it will be recognized as two		{{server_host}}	{{server_port}}
+iremovable drives (corresponding to internal storage and SD card, e.g.,		{{server_host}}	{{server_port}}
+imy G520).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If no SD card slot exists, it will be recognized as a single drive		{{server_host}}	{{server_port}}
+i(internal storage).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThus, by writing an operating system along with MBR or PBR to the		{{server_host}}	{{server_port}}
+iinternal storage or SD card, booting becomes possible. However, during		{{server_host}}	{{server_port}}
+itesting, Linux systems failed to load anything beyond the kernel		{{server_host}}	{{server_port}}
+i(`bzImage` or `vmlinuz`) and initial RAM disk (`initrd.gz` or `lz`).		{{server_host}}	{{server_port}}
+iIt's unclear whether this is a system or phone issue.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, we need a Linux distribution that requires only two files		{{server_host}}	{{server_port}}
+i(kernel and initrd). This is where SliTaz comes in.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> SliTaz is a free GNU/Linux distribution based on Busybox, the		{{server_host}}	{{server_port}}
+iLinux kernel, and GNU free software. It can boot from CD/USB, run		{{server_host}}	{{server_port}}
+ientirely in RAM, or be installed to a hard drive.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSliTaz is distributed as a ~30MB ISO. It includes a complete package		{{server_host}}	{{server_port}}
+imanager (`tazpkg`), but lacks a Chinese interface package. Hence,		{{server_host}}	{{server_port}}
+iinstead of the official version, we'll use a modified version by		{{server_host}}	{{server_port}}
+iChinese users called LinuxPE. This version adds Chinese UI, input		{{server_host}}	{{server_port}}
+imethods, Firefox, and other popular software without altering core		{{server_host}}	{{server_port}}
+ifunctionality.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPractical Steps:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSoftware Preparation		{{server_host}}	{{server_port}}
+i- :		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- UltraISO (search online)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- LinuxPE: Download from		{{server_host}}	{{server_port}}
+hhttps://code.google.com/p/linux-pe/downloads/list	URL:https://code.google.com/p/linux-pe/downloads/list	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `base`: Minimal version		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `wireless`: Includes penetration tools (e.g., Beini, minidwep)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `all`: Full-featured version		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `android-kitchen`: For creating Android ROMs (unnecessary for most		{{server_host}}	{{server_port}}
+iusers)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install UltraISO, connect your Android phone to the computer, and		{{server_host}}	{{server_port}}
+ienable USB mass storage mode.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open UltraISO and load the downloaded LinuxPE/SliTaz ISO.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Navigate to `Boot` > `Write Disk Image`.		{{server_host}}	{{server_port}}
+i(Image below is illustrative)		{{server_host}}	{{server_port}}
+I/usr/uploads/2013/07/3392244635.jpg	/usr/uploads/2013/07/3392244635.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the pop-up window, select your phone's drive letter. If two		{{server_host}}	{{server_port}}
+idrives appear (phone/SD card), choose your target.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click `Write` (labeled "便捷写入" in older versions).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote: UltraISO won't format your phone, but backup is recommended.		{{server_host}}	{{server_port}}
+iWarning: Selecting "Write" directly may format your storage. After		{{server_host}}	{{server_port}}
+ireconnection, the formatted phone/SD card may become unrecognizable.		{{server_host}}	{{server_port}}
+iThe only fix is reformatting on the phone.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Reboot the computer. At the boot screen (manufacturer logo), press		{{server_host}}	{{server_port}}
+ithe boot menu key (usually Esc/F12; test multiple keys).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- In the boot menu, select your phone using arrow keys and press		{{server_host}}	{{server_port}}
+iEnter. LinuxPE will start.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf two drive options appear, match them to Windows drive letters. If		{{server_host}}	{{server_port}}
+ithe LinuxPE drive letter comes first alphabetically in Windows, choose		{{server_host}}	{{server_port}}
+ithe first option; otherwise, the second. Test if uncertain.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBooting from a powered-off computer		{{server_host}}	{{server_port}}
+i- :		{{server_host}}	{{server_port}}
+i(1) Connect the phone to the computer.		{{server_host}}	{{server_port}}
+i(2) Power on and press the		{{server_host}}	{{server_port}}
+iBIOS key (usually F2/Esc; sometimes accessible via boot menu)		{{server_host}}	{{server_port}}
+i(3) Enable USB storage mode on the phone.		{{server_host}}	{{server_port}}
+i(4) Navigate to "Save" in BIOS, press Enter, and confirm with "Y" if		{{server_host}}	{{server_port}}
+iprompted.		{{server_host}}	{{server_port}}
+i(5) Reboot and press the boot menu key.		{{server_host}}	{{server_port}}
+iReason: Android phones activate USB mode only after detecting computer		{{server_host}}	{{server_port}}
+istartup, requiring this workaround.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

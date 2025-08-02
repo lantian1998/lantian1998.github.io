@@ -1,0 +1,52 @@
+iDN42, short for Decentralized Network 42, is a large-scale VPN		{{server_host}}	{{server_port}}
+inetwork. Unlike traditional VPNs, DN42 utilizes technologies commonly		{{server_host}}	{{server_port}}
+ideployed in internet backbones (such as BGP), effectively simulating a		{{server_host}}	{{server_port}}
+ireal-world network environment.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ia previous article		{{server_host}}	{{server_port}}
+i, I joined the DN42 network, and in		{{server_host}}	{{server_port}}
+ianother article		{{server_host}}	{{server_port}}
+i, I registered my own domain and configured my DNS server. With a DNS		{{server_host}}	{{server_port}}
+iserver in place, we can now set up reverse lookup records for our IP		{{server_host}}	{{server_port}}
+iaddresses. Reverse lookup primarily aids in spam prevention and		{{server_host}}	{{server_port}}
+iimproves the appearance of outputs in network tools like ping and		{{server_host}}	{{server_port}}
+itraceroute.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSetting Up the Resolver for IP Ranges		{{server_host}}	{{server_port}}
+iThe first step is to delegate reverse resolution for your IP ranges to		{{server_host}}	{{server_port}}
+iyour DNS server. My servers are ns[1-3].lantian.dn42. While all could		{{server_host}}	{{server_port}}
+itheoretically be specified, DN42 currently requires pull requests for		{{server_host}}	{{server_port}}
+iconfiguration changes—a lengthy process—so I retained only the initial		{{server_host}}	{{server_port}}
+iDNS server ns1.lantian.dn42 registered with this IP.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter cloning DN42's data repository, add this line to your IP range		{{server_host}}	{{server_port}}
+ifile:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe complete file should resemble:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, `git add`, `git commit`, submit a pull request, and await		{{server_host}}	{{server_port}}
+imerging and recursive DNS propagation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguring PowerDNS		{{server_host}}	{{server_port}}
+iWhile waiting, set up the resolver. Following		{{server_host}}	{{server_port}}
+ithis guide		{{server_host}}	{{server_port}}
+i, we already have a PowerDNS server. Reverse IP resolution resembles		{{server_host}}	{{server_port}}
+iresolving a special domain:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- For a /24 range, the domain is `[reverse-IP].in-addr.arpa` (e.g.,		{{server_host}}	{{server_port}}
+i`0.168.192.in-addr.arpa` for 192.168.0.0/24).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Most DN42 users have smaller ranges (/26-/29). For 172.22.76.184/29,		{{server_host}}	{{server_port}}
+ithe domain becomes `184/29.76.22.172.in-addr.arpa`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd this domain in PowerDNS as shown:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen create PTR records for each IP. For 172.22.76.185, the record is		{{server_host}}	{{server_port}}
+i`185.184/29.76.22.172.in-addr.arpa`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter DN42's recursive DNS propagates, query reverse records using		{{server_host}}	{{server_port}}
+i`dig -x [IP] @172.23.0.53`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor IPv6 reverse resolution in DN42, see		{{server_host}}	{{server_port}}
+ithis article		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

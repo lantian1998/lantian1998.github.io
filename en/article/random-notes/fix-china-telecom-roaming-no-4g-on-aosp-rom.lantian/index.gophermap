@@ -1,0 +1,48 @@
+iSince the support life of my OnePlus 8T's official ROM is about to		{{server_host}}	{{server_port}}
+iend, I
+flashed Nameless OS, a Lineage OS based third party Android		{{server_host}}	{{server_port}}
+iROM, onto my phone.
+But after flashing the ROM, I found that my China		{{server_host}}	{{server_port}}
+iTelecom SIM card cannot roam
+on the 4G network of local mobile service		{{server_host}}	{{server_port}}
+iproviders, only 2G or 3G work. Since
+the local providers are recently		{{server_host}}	{{server_port}}
+ishutting down 2G and 3G networks, the roaming
+cellular signal strength		{{server_host}}	{{server_port}}
+iis really bad. I experience a high latency on receiving
+or sending		{{server_host}}	{{server_port}}
+imessages, nor can I use VoLTE to make calls normally.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI tested other Lineage OS based third party ROMS, and experienced the		{{server_host}}	{{server_port}}
+isame
+problem.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter numerous attempts, I found that the problem		{{server_host}}	{{server_port}}
+iseems to be		{{server_host}}	{{server_port}}
+iwith the
+phone's APN settings. I use the term		{{server_host}}	{{server_port}}
+iseems to be		{{server_host}}	{{server_port}}
+ibecause while changing APN
+settings fixed my problem, I have no idea		{{server_host}}	{{server_port}}
+iwhy this works, nor am I sure this is
+the correct way to fix it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere are my steps to resolve the problem:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter phone settings - SIMs - China Telecom - Access Point Name		{{server_host}}	{{server_port}}
+isettings.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select "中国电信NET设置" (`ctnet`, China Telecom NET Settings) to		{{server_host}}	{{server_port}}
+imanage
+detailed options.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Change `APN Type` to: `default,supl,dun,ims`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The original value is `default,supl,dun`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Click the three-dot menu on top right, and select Save.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select the radio button on the right of `ctnet`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Turn off the phone, wait a few minutes, and then turn it on again.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

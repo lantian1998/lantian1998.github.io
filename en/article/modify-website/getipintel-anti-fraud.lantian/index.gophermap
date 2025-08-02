@@ -1,0 +1,87 @@
+iYou never know whether the person chatting with you online is a human		{{server_host}}	{{server_port}}
+ior a dog. The anonymity of the internet greatly facilitates online		{{server_host}}	{{server_port}}
+ifraud. A few years ago, several webmasters in a student webmaster		{{server_host}}	{{server_port}}
+ialliance had their email addresses leaked. Troublemakers then used		{{server_host}}	{{server_port}}
+iGo^_^Agent to impersonate them, using their common usernames and email		{{server_host}}	{{server_port}}
+iaddresses to harass other bloggers in the alliance, causing widespread		{{server_host}}	{{server_port}}
+ichaos.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe widely used Akismet clearly failed to help, and blocking IPs		{{server_host}}	{{server_port}}
+iafterward proved ineffective (the troublemaker would hit-and-run).		{{server_host}}	{{server_port}}
+iPopular anti-fraud services at the time, like MaxMind, required high		{{server_host}}	{{server_port}}
+ifees that ordinary webmasters couldn't afford.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut now, times have changed!		{{server_host}}	{{server_port}}
+hGetIPIntel	URL:http://getipintel.net/	{{server_host}}	{{server_port}}
+iis a project by an American graduate student specializing in machine		{{server_host}}	{{server_port}}
+ilearning and cybersecurity. It uses machine learning technology to		{{server_host}}	{{server_port}}
+icomprehensively analyze various data points of an IP address,		{{server_host}}	{{server_port}}
+idetermining whether visitors from that IP are using proxies like VPNs		{{server_host}}	{{server_port}}
+ior TOR.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis service is completely free (though donations are accepted) and		{{server_host}}	{{server_port}}
+idoesn't even require manual registration. Simply include your email		{{server_host}}	{{server_port}}
+iaddress when calling their API and reply to any verification email		{{server_host}}	{{server_port}}
+ithey might send.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe service offers 4 modes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Checks only if an IP belongs to a known VPN, TOR, or other proxy		{{server_host}}	{{server_port}}
+iserver. This brute-force method is the fastest, with the official		{{server_host}}	{{server_port}}
+iclaiming response times under 60ms (excluding network latency). In my		{{server_host}}	{{server_port}}
+itests, all my VPS IPs were directly blocked, suggesting they blacklist		{{server_host}}	{{server_port}}
+ientire data center IP ranges.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2016/10/577727895.png	/usr/uploads/2016/10/577727895.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(The IP in the image belongs to my AlphaRacks Los Angeles VPS)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enables dynamic checks. From my understanding, this scans for open		{{server_host}}	{{server_port}}
+iports commonly used by VPNs and proxy servers. Official response time:		{{server_host}}	{{server_port}}
+iunder 130ms.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Adds more checks, including determining if an IP is a botnet zombie		{{server_host}}	{{server_port}}
+i(hacker-controlled computer). Official response time is also under		{{server_host}}	{{server_port}}
+i130ms, but with higher false-positive rates. They recommend		{{server_host}}	{{server_port}}
+ire-checking after 5 seconds.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Full inspection with forced completion wait. Response times can		{{server_host}}	{{server_port}}
+ireach 5s, making it unsuitable for frontend use.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThus, Mode 3 essentially returns Mode 2 results first, then performs a		{{server_host}}	{{server_port}}
+iMode 4 check in the background.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHow to use it? Based on the mode:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMode 1 (Blacklist only):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMode 2 (Basic dynamic checks):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMode 3 (Advanced dynamic checks):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMode 4 (Full inspection):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe response is a number between 0-1 (negative values indicate		{{server_host}}	{{server_port}}
+ierrors). A value of 1 means the IP is blacklisted, while values		{{server_host}}	{{server_port}}
+ibetween 0-1 indicate the probability of proxy usage.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2016/10/3429481723.png	/usr/uploads/2016/10/3429481723.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(The IP is my home address, with last digits redacted)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPHP example for Mode 1 check:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf your PHP server is behind a proxy, you may need to replace		{{server_host}}	{{server_port}}
+i`REMOTE_ADDR` with `HTTP_X_FORWARDED_FOR`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGetIPIntel uses CloudFlare, so overseas servers needn't worry about		{{server_host}}	{{server_port}}
+ispeed (except in Mode 4). I currently use Mode 1 to hide the comment		{{server_host}}	{{server_port}}
+ibox for proxy users. Later I may develop a Typecho plugin to block		{{server_host}}	{{server_port}}
+itheir comments entirely.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iImportant: If your site is blocked in mainland China, do NOT enable		{{server_host}}	{{server_port}}
+ithis service—mainland visitors will be unable to access it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOfficial page:		{{server_host}}	{{server_port}}
+hhttp://getipintel.net/	URL:http://getipintel.net/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

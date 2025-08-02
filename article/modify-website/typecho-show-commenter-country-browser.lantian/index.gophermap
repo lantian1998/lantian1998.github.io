@@ -1,0 +1,32 @@
+iTypecho		{{server_host}}	{{server_port}}
+i由于插件稀少，一直没有找到显示评论者国家和浏览器的插件，所以只好自力更生		{{server_host}}	{{server_port}}
+i
+了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i代码修改自WordPress插件Show UserAgent，下载页
+面：		{{server_host}}	{{server_port}}
+hhttps://wordpress.org/plugins/show-useragent/	URL:https://wordpress.org/plugins/show-useragent/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i前提是你的主题使用了自定义评论代码而不是Typecho默认的评论显示代码，一般		{{server_host}}	{{server_port}}
+i符合要求
+的主题的comments.php或者functions.php中会有如下代码：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i下载Show		{{server_host}}	{{server_port}}
+iUserAgent插件解压，把里面的flags文件夹改名成country，browsers文件夹改名
+		{{server_host}}	{{server_port}}
+i成browser，ip2c文件夹改名成lib，上传到服务器上你的主题文件夹。（其实不改		{{server_host}}	{{server_port}}
+i也可以，
+但是我是按照个人习惯这么改的，你也可以修改下面代码的路径）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在主题的functions.php中插入这么长一串代码：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i把里面的`http://cdn.lantian.lt/usr/themes/hybridside`这个网址全部改成		{{server_host}}	{{server_port}}
+i你的主题文
+件夹的网址。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在主题的自定义评论代码里你想显示评论者国家的地方插入：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在你想显示系统和浏览器的地方插入：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i修改完成，测试效果。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

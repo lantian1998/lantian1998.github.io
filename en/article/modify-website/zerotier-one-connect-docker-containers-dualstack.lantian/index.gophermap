@@ -1,0 +1,176 @@
+iPreface		{{server_host}}	{{server_port}}
+iAchieving intercommunication between containers on multiple Docker		{{server_host}}	{{server_port}}
+iservers is a challenging problem. If you build your own overlay		{{server_host}}	{{server_port}}
+inetwork, you need to set up services like etcd on one server. But if		{{server_host}}	{{server_port}}
+ithe server hosting etcd crashes, the entire network goes down. The		{{server_host}}	{{server_port}}
+icheap VPS I use occasionally experiences network interruptions, and I		{{server_host}}	{{server_port}}
+ioften accidentally crash servers myself, so this approach isn't		{{server_host}}	{{server_port}}
+ifeasible for me.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDocker also has other commercial overlay networking solutions like		{{server_host}}	{{server_port}}
+iWeave, but for individual users, these solutions are too expensive		{{server_host}}	{{server_port}}
+i(I'm just experimenting for fun), so they're not considered either.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn these network architectures, central servers like etcd or Weave		{{server_host}}	{{server_port}}
+irecord which server each container is on and its internal IP, allowing		{{server_host}}	{{server_port}}
+iDNS resolution to any container. For example, if I set up containers		{{server_host}}	{{server_port}}
+inamed `lantian-nginx` and `lantian-phpfpm`, I can directly use		{{server_host}}	{{server_port}}
+i`lantian-phpfpm:[port]` in the nginx configuration file.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut maybe I can sacrifice this feature? I don't have many containers,		{{server_host}}	{{server_port}}
+iand only a few MariaDB instances need cross-server connections for		{{server_host}}	{{server_port}}
+imaster-slave database replication. Manually specifying IPs isn't too		{{server_host}}	{{server_port}}
+itroublesome.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen I can use traditional VPN solutions for intercommunication.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnother problem arises: Since my servers are unstable, I don't want		{{server_host}}	{{server_port}}
+ione server crashing to take down the entire network. So solutions like		{{server_host}}	{{server_port}}
+iOpenVPN that require a central VPN server are out. P2P VPNs like Tinc		{{server_host}}	{{server_port}}
+imeet my requirements, but I frequently add/remove servers—do I really		{{server_host}}	{{server_port}}
+ineed to modify configurations on each machine every time?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor a centrally managed P2P VPN, I could use LogMeIn Hamachi. This		{{server_host}}	{{server_port}}
+ifree software connects to LogMeIn's central server to get the actual		{{server_host}}	{{server_port}}
+iIPs of other computers in the network and establishes P2P connections.		{{server_host}}	{{server_port}}
+iI do have Hamachi on my servers, but it only assigns one IPv4 and one		{{server_host}}	{{server_port}}
+iIPv6 per machine, which isn't enough for Docker networking. Plus, each		{{server_host}}	{{server_port}}
+inetwork only allows 5 computers to connect for free—beyond that		{{server_host}}	{{server_port}}
+irequires payment.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo far, my requirements are:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Any single server failure shouldn't affect others		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Need a unified management panel for quick server addition/removal		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Don't need Docker's DNS resolution features		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Each server should get multiple IPv4/IPv6 addresses (can be internal		{{server_host}}	{{server_port}}
+iULA ranges), preferably with an internal subnet		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter some research, I chose ZeroTier One. It's similar to Hamachi but		{{server_host}}	{{server_port}}
+ihas these advantages:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- I can specify which IPv4 subnets are routed through ZeroTier and		{{server_host}}	{{server_port}}
+ifreely set address pools.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Each computer can get a /80 subnet under IPv6 ULA, sufficient for		{{server_host}}	{{server_port}}
+iDocker.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Free for up to 100 devices per user.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe first point is crucial. For example, I can set automatic IP		{{server_host}}	{{server_port}}
+iassignment within 172.27.0.0/16 for each computer, while centrally		{{server_host}}	{{server_port}}
+irouting 172.28.0.0/24 to one Docker server, 172.28.1.0/24 to another,		{{server_host}}	{{server_port}}
+iand so on.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstallation and Configuration		{{server_host}}	{{server_port}}
+iZeroTier One provides a one-click install script. Run this command on		{{server_host}}	{{server_port}}
+iyour server:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen register an account on ZeroTier One's official site. This		{{server_host}}	{{server_port}}
+irequires a phone number. I tested with a China Telecom number—it		{{server_host}}	{{server_port}}
+ireceived the verification SMS after 7 hours... I eventually used a		{{server_host}}	{{server_port}}
+iGoogle Voice number.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter registering and logging in, you'll see this interface:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iClick "Network" at the top, then "Create New Network". You'll see a		{{server_host}}	{{server_port}}
+inew network in the list:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe second one in the image is my existing network; the first is newly		{{server_host}}	{{server_port}}
+icreated. Click into it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe top-left shows the Network ID—you'll need this for your ZeroTier		{{server_host}}	{{server_port}}
+iclient later.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iShort Name is the network name—customize it for easier identification.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iManaged Routes (top-right) is for routing table settings—we'll modify		{{server_host}}	{{server_port}}
+ithis later.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIPv4 Auto-Assign handles automatic IPv4 address assignment—we need to		{{server_host}}	{{server_port}}
+ienable this.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter enabling, choose a subnet that doesn't conflict with your		{{server_host}}	{{server_port}}
+iserver's existing subnets. For example, if a NAT VPS uses		{{server_host}}	{{server_port}}
+i172.17.0.0/16, don't select it to avoid network outages. After		{{server_host}}	{{server_port}}
+iselection, routing table settings are automatically added:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIPv6 Auto-Assign handles IPv6 assignment with two options:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe RFC4193 option generates a random ULA subnet (under fd00::/8),		{{server_host}}	{{server_port}}
+iassigning one IPv6 (/128) per server. 6PLANE uses another ULA subnet		{{server_host}}	{{server_port}}
+i(fc00::/8), assigning a /80 subnet per server. For Docker networking,		{{server_host}}	{{server_port}}
+iwe need the 6PLANE subnet.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, add servers to the network. Run this command on your server:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen check the "Auth" box for the corresponding server in the settings		{{server_host}}	{{server_port}}
+ipage:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe page will display the server's assigned IPv4 and IPv6 addresses,		{{server_host}}	{{server_port}}
+iand servers can now ping each other.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguring Docker - Native Docker		{{server_host}}	{{server_port}}
+iIn this example, assume a Docker server is assigned 10.147.17.233 and		{{server_host}}	{{server_port}}
+ifc23:3333:3333:3333:3333::1/80. We want to add 172.28.233.x/24 for its		{{server_host}}	{{server_port}}
+iuse. OS environment is Debian 8.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe need to specify Docker startup parameters. On systemd distributions		{{server_host}}	{{server_port}}
+ilike Debian 8, modify systemd configuration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEnter this content in docker.conf:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSave with Ctrl+X, Y, Enter. Then run:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iModify the DOCKER_OPTS line to:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRestart Docker:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow your Docker containers will have IPs in these two subnets.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNew problem: Containers get ULA subnets and can't access public IPv6.		{{server_host}}	{{server_port}}
+iSolution: Use docker-ipv6nat. This container automatically configures		{{server_host}}	{{server_port}}
+iIPv6 NAT based on your container settings, similar to Docker's IPv4		{{server_host}}	{{server_port}}
+iNAT.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhy use IPv6 NAT? Advantages:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Some providers only give one IPv6 address		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Easier firewall configuration (external can't directly access		{{server_host}}	{{server_port}}
+icontainers)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Operates on ULA subnets—perfect for this scenario		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLaunch the container:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou may need to restart other containers for changes to take effect.		{{server_host}}	{{server_port}}
+iNow your containers can access public IPv6.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOptionally, add `--userland-proxy=false` to DOCKER_OPTS to disable		{{server_host}}	{{server_port}}
+iDocker's userland proxy and save memory.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguring Docker - Compose		{{server_host}}	{{server_port}}
+iWith Docker-Compose, things are simpler—no need to modify systemd.		{{server_host}}	{{server_port}}
+iUpdate your docker-compose.yml:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd dependency on docker-ipv6nat for each original container. Then run		{{server_host}}	{{server_port}}
+i`docker-compose up -d`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguring System Forwarding		{{server_host}}	{{server_port}}
+iAdd to /etc/sysctl.conf:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRun `sysctl -p` to enable. Configure firewall rules for these subnets		{{server_host}}	{{server_port}}
+iif needed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguring ZeroTier Routing Table		{{server_host}}	{{server_port}}
+iIn Managed Routes, add "172.28.233.1/24, 10.147.17.233" to route all		{{server_host}}	{{server_port}}
+i172.28.233.1/24 traffic to 10.147.17.233.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow you can ping Docker containers on 10.147.17.233 from other		{{server_host}}	{{server_port}}
+iservers. Repeat on all servers (ensure IP ranges don't overlap) to		{{server_host}}	{{server_port}}
+iestablish a dual-stack LAN across all Docker servers and containers.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,105 @@
+i来自 CloudFlare 博客的最新消息
+（		{{server_host}}	{{server_port}}
+hhttp://blog.cloudflare.com/google-now-factoring-https-support-into-ranking-cloudflare-on-track-to-make-it-free-and-easy	URL:http://blog.cloudflare.com/google-now-factoring-https-support-into-ranking-cloudflare-on-track-to-make-it-free-and-easy	{{server_host}}	{{server_port}}
+i），Google可能会在算权重的时候把网站支持SSL作为加分项目。因此我就给我的		{{server_host}}	{{server_port}}
+i博客启用
+了SSL。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i申请证书		{{server_host}}	{{server_port}}
+iSSL在服务器端必须有证书。这个证书最好不要自己生成，否则大多数浏览器都会		{{server_host}}	{{server_port}}
+i提示证书
+不受信任。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStartSSL是目前唯一一家颁发免费SSL证书并且受到大多数浏览器信任的证书颁		{{server_host}}	{{server_port}}
+i发机构，可
+以根据		{{server_host}}	{{server_port}}
+hhttp://www.freehao123.com/startssl-ssl/	URL:http://www.freehao123.com/startssl-ssl/	{{server_host}}	{{server_port}}
+i这篇文章进行操作。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i不过在实际操作中，由于StartSSL连接速度较慢，如果按照向导生成证书，中途可		{{server_host}}	{{server_port}}
+i能卡住，
+而一旦卡住就要全部重来，我们可以自己生成证书请求，然后提交。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在你的Linux服务器（本例为Debian 7）上输入以下命令产生一个私钥：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i输入以下命令产生证书请求（CSR文件），其中信息可以乱填，StartSSL不关心其中		{{server_host}}	{{server_port}}
+i信
+息，他只关心你的私钥是多少。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 把上一步的输出复制。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i按照上面这篇文章操作，执行到这一步时选择Skip，然后粘贴入你的证书请求，然		{{server_host}}	{{server_port}}
+i后下一
+步。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+gStartSSL	/usr/uploads/16501407479649.gif	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i安装证书		{{server_host}}	{{server_port}}
+i完成上面的步骤后，你应该（至少）有两个文件：一个是你的私钥，一个是证书文件		{{server_host}}	{{server_port}}
+i。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你手动生成证书请求csr文件，那么privkey.pem就是你的私钥；如果你通过网		{{server_host}}	{{server_port}}
+i页向导生
+成，私钥已经在向导过程中给出。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i把你的证书保存为ssl.crt，以下操作将按照本文件名继续。如果你通过网页向导		{{server_host}}	{{server_port}}
+i操作，
+把你的私钥保存到ssl.key。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i如果通过网页向导操作，输入以下命令对你的私钥解密，密码是你在网页向导上填		{{server_host}}	{{server_port}}
+i写的那
+个。如果不解密，每次nginx启动时都会要求你输入密码。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+iFirefox在证书验证上比较奇葩，它要求证书文件中保存有这个证书的颁发机构的		{{server_host}}	{{server_port}}
+i证书。
+因此我们要进行如下操作：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i此时你获得一个ssl-unified.crt文件，把它和privkey.pem移动到你喜欢的地方		{{server_host}}	{{server_port}}
+i。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i（警告：不要复制到能够通过网页访问来下载的地方，比如把他们放在/var/www里		{{server_host}}	{{server_port}}
+i就是作
+死行为！本例以放在/root下为例。）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 编辑你的nginx配置文件。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在配置文件里你的网站那一段的listen 80下面输入：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 重启nginx，安装结束。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSPDY的安装和启用		{{server_host}}	{{server_port}}
+iSPDY是Google主导开发的一个网络协议，使用它，可以在一个SSL连接内同时传输		{{server_host}}	{{server_port}}
+i好几路数
+据。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i比如，打开网页时，如果没有SPDY，那么浏览器就要同时打开好几路SSL连接下载数		{{server_host}}	{{server_port}}
+i据。问
+题是，这些连接不是同时打开的，一般情况下网页加载到一半，浏览器发现		{{server_host}}	{{server_port}}
+i“哎呀我需要这
+个东西但是还没下载”，才会开新连接下载数据。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i而有了SPDY，浏览器可以直接在同一个SSL连接中下载数据，省去了连接和SSL验证		{{server_host}}	{{server_port}}
+i的时间。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i更新nginx版本。Debian软件源里默认的nginx不带有SPDY功能，需要把nginx替换		{{server_host}}	{{server_port}}
+i成
+nginx-full。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 编辑你的nginx配置文件，把		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 改成		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 完事。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i启用后，如果你的网站的图片、CSS、JS等都从你的服务器上下载，将会较大地改		{{server_host}}	{{server_port}}
+i善你的网
+站在SSL下的载入速度。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

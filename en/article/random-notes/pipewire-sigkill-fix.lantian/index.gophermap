@@ -1,0 +1,93 @@
+iProblem		{{server_host}}	{{server_port}}
+iI frequently encounter the situation that the Pipewire audio server is		{{server_host}}	{{server_port}}
+isuddenly
+stopped:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The problem usually appears when I connect/disconnect my laptop from		{{server_host}}	{{server_port}}
+ithe power
+adapter. My computer usually lags for a short time while		{{server_host}}	{{server_port}}
+iswitching between
+performance profiles.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `systemctl --user status pipewire.service` only shows that the		{{server_host}}	{{server_port}}
+iPipewire
+process was terminated by a `SIGKILL` signal, without any		{{server_host}}	{{server_port}}
+iother useful log
+information.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Neither `coredumpctl` nor `dmesg` shows the existence of a core dump		{{server_host}}	{{server_port}}
+ievent.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCause		{{server_host}}	{{server_port}}
+iThe Pipewire process runs with realtime priority, with which its		{{server_host}}	{{server_port}}
+ischeduling
+needs are satisfied first, so it can process audio data in		{{server_host}}	{{server_port}}
+itime to prevent
+stuttering. To increase its process priority, Pipewire		{{server_host}}	{{server_port}}
+iuses its
+`libpipewire-module-rt` module to send requests to the		{{server_host}}	{{server_port}}
+i`RTKit` service running
+as `root` in the system. `RTKit` then changes		{{server_host}}	{{server_port}}
+iprocess priority with its
+privileges.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, if a process with realtime priority encountered a bug, for		{{server_host}}	{{server_port}}
+iexample an
+infinite loop, it will consume all CPU resources. Since		{{server_host}}	{{server_port}}
+imost of the other
+processes (including but not limited to, SSH daemon,		{{server_host}}	{{server_port}}
+iXorg, and your shell) are
+running with a lower priority, they won't		{{server_host}}	{{server_port}}
+iget any CPU time slices, and won't be
+able to handle any tasks,		{{server_host}}	{{server_port}}
+iincluding your command inputs trying to fix the
+system.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo mitigate this problem, Linux kernel limits the execution time of		{{server_host}}	{{server_port}}
+irealtime
+processes by default. Under the default settings, a realtime		{{server_host}}	{{server_port}}
+iprocess must finish
+its computations (like Pipewire's audio		{{server_host}}	{{server_port}}
+iprocessing) within 200ms, and use the
+`sched_yield` system call to		{{server_host}}	{{server_port}}
+ireturn CPU time slices to other processes. It can
+then wait for the		{{server_host}}	{{server_port}}
+inext event in the background (like running out of audio buffer
+on the		{{server_host}}	{{server_port}}
+isound card), when Linux kernel invokes this process again. If		{{server_host}}	{{server_port}}
+ithe
+realtime process does not finish within 200ms, Linux kernel will		{{server_host}}	{{server_port}}
+isend a SIGKILL
+signal to terminate the process.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBecause my computer was lagging while switching between performance		{{server_host}}	{{server_port}}
+iprofiles,
+Pipewire spent more than 200ms on handling audio data, and		{{server_host}}	{{server_port}}
+ithus was terminated
+by Linux kernel.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSolution		{{server_host}}	{{server_port}}
+iSince I'm unable to fix the lagging while switching performance		{{server_host}}	{{server_port}}
+iprofiles, I
+decided to increase Pipewire's time limit to 5 seconds,		{{server_host}}	{{server_port}}
+ienough for it to process
+audio data even when the computer is lagging.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst we need to change the settings for Pipewire's		{{server_host}}	{{server_port}}
+i`libpipewire-module-rt`
+module, to make it request a longer time		{{server_host}}	{{server_port}}
+ilimit:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe unit for 5000000 is microseconds. Pipewire will now request a 5		{{server_host}}	{{server_port}}
+isecond time
+limit.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, since `RTKit` imposes an additional layer of execution time		{{server_host}}	{{server_port}}
+ilimit, we need
+to add a startup argument to `RTKit` to increase that		{{server_host}}	{{server_port}}
+ilimit as well. Run
+`systemctl edit rtkit-daemon.service`, and enter		{{server_host}}	{{server_port}}
+ithe following config:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you're using NixOS, you can use the following config instead:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

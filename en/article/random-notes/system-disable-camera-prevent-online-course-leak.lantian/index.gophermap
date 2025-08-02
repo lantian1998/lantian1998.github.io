@@ -1,0 +1,43 @@
+iThis post will explain the way to disable your webcam on Windows and		{{server_host}}	{{server_port}}
+iLinux, so:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- On the OS level, prevent you from turning on the webcam by mistake,		{{server_host}}	{{server_port}}
+iand
+live-stream your footage of		{{server_host}}	{{server_port}}
+ihaving a meal		{{server_host}}	{{server_port}}
+ilying on the bed		{{server_host}}	{{server_port}}
+iplaying
+games		{{server_host}}	{{server_port}}
+i(NSFW)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Prevent certain online lecturing software from secretly turning on		{{server_host}}	{{server_port}}
+ithe
+webcam.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWindows Procedures		{{server_host}}	{{server_port}}
+iPress the `Win+R` combination key to open the Run window, type		{{server_host}}	{{server_port}}
+i`devmgmt.msc` and
+enter to open the Device Manager. Your camera will		{{server_host}}	{{server_port}}
+ibe in
+`Image Acquisition Devices` category, right-click on it to		{{server_host}}	{{server_port}}
+idisable it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(The following picture is taken from a Simplified Chinese Windows XP,		{{server_host}}	{{server_port}}
+ibut the
+procedure and icons should be similar for Windows 7 and 10.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IWindows Disabling Camera	/usr/uploads/202003/windows-disable-camera.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen you need to use the camera, come back to re-enable it, and then		{{server_host}}	{{server_port}}
+iclose and
+reopen your browser or online lecturing software.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLinux Procedures		{{server_host}}	{{server_port}}
+iWhen you need your webcam, run `sudo modprobe -v uvcvideo` to load the		{{server_host}}	{{server_port}}
+idrivers.
+After you're done, run `sudo modprobe -rv uvcvideo` to unload		{{server_host}}	{{server_port}}
+iit. After the
+load/unload, you simply need to close and reopen your		{{server_host}}	{{server_port}}
+ibrowser or online
+lecturing software.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

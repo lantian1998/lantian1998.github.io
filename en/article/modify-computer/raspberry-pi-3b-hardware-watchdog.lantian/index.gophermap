@@ -1,0 +1,59 @@
+iIn computing, a "watchdog" refers to a hardware timer designed to		{{server_host}}	{{server_port}}
+irestart a computer when it becomes unresponsive (crashes). The		{{server_host}}	{{server_port}}
+icomputer's operating system must run a program that continuously		{{server_host}}	{{server_port}}
+icommunicates with the watchdog hardware. When communication is		{{server_host}}	{{server_port}}
+iinterrupted for a preset duration, the watchdog will forcibly reboot		{{server_host}}	{{server_port}}
+ithe system by sending a RESET signal or cutting and restoring power,		{{server_host}}	{{server_port}}
+iensuring services running on the computer aren't disrupted for		{{server_host}}	{{server_port}}
+iextended periods.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDuring my Raspberry Pi tinkering, I've crashed it multiple times,		{{server_host}}	{{server_port}}
+iforcing manual power cycling to restart. Enabling the hardware		{{server_host}}	{{server_port}}
+iwatchdog feature on the Raspberry Pi can minimize such occurrences.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLoading the Driver		{{server_host}}	{{server_port}}
+iThanks to Linux's "everything is a file" philosophy, you can directly		{{server_host}}	{{server_port}}
+icheck the watchdog driver status using the ls command:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf this file exists, proceed to the next section. If not, load the		{{server_host}}	{{server_port}}
+idriver based on your Raspberry Pi model:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Raspberry Pi 1st gen driver: bcm2708_wdog		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Raspberry Pi 2nd gen driver: bcm2709_wdog		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Raspberry Pi 3rd gen driver: bcm2835_wdt		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLoad the driver using `modprobe -v [driver_name]`, then recheck with		{{server_host}}	{{server_port}}
+i`ls /dev/watchdog`. If successful, configure the driver to load at		{{server_host}}	{{server_port}}
+iboot by editing `/etc/modules` and adding the driver name on a new		{{server_host}}	{{server_port}}
+iline.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalling Communication Software		{{server_host}}	{{server_port}}
+iAs mentioned, the hardware watchdog requires software communication to		{{server_host}}	{{server_port}}
+imonitor system status. On Raspbian, this software is `watchdog`,		{{server_host}}	{{server_port}}
+iinstallable via apt-get:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, enable it to start at boot:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEdit the configuration file `/etc/watchdog.conf` with these changes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Uncomment `#max-load-1 = 24` (remove the leading `#`). This reboots		{{server_host}}	{{server_port}}
+ithe system if the 1-minute load average exceeds 24 (extremely high).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Uncomment `#watchdog-device = /dev/watchdog` to set the watchdog		{{server_host}}	{{server_port}}
+ipath.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Add `watchdog-timeout = 15` to reboot after 15 seconds of		{{server_host}}	{{server_port}}
+iunresponsiveness. The maximum value for Raspberry Pi 3B is 15. Avoid		{{server_host}}	{{server_port}}
+isetting it too low to prevent reboot loops.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSave changes and restart the service:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe watchdog feature is now active.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTesting		{{server_host}}	{{server_port}}
+iSimulate a system crash by terminating the watchdog service:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter 15 seconds, the Raspberry Pi will automatically reboot.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

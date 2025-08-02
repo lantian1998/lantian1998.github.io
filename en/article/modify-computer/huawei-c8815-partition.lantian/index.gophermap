@@ -1,0 +1,94 @@
+iThe Huawei C8815 smartphone comes with 4GB of internal storage, but		{{server_host}}	{{server_port}}
+inot all of this space is available for user data - it also includes		{{server_host}}	{{server_port}}
+isystem files and other miscellaneous content.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAndroid device storage is generally divided into the following		{{server_host}}	{{server_port}}
+ipartitions:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCache partition		{{server_host}}	{{server_port}}
+i- : Stores temporary files for Android system operations, typically		{{server_host}}	{{server_port}}
+iless than 10MB in total		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSystem partition		{{server_host}}	{{server_port}}
+i- : Contains Android OS files modified during flashing		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iData partition		{{server_host}}	{{server_port}}
+i- : Stores installed apps and their data		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInternal storage (sdcard)		{{server_host}}	{{server_port}}
+i- : The "built-in storage" visible in file managers		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCarrier-customized devices like the C8815 also include a		{{server_host}}	{{server_port}}
+icust partition		{{server_host}}	{{server_port}}
+ifor carrier-specific modifications.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe factory partition layout isn't always optimal. The C8815's default		{{server_host}}	{{server_port}}
+ipartitioning is:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCache		{{server_host}}	{{server_port}}
+i- : ~190MB (excessive for actual needs of ~5MB usage)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCust		{{server_host}}	{{server_port}}
+i- : 80MB (carrier bloatware, removable)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSystem		{{server_host}}	{{server_port}}
+i- : 1.1GB (oversized for typical custom ROMs)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iData		{{server_host}}	{{server_port}}
+i- : 1.1GB (often needs expansion)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInternal storage		{{server_host}}	{{server_port}}
+i- : 1GB (could be reduced with external SD card usage)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRecommended partitioning scheme:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCache		{{server_host}}	{{server_port}}
+i- : 10MB		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCust		{{server_host}}	{{server_port}}
+i- : 10MB (required minimum)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSystem		{{server_host}}	{{server_port}}
+i- : 500MB (adjust based on ROM size + 20MB buffer)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInternal storage		{{server_host}}	{{server_port}}
+i- : 100MB (with external SD) or 800MB-1.5GB (without)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRemaining space		{{server_host}}	{{server_port}}
+i-  allocated to Data partition		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPartitioning Steps		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Download		{{server_host}}	{{server_port}}
+1Aroma File Manager	/en/article/modify-computer/aroma-file-manager-recovery-mode.lantian	{{server_host}}	{{server_port}}
+iand boot into recovery mode		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Access terminal via Menu > Terminal		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Check current partitions:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSample output:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Partition numbers 15=cache, 16=cust, 17=system, 18=data, 19=sdcard)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Calculate new partition boundaries (1MB = 128 blocks):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Modify partitions:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCommand sequence example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Verify with `p` command, then write changes with `w`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Reboot to recovery, perform factory reset, format storage		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Reflash ROM		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWARNING:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- DO NOT modify partitions 14 and earlier		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Double-check calculations before writing changes		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Original partition table can be restored using Huawei's official		{{server_host}}	{{server_port}}
+ifirmware (hold Volume Up+Down during power-on to flash)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

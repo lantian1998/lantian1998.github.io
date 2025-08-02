@@ -1,0 +1,195 @@
+i前言		{{server_host}}	{{server_port}}
+i多台 Docker 服务器上的容器互通是一个不好解决的问题。如果自建一个		{{server_host}}	{{server_port}}
+iOverlay 网络，
+就需要在一台服务器上建立 etcd 之类的服务。但如果 etcd		{{server_host}}	{{server_port}}
+i所在的服务器挂了，整个网络
+就 GG 了。我用的便宜 VPS		{{server_host}}	{{server_port}}
+i有偶尔网络中断的情况，我自己搞崩也服务器是常有的事，所
+以我不能采取这种		{{server_host}}	{{server_port}}
+i方式。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDocker 也有其它的基于 Overlay 的商业化组网方案，例如		{{server_host}}	{{server_port}}
+iWeave，但是对于个人用户来说
+这些方案的价格太高了（我只是搞来玩玩），所以也		{{server_host}}	{{server_port}}
+i不考虑。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在这些网络结构上，etcd 或者 Weave		{{server_host}}	{{server_port}}
+i之类的中心服务器记录了每个容器所在的服务器和内
+部		{{server_host}}	{{server_port}}
+iIP，所以在任何容器上都可以直接 DNS		{{server_host}}	{{server_port}}
+i解析到其它容器。也就是说，假如我设置了
+lantian-nginx 和 lantian-phpfpm		{{server_host}}	{{server_port}}
+i两个容器，在 nginx 的配置文件里我可以直接把
+php-fpm 的地址填成		{{server_host}}	{{server_port}}
+ilantian-phpfpm:[端口号]，方便配置。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但我好像可以放弃这个功能啊？我的容器数量并不多，而且只有几个 MariaDB		{{server_host}}	{{server_port}}
+i需要跨服务
+器连接，做数据库主从备份，手动指定一下 IP 并不麻烦。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i那么我就可以直接使用传统的 VPN 方案来做互通了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i问题又来了：由于自己的服务器不稳定，我不希望某台服务器挂掉导致网络互通挂		{{server_host}}	{{server_port}}
+i掉，所以
+Open^_^VPN 之类需要架设中心 VPN 服务器的也算了。Tinc 这类 P2P		{{server_host}}	{{server_port}}
+iVPN		{{server_host}}	{{server_port}}
+i符合我的要
+求，但是我的服务器常有增减，难道我每次都要一台台上去改配置吗？		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i有中央管理面板的 P2P VPN，我或许可以用 LogMeIn		{{server_host}}	{{server_port}}
+iHamachi。这款免费软件通过和
+LogMeIn		{{server_host}}	{{server_port}}
+i公司的中心服务器连接，获取网络内其它计算机的实际 IP，并分别建立 P2P		{{server_host}}	{{server_port}}
+i连
+接。我的服务器上倒是有 Hamachi，但是它只给每台计算机一个 IPv4 和一个		{{server_host}}	{{server_port}}
+iIPv6，对于
+Docker 组网来说不够用啊。而且它每个网络只能让 5		{{server_host}}	{{server_port}}
+i台计算机互联，否则就要加钱。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i到现在为止，我的需求如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 任何一台服务器 GG 不能影响其它服务器		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 需要一个统一的管理面板可以快速增减服务器		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 不需要 Docker 的 DNS 解析之类功能		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 每台服务器可以获得多于一个的 IPv4 和 IPv6（可以是内网 ULA		{{server_host}}	{{server_port}}
+i网段），最好有一个
+内网网段		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i经过一番搜索，我选定了 ZeroTier One 这款软件。它类似于		{{server_host}}	{{server_port}}
+iHamachi，但是相比之下它有
+如下优点：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我可以指定哪些 IPv4 网段被路由到 ZeroTier		{{server_host}}	{{server_port}}
+iOne，并且可以任意设置分配地址池。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我可以让每台计算机分配到一个 IPv6 ULA 下的 /80 网段，足够 Docker		{{server_host}}	{{server_port}}
+i使用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 每个用户可以免费添加 100 台计算机。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i第一点尤其重要，例如，我可以设置给每台计算机在 172.27.0.0/16 下自动分配		{{server_host}}	{{server_port}}
+iIP，但是
+我又可以统一指定把 172.28.0.0/24 路由到某台 Docker		{{server_host}}	{{server_port}}
+i服务器，172.28.1.0/24 路由到
+另一台，以此类推。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i安装与配置		{{server_host}}	{{server_port}}
+iZeroTier One 官方提供一键安装脚本。在你的服务器上运行如下命令即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后在 ZeroTier One		{{server_host}}	{{server_port}}
+i官方注册一个账号。这里需要你的手机号。我测试中国电信手机号可
+以收到验		{{server_host}}	{{server_port}}
+i证短信，但是隔了 7 个小时……最后我用的是 Google Voice 的号码。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i注册登录后你就能看到如下界面：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i点击上方的 Network（网络），再点击 Create New		{{server_host}}	{{server_port}}
+iNetwork（创建新网络），你会看到列
+表上多了一个网络。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如图，第二个是我已有的网络，第一个是新创建的。点击进去。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i左上角是 Network ID，稍后你要输入到你的 ZeroTier 客户端去。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iShort Name 是网络名称，你可以自定义以使得它更好辨别。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i右上角 Managed Routes 是路由表设置，稍后再改。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIPv4 Auto-Assign 是 IPv4 地址的自动分配，我们要把它打开。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i打开后，在列出的网段中选一个看得顺眼的。这个网段不能与你服务器实际在用		{{server_host}}	{{server_port}}
+i的网段有重
+合。例如，如果有一台 NAT VPS，其 IPv4 所在网段是		{{server_host}}	{{server_port}}
+i172.17.0.0/16，那么你就不能选
+它，否则它有可能会断网。选择后，会自动给你		{{server_host}}	{{server_port}}
+i添加好路由表设置，如图：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIPv6 Auto-Assign 是 IPv6 的自动分配，下有两个选项。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRFC4193 选项会为你随机生成一个 ULA 网段（在 fd00::/8		{{server_host}}	{{server_port}}
+i下），每台服务器获得一个
+IPv6（/128）；6PLANE 在另一个 ULA 网段（fc00::/8		{{server_host}}	{{server_port}}
+i下），每台服务器获得一个 /80
+段。为了 Docker 组网，我们需要的就是 6PLANE		{{server_host}}	{{server_port}}
+i网段。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i接下来，我们把服务器加进这个网络。在服务器上输入命令：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后在设置页面的下方，勾上对应服务器的 Auth 选项：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i页面上会显示服务器对应的 IPv4 和 IPv6，各台服务器也能互相 ping 通了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i配置 Docker - 原生 Docker		{{server_host}}	{{server_port}}
+i在这个例子中，假定这台 Docker 服务器分配到了 10.147.17.233		{{server_host}}	{{server_port}}
+i和
+fc23:3333:3333:3333:3333::1/80，我们希望添加一个 172.28.233.x/24		{{server_host}}	{{server_port}}
+i供它使用，系统
+环境是 Debian 8。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我们需要指定 Docker 使用一些启动命令参数。在 Debian 8 这类 systemd		{{server_host}}	{{server_port}}
+i发行版上，我
+们需要修改一下 systemd 的配置。输入以下命令：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i向 docker.conf 输入如下内容：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCtrl+X，Y，回车保存退出，再运行：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i经过如上修改，此处显示的 DOCKER_OPTS		{{server_host}}	{{server_port}}
+i环境变量就能生效了。将对应的这一行修改成：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i重启 Docker：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后你的 Docker 容器就有了在这两个网段上的 IP。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i问题又来了，由于容器获得的是 ULA 网段，无法访问 IPv6		{{server_host}}	{{server_port}}
+i公网，怎么办？我们需要借助
+docker-ipv6nat。这个软件（容器）可以根据你的容		{{server_host}}	{{server_port}}
+i器设置自动配置 IPv6 NAT，就像
+Docker 在 IPv4 上做的一样。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i等等，为什么要用 IPv6 NAT？我认为它的优点如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 某些主机商只提供一个 IPv6 地址		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 更方便的防火墙配置（外网无法直接访问到容器）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 它在 ULA 网段上运行，刚好符合这次的需求		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i启动这个容器：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i你可能需要重新启动一下其它容器以使配置生效。这样你的容器就能访问 IPv6		{{server_host}}	{{server_port}}
+i公网了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你愿意，可以在 DOCKER_OPTS 里加一句 `--userland-proxy=false`，禁用		{{server_host}}	{{server_port}}
+iDocker 的
+应用层代理，可以节省内存。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i配置 Docker - Compose		{{server_host}}	{{server_port}}
+i如果你用 Docker-Compose，那么事情就方便了许多，不需要修改 systemd		{{server_host}}	{{server_port}}
+i配置了。将你的
+docker-compose.yml 里修改成如下内容：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i注意要给原有的每个容器添加依赖 docker-ipv6nat。然后重新		{{server_host}}	{{server_port}}
+i`docker-compose up -d`
+即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i配置系统转发		{{server_host}}	{{server_port}}
+i在 /etc/sysctl.conf 里添加以下内容：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i执行 `sysctl -p` 开启转发。如果你有防火墙，记得给相应的网段放行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i配置 ZeroTier 路由表		{{server_host}}	{{server_port}}
+i在右上角 Managed Routes		{{server_host}}	{{server_port}}
+i里添加“172.28.233.1/24，10.147.17.233”，代表把
+172.28.233.1/24		{{server_host}}	{{server_port}}
+i网段的请求全部交由 10.147.17.233 处理。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后，你在其它服务器就能 ping 通 10.147.17.233 上的 Docker		{{server_host}}	{{server_port}}
+i容器了。在其它服务器
+上如法炮制（记得 IP 段不能重合），就能在所有 Docker		{{server_host}}	{{server_port}}
+i服务器和容器之间建成一张双栈
+局域网了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

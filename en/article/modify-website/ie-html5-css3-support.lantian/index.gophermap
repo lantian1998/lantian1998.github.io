@@ -1,0 +1,77 @@
+iSince I started this blog, I never considered the experience of IE		{{server_host}}	{{server_port}}
+iusers. At that time, my browser was Firefox, and the only use I had		{{server_host}}	{{server_port}}
+ifor IE was to download Firefox. Now I use Chrome on Windows, Chrome on		{{server_host}}	{{server_port}}
+iMac, and Opera on my phone. I thought I could bid farewell to IE		{{server_host}}	{{server_port}}
+icompatibility forever.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut I didn't expect to be defeated by the electronic reading room at		{{server_host}}	{{server_port}}
+iHangzhou No. 2 High School.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirefox installer: 20MB. Chrome installer: 30MB. They don't seem		{{server_host}}	{{server_port}}
+ilarge, right? But the electronic reading room apparently uses QoS for		{{server_host}}	{{server_port}}
+ismoother web browsing. QoS is fine, but it has bugs—the average speed		{{server_host}}	{{server_port}}
+iper machine there is 50Kbps. With only half an hour of internet access		{{server_host}}	{{server_port}}
+iper visit, spending over ten minutes downloading a browser is truly		{{server_host}}	{{server_port}}
+ifrustrating!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdditionally, they use XP systems with IE8 browsers. So, to make my		{{server_host}}	{{server_port}}
+iwebsite look decent, I reluctantly decided to add IE compatibility.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1. HTML5 Compatibility		{{server_host}}	{{server_port}}
+iMy website extensively uses HTML5 technology. While this allows modern		{{server_host}}	{{server_port}}
+ibrowsers to prioritize rendering the main content and speed up page		{{server_host}}	{{server_port}}
+iloading, it looks terrible on IE8 which doesn't support HTML5. The		{{server_host}}	{{server_port}}
+irecent comments section on the right expanding to 100% width—is that		{{server_host}}	{{server_port}}
+iacceptable?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, solving the layout issues caused by HTML5 is crucial. The		{{server_host}}	{{server_port}}
+isolution is to make IE recognize HTML5 tags.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHTML5Shiv addresses the issue where new HTML5 elements aren't		{{server_host}}	{{server_port}}
+irecognized by IE6-8. These elements can't wrap child elements as		{{server_host}}	{{server_port}}
+iparent nodes and can't have CSS styles applied. Applying CSS styles to		{{server_host}}	{{server_port}}
+iunknown elements simply requires executing		{{server_host}}	{{server_port}}
+i`document.createElement(elementName)`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBy adding HTML5Shiv, we achieve IE6-8 compatibility.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMethod:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Download		{{server_host}}	{{server_port}}
+hHTML5Shiv source code	URL:https://github.com/aFarkas/html5shiv/zipball/master	{{server_host}}	{{server_port}}
+iand upload it to your web server.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Add the following code to the `<head>` section of your webpage:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Refresh the page to see the effect.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2. CSS3 Compatibility		{{server_host}}	{{server_port}}
+iWhile CSS3 greatly enhances webpage aesthetics, it makes pages look		{{server_host}}	{{server_port}}
+iawful in IE. The second issue to solve is CSS3 support.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCSS3Pie is a plugin for IE6-9 that enables support for the most common		{{server_host}}	{{server_port}}
+iCSS3 properties:		{{server_host}}	{{server_port}}
+i`border-radius`, `box-shadow`, `border-image`, `multiple background		{{server_host}}	{{server_port}}
+iimages`, `linear-gradient as background image`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThus, we can add CSS3Pie to optimize webpage display.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMethod:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Download		{{server_host}}	{{server_port}}
+hCSS3Pie 2.0	URL:http://css3pie.com/download-latest-2.x	{{server_host}}	{{server_port}}
+iand upload all files to your server.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Locate CSS sections using the supported properties (e.g., in my CSS,		{{server_host}}	{{server_port}}
+ionly `#container` uses them).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Add this code to the relevant CSS block:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote: The path to		{{server_host}}	{{server_port}}
+i`PIE.htc`		{{server_host}}	{{server_port}}
+iis relative to the webpage, not the CSS file.		{{server_host}}	{{server_port}}
+i4. Clear cache and refresh to see the effect.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDuring testing, CSS3 effects only appear after the page fully loads,		{{server_host}}	{{server_port}}
+iso your page loading speed is also important.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

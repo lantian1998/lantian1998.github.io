@@ -1,0 +1,153 @@
+i这次就直接进入正题。（其实是不知道该拿什么开头）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i安装 Transmission 挂 PT		{{server_host}}	{{server_port}}
+i作为一个可以自由连接各种传感器的小型电脑，树莓派的可玩性相当高。即使你		{{server_host}}	{{server_port}}
+i不想在
+GPIO		{{server_host}}	{{server_port}}
+i上接一大堆传感器（或者像我一样觉得另外的传感器暂时没什么用），你也可以利		{{server_host}}	{{server_port}}
+i用
+它低功耗的特点，让它 24 小时运行，做一些不需要大量 CPU		{{server_host}}	{{server_port}}
+i运算，但是因为其它因素需
+要较长时间才能完成的任务，例如……挂机下载。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我所在的大学有一个内网的 PT（Private Tracker）站。PT 站就是一个 BT		{{server_host}}	{{server_port}}
+i种子的发布网
+站，但是它在传统 BT		{{server_host}}	{{server_port}}
+i的基础上增加了用户管理功能，并且通过限制客户端种类、强制要求
+上传率等方		{{server_host}}	{{server_port}}
+i式，解决了传统 BT		{{server_host}}	{{server_port}}
+i下各类客户端吸血（只下载不上传，例如迅雷）和种子很快
+失效（因为一段时间后		{{server_host}}	{{server_port}}
+i就没人继续上传了）的问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但因为有了这些要求，PT		{{server_host}}	{{server_port}}
+i站用户往往需要长时间挂机上传下载，而这刚好是树莓派擅长的
+事。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i上篇文章		{{server_host}}	{{server_port}}
+i里，我弄好了一个简单的 NAS。在此基础上装一个 BT 下载软件就可以挂
+PT		{{server_host}}	{{server_port}}
+i了。这个 PT 站在 Linux 下仅允许 Deluge，Rufus，Transmission 和		{{server_host}}	{{server_port}}
+irTorrent。我一
+开始准备用 Deluge，但是 PT 站提示不允许使用 Raspbian		{{server_host}}	{{server_port}}
+i软件源内最新的 Deluge
+1.3.13。该站推荐旧版本的 Deluge 1.3.3，可以在		{{server_host}}	{{server_port}}
+iDebian 7 软件源内找到，但是可能是
+因为 Debian 9 基于		{{server_host}}	{{server_port}}
+isystemd，我装上旧版后无法启动。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i总之我选择了 Transmission。首先 apt-get：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后编辑 `/etc/transmission-daemon/settings.json`：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后 `service transmission-daemon start` 启动后，访问 [树莓派 IP]:9091		{{server_host}}	{{server_port}}
+i可以查看
+Web 管理界面，可以上传种子、调整限速等。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i针对学校网络环境的调整		{{server_host}}	{{server_port}}
+i上篇文章		{{server_host}}	{{server_port}}
+i中我提到过，学校提供了一个有线网和两个 Wi-Fi，它们各自有如下特
+点：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 有线网，限速 1.5M，网页方式登录，其它设备局域网内可访问		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 无线网，限速		{{server_host}}	{{server_port}}
+i1.5M，网页方式登录，其它设备若通过无线网连接则无法访问（Wi-Fi		{{server_host}}	{{server_port}}
+i设
+备隔离，通过有线网仍可访问）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- eduroam，不限速，WPA2		{{server_host}}	{{server_port}}
+i企业级登录，其它设备若通过无线网连接则无法访问（Wi-Fi
+设备隔离，通过有线		{{server_host}}	{{server_port}}
+i网仍可访问）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i由于树莓派有一个有线网卡和一个无线网卡，因此最佳的方案是，树莓派平时通过		{{server_host}}	{{server_port}}
+ieduroam
+进行 PT 下载，我用自己电脑访问树莓派有线网卡的 IP		{{server_host}}	{{server_port}}
+i进行管理和访问文件。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是如果你直接把有线网和无线网都连上，你会发现只有一张网卡有流量，另外一		{{server_host}}	{{server_port}}
+i张网卡甚
+至无法 ping 通。这是因为 Linux 内核在收到连接请求（例如 TCP		{{server_host}}	{{server_port}}
+iSYN）时，并不是“从哪
+来回哪去”，直接从连接请求来源网卡继续建立连接（TCP		{{server_host}}	{{server_port}}
+iACK）。相反，Linux		{{server_host}}	{{server_port}}
+i会根据内核
+的路由表来确定从哪张网卡回复。这样就会造成从有线网卡进入的		{{server_host}}	{{server_port}}
+i请求被从无线网卡回复，
+然后回复因为设备隔离策略或是来源 IP 与网卡 IP		{{server_host}}	{{server_port}}
+i不符而被丢弃。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因此我们需要设置一下 Linux		{{server_host}}	{{server_port}}
+i的策略路由功能，做到“从哪来回哪去”。策略路由可以指定
+符合某些条件的数据		{{server_host}}	{{server_port}}
+i包（例如从某张网卡进入的数据包）不经主路由表处理，而是单独开一
+张路由表处		{{server_host}}	{{server_port}}
+i理它。这个功能早在《		{{server_host}}	{{server_port}}
+iOpenVZ 配置 Hurricane Electric IPv6 隧道，开启整
+个地址池并与原生 IPv6		{{server_host}}	{{server_port}}
+i共同使用		{{server_host}}	{{server_port}}
+i》里我就用过了。虽然当时是用在了 IPv6 地址上，
+但是 Linux 下 IPv4 和		{{server_host}}	{{server_port}}
+iIPv6 的网络命令都大致相同，因此稍微改一下就可以使用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i首先输入 `route` 命令查看路由表，你会看到这样的输出：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i此处可以看到，有两条 Destination（目标）为		{{server_host}}	{{server_port}}
+idefault（默认）的路由，一条对应有线网
+卡（eth0），一条对应无线网卡（wlan0）。		{{server_host}}	{{server_port}}
+i它们的网关分别是 10.106.65.1 和
+10.107.128.1，记录好它们。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i再输入 `ip addr` 看一下现在的 IP。你会看到类似如下输出：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i很长？其实重要的就几句话。我们只关心各张网卡的地址：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这样就可以清楚地看到，有线网卡的地址是 10.106.65.213/24。因为 IPv4		{{server_host}}	{{server_port}}
+i的地址用 32
+bit 表示，所以把最后（32-24=）8 bit 清零，获得		{{server_host}}	{{server_port}}
+i10.106.65.0/24。也就是说，你 DHCP
+自动获取到的 IP 必然在 10.106.65.0/24		{{server_host}}	{{server_port}}
+i这个 IP		{{server_host}}	{{server_port}}
+i段以内。同理，无线网卡的地址是
+10.107.134.208/20，清掉最后（32-20=）12		{{server_host}}	{{server_port}}
+ibit，获得 10.107.128.0/20。记好，等会也
+要用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后修改		{{server_host}}	{{server_port}}
+i`/etc/iproute2/rt_tables`，这里记录了路由表的列表，我们需要在这里加两张
+		{{server_host}}	{{server_port}}
+i路由表，分别给两张网卡使用：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后设置策略路由：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i输完这些命令，你的两张网卡就都能 ping		{{server_host}}	{{server_port}}
+i通了，“从哪来到哪去”完工。你可以把上面这四
+条命令加入 `/etc/rc.local`		{{server_host}}	{{server_port}}
+i以开机自动设置。如果开机时没有生效，在四行命令上面再
+加一行 `sleep 5`		{{server_host}}	{{server_port}}
+i就可以了——开机的时候有可能 Linux 网络功能还没启动完，因此先等		{{server_host}}	{{server_port}}
+i5
+秒让网络功能启动了再继续设置。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后一个问题，在同时连接了有线和无线的情况下，Linux 的 DHCP		{{server_host}}	{{server_port}}
+i客户端会给有线网卡设
+置更低的 Metric，使得流量优先从有线网卡走。Metric		{{server_host}}	{{server_port}}
+i就是 Linux 下每条路由的优先
+级，Metric		{{server_host}}	{{server_port}}
+i越低，优先级越高。但是我希望优先使用无线网卡，因此就要修改 DHCP		{{server_host}}	{{server_port}}
+i客户
+端的设置，给有线网卡更高的 Metric。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i编辑 `/etc/dhcpcd.conf`：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i保存重启，然后网络请求就都优先通过无线网卡发送了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最终效果		{{server_host}}	{{server_port}}
+i树莓派下所有的下载软件均通过不限速的 eduroam Wi-Fi		{{server_host}}	{{server_port}}
+i进行下载。我用自己的电脑通过
+连接较慢的有线网卡的 IP 操作		{{server_host}}	{{server_port}}
+iSSH、Transmission，访问共享等，不影响 Wi-Fi 的传输
+速度，同时 1.5M		{{server_host}}	{{server_port}}
+i的限速也足以观看 1080p 分辨率的视频（特别高清的除外）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

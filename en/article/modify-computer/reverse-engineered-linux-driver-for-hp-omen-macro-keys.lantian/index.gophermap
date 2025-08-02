@@ -1,0 +1,202 @@
+iI got a new laptop some time ago, an HP OMEN 17t-ck000. While it's a		{{server_host}}	{{server_port}}
+inice laptop
+with excellent build quality and performance, it has one		{{server_host}}	{{server_port}}
+iproblem: it's drivers
+under Linux are far from complete.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- No support for fan speed control. You can see the fan speed but		{{server_host}}	{{server_port}}
+ithat's it. In
+addition, HP's default fan control strategy is very		{{server_host}}	{{server_port}}
+iagressive, in the sense
+that even with fan spin down enabled in BIOS,		{{server_host}}	{{server_port}}
+ithe fan keeps running with the
+CPU being around 40 degrees celsius and		{{server_host}}	{{server_port}}
+iGPU being idle.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Actually,		{{server_host}}	{{server_port}}
+hNBFC	URL:https://github.com/hirschmann/nbfc	{{server_host}}	{{server_port}}
+ican be used to control
+the fan speed by directly writing to EC		{{server_host}}	{{server_port}}
+iregisters, but		{{server_host}}	{{server_port}}
+1in an unfortunate accident	/en/article/chat/how-i-nuked-my-btrfs-partition.lantian/	{{server_host}}	{{server_port}}
+iI lost my configuration file.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- I was trying NixOS on my new laptop when I set up NBFC. When the		{{server_host}}	{{server_port}}
+iaccident
+happened, I had removed NixOS from the laptop, and the config		{{server_host}}	{{server_port}}
+ifiles were
+never uploaded to GitHub.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- I may write that config file again in the future.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- No support for tuning keyboard backlight color, which is controlled		{{server_host}}	{{server_port}}
+iby OMEN
+Command Center on Windows. Sometimes my system crash, and I		{{server_host}}	{{server_port}}
+ipress the power
+button to force a shutdown, only to find that BIOS has		{{server_host}}	{{server_port}}
+ireset the backlight
+into the colorful default setting. Whenever that		{{server_host}}	{{server_port}}
+ihappens, I'll have to set it
+back on Windows.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The good news is that there's a modified Linux `hp_wmi` kernel		{{server_host}}	{{server_port}}
+imodule on
+GitHub, with support for controlling keyboard backlight on		{{server_host}}	{{server_port}}
+iLinux.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- It's developed by James Churchill (pelrun), and can be downloaded		{{server_host}}	{{server_port}}
+ifrom		{{server_host}}	{{server_port}}
+hhttps://github.com/pelrun/hp-omen-linux-module	URL:https://github.com/pelrun/hp-omen-linux-module	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- There's a row of macro keys on the left side of the keyboard.		{{server_host}}	{{server_port}}
+iThey're
+controlled by OMEN Command Center on Windows, and can be set		{{server_host}}	{{server_port}}
+iup with macro
+definitions to simulate a series of keystrokes on		{{server_host}}	{{server_port}}
+ikeypress. Of course, it
+doesn't work on Linux.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hHP has no plan to develop an OMEN Command Center for Linux	URL:https://h30434.www3.hp.com/t5/Gaming-Notebooks/HP-Omen-keyboard-control-on-Linux/td-p/4890663	{{server_host}}	{{server_port}}
+i- .		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHaving unusable keys on your keyboard is frustrating. Although I'm not		{{server_host}}	{{server_port}}
+ia heavy
+gamer and don't need macro keys, I can still use them for		{{server_host}}	{{server_port}}
+ishortcuts to apps,
+like the browser or the terminal.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, I started my journey of reverse engineering OMEN Command		{{server_host}}	{{server_port}}
+iCenter.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe Reverse Engineering Journey		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOMEN Command Center is written with Microsoft's .NET technology, which		{{server_host}}	{{server_port}}
+imeans the
+decompilation process is trivial. As a .NET program, each		{{server_host}}	{{server_port}}
+iand every of its DLL
+are named after their class names, which means		{{server_host}}	{{server_port}}
+itheir functions can be determined
+after their file name. In addition,		{{server_host}}	{{server_port}}
+hdotPeek from JetBrains	URL:https://www.jetbrains.com/decompiler/	{{server_host}}	{{server_port}}
+ican decompile
+.NET programs into C# code with original function and		{{server_host}}	{{server_port}}
+ivariable names, so I don't
+need to read assembly code to figure out		{{server_host}}	{{server_port}}
+iwhat each function does, like the
+experience with C programs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the process decompiling the DLLs with dotPeek, I		{{server_host}}	{{server_port}}
+inoticed
+`HP.Omen.MacrosModule.dll`, which seems to be the DLL for the		{{server_host}}	{{server_port}}
+ikeyboard macro
+function. After a bit of searching, I found my target		{{server_host}}	{{server_port}}
+iof a class:
+`HP.Omen.MacrosModule.Models.MacroModel`. It's responsible		{{server_host}}	{{server_port}}
+ifor translating macro
+definitions of OMEN Command Center to binary		{{server_host}}	{{server_port}}
+irepresentations understood by EC,
+and writing them to the EC via		{{server_host}}	{{server_port}}
+hWMI ACPI	URL:https://docs.microsoft.com/en-us/samples/microsoft/windows-driver-samples/wmi-acpi-sample/	{{server_host}}	{{server_port}}
+iinterface.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, let's take a look of the `OnEditorPageSaveClick` function:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow the problem is, is my laptop the Dragons variant or the Marlins		{{server_host}}	{{server_port}}
+ivariant? The
+device type is actually determined by `DeviceList.json`		{{server_host}}	{{server_port}}
+iin `HP.Omen.DeviceLib`,
+and the IDs in that JSON are the PCI Subsystem		{{server_host}}	{{server_port}}
+iDevice IDs. First, I determine
+the ID of my laptop:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo my ID is `88f7`. Now into that JSON file:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThere's `MarlinsMacro` in the feature list, so I guess my laptop is of		{{server_host}}	{{server_port}}
+itype
+Marlins. Back to the logic for Marlins devices:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`SetBytesToEC` function is called, which is in charge of translating		{{server_host}}	{{server_port}}
+ikeystroke
+sequence to EC's binary representation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWith a		{{server_host}}	{{server_port}}
+hreference table for PS/2 Scan Code Set 1	URL:https://wiki.osdev.org/PS/2_Keyboard#Scan_Code_Set_1	{{server_host}}	{{server_port}}
+i,
+we can encode a few sequences:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Press and release A: `[3, 0x1e, 0x9e]`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Press A, wait 100ms, and release: `[5, 0x1e, 255, 100, 0x9e]`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Press A, wait 300ms, and release: `[7, 0x1e, 255, 255, 255, 45,		{{server_host}}	{{server_port}}
+i0x9e]`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Each wait is up to 255ms because of limitations of byte data type.		{{server_host}}	{{server_port}}
+iThe wait
+of 300ms needs to be done with two waits.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBack to the logic of `OnEditorPageSaveClick`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`SetMacrosToSystemInfoService` writes the encoded key sequences to EC:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis logic combines the encoded key sequence of all function keys		{{server_host}}	{{server_port}}
+itogether, and
+sends them to EC with a WMI write.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe order of keys are stored		{{server_host}}	{{server_port}}
+iin
+`HP.Omen.MacrosModule.Models.EnumMacroKeyMarlins`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow it's pretty clear what we need to do:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Encode the keystroke sequence for each macro key;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Combine all of them into an array of size 4096 bytes;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Call the WMI ACPI command to send the array to EC.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWriting Linux Driver		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI'm already using a modified Linux `hp_wmi` driver for keyboard		{{server_host}}	{{server_port}}
+ibacklight
+support, so I decided to make my modifications on top.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Modified driver can be downloaded at		{{server_host}}	{{server_port}}
+hhttps://github.com/pelrun/hp-omen-linux-module	URL:https://github.com/pelrun/hp-omen-linux-module	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst I need a key sequence. Due to hardware limitations of HP,		{{server_host}}	{{server_port}}
+ispecial function
+keys (like volume adjustments and media controls) are		{{server_host}}	{{server_port}}
+inot supported in the key
+sequence. Therefore, I cannot send keystrokes		{{server_host}}	{{server_port}}
+ifor keys not present on a regular
+keyboard, like F13-F24, to avoid		{{server_host}}	{{server_port}}
+iconflicts. Because my laptop doesn't have a
+numpad, I decided to map		{{server_host}}	{{server_port}}
+ithe macro keys to numpad keys instead:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Currently my module uses a fixed keystroke sequence. I can add		{{server_host}}	{{server_port}}
+iconfiguration
+interfaces in the future, allowing users to set their		{{server_host}}	{{server_port}}
+iown key sequences.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext I need two functions, one for enabling macro keys on module load,		{{server_host}}	{{server_port}}
+iand one
+for disabling them:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, call these functions in the module's load and unload		{{server_host}}	{{server_port}}
+ifunctions.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDownload		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI uploaded the modified module to		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/hp-omen-linux-module	URL:https://github.com/xddxdd/hp-omen-linux-module	{{server_host}}	{{server_port}}
+i. Those changes related to this
+post can be found at		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/hp-omen-linux-module/commit/macro_keys	URL:https://github.com/xddxdd/hp-omen-linux-module/commit/macro_keys	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOr, you can directly integrate the macro key function (and keyboard		{{server_host}}	{{server_port}}
+ibacklight
+function) to the kernel by applying this patch:		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nur-packages/blob/master/pkgs/linux-xanmod-lantian/patches/0004-hp-omen-fourzone.patch	URL:https://github.com/xddxdd/nur-packages/blob/master/pkgs/linux-xanmod-lantian/patches/0004-hp-omen-fourzone.patch	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

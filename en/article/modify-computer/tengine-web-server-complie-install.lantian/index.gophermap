@@ -1,0 +1,22 @@
+iTengine is a high-performance web server developed by Alibaba based on		{{server_host}}	{{server_port}}
+inginx. In addition to retaining nginx's original high-performance		{{server_host}}	{{server_port}}
+ifeatures, it adds the following capabilities:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhile ordinary users may not notice a difference, it's still great for		{{server_host}}	{{server_port}}
+iexperimentation. I've heard sites like Tudou or 56.com have already		{{server_host}}	{{server_port}}
+iadopted Tengine.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBelow are the compilation steps.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote: Since Tengine is modular, we're enabling extra modules for		{{server_host}}	{{server_port}}
+iflexibility (they load dynamically). Remove any `--with-...` option		{{server_host}}	{{server_port}}
+ifor modules you don't need.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf `configure` fails, it's usually due to missing `libxxx`		{{server_host}}	{{server_port}}
+idependencies. Search for them in Synaptic Package Manager. Remember to		{{server_host}}	{{server_port}}
+iinstall `-dev` packages (base packages install automatically).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstallation complete. Start with `nginx` in the terminal. Tengine		{{server_host}}	{{server_port}}
+iconfiguration is similar to nginx – refer to nginx documentation for		{{server_host}}	{{server_port}}
+iguidance.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

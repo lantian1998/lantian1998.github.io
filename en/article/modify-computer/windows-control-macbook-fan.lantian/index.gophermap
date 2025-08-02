@@ -1,0 +1,50 @@
+iMacBook's thermal management is a perpetual pain point for users.		{{server_host}}	{{server_port}}
+iApple's cooling strategy is extremely conservative, only ramping up		{{server_host}}	{{server_port}}
+ifan speeds when CPU temperatures exceed 90°C, which significantly		{{server_host}}	{{server_port}}
+iharms both the CPU and user experience.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis morning after installing Windows 8.1 and watching some online		{{server_host}}	{{server_port}}
+ivideos, I accidentally touched the exhaust vent while moving the		{{server_host}}	{{server_port}}
+ilaptop... you know how that feels.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, since Apple's thermal control strategy falls short, we'll		{{server_host}}	{{server_port}}
+itake matters into our own hands using software.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInitially, I tried iFanAutoControl. The software detected my CPU		{{server_host}}	{{server_port}}
+itemperature at 70°C, rapidly increased fan speed, and brought		{{server_host}}	{{server_port}}
+itemperatures down to 50°C. But after setting the laptop aside, the fan		{{server_host}}	{{server_port}}
+istubbornly maintained 6000 RPM – does this software only accelerate		{{server_host}}	{{server_port}}
+iwithout deceleration? ...Uninstalled.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter uninstallation, the fan kept spinning wildly. Only a full		{{server_host}}	{{server_port}}
+ishutdown and cold boot resolved it (a simple restart didn't work).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen I discovered a fantastic tool: LubbosFanControl. Though somewhat		{{server_host}}	{{server_port}}
+idated with built-in profiles for older Nvidia-based Macs, it performed		{{server_host}}	{{server_port}}
+ipoorly on my integrated graphics model.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI launched the software (surprisingly without admin rights). It		{{server_host}}	{{server_port}}
+ireported my CPU at 90°C – alarmingly high! The fan immediately jumped		{{server_host}}	{{server_port}}
+ito 6000 RPM. Yet after a while, while temperatures stubbornly showed		{{server_host}}	{{server_port}}
+i90°C, the exhaust air felt nowhere near that hot when I touched it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ILubbos Fan Control	/usr/uploads/2013/10/2933104397.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA Google search revealed outdated sensor parameters in the old		{{server_host}}	{{server_port}}
+iversion. I edited the .ini configuration file, adjusting sensor		{{server_host}}	{{server_port}}
+isettings, GPU count, and CPU count to match my MacBook. After		{{server_host}}	{{server_port}}
+irelaunching, LubbosFanControl correctly detected 57°C with normal fan		{{server_host}}	{{server_port}}
+icontrol.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI tested it with a CPU/GPU-intensive video:		{{server_host}}	{{server_port}}
+hRailgun Era	URL:http://www.bilibili.tv/video/av719948/	{{server_host}}	{{server_port}}
+i(2160p@120fps – impossible for integrated graphics). Upon playback,		{{server_host}}	{{server_port}}
+iCPU usage spiked and fan speed increased appropriately. Closing the		{{server_host}}	{{server_port}}
+ivideo triggered automatic fan slowdown – success!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2013/10/566121349.png	/usr/uploads/2013/10/566121349.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iModified LubbosFanControl download (fully supports mid-2012 integrated		{{server_host}}	{{server_port}}
+igraphics MBP):		{{server_host}}	{{server_port}}
+1LubbosFanControl.7z	/usr/uploads/2013/10/1691255080.7z	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

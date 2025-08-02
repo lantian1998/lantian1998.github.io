@@ -1,0 +1,133 @@
+i(Cover image from:		{{server_host}}	{{server_port}}
+hWikipedia - Logarithm	URL:https://en.wikipedia.org/wiki/Logarithm	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOrigin		{{server_host}}	{{server_port}}
+iDue to a somewhat absurd reason (calculating the physical distance		{{server_host}}	{{server_port}}
+ibetween VPS
+to estimate network latency), I		{{server_host}}	{{server_port}}
+1implemented a somewhat absurd trigonometric function library using Nix	/en/article/modify-computer/nix-trigonometric-math-library-from-zero.lantian/	{{server_host}}	{{server_port}}
+i.
+After I		{{server_host}}	{{server_port}}
+hpublished the trigonometric function library on GitHub	URL:https://github.com/xddxdd/nix-math	{{server_host}}	{{server_port}}
+i,
+I found that someone actually used it! It seems my needs weren't too		{{server_host}}	{{server_port}}
+iabsurd
+after all.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the repository's Issues,		{{server_host}}	{{server_port}}
+ha user suggested that I add some exponential/logarithmic function support to this math library	URL:https://github.com/xddxdd/nix-math/issues/1	{{server_host}}	{{server_port}}
+i,
+such as `exp`, `ln`, `pow`, and `log`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince implementing these basic functions from scratch is also quite		{{server_host}}	{{server_port}}
+iinteresting,
+I took some time to research it. Among these four		{{server_host}}	{{server_port}}
+ifunctions, `exp` and `ln` are
+somewhat difficult. `pow` and `log` can		{{server_host}}	{{server_port}}
+iboth be derived from the other two
+functions:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLogarithmic Function ln		{{server_host}}	{{server_port}}
+iAs we learned in math classes, when		{{server_host}}	{{server_port}}
+i, the natural logarithm
+function		{{server_host}}	{{server_port}}
+ican be obtained using the following Taylor series:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen I implemented the trigonometric function last time, I wrote code		{{server_host}}	{{server_port}}
+ito
+calculate the result of the		{{server_host}}	{{server_port}}
+ifunction based on the Taylor series.
+Therefore, we only need to copy		{{server_host}}	{{server_port}}
+ithe code and change the formula for calculating
+a term in the series.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Formula from:		{{server_host}}	{{server_port}}
+hWikipedia	URL:https://en.wikipedia.org/wiki/Logarithm#Taylor_series	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAlthough this Taylor series can handle the range		{{server_host}}	{{server_port}}
+i, after testing,
+when		{{server_host}}	{{server_port}}
+iis close to the ends of the range, the number of terms to be		{{server_host}}	{{server_port}}
+icalculated
+becomes too large, causing Nix to report a stack overflow		{{server_host}}	{{server_port}}
+ierror:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter testing, the number of terms is acceptable when		{{server_host}}	{{server_port}}
+i, so I
+only use the Taylor series for calculation within this range.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor inputs outside this range, it needs to be converted to this range		{{server_host}}	{{server_port}}
+ibefore
+calculation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince the calculation method		{{server_host}}	{{server_port}}
+iis applicable to the
+entire		{{server_host}}	{{server_port}}
+irange, to maintain consistency in the calculation method, I
+used this		{{server_host}}	{{server_port}}
+imethod for all inputs in this range.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, we only need to implement the logic to use different algorithms		{{server_host}}	{{server_port}}
+ibased on
+the input range:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWith the natural logarithm function		{{server_host}}	{{server_port}}
+i, we can implement the generic
+logarithm function		{{server_host}}	{{server_port}}
+iwith any base:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNatural Exponential Function exp		{{server_host}}	{{server_port}}
+iWith the logarithm function in place, we still need another piece of		{{server_host}}	{{server_port}}
+ithe puzzle:
+the natural exponential function		{{server_host}}	{{server_port}}
+i. The Taylor expansion of the
+natural exponential function is:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iObviously, this Taylor expansion never converges, so we cannot		{{server_host}}	{{server_port}}
+icalculate the
+result term by term and then sum them up. Therefore, we		{{server_host}}	{{server_port}}
+ican use the same method
+as calculating		{{server_host}}	{{server_port}}
+iin the previous article, using polynomial regression to
+fit the curve		{{server_host}}	{{server_port}}
+iof the natural exponential function.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo which segment should we fit? When		{{server_host}}	{{server_port}}
+i, we can directly calculate the
+reciprocal of the absolute value		{{server_host}}	{{server_port}}
+iexponent		{{server_host}}	{{server_port}}
+i. And since we
+already have the function `_pow_int` for calculating		{{server_host}}	{{server_port}}
+iinteger powers, when		{{server_host}}	{{server_port}}
+i, we can split		{{server_host}}	{{server_port}}
+iinto integer and decimal parts and calculate them
+separately:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, we only need to fit the natural exponential function on		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince we don't know how many terms to use in polynomial regression to		{{server_host}}	{{server_port}}
+iget the
+best result, I wrote a simple script using Python and Numpy to		{{server_host}}	{{server_port}}
+itry from 1 term
+to 100 terms and then select the fitting result with		{{server_host}}	{{server_port}}
+ithe smallest error:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBy comparing with the		{{server_host}}	{{server_port}}
+ifunction, which is also based on polynomial
+regression, we can		{{server_host}}	{{server_port}}
+iimplement the		{{server_host}}	{{server_port}}
+ifunction:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFloating-Point Power Function pow		{{server_host}}	{{server_port}}
+iWith the above functions, we can finally calculate floating-point		{{server_host}}	{{server_port}}
+ipowers using		{{server_host}}	{{server_port}}
+i. The only thing to note is various special cases:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSummary		{{server_host}}	{{server_port}}
+iAll these logarithmetic functions (and some extra math functions) can		{{server_host}}	{{server_port}}
+ibe
+obtained from my GitHub:		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-math	URL:https://github.com/xddxdd/nix-math	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you're using Nix Flake, you can use the function as follows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,48 @@
+iNAT64 is a technology that emerged during the transition from IPv4 to		{{server_host}}	{{server_port}}
+iIPv6. It allows IPv6-only devices to access IPv4 networks by mapping		{{server_host}}	{{server_port}}
+iIPv4 addresses to a specific IPv6 address range. However, since purely		{{server_host}}	{{server_port}}
+iIPv6-capable devices are still uncommon, its current applications in		{{server_host}}	{{server_port}}
+iChina mainly focus on two areas:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- For educational network users where IPv4 is		{{server_host}}	{{server_port}}
+icharged/rate-limited/volume-capped while IPv6 is free/unlimited,		{{server_host}}	{{server_port}}
+ipublic NAT64 services can help save costs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- For iOS app developers, it serves as a testing environment to pass		{{server_host}}	{{server_port}}
+iApp Store review requirements.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe can also set up a NAT64 server on our own router with both IPv4 and		{{server_host}}	{{server_port}}
+iIPv6 connectivity by installing appropriate software. Common solutions		{{server_host}}	{{server_port}}
+iinclude Tayga and Jool. Tayga is outdated with its last update dating		{{server_host}}	{{server_port}}
+iback to 2011, while Jool remains actively maintained. Therefore, this		{{server_host}}	{{server_port}}
+iguide uses Jool for setup.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalling Jool		{{server_host}}	{{server_port}}
+iThe first step is installing Jool. Arch Linux users can find Jool in		{{server_host}}	{{server_port}}
+iAUR, but it's unavailable in Debian/Ubuntu official repositories,		{{server_host}}	{{server_port}}
+irequiring manual compilation on these systems.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor Arch Linux:		{{server_host}}	{{server_port}}
+iSimply run `yaourt -S jool-dkms-git`. Raspberry Pi users need to		{{server_host}}	{{server_port}}
+imodify the PKGBUILD by changing `arch=('i686' 'x86_64')` to		{{server_host}}	{{server_port}}
+i`arch=('i686' 'x86_64' 'armv7h')` to add ARM architecture support.		{{server_host}}	{{server_port}}
+iAfter installation, proceed from the "Set kernel module auto-load at		{{server_host}}	{{server_port}}
+iboot" step below.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor Debian/Ubuntu:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter installation, run `jool`. If you see output similar to `Status:		{{server_host}}	{{server_port}}
+iEnabled`, the installation succeeded.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTesting NAT64		{{server_host}}	{{server_port}}
+iThe IPv6 address space reserves a specific pool for NAT64:		{{server_host}}	{{server_port}}
+i`64:ff9b::/96` as shown above. You can access IPv4 resources by		{{server_host}}	{{server_port}}
+iappending the IPv4 address to this prefix. For example, to access		{{server_host}}	{{server_port}}
+i`8.8.8.8`, use `64:ff9b::8.8.8.8`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNote: Direct access to this address from the Jool host machine will		{{server_host}}	{{server_port}}
+ifail. You must configure the host as a router and access it from		{{server_host}}	{{server_port}}
+ianother device. I successfully tested this by setting up a Raspberry		{{server_host}}	{{server_port}}
+iPi as a WiFi hotspot router and pinging the address from a connected		{{server_host}}	{{server_port}}
+icomputer.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

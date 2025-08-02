@@ -1,0 +1,51 @@
+iIn a blog, when the author replies to a visitor's comment, it's		{{server_host}}	{{server_port}}
+idifficult for the visitor to notice the reply unless they revisit the		{{server_host}}	{{server_port}}
+ipage. However, with the comment reply email notification feature,		{{server_host}}	{{server_port}}
+ivisitors receive an email when the author or another visitor replies		{{server_host}}	{{server_port}}
+ito their comment, allowing them to promptly learn about the response.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the widely used WordPress blog system, emails are typically sent		{{server_host}}	{{server_port}}
+ivia the system's default sendmail, which often ends up in spam		{{server_host}}	{{server_port}}
+ifolders. Therefore, we usually opt for email services like Tencent,		{{server_host}}	{{server_port}}
+iMicrosoft, or Google that provide domain-specific email solutions,		{{server_host}}	{{server_port}}
+iwhich require sending emails via SMTP. The issue is that sendmail		{{server_host}}	{{server_port}}
+idoesn't natively support SMTP, though this can be resolved using		{{server_host}}	{{server_port}}
+iplugins within the blog system.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, this approach has limitations. If the VPS provider blocks		{{server_host}}	{{server_port}}
+iport 25 (the standard SMTP port), blog systems that don't support		{{server_host}}	{{server_port}}
+iSSL-encrypted SMTP will fail to send emails. Additionally, if your VPS		{{server_host}}	{{server_port}}
+ihosts multiple websites with different platforms, configuring each one		{{server_host}}	{{server_port}}
+iindividually is cumbersome and error-prone.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, we can solve this by installing SMTP email-sending software		{{server_host}}	{{server_port}}
+idirectly on the VPS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ieSMTP is a sendmail syntax-compatible tool that redirects		{{server_host}}	{{server_port}}
+isendmail-generated emails through SMTP.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLog in to your VPS and enter the following commands:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter `hostname=`, enter the SMTP server address. If it's not using		{{server_host}}	{{server_port}}
+iport 25, specify the port (e.g., Gmail uses `smtp.gmail.com:587`).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter `username=`, enter your email address.		{{server_host}}	{{server_port}}
+iAfter `password=`, enter your email password.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf the mail server supports StartTLS (like Gmail), change `starttls=`		{{server_host}}	{{server_port}}
+ifrom `disabled` to `enabled`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter `mda=`, enter `"/usr/bin/procmail -d %T"` (including quotes).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe final file should resemble:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPress `Ctrl+X` to save and exit.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iModify your `php.ini` file, locate the `sendmail_path` line, and		{{server_host}}	{{server_port}}
+ichange it to:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSave the changes, then run:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConfiguration complete. You can now send a test email from your blog		{{server_host}}	{{server_port}}
+isystem to verify.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

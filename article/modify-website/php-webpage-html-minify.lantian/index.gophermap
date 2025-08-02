@@ -1,0 +1,31 @@
+i有兴趣的同学可以数数上面的这段代码里有几个tab符。上面还只是cn.wordpres		{{server_host}}	{{server_port}}
+is.org的一
+小段。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在HTML编程过程中，为了让代码对网站主和技术员简明易懂，程序猿们经常会在代		{{server_host}}	{{server_port}}
+i码前加上
+分层缩进的Tab或者空格。但对于最终用户来说，这些tab和空格都是无		{{server_host}}	{{server_port}}
+i用的。所以在网站输
+出中，我们应该把这些东西都干掉，甚至包括换行符，除了te		{{server_host}}	{{server_port}}
+ixtarea和pre内容的换行符，
+这两个你懂的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i有国外大神开发出了HTML Minify		{{server_host}}	{{server_port}}
+iPHP文件，可以全自动清除这些浪费流量的内容。不过，
+原始PHP执行效率较低，因		{{server_host}}	{{server_port}}
+i为它有一个将绝对路径转换成相对路径的功能，耗时比清除这些
+内容的时间还要		{{server_host}}	{{server_port}}
+i长，所以我进行了修改，把这个功能干掉了。还有其它一些修改，都是牺牲
+小部分		{{server_host}}	{{server_port}}
+i功能来加快代码执行的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i使用方法：把这段代码保存成html-minify.php，上传到和你的主题模板index.php		{{server_host}}	{{server_port}}
+i在同一目
+录下，在你模板header.php里最上头增加这么一行话：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i保存，搞定。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i以下为我修改的代码：（要原版请移
+步		{{server_host}}	{{server_port}}
+hhttp://github.com/stevenvachon/html-minify/	URL:http://github.com/stevenvachon/html-minify/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

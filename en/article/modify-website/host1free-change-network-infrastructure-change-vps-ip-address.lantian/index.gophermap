@@ -1,0 +1,9 @@
+iDear Host1Free User Lan Tian,		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn short, the VPS IP address has been changed to 5.175.206.68, while		{{server_host}}	{{server_port}}
+ithe original 5.175.156.249 will remain until next Wednesday as a		{{server_host}}	{{server_port}}
+itransition period. Please update your DNS settings accordingly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, it's impressive that a permanently free VPS has remained this		{{server_host}}	{{server_port}}
+istable (?) for so long.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

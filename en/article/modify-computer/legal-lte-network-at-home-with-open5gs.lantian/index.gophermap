@@ -1,0 +1,599 @@
+iIn my		{{server_host}}	{{server_port}}
+1previous post	/en/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/	{{server_host}}	{{server_port}}
+i, I built a legal LTE network using the US CBRS band and		{{server_host}}	{{server_port}}
+hMagma LTE core network software	URL:https://magmacore.org/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Regarding "legal": I am not a lawyer or a wireless expert. Based		{{server_host}}	{{server_port}}
+ion my research into the relevant policies and regulations, my entire		{{server_host}}	{{server_port}}
+isetup should be legal. However, I take no responsibility if you		{{server_host}}	{{server_port}}
+iencounter any legal issues after following the instructions in this		{{server_host}}	{{server_port}}
+ipost.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI chose Magma at the time because the CBRS LTE base station I bought		{{server_host}}	{{server_port}}
+iwas originally used for the Helium Mobile network, and		{{server_host}}	{{server_port}}
+hNova Labs/Helium Mobile uses Magma for its CBRS core network	URL:https://github.com/helium/HIP/blob/main/0139-phase-out-cbrs.md#what-to-do-with-cbrs-radios	{{server_host}}	{{server_port}}
+i. This ensured that Magma was compatible with my base station.		{{server_host}}	{{server_port}}
+iHowever, from the perspective of building a self-hosted core network		{{server_host}}	{{server_port}}
+iin a Homelab, Magma has these issues:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Magma's core network relies on Docker or Kubernetes for deployment,		{{server_host}}	{{server_port}}
+imaking it difficult to deploy outside of containers using conventional		{{server_host}}	{{server_port}}
+imethods (e.g., systemd services). As a NixOS user, I prefer to avoid		{{server_host}}	{{server_port}}
+ibloated Docker containers and manage services on the system using		{{server_host}}	{{server_port}}
+isystemd.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Magma's Access Gateway can only be installed on Ubuntu 20.04, which		{{server_host}}	{{server_port}}
+ihas a completely different system management approach from my usual		{{server_host}}	{{server_port}}
+iNixOS. This means I would need to manually manage the Access Gateway		{{server_host}}	{{server_port}}
+imachine's configuration and system upgrades, without being able to		{{server_host}}	{{server_port}}
+ireuse my existing NixOS configuration.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Magma sometimes has strange issues, such as:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Android phones always failing to connect to the base station while		{{server_host}}	{{server_port}}
+iiPhones work fine;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Phones unable to properly obtain the network name, always displaying		{{server_host}}	{{server_port}}
+iMCC/MNC `315 010` instead of the actual configured network name `Lan		{{server_host}}	{{server_port}}
+iTian Mobile`;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The Access Gateway connected to the core network and synchronized		{{server_host}}	{{server_port}}
+iconfigurations normally, but the core network management interface		{{server_host}}	{{server_port}}
+ishowed that the Access Gateway had not been connected for a long time.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, after finishing the previous post and confirming the		{{server_host}}	{{server_port}}
+ifeasibility of building a self-hosted LTE network, I began trying to		{{server_host}}	{{server_port}}
+ireplace Magma with another open-source LTE core network software,		{{server_host}}	{{server_port}}
+hOpen5GS	URL:https://open5gs.org/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCompared to Magma, Open5GS has these advantages:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open5GS does not distinguish between core network and Access Gateway		{{server_host}}	{{server_port}}
+icomponents; it can be fully deployed on a single machine.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open5GS packages are already available in Nixpkgs (`pkgs.open5gs`),		{{server_host}}	{{server_port}}
+iso I can install and use it directly on NixOS without needing to		{{server_host}}	{{server_port}}
+ipackage it myself, and without Docker or Ubuntu.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open5GS does not have the strange issues that Magma has; once set		{{server_host}}	{{server_port}}
+iup, it is quite stable.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis post documents the process of setting up a core network with		{{server_host}}	{{server_port}}
+iOpen5GS on NixOS, and connecting a FreedomFi/Sercomm SCE4255W base		{{server_host}}	{{server_port}}
+istation to the core network to transmit LTE signals.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalling Open5GS		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> I referenced the following materials during the configuration		{{server_host}}	{{server_port}}
+iprocess:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hOpen5GS official documentation	URL:https://open5gs.org/open5gs/docs/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A set of Open5GS (and some add-ons) configurations packaged as		{{server_host}}	{{server_port}}
+iready-to-use Docker containers:		{{server_host}}	{{server_port}}
+hherlesupreeth/docker_open5gs	URL:https://github.com/herlesupreeth/docker_open5gs	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPreparation		{{server_host}}	{{server_port}}
+iThis post assumes you have prepared the following hardware or software		{{server_host}}	{{server_port}}
+iconfigurations as described in my		{{server_host}}	{{server_port}}
+1previous post	/en/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/	{{server_host}}	{{server_port}}
+i. If you have not completed these configurations, you can refer to the		{{server_host}}	{{server_port}}
+icorresponding sections in the previous post to configure the software		{{server_host}}	{{server_port}}
+ior purchase the hardware:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A FreedomFi/Sercomm SCE4255W base station with the web management		{{server_host}}	{{server_port}}
+iinterface unlocked.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The base station is already registered with the CBRS SAS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A SIM card programmedwith authentication information (KI, OPC,		{{server_host}}	{{server_port}}
+ietc.), and you have recorded this authentication information (for		{{server_host}}	{{server_port}}
+ilater registration with Open5GS).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis post will use NixOS for all configurations, but I also provides		{{server_host}}	{{server_port}}
+isome commands for Ubuntu, which users of other Linux distributions can		{{server_host}}	{{server_port}}
+iuse as a reference.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUnderstanding Open5GS Components		{{server_host}}	{{server_port}}
+iOpen5GS, as its name suggests, is primarily a software that implements		{{server_host}}	{{server_port}}
+ia 5G core network (as well as a LTE core network). Since the core		{{server_host}}	{{server_port}}
+inetwork protocols and structure in the 5G era are significantly		{{server_host}}	{{server_port}}
+idifferent from the 4G era, especially for standalone 5G SA networks,		{{server_host}}	{{server_port}}
+iOpen5GS can roughly be seen as a set of LTE/5G NSA core network		{{server_host}}	{{server_port}}
+isoftware, plus a set of 5G SA core network software, with a small		{{server_host}}	{{server_port}}
+iportion of components shared between them.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe LTE/5G NSA part of Open5GS consists of the following components:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- MME - Mobility Management Entity		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- HSS - Home Subscriber Server		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- PCRF - Policy and Charging Rules Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SGWC - Serving Gateway Control Plane		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SGWU - Serving Gateway User Plane		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SMF - Session Management Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SMF itself is a 5G core network component, but Open5GS SMF also		{{server_host}}	{{server_port}}
+iimplements the Packet Gateway Control Plane in the 4G core network		{{server_host}}	{{server_port}}
+istructure.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- UPF - User Plane Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- UPF itself is a 5G core network component, but Open5GS UPF also		{{server_host}}	{{server_port}}
+iimplements the Packet Gateway User Plane in the 4G core network		{{server_host}}	{{server_port}}
+istructure.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SCP -		{{server_host}}	{{server_port}}
+iSecure, Contain, Protect		{{server_host}}	{{server_port}}
+iService Communication Proxy		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SCP itself is a 5G core network component, but SMF depends on it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- NRF - NF Repository Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- NRF itself is a 5G core network component, but SCP depends on it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd the 5G SA part consists of the following components:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- NRF - NF Repository Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SCP - Service Communication Proxy		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SEPP - Security Edge Protection Proxy		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- AMF - Access and Mobility Management Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SMF - Session Management Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- UPF - User Plane Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- AUSF - Authentication Server Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- UDM - Unified Data Management		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- UDR - Unified Data Repository		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- PCF - Policy and Charging Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- NSSF - Network Slice Selection Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- BSF - Binding Support Function		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThese components communicate with each other in the following		{{server_host}}	{{server_port}}
+istructure:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IOpen5GS Component Architecture Diagram	/usr/uploads/202507/Open5GS_CUPS-01.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Image source:		{{server_host}}	{{server_port}}
+hOpen5GS official documentation	URL:https://open5gs.org/open5gs/docs/guide/01-quickstart/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe communication between various components of the 4G/5G core network		{{server_host}}	{{server_port}}
+iuses the standardized		{{server_host}}	{{server_port}}
+hDiameter protocol	URL:https://en.wikipedia.org/wiki/Diameter_(protocol)	{{server_host}}	{{server_port}}
+i, which is based on TCP or		{{server_host}}	{{server_port}}
+hSCTP	URL:https://en.wikipedia.org/wiki/Stream_Control_Transmission_Protocol	{{server_host}}	{{server_port}}
+iprotocol, exchanging data between various components of the 4G/5G core		{{server_host}}	{{server_port}}
+inetwork. This also means that hardware and software from different		{{server_host}}	{{server_port}}
+ivendors, as long as they support the Diameter protocol, can join the		{{server_host}}	{{server_port}}
+isame core network and jointly provide services to mobile users.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, in this post, I will only use Open5GS components, and will		{{server_host}}	{{server_port}}
+inot add other components to the core network for now.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalling Open5GS Package		{{server_host}}	{{server_port}}
+iIf you are using Ubuntu, you can refer to the		{{server_host}}	{{server_port}}
+hOpen5GS official installation tutorial	URL:https://open5gs.org/open5gs/docs/guide/01-quickstart/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDuring this process, in addition to installing the Open5GS binaries, a		{{server_host}}	{{server_port}}
+iset of systemd services corresponding to each Open5GS component is		{{server_host}}	{{server_port}}
+icreated, and the default Open5GS configuration is copied to `/etc`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince NixOS only has the Open5GS package (`pkgs.open5gs`) and no		{{server_host}}	{{server_port}}
+icorresponding NixOS module, we need to manually create systemd		{{server_host}}	{{server_port}}
+iservices for Open5GS, mimicking the installation process on other		{{server_host}}	{{server_port}}
+isystems like Ubuntu:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCreating Open5GS Configuration Files		{{server_host}}	{{server_port}}
+iIf you are using Ubuntu, the above installation process should have		{{server_host}}	{{server_port}}
+iautomatically installed the default configuration files to		{{server_host}}	{{server_port}}
+i`/etc/freeDiameter` and `/etc/open5gs`. However, in NixOS, this		{{server_host}}	{{server_port}}
+iprocess is not automatic, and we need to manually copy the		{{server_host}}	{{server_port}}
+iconfiguration files or manually specify their paths.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince the Nixpkgs Open5GS package already comes with a set of default		{{server_host}}	{{server_port}}
+iconfigurations, we can directly copy the default configuration files		{{server_host}}	{{server_port}}
+ifrom this package. First, build the package:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf all goes well, Nix will download the pre-compiled Open5GS from the		{{server_host}}	{{server_port}}
+iBinary Cache and symlink it to the `result` directory. At this point,		{{server_host}}	{{server_port}}
+iwe can see the default configuration files in the `result/etc` folder:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen we can copy them to our NixOS configuration for later		{{server_host}}	{{server_port}}
+imodification:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor files in the `freeDiameter` folder, we need to place them under		{{server_host}}	{{server_port}}
+i`/etc/freeDiameter`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor files in the `open5gs` folder, you can directly specify the		{{server_host}}	{{server_port}}
+iconfiguration file path using the `-c` parameter when starting		{{server_host}}	{{server_port}}
+iOpen5GS:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNot placing them in `/etc` ensures that Open5GS services will		{{server_host}}	{{server_port}}
+iautomatically restart after modifying the configuration files.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFixing Paths in Open5GS Configuration Files under NixOS		{{server_host}}	{{server_port}}
+iSince Open5GS packaged in Nixpkgs is installed by default under a path		{{server_host}}	{{server_port}}
+iin `/nix/store`, its configuration files also references many paths		{{server_host}}	{{server_port}}
+iunder `/nix/store` by default.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, get the actual installation path of Open5GS:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen search for this path in the copied configuration files. You will		{{server_host}}	{{server_port}}
+isee many places containing the full path:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOnce the Open5GS package or its dependencies are updated, the path of		{{server_host}}	{{server_port}}
+iOpen5GS in the Nix store will change, causing files specified by		{{server_host}}	{{server_port}}
+iabsolute paths to become invalid, and preventing Open5GS from		{{server_host}}	{{server_port}}
+istarting. Therefore, we need to keep these paths synchronized with the		{{server_host}}	{{server_port}}
+iOpen5GS path, or point them outside the Nix store, to prevent future		{{server_host}}	{{server_port}}
+iissues.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMy workaround is to first link a copy of the `pkgs.open5gs` package to		{{server_host}}	{{server_port}}
+i`/etc`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen modify the above paths:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter the modification, we will be able to upgrade Open5GS without		{{server_host}}	{{server_port}}
+iissues in the future, and our configuration files placed in `/etc`		{{server_host}}	{{server_port}}
+iwill take effect normally.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Optional) Regenerate Diameter TLS Certificates		{{server_host}}	{{server_port}}
+iOpen5GS packaged in Nixpkgs comes with a TLS certificate generated		{{server_host}}	{{server_port}}
+iduring the build process. If your Open5GS is downloaded from the		{{server_host}}	{{server_port}}
+iBinary Cache instead of being compiled locally, you will be using the		{{server_host}}	{{server_port}}
+isame TLS key  others can download from the Binary Cache.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you deploy on a single machine according to this tutorial, since		{{server_host}}	{{server_port}}
+iall communication is local and does not go through external networks,		{{server_host}}	{{server_port}}
+iencryption and private key leakage have little impact on security.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, if you plan to place some components on other machines, or if		{{server_host}}	{{server_port}}
+iyou do not want to use this leaked key, you can generate a new one		{{server_host}}	{{server_port}}
+iusing the following script:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen you run `systemctl start open5gs-certs.service`, this service		{{server_host}}	{{server_port}}
+iwill automatically generate missing keys in `/var/lib/open5gs-certs`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen you can modify the Open5GS configuration file to point the TLS		{{server_host}}	{{server_port}}
+ikey path to `/var/lib/open5gs-certs`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou can also add `open5gs-certs.service` to the `After` and `Requires`		{{server_host}}	{{server_port}}
+iof each Open5GS systemd service to ensure that the keys are generated		{{server_host}}	{{server_port}}
+ibefore Open5GS starts.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalling Open5GS Web Management UI		{{server_host}}	{{server_port}}
+iThe above steps configured the Open5GS core network itself, but we		{{server_host}}	{{server_port}}
+ialso need to install the web management UI to manage SIM card related		{{server_host}}	{{server_port}}
+iinformation registered with Open5GS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you are using Ubuntu, you can use the official installation script:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you are using NixOS, you can install it with the following		{{server_host}}	{{server_port}}
+iconfiguration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStarting Open5GS		{{server_host}}	{{server_port}}
+iDeploy the above configuration to your NixOS machine, and if		{{server_host}}	{{server_port}}
+ieverything goes well, these services should start normally without		{{server_host}}	{{server_port}}
+iissues.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you are using Ubuntu, all 4G/5G services should have automatically		{{server_host}}	{{server_port}}
+istarted when you installed the `open5gs` package. You can disable the		{{server_host}}	{{server_port}}
+i5G SA related services that we don't need, or you can ignore them;		{{server_host}}	{{server_port}}
+ithey will not affect subsequent configurations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCreating Default Administrator for Management Panel		{{server_host}}	{{server_port}}
+iOpen5GS does not automatically create a default administrator user		{{server_host}}	{{server_port}}
+iwhen it starts, so after the deployment is complete and MongoDB has		{{server_host}}	{{server_port}}
+istarted, we need to manually run the following command to create an		{{server_host}}	{{server_port}}
+iadministrator:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Source:		{{server_host}}	{{server_port}}
+hhttps://github.com/open5gs/open5gs/blob/main/docs/assets/webui/mongo-init.js	URL:https://github.com/open5gs/open5gs/blob/main/docs/assets/webui/mongo-init.js	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe above command will create an administrator user with username		{{server_host}}	{{server_port}}
+i`admin` and password `1423`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOpen `http://[Open5GS machine's IP address]:9999` in your browser, and		{{server_host}}	{{server_port}}
+ilog in to the management panel with the above username and password.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iModifying Open5GS Configuration Files		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter Open5GS is installed, you will need to modify the configuration		{{server_host}}	{{server_port}}
+ifiles to match the parameters of our CBRS LTE network. We only need to		{{server_host}}	{{server_port}}
+imake the following changes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Change MCC/MNC from the default 999/70 to CBRS's 315/010.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSimply search globally for `mcc: 999` and `mnc: 70`, and replace them		{{server_host}}	{{server_port}}
+iwith `mcc: 315` and `mnc: 010` respectively:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Make the MME component listen on `eth0` (or your actual network card		{{server_host}}	{{server_port}}
+iname) interface instead of `127.0.0.2`, otherwise the base station		{{server_host}}	{{server_port}}
+icannot connect to the core network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iModify `open5gs/mme.yaml`, change the original configuration under		{{server_host}}	{{server_port}}
+i`s1ap`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- (Optional) Customize the network name broadcast by MME.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iModify `open5gs/mme.yaml`, find `network_name`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iChange it to your desired network name, for example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, restart all Open5GS related services:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConnecting FreedomFi/Sercomm Base Station to Open5GS		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, please ensure that you can log in to the FreedomFi/Sercomm		{{server_host}}	{{server_port}}
+iSCE4255 base station's web management panel via IP address. If you		{{server_host}}	{{server_port}}
+icannot access the base station's web management panel, please refer to		{{server_host}}	{{server_port}}
+ithe		{{server_host}}	{{server_port}}
+1section on enabling the management panel in my previous post	/en/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/#unlocking-the-management-interface-of-the-indoor-base-station	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDisabling TR-069 Remote Management		{{server_host}}	{{server_port}}
+iFreedomFi's Sercomm base stations by default connect to		{{server_host}}	{{server_port}}
+i`acs.freedomfi.com`, a TR-069 server, to automatically obtain		{{server_host}}	{{server_port}}
+iconfigurations. Although this remote management server was shut down		{{server_host}}	{{server_port}}
+iwhen Helium Mobile discontinued its CBRS network, our base station		{{server_host}}	{{server_port}}
+iwill still continuously try to connect to this server. When using		{{server_host}}	{{server_port}}
+iMagma to build the core network, since the Magma core network itself		{{server_host}}	{{server_port}}
+ihas TR-069 server functionality, we can keep remote management enabled		{{server_host}}	{{server_port}}
+iand simply hijack remote management requests to our TR-069 server.		{{server_host}}	{{server_port}}
+iHowever, Open5GS does not have TR-069 functionality, so we need to		{{server_host}}	{{server_port}}
+idisable the base station's TR-069 remote management to avoid		{{server_host}}	{{server_port}}
+iunnecessary requests, and prevent the base station's configuration		{{server_host}}	{{server_port}}
+ifrom being accidentally overwritten.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iClick `TR098` at the top of the management interface, then switch to		{{server_host}}	{{server_port}}
+ithe `MgntServer` tab to switch to the base station's TR-069 remote		{{server_host}}	{{server_port}}
+imanagement settings page:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ISercomm Base Station TR-069 Settings Page	/usr/uploads/202507/sercomm-tr069.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUncheck `EnableCWMP`, then click the `Save` button to save the		{{server_host}}	{{server_port}}
+isettings.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince the Sercomm base station management panel has some bugs, it is		{{server_host}}	{{server_port}}
+irecommended to restart the base station here to ensure the settings		{{server_host}}	{{server_port}}
+itake effect. The base station may automatically restart when saving		{{server_host}}	{{server_port}}
+isettings, but if it does not, you can manually restart it by clicking		{{server_host}}	{{server_port}}
+ithe power button in the upper right corner of the management		{{server_host}}	{{server_port}}
+iinterface, or by manually power cycling it. After restarting, please		{{server_host}}	{{server_port}}
+ireturn to this page and ensure `EnableCWMP` is unchecked.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAt this point, the base station's TR-069 remote management function is		{{server_host}}	{{server_port}}
+idisabled, and we can modify settings without fear of being overwritten		{{server_host}}	{{server_port}}
+iby remote management.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iModifying Base Station CBRS SAS Connection Configuration		{{server_host}}	{{server_port}}
+iThe next step is to connect the base station to the CBRS SAS server to		{{server_host}}	{{server_port}}
+iobtain spectrum allocation, thereby avoiding conflicts with other base		{{server_host}}	{{server_port}}
+istations or operator signals, and preventing the FCC from SWATting		{{server_host}}	{{server_port}}
+iyou. When using the Magma core network, the CBRS SAS connection is		{{server_host}}	{{server_port}}
+iautomatically configured by Magma's TR-069 server, but since Open5GS		{{server_host}}	{{server_port}}
+idoes not have TR-069 functionality, this needs to be done manually.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, ensure your base station is registered with the SAS. You can		{{server_host}}	{{server_port}}
+irefer to the		{{server_host}}	{{server_port}}
+1section on connecting to SAS in my previous post	/en/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/#connecting-the-base-station-to-sas	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, click `Manage` at the top of the base station management		{{server_host}}	{{server_port}}
+iinterface, then switch to the `SAS Configuration` tab:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ISercomm Base Station SAS Settings Page	/usr/uploads/202507/sercomm-sas.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Check the `Enable` option.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter `0` for the `Method` option.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select `Commercial-Google` for `Server`, corresponding to Google		{{server_host}}	{{server_port}}
+iSAS. At this point, `Server Url` should be automatically populated.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter your Google Cloud Project ID for `UserID`, which can be found		{{server_host}}	{{server_port}}
+ion the console homepage:		{{server_host}}	{{server_port}}
+hhttps://console.cloud.google.com	URL:https://console.cloud.google.com	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select `A` for `Category`, corresponding to indoor base stations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select `GAA` for `ChannelType`, corresponding to the lowest priority		{{server_host}}	{{server_port}}
+iof the three types of CBRS users.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter `/C=TW/O=Sercomm/OU=WInnForum CBSD		{{server_host}}	{{server_port}}
+iCertificate/CN=P27-SCE4255W:%s` for `CertSubject`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ISercomm Base Station SAS Location Settings Page	/usr/uploads/202507/sercomm-sas-location.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select `indoor` for `Location`, corresponding to indoor deployment.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If your base station's location has good GPS signal, `Location		{{server_host}}	{{server_port}}
+iSource` can be set to `GPS`. However, if the GPS signal is poor, the		{{server_host}}	{{server_port}}
+ibase station will need to wait for GPS positioning to complete before		{{server_host}}	{{server_port}}
+iconnecting to CBRS SAS and starting to transmit signals after		{{server_host}}	{{server_port}}
+irestarting. In this case, you can select `Manual` and manually enter		{{server_host}}	{{server_port}}
+ithe base station's latitude and longitude.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `Latitude` is latitude, with positive values for north of equator,		{{server_host}}	{{server_port}}
+iand negative values for south of equator. Note that the unit for		{{server_host}}	{{server_port}}
+iSercomm base station's latitude and longitude is microdegrees (i.e.,		{{server_host}}	{{server_port}}
+ione millionth of a degree), so if you want to set 40 degrees north of		{{server_host}}	{{server_port}}
+iequator, please enter `40000000`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `Longitude` is longitude, with positive values for east of meridian,		{{server_host}}	{{server_port}}
+iand negative values for west of meridian. Note that the unit for		{{server_host}}	{{server_port}}
+iSercomm base station's latitude and longitude is microdegrees (i.e.,		{{server_host}}	{{server_port}}
+ione millionth of a degree), so if you want to set 80 degrees west of		{{server_host}}	{{server_port}}
+imeridian, please enter `-80000000`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Please obtain the latitude and longitude using your mobile phone or		{{server_host}}	{{server_port}}
+iother devices for actual positioning. The base station's location		{{server_host}}	{{server_port}}
+ineeds to be relatively precise, otherwise it will affect the CBRS SAS		{{server_host}}	{{server_port}}
+ispectrum allocation. This latitude and longitude should also be		{{server_host}}	{{server_port}}
+iconsistent with the latitude and longitude set on the CBRS SAS		{{server_host}}	{{server_port}}
+iplatform.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select `AMSL` for `HeightType`, which means height above mean sea		{{server_host}}	{{server_port}}
+ilevel.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter the base station's altitude for `Elevation`, in millimeters,		{{server_host}}	{{server_port}}
+iso if you want to set 40 meters above sea level, please enter `40000`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSave the settings. You don't need to restart the base station yet; you		{{server_host}}	{{server_port}}
+ican wait until configuring the base station's connection to the		{{server_host}}	{{server_port}}
+iOpen5GS core network in the next step.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iModifying Base Station Core Network Connection Configuration		{{server_host}}	{{server_port}}
+iThe next step is to connect the base station to the Open5GS core		{{server_host}}	{{server_port}}
+inetwork to transmit user information and data traffic.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iClick `Manage` at the top of the base station management interface,		{{server_host}}	{{server_port}}
+ithen switch to the `LTE Basic Setting` tab:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ISercomm Base Station LTE Settings Page	/usr/uploads/202507/sercomm-sas-location.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `Cell Configuration`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Check the `AdminStats` option, which means enabling signal		{{server_host}}	{{server_port}}
+itransmission.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select `1` for `Carrier Number`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you select `2` and adjust the settings below accordingly, you can		{{server_host}}	{{server_port}}
+ienable carrier aggregation to double the bandwidth, but Sercomm's CBRS		{{server_host}}	{{server_port}}
+iSAS implementation has some issues that may randomly cause signal		{{server_host}}	{{server_port}}
+itransmission interruptions.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Do not check the `Carrier Aggregation` option.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you want to enable carrier aggregation, check this box.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select `20` for `BandWidth` to maximize bandwidth for highest speed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter `0` for `CellIDentity`. If you have multiple base stations,		{{server_host}}	{{server_port}}
+iyou can enter `1`, `2`, etc., sequentially, ensuring no duplication		{{server_host}}	{{server_port}}
+ibetween base stations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you want to enable carrier aggregation, enter `0,1`, which means		{{server_host}}	{{server_port}}
+itwo different IDs separated by a comma.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter `100` for `PCI`. If you have multiple base stations, you can		{{server_host}}	{{server_port}}
+ienter `101`, `102`, etc., sequentially, ensuring no duplication		{{server_host}}	{{server_port}}
+ibetween base stations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If you want to enable carrier aggregation, enter `100,101`, which		{{server_host}}	{{server_port}}
+imeans two different IDs separated by a comma.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter `24` for `TxPower`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Under `S1 Configuration`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select IPv4 for `Tunnel Type`. At this point, data between the base		{{server_host}}	{{server_port}}
+istation and the core network is transmitted in plain text.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Since our base station and core network are on the same local area		{{server_host}}	{{server_port}}
+inetwork and are physically controlled by us, the security risk here is		{{server_host}}	{{server_port}}
+ismall. However, if your base station needs to connect to the core		{{server_host}}	{{server_port}}
+inetwork over Internet, you should try using the `IPSEC` option, but		{{server_host}}	{{server_port}}
+iyou will need to additionally configure IPSec tunnel related settings.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter the IP address of the `Open5GS` core network machine for `MME		{{server_host}}	{{server_port}}
+iIP Address`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If different components of your `Open5GS` core network are installed		{{server_host}}	{{server_port}}
+ion different machines, enter the IP address of the machine running the		{{server_host}}	{{server_port}}
+iMME component here.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter `315010` for `PLMNID`, corresponding to CBRS's MCC/MNC.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter `1` for `TAC`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- If your base station's location has good GPS signal, `Sync Source`		{{server_host}}	{{server_port}}
+ican be set to `GPS`. However, if the GPS signal is poor, the base		{{server_host}}	{{server_port}}
+istation will need to wait for GPS positioning to complete before		{{server_host}}	{{server_port}}
+istarting to transmit signals after restarting. In this case, you can		{{server_host}}	{{server_port}}
+iselect `FREE_RUNNING`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSave the settings. It is recommended to restart the base station once		{{server_host}}	{{server_port}}
+ihere to ensure the settings take effect. The base station may		{{server_host}}	{{server_port}}
+iautomatically restart when saving settings, but if it does not, you		{{server_host}}	{{server_port}}
+ican manually restart it by clicking the power button in the upper		{{server_host}}	{{server_port}}
+iright corner of the management interface, or by manually power cycling		{{server_host}}	{{server_port}}
+iit.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter restarting, wait a moment and check the base station's indicator		{{server_host}}	{{server_port}}
+ilights; the leftmost LTE status indicator light should be a steady		{{server_host}}	{{server_port}}
+iblue, indicating that it's now transmitting LTE signals. This		{{server_host}}	{{server_port}}
+icompletes the base station configuration.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTake out your phone, select any SIM card, turn off the "Automatic		{{server_host}}	{{server_port}}
+iNetwork Selection" option, and the phone will automatically search for		{{server_host}}	{{server_port}}
+inearby mobile networks. If your phone supports LTE band 48,  you		{{server_host}}	{{server_port}}
+ishould see a network named `Lan Tian Mobile` (or your own configured		{{server_host}}	{{server_port}}
+inetwork name), which is the signal transmitted by your base station.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe base station management panel should also display `henb running`,		{{server_host}}	{{server_port}}
+iindicating that the base station is running normally:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ISercomm Base Station Status Page	/usr/uploads/202507/sercomm-status.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRegistering SIM Card Information with Open5GS		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter the core network and base station are running normally, you can		{{server_host}}	{{server_port}}
+iregister SIM cards with the core network to allow phones and other		{{server_host}}	{{server_port}}
+idevices using these SIM cards to connect to the LTE network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPrepare a few programmable SIM cards and program authentication		{{server_host}}	{{server_port}}
+iinformation to your SIM cards according to the		{{server_host}}	{{server_port}}
+1SIM card programming tutorial in the previous post	/en/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/#programming-sim-cards	{{server_host}}	{{server_port}}
+i. Record the SIM card's IMSI/KI/OPC information.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLog in to Open5GS's web management panel, then click `Add a		{{server_host}}	{{server_port}}
+isubscriber`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IOpen5GS Add SIM Card Interface	/usr/uploads/202507/open5gs-add-subscriber.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter the SIM card's corresponding IMSI information for `IMSI`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter the SIM card's `KI` for `Subscriber Key`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enter the SIM card's `OPC` for `Operator Key`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iKeep all other options at their defaults and click Save.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInsert the SIM card into your phone, wait a moment, and your phone		{{server_host}}	{{server_port}}
+ishould be able to connect to your mobile network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSummary		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis post mainly records the steps that differ from the Magma core		{{server_host}}	{{server_port}}
+inetwork when setting up Open5GS, as well as some issues specific to		{{server_host}}	{{server_port}}
+isetting it up on NixOS. Compared to Magma, Open5GS has a simpler		{{server_host}}	{{server_port}}
+iinstallation process and does not rely on containerization management		{{server_host}}	{{server_port}}
+itools like Docker. If you are using Ubuntu, most of the above process		{{server_host}}	{{server_port}}
+iis actually automatically completed during `apt install`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFrom the perspective of LTE terminal devices (e.g., mobile phones),		{{server_host}}	{{server_port}}
+ithere is no difference in using these two core network software. Both		{{server_host}}	{{server_port}}
+ihave similar latency and network bandwidth, mainly limited by LTE		{{server_host}}	{{server_port}}
+icommunication itself. (Except for the strange bug I encountered with		{{server_host}}	{{server_port}}
+iMagma where Android phones could not authenticate properly.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI switched to Open5GS for the management convenience mentioned at the		{{server_host}}	{{server_port}}
+ibeginning. You can choose either Open5GS or Magma based on your		{{server_host}}	{{server_port}}
+ipreference.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,117 @@
+i正好一年前，
+我		{{server_host}}	{{server_port}}
+1在 DN42 网络内用 Docker 建立了 Anycast 服务	/article/modify-website/dn42-docker-anycast-dns.lantian	{{server_host}}	{{server_port}}
+i。
+当时我的方法是，自定义容器的镜像，在其中安装一个 Bird，然后加入 OSPF		{{server_host}}	{{server_port}}
+i协议的配置
+文件来广播 Anycast		{{server_host}}	{{server_port}}
+i路由。但是随着时间推移，这套方案出现了以下问题：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 安装 Bird 本身是个较花时间的过程。我的 Bird 不是用 `apt-get`		{{server_host}}	{{server_port}}
+i装的，因
+为		{{server_host}}	{{server_port}}
+1我的 Dockerfile 需要支持多种 CPU 架构	/article/modify-website/gpp-preprocess-dockerfile-include-if.lantian	{{server_host}}	{{server_port}}
+i，
+而 Debian 有些架构的软件源里没有 Bird。而又因为我的构建服务器是		{{server_host}}	{{server_port}}
+iAMD64 架
+构，		{{server_host}}	{{server_port}}
+1使用 `qemu-user-static` 支持其它架构的镜像运行	/article/modify-computer/build-arm-docker-image-on-x86-docker-hub-travis-automatic-build.lantian	{{server_host}}	{{server_port}}
+i，
+为其它架构制作镜像、编译程序时就涉及到大量的指令集翻译，效率非常低。		{{server_host}}	{{server_port}}
+i构建一个
+镜像在不同架构下的版本可能需要 2 小时以上，而安装应用本身的		{{server_host}}	{{server_port}}
+i`apt-get` 流程只
+需要几分钟。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i自己定制镜像也比较花时间。因为容器中需要同时运行目标应用（例如之前的
+Po		{{server_host}}	{{server_port}}
+iwerDNS）和 Bird，就不能直接把目标应用作为 ENTRYPOINT		{{server_host}}	{{server_port}}
+i了，而添加其它的管理程
+序（supervisord、s6-supervise、tini、自己写 Bash		{{server_host}}	{{server_port}}
+i脚本）等都额外增加了镜像复杂
+度（也就是出问题的概率），还要考虑信号、返回		{{server_host}}	{{server_port}}
+i值传递，以及僵尸进程的问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最近我在读		{{server_host}}	{{server_port}}
+h`docker-compose` 的参考文档	URL:https://docs.docker.com/compose/compose-file/compose-file-v2/	{{server_host}}	{{server_port}}
+i时，
+发现了 `network_mode` 即容器的网络模式可以设置成 `container:[ID]`		{{server_host}}	{{server_port}}
+i或者
+`service:[name]`，也就是多个容器可以共享它们的网络命名空间，统一进		{{server_host}}	{{server_port}}
+i行 IP 的分配和
+路由。这意味着我可以单开一个 Bird		{{server_host}}	{{server_port}}
+i容器，然后把它挂到应用程序的网络上，就可以在不
+动原容器的情况下实现		{{server_host}}	{{server_port}}
+iAnycast 了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i方案一：两个容器		{{server_host}}	{{server_port}}
+i最简单直观的方法就是两个容器，一个跑应用程序，一个跑 Bird。此处以		{{server_host}}	{{server_port}}
+iPowerDNS 为
+例，我的配置文件如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i此处我把网络相关配置（包括 IP 和端口）都设置在了 PowerDNS 容器上，然后把		{{server_host}}	{{server_port}}
+iBird 容
+器指定 `network_mode:		{{server_host}}	{{server_port}}
+iservice:powerdns`，让它们共享网络命名空间。此处 Bird 容器
+仍然需要		{{server_host}}	{{server_port}}
+i`NET_ADMIN` 权限来处理广播和路由的事情，但 PowerDNS		{{server_host}}	{{server_port}}
+i就不需要
+`NET_ADMIN` 了，也算是提升了一点安全性？		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后 `docker-compose up -d` 启动两个容器就可以了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i问题出现了		{{server_host}}	{{server_port}}
+i但是没多久，主系统就收不到 Bird 容器发来的 OSPF 广播了。我进入 Bird		{{server_host}}	{{server_port}}
+i容器一看：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIP 分配没了。我再一看 PowerDNS 容器，因为我的服务器上都有		{{server_host}}	{{server_port}}
+hWatchtower	URL:https://github.com/containrrr/watchtower	{{server_host}}	{{server_port}}
+i自动跟进镜像的最新版本，
+然后这段时间我的构建服务器更新了 PowerDNS		{{server_host}}	{{server_port}}
+i的镜像，容器被重新创建了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因为 `network_mode` 中的 `service` 实际上是 `docker-compose`		{{server_host}}	{{server_port}}
+i提供的简写方式，实
+际上是按容器 ID 绑定的。因为 PowerDNS		{{server_host}}	{{server_port}}
+i容器被重新创建了，Bird 容器的网络命名空间
+也丢失了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i此时如果尝试重启 Bird 容器，会提示找不到 PowerDNS 原先 ID		{{server_host}}	{{server_port}}
+i对应的容器。但麻烦事情
+来了：这时你执行 `docker-compose up -d`		{{server_host}}	{{server_port}}
+i时，`docker-compose`		{{server_host}}	{{server_port}}
+i不会帮你重新创建容
+器，只会尝试启动现有的容器，然后失败。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因此，我需要一个永远运行、永远不更新的容器来承载网络命名空间，把随时会更		{{server_host}}	{{server_port}}
+i新的
+PowerDNS 和 Bird		{{server_host}}	{{server_port}}
+i的容器都挂载上去，来保证更新时不会出现严重的问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i方案二：三个容器		{{server_host}}	{{server_port}}
+i我选择了		{{server_host}}	{{server_port}}
+hBusybox 容器	URL:https://hub.docker.com/_/busybox?tab=tags	{{server_host}}	{{server_port}}
+i来永远运行，
+它够小，占用内存也可以忽略不计。在我写这篇文章时，Busybox		{{server_host}}	{{server_port}}
+i的最新版本是 1.31.1。
+但是 1.31.1		{{server_host}}	{{server_port}}
+i的镜像还是隔一段时间会有更新。因此我选择了上一个版本的 1.31.0		{{server_host}}	{{server_port}}
+i的镜
+像，这个版本的镜像上次更新在 3 个月前。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我用 Busybox 运行 `tail -f /dev/null` 来让它永久运行。这个操作不占用		{{server_host}}	{{server_port}}
+iCPU。我额外
+给容器设置了 Label，禁止 Watchtower 对它进行更新。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i配置文件如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i此处，Busybox 的容器会一直稳定的运行，保证网络命名空间的正常；PowerDNS 和		{{server_host}}	{{server_port}}
+iBird
+都挂上去提供服务，同时它们可以任意更新而不影响整个网络命名空间的存		{{server_host}}	{{server_port}}
+i在。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i至于 Busybox 占用多少资源：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i384KB 内存可以直接忽略不计。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,312 @@
+i国庆放假期间我在某宝上买了一只树莓派 3B		{{server_host}}	{{server_port}}
+i和一堆传感器，准备搞一波事情。因为是国
+庆，所以各家店发货都有不同的延迟，		{{server_host}}	{{server_port}}
+i导致我国庆长假后又过了好几天东西才到齐。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i先上张完成体的图片：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我分了五家店买了这些东西：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 树莓派 3B（含外壳、风扇、散热片、电源套装）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 闪迪 32G TF卡		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 树莓派传感器套装（支持树莓派的 3.3V 电平，总共 16 个）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 5 寸 800x480 触摸屏		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- DS3231 时钟模块和 GPIO 针脚标记板（后买）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i树莓派本体		{{server_host}}	{{server_port}}
+i最先到的是树莓派 3B 本体，以及配套的外壳风扇散热片等等。然而我买的 TF		{{server_host}}	{{server_port}}
+i卡还没到……
+所以这只树莓派暂时什么都干不了。不过我还是可以把外壳风扇等		{{server_host}}	{{server_port}}
+i等先组装起来。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然而我很快发现了问题：店家的外壳内支撑柱的位置不准，同一侧的两根柱子同时		{{server_host}}	{{server_port}}
+i只能有一
+根插在树莓派电路板的孔里，另一根只能顶在电路板上，树莓派装不进		{{server_host}}	{{server_port}}
+i去。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后我就拿起剪刀把那两根柱子剪了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i树莓派很顺利地放了进去。因为外壳大小刚好，所以没了柱子不影响树莓派的稳		{{server_host}}	{{server_port}}
+i定性。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i散热片居然是用双面胶粘在芯片上的，我不禁怀疑它们甚至会影响散热。或许之		{{server_host}}	{{server_port}}
+i后我应该用
+硅脂把双面胶替换掉。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i风扇要接在树莓派的 4、6 针脚上（分别是 5V		{{server_host}}	{{server_port}}
+i和接地），它也给我一种仅仅作为安慰剂存
+在的感觉。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i上一下电，树莓派主板红灯亮起，风扇开始转动，说明启动成功。但因为 TF		{{server_host}}	{{server_port}}
+i卡还没到，树
+莓派什么都干不了，所以还得等等。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTF 卡		{{server_host}}	{{server_port}}
+iTF 卡在第二天到达。我只需要把树莓派的 Raspbian 系统 dd 进 TF		{{server_host}}	{{server_port}}
+i卡里就大功告成了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i首先去		{{server_host}}	{{server_port}}
+ihttps://www.raspberrypi.org/downloads/raspbian/		{{server_host}}	{{server_port}}
+i下载 Raspbian。因为
+我打算自己装桌面，所以我下载了 Lite 版。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因为我自己用的是 Mac OS X，所以不需要装额外的软件。先是打开磁盘工具把		{{server_host}}	{{server_port}}
+iTF 卡卸载
+了，然后：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i把卡从电脑上拔下来插进树莓派，上电，开机，一气呵成。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i学校网络		{{server_host}}	{{server_port}}
+i但是……我是在学校里，所以我遇到了尴尬的情况：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 学校的有线网络和无线网络 A 需要通过网页登录。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 学校有 eduroam 无线网络，但是 eduroam 是 WPA2-EAP		{{server_host}}	{{server_port}}
+i企业级认证，需要输入用户名
+和密码。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我的显示屏还没到。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我有无线鼠标，但是没有无线键盘。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i当务之急是先连进树莓派。那么用电脑把 Wi-Fi		{{server_host}}	{{server_port}}
+i共享到有线网端口就行了。不幸的是，Mac
+OS X 拒绝共享 WPA2-EAP		{{server_host}}	{{server_port}}
+i的无线网络，所以我只能先用一下 Windows。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i进入控制面板-网络与共享中心-WiFi连接-属性，选上“允许其它用户通过此计算		{{server_host}}	{{server_port}}
+i机的
+Internet 连接来连接”，再选择你的有线网卡，类似下图：（图片来自网络）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后把树莓派用网线连到电脑上就可以了。那么怎么获知树莓派的 IP		{{server_host}}	{{server_port}}
+i呢？打开命令提示
+符，输入 `arp -a`，然后去找 IP 为 192.168.137.xxx		{{server_host}}	{{server_port}}
+i的设备，它就是树莓派，用 PuTTY
+等工具连上去吧。默认用户名 pi，密码		{{server_host}}	{{server_port}}
+iraspberry。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i连接 eduroam		{{server_host}}	{{server_port}}
+i又一个问题出现了：我的树莓派必须能不依赖电脑自己上网，否则我买它没什么意		{{server_host}}	{{server_port}}
+i义，还不
+如直接买只 Arduino 接在 24 小时运行的电脑上。于是我 Google		{{server_host}}	{{server_port}}
+i了一通 wpa_supplicant
+连接 WPA2-EAP 网络的配置，但是全都连不上。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我突然想到，我的手机是 Android 系统，Android 也是 Linux，连 Wi-Fi		{{server_host}}	{{server_port}}
+i同样是用
+wpa_supplicant，把它的配置文件抄出来不就行了？于是我把手机的
+`/		{{server_host}}	{{server_port}}
+idata/misc/wifi/wpa_supplicant.conf`		{{server_host}}	{{server_port}}
+i里对应的段落抄进树莓派的
+`/etc/wpa_supplicant/wpa_supplicant.conf`，成		{{server_host}}	{{server_port}}
+i功连上了 eduroam。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i配置文件如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i端口映射		{{server_host}}	{{server_port}}
+i如同大多数公共 Wi-Fi		{{server_host}}	{{server_port}}
+i一样，学校的无线网络禁止无线设备之间访问。所以我需要一个工
+具来帮我映射		{{server_host}}	{{server_port}}
+i一下 SSH 端口，保证最基本的访问。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i花生壳？看起来还可以，1M 的免费带宽给 SSH		{{server_host}}	{{server_port}}
+i也够了，但是即使是免费套餐也要付 6 块
+钱开通。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i于是我找了两家国内的免费 ngrok 服务提供商，把 22		{{server_host}}	{{server_port}}
+i端口映射了出去。类似的服务商都
+有详细的步骤说明，且各家操作方法有一定区		{{server_host}}	{{server_port}}
+i别，不再赘述。它们保证了基础访问，但是还
+是不太稳定。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后我还是在自己的腾讯云主机上装了 frp 来进行端口映射。直接参照		{{server_host}}	{{server_port}}
+i官方文档		{{server_host}}	{{server_port}}
+i操
+作即可。我还顺手在上面装了一个本博客之前经常提到的 ZeroTier One。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i传感器		{{server_host}}	{{server_port}}
+i传感器终于到了。我先拿了一只 DHT11 温湿度传感器出来准备连上去。DHT11		{{server_host}}	{{server_port}}
+i总共有三个
+针脚，分别是 Vcc（3.3V 供电）、GND（地线）和 DATA（信号）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i和 Arduino		{{server_host}}	{{server_port}}
+i不同，树莓派的电源和数据针脚全部混在了一起，并且没有标示各个针脚用
+途。		{{server_host}}	{{server_port}}
+i不过，树莓派里有软件可以查询。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i首先 `apt-get install wiringpi`，再 `gpio		{{server_host}}	{{server_port}}
+ireadall`，你就能看到这样的输出：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这就是各个针脚的意义，它们的状态，以及通过不同方式调用时的编号。你也可以		{{server_host}}	{{server_port}}
+i买一块
+GPIO 针脚标记板，它可以套在树莓派的 GPIO		{{server_host}}	{{server_port}}
+i上，标示出各个针脚的用途。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i总之，把 Vcc 接到 1 号脚，GND 接到 9 号脚，DATA 接到		{{server_host}}	{{server_port}}
+iGPIO.7，传感器和树莓派就连
+通了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i下一步是读取数据。由于 DHT11		{{server_host}}	{{server_port}}
+i输出数据时以微秒为单位变化输出，并且规律有些复杂，
+我先用了现成的代码，例		{{server_host}}	{{server_port}}
+i如		{{server_host}}	{{server_port}}
+ihttps://github.com/szazo/DHT11_Python		{{server_host}}	{{server_port}}
+i这
+个。`git clone` 下来后，编辑		{{server_host}}	{{server_port}}
+idht11_example.py，改掉针脚编号，就能看到这样的输
+出：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i搞定。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i触摸屏		{{server_host}}	{{server_port}}
+i触摸屏是最晚发货的一个，也是最晚到的。这块屏上有一个两排共 26		{{server_host}}	{{server_port}}
+i个针脚口（母座），
+可以直接插到树莓派上提供触摸信号，然后通过一个 HDMI		{{server_host}}	{{server_port}}
+i转接头连接树莓派和屏幕的
+HDMI 接口就可以显示图像。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i不过，要使用这块屏幕还是要费一些功夫的，例如这块屏幕支持且仅支持 800x480		{{server_host}}	{{server_port}}
+i分辨
+率，因此必须在 `/boot/config.txt` 里修改分辨率：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i并在 `/etc/lightdm/lightdm.conf` 里加上这句话，强制 800x480 分辨率：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i另外这块屏幕设置触摸也要在 config.txt		{{server_host}}	{{server_port}}
+i里加几句话，但是店家产品详情里给的代码是！
+错！的！我启用触摸失败后 Google		{{server_host}}	{{server_port}}
+i了好久，直到我在树莓派官方论坛上看到了一个同样被
+坑的外国人的帖子。触摸		{{server_host}}	{{server_port}}
+i芯片的型号是 ADS7846，而店家给成了 ADS7856，驱动加载失败，
+自然无法触摸。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i总之，加上这两句话：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后装个触摸驱动，并启动 LightDM：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i触摸屏就可以用了。最后，配置一下长按作右键处理，就像手机上一样：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i不过这块屏幕还是有一些不足的地方：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 有时候会拖影。这个算小问题，毕竟屏幕还算便宜。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i耗电巨大，树莓派上只连接了屏幕时，右上角还会时不时出现黄色闪电图标（代表		{{server_host}}	{{server_port}}
+i电压
+不足），如果插上移动硬盘，闪电图标就常亮了。我可能需要一块额外的电源		{{server_host}}	{{server_port}}
+i板来给它
+供电，但我某宝上暂时没找到合适的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 把 GPIO 的所有供电针脚全占了，而且在一大堆针脚空置的前提下整整占了 26		{{server_host}}	{{server_port}}
+i脚，导
+致我无法在无外部电源并且不焊接的情况下接传感器。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我又没法在寝室里焊接，对吧？emmmmm……（C）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i于是我把它拔了然后暂时放了起来。等到需要用到的时候再装上用吧。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i连接有线网		{{server_host}}	{{server_port}}
+i接下来我要把我的移动硬盘接上去，做一个简易 NAS。由于 NAS		{{server_host}}	{{server_port}}
+i流量较大，因此不能通过
+外网服务转发，必须直连。由于 Wi-Fi		{{server_host}}	{{server_port}}
+i下各设备有隔离，因此我只能把树莓派接到有线网
+上。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是学校网络有登录页面，直接插上网线不登陆是连不上网的。并且即使 Wi-Fi		{{server_host}}	{{server_port}}
+i还连着，
+一旦插上网线，所有流量都会从有线网络走，端口映射等等也就断了。em		{{server_host}}	{{server_port}}
+immmm……		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我用自己的电脑登录学校网络，然后用浏览器的开发者工具监测网络，记录下登陆		{{server_host}}	{{server_port}}
+i请求提交
+时 POST 的内容和地址。然后在树莓派上建立一个脚本，如果 ping		{{server_host}}	{{server_port}}
+i不通外网，就用 curl
+模拟提交一次。然后 crontab 设置每分钟执行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i脚本内容如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i插上网线一分钟后，腾讯云主机的 frp		{{server_host}}	{{server_port}}
+i显示客户端连了上来。登进树莓派关掉无线网络
+（就是注释掉		{{server_host}}	{{server_port}}
+iwpa_supplicant.conf）里的那几条，搞定。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i做 NAS		{{server_host}}	{{server_port}}
+i树莓派的有线网卡是 100M 而非 1G 的，而且它的 USB 都是 2.0		{{server_host}}	{{server_port}}
+i的，这也使得它不怎么适
+合做正经的		{{server_host}}	{{server_port}}
+iNAS。不过做一个玩玩级别的还是一点问题都没有的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i拔了屏幕后，我就有足够的电力去接移动硬盘了。插上移动硬盘，		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i分区挂载完成。然后是安装 Netatalk 做 AFP 文件共享和 Time Machine		{{server_host}}	{{server_port}}
+i备份
+盘。Raspbian 软件源自带的 netatalk 太老了，不能用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i你可以下载现成的 deb 或是自行编译。如果你要现成的，从		{{server_host}}	{{server_port}}
+ihttps://monal.im/netatalk/		{{server_host}}	{{server_port}}
+i下载 netatalk 和 libatalk16 的 deb 文件并
+`dpkg -i *.deb` 安装。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你要自己编译，参考		{{server_host}}	{{server_port}}
+ihttps://samuelhewitt.com/blog/2015-09-12-debian-linux-server-mac-os-ti		{{server_host}}	{{server_port}}
+ime-machine-backups-how-to		{{server_host}}	{{server_port}}
+i这篇文章操作：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后同样安装 netatalk 和 libatalk16 两个 deb。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i安装完 Netatalk 后，再安装：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i修改 `/etc/netatalk/afp.conf`：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后在 Mac 的终端下运行：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i并在 Time Machine 里选择树莓派即可。如果你在 Time Machine		{{server_host}}	{{server_port}}
+i里找不到树莓派，那么在
+Mac 下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i完工。不过，我睡前（12 点左右）开始备份，第二天早上 7:30 查看状态，还剩 13		{{server_host}}	{{server_port}}
+i小时
+……应该是学校网络限速的锅。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDS3231 时钟模块和 GPIO 针脚标记板		{{server_host}}	{{server_port}}
+i你的电脑关机再开机仍然保持准时，是因为主板上有一个时钟模块，在断电的情况		{{server_host}}	{{server_port}}
+i下也在默
+默地走时。但是树莓派上没有，它每次开机都要网络对时。如果没有网		{{server_host}}	{{server_port}}
+i络，时间就错乱了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我买的那堆传感器里包括了一个 DS1307		{{server_host}}	{{server_port}}
+i时钟模块，但是没焊排针。我在学校里也没有电烙
+铁用，所以干脆再买一块		{{server_host}}	{{server_port}}
+iDS3231（8 块钱），顺便买了块 GPIO 针脚标记板（7		{{server_host}}	{{server_port}}
+i块钱，上
+面提到过）和一些杜邦线（5 块钱），解决针脚太多、担心数错的问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDS3231 安装极其简单，往 1、3、5、7、9 针脚上一插就行，不过 DHT11		{{server_host}}	{{server_port}}
+i就得换个位置：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i进入树莓派系统后，首先删掉 fake-hwclock：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后继续改 `/boot/config.txt`：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i注意如果你原来已经有了 dtoverlay，那么就要把这里的 dtoverlay		{{server_host}}	{{server_port}}
+i内容加到原有的
+dtoverlay 里面去。例如我触摸屏+时钟模块的配置是：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i重启，`sudo hwclock -r`		{{server_host}}	{{server_port}}
+i可以读取时钟模块中的时间，这个时间肯定是错误的，因为没有
+和外界对过时。		{{server_host}}	{{server_port}}
+i执行 `sudo hwclock -w`		{{server_host}}	{{server_port}}
+i写入时间后，再次读取，时间就正确了。之后即
+使树莓派在断网的情况下重启，也		{{server_host}}	{{server_port}}
+i能保持走时准确。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i总结		{{server_host}}	{{server_port}}
+i目前为止，我在树莓派上就折腾了这些。接下来我应该会往上面接更多的传感器，		{{server_host}}	{{server_port}}
+i然后搞一
+个状态页面或者通知系统来监控它们。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i不过，树莓派终究只能玩玩，不适合运行正式的应用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

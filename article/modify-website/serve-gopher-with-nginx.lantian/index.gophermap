@@ -1,0 +1,278 @@
+i更新日志		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 2021-03-24：改进文章处理逻辑，增加识别链接和图片的代码。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 2021-03-21：最初版本。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i什么是 Gopher		{{server_host}}	{{server_port}}
+iGopher 是互联网发展早期的一种网络协议，由美国明尼苏达大学于 1991		{{server_host}}	{{server_port}}
+i年发明，用途类
+似于现在的 HTTP。它的基础协议非常简单：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 客户端连接服务端的 TCP 70 端口，并发送一串 URL，用 CRLF		{{server_host}}	{{server_port}}
+i结尾，例
+如：`some_dir/hello.txt`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 服务端把这个文件的内容全部发过来，然后关闭连接。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 没了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i服务端返回的文件可能是一个		{{server_host}}	{{server_port}}
+iTXT、一张图片、一个二进制文件，也可能是一个有着特殊格
+式的 Gopher		{{server_host}}	{{server_port}}
+i列表文件，称为 `Gophermap`。这个文件每一行由以下几部分组成：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一个字符，代表这一行的类型，是文字（`i`）、到一个 TXT		{{server_host}}	{{server_port}}
+i的链接（`0`）、到另一个
+Gophermap		{{server_host}}	{{server_port}}
+i的链接（`1`）、图片（`I`），还是二进制文件（`9`）。当然还有一些现在
+已经不再		{{server_host}}	{{server_port}}
+i使用的协议，可以参阅		{{server_host}}	{{server_port}}
+hRFC1436 Section 3.8	URL:https://tools.ietf.org/html/rfc1436#section-3.8	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一句话，代表这一行显示的信息，例如 `Hello World`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一个 TAB。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这个链接指向的路径，例如 `/some_dir/hello.txt`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一个 TAB。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这个链接指向的服务器域名或 IP，例如 `gopher.lantian.pub`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一个 TAB。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 这个链接指向的服务器端口，一般是 `70`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- CR+LF 换行符结尾。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在所有内容结束后，`Gophermap`		{{server_host}}	{{server_port}}
+i的最后一行还会有一个单独的英文句点，表示文件结束。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i可以参考以下几个例子：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i由于 Gopher 协议极其简单，它在上世纪 90		{{server_host}}	{{server_port}}
+i年代计算机运算能力不足的背景下得到了广泛
+的运用。但由于客户端唯一能做		{{server_host}}	{{server_port}}
+i的事情就是发送一串 URL，在 Gopher		{{server_host}}	{{server_port}}
+i协议上实现客户端向
+服务端上传数据功能比较复杂，例如搜索功能、评论区等等		{{server_host}}	{{server_port}}
+i。此外，服务端返回数据时也只
+能返回文件本身的数据，而不能像 HTTP		{{server_host}}	{{server_port}}
+i协议一样添加上其它的响应头，这就导致客户端必
+须根据之前收到的 Gophermap		{{server_host}}	{{server_port}}
+i中的信息来判断数据类型，或者干脆自己猜。因此		{{server_host}}	{{server_port}}
+iGopher
+协议最终被功能更加强大的 HTTP 协议替代了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是 Gopher 协议没有消亡。时至今日（2021 年），依然有在活跃更新的 Gopher		{{server_host}}	{{server_port}}
+i服务器
+端软件，例如		{{server_host}}	{{server_port}}
+hGophernicus	URL:https://github.com/gophernicus/gophernicus	{{server_host}}	{{server_port}}
+i，也有一些
+网站仍然在通过 Gopher 协议提供服务。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你想试着访问 Gopher 网站，可以尝试		{{server_host}}	{{server_port}}
+hFirefox 的 Overbite 插件	URL:https://gopher.floodgap.com/overbite/	{{server_host}}	{{server_port}}
+i，或者		{{server_host}}	{{server_port}}
+hGopherus	URL:http://gopherus.sourceforge.net/	{{server_host}}	{{server_port}}
+i等客户端软件。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i为什么要用 nginx？		{{server_host}}	{{server_port}}
+i相比起 Gophernicus 等专用的 Gopher 服务端软件，nginx		{{server_host}}	{{server_port}}
+i对现代的动态网页技术有着更
+好的支持。例如它可以用 FastCGI 对接 PHP 和		{{server_host}}	{{server_port}}
+iASP.NET（Mono）来动态生成内容，或者把
+请求代理到其它基于 HTTP		{{server_host}}	{{server_port}}
+i的服务器，作为一个 Gopher 代理。相比之下，Gophernicus 只
+支持传统的		{{server_host}}	{{server_port}}
+iCGI，也没有代理功能。此外，nginx 的高性能有目共睹。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i不过我选择 nginx 还有另一个原因：我正
+在		{{server_host}}	{{server_port}}
+1把 nginx 魔改成一个 WHOIS 服务器	/article/modify-website/serve-dn42-whois-with-nginx.lantian/	{{server_host}}	{{server_port}}
+i（给
+DN42 用的），而 WHOIS 也是和 Gopher		{{server_host}}	{{server_port}}
+i一样，一问一答的协议。我把修改的功能稍微调整
+一下就可以直接支持 Gopher		{{server_host}}	{{server_port}}
+i了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i让 nginx 支持 Gopher		{{server_host}}	{{server_port}}
+inginx 本身是一个 HTTP 服务器。我们先不考虑引入了二进制命令的现代		{{server_host}}	{{server_port}}
+iHTTP/2.0，或者
+基于 UDP 的 QUIC 和 HTTP/3.0，先回头看曾经被广泛使用的		{{server_host}}	{{server_port}}
+iHTTP/1.1 协议，当时的一个
+请求长这样：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i上面一部分是客户端发起的请求，其中必要的是 `GET http://localhost/		{{server_host}}	{{server_port}}
+iHTTP/1.1` 部分
+和 `Host:		{{server_host}}	{{server_port}}
+ilocalhost`，它们分别告知了服务器访问的路径（`/test.php`）和域名
+（`localho		{{server_host}}	{{server_port}}
+ist`）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i其余部分，例如常见的 User-Agent 等请求头，对于 HTTP		{{server_host}}	{{server_port}}
+i协议来说并不必要。我们可以用
+`telnet localhost 80`		{{server_host}}	{{server_port}}
+i指令连接服务器，并只保留前两行手动发起请求：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i服务端依然返回了页面的内容。但是这比起我们需要的多了不少东西：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Gopher 客户端不认识 HTTP 的 200 状态码；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 多余的 Date、Content-Type 等响应头；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- nginx 回复的响应内容经过 `Transfer-Encoding: chunked` 编码，Gopher		{{server_host}}	{{server_port}}
+i客户端也不
+认识。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在输完 `Host:` 一行后我们按了两次回车，nginx 才发送响应。Gopher		{{server_host}}	{{server_port}}
+i客户端只会发一
+次回车。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 最重要的是，注意到那个 `^C` 没？那是我手动按 `Ctrl+C`		{{server_host}}	{{server_port}}
+i中断了连接。nginx 默认启
+用了 `Connection:		{{server_host}}	{{server_port}}
+ikeep-alive`，发送完请求后不会主动关闭连接，而会等待客户端发
+起第二个请求		{{server_host}}	{{server_port}}
+i，如果是 Gopher 客户端就只能一直等下去了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因此，基于 HTTP/1.1 修改太过复杂。不过，有 1.1 就有 1.0。我们用 HTTP/1.0		{{server_host}}	{{server_port}}
+i试试？		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这回服务端主动关闭了连接，并且返回的数据也不是 `chunk`		{{server_host}}	{{server_port}}
+i模式编码了，可喜可贺。但
+是 HTTP 的响应头还在，难道我们要把 nginx		{{server_host}}	{{server_port}}
+i发送响应头的逻辑全干掉？这个修改量有点
+大。另外，我们还是得按两次回车。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i好消息是，在 HTTP/1.0 之前，还有一版极简的协议 HTTP/0.9，就一行：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i客户端只发送了上面的 GET 一行。在发送换行符后，nginx		{{server_host}}	{{server_port}}
+i就直接把响应数据
+`Hello World` 发过来了，不用按两次回车，没有带上 200		{{server_host}}	{{server_port}}
+i状态码或者别的响应头，还不
+忘关闭连接。这已经很接近我们想要的效果了：这		{{server_host}}	{{server_port}}
+i里的 HTTP 客户端发送了
+`GET /test.php[回车]`，而 Gopher 客户端会发送		{{server_host}}	{{server_port}}
+i`test.php[回车]`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i此时我们的修改方法已经确定：在 nginx 中添加一版协议来解析 Gopher		{{server_host}}	{{server_port}}
+i请求，把请求类
+型锁定为 GET，在 URL 前面插入一个 `/`		{{server_host}}	{{server_port}}
+i斜杠，剩余逻辑全部照抄 HTTP/0.9 的就好。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+inginx 补丁及用法		{{server_host}}	{{server_port}}
+i按照以上方法，我做了一个补丁，可以直接打到 nginx 1.19.7		{{server_host}}	{{server_port}}
+i的源码里。这个补丁可以在
+这里下载
+到：		{{server_host}}	{{server_port}}
+hhttps://gist.github.com/xddxdd/293becc41d805d7b8cfb5d11b6e326e1	URL:https://gist.github.com/xddxdd/293becc41d805d7b8cfb5d11b6e326e1	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这个补丁总共做了三件事情：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 增加了一个 `listen` 的选项 `plain`，代表用于接收 Gopher 的、不带 GET		{{server_host}}	{{server_port}}
+i的请求。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 例如 `listen 70 plain default_server;`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 注意开启 `plain` 选项后，这个端口就不能接受普通的 HTTP		{{server_host}}	{{server_port}}
+i请求了！因此不要把
+80 端口的 `listen` 加上这个选项，更不要和 `http2`		{{server_host}}	{{server_port}}
+i之类的选项一起开。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 理论上也支持 SSL，但我没试过。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 增加了一个 `plain` 模式专用的、解析 URL 用的状态机，相比 HTTP		{{server_host}}	{{server_port}}
+i的状态机，删除
+了解析请求类型（`GET`）、域名（`http://localhost`）和 HTTP		{{server_host}}	{{server_port}}
+i版本（`HTTP/1.1`）
+相关的功能，请求类型锁定为 `GET`，域名设置为 `null`（与		{{server_host}}	{{server_port}}
+iHTTP/1.0 相同），HTTP
+版本锁定为 0.9。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在开始接收客户端的请求前，先往接收缓冲区存一个斜杠 `/`，以达到向 URL		{{server_host}}	{{server_port}}
+i开头插入
+斜杠的效果。nginx 后续处理流程需要频繁用到存放 URL		{{server_host}}	{{server_port}}
+i的指针，相比修改所有用到
+URL		{{server_host}}	{{server_port}}
+i的逻辑，直接插入一个斜杠是最简单粗暴、也是最稳妥的方法。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在编译 nginx 时，需要开启 `--with-http_plain_module` 参数。此外在配置		{{server_host}}	{{server_port}}
+inginx 时，
+记得设置 `index gophermap;` 让 nginx 默认读取文件夹中的		{{server_host}}	{{server_port}}
+iGophermap。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i生成 Gophermap 文件		{{server_host}}	{{server_port}}
+i有了服务端，接下来需要的就是网站的文件了。由于我用的是静态网站生成器		{{server_host}}	{{server_port}}
+iHexo，文章
+的文件格式都是 Markdown，我就偷了个懒，把 Markdown 文件用		{{server_host}}	{{server_port}}
+hRemark	URL:https://github.com/remarkjs/remark	{{server_host}}	{{server_port}}
+i稍微调整一下格式、再过一下		{{server_host}}	{{server_port}}
+hPrettier	URL:https://github.com/prettier/prettier	{{server_host}}	{{server_port}}
+i缩成 70		{{server_host}}	{{server_port}}
+i字符一行。然后我用正则
+表达式识别文章中的链接和图片，把他们放到单独的一		{{server_host}}	{{server_port}}
+i行并设置为链接（`1`）或图片
+（`I`）格式，因为 Gophermap		{{server_host}}	{{server_port}}
+i不支持文字和链接混在同一行。最后把剩余文字全部设置为
+`i`：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i生成文件的效果类似于：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i（实际文件中都是 Tab，我的编辑器自动把 Tab 都替换成了空格）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i注意到后面的 `{{server_addr}}` 和 `{{server_port}}` 了吗？它们是		{{server_host}}	{{server_port}}
+iGophermap		{{server_host}}	{{server_port}}
+i中指
+定链接的目标主机和端口的参数。这两个参数不能遗漏，也不存在“相对于		{{server_host}}	{{server_port}}
+i当前路径”的值。
+我选择把它们都交给 nginx 替换处理：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i有了文章，我还需要一个目录作为首页。我直接写了一个 `for`		{{server_host}}	{{server_port}}
+i循环给每篇文章生成一个
+链接，并附上两行的内容概要，关键逻辑如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我把 Hexo 生成 Gophermap 的逻辑上传到了		{{server_host}}	{{server_port}}
+hhttps://gist.github.com/xddxdd/99170395595e339ed5735cdf9b9b2cd1	URL:https://gist.github.com/xddxdd/99170395595e339ed5735cdf9b9b2cd1	{{server_host}}	{{server_port}}
+i，
+把 `gopher.js` 放到主题的 `scripts`		{{server_host}}	{{server_port}}
+i目录（例如
+`themes/lantian/scripts/gopher.js`）即可使用。但要注意的是，我		{{server_host}}	{{server_port}}
+i手动删除了一些与我
+的网站相关的代码（主要是多语言支持相关），并且删除完后		{{server_host}}	{{server_port}}
+i没有再测试，代码可能会有点
+问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最终效果		{{server_host}}	{{server_port}}
+i首先是用 Linux 终端下的 Gopherus 浏览器访问的效果：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IGopherus 访问中文内容	/usr/uploads/202103/gopher-gopherus.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i网站内容可以正常显示了，但是和预期还有些差别：Gopherus 将每行在 80		{{server_host}}	{{server_port}}
+i字节处截断
+了，而 UTF-8 编码的中文字每个占 3 字节，导致了有约		{{server_host}}	{{server_port}}
+i的内容被挤到了
+下一行。英文站就没有这个问题：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IGopherus 访问英文内容	/usr/uploads/202103/gopher-gopherus-en.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i比起 Gopherus，还有更现代的解决方案，Firefox 浏览器加 Overbite 插件：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IFirefox + Overbite 访问中文内容	/usr/uploads/202103/gopher-overbite.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i中文内容的排版比起 Gopherus 好了不少。当然英文内容也可以正常显示：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IFirefox + Overbite 访问英文内容	/usr/uploads/202103/gopher-overbite-en.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我们点进一篇文章看看。虽然只是 Markdown		{{server_host}}	{{server_port}}
+i没做太多额外的处理，但文章本身是可读的：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IFirefox + Overbite 访问中文文章	/usr/uploads/202103/gopher-overbite-article.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IFirefox + Overbite 访问英文文章	/usr/uploads/202103/gopher-overbite-article-en.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i你也可以用 Gopher 客户端访问		{{server_host}}	{{server_port}}
+1gopher://gopher.lantian.pub	/gopher://gopher.lantian.pub	{{server_host}}	{{server_port}}
+i自行查看效果。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

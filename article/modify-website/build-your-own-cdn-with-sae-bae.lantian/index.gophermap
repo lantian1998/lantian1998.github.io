@@ -1,0 +1,51 @@
+i警告：由于我疏忽，把SAE		{{server_host}}	{{server_port}}
+iCDN的index.php代码打错了一行，请参照下面代码中的注释修
+改代码，否则将造		{{server_host}}	{{server_port}}
+i成远程图片不能获取的问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i大多数人的博客都放在国外，原因我不说了。但是SAE和BAE的服务器放在国内，速		{{server_host}}	{{server_port}}
+i度很快
+（SAE由于是电信通机房，抽风有点严重），因此我们可以利用它们为自己的		{{server_host}}	{{server_port}}
+i博客加速。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1.SAE搭建CDN		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这个方法要用到SaeLayerCDN，在SAE的应用商店里也有，可以一键安装，然后修改		{{server_host}}	{{server_port}}
+i几个简单
+的设置就完成运行。不过让我百思不得其解的是，为什么一个能在一个		{{server_host}}	{{server_port}}
+iphp文件里完成的东
+西愣是要弄成5个，还要搞面向对象的编程？		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我把里面的无用代码删除了一大堆，并且合并到了一个php里。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i安装方法：SAE里创建应用，创建一个storage名为cache，代码管理里创建代码库，		{{server_host}}	{{server_port}}
+i在编辑
+代码里创建以下文件：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1）config.yaml 内容：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2）index.php 内容：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i保存，然后把你原网站里所有的图片、视频等你希望走SAE的内容的URL从你的网		{{server_host}}	{{server_port}}
+i站改成SAE
+给你的二级域名。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.BAE搭建CDN		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这个可就没有现成代码了，我就照着上面的那个改了一下。要命的是BAE官方的开		{{server_host}}	{{server_port}}
+i发文档有
+问题，搞得我折腾半天。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBAE创建应用，类型为PC Iframe，然后打开BAE托管。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在云存储里创建一个bucket，名字自定。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在应用配置里增加一条url类型规则，规则为“/(.*)”（不含引号），执行index.php		{{server_host}}	{{server_port}}
+i。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在代码管理里面创建一个文件，名为index.php，内容如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i存盘即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我已经把这个部署完毕了，等会上传数据。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

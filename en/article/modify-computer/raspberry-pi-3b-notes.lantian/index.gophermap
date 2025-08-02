@@ -1,0 +1,104 @@
+iDuring the National Day holiday, I purchased a Raspberry Pi 3B and a		{{server_host}}	{{server_port}}
+ibunch of sensors from Taobao to start some projects. Due to holiday		{{server_host}}	{{server_port}}
+ishipping delays, all components arrived piecemeal days after the		{{server_host}}	{{server_port}}
+ivacation ended.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, a photo of the completed setup:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI ordered from five different stores:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Raspberry Pi 3B (with case, fan, heatsinks, power supply)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SanDisk 32GB TF card		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Raspberry Pi sensor kit (3.3V compatible, 16 sensors total)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 5-inch 800x480 touchscreen		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- DS3231 RTC module and GPIO pin labels (purchased later)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRaspberry Pi Unit		{{server_host}}	{{server_port}}
+iThe Pi 3B arrived first. However, the TF card hadn't arrived yet,		{{server_host}}	{{server_port}}
+ileaving the Pi unusable. I proceeded to assemble the case and cooling		{{server_host}}	{{server_port}}
+isystem.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEncountered an issue: The case's internal support pillars were		{{server_host}}	{{server_port}}
+imisaligned. I resolved this by cutting off two obstructing pillars		{{server_host}}	{{server_port}}
+iwith scissors:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe heatsinks used double-sided tape, which I suspect might hinder		{{server_host}}	{{server_port}}
+iheat dissipation. The fan (connected to 5V and GND pins) felt more		{{server_host}}	{{server_port}}
+ilike a placebo effect.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTF Card Setup		{{server_host}}	{{server_port}}
+iThe TF card arrived the next day. Flashed Raspbian Lite using:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInserted into Pi and powered on.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSchool Network Challenges		{{server_host}}	{{server_port}}
+iFaced three hurdles:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Campus wired/WiFi required web login		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Eduroam WiFi used WPA2-EAP enterprise auth		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- No display/keyboard for initial setup		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWorkaround: Shared internet from Windows PC via Ethernet. Used `arp		{{server_host}}	{{server_port}}
+i-a` to find Pi's IP (192.168.137.xxx) and connected via PuTTY.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEduroam Configuration		{{server_host}}	{{server_port}}
+iCopied Android's wpa_supplicant configuration for Eduroam:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPort Forwarding		{{server_host}}	{{server_port}}
+iUsed free ngrok services initially, then switched to self-hosted frp		{{server_host}}	{{server_port}}
+ion Tencent Cloud for stable SSH access. Also deployed ZeroTier One for		{{server_host}}	{{server_port}}
+iVPN connectivity.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSensor Integration		{{server_host}}	{{server_port}}
+iFirst test with DHT11 temp/humidity sensor:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- VCC: Pin 1 (3.3V)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- GND: Pin 9		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- DATA: GPIO7 (wPi pin 7)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsed pre-built Python library from		{{server_host}}	{{server_port}}
+iszazo/DHT11_Python		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTouchscreen Setup		{{server_host}}	{{server_port}}
+i5" 800x480 display required config tweaks:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i/boot/config.txt		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i/etc/lightdm/lightdm.conf		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalled touch drivers and configured long-press right-click:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWired Network Automation		{{server_host}}	{{server_port}}
+iScript for campus network login:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdded to crontab for periodic checks.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNAS Implementation		{{server_host}}	{{server_port}}
+iMounted external HDD and configured Netatalk for Time Machine:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i/etc/netatalk/afp.conf		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMac configuration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDS3231 RTC Module		{{server_host}}	{{server_port}}
+iReplaced fake-hwclock with hardware RTC:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i/boot/config.txt		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCommands:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConclusion		{{server_host}}	{{server_port}}
+iCurrent setup includes basic environmental monitoring and NAS		{{server_host}}	{{server_port}}
+ifunctionality. Future plans include expanding sensor integration and		{{server_host}}	{{server_port}}
+ibuilding a monitoring dashboard. While fun for tinkering, the Pi's		{{server_host}}	{{server_port}}
+ihardware limitations (USB 2.0, 100Mbps Ethernet) make it unsuitable		{{server_host}}	{{server_port}}
+ifor serious NAS use.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

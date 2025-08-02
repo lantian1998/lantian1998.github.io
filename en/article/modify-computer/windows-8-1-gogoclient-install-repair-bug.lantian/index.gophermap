@@ -1,0 +1,52 @@
+iHalf a year ago, when I was still using Ubuntu, I		{{server_host}}	{{server_port}}
+1achieved interoperability between IPv4 and IPv6 using an XP virtual machine + gogoCLIENT	/en/article/modify-computer/ipv4-ipv6-porting.lantian	{{server_host}}	{{server_port}}
+i. Today, when I tried to install gogoCLIENT (hereinafter referred to		{{server_host}}	{{server_port}}
+ias GC) on Windows 8.1, I encountered a bizarre bug.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDownload link:		{{server_host}}	{{server_port}}
+hhttp://www.gogo6.com/profile/gogoCLIENT	URL:http://www.gogo6.com/profile/gogoCLIENT	{{server_host}}	{{server_port}}
+i(account registration required).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen I launched the installer, GC immediately gave me a harsh welcome:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2013/10/3582034854.png	/usr/uploads/2013/10/3582034854.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe solution was straightforward: Right-click the installer, change		{{server_host}}	{{server_port}}
+ithe compatibility mode to Vista, and the main program will run without		{{server_host}}	{{server_port}}
+iissues.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2013/10/3762193501.png	/usr/uploads/2013/10/3762193501.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter installation, I launched the main program, entered the		{{server_host}}	{{server_port}}
+ipreviously used `hg.tfn.net.tw`, and connected. After 10 seconds, a		{{server_host}}	{{server_port}}
+inotification popped up indicating a successful connection. But when I		{{server_host}}	{{server_port}}
+ichecked the network connections, IPv6 showed "No network access"!		{{server_host}}	{{server_port}}
+iViewing the details revealed:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2013/10/3344136822.png	/usr/uploads/2013/10/3344136822.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAll I could think was: Where is the default gateway? (The DNS was also		{{server_host}}	{{server_port}}
+imanually configured by me.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iA Baidu search yielded no results. Switching to Google and searching		{{server_host}}	{{server_port}}
+iin English for "windows gogo6 default gateway" revealed it was indeed		{{server_host}}	{{server_port}}
+ia bug!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFix method:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open Notepad via the Start Menu (or Start Screen) with		{{server_host}}	{{server_port}}
+iAdministrator privileges		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open `C:\Program Files\gogo6\gogoCLIENT\template\windows.cmd` in		{{server_host}}	{{server_port}}
+iNotepad and replace		{{server_host}}	{{server_port}}
+iall occurrences		{{server_host}}	{{server_port}}
+iof:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iwith:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSave the file.		{{server_host}}	{{server_port}}
+i3. Open GC and reconnect to the server.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis successfully sets the default gateway, enabling IPv6 internet		{{server_host}}	{{server_port}}
+iaccess.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

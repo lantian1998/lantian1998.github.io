@@ -1,0 +1,198 @@
+iWhat Happened		{{server_host}}	{{server_port}}
+iThe quality of my previous laptop (Lenovo Legion R720) isn't great.		{{server_host}}	{{server_port}}
+iAfter 4
+years of use, I swapped its keyboard once and replaced its		{{server_host}}	{{server_port}}
+ifailed mechanical
+hard drive with a SATA SSD. In addition, every time		{{server_host}}	{{server_port}}
+iI opened its back panel,
+some plastic residue or even screws would		{{server_host}}	{{server_port}}
+ifall out from the back panel or the
+hinge. These were strong		{{server_host}}	{{server_port}}
+iindications that the laptop already had one foot in the
+grave. So I		{{server_host}}	{{server_port}}
+itook advantage of a special deal and got a new laptop for cheap,		{{server_host}}	{{server_port}}
+iand
+planned to migrate my data over to the new laptop.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe operating system I daily drive, Arch Linux, sits on a Western		{{server_host}}	{{server_port}}
+iDigital SN550
+1T SSD I bought half a year ago (including the EFI boot		{{server_host}}	{{server_port}}
+ipartition and the
+Btrfs-formatted root partition). The usual procedure		{{server_host}}	{{server_port}}
+iis to reinstall the
+operating system on the new laptop. But I had a		{{server_host}}	{{server_port}}
+isecond thought. Apart from some
+tweaks to the touchpad and the NVIDIA		{{server_host}}	{{server_port}}
+iGPU, I didn't have much hardware-specific
+configuration on the OS, so		{{server_host}}	{{server_port}}
+iI can simply adjust or remove these configurations
+and have a working		{{server_host}}	{{server_port}}
+isystem. Easy peasy.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo I took that drive and inserted it into the second M.2 slot on my		{{server_host}}	{{server_port}}
+inew laptop.
+I turned on the computer and saw the EFI boot partition		{{server_host}}	{{server_port}}
+iautomatically picked up
+and listed on the BIOS boot menu. I'm back to		{{server_host}}	{{server_port}}
+ibusiness in no time.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs a regular Arch Linux user, of course the first thing to do when I		{{server_host}}	{{server_port}}
+ilog in is
+`sudo pacman -Syu`. As the system update ran, a "No space		{{server_host}}	{{server_port}}
+ileft on device" error
+popped up, and the update process was aborted. I		{{server_host}}	{{server_port}}
+iran `df -h` and saw I only used
+600GB out of that 1TB drive. What?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI reran `sudo pacman -Syu` and saw another error: "Read-only		{{server_host}}	{{server_port}}
+iFilesystem." I ran
+`mount` and found that the root partition is now		{{server_host}}	{{server_port}}
+i`ro` read only.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPanic		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI took a look at `dmesg` and saw a bunch of Btrfs error messages. They		{{server_host}}	{{server_port}}
+isaid some
+data blocks had incorrect checksums.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMore panic		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI turned off the computer, grabbed my USB drive, and booted into the		{{server_host}}	{{server_port}}
+iArch Linux
+installation ISO on it. I first ran `smartctl -a		{{server_host}}	{{server_port}}
+i/dev/nvme0n1` and saw that the
+drive was 100% healthy (percent of		{{server_host}}	{{server_port}}
+iavailable spare blocks) with 0 data errors.
+Weird. I then ran `btrfs		{{server_host}}	{{server_port}}
+icheck /dev/nvme0n1p2` and after a 10-minute scan, it
+found 3 corrupted		{{server_host}}	{{server_port}}
+ifiles. Two of them are packages downloaded by `pacman`, and
+the other		{{server_host}}	{{server_port}}
+ione from the Java OpenJFX component. I noted down the name of		{{server_host}}	{{server_port}}
+ithat
+component, preparing to reinstall the package later on. I removed		{{server_host}}	{{server_port}}
+ithe 3
+corrupted files and reran `btrfs check`. Everything is back in		{{server_host}}	{{server_port}}
+iorder.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNo big deal		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhile I was rebooting the computer, thinking to myself about how the		{{server_host}}	{{server_port}}
+iBtrfs
+partition had corrupted data out of nowhere, it had a Kernel		{{server_host}}	{{server_port}}
+iPanic early in the
+startup process, with dozens of Btrfs functions in		{{server_host}}	{{server_port}}
+ithe call stack.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPanic		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs I booted to my USB drive again, I suddenly recalled something. I		{{server_host}}	{{server_port}}
+iDID have
+some hardware-specific configuration on my previous laptop.		{{server_host}}	{{server_port}}
+iTo be specific, I
+used		{{server_host}}	{{server_port}}
+hIntel-Undervolt	URL:https://github.com/kitsunyan/intel-undervolt	{{server_host}}	{{server_port}}
+iundervolt the CPU by 0.1V		{{server_host}}	{{server_port}}
+i. For 7th-Gen Intel laptop CPUs, like the i7-7700HQ
+on my previous		{{server_host}}	{{server_port}}
+ilaptop, 0.1V voltage doesn't impact stability. But this minor
+tweak		{{server_host}}	{{server_port}}
+ican reduce the heat output and power consumption by a lot.		{{server_host}}	{{server_port}}
+iHowever,
+starting from 8th-Gen CPUs, with the increasing competition		{{server_host}}	{{server_port}}
+ifrom AMD, Intel was
+pushing its CPUs to their limits, without much		{{server_host}}	{{server_port}}
+iroom left for undervolting.
+Therefore, my configuration undervolted		{{server_host}}	{{server_port}}
+ithe CPU too much and made it unstable.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNo big deal		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI mounted the Btrfs partition, removed the configuration and the		{{server_host}}	{{server_port}}
+ibinary of the
+Intel-Undervolt program, then rebooted again. This time,		{{server_host}}	{{server_port}}
+ialthough I didn't see
+another Kernel Panic, Btrfs printed many		{{server_host}}	{{server_port}}
+imessages instead about how the metadata
+was damaged, and it couldn't		{{server_host}}	{{server_port}}
+imount my `/home` subvolume.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMore panic		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs a long-time Btrfs user, I knew that Btrfs had an extremely complex		{{server_host}}	{{server_port}}
+ion-disk
+format, and the chance of data recovery with damaged metadata		{{server_host}}	{{server_port}}
+iwas close to zero.
+To avoid such situations, I enabled the `-m dup`		{{server_host}}	{{server_port}}
+ioption a while back, to store
+two copies of metadata on the disk. Back		{{server_host}}	{{server_port}}
+ito the installation environment, I ran
+`btrfs check` again. It found a		{{server_host}}	{{server_port}}
+idamaged metadata block and declared that its
+checksum was incorrect.		{{server_host}}	{{server_port}}
+iIt then found the duplicate metadata block for backup,
+and printed the		{{server_host}}	{{server_port}}
+iexact same checksum error.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBoth metadata blocks are dead		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI tried to copy my data away first. I plugged in my USB drive for		{{server_host}}	{{server_port}}
+ibackups and
+ran `cp -r /mnt/home /backup_usb/`, only to see the		{{server_host}}	{{server_port}}
+iconsole covered with
+"Input/output error", and no file made its way to		{{server_host}}	{{server_port}}
+ithe backup drive. Out of
+desperation, I ran `btrfs check --repair`,		{{server_host}}	{{server_port}}
+iwhich cleared my entire `/home`
+subvolume.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI'm DONE		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI took a look at the backup drive. My last backup was from August this		{{server_host}}	{{server_port}}
+iyear.
+Thankfully I usually upload most of my files to GitHub or my		{{server_host}}	{{server_port}}
+iprivate Git server,
+and most of the rest files can be obtained from		{{server_host}}	{{server_port}}
+iother places (like my Steam
+library). Therefore, I didn't lose too		{{server_host}}	{{server_port}}
+imuch data over the 4 months.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAll that's left is the boring reinstallation process.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRecap		{{server_host}}	{{server_port}}
+iMost likely, the Btrfs metadata was corrupted on my second attempt to		{{server_host}}	{{server_port}}
+istart the
+operating system, where it had a Btrfs Kernel Panic. The		{{server_host}}	{{server_port}}
+ireason should be that
+CPU undervolting, causing communication		{{server_host}}	{{server_port}}
+iinstabilities from CPU to RAM or SSD, or
+checksum computation errors.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe adjustments made by Intel-Undervolt will remain effective until		{{server_host}}	{{server_port}}
+ithe system
+is completely shut off. But since I turned off the computer		{{server_host}}	{{server_port}}
+iby long-pressing the
+power button, the computer cold-booted every		{{server_host}}	{{server_port}}
+itime, so the CPU voltage was normal
+in the installation environment		{{server_host}}	{{server_port}}
+ifrom my USB drive, and the operations were
+executed correctly and		{{server_host}}	{{server_port}}
+istably.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLessons Learnt		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Practice 3-2-1 backup strategy on your important data. That is a		{{server_host}}	{{server_port}}
+iminimum of 3
+copies, with 2 stored locally (including the one you're		{{server_host}}	{{server_port}}
+icurrently using, and
+a backup) and 1 stored remotely (like a cloud		{{server_host}}	{{server_port}}
+istorage service).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Whenever Btrfs has the slightest hiccup, the first thing to do		{{server_host}}	{{server_port}}
+ishould always
+be mounting the partition read-only and copying the data		{{server_host}}	{{server_port}}
+ielsewhere, before
+attempting further diagnosis or repair steps. I'd		{{server_host}}	{{server_port}}
+iimagine that this applies
+to other CoW filesystems (like ZFS) as well.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

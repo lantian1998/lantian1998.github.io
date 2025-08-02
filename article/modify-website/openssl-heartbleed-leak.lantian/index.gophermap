@@ -1,0 +1,58 @@
+i2014年4月8日，微软正式停止对Windows XP提供支持服务。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2014年4月8日，著名开源SSL支持软件OpenSSL爆出“心血”漏洞，该漏洞面前几乎现		{{server_host}}	{{server_port}}
+i在的一切
+IDS系统和防火墙都无法防御。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSSL，全称Secure Socket		{{server_host}}	{{server_port}}
+iLayer，是一种互联网上广泛使用的加密协议，它可以防止数据在
+用户和服务器传		{{server_host}}	{{server_port}}
+i输时被窃听。OpenSSL是一款开放源代码的SSL支持软件，通过调用它，所有
+软件		{{server_host}}	{{server_port}}
+i都可以轻松实现SSL加密连接，不需要自己再研究一遍SSL了。HTTPS协议就利用SS		{{server_host}}	{{server_port}}
+iL保护
+用户数据，大型网站在用户登录时会将用户导向HTTPS页面，以便保护用户		{{server_host}}	{{server_port}}
+i数据。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是OpenSSL爆出的“心血”漏洞，则对所有这些软件造成了巨大的影响。这个漏洞		{{server_host}}	{{server_port}}
+i会导致什
+么呢？随机读取内存，一次64KB。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i一次64KB，而这个攻击可以被一直重复而不会被防火墙发现，因此黑客可以不断遍		{{server_host}}	{{server_port}}
+i历整台服
+务器的内存，从内存中拿到一些重要的数据，比如用户密码，cookie，和		{{server_host}}	{{server_port}}
+i网站程序源代码。
+利用这些信息，黑客可以盗号，可以利用源代码对服务器发起		{{server_host}}	{{server_port}}
+i更多攻击。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i漏洞影响OpenSSL		{{server_host}}	{{server_port}}
+i1.01到1.01f版本，最新的1.01g版本已经修复该漏洞，早于1.01的
+OpenSSL也没有		{{server_host}}	{{server_port}}
+i这个漏洞。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这个漏洞会影响到：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1.（几乎）所有基于Linux、BSD、Mac等平台的启用SSL的网站服务器，包括
+Apache		{{server_host}}	{{server_port}}
+i、Nginx、Lighttpd、Tengine（其实就是Nginx）等，这些网站包括支付宝、淘宝、		{{server_host}}	{{server_port}}
+i
+腾讯等非常重要的网站。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2.所有在Windows平台上运行的启用SSL的Apache、Nginx等开源网站服务器。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i3.（几乎）所有基于SSL的邮件服务（POP3，IMAP，SMTP），包括Gmail，QQ邮箱等。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i4.所有OpenV^		{{server_host}}	{{server_port}}
+i^P^		{{server_host}}	{{server_port}}
+i^N服务以及其它基于SSL的V^		{{server_host}}	{{server_port}}
+i^P^		{{server_host}}	{{server_port}}
+i^N服务。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i作为用户，基本无法防御，如果这两天登录了这些服务，马上修改密码（多数服务商		{{server_host}}	{{server_port}}
+i已经修
+复这些漏洞）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i作为站长，如果采用虚拟主机，可以要求服务商升级系统；如果自己有VPS，执行一		{{server_host}}	{{server_port}}
+i下系统
+升级就可以了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

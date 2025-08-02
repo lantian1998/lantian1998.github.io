@@ -1,0 +1,31 @@
+iWhile visiting Blog @ Mr.Ducky today, I noticed the navigation bar		{{server_host}}	{{server_port}}
+ishowed 4 items on the homepage but 6 items on subpages. After checking		{{server_host}}	{{server_port}}
+iwith the owner, it turned out to be a caching issue...		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCaching plugin bugs can cause significant problems. Therefore, it's		{{server_host}}	{{server_port}}
+icrucial to understand how to use caching plugins correctly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- When publishing a new post, your website's homepage should update		{{server_host}}	{{server_port}}
+iautomatically. However, if a caching plugin is active, it may continue		{{server_host}}	{{server_port}}
+iserving the old cached version, preventing visitors from seeing the		{{server_host}}	{{server_port}}
+ilatest content. Always clear your cache promptly after updates.		{{server_host}}	{{server_port}}
+iPlugins like W3TC and WP Super Cache support automatic cache clearing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- After modifying your website template, always clear the cache		{{server_host}}	{{server_port}}
+iimmediately. Failure to do so might lead to serious display issues		{{server_host}}	{{server_port}}
+i(severity depends on the extent of template modifications).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Regularly check consistency across different subpages - especially		{{server_host}}	{{server_port}}
+ifor navigation bars and recent post sections. If inconsistencies		{{server_host}}	{{server_port}}
+iappear, refresh the cache immediately to prevent larger issues from		{{server_host}}	{{server_port}}
+iemerging.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Implement proper user state detection for pages that display		{{server_host}}	{{server_port}}
+idifferent content to logged-in vs. anonymous users. Consider disabling		{{server_host}}	{{server_port}}
+icaching for logged-in users, or in extreme cases, disable caching		{{server_host}}	{{server_port}}
+ientirely for specific pages.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhile caching plugins can significantly improve website performance,		{{server_host}}	{{server_port}}
+iimproper configuration may lead to unexpected behavior. Stay vigilant		{{server_host}}	{{server_port}}
+iabout cache management to ensure your website displays correctly.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

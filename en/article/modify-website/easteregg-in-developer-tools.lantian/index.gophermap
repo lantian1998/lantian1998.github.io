@@ -1,0 +1,24 @@
+I/usr/uploads/92411407737467.png	/usr/uploads/92411407737467.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn Chrome Developer Tools, there's a section called the "Console"		{{server_host}}	{{server_port}}
+iwhere we can add some Easter egg messages, for example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you can see these lines, then you definitely don't have a		{{server_host}}	{{server_port}}
+igirlfriend.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThese messages can be output using JavaScript with the following		{{server_host}}	{{server_port}}
+iimplementation code:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen `cons.warn` takes only one parameter, it outputs that sentence in		{{server_host}}	{{server_port}}
+ithe console. If it takes two parameters and the first parameter (the		{{server_host}}	{{server_port}}
+imessage) starts with `%c`, then the second parameter is CSS code.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing `cons.warn` will display a yellow triangle at the beginning of		{{server_host}}	{{server_port}}
+ithe output. Using `cons.log` shows nothing at the beginning, while		{{server_host}}	{{server_port}}
+i`cons.error` displays a red cross, as shown in the image.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/20140811/1407737826162144.png	/usr/uploads/20140811/1407737826162144.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPlace this modified code in your website's `footer.php` template and		{{server_host}}	{{server_port}}
+irefresh the page to see the effect.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

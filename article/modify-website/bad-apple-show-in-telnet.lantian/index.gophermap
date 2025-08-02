@@ -1,0 +1,72 @@
+i今天折腾了半天，把Bad		{{server_host}}	{{server_port}}
+iApple折腾到了我VPS的Telnet里面，用的就是我早些时候发
+的		{{server_host}}	{{server_port}}
+1命令行动画版	/article/modify-computer/bad-apple-command-line-art.lantian	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果大家想看，telnet xuyh0120.tk 或 telnet 5.175.156.249		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRound 1. 移植到SSH		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i因为本来和同学说好我要在SSH下折腾出一个，所以就先用这个了。首先把Bad		{{server_host}}	{{server_port}}
+iApple传到
+VPS上，我存在/opt/badapple。这个文件夹里两个文件：badapple和ba		{{server_host}}	{{server_port}}
+idapple.in（资源文
+件，我改过扩展名）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSSH登录看效果，结果Error		{{server_host}}	{{server_port}}
+i2，找不到资源文件。我就在本地重新编译一遍（VPS上没
+FPC），把路径从相对改成		{{server_host}}	{{server_port}}
+i绝对，上传，再次登录，就成功出现了Bad Apple的动画。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i下一个要解决的问题是放完片子自动把用户T出去，我的一同学给我的建议居然是		{{server_host}}	{{server_port}}
+ipkill		{{server_host}}	{{server_port}}
+i-9
+sshd……这样效果不错，但是你对得起另外在看的人吗……不过我发现，片子放完，		{{server_host}}	{{server_port}}
+i我用pascal
+写的这个程序结束之后，openssh自动断掉了链接。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是SSH功能过分强大，会有安全隐患，比如SSH自带的SFTP文件传输协议，可以直		{{server_host}}	{{server_port}}
+i接跳过
+sh。所以需要在/etc/ssh/sshd_config里找到这么一段：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i具体内容有所差异，但是开头就是Subsystem，前面加#号注释掉就可以。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i第二个要禁用的就是TCP/IP		{{server_host}}	{{server_port}}
+i端口转发，这个功能强大，必须得封掉。还是在上面那个文件
+里加上：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是在后来的研究中，我又发现了SCP文件传输，而且居然和SSH深度绑定，无法禁		{{server_host}}	{{server_port}}
+i用。于是
+我只好悲剧的放弃了SSH，删除了用户。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRound 2. 移植到Telnet		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i大家在自己机器里执行一下telnet		{{server_host}}	{{server_port}}
+itowel.blinkenlights.nl试试。放心，不会搞坏你的机
+器，但是Vista及以上用户		{{server_host}}	{{server_port}}
+i一般看不到效果。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这是国外一家网站提供的星球大战ASCII艺术，可以在telnet里看。所以我也准备		{{server_host}}	{{server_port}}
+i试试。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i当时我还没有删除badapple用户，所以telnet过去，输用户名密码就进了。但是输		{{server_host}}	{{server_port}}
+i密码麻
+烦，而且在那个星球大战里面也无需输密码。所以我只好研究一下telnet		{{server_host}}	{{server_port}}
+id了。执行man
+telnetd，发现有一个-L参数，可以自己设定登录用的程序，也就是L		{{server_host}}	{{server_port}}
+iogin		{{server_host}}	{{server_port}}
+iShell。我在
+xinetd里加了参数，没用。结果man里还有一句：默认使用/usr/lib/		{{server_host}}	{{server_port}}
+itelnetlogin。高级！		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i以上就是用Bad Apple替代原有Login		{{server_host}}	{{server_port}}
+iShell，在登录阶段就开始显示动画。和SSH一样，动
+画放完telnet也会自动断掉		{{server_host}}	{{server_port}}
+i。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i效果非常爽，除了出来动画前还有一句Debian GNU Linux		{{server_host}}	{{server_port}}
+i6.0什么的，但是我要的效果已经
+达到了，收工。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i演示地址：telnet xuyh0120.tk 或 telnet 5.175.156.249		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

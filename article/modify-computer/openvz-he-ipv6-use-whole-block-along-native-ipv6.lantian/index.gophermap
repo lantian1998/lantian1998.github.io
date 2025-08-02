@@ -1,0 +1,99 @@
+iAlphaRacks 是一个物美价廉的主机商，1CPU、512M内存、10G硬盘的 VPS 只要		{{server_host}}	{{server_port}}
+i9.9 美元/
+年。但是这家主机商在 IPv6 地址上比较抠，需要用户说明用 IPv6		{{server_host}}	{{server_port}}
+i的理由，据说最多给20
+个？但是不一定给满20个，比如我告诉主机商要用 IPv6		{{server_host}}	{{server_port}}
+i地址给仅支持 IPv6 的用户提供服
+务，主机商回复：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> 我们已经为你的 VPS 增加了1个IPv6地址。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i一个 IPv6 自然是不够我折腾的。好在美国 Hurricane Electric 公司提供		{{server_host}}	{{server_port}}
+hIPv6 隧道服务	URL:https://tunnelbroker.net/	{{server_host}}	{{server_port}}
+i，为每个用户提供5个隧道，每个隧道有1个
+/64地址池，并可以一键开通1个/48地		{{server_host}}	{{server_port}}
+i址池。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如此良心的服务，要在 OpenVZ 的 VPS 上使用却还要费一番周折。因为 OpenVZ		{{server_host}}	{{server_port}}
+i的内核版
+本往往是2.6.32，2.6.32的老内核不原生支持隧道功能，而支持的新版3		{{server_host}}	{{server_port}}
+i.10的内核刚刚发
+布，很多主机商没有更新。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在 OpenVZ 上开启 HE 隧道		{{server_host}}	{{server_port}}
+i我们需要借助一个第三方小程序，它可以把 Hurricane Electric 的隧道转换为		{{server_host}}	{{server_port}}
+iTun/Tap
+的隧道（相当于 Windows 下 OpenVPN		{{server_host}}	{{server_port}}
+i的那个网络适配器）并且在服务器上配置好。下载安
+装教程如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后创建 `/etc/init.d/ipv6tb`，输入下面这个
+从		{{server_host}}	{{server_port}}
+hhttps://www.cybermilitia.net/2013/07/22/ipv6-tunnel-on-openvz/	URL:https://www.cybermilitia.net/2013/07/22/ipv6-tunnel-on-openvz/	{{server_host}}	{{server_port}}
+i弄
+来的启动代码：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i（注意替换其中的 IP 地址）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后输入：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i隧道就起来了。但是这时你会发现两个问题：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 虽然你有一整个/64（可能还有个/48），但是你只能使用末尾是::1的地址；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- VPS 原生的 IPv6 不通了，所有流量走了隧道。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i接下来我们就要一步步解决这个问题。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i开启整个地址池		{{server_host}}	{{server_port}}
+iLinux 内核支持一个叫 AnyIP		{{server_host}}	{{server_port}}
+i的功能。这个功能允许你将一整个地址池快速地设置到一个
+网络接口上，这样就		{{server_host}}	{{server_port}}
+i不需要你手动给网络接口把地址池里的 IP 挂上去，或者写个脚本帮你
+挂。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i顺带提一句，一个/64地址池有 18,446,744,073,709,551,616 个 IP。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i那么如何开启这个功能呢？输入以下代码即可：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i输完回车，你的地址池里其它的 IP 就全部可用了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i同时使用原生 IPv6 和隧道		{{server_host}}	{{server_port}}
+i当你的 VPS 上同时有多种 IPv6		{{server_host}}	{{server_port}}
+i接入方式时，你会发现你同时只能使用一个。因为		{{server_host}}	{{server_port}}
+iLinux
+在非默认网络接口上接收到数据包后，会从默认的那个接口回复，而不是原		{{server_host}}	{{server_port}}
+i路返回。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i幸亏 Linux		{{server_host}}	{{server_port}}
+i提供策略路由功能，也就是根据一定条件，让各个数据包走到它们该走的接口
+上		{{server_host}}	{{server_port}}
+i。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如何配置？按照步骤操作即可：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 输入如下命令，设置路由表并关闭之前建立的隧道：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 修改你前面创建的		{{server_host}}	{{server_port}}
+i/etc/init.d/ipv6tb		{{server_host}}	{{server_port}}
+i，删除所
+有内容，用如下内容代替：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i（下面的代码修改自		{{server_host}}	{{server_port}}
+hhttp://itkia.com/ipv6-policy-routing-linux-gotchas/	URL:http://itkia.com/ipv6-policy-routing-linux-gotchas/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 输入如下命令重新开启隧道：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- （可选）开机自动启动：打开 `/etc/rc.local`，在exit 0之前建立一行，输入：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i当你改完后，文件应该是这样的：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2016/08/3015453537.png	/usr/uploads/2016/08/3015453537.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i保存后，隧道就能自动启动了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这样设置出来的 IPv6 隧道，可以与原生 IPv6		{{server_host}}	{{server_port}}
+i和平共处，同时系统发起的网络操作（比如
+软件更新）都会经过原生 IPv6		{{server_host}}	{{server_port}}
+i而不走隧道，大大提高了稳定性与速度。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

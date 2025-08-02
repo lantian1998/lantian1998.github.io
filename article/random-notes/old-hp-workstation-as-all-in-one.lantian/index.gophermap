@@ -1,0 +1,216 @@
+i我买了一台 HP 的老款工作站，用作家里的		{{server_host}}	{{server_port}}
+iNAS+软路由。本文简单记录这台工作站的配置
+过程。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i硬件选择		{{server_host}}	{{server_port}}
+iNAS 的硬件主要有这些选择：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 成品 NAS（如群晖）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 优点：开箱即用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 缺点：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 价格贵，到了“买系统送硬件”的程度。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 而且与各种 Linux 发行版相比，NAS 的原厂系统难以定制。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 二手服务器		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 优点：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i便宜，在保修期结束后,这些服务器大都被数据中心当作废品处理，然后被以极低		{{server_host}}	{{server_port}}
+i的
+成本回收，翻新后二次售卖。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i稳定，这些服务器在设计时就考虑了长期运行，并且一直在温湿度稳定、无尘的数		{{server_host}}	{{server_port}}
+i据
+中心中运行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 缺点：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i噪音大，需要自行修改系统配置降低风扇转速，更换静音风扇，或者加装风扇减速
+		{{server_host}}	{{server_port}}
+i线。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 体积大（主要针对机架式服务器）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i专用配件，服务器厂商会定制各种配件供特定型号使用，如果你有扩展需求，需要		{{server_host}}	{{server_port}}
+i加
+价购买这些专用配件。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 二手工作站		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 优点：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 便宜、稳定，与二手服务器相同。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 噪音小，毕竟工作站是放在办公桌边，而不是在机房里使用的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 缺点：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 专用配件，与二手服务器相同。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 自己购买电脑配件组装		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 优点：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 可以完全根据自己的需求定制。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 缺点：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 性价比不如二手服务器和工作站。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 家用配件的稳定性可能不及商用服务器和工作站。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i而我对于这台 NAS 有这些需求：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 需要能用 Jellyfin 视频转码，而且最好支持 H265 编码，这需要一块 6		{{server_host}}	{{server_port}}
+i代（Skylake）
+以上、带核显的 Intel CPU，或者加装一块 NVIDIA 的显卡。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 除此之外，只要不是非常差的 CPU（例如 Intel Atom		{{server_host}}	{{server_port}}
+i系列），对性能几乎没要求。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 低噪音，我目前住在单间公寓，这台 NAS 会和我的床放在同一个房间。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我不喜欢成品 NAS 系统，希望自己安装 NixOS 然后自行配置。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 能省则省。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i综上考虑，我选择购买二手工作站。由于我目前人在美国，我在 eBay 上花 50		{{server_host}}	{{server_port}}
+i刀购买了一
+台回收翻新的 HP 工作站。关键配置如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 型号：HP Z220 SFF		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- CPU：Intel E3-1225 v2		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 内存：4GB DDR3		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 硬盘：250GB 机械硬盘		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 电源：240W		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 三根 PCI-E 插槽，一根 x16，一根 x4，一根 x1。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一根 PCI 插槽。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i存储		{{server_host}}	{{server_port}}
+i作为一台 NAS，首先要考虑的就是数据存储。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这台工作站有 4 个 SATA 接口，两个 3.5 寸硬盘位，以及一个 5		{{server_host}}	{{server_port}}
+i寸光驱位（安装了光
+驱）。我拆掉了原装硬盘，加装了两块全新的 16TB		{{server_host}}	{{server_port}}
+i机械硬盘作为数据存储。我计划先将这
+两块硬盘组成 RAID-1		{{server_host}}	{{server_port}}
+i阵列，在未来容量不足时加装一块硬盘转换成 RAID-5。ZFS 不支持
+从 RAID-1		{{server_host}}	{{server_port}}
+i转换成 RAID-5，而且 ZFS 内核模块由于没有合入 Linux		{{server_host}}	{{server_port}}
+i主线，经常在升级内
+核版本时挂掉。而 Btrfs 本身的 RAID-5		{{server_host}}	{{server_port}}
+i功能有严重的稳定性问题，容易造成数据丢失。
+因此我最终选择的方案是 Btrfs		{{server_host}}	{{server_port}}
+i+ LVM RAID-1，让配置更加灵活的 LVM 来处理 RAID。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我还加装了一块 180GB 容量的 Intel 520		{{server_host}}	{{server_port}}
+i固态硬盘作为启动盘。虽然这块固态硬盘很老，
+但它的价格仅 15 刀，接近 eBay		{{server_host}}	{{server_port}}
+i上所有固态硬盘的最低价，同时它用的是 MLC 颗粒，相
+比现在的 TLC		{{server_host}}	{{server_port}}
+i颗粒寿命更长。这块硬盘上只装 NixOS 的系统文件（`/nix`		{{server_host}}	{{server_port}}
+i文件夹），以
+及一些会被每日备份到云存储的配置文件，所以我不担心丢失这块硬		{{server_host}}	{{server_port}}
+i盘上的数据。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i另外，我配置了		{{server_host}}	{{server_port}}
+hBees	URL:https://github.com/Zygo/bees	{{server_host}}	{{server_port}}
+i软件用于 Btrfs 上的数据去
+重。我的两块硬盘 RAID-1 后有大约 14.6TB		{{server_host}}	{{server_port}}
+i的可用存储空间。Bees 要有效去重这些空间
+需要占用 2GB		{{server_host}}	{{server_port}}
+i内存创建一个硬盘内容的哈希表。再加上一些其它的服务，原装的 4GB		{{server_host}}	{{server_port}}
+i内存
+很快就不够用了。因此，我又花了 40 刀给这台工作站换上了 16GB 的		{{server_host}}	{{server_port}}
+iDDR3 ECC-UDIMM 内
+存。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i软路由		{{server_host}}	{{server_port}}
+i这台工作站将直接接到运营商的光猫，作为我家的主路由。我不打算使用		{{server_host}}	{{server_port}}
+iOpenWRT 等专为
+路由器设计的 Linux 发行版，而是直接在 NixOS		{{server_host}}	{{server_port}}
+i上配置数据包转发和 NAT。开启转发功能
+只需要几行 sysctl 配置：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i而 NAT 则需要配置防火墙。我使用的是 Nftables，简化后的配置如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后，启用 MiniUPnPd，让客户端上的软件可以按需配置端口转发：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后在内网接口上配置好 IP 和 DHCP 服务器：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i应用配置，`networkctl reload` 后，客户端即可上网。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i视频转码		{{server_host}}	{{server_port}}
+i作为一台小体积（Small Form Factor）工作站，HP Z220 SFF 只能使用矮尺寸的		{{server_host}}	{{server_port}}
+iPCI-E 扩
+展卡（高 8 厘米）而非标准尺寸的扩展卡（高 12 厘米）。同时，功率仅		{{server_host}}	{{server_port}}
+i240W		{{server_host}}	{{server_port}}
+i的电源也
+没有额外的显卡供电线，所以我也无法使用高性能高功率的显卡。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我最开始花 40 刀买了一块 NVIDIA Quadro P400 显卡，TDP 为		{{server_host}}	{{server_port}}
+i30W。这块显卡本身的性能
+非常差，约等于传说中的 NVIDIA GT 1010 显卡，连		{{server_host}}	{{server_port}}
+i1030 都不如。但是，它搭载了和 10
+系列显卡相同的视频编解码电
+路，		{{server_host}}	{{server_port}}
+h支持 H265 10-bit 视频编码	URL:https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new	{{server_host}}	{{server_port}}
+i。
+除了 GPU 核心工作频率不同外，Quadro P400 的视频转码性能和其它 10		{{server_host}}	{{server_port}}
+i系列显卡完全相
+同。因此，Quadro P400 也是 Reddit 上很多 DIY NAS		{{server_host}}	{{server_port}}
+i玩家的选择。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我买到卡后进行测试，发现它确实可以转码 4K HEVC 的视频，速度能达到每秒 60		{{server_host}}	{{server_port}}
+i帧。但
+如果我开启了 Jellyfin		{{server_host}}	{{server_port}}
+i的色彩空间映射（Tone-mapping），转码速度就会降到十几帧，导
+致视频无法流畅		{{server_host}}	{{server_port}}
+i播放。Tone-mapping 的用途是将视频的特殊色彩空间（例如 HDR		{{server_host}}	{{server_port}}
+i或杜比视
+界）映射到标准的 SDR 色彩空间，让不支持 HDR		{{server_host}}	{{server_port}}
+i的设备也可以正确地显示这些视
+频。Jellyfin Tone-mapping 用到了显卡的 3D		{{server_host}}	{{server_port}}
+i处理单元，而 Quadro P400 的 3D 性能非
+常弱，导致了瓶颈的出现。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我后来把显卡换成了 NVIDIA Tesla P4，TDP 为 50W。虽然它是数据中心用的		{{server_host}}	{{server_port}}
+iTesla 系列
+计算卡，但它也支持视频编解码，拥有和 10		{{server_host}}	{{server_port}}
+i系列显卡相同的编解码电路。这张卡本身在
+eBay 上卖 100		{{server_host}}	{{server_port}}
+i刀左右，但它是被动散热卡，所以还需要加 20		{{server_host}}	{{server_port}}
+i刀加装风扇和导风罩，让它
+能在普通台式电脑中散热。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i经过测试，这张卡可以在开启 Tone-mapping 的情况下，以 60		{{server_host}}	{{server_port}}
+i帧左右的速度将视频转码到
+4K		{{server_host}}	{{server_port}}
+i80Mbps，完全满足我的视频转码需求。唯一的缺点是，HP Z220 SFF		{{server_host}}	{{server_port}}
+i的主板上没有标准
+的风扇接口，我只能使用 USB 5V 到 12V		{{server_host}}	{{server_port}}
+i的升压线给风扇供电，让风扇一直保持在满速状
+态。风扇噪音稍大，但对我来说		{{server_host}}	{{server_port}}
+i可以接受。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i另外，Tesla P4 还原生支持 NVIDIA GRID		{{server_host}}	{{server_port}}
+i功能，可以生成虚拟显卡给虚拟机使用。但
+NVIDIA GRID		{{server_host}}	{{server_port}}
+i需要使用专门的宿主机驱动，不支持 3D、视频转码等功能，导致		{{server_host}}	{{server_port}}
+iJellyfin
+的视频转码无法使用。所以，我目前还是选择使用普通的驱动。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,20 @@
+iA few days ago, I used the Leaflet JavaScript module for a project		{{server_host}}	{{server_port}}
+ithat required maps. However, when searching for map data sources, I		{{server_host}}	{{server_port}}
+ifound that Amap's satellite imagery cannot be zoomed to high precision		{{server_host}}	{{server_port}}
+ioutside mainland China, showing no satellite imagery for that area;		{{server_host}}	{{server_port}}
+iwhile Google China's satellite imagery lacks street information.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter some research, I discovered that Amap's satellite imagery		{{server_host}}	{{server_port}}
+iconsists of two layers: the satellite layer and the street layer.		{{server_host}}	{{server_port}}
+iMoreover, both Amap and Google China maps use China's "Mars Coordinate		{{server_host}}	{{server_port}}
+iSystem" encryption, meaning their maps can be directly overlaid		{{server_host}}	{{server_port}}
+iwithout misalignment. By combining Amap's street layer with Google		{{server_host}}	{{server_port}}
+iChina's satellite layer, we obtain an electronic map that supports		{{server_host}}	{{server_port}}
+ihigh-precision zooming while displaying street information.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDemo:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou can view the source code by right-clicking, or copy it below. The		{{server_host}}	{{server_port}}
+imap data source URLs are from		{{server_host}}	{{server_port}}
+hhtoooth/Leaflet.ChineseTmsProviders	URL:https://github.com/htoooth/Leaflet.ChineseTmsProviders	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

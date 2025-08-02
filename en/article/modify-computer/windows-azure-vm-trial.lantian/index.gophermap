@@ -1,0 +1,44 @@
+iWindows Azure is a virtual machine service provided by Microsoft,		{{server_host}}	{{server_port}}
+isimilar to AWS. Due to China's regulations prohibiting cloud computing		{{server_host}}	{{server_port}}
+iservices from sharing data with foreign countries, Azure operates in		{{server_host}}	{{server_port}}
+iChina through a dedicated company called 21Vianet, with data centers		{{server_host}}	{{server_port}}
+icurrently in East China and North China.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCurrently, Azure doesn't appear to have a time-limited trial. After		{{server_host}}	{{server_port}}
+ichecking online, it seems there are no time restrictions. The trial		{{server_host}}	{{server_port}}
+iserver limits each user to a maximum of 3000 CPU hours per month (1500		{{server_host}}	{{server_port}}
+ihours for high-memory servers), meaning a 4-core server can run		{{server_host}}	{{server_port}}
+icontinuously for a full month without shutdown.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI applied for an activation code long ago and recently received it		{{server_host}}	{{server_port}}
+iunexpectedly in my email. It stated that "the activation code will		{{server_host}}	{{server_port}}
+iexpire if not activated within 7 days," so I proceeded with		{{server_host}}	{{server_port}}
+iactivation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen creating a virtual machine, options include Server 2012 R2,		{{server_host}}	{{server_port}}
+iServer 2012, Server 2008 R2, Ubuntu, CentOS, etc. I chose Server 2012		{{server_host}}	{{server_port}}
+iR2 with 4 cores and 7GB RAM in the East China data center.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis is the management panel:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2014/05/1498285805.png	/usr/uploads/2014/05/1498285805.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iClicking the link below downloads an RDP file – double-click it to		{{server_host}}	{{server_port}}
+iconnect to your server.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter connecting, server-related information appears in the top-right		{{server_host}}	{{server_port}}
+icorner of the desktop:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2014/05/1140965806.png	/usr/uploads/2014/05/1140965806.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe server operates very quickly with virtually no noticeable network		{{server_host}}	{{server_port}}
+ilatency. The 4-core, 7GB RAM configuration can handle nearly any		{{server_host}}	{{server_port}}
+iprogram:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/2014/05/222836011.png	/usr/uploads/2014/05/222836011.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iExternal ping tests are impossible since the server blocks them, and		{{server_host}}	{{server_port}}
+ithe lack of a dedicated IP prevents website hosting. However, overall,		{{server_host}}	{{server_port}}
+ithis is an exceptionally powerful configuration for a free virtual		{{server_host}}	{{server_port}}
+imachine.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

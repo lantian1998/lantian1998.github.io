@@ -1,0 +1,67 @@
+iWhen you type a website address into your browser, the browser can't		{{server_host}}	{{server_port}}
+iimmediately locate the site. It first sends the address to a DNS		{{server_host}}	{{server_port}}
+iserver, which then queries other servers layer by layer until reaching		{{server_host}}	{{server_port}}
+ithe root servers to obtain the website's IP address. Only then can the		{{server_host}}	{{server_port}}
+ibrowser establish a connection.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis process repeats every time you visit a new website, resulting in		{{server_host}}	{{server_port}}
+islow speeds. Additionally, DNS servers operated by Chinese telecom		{{server_host}}	{{server_port}}
+iproviders may hijack your requests to redirect you to pages like 114		{{server_host}}	{{server_port}}
+iNavigation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo accelerate browsing and gain anti-interference benefits, we can set		{{server_host}}	{{server_port}}
+iup a local DNS server on our computer. For Linux and Mac systems,		{{server_host}}	{{server_port}}
+iPdnsd is a lightweight solution. It queries other DNS servers via TCP		{{server_host}}	{{server_port}}
+ior UDP to resolve domain names, caches the results, and significantly		{{server_host}}	{{server_port}}
+ispeeds up subsequent requests.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i1. Installation		{{server_host}}	{{server_port}}
+iFor Linux (Ubuntu example):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor Mac (requires Homebrew):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd the following content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter these steps, the Pdnsd configuration file should be open for		{{server_host}}	{{server_port}}
+imodification.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i2. Configuring the DNS Server		{{server_host}}	{{server_port}}
+iFirst, clear the configuration file (if not already empty), then set		{{server_host}}	{{server_port}}
+iup the basic configuration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn China, DNS queries for certain websites may encounter interference		{{server_host}}	{{server_port}}
+ifrom faulty servers that return incorrect IP addresses. While standard		{{server_host}}	{{server_port}}
+iDNS uses UDP port 53, switching to TCP queries avoids this		{{server_host}}	{{server_port}}
+iinterference. Pdnsd bridges TCP-based DNS to UDP usage.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`min_ttl` sets the minimum time-to-live (in seconds) for cached DNS		{{server_host}}	{{server_port}}
+irecords. For example, with 600 seconds (10 minutes), Pdnsd caches		{{server_host}}	{{server_port}}
+iwebsite IPs after the first request. Recommended value: 600-3600		{{server_host}}	{{server_port}}
+iseconds.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNext, configure upstream DNS servers. 114DNS is a clean and fast		{{server_host}}	{{server_port}}
+ioption with nationwide nodes in China:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThese IPs are known to return invalid responses during DNS		{{server_host}}	{{server_port}}
+iinterference. Since 114DNS may also be affected, we filter these		{{server_host}}	{{server_port}}
+iaddresses.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGoogle DNS offers clean resolution via TCP but may route users to		{{server_host}}	{{server_port}}
+iinternational CDN nodes, slowing access. Use it as a fallback:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iV2EX DNS corrects typos (e.g., `google.cmo` → `google.com`) and uses		{{server_host}}	{{server_port}}
+inon-standard ports to resist interference:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOpenDNS uses port 5353 to avoid interference:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor .BIT domains (based on NameCoin, similar to Bitcoin), add		{{server_host}}	{{server_port}}
+ispecialized servers. Place this block directly under `global`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf all else fails, query root servers directly:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd local resolution for entries like `localhost`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter configuration, restart your computer and set your DNS to		{{server_host}}	{{server_port}}
+i`127.0.0.1`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iComplete Configuration File (with HiNet backup):		{{server_host}}	{{server_port}}

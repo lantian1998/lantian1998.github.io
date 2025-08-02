@@ -1,0 +1,35 @@
+iOn the evening of October 4, 2014, attempts to access Microsoft		{{server_host}}	{{server_port}}
+iaccount login pages from China triggered invalid SSL certificate		{{server_host}}	{{server_port}}
+iwarnings, as shown:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/46671412433584.png	/usr/uploads/46671412433584.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCopied from Chrome. The "issuer common name being only a domain" and		{{server_host}}	{{server_port}}
+i"hotmai.com" (missing 'l') indicate this was an SSL man-in-the-middle		{{server_host}}	{{server_port}}
+iattack.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe fake certificate content:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSimultaneously, reports indicated login.windows.net experienced		{{server_host}}	{{server_port}}
+isimilar issues. DNS queries confirmed no DNS poisoning occurred.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/26971412433584.png	/usr/uploads/26971412433584.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLeft: Google DNS (TCP query), Right: 114DNS (UDP query)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/96551412433589.png	/usr/uploads/96551412433589.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTesting via SSH tunnel through Windows Azure China showed no issues.		{{server_host}}	{{server_port}}
+iLeft: Local query result; Right: Azure China query result,		{{server_host}}	{{server_port}}
+ireconfirming DNS integrity.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+I/usr/uploads/59401412433590.png	/usr/uploads/59401412433590.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+itcping tests (		{{server_host}}	{{server_port}}
+hhttps://github.com/jlyo/tcping	URL:https://github.com/jlyo/tcping	{{server_host}}	{{server_port}}
+i) to port 443 revealed clear hijacking. Normal ping latency to		{{server_host}}	{{server_port}}
+ilogin.live.com is ~200ms, making sub-10ms responses impossible.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAround 10:30 PM, the issue resolved and SSL connections to		{{server_host}}	{{server_port}}
+ilogin.live.com normalized.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

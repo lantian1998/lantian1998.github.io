@@ -1,0 +1,335 @@
+iChangelog		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 2021-03-24: Improve post-processing, add scripts for parsing links		{{server_host}}	{{server_port}}
+iand images.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 2021-03-21: Initial version.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhat's Gopher		{{server_host}}	{{server_port}}
+iGopher is a protocol born in the early ages of the Internet. It was		{{server_host}}	{{server_port}}
+iinvented at
+the University of Minnesota in 1991, with a purpose		{{server_host}}	{{server_port}}
+isimilar to HTTP today. The
+protocol itself is extremely simple:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Client connects to TCP port 70 of the server, and send one line of		{{server_host}}	{{server_port}}
+iURL ending
+with CRLF, e.g. `some_dir/hello.txt`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Server sends data of the requested file and closes the connection.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- And we're done.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe server could be returning a text file, a picture, a binary file,		{{server_host}}	{{server_port}}
+ior a Gopher
+list file called `Gophermap` with special formatting. Each		{{server_host}}	{{server_port}}
+iline of the file is
+composed of the following fields:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A character representing the type of this line, may it be text		{{server_host}}	{{server_port}}
+i(`i`), a link
+to a text file (`0`), a link to another Gophermap (`1`),		{{server_host}}	{{server_port}}
+ia picture (`I`), or
+a binary (`9`). Of course, there are other types		{{server_host}}	{{server_port}}
+imeant for protocols no
+longer used today. See		{{server_host}}	{{server_port}}
+hRFC1436 Section 3.8	URL:https://tools.ietf.org/html/rfc1436#section-3.8	{{server_host}}	{{server_port}}
+ifor
+more details.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A message line to be shown for this line, e.g., `Hello World`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A TAB character.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Target path of the link, e.g., `/some_dir/hello.txt`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A TAB character.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Target hostname of the link, e.g., `gopher.lantian.pub`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A TAB character.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Target port of the link, usually `70`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- CR+LF as line ending.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAt the end of the `Gophermap` there is a single period on its own		{{server_host}}	{{server_port}}
+iline, marking
+the end of the map.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTake a look at these examples:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUnder the background of lacking computing power, the Gopher protocol		{{server_host}}	{{server_port}}
+iwas widely
+used in the 1990s due to its extreme simplicity. But since		{{server_host}}	{{server_port}}
+ithe only thing a
+client can do is to send a URL, it is much more		{{server_host}}	{{server_port}}
+icomplicated to allow the client
+to post data onto the server, like for		{{server_host}}	{{server_port}}
+isearching or comment sections. In
+addition, the server can only return		{{server_host}}	{{server_port}}
+ithe file itself but nothing else, unlike
+HTTP where additional		{{server_host}}	{{server_port}}
+iresponse headers are allowed. This means the client needs
+to find out		{{server_host}}	{{server_port}}
+ithe type of response based on previous Gophermaps, or even guess		{{server_host}}	{{server_port}}
+ion
+its own. Therefore, Gopher was eventually replaced with		{{server_host}}	{{server_port}}
+ifunctionally superior
+HTTP.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut Gopher protocol isn't dead. As of now (the year 2021), there are		{{server_host}}	{{server_port}}
+istill
+actively maintained Gopher server software such as		{{server_host}}	{{server_port}}
+hGophernicus	URL:https://github.com/gophernicus/gophernicus	{{server_host}}	{{server_port}}
+i, and there are sites
+serving over Gopher.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you want to try visiting Gopher sites, you may try		{{server_host}}	{{server_port}}
+hOverbite extension for Firefox	URL:https://gopher.floodgap.com/overbite/	{{server_host}}	{{server_port}}
+i, or
+client software like		{{server_host}}	{{server_port}}
+hGopherus	URL:http://gopherus.sourceforge.net/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhy Nginx?		{{server_host}}	{{server_port}}
+iCompared to some software designed specifically for Gopher, such as		{{server_host}}	{{server_port}}
+iGophernicus,
+Nginx has better support for modern dynamic web pages.		{{server_host}}	{{server_port}}
+iFor example, it can
+dynamically generate responses based on PHP and		{{server_host}}	{{server_port}}
+iASP.NET (Mono) over FastCGI, or
+proxy requests to other HTTP servers,		{{server_host}}	{{server_port}}
+ieffectively making it a Gopher gateway.
+Comparatively, Gophernicus		{{server_host}}	{{server_port}}
+ionly supports classic CGI and no proxy functionality.
+In addition,		{{server_host}}	{{server_port}}
+iNginx is well known for its high performance.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut there is one more reason I chose Nginx: I was		{{server_host}}	{{server_port}}
+1modifying Nginx to use it as a WHOIS server	/en/article/modify-website/serve-dn42-whois-with-nginx.lantian/	{{server_host}}	{{server_port}}
+i(for DN42), and WHOIS protocol is almost the same as Gopher: one		{{server_host}}	{{server_port}}
+irequest and one
+response. With minor adjustments, I can make my new		{{server_host}}	{{server_port}}
+ifeature work with Gopher.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLet Nginx support Gopher		{{server_host}}	{{server_port}}
+iNginx, by itself, is an HTTP server. Let us ignore for a moment the		{{server_host}}	{{server_port}}
+imodern
+HTTP/2.0 with binary commands, or UDP-based QUIC or HTTP/3.0,		{{server_host}}	{{server_port}}
+iand look back at
+the HTTP/1.1, which was once widely used. Back then,		{{server_host}}	{{server_port}}
+ia request looks like this:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe first part is the client request, of which `GET http://localhost/		{{server_host}}	{{server_port}}
+iHTTP/1.1`
+and `Host: localhost` are necessary. They tell the server		{{server_host}}	{{server_port}}
+ithe path (`/test.php`)
+and domain (`localhost`) the client is trying		{{server_host}}	{{server_port}}
+ito access.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe other parts, such as User-Agent headers commonly seen, are not an		{{server_host}}	{{server_port}}
+iessential
+part of the HTTP protocol. We can connect to the server		{{server_host}}	{{server_port}}
+imanually with
+`telnet localhost 80` and only send the first two lines:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe server still gave back contents for the page, but there are things		{{server_host}}	{{server_port}}
+imore than
+we actually need:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Gopher clients won't recognize the 200 status code of HTTP;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- There are extra response headers including Date, Content-Type, etc.;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The responses of Nginx are encoded with `Transfer-Encoding:		{{server_host}}	{{server_port}}
+ichunked`, which
+Gopher clients have no idea about;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- We need to press Enter twice after the `Host:` line before Nginx		{{server_host}}	{{server_port}}
+isends the
+response. Gopher clients will only do it once;		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Most importantly, have you noticed the `^C`? It's there because I		{{server_host}}	{{server_port}}
+imanually
+pressed `Ctrl+C` to terminate the connection. Nginx		{{server_host}}	{{server_port}}
+ihas
+`Connection: keep-alive` enabled by default and won't actively		{{server_host}}	{{server_port}}
+iclose the
+connection after the request is completed. Instead, it will		{{server_host}}	{{server_port}}
+iwait for the
+client to send a second request. A Gopher client, in this		{{server_host}}	{{server_port}}
+icase, will wait
+forever.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, there's too much to change based on HTTP/1.1. But if		{{server_host}}	{{server_port}}
+ithere's 1.1,
+there's also 1.0. How about we have a try of HTTP/1.0?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis time, the server actively closed the connection, and returned raw		{{server_host}}	{{server_port}}
+idata
+instead of `chunk` encoded ones, which is good. But there are		{{server_host}}	{{server_port}}
+istill extra HTTP
+response headers. Do we need to disable all logic		{{server_host}}	{{server_port}}
+irelated to HTTP headers?
+There's still a lot to do. And we still need		{{server_host}}	{{server_port}}
+ito press Enter twice, by the way.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHere's some good news: there was an extremely simple version of		{{server_host}}	{{server_port}}
+iHTTP/0.9 before
+HTTP/1.0, and it is just a single line:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe client only sent the first `GET` line. Once it sends a line feed,		{{server_host}}	{{server_port}}
+iNginx
+replies back `Hello World` without needing the second line feed,		{{server_host}}	{{server_port}}
+iwithout status
+code 200 or other headers, and not forgetting to close		{{server_host}}	{{server_port}}
+ithe connection. This is
+very close to what we want: the HTTP client		{{server_host}}	{{server_port}}
+isent `GET /test.php[ENTER]` this
+time, while a Gopher client will		{{server_host}}	{{server_port}}
+iprobably send `test.php[ENTER]`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow we have a plan: add a protocol to parse Gopher requests, set the		{{server_host}}	{{server_port}}
+irequest
+type to GET, add a slash `/` before the URL, and copy/reuse		{{server_host}}	{{server_port}}
+iHTTP/0.9 logic for
+the rest part.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+inginx Patch and Usage		{{server_host}}	{{server_port}}
+iI made a patch using the method above, which can be directly applied		{{server_host}}	{{server_port}}
+ito the
+source code of Nginx 1.19.7. The patch can be obtained from		{{server_host}}	{{server_port}}
+hhttps://gist.github.com/xddxdd/293becc41d805d7b8cfb5d11b6e326e1	URL:https://gist.github.com/xddxdd/293becc41d805d7b8cfb5d11b6e326e1	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOverall, this patch did three changes:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A new option, `plain`, is added to `listen`, meaning this port will		{{server_host}}	{{server_port}}
+ibe used
+to receive Gopher connections without the GET part.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Use it like `listen 70 plain default_server;`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Attention: a `plain` port cannot receive normal HTTP requests! So do		{{server_host}}	{{server_port}}
+inot
+add it to the `listen` for port 80, and never use it with other		{{server_host}}	{{server_port}}
+iprotocols
+like `http2`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- SSL is theoretically supported, but I never tried.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- A state machine for parsing `plain` URLs is added. Compared to HTTP		{{server_host}}	{{server_port}}
+istate
+machines, everything related to parsing request type (`GET`),		{{server_host}}	{{server_port}}
+idomain
+(`http://localhost`), and HTTP version (`HTTP/1.1`) is removed.		{{server_host}}	{{server_port}}
+iThe request
+type is hardcoded to `GET`, the domain set to `null` (just		{{server_host}}	{{server_port}}
+ilike HTTP/1.0),
+and the HTTP version is set to 0.9.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Before starting to receive requests from the client, a slash `/` is		{{server_host}}	{{server_port}}
+istored
+into the receiving buffer to insert it to the beginning of the		{{server_host}}	{{server_port}}
+iURL. Nginx
+will use the pointers to the URL many times during the		{{server_host}}	{{server_port}}
+ientire process, and
+compared to changing all URL-related logic,		{{server_host}}	{{server_port}}
+iinserting a slash is simple,
+effective, and reliable.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRemember to enable `--with-http_plain_module` while compiling Nginx,		{{server_host}}	{{server_port}}
+iand
+remember to set `index gophermap;` so Nginx looks for the		{{server_host}}	{{server_port}}
+iGophermap by default.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iGenerating Gophermaps		{{server_host}}	{{server_port}}
+iNow that we have a server, the next thing we need is files for the		{{server_host}}	{{server_port}}
+iwebsite.
+Since I use Hexo, a static site generator, and all my posts		{{server_host}}	{{server_port}}
+iare written in
+Markdown, I simply went the lazy way of reformatting		{{server_host}}	{{server_port}}
+iMarkdown files with		{{server_host}}	{{server_port}}
+hRemark	URL:https://github.com/remarkjs/remark	{{server_host}}	{{server_port}}
+i, capping to 70 characters per line
+with		{{server_host}}	{{server_port}}
+hPrettier	URL:https://github.com/prettier/prettier	{{server_host}}	{{server_port}}
+i. Then I search for all
+links and images with a regex, put them to		{{server_host}}	{{server_port}}
+itheir own lines as link (`1`) or
+image (`I`), since Gophermap doesn't		{{server_host}}	{{server_port}}
+isupport mixing text and link in the same
+line. All other texts are set		{{server_host}}	{{server_port}}
+ias `i`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe generated file will look like:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Actual files have Tabs in them; my editor converted them to spaces)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSee the `{{server_addr}}` and `{{server_port}}`? They point to the		{{server_host}}	{{server_port}}
+itarget host
+and port. They can neither be omitted or replaced with		{{server_host}}	{{server_port}}
+isome "relative" value. I
+simply hand the task of setting values for		{{server_host}}	{{server_port}}
+ithem to nginx:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWith posts ready, I need a list of contents as my index page. I simply		{{server_host}}	{{server_port}}
+iwrote a
+`for` loop, generating a link and two lines of summary for		{{server_host}}	{{server_port}}
+ieach post. The key
+logic is as below:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI posted my logic of generating Gophermaps in Hexo to		{{server_host}}	{{server_port}}
+hhttps://gist.github.com/xddxdd/99170395595e339ed5735cdf9b9b2cd1	URL:https://gist.github.com/xddxdd/99170395595e339ed5735cdf9b9b2cd1	{{server_host}}	{{server_port}}
+i.
+Place `gopher.js` to the `scripts` directory of your theme		{{server_host}}	{{server_port}}
+i(e.g.
+`themes/lantian/scripts/gopher.js`) to use it. One reminder		{{server_host}}	{{server_port}}
+ithough, I removed
+some code specific to my site (mainly multilingual		{{server_host}}	{{server_port}}
+isupport stuff) and didn't
+test it again afterwards, so there could be		{{server_host}}	{{server_port}}
+iminor issues.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinal Results		{{server_host}}	{{server_port}}
+iFirst, let's take a look at how things look like with Gopherus browser		{{server_host}}	{{server_port}}
+iunder the
+Linux terminal:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IGopherus on Chinese contents	/usr/uploads/202103/gopher-gopherus.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe site is displayed normally, but it's a bit different from		{{server_host}}	{{server_port}}
+iexpected: Gopherus
+cut each line at 80 bytes, but Chinese characters		{{server_host}}	{{server_port}}
+iare 3 bytes each in UTF-8
+encoding. This means approximately		{{server_host}}	{{server_port}}
+iof the content each line wraps
+to the next line. My English site is		{{server_host}}	{{server_port}}
+ishown correctly:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IGopherus on English contents	/usr/uploads/202103/gopher-gopherus-en.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThere are modern solutions compared to Gopherus, which is the Firefox		{{server_host}}	{{server_port}}
+ibrowser
+with Overbite plugin:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IFirefox + Overbite on Chinese contents	/usr/uploads/202103/gopher-overbite.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iChinese contents layout is much better than Gopherus. Of course,		{{server_host}}	{{server_port}}
+iEnglish
+contents can be shown normally as well:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IFirefox + Overbite on English contents	/usr/uploads/202103/gopher-overbite-en.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLet's try browsing a post. Although it's just plain Markdown without		{{server_host}}	{{server_port}}
+imuch extra
+processing, the post itself is readable:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IFirefox + Overbite on Chinese contents	/usr/uploads/202103/gopher-overbite-article.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IFirefox + Overbite on English contents	/usr/uploads/202103/gopher-overbite-article-en.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou can visit		{{server_host}}	{{server_port}}
+1gopher://gopher.lantian.pub	/gopher://gopher.lantian.pub	{{server_host}}	{{server_port}}
+iwith
+your own Gopher client to see the results.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

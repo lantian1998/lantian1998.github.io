@@ -1,0 +1,37 @@
+iFont Awesome is an open-source icon library. Its latest version 4.1		{{server_host}}	{{server_port}}
+iprovides 439 vector icons that can match screens of various sizes and		{{server_host}}	{{server_port}}
+iresolutions. It exists as a font, and a single 71KB file contains all		{{server_host}}	{{server_port}}
+ithese icons. These icons feature a unified style and can be		{{server_host}}	{{server_port}}
+iconveniently used in various contexts.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Installation		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, download Font Awesome:		{{server_host}}	{{server_port}}
+hhttps://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.1.0.zip	URL:https://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.1.0.zip	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen unzip the file and upload its contents to your website.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAdd the following code in the `<head>` section of your webpage:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis completes the installation.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Usage		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hhttps://fortawesome.github.io/Font-Awesome/icons/	URL:https://fortawesome.github.io/Font-Awesome/icons/	{{server_host}}	{{server_port}}
+iprovides a reference table of icon class names. Find your desired icon		{{server_host}}	{{server_port}}
+i(e.g., `fa-cloud`) and insert this code in your webpage:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEffect:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo enlarge icons, add classes like `fa-lg`, `fa-2x`, `fa-3x`, `fa-4x`,		{{server_host}}	{{server_port}}
+ior `fa-5x`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEffect:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSome icons also support animation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iEffect:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsing these icons allows for more intuitive representation of website		{{server_host}}	{{server_port}}
+ifunctionalities without compromising loading speed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

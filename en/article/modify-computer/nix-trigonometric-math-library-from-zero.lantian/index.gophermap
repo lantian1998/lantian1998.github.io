@@ -1,0 +1,224 @@
+i(Cover image from:		{{server_host}}	{{server_port}}
+hWikipedia - Trigonometry	URL:https://en.wikipedia.org/wiki/Trigonometry	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhy		{{server_host}}	{{server_port}}
+iI wanted to calculate the network latency between all my VPS nodes,		{{server_host}}	{{server_port}}
+iand add the
+latency into the configuration file of Bird BGP daemon, so		{{server_host}}	{{server_port}}
+ithe network packets
+are forwarded through the lowest latency route.		{{server_host}}	{{server_port}}
+iHowever, I have 17 nodes as of
+today, and I didn't want to manually		{{server_host}}	{{server_port}}
+irun a `ping` command between each pair.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo I came up with a solution: I can mark the latitudes and longitudes		{{server_host}}	{{server_port}}
+iof the
+physical locations of my nodes, calculate the physical		{{server_host}}	{{server_port}}
+idistance, and divide that
+by half the light speed to get the		{{server_host}}	{{server_port}}
+iapproximate latencies. I randomly sampled a
+few node pairs, and found		{{server_host}}	{{server_port}}
+ithat the Internet routing between them are mostly
+straightforward,		{{server_host}}	{{server_port}}
+iwith no significant detours. In this case, the physical
+distance is a		{{server_host}}	{{server_port}}
+igood approximation that satisfies my requirements.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBecause I use NixOS across all my nodes, and manage all configs with		{{server_host}}	{{server_port}}
+iNix, I need
+to find a way to calculate this distance with Nix. One		{{server_host}}	{{server_port}}
+icommonly used method to
+calculate distance based on latitude/longitude		{{server_host}}	{{server_port}}
+iis Haversine formula. It
+approximates the Earth as a sphere with a		{{server_host}}	{{server_port}}
+iradius of 6371km, and then use the
+following formula to calculate the		{{server_host}}	{{server_port}}
+idistance:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Reference:		{{server_host}}	{{server_port}}
+hWikipedia - Haversine formula	URL:https://en.wikipedia.org/wiki/Haversine_formula	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Note: there are a few variations of Haversine formula. I actually		{{server_host}}	{{server_port}}
+iused this
+arctan-based implementation from Stackoverflow:		{{server_host}}	{{server_port}}
+hhttps://stackoverflow.com/a/27943	URL:https://stackoverflow.com/a/27943	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNix however, as a language mainly focused on packaging and generating		{{server_host}}	{{server_port}}
+iconfig
+files, naturally doesn't natively support trigonometric		{{server_host}}	{{server_port}}
+ifunctions, and is only
+capable of some simple floating point		{{server_host}}	{{server_port}}
+icomputations.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThus I went with another way, depending on Python's `geopy` module for		{{server_host}}	{{server_port}}
+idistance
+computation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIt works, but what it really did is creating a new "package" for each		{{server_host}}	{{server_port}}
+ipair of
+latitudes/longitudes, and having Nix build it. In order to		{{server_host}}	{{server_port}}
+iachieve reproducible
+packaging wherever possible, and prevent extra		{{server_host}}	{{server_port}}
+ivariables from being introduced,
+Nix creates a sandbox isolated from		{{server_host}}	{{server_port}}
+iInternet and restricted from arbitrary disk
+access, run Python in this		{{server_host}}	{{server_port}}
+isandbox, have it load `geopy`, and do the
+calculation. This process is		{{server_host}}	{{server_port}}
+islow, taking around 0.5s for each package on my
+laptop (i7-11800H),		{{server_host}}	{{server_port}}
+iand cannot be parallelized due to Nix's limitations. As of
+today, my		{{server_host}}	{{server_port}}
+i17 nodes are distributed in 10 different cities around the world.		{{server_host}}	{{server_port}}
+iThis
+means calculating all these distances alone will take		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn addition, since the output of the packaging function		{{server_host}}	{{server_port}}
+i`pkgs.runCommandLocal`
+is immediately consumed by `builtins.readFile`,		{{server_host}}	{{server_port}}
+ithe packages for distance
+calculation are not directly referenced by		{{server_host}}	{{server_port}}
+imy Nix config. This means that their
+reference count is 0, and will be		{{server_host}}	{{server_port}}
+iimmediately garbage collected with
+`nixos-collect-garbage -d`. Next		{{server_host}}	{{server_port}}
+itime I want to build my config, it needs
+another 22.5s to calculate		{{server_host}}	{{server_port}}
+iall of them again.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIs it possible that I no longer rely on Python, but instead implement		{{server_host}}	{{server_port}}
+ithe
+trigonometric functions sin, cos, tan, and finally implement the		{{server_host}}	{{server_port}}
+iHaversine
+function?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd here comes the project today: trigonometric math library		{{server_host}}	{{server_port}}
+iimplemented in pure
+Nix.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+isin, cos, tan: Taylor Expansion		{{server_host}}	{{server_port}}
+iThe trigonometric functions, sine and cosine, have a relatively easy		{{server_host}}	{{server_port}}
+iway to
+compute: Taylor expansions. We all know that the sine function		{{server_host}}	{{server_port}}
+ihas the following
+Taylor expansion:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe can observe that each expanded item can be calculated with basic		{{server_host}}	{{server_port}}
+iarithmetric
+operations. Therefore, we can implement the following		{{server_host}}	{{server_port}}
+ifunctions in Nix:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor the calculation of a single Taylor expansion item, to avoid		{{server_host}}	{{server_port}}
+iprecision loss,
+I didn't calculate the numerator and denominator		{{server_host}}	{{server_port}}
+iseparately before dividing
+them. Instead, I expanded		{{server_host}}	{{server_port}}
+i, and calculate them
+one by one, and multiply all these much smaller		{{server_host}}	{{server_port}}
+iresults.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen, we need to determine how many items we want to calculate. We		{{server_host}}	{{server_port}}
+icould opt to
+a constant number of items, 10 for example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut when a fixed number of items are used, the 10 Taylor expansion		{{server_host}}	{{server_port}}
+iitems quickly
+diminish below floating point accuracy when the input is		{{server_host}}	{{server_port}}
+ivery small, and further
+items are still not small enough to be ignored		{{server_host}}	{{server_port}}
+iwith larger inputs. So I decided
+to have it make decisions based on		{{server_host}}	{{server_port}}
+ithe value of Taylor expansion items, and stop
+computation when the		{{server_host}}	{{server_port}}
+ivalue is below our accuracy target:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow we have a sine function with sufficient accuracy. Scan its result		{{server_host}}	{{server_port}}
+iwith input
+from 0 to 10 (above		{{server_host}}	{{server_port}}
+i), with a step of 0.001:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCompare `testOutput` to the result of Python Numpy's `np.sin`, and all		{{server_host}}	{{server_port}}
+ithe
+results are within 0.0001% of true value. This satisfies our		{{server_host}}	{{server_port}}
+iprecision
+requirements.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSimilarly, we can implement the cosine function:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYou really think I'm doing it from ground zero again? Really?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSimilarly, the tangent function is also simple:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI also ran the test on `cos` and `tan`, and the error is also within		{{server_host}}	{{server_port}}
+i0.0001%.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iarctan: Approximation. the Only Way		{{server_host}}	{{server_port}}
+iThe arctangent function also has a Taylor expansion:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYet it is easy to notice that arctan's Taylor expansion doesn't		{{server_host}}	{{server_port}}
+iconverge nearly
+as fast as sine. Since its denominator increase		{{server_host}}	{{server_port}}
+ilinearly, we need to calculate
+much more items before it's smaller		{{server_host}}	{{server_port}}
+ithan epsilon, which may cause a stack
+overflow for Nix:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTaylor expansion is no longer an option then, we need something that		{{server_host}}	{{server_port}}
+icalculates
+much faster. Being inspired by		{{server_host}}	{{server_port}}
+hhttps://stackoverflow.com/a/42542593	URL:https://stackoverflow.com/a/42542593	{{server_host}}	{{server_port}}
+i, I decided
+to fit the arctangent curve on		{{server_host}}	{{server_port}}
+iwith polynomial regression, and map the
+arctangent function in other		{{server_host}}	{{server_port}}
+iranges using the following rules:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStart Python and Numpy, and begin the fitting process:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe output above means that the arctangent function on		{{server_host}}	{{server_port}}
+ican be
+approximated with:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe can replicate this polynomial function in Nix:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI ran the precision test, and all results are within 0.0001% of true		{{server_host}}	{{server_port}}
+ivalue.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+isqrt: Newtonian Method		{{server_host}}	{{server_port}}
+iFor the square root function, we can iterate with the famous Newtonian		{{server_host}}	{{server_port}}
+imethod.
+The iteration formula I'm using is:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOf which		{{server_host}}	{{server_port}}
+iis the input to the square root function.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe can implement Newtonian square root calculation in Nix with the		{{server_host}}	{{server_port}}
+ifollowing
+code, and iterate until the change in result is below		{{server_host}}	{{server_port}}
+iepsilon:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe precision test shows all results are within		{{server_host}}	{{server_port}}
+i(absolute value) of true
+value.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHaversine Formula		{{server_host}}	{{server_port}}
+iWith the functions above ready, we can finally start implementing the		{{server_host}}	{{server_port}}
+iHaversine
+formula. I'm using this implementation from Stackoverflow as		{{server_host}}	{{server_port}}
+ia reference:		{{server_host}}	{{server_port}}
+hhttps://stackoverflow.com/a/27943	URL:https://stackoverflow.com/a/27943	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, calculate the theoretical delay based on light speed:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConclusion		{{server_host}}	{{server_port}}
+iI finally reached the target I was aiming for: calculate the		{{server_host}}	{{server_port}}
+itheoretical network
+latency between my nodes based on the light speed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAll these trigonometric functions (and some extra math functions) can		{{server_host}}	{{server_port}}
+ibe
+obtained from my GitHub:		{{server_host}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-math	URL:https://github.com/xddxdd/nix-math	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you're using Nix Flake, you can use the function as follows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,17 @@
+iInspired by		{{server_host}}	{{server_port}}
+1WP Blog One-click Check-in JS	/en/article/chat/wordpress-blog-onekey-comment-javascript.lantian	{{server_host}}	{{server_port}}
+i, I modified the JS code to implement one-click check-in functionality		{{server_host}}	{{server_port}}
+ifor Youyan and Duoshuo comment systems.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYouyan Version:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsage: Open a page with Youyan and click once. Can be used without		{{server_host}}	{{server_port}}
+ilogin, or after logging in via Weibo first.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDuoshuo Version:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUsage: Open a page with Duoshuo, log in via Weibo first, then click to		{{server_host}}	{{server_port}}
+iuse.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI tested this on my guestbook. Feel free to continue testing~		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

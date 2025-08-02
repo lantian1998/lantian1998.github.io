@@ -1,0 +1,433 @@
+i> 本文部分内容参考自		{{server_host}}	{{server_port}}
+hhttps://hostedtalk.net/t/connecting-uptime-robot-with-ns1-dns-api/3883	URL:https://hostedtalk.net/t/connecting-uptime-robot-with-ns1-dns-api/3883	{{server_host}}	{{server_port}}
+i> 。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i目标		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我的 VPS 多且遍布世界各地，但一直以来，我的网站都只用了美国洛杉矶的一台		{{server_host}}	{{server_port}}
+iVPS 提供
+服务。因为我为了特殊线路、低价等原因购买的都是小服务商的		{{server_host}}	{{server_port}}
+iVPS，而非
+DigitalOcean、Vultr 甚至 AWS、Azure 等大厂，这台美国洛杉矶的		{{server_host}}	{{server_port}}
+iVPS 网络有时会不稳
+定，虽然次数很少，但每次我都得手动临时切换 DNS 到其它		{{server_host}}	{{server_port}}
+iVPS 上，等网络恢复后再切换
+回来。因此，我希望可以把手头所有的 VPS		{{server_host}}	{{server_port}}
+i都用来提供网站服务，在某台 VPS 宕机时，用
+DNS 将流量自动切到其它 VPS		{{server_host}}	{{server_port}}
+i上。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i由于我的网站使用 Hexo		{{server_host}}	{{server_port}}
+i静态网页生成系统，同步网站数据并无难度：只需要在一台 VPS
+上生成文件，再用		{{server_host}}	{{server_port}}
+iAnsible 批量同步到所有 VPS 上即可。但更大的问题是 DNS		{{server_host}}	{{server_port}}
+i的配置。
+我希望用 GeoDNS 把用户导流到最近的 VPS		{{server_host}}	{{server_port}}
+i上，例如亚洲用户可以访问我的中国香港节
+点，美国用户可以访问我的美国洛杉		{{server_host}}	{{server_port}}
+i矶节点，等等。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是市面上的 GeoDNS 服务价格都有些昂贵，当只使用一个域名时：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hCloudNS 每月的价格是 $9.95	URL:https://www.cloudns.net/geodns/	{{server_host}}	{{server_port}}
+i- ；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hConstellix 每月的价格是 $10	URL:https://constellix.com/pricing/products	{{server_host}}	{{server_port}}
+i- ；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hAWS Route 53 每月的价格是 $0.5，外加每百万次查询 $0.7，和每个节点的监控 $0.75	URL:https://aws.amazon.com/route53/pricing/	{{server_host}}	{{server_port}}
+i- ；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hPerfOps 提供一个开启了 GeoDNS 的子域名用于 CNAME，10 万次查询以内是免费的，但每个节点的监控要 $5	URL:https://perfops.net/pricing	{{server_host}}	{{server_port}}
+i- 。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Cloudflare Load Balancing 每月的价格是 $15（两个后端，开启		{{server_host}}	{{server_port}}
+iTraffic
+Steering），之后每多一个节点再加 $5。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hNS1 提供支持 GeoDNS 的免费服务	URL:https://ns1.com/plans	{{server_host}}	{{server_port}}
+i。虽然 NS1 免费版只
+能监控一个节点，但它支持用 API 接口或者		{{server_host}}	{{server_port}}
+hAWS SNS	URL:https://aws.amazon.com/sns/	{{server_host}}	{{server_port}}
+i设置节点健康状态，从而达到自动切换节点的效果。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i为什么不自建		{{server_host}}	{{server_port}}
+i我以前试
+过		{{server_host}}	{{server_port}}
+h用 PowerDNS 自建权威 DNS 来实现 GeoDNS	URL:https://lantian.pub/article/modify-website/powerdns-lua-diy-geodns.lantian/	{{server_host}}	{{server_port}}
+i，
+但是效果并不好。最主要的原因是，各地的递归 DNS 不会自动选择最近的权威		{{server_host}}	{{server_port}}
+iDNS 进行解
+析，而是从域名的 DNS 列表中随机选择一个；如果某个递归 DNS		{{server_host}}	{{server_port}}
+i选到了地球另一边的权威
+DNS，甚至选到了一个暂时宕机的节点，DNS		{{server_host}}	{{server_port}}
+i解析就会很慢甚至失败，反而影响网站打开速
+度。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i商业 DNS 大都使用 Anycast 解决这个问题，也就是在多个数据中心发布同一个		{{server_host}}	{{server_port}}
+iIP 地址，
+递归 DNS		{{server_host}}	{{server_port}}
+i的请求会被路径上的路由器自动导向最近的数据中心。但是发布 IP		{{server_host}}	{{server_port}}
+i地址的前提
+是，你要有一个 ASN（一次性价格 $50-100），还要有一段 IPv4		{{server_host}}	{{server_port}}
+i地址（每月价格约
+$100），性价比甚至不如直接购买商业 DNS。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i准备工作		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i你需要准备好：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一个绑定信用卡的 AWS 帐号，每月可能需要支付几美分费用。我们需要使用：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hLambda 函数计算功能	URL:https://aws.amazon.com/lambda/pricing/	{{server_host}}	{{server_port}}
+i- （每月前 100
+万次请求免费）；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hAPI 网关	URL:https://aws.amazon.com/api-gateway/pricing/	{{server_host}}	{{server_port}}
+i- （用于将 Lambda 函数
+暴露到公网，前 12 个月每月 100		{{server_host}}	{{server_port}}
+i万次请求免费，随后每百万次请求 $1.17）；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+hSNS 消息服务	URL:https://aws.amazon.com/sns/pricing/	{{server_host}}	{{server_port}}
+i- （用于将宕机、恢复消息发
+给 NS1，每月前 100 万次请求免费）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一个		{{server_host}}	{{server_port}}
+hNS1 帐号	URL:https://ns1.com/signup	{{server_host}}	{{server_port}}
+i，需要验证信用卡，但不需要收费。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一个 DNS 记录数量低于 50 的域名，绑定到 NS1 上。NS1		{{server_host}}	{{server_port}}
+i免费版限制域名上只能有 50
+条 DNS 记录。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 你可以注册一个 6-9 位数的 xyz 域名专门用于
+NS1，		{{server_host}}	{{server_port}}
+h每年价格仅需 $0.99	URL:https://gen.xyz/1111b	{{server_host}}	{{server_port}}
+i，然后把主域名 CNAME 过去。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在你的主 DNS 上，给每个后端节点添加一个单独的 A/AAAA		{{server_host}}	{{server_port}}
+i记录，例如
+`hostdare.lantian.pub -> 185.186.147.110`，后面将会把 CNAME		{{server_host}}	{{server_port}}
+i和监控都指向这
+里。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一个 UptimeRobot 或 Freshping 帐号，配置好所有节点的监控。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 后端地址请使用第 4 步配置好的域名。以
+`hostdare.lantian.pub ->		{{server_host}}	{{server_port}}
+i185.186.147.110`		{{server_host}}	{{server_port}}
+i为例，监控地址请使用
+`https://hostdare.lantian.pub`，而非		{{server_host}}	{{server_port}}
+i`185.186.147.110` 等 IP 地址。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- UptimeRobot 的最小监控间隔是 5 分钟。Freshping 的最小监控间隔是 1		{{server_host}}	{{server_port}}
+i分钟，但
+不支持 IPv6。你可以自行取舍。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i一般来说宕机通知的条数都很少，因此你在 AWS 的消费很可能低于每月 1		{{server_host}}	{{server_port}}
+i美分，几乎完全
+免费。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i所有消息的流向是：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i为什么要用 AWS Lambda 和 AWS SNS		{{server_host}}	{{server_port}}
+i因为 NS1 的 Webhook 接口不太稳定，而 AWS SNS 支持自动重试。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在最初测试时我用的是 Cloudflare Workers，但是 NS1 的 API 接口频繁返回		{{server_host}}	{{server_port}}
+iBad
+Request 错误，而且短时间内重试无法解决该问题。因为 Cloudflare		{{server_host}}	{{server_port}}
+iWorkers		{{server_host}}	{{server_port}}
+i只能由请求
+触发，而且有执行时间限制，它无法在后台每过几秒重试一次。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是 AWS SNS 可以做到接口不稳定时自动重试，而 AWS Lambda 可以方便地向		{{server_host}}	{{server_port}}
+iSNS 发送消
+息，因此我最后选择了 AWS 的服务组合。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNS1 对接 AWS SNS		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 进入		{{server_host}}	{{server_port}}
+hNS1 后台的 Integrations 页面	URL:https://my.nsone.net/#/integrations	{{server_host}}	{{server_port}}
+i，点
+击 `Add a Data Source` 添加数据源，选择 AWS CloudWatch，名称任意。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我们并不会用到 AWS CloudWatch 服务，只是我们会将宕机信息以 CloudWatch		{{server_host}}	{{server_port}}
+i的格
+式发给 NS1。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 切换到 Incoming Feeds 标签，点击 CloudWatch		{{server_host}}	{{server_port}}
+i图标添加一个数据订阅（Feed），其
+中 `Alarm Name` 需要与		{{server_host}}	{{server_port}}
+iUptimeRobot/Freshping 上配置好的域名一
+致。`Name (for internal		{{server_host}}	{{server_port}}
+ireference)` 可以随意填写，我配置成和 `Alarm Name` 保
+持一致。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 以 `hostdare.lantian.pub -> 185.186.147.110` 为例，`Alarm Name`		{{server_host}}	{{server_port}}
+i需要填写为
+`hostdare.lantian.pub`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+INS1 添加订阅	/usr/uploads/202202/ns1-alarm.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 重复第二步，添加所有节点的订阅。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 此时 Incoming Feeds 标签会显示 CloudWatch 订阅的链接（`Feeds		{{server_host}}	{{server_port}}
+iURL`），记下这个
+链接，稍后将会将它添加到 AWS SNS 中。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+INS1 订阅链接	/usr/uploads/202202/ns1-feed.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 进入		{{server_host}}	{{server_port}}
+hAWS SNS 管理页面	URL:https://us-west-1.console.aws.amazon.com/sns/v3/home?region=us-west-1#/topics	{{server_host}}	{{server_port}}
+i，
+新建一个 Topic（消息队列），类型选择 Standard，其余选项均保持默认。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 注意我的 AWS 链接都是 us-west-1		{{server_host}}	{{server_port}}
+i区的，如果你想新建在其它区域请自行切换！AWS
+上的 SNS 和稍后创建的 Lambda		{{server_host}}	{{server_port}}
+i函数必须在同一个区！		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS 创建 Topic	/usr/uploads/202202/aws-create-topic.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Topic 的页面上会显示一个 ARN（资源		{{server_host}}	{{server_port}}
+iID），将其记录下来，稍后创建函数时会用到。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 点击页面下方的 `Create subscription`		{{server_host}}	{{server_port}}
+i按钮创建数据订阅，Protocol（协议）选择
+HTTPS，Endpoint（地址）输入第 4		{{server_host}}	{{server_port}}
+i步的订阅链接，其余选项保持默认。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS 创建订阅	/usr/uploads/202202/aws-create-subscription.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i此时发送到 AWS SNS 的这个 Topic 的消息，都会被转发到 NS1 的		{{server_host}}	{{server_port}}
+iAPI，从而将节点状态
+同步到 NS1。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAWS 创建 Lambda 函数处理 Webhook		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i下一步是通过 AWS Lambda 创建一个函数，将 UptimeRobot 或者 Freshping 的		{{server_host}}	{{server_port}}
+iWebhook
+消息转换成 AWS SNS 的消息。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 进入		{{server_host}}	{{server_port}}
+hAWS Lambda 管理页面	URL:https://us-west-1.console.aws.amazon.com/lambda/home?region=us-west-1#/functions	{{server_host}}	{{server_port}}
+i，
+创建一个函数。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 注意我的 AWS 链接都是 us-west-1		{{server_host}}	{{server_port}}
+i区的，如果你想新建在其它区域请自行切换！AWS
+上的 SNS 和 Lambda		{{server_host}}	{{server_port}}
+i函数必须在同一个区！		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 选择 `Auto from scratch`，Runtime 选择 `Node.js		{{server_host}}	{{server_port}}
+i14.x`，其余均保持默认。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS 创建 Lambda 函数	/usr/uploads/202202/aws-create-lambda.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 此时你会自动进入函数的编辑页面。如果你准备用		{{server_host}}	{{server_port}}
+iUptimeRobot，将这段代码复制进
+去：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果你准备用 Freshping，将这段代码复制进去：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 点击 Deploy 部署。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 点击函数的 Configuration 标签，左侧选择 Permissions，再点击 Execution		{{server_host}}	{{server_port}}
+iRole 里
+的链接，进入权限管理页面。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS 函数权限配置	/usr/uploads/202202/aws-lambda-permissions.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在打开的新页面上，点击 Add permissions - Create inline		{{server_host}}	{{server_port}}
+ipolicy，创建一条权限规
+则。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 进入 Create Policy（创建规则）页面后，Service 选择 SNS；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS 权限配置选择 Service	/usr/uploads/202202/aws-permission-service.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Actions 选择 Write 下的 Publish；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS 权限配置选择 Actions	/usr/uploads/202202/aws-permission-actions.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在 Resources 点击 Add ARN，填写之前创建的 AWS SNS 的 ARN：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS 权限配置选择 Resources	/usr/uploads/202202/aws-permission-resources.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 点右下角的 Review Policy，随便起个名字，然后点 Create Policy		{{server_host}}	{{server_port}}
+i创建规则。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i至此，我们创建了一个解析 UptimeRobot 或 Freshping 的 Webhook 消息的		{{server_host}}	{{server_port}}
+iLambda 函
+数，并赋予了它向 SNS 发送消息的权限。但是现在还没有办法通过		{{server_host}}	{{server_port}}
+iHTTP 方式向这个函数
+发送请求。下一节将创建一个 API Gateway 用于接收		{{server_host}}	{{server_port}}
+iHTTP 请求并调用函数。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAWS 创建 API Gateway 接受 HTTP 请求		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 进入		{{server_host}}	{{server_port}}
+hAWS API Gateway 管理页面	URL:https://us-west-1.console.aws.amazon.com/apigateway/main/apis?region=us-west-1	{{server_host}}	{{server_port}}
+i，
+创建一个 API，类型选 HTTP；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 注意我的 AWS 链接都是 us-west-1		{{server_host}}	{{server_port}}
+i区的，如果你想新建在其它区域请自行切换！		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS API Gateway 选择类型	/usr/uploads/202202/aws-api-type.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 点击 Add integration，类型选择 Lambda，并选择你刚才创建的 Lambda		{{server_host}}	{{server_port}}
+i函数，随便起
+个名，并点击下一步：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS API Gateway 选择 Lambda 函数	/usr/uploads/202202/aws-api-integrations.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在 Configure routes 页面，记下你的 Lambda		{{server_host}}	{{server_port}}
+i函数对应的路径，例如我的路径就是
+`/ns1-uptime`：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS API Gateway 配置路径	/usr/uploads/202202/aws-api-routes.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一路下一步创建成功，页面中央的 Stages 中就是 API Gateway 的地址。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IAWS API Gateway 地址	/usr/uploads/202202/aws-api-url.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在地址末尾加上第三步的路径就是函数的地址。假设我的 API Gateway		{{server_host}}	{{server_port}}
+i地址是
+`https://1234567890.execute-api.us-west-1.amazonaws.com/`，那么		{{server_host}}	{{server_port}}
+iLambda		{{server_host}}	{{server_port}}
+i函数的
+地址就是
+`https://1234567890.execute-api.us-west-1.amazonaws.co		{{server_host}}	{{server_port}}
+im/ns1-uptime`，直接访问
+时应显示 Internal Server Error。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iUptimeRobot/Freshping 接入 Webhook		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 由于我们在函数中设置了一个密码（`SECRET_KEY`），我们需要先把密码加到		{{server_host}}	{{server_port}}
+iLambda
+函数的地址上。假设密码是 `123456`，那么就在函数地址末尾加上		{{server_host}}	{{server_port}}
+i`?key=123456`，完
+整地址就是
+`https://1234567890.execute-api.us-west-1.		{{server_host}}	{{server_port}}
+iamazonaws.com/ns1-uptime?key=123456`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果你用的是 UptimeRobot，进
+入		{{server_host}}	{{server_port}}
+h后台的 My Settings 页面	URL:https://uptimerobot.com/dashboard#mySettings	{{server_host}}	{{server_port}}
+i，添
+加联系人（Add Alert Contact）：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 类型选择 Webhook；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- URL to Notify 输入函数带有密码的完整地址；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- POST Value 输入：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 勾选 Send as JSON；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Enable notification for 选择 Up & down events；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 保存。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IUptimeRobot Webhook 配置	/usr/uploads/202202/uptimerobot-webhook.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 修改所有的监控任务，在联系人一栏选中刚刚添加的 Webhook。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果你用的是 Freshping，进入后台，点击左侧齿轮按钮 - Integrations		{{server_host}}	{{server_port}}
+i页面，在
+Webhook 一栏创建接入（Create Integration）：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Event Type 选择 Up/Down；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Trigger the Webhook 输入函数带有密码的完整地址；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 其余均保持默认，保存即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNS1 配置 GeoDNS 和自动切换		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后一步，我们要在 NS1		{{server_host}}	{{server_port}}
+i的控制面板里添加每个地区的解析记录，并绑定到对应的订阅
+Feed 上。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 回到		{{server_host}}	{{server_port}}
+hNS1 控制面板的 Zones 页面	URL:https://my.nsone.net/#/zones	{{server_host}}	{{server_port}}
+i，进入你的域名
+选项。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 创建一个 CNAME 记录，先不添加 Answer，填写名称后直接保存。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 点击左侧的 Edit Filter Chain，然后从右侧依次拖入：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Up		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Geotarget Country		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select First Group		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Shuffle		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Select First N		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 勾选 Enable Client Subnet，然后保存。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+INS1 Filter Chain	/usr/uploads/202202/ns1-filter-chain.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在右侧点击添加 Answer Group，每个 Group 对应一个地区。点击 Answer		{{server_host}}	{{server_port}}
+iGroup 右侧
+的菜单，选择编辑信息 Edit Group		{{server_host}}	{{server_port}}
+iMetadata，添加国家（Country）和地区
+（Subdivisions）信息。以洛杉矶（Los		{{server_host}}	{{server_port}}
+iAngeles）为例：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Country/countries 选择 Americas / Northern America / United States；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Subdivisions 选择 North America / United States of America /		{{server_host}}	{{server_port}}
+iCalifornia；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- US States 选择 Western US / California；		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 保存。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+INS1 Answer Group	/usr/uploads/202202/ns1-answer-group.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 在这个 Answer Group 里选择 Add Answer to Group，填写准备工作第 4		{{server_host}}	{{server_port}}
+i步创建的对应
+节点的域名。点击右侧菜单选择编辑信息 Edit Answer		{{server_host}}	{{server_port}}
+iMetadata：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 点击 Up/down 右侧的图标，选择对应这个节点的订阅 Feed，保存。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+INS1 Answer 信息	/usr/uploads/202202/ns1-answer-meta.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 重复 5、6 两步添加所有地区和节点并保存，此时这个 CNAME 记录已经启用了		{{server_host}}	{{server_port}}
+iGeoDNS
+和自动切换。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 将你的主域名 CNAME 到 NS1 上的这个（子）域名。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> 需要注意的是，目前的 DNS 规范不支持把根域名（主域名的 `@` 记录）CNAME		{{server_host}}	{{server_port}}
+i到其它域
+名上。如果你想把你的根域名CNAME 过来，可以选择使用 DNS		{{server_host}}	{{server_port}}
+i服务商的 CNAME
+Flattening 功能。有些服务商会以 ALIAS、ANAME		{{server_host}}	{{server_port}}
+i的方式提供该功能，而有些服务商
+（如 Cloudflare）会自动对根域名的 CNAME		{{server_host}}	{{server_port}}
+i记录启用此功能。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> 但是，此时 NS1 获取到的客户端 IP 将是你主域名 DNS 服务商的权威 DNS		{{server_host}}	{{server_port}}
+iIP。对于
+Cloudflare		{{server_host}}	{{server_port}}
+i等全球节点众多的服务商，这不是问题，因为你的用户一般离权威 DNS		{{server_host}}	{{server_port}}
+i很
+近。但如果你的服务商节点较少，GeoDNS		{{server_host}}	{{server_port}}
+i可能会将你的用户导向较远的节点。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i此时全部配置均已完成，你可以手动停掉一台服务器检查效果。当你收到		{{server_host}}	{{server_port}}
+iUptimeRobot 或
+者 Freshping 的警告时，NS1		{{server_host}}	{{server_port}}
+i控制面板里对应服务器的状态也应该变成了 Down，DNS		{{server_host}}	{{server_port}}
+i查询
+也不会返回这台服务器的记录；当服务器恢复时，其状态会变回		{{server_host}}	{{server_port}}
+iUp，重新开始提供服务。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

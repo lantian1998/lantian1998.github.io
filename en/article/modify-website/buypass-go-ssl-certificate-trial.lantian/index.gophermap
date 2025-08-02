@@ -1,0 +1,59 @@
+iBuyPass is a Norwegian Certificate Authority (CA) that provides		{{server_host}}	{{server_port}}
+ivarious services including digital certificates and security		{{server_host}}	{{server_port}}
+iauthentication products. Recently, BuyPass launched an ACME-based		{{server_host}}	{{server_port}}
+iautomated certificate issuance service called BuyPass GO, similar to		{{server_host}}	{{server_port}}
+iLet's Encrypt. The main difference from Let's Encrypt is that their		{{server_host}}	{{server_port}}
+icertificates have a 180-day validity period per issuance—twice as long		{{server_host}}	{{server_port}}
+ias Let's Encrypt's. Therefore, if you need to manually replace		{{server_host}}	{{server_port}}
+icertificates for your service, BuyPass certificates are more		{{server_host}}	{{server_port}}
+iconvenient. Additionally, BuyPass currently doesn't support issuing		{{server_host}}	{{server_port}}
+iwildcard certificates (commonly called wildcard certs?), requiring all		{{server_host}}	{{server_port}}
+idomain names to be listed individually.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Though personally, if manual certificate replacement is needed, I		{{server_host}}	{{server_port}}
+ithink it's better to apply for a one-year validity certificate from		{{server_host}}	{{server_port}}
+iTrustAsia or similar providers.)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iApplying for Certificates		{{server_host}}	{{server_port}}
+iI use the		{{server_host}}	{{server_port}}
+iacme.sh		{{server_host}}	{{server_port}}
+itool to apply for certificates. The first step is account		{{server_host}}	{{server_port}}
+iregistration. Unlike Let's Encrypt, BuyPass requires providing a valid		{{server_host}}	{{server_port}}
+iemail during registration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf your domain has CAA records restricting which CAs can issue		{{server_host}}	{{server_port}}
+icertificates, add a `0 issue buypass.com` record to allow BuyPass to		{{server_host}}	{{server_port}}
+iissue certificates for you.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen proceed with the application. I used DNS validation with CloudXNS		{{server_host}}	{{server_port}}
+ias the provider:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI encountered a strange issue where the server returned a 500 error at		{{server_host}}	{{server_port}}
+ithe "Getting new-authz" step. After re-running the account		{{server_host}}	{{server_port}}
+iregistration command, it worked...		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe certificate is then ready for use.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iResults		{{server_host}}	{{server_port}}
+iThe certificate appears in Chrome as follows:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSSLLabs test results:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iI applied for one RSA and one ECC certificate. For the ECC		{{server_host}}	{{server_port}}
+icertificate, the intermediate certificate is still RSA. The RSA		{{server_host}}	{{server_port}}
+iintermediate requires the web server to send more data to clients.		{{server_host}}	{{server_port}}
+iIdeally, there should be an ECC intermediate certificate. However,		{{server_host}}	{{server_port}}
+isince Let's Encrypt also uses RSA intermediates for ECC certificates,		{{server_host}}	{{server_port}}
+ithis is acceptable.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMy test site is at		{{server_host}}	{{server_port}}
+ihttps://buypass-ssl.lantian.pub		{{server_host}}	{{server_port}}
+ifor your reference.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSummary		{{server_host}}	{{server_port}}
+iBeyond the longer validity period, BuyPass doesn't offer significant		{{server_host}}	{{server_port}}
+iadvantages over Let's Encrypt. Given that ACME certificates are		{{server_host}}	{{server_port}}
+iauto-renewed, the extended validity isn't a major benefit. Its greater		{{server_host}}	{{server_port}}
+isignificance lies in serving as an emergency backup if Let's Encrypt		{{server_host}}	{{server_port}}
+iexperiences outages.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,62 @@
+iCDN，也就是内容分发服务，可以为你的网站在某个位置建立一个分站，其内容与你		{{server_host}}	{{server_port}}
+i的原始
+站点相同。同时，这些分站还能保存你原有的一些静态资源，如JS、CSS、		{{server_host}}	{{server_port}}
+i图片，让你的网
+站访问更快。有时CDN还能优化某两地之间的网络状况。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i比方说，我的网站在B地，我（以及我的访客）在A地，从A地到B地的宽带需要经过C地		{{server_host}}	{{server_port}}
+i，但
+是C地的宽带质量不好。这时，我Ping我的网站，就会出现不同程度的丢包，一		{{server_host}}	{{server_port}}
+i旦数据包丢
+失，客户端只能等待一段时间，见服务器无响应，再次发包，会导致网		{{server_host}}	{{server_port}}
+i站打开速度变慢。而
+此时，我使用了D地的CDN，此时CDN就会绕过宽带不好的C地，		{{server_host}}	{{server_port}}
+i丢包率明显降低，就可以提高
+网站的速度。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是有时CDN会适得其反，比如原先访问网站经过D，开启CDN后经过C，就会导致减		{{server_host}}	{{server_port}}
+i速。再举
+个极端的例子，比如我的网站在美国东海岸，我在西海岸，此时我的CDN		{{server_host}}	{{server_port}}
+i却偏偏让我从东海
+岸、亚洲、欧洲、西海岸这样绕一圈，就会导致减速。所以，		{{server_host}}	{{server_port}}
+i选择CDN，不能只看CDN位置，
+还要看CDN到你原始网站和到你的路径。之前我的博		{{server_host}}	{{server_port}}
+i客使用安全宝CDN的时候，分配到美国洛
+杉矶的ChinaCache节点，毕竟是中国人选		{{server_host}}	{{server_port}}
+i的机房，速度非常给力（在美国服务器中），ping
+一下子从250ms降到150ms。但是		{{server_host}}	{{server_port}}
+i后来，我放弃安全宝DNS，将DNS解析商换成DNSPod，并重新
+做了CNAME解析，这时安		{{server_host}}	{{server_port}}
+i全宝就给我分配了香港新世界节点。从理论上来说，距离近了，速
+度也会快。但		{{server_host}}	{{server_port}}
+i是我反而觉得速度变慢了。以前我按刷新，Chrome的小圆圈转1/8圈就能开始
+加		{{server_host}}	{{server_port}}
+i载，现在却要转上1/2圈，甚至有转个3圈停不下来的。我马上就觉得我遇到了适得		{{server_host}}	{{server_port}}
+i其反的
+那种情况。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i为了确定我的猜想，最好的方法就是Tracert路由追踪。Tracert可以跟踪你的数		{{server_host}}	{{server_port}}
+i据包一路上
+的所有节点，从而帮助你判断你的数据包的传输情况。但是我手头上		{{server_host}}	{{server_port}}
+i没有香港节点的VPS之
+类的东西，所以我就用了WebKaka。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWebKaka可以给你的网站提供测速服务，还可以在线ping和tracert。我现在暂时		{{server_host}}	{{server_port}}
+i给国外的用
+户解析了Incapsula CDN（国内还是安全宝），Incapsula		{{server_host}}	{{server_port}}
+iCDN根据我估计有美国西海岸、美
+国东海岸、以色列（？）3个节点，所以我在WebKa		{{server_host}}	{{server_port}}
+ika里对应选择了美国加州HE、洛杉矶BN和
+香港新世界，向我的源站IP发起Tracer		{{server_host}}	{{server_port}}
+it。不一会儿，Tracert完成。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i所以我们可以看到，美国的两个节点都从美国本土走了过去，但是香港的数据包却		{{server_host}}	{{server_port}}
+i从欧洲绕
+了一圈。众所周知，美国的网络情况最好，所以相应的美国节点也最快		{{server_host}}	{{server_port}}
+i。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i现在由于怕Incapsula反应过于激烈，我对国外用户解析就是Incapsula原始解析，		{{server_host}}	{{server_port}}
+i而国内用
+户则被我手动指定到了美国西海岸节点。原先的速度就又回来了，HOHO		{{server_host}}	{{server_port}}
+i~		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

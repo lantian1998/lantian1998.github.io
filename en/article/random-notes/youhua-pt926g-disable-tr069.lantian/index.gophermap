@@ -1,0 +1,74 @@
+iThis post explains the procedure to disable TR069 on a Youhua PT926G		{{server_host}}	{{server_port}}
+ifiber optic
+modem, to prevent China Telecom from pushing		{{server_host}}	{{server_port}}
+iconfig/firmware updates, and void
+your change of switching to bridging		{{server_host}}	{{server_port}}
+imode or setting port-forward rules.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn the WAN settings of the management portal of this modem, the TR069		{{server_host}}	{{server_port}}
+iconnection
+can neither be modified nor removed. But with a simple		{{server_host}}	{{server_port}}
+ipatch on the management
+portal's code, you can break the limitation on		{{server_host}}	{{server_port}}
+ithe modem.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, you should follow my previous post:		{{server_host}}	{{server_port}}
+1Hacking a Youhua PT926G Fiber Optic Modem	/en/article/random-notes/youhua-pt926g-fiber-modem-crack.lantian/	{{server_host}}	{{server_port}}
+i,
+to obtain the Telnet Root password.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen Telnet in, run `su`, and type in the password to get to Root		{{server_host}}	{{server_port}}
+iShell. When
+you do that correctly, the command-line will prompt `#`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen follow these steps:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type `cp /home/httpd/web/net_eth_links.asp /var/` and hit Enter.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- We're going to modify this file, but it's on a read-only partition.		{{server_host}}	{{server_port}}
+iSo we
+first copy it to somewhere writable first.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type `vi /var/net_eth_links.asp` to edit the file. `vi` is famous		{{server_host}}	{{server_port}}
+ifor being
+difficult to use, so let's go through this step by step:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type `/is_configurable` and Enter, which is searching for		{{server_host}}	{{server_port}}
+istring
+`is_configurable`. The cursor should jump to somewhere around:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Use your arrow keys to move to the line with `var lk`, and press the		{{server_host}}	{{server_port}}
+iD key
+twice. Now that line is removed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Press D repeatedly until you removed the line right before `return		{{server_host}}	{{server_port}}
+itrue;`
+(not including `return true;`), so the whole function will look		{{server_host}}	{{server_port}}
+ilike:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type `:wq` and press Enter to save the file and close the editor.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Type `mount --bind /var/net_eth_links.asp		{{server_host}}	{{server_port}}
+i/home/httpd/web/net_eth_links.asp`
+and Enter.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Although we cannot modify the original file, we can use the new file		{{server_host}}	{{server_port}}
+i"in
+place of" the old file, so the system will automatically use the		{{server_host}}	{{server_port}}
+inew copy
+when trying to access the file.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- This is what this line is doing.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Open your browser and visit the management portal at 8080. Now the		{{server_host}}	{{server_port}}
+iTR069
+connection in WAN settings can be edited.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- You may remove it, change its type to `Internet` or `Other`, or set		{{server_host}}	{{server_port}}
+iit to
+`Bridge` mode. It's up to you.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Now, the modem's TR069 settings are no longer valid, and it won't be		{{server_host}}	{{server_port}}
+iable
+to connect to China Telecom's central management services.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

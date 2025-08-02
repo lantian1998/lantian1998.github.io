@@ -1,0 +1,52 @@
+iCDN, or Content Delivery Network, creates distributed copies of your		{{server_host}}	{{server_port}}
+iwebsite across multiple locations. These copies store static resources		{{server_host}}	{{server_port}}
+ilike JS, CSS, and images, accelerating access for visitors. Sometimes		{{server_host}}	{{server_port}}
+iCDNs can also optimize network paths between regions.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFor example, if your website is hosted in		{{server_host}}	{{server_port}}
+iLocation B		{{server_host}}	{{server_port}}
+i, and you (and your visitors) are in		{{server_host}}	{{server_port}}
+iLocation A		{{server_host}}	{{server_port}}
+i, the connection between A and B might pass through		{{server_host}}	{{server_port}}
+iLocation C		{{server_host}}	{{server_port}}
+iwith poor network quality. When you ping your site, packet loss occurs		{{server_host}}	{{server_port}}
+iat C, forcing clients to wait and retransmit data, slowing down the		{{server_host}}	{{server_port}}
+isite. By using a CDN in		{{server_host}}	{{server_port}}
+iLocation D		{{server_host}}	{{server_port}}
+i, traffic bypasses the problematic C, reducing packet loss and		{{server_host}}	{{server_port}}
+iimproving speed.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, CDNs can backfire. For instance, if traffic originally took		{{server_host}}	{{server_port}}
+ipath D but is rerouted through C after enabling CDN, speeds drop. An		{{server_host}}	{{server_port}}
+iextreme case: if your site is on the US East Coast and you're on the		{{server_host}}	{{server_port}}
+iWest Coast, a CDN might route traffic through Asia and Europe first.		{{server_host}}	{{server_port}}
+iThus, CDN selection should consider both the CDN's location		{{server_host}}	{{server_port}}
+iand		{{server_host}}	{{server_port}}
+iits routing paths to your origin server and users.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPreviously, my blog used Safeguard CDN (安全宝) with a ChinaCache node		{{server_host}}	{{server_port}}
+iin Los Angeles. Being a Chinese-operated data center, it performed		{{server_host}}	{{server_port}}
+iexceptionally well (for a US server), reducing ping from 250ms to		{{server_host}}	{{server_port}}
+i150ms. Later, I switched DNS to DNSPod and reconfigured CNAME records,		{{server_host}}	{{server_port}}
+iwhich assigned me a Hong Kong New World Telecom node. While		{{server_host}}	{{server_port}}
+igeographically closer, the site felt slower. Chrome's loading spinner		{{server_host}}	{{server_port}}
+inow spun half a circle (or even three!) instead of just 1/8th.		{{server_host}}	{{server_port}}
+iClearly, the CDN was backfiring.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo verify, I used		{{server_host}}	{{server_port}}
+itraceroute		{{server_host}}	{{server_port}}
+ito map the network path. Without a Hong Kong VPS, I turned to WebKaka		{{server_host}}	{{server_port}}
+ifor cross-region testing. WebKaka provides speed tests, ping, and		{{server_host}}	{{server_port}}
+itraceroute tools. I temporarily routed international traffic to		{{server_host}}	{{server_port}}
+iIncapsula CDN (with US West/East Coast and Israel nodes) while keeping		{{server_host}}	{{server_port}}
+iSafeguard CDN for China. Then, I ran traceroutes from WebKaka's Hong		{{server_host}}	{{server_port}}
+iKong New World and US Los Angeles BN nodes to my origin IP:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe results showed Hong Kong traffic detouring through Europe, while		{{server_host}}	{{server_port}}
+iUS nodes took direct paths. Unsurprisingly, US-based routing was		{{server_host}}	{{server_port}}
+ifaster.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo resolve this, I manually routed international traffic to		{{server_host}}	{{server_port}}
+iIncapsula's default nodes and forced Chinese users to a US West Coast		{{server_host}}	{{server_port}}
+inode. The original speed returned. Hooray! 🎉		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

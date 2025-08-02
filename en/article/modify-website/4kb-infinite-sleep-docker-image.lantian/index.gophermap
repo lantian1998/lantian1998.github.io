@@ -1,0 +1,183 @@
+iIn my network configuration, some of my Docker containers, for example		{{server_host}}	{{server_port}}
+iDNS, need
+to achieve high availability with Anycast.		{{server_host}}	{{server_port}}
+1In my previous post	/en/article/modify-website/docker-share-network-namespace-bird-high-availability.lantian/	{{server_host}}	{{server_port}}
+i,
+I created a Busybox container and run `tail -f /dev/null`, in order		{{server_host}}	{{server_port}}
+ito let it
+persist infinitely, but without using any CPU cycles, to		{{server_host}}	{{server_port}}
+imaintain a network
+namespace used by both the server application and		{{server_host}}	{{server_port}}
+iBIRD.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn short: I invented a Pod in Kubernetes on my own.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> I don't use K8S, since my nodes run individually rather than in a		{{server_host}}	{{server_port}}
+icluster, I
+don't need the cluster functionality of K8S at all. In		{{server_host}}	{{server_port}}
+iaddition, K8S is
+difficult to set up.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut on another thought, a Busybox container seems like an overkill for		{{server_host}}	{{server_port}}
+ithis
+purpose, and I have to set the entrypoint manually. It would be		{{server_host}}	{{server_port}}
+igreat if I have
+a tiny Docker image that only sleeps indefinitely.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPlan A: Statically link one to Musl		{{server_host}}	{{server_port}}
+iThe most straightforward way is to write an infinite loop in C, and		{{server_host}}	{{server_port}}
+icall
+functions like `sleep` to wait forever. In Linux, a `pause`		{{server_host}}	{{server_port}}
+ifunction is provided
+by C standard libraries such as Glibc or Musl. It		{{server_host}}	{{server_port}}
+iwill pause the program until
+it receives an external signal.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSo here's the infinite loop with `pause`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen statically link it to Musl. Don't use Glibc,		{{server_host}}	{{server_port}}
+1I've mentioned why when I was trying to create tiny Docker images	/en/article/modify-website/static-build-tiny-docker-images.lantian	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd we have an executable that's 17KB in size:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIt's pretty small, compared to Busybox's image that's over 1MB in		{{server_host}}	{{server_port}}
+isize. But we
+can do better.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPlan B: Assembly!		{{server_host}}	{{server_port}}
+iIf we try to decompile the `sleep` program, we'll get a bunch of		{{server_host}}	{{server_port}}
+ifunctions:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis is because a portion of Musl is copied over in the static linking		{{server_host}}	{{server_port}}
+iprocess.
+But for a program that does nothing other than waiting		{{server_host}}	{{server_port}}
+iforever, it doesn't need
+any of them. Can we remove them:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSure. One way is to call the system call for `pause` directly in		{{server_host}}	{{server_port}}
+iassembly. Don't
+be frightened by assembly though, our program is only		{{server_host}}	{{server_port}}
+i6 lines long:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Line 1 indicates that all the code should be put to the `.text`		{{server_host}}	{{server_port}}
+isection
+(executable code section) of the Linux ELF executable.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Line 2 and Line 3 define a `_start` function.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Although the main function is `main` when we write C code, it's not		{{server_host}}	{{server_port}}
+ithe
+first function that Linux calls when it starts the program.		{{server_host}}	{{server_port}}
+iInstead, it runs
+the `_start` function copied over from C standard		{{server_host}}	{{server_port}}
+ilibrary. It will load some
+environment settings (such as parsing		{{server_host}}	{{server_port}}
+icommand-line arguments) and call our
+`main` function. But we don't		{{server_host}}	{{server_port}}
+ineed all these steps. We just need to `sleep`
+forever.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Line 4 and Line 5 call the system call numbered 34, or the `pause`		{{server_host}}	{{server_port}}
+icall for
+Linux. It's the one that I mentioned before, sleep		{{server_host}}	{{server_port}}
+iindefinitely until a signal
+is received.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Line 6 jumps to the beginning of `_start` to create an infinite		{{server_host}}	{{server_port}}
+iloop.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i"Compile" it (technically it's not, it's only translating to machine		{{server_host}}	{{server_port}}
+icode):		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd we have a 4.3 KB executable that does sleep forever.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut problems arise again: The code we just created, as well as the		{{server_host}}	{{server_port}}
+iexecutable,
+only supports x86_64. I have a Raspberry Pi and a Tinker		{{server_host}}	{{server_port}}
+iBoard, which means I
+need to support ARM. And if I ever come across a		{{server_host}}	{{server_port}}
+imachine that only does x86 32
+bits, or RISC-V got popular somehow in		{{server_host}}	{{server_port}}
+ithe future, I'll have to install an
+assembler and write a version of		{{server_host}}	{{server_port}}
+icode for each and every architecture.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo make matters worse, Linux numbers its system calls differently		{{server_host}}	{{server_port}}
+iunder
+different architectures. I'll have to look them up for each		{{server_host}}	{{server_port}}
+iarchitecture.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iCan this be simplified?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPlan C: Use Musl's Source Code		{{server_host}}	{{server_port}}
+iRemember the C standard libraries like Musl? One of their jobs is to		{{server_host}}	{{server_port}}
+iwrap up
+Linux system calls, so programmers can use them without		{{server_host}}	{{server_port}}
+iwriting assembly.
+Wouldn't it be better if we could reuse the wrapping		{{server_host}}	{{server_port}}
+ipart, without other junks
+that we don't need?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFirst, we need to grab a copy of Musl's code:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMusl has assembly code, inlined in C files, for system calls in		{{server_host}}	{{server_port}}
+idifferent
+architectures, under the `arch` folder. For example, the		{{server_host}}	{{server_port}}
+icode for x86_64 is at
+`arch/x86_64/syscall_arch.h`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn addition, there's a system call table in `cat		{{server_host}}	{{server_port}}
+iarch/x86_64/bits/syscall.h.in`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNeither of them depends on external stuff, and we can include them		{{server_host}}	{{server_port}}
+idirectly.
+Therefore we can create this piece of code:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> `pause` system call isn't supported on all architectures. When		{{server_host}}	{{server_port}}
+ithis happens, I
+use `sched_yield` instead to tell the OS to allocate		{{server_host}}	{{server_port}}
+iCPU cycles to other
+programs. This consumes more CPU cycles than		{{server_host}}	{{server_port}}
+i`pause`.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Like assembly, a `_start` function is created. We don't need other		{{server_host}}	{{server_port}}
+istuff from
+C standard libraries.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThen compile:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhich will give us a `sleep` file that's 8.9 KB in size:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThat is not the limit. If some assembly can get us to 4.3 KB, we can		{{server_host}}	{{server_port}}
+ido similar
+with C. Let's run `objdump -x sleep` to see the ELF		{{server_host}}	{{server_port}}
+iSections:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThere are four parts in `sleep`, in which only `.text` is needed by		{{server_host}}	{{server_port}}
+iuse, so we
+need to remove the other ones. GCC supports not generating		{{server_host}}	{{server_port}}
+i`.node.gnu.build-id`
+with flag `-Wl,--build-id=none`, and not		{{server_host}}	{{server_port}}
+igenerating `.eh_frame` with
+`-fno-asynchronous-unwind-tables`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow the file is sized at 4.7 KB. We can further remove `.comment`:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd we got to 4.3 KB, exactly the same as that assembly. Let's check		{{server_host}}	{{server_port}}
+iby doing a
+disassembly:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIt's almost the same size as the assembly code. If you take a look		{{server_host}}	{{server_port}}
+iwith hexdump,
+you will see tons of 0s in the file. But they cannot be		{{server_host}}	{{server_port}}
+iremoved since a memory
+page in x86 is 4KB, and ELF file sections have		{{server_host}}	{{server_port}}
+ito be aligned to 4KB.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFinally, put all of them into a Dockerfile, and we have a Docker		{{server_host}}	{{server_port}}
+iimage.		{{server_host}}	{{server_port}}
+hYou can take a look at my Dockerfile here at this commit.	URL:https://github.com/xddxdd/dockerfiles/tree/eecbb766176852ead16a6066017772161c59e502/dockerfiles/sleep/template.Dockerfile	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBut Was It Worth It?		{{server_host}}	{{server_port}}
+iGood question. I want to find out too.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

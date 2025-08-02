@@ -1,0 +1,148 @@
+iDocker 是一个 Linux 下的容器管理软件。每个容器某种意义上相当于一个		{{server_host}}	{{server_port}}
+iOpenVZ		{{server_host}}	{{server_port}}
+iVPS，
+可以将服务器上的各个应用隔离开来。这种隔离有助于同一软件不同版本，		{{server_host}}	{{server_port}}
+i或是互相冲突的
+软件在同一服务器上运行，比如 MySQL 5.7，MySQL 5.6 和		{{server_host}}	{{server_port}}
+iMariaDB 10.1 可以在同一台服
+务器上的三个 Docker 容器中运行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i但是 Docker 比 OpenVZ 优秀的地方在于，它对 Linux		{{server_host}}	{{server_port}}
+i内核的版本要求要宽松的
+多。OpenVZ 的内核至今为止停留在		{{server_host}}	{{server_port}}
+i2.6.32（稳定版）和 3.10（开发版），但是 Docker
+可以在 3.10 以上的任何版本		{{server_host}}	{{server_port}}
+iLinux 内核运行。我的服务器现在运行 Linux 4.9 内核（为
+了		{{server_host}}	{{server_port}}
+iBBR），明显不能运行 OpenVZ，但是可以运行 Docker。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDocker 另一个优点是提供了一套非常完整的镜像仓库和自动化工具。在 OpenVZ		{{server_host}}	{{server_port}}
+i上，我必
+须分别登录每台 VPS，设置网络，`apt-get`，还要定期去每台 VPS		{{server_host}}	{{server_port}}
+i上备份数据。但是在
+Docker 上，我可以直接使用现有的软件镜像（不用再		{{server_host}}	{{server_port}}
+i`apt-get`），并将数据文件夹直接
+映射到主机上（不用分别备份）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDocker 更是提供 Docker Compose，以配置文件的形式设置多个 Docker		{{server_host}}	{{server_port}}
+i容器，并且快速部
+署、删除。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i安装 Docker 以及 Docker Compose		{{server_host}}	{{server_port}}
+i我个人使用的系统是 Debian 8，可以直接从 Docker 官方的软件源安装。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i使用现有镜像迁移		{{server_host}}	{{server_port}}
+i我服务器上原来运行的软件是：Nginx，PHP7.0-FPM，MariaDB，Memcached，Redis 和		{{server_host}}	{{server_port}}
+iSS。
+为了统一管理，我使用 Docker 镜像的方式部署。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我决定把数据全部存在 `/srv` 文件夹中，因此 cd		{{server_host}}	{{server_port}}
+i进这个文件夹，并创建
+docker-compose.yml 文件。这个就是 Docker Compose		{{server_host}}	{{server_port}}
+i的配置文件。其基本格式如下：（#
+号后的内容为我添加的注释，在原文件中不存		{{server_host}}	{{server_port}}
+i在）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i接下来我们就要写一个 docker-compose.yml，运行 MariaDB		{{server_host}}	{{server_port}}
+i的镜像并将数据导入。（#号
+后的内容为我添加的注释，在原文件中不存在）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i首先停止原来的 MariaDB：`service mysql stop`（我不考虑无缝切换问题）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后把数据文件夹移过来：`mv /var/lib/mysql /srv/mysql`		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后 `docker-compose up -d` 加载这个配置文件		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMariaDB 就在 Docker 里运行起来了！		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i同理，Redis 和 Memcached 都有现成的镜像，可以如法炮制。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i从 apt-get 安装软件的镜像		{{server_host}}	{{server_port}}
+i对于 PHP7.0-FPM，问题要复杂一些。镜像仓库里的官方 PHP-FPM		{{server_host}}	{{server_port}}
+i加了奇怪的编译参数，配
+置文件的放置方式和我从 DotDeb		{{server_host}}	{{server_port}}
+i安装的不同。为了防止以后出现奇怪的问题，我决定做一
+个简单的 Docker		{{server_host}}	{{server_port}}
+i镜像。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i做 Docker 镜像不需要你有什么高深的编程技巧。相反，你只要会基本的 bash		{{server_host}}	{{server_port}}
+i命令就行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i首先新建一个文件夹，cd 进去，创建一个		{{server_host}}	{{server_port}}
+iDockerfile，这就是你的新镜像的构建配置文
+件。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDockerfile 的基本格式如下：(# 号后面的是我自己加的)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在这个新镜像的构建过程中，需要在 Debian 8 的基础上，添加 DotDeb		{{server_host}}	{{server_port}}
+i软件
+源，apt-get，添加自己的配置文件，开放端口供其它容器访问，设置启动命令		{{server_host}}	{{server_port}}
+i。我的
+Dockerfile 是这样的：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+idotdeb.gpg 是 DotDeb 软件源的密钥，因为 Docker 官方的 Debian 镜像居然连		{{server_host}}	{{server_port}}
+iwget 都
+没有，我又不想浪费一次 `apt-get		{{server_host}}	{{server_port}}
+iupdate`，就直接把密钥提前下载下来放在 Dockerfile
+同文件夹里；		{{server_host}}	{{server_port}}
+hwww.conf，php.ini	URL:http://www.conf，php.ini	{{server_host}}	{{server_port}}
+i和 php-fpm.conf		{{server_host}}	{{server_port}}
+i是我自己的配置文件，你在构建时，如
+果直接用默认配置，把对应的 ADD		{{server_host}}	{{server_port}}
+i行删掉即可；如果你要自定义配置，就把对应配置文件
+放在 Dockerfile		{{server_host}}	{{server_port}}
+i同文件夹里。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在当前文件夹开始构建：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+idocker-compose.yml 里加上这些内容：（注意空格，# 号后删掉）		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i自己编译软件镜像		{{server_host}}	{{server_port}}
+i我的 Nginx 要更麻烦一些，因为我给 Nginx 加了一堆奇怪的东西，包括		{{server_host}}	{{server_port}}
+iHTTP2+SPDY 补
+丁、Google PageSpeed、Certificate Transparency		{{server_host}}	{{server_port}}
+i补丁、Brotli		{{server_host}}	{{server_port}}
+i压缩格式之类的。很明
+显，我找不到现有的镜像，所以我只能自己编译了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i要把这些做成镜像，原理其实很简单：把你在编译过程中输的命令全部写进		{{server_host}}	{{server_port}}
+iDockerfile
+里。但是在你编译的时候，你是不是要输好几次软件的版本号，比如		{{server_host}}	{{server_port}}
+i`cd nginx-1.11.8`
+之类的？在 Dockerfile		{{server_host}}	{{server_port}}
+i里，类似的版本号都可以写成变量，在以后升级时可以方便地修
+改。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i在 Dockerfile 中可以如此使用变量：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我们要做的事情：安装编译环境，下载 Nginx		{{server_host}}	{{server_port}}
+i和各个补丁的源代码，编译安装。我的
+Dockerfile 如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这里涉及到一个问题，就是 nginx 默认后台运行。但是，一旦它后台运行，Docker		{{server_host}}	{{server_port}}
+i就认为
+它的主进程已经结束了，就把这个容器停掉了！因此，我们要用点小技巧。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+istart.sh 的内容如下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i`tail -F` 会不断地加载这个文件，并显示它的新内容。这个 start.sh		{{server_host}}	{{server_port}}
+i就是启动 nginx
+并不断显示它的内容。只要 start.sh		{{server_host}}	{{server_port}}
+i不停，容器就能一直保持运行。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i另外一点，在编译完之后，最好把编译环境和源代码都删掉，否则会无谓地增大镜		{{server_host}}	{{server_port}}
+i像的占用
+空间。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i开始构建：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i向 docker-compose.yml 添加：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i结语		{{server_host}}	{{server_port}}
+i在上面，我们建立了 MariaDB、PHP-FPM、Nginx		{{server_host}}	{{server_port}}
+i三个容器。以后它们可以用
+`docker-compose up -d`		{{server_host}}	{{server_port}}
+i统一启动，`docker-compose down`		{{server_host}}	{{server_port}}
+i统一关闭并删除，极大地方
+便了管理和部署。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

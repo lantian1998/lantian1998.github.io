@@ -1,0 +1,523 @@
+iRight now, I'm gradually migrating my servers from Devuan Linux to		{{server_host}}	{{server_port}}
+hNixOS	URL:https://nixos.org/	{{server_host}}	{{server_port}}
+i. NixOS is a Linux distribution centered on a set of
+Nix configuration		{{server_host}}	{{server_port}}
+ifiles located in `/etc/nixos`, which is used to install and
+configure		{{server_host}}	{{server_port}}
+ithe whole operating system. Because this configuration set defines		{{server_host}}	{{server_port}}
+iALL		{{server_host}}	{{server_port}}
+iconfig files and packages on the system, as long as you use the		{{server_host}}	{{server_port}}
+isame
+config files, you will absolutely get the same operating system		{{server_host}}	{{server_port}}
+ievery time you
+reinstall. Nix configuration language is also Turing		{{server_host}}	{{server_port}}
+icomplete, so you will be
+able to generate config files with Nix, no		{{server_host}}	{{server_port}}
+imatter how complicated that software
+is.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnother important feature of the Nix package manager is reproducible		{{server_host}}	{{server_port}}
+ibuilds.
+Every package in NixOS is defined with Nix config files, and		{{server_host}}	{{server_port}}
+ithe Nix package
+manager can promise that, as long as the software		{{server_host}}	{{server_port}}
+idoesn't deliberately fight
+back, you will get binaries with the exact		{{server_host}}	{{server_port}}
+isame functionality, and in most
+cases, get binaries with the same hash		{{server_host}}	{{server_port}}
+ivalues (such as MD5 and SHA256).		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince NixOS the Linux distribution is quite unfriendly to beginners, I		{{server_host}}	{{server_port}}
+iwill
+write a series of posts on my whole transition process. This is		{{server_host}}	{{server_port}}
+ithe first post
+in the series and mainly focuses on the reason I fall		{{server_host}}	{{server_port}}
+iin love with it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBefore I use NixOS		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iManaging Multiple Servers		{{server_host}}	{{server_port}}
+iHow many servers do you have? I have 10. In addition to the 4 VPSes		{{server_host}}	{{server_port}}
+ilisted on my		{{server_host}}	{{server_port}}
+1DN42 Peering Page	/en/page/dn42/	{{server_host}}	{{server_port}}
+i, which I run my website and BGP network on,
+I also have 1 dedicated		{{server_host}}	{{server_port}}
+iserver for my CI and backups, 3 Oracle cloud servers
+that I got for		{{server_host}}	{{server_port}}
+ifree, 1 VPS with large RAM from VirMach New York that I use to
+run		{{server_host}}	{{server_port}}
+iJava apps like Keycloak, and 1 VPS planned to replace the Virtono node		{{server_host}}	{{server_port}}
+iin
+Frankfurt, Germany.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhen you have that many servers, you will find managing all of them		{{server_host}}	{{server_port}}
+ibe
+difficult. If I want to edit the BIRD config on all my nodes, I		{{server_host}}	{{server_port}}
+iwill have to do:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnd this is the most trivial scenario. Things are more troublesome		{{server_host}}	{{server_port}}
+iwhen the
+config file is supposed to be different on all my nodes. In		{{server_host}}	{{server_port}}
+ithis case, I have to
+log in to each node and do the config change		{{server_host}}	{{server_port}}
+imanually. Half an hour would have
+passed for some config changes on		{{server_host}}	{{server_port}}
+iall 10 nodes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAs an attempt to resolve this problem, earlier this year I started to		{{server_host}}	{{server_port}}
+igenerate
+the config files with Ansible's template module. This is one		{{server_host}}	{{server_port}}
+iof my BIRD config
+files for example:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWith this, I can define variables for each node in the Ansible		{{server_host}}	{{server_port}}
+iinventory, and
+generate the config files automatically:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iOnce I finished changing the config, I simply ran `ansible-playbook`		{{server_host}}	{{server_port}}
+ito call my
+predefined playbook to automatically generate new configs		{{server_host}}	{{server_port}}
+ionto every node and
+reload BIRD. This resolves the issue for managing		{{server_host}}	{{server_port}}
+iBIRD config, but I have more
+pieces of components that require similar		{{server_host}}	{{server_port}}
+iwork, like Nginx, CoreDNS, Tinc VPS,
+etc. In addition, the		{{server_host}}	{{server_port}}
+iconfiguration of the system itself, from the list of
+preinstalled		{{server_host}}	{{server_port}}
+ipackages to `sysctl.conf` and `motd`, needs dedicated playbooks.
+Now I		{{server_host}}	{{server_port}}
+ihave bunches of playbooks and bunches of templates.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThat's not the end of the story. Apparently, I cannot rerun each and		{{server_host}}	{{server_port}}
+ievery
+playbook when I'm changing something, or it would take several		{{server_host}}	{{server_port}}
+ihours. Therefore,
+I need to determine which playbooks I should call		{{server_host}}	{{server_port}}
+imanually. Since I have a LOT
+of playbooks, I've had several oops where		{{server_host}}	{{server_port}}
+iI cannot see the changes from my
+config update, and it ended to be		{{server_host}}	{{server_port}}
+iusing the wrong playbooks.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWe're still not done yet. My nodes can be unstable sometimes, making		{{server_host}}	{{server_port}}
+ideployments
+fail, as they are cheap VPSes anyway. When this happens, I		{{server_host}}	{{server_port}}
+iusually wait until
+that node recovers and rerun the deployment. Only		{{server_host}}	{{server_port}}
+iif I still remember to do it,
+that is. If I forgot to deploy my last		{{server_host}}	{{server_port}}
+iconfig change and my new change happened
+to rely on that, some more		{{server_host}}	{{server_port}}
+itime would be spent diagnosing the issue.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDistributing Binaries		{{server_host}}	{{server_port}}
+iI have a lot of software that I developed or modified myself, like my		{{server_host}}	{{server_port}}
+1modified Nginx	/en/article/modify-website/serve-dn42-whois-with-nginx.lantian/	{{server_host}}	{{server_port}}
+1Traceroute poet	/en/article/creations/traceroute-chain.lantian/	{{server_host}}	{{server_port}}
+1BIRD Looking Glass	/en/article/modify-website/go-bird-looking-glass.lantian/	{{server_host}}	{{server_port}}
+i,
+and my customized slimmed-down kernel. Apparently, I cannot compile		{{server_host}}	{{server_port}}
+ithem on my
+cheap VPSes, or my provider may shut them down for		{{server_host}}	{{server_port}}
+iexcessive CPU usage and GG. I
+need to compile the software somewhere		{{server_host}}	{{server_port}}
+iand then deploy them to all the nodes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBefore I switch to NixOS, I use the		{{server_host}}	{{server_port}}
+hDevuan Linux distro	URL:https://www.devuan.org	{{server_host}}	{{server_port}}
+i(basically Debian without
+SystemD). Debian is infamous for the		{{server_host}}	{{server_port}}
+icomplexity of packaging software, as you
+need to write a complicated		{{server_host}}	{{server_port}}
+iMakefile just for packaging into DEB files. In
+addition, complicated		{{server_host}}	{{server_port}}
+iprograms may depend on lots of customized libraries. For
+example, my		{{server_host}}	{{server_port}}
+iNginx depends on Brotli, Zlib modified by Cloudflare, BoringSSL, and
+a		{{server_host}}	{{server_port}}
+ibunch of third-party Nginx modules. This makes it even harder to		{{server_host}}	{{server_port}}
+ipack
+everything into one DEB file. Therefore, I simply gave up on DEB		{{server_host}}	{{server_port}}
+ipackages and
+started to search for better solutions.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe next solution is Docker containers. Docker containers are really		{{server_host}}	{{server_port}}
+ieasy to
+use,		{{server_host}}	{{server_port}}
+1I started with them back in 2016	/en/article/modify-website/migrate-website-docker.lantian/	{{server_host}}	{{server_port}}
+i.
+However, with continuous version updates and the addition of new		{{server_host}}	{{server_port}}
+ifeatures, the
+memory consumption of Docker is rising as well.		{{server_host}}	{{server_port}}
+i`dockerd` usually takes 80-100MB
+RAM on my nodes, and that's not		{{server_host}}	{{server_port}}
+icounting another 20-30MB from `containerd`. For
+my small VPS boxes		{{server_host}}	{{server_port}}
+iwith only 512MB RAM, that's almost one-fourth of my total		{{server_host}}	{{server_port}}
+iRAM
+allotment.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> RAM usage is also the main reason I switched from Debian to		{{server_host}}	{{server_port}}
+iDevuan. The
+various processes of SystemD took some 50MB of RAM, but		{{server_host}}	{{server_port}}
+isince Devuan is still
+using the sysvinit framework from Debian 7 and		{{server_host}}	{{server_port}}
+iearlier, the resident memory
+usage of `init`, `udev` and `rsyslog`		{{server_host}}	{{server_port}}
+iadds up to only 20MB. And as I have
+Docker, I don't need the		{{server_host}}	{{server_port}}
+iadvanced features of SystemD anyway.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> If I ever ran out of RAM on these small VPS boxes, it can get		{{server_host}}	{{server_port}}
+ianywhere from
+being terribly slow due to bad IO performance and slow		{{server_host}}	{{server_port}}
+iSWAP operations, to
+being completely frozen for high IO latency or		{{server_host}}	{{server_port}}
+ibeing shut down for excessive
+IOPS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThere is a replacement for `dockerd`, of course, the Podman developed		{{server_host}}	{{server_port}}
+iby Red
+Hat. Podman's largest difference is that it doesn't have a		{{server_host}}	{{server_port}}
+iresidual background
+process like `dockerd`, and it only creates one or		{{server_host}}	{{server_port}}
+itwo processes for each
+running container for monitoring, logging, and		{{server_host}}	{{server_port}}
+iDNS resolution purposes. However,
+lacking a background process means		{{server_host}}	{{server_port}}
+ino autostart on system bootup, and Podman
+relies on an external		{{server_host}}	{{server_port}}
+iprocess manager like SystemD or Supervisord to do that. In
+addition,		{{server_host}}	{{server_port}}
+iwhile Podman strives to emulate the Docker API, the compatibility		{{server_host}}	{{server_port}}
+iwork
+is still far from complete, and it is hard to use tools like		{{server_host}}	{{server_port}}
+iDocker Compose with
+it. For me, the biggest no-go is the lack of		{{server_host}}	{{server_port}}
+hIPv6 NAT	URL:https://github.com/robbertkl/docker-ipv6nat	{{server_host}}	{{server_port}}
+i, which basically means
+no IPv6 connectivity in my containers, and no		{{server_host}}	{{server_port}}
+iaccess to services in containers
+from the IPv6 network.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis leads to the next problem: container networking is hard. By		{{server_host}}	{{server_port}}
+idefault, Docker
+containers get their own network namespaces with their		{{server_host}}	{{server_port}}
+iown IP addresses. This
+means that containers cannot access each other		{{server_host}}	{{server_port}}
+ifrom `127.0.0.1 (localhost)`.
+Instead, they need to resolve the names		{{server_host}}	{{server_port}}
+ivia DNS. For example, PHP-FPM sitting in
+a container cannot connect to		{{server_host}}	{{server_port}}
+ia MySQL database via `127.0.0.1`. It has to
+resolve the IP of the		{{server_host}}	{{server_port}}
+icontainer `mysql` with DNS before it can make a
+connection. Now,		{{server_host}}	{{server_port}}
+iprograms in containers cannot only listen on `127.0.0.1`. They
+need to		{{server_host}}	{{server_port}}
+ilisten on `0.0.0.0` instead so that the host and other containers		{{server_host}}	{{server_port}}
+ican
+access it. Since databases like MySQL usually default to listening		{{server_host}}	{{server_port}}
+ion
+`127.0.0.1` for security, some extra config changes are needed		{{server_host}}	{{server_port}}
+ieither when
+packing the Docker image or using it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iDNS resolution causes new issues as well. Programs may not refresh		{{server_host}}	{{server_port}}
+itheir DNS
+cache in time, with one major example being Nginx. For		{{server_host}}	{{server_port}}
+iexample, I have two
+containers, A (`172.17.0.100`) and B		{{server_host}}	{{server_port}}
+i(`172.17.0.101`). I changed their config
+and redeployed them with		{{server_host}}	{{server_port}}
+i`docker-compose`. Since `docker-compose` creates the
+containers in		{{server_host}}	{{server_port}}
+iparallel with no deterministic order, A gets `172.17.0.101` this
+time,		{{server_host}}	{{server_port}}
+iand B gets `172.17.0.100`. Since Nginx doesn't refresh DNS		{{server_host}}	{{server_port}}
+iresolution
+results in time, whenever I try to access A, I actually get		{{server_host}}	{{server_port}}
+ito B, and vice
+versa. To avoid this issue, I have to restart all		{{server_host}}	{{server_port}}
+icontainers related to A and B,
+and this is some extra maintenance		{{server_host}}	{{server_port}}
+icost.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iYes, you can actually resolve this with Docker: you can set the		{{server_host}}	{{server_port}}
+inetworking mode
+of containers to `host` (aka `--net host`) to let the		{{server_host}}	{{server_port}}
+icontainers share the
+network namespace and IPs with the host. But		{{server_host}}	{{server_port}}
+iremember that Docker containers
+usually listen on `0.0.0.0`? Many		{{server_host}}	{{server_port}}
+iDocker images had already changed the config
+for you to listen on		{{server_host}}	{{server_port}}
+i`0.0.0.0`, and as you use `host` mode, you're exposing the
+port to the		{{server_host}}	{{server_port}}
+ipublic Internet, causing a security risk. Now you need to change		{{server_host}}	{{server_port}}
+ithe
+config back to what it was. Too much trouble!		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAnother way that would have worked is manually assigning an IP to		{{server_host}}	{{server_port}}
+ieach
+container, so that each of them gets the same IP after recreate.		{{server_host}}	{{server_port}}
+iFor obvious
+reasons, manually assigning IPs to dozens of containers		{{server_host}}	{{server_port}}
+iisn't fun.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFixing System Crashes		{{server_host}}	{{server_port}}
+iSince I change my system config from time to time, it's common for me		{{server_host}}	{{server_port}}
+ito
+accidentally kill the network or kill the kernel at the initrd boot		{{server_host}}	{{server_port}}
+istage.
+Whenever this happens, I will have to use a slow VNC console,		{{server_host}}	{{server_port}}
+ior even some IPMI
+that supports only Java 7, to change the config		{{server_host}}	{{server_port}}
+iback. If I'm even less lucky and
+the system doesn't boot at all, I		{{server_host}}	{{server_port}}
+iwill need to fix that in a rescue system.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iRescue systems from different providers vary, and you will encounter		{{server_host}}	{{server_port}}
+istrange
+issues. I've had a rescue system with kernel 4.9 not		{{server_host}}	{{server_port}}
+irecognizing my
+Zstd-compressed Btrfs filesystem, and another rescue		{{server_host}}	{{server_port}}
+isystem not providing kernel
+headers, making it impossible to compile		{{server_host}}	{{server_port}}
+iZFS kernel modules and load my ZFS
+partition.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn addition, you are lucky if you nailed it on your first attempt. As		{{server_host}}	{{server_port}}
+iI don't
+reboot my nodes often, the boot failure I'm dealing with may		{{server_host}}	{{server_port}}
+ibe caused by some
+change 3 months ago. Therefore, I have to check my		{{server_host}}	{{server_port}}
+iGit history and guess the
+cause while I repeatedly boot to the rescue		{{server_host}}	{{server_port}}
+isystem, mount my partitions and
+change the config, and reboot back to		{{server_host}}	{{server_port}}
+ithe hard drive, praying it will work this
+time.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe day would have passed once I finally fixed the problem.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iInstalling NixOS		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe unique Nix package/config management system resolves all the		{{server_host}}	{{server_port}}
+iissues above.
+Let's start by installing NixOS first. Since NixOS is a		{{server_host}}	{{server_port}}
+idistro based on config
+files, the installation process comes down to 3		{{server_host}}	{{server_port}}
+isteps:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Partition the disk and mount to `/mnt`. Anyone who has installed		{{server_host}}	{{server_port}}
+iArch Linux
+or Gentoo already knows what to do.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Generate a default config and make some		{{server_host}}	{{server_port}}
+ichanges.
+`nixos-generate-config --root /mnt` will autodetect your		{{server_host}}	{{server_port}}
+ihardware and create
+a config at `/mnt/etc/nixos/configuration.nix`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Install your system based on the config file with `nixos-install`。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe installation manual of NixOS is		{{server_host}}	{{server_port}}
+hon this page	URL:https://nixos.org/manual/nixos/stable/index.html#sec-installation	{{server_host}}	{{server_port}}
+i,
+and its ISO images can be downloaded		{{server_host}}	{{server_port}}
+hon this page	URL:https://nixos.org/download.html	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf you want to install NixOS on a VPS, but your provider cannot mount		{{server_host}}	{{server_port}}
+ian ISO for
+you, and your VPS is too low on RAM to boot the NixOS		{{server_host}}	{{server_port}}
+iinstallation image from
+the network (		{{server_host}}	{{server_port}}
+hNetboot.xyz	URL:https://netboot.xyz/	{{server_host}}	{{server_port}}
+i), you can also use		{{server_host}}	{{server_port}}
+hNixOS-Infect	URL:https://github.com/elitak/nixos-infect	{{server_host}}	{{server_port}}
+ito replace your existing
+system with NixOS.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> NixOS-Infect automatically mounts a Swap file on servers with low		{{server_host}}	{{server_port}}
+iRAM to avoid
+memory exhaustion during the installation process. But		{{server_host}}	{{server_port}}
+iif you use Btrfs, ZFS,
+or any filesystem that doesn't support		{{server_host}}	{{server_port}}
+imounting a Swapfile, you need to
+comment out the `makeSwap` and		{{server_host}}	{{server_port}}
+i`removeSwap` functions from the `nixos-infect`
+script.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iManaging Multiple Servers, but with NixOS		{{server_host}}	{{server_port}}
+iAt the very beginning, I mentioned that one important feature of NixOS		{{server_host}}	{{server_port}}
+iis
+managing each and every package and config with a set of Nix config		{{server_host}}	{{server_port}}
+ifiles.
+Therefore, we can use any tools we like, for example Ansible,		{{server_host}}	{{server_port}}
+iRsync, or even
+Git, to manage the config at `/etc/nixos`. Since this		{{server_host}}	{{server_port}}
+iis the only config file we
+care about, we no longer need a bunch of		{{server_host}}	{{server_port}}
+icomplicated Ansible playbooks or dozens
+of Rsync commands. We only		{{server_host}}	{{server_port}}
+ineed to overwrite `/etc/nixos`, run
+`nixos-rebuild switch`, and call		{{server_host}}	{{server_port}}
+iit a day.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSince each config update is equivalent to overwriting all programs and		{{server_host}}	{{server_port}}
+iconfig in
+the whole system, you don't need to decide on which special		{{server_host}}	{{server_port}}
+iscript to use, which
+services to reboot, and which config files you		{{server_host}}	{{server_port}}
+iforgot to copy onto the node.
+NixOS will automatically compare your		{{server_host}}	{{server_port}}
+inew config to the last one and restart the
+services on demand.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNixOS, as a Linux distro with some history, also has some software		{{server_host}}	{{server_port}}
+iecosystem
+around it, like the		{{server_host}}	{{server_port}}
+hDeploy-RS tool	URL:https://github.com/serokell/deploy-rs	{{server_host}}	{{server_port}}
+i. It
+can read your Nix Flakes config file (a variation of Nix config		{{server_host}}	{{server_port}}
+ifile), compute
+the result on your local machine, and copy it to all		{{server_host}}	{{server_port}}
+iyour nodes and activate it.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBinary Distribution, but with Nix Package Manager		{{server_host}}	{{server_port}}
+iThe Nix package manager stores binaries in paths		{{server_host}}	{{server_port}}
+ilike
+`/nix/store/wadmyilr414n7bimxysbny876i2vlm5r-bash-5.1-p8`. The		{{server_host}}	{{server_port}}
+ihash value at the
+middle corresponds to all inputs from the package		{{server_host}}	{{server_port}}
+iconfig, including the version
+of the source code (like URLs to		{{server_host}}	{{server_port}}
+i`tar.gz`, Git commit hashes, etc.), SHA256 of
+the source code,		{{server_host}}	{{server_port}}
+icompilation and installation commands, and versions of all
+libraries		{{server_host}}	{{server_port}}
+iit depends on. To make sure the software is exactly the same,		{{server_host}}	{{server_port}}
+iNix
+compiles them in a sandbox. Compilation scripts in the sandbox can		{{server_host}}	{{server_port}}
+ionly access
+the dependent libraries. It cannot even get the system		{{server_host}}	{{server_port}}
+itime (fixed to UNIX
+timestamp 0 or 1970-01-01 00:00:00) or connect to		{{server_host}}	{{server_port}}
+ithe Internet.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLet's take an example. It's well known that most programs on Linux		{{server_host}}	{{server_port}}
+idepends on
+the system Libc. Let's find out which Libc the bash we're		{{server_host}}	{{server_port}}
+italking about is
+depending on:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis Bash can only use a Glibc in a fixed location in `/nix/store`, or		{{server_host}}	{{server_port}}
+ithe exact
+copy used during compilation. Therefore, the Nix package		{{server_host}}	{{server_port}}
+imanager also avoids
+program crashing due to shared library updates.		{{server_host}}	{{server_port}}
+iSince programs can only use the
+libraries at exact paths, and an exact		{{server_host}}	{{server_port}}
+ipath with config hash must correspond to
+the exact library, as long as		{{server_host}}	{{server_port}}
+ia programs works during compile time, it will
+continue to work exactly		{{server_host}}	{{server_port}}
+ithat way.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> This doesn't include cases where the program has deliberate		{{server_host}}	{{server_port}}
+icountermeasures,
+like generating compilation results from		{{server_host}}	{{server_port}}
+i`/dev/random`, or behaving
+differently based on system time (aka		{{server_host}}	{{server_port}}
+itime bomb). However, these behaviors are
+extremely rare in normal		{{server_host}}	{{server_port}}
+iprograms, so for the vast majority of programs, the
+Nix package		{{server_host}}	{{server_port}}
+imanagement system can fulfill its promise.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLikewise, If I copy this Bash and its dependent libraries to another		{{server_host}}	{{server_port}}
+isystem, as
+long as the path is still the same, this Bash program will		{{server_host}}	{{server_port}}
+isurely work the same.
+Therefore, there is a version of the Nix package		{{server_host}}	{{server_port}}
+imanager that installs onto
+other distros like Ubuntu or Arch Linux,		{{server_host}}	{{server_port}}
+iwhich shares most binaries with NixOS
+and have the same functionality		{{server_host}}	{{server_port}}
+iwithout interfering with the system's own
+package management.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThat is exactly what the		{{server_host}}	{{server_port}}
+hDeploy-RS tool	URL:https://github.com/serokell/deploy-rs	{{server_host}}	{{server_port}}
+imentioned above is based on. It downloads or builds all packages		{{server_host}}	{{server_port}}
+ilocally and
+then copies the results from `/nix/stores` onto the target		{{server_host}}	{{server_port}}
+inodes, so no
+compilations are necessary on the target nodes.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iBy the way, the Nix package manager treats config files in the same		{{server_host}}	{{server_port}}
+ifashion as
+packages. For example,		{{server_host}}	{{server_port}}
+i`/nix/store/dpgmxhxkf55dfgwnrhz7hc4ahckkx78b-nginx.conf`
+is my Nginx		{{server_host}}	{{server_port}}
+iconfig file. Deploy-RS uses the same logic to generate the		{{server_host}}	{{server_port}}
+iconfig
+files locally, then copy them to the remote server.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iFixing System Crashes, but Luckily with NixOS		{{server_host}}	{{server_port}}
+iSince all binaries of NixOS are stored in `/nix/store` and there is no		{{server_host}}	{{server_port}}
+iunified
+path, NixOS will adjust the `PATH` environment variable to		{{server_host}}	{{server_port}}
+iinclude all `bin`
+folders of packages, so you can call them directly		{{server_host}}	{{server_port}}
+iin Bash; In addition, NixOS
+will link some config files to `/etc` so		{{server_host}}	{{server_port}}
+iprograms can find them at their desired
+location.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf the new config files crashed the system, theoretically, you only		{{server_host}}	{{server_port}}
+ineed to
+adjust `PATH` and links in `/etc` to recover to the last		{{server_host}}	{{server_port}}
+icorrect config, and the
+system will recover to an older state.		{{server_host}}	{{server_port}}
+iTherefore, NixOS directly provides the
+options in its boot menu, so		{{server_host}}	{{server_port}}
+iyou can boot to a specific deployment state:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+INixOS Boot Menu	/usr/uploads/202110/nixos-bootloader.jpg	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Image downloaded from		{{server_host}}	{{server_port}}
+hhttps://discourse.nixos.org/t/how-to-make-uefis-grub2-menu-the-same-as-bioss-one/10074	URL:https://discourse.nixos.org/t/how-to-make-uefis-grub2-menu-the-same-as-bioss-one/10074	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTherefore, NixOS doesn't need a rescue system in most cases, as it can		{{server_host}}	{{server_port}}
+irecover
+itself with an older config state. Once the system is up, you		{{server_host}}	{{server_port}}
+ican proceed to
+redeploy the fixed config or continue to use the older		{{server_host}}	{{server_port}}
+isystem as if nothing has
+happened.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Note that this NixOS mechanism is not a filesystem snapshot and		{{server_host}}	{{server_port}}
+icannot
+rollback data files of programs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i> Assuming that I upgraded to MariaDB 10.6 and rolled back to an		{{server_host}}	{{server_port}}
+iolder config
+with MariaDB 10.5. Since MariaDB 10.6 auto-upgraded the		{{server_host}}	{{server_port}}
+idata files, MariaDB
+10.5 wouldn't recognize them and will refuse to		{{server_host}}	{{server_port}}
+istart. NixOS cannot and does
+not intend to fix the issue.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iConclusion and Followups		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis post mainly focuses on introducing the advantages of NixOS and		{{server_host}}	{{server_port}}
+iits package
+management system over other Linux distros. In the		{{server_host}}	{{server_port}}
+ifollow-up posts, I will
+explain the process of configuring everything		{{server_host}}	{{server_port}}
+iin NixOS and replacing my nodes
+step by step.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

@@ -1,0 +1,28 @@
+iRecently, Greedy Moon (贪玩蓝月) has gained popularity due to its		{{server_host}}	{{server_port}}
+ibrainwashing advertisements. Many tutorials have emerged showing how		{{server_host}}	{{server_port}}
+ito add a custom program to Steam and rename it to "Greedy Moon" to		{{server_host}}	{{server_port}}
+idisplay yourself as playing the game. However, this method requires		{{server_host}}	{{server_port}}
+ikeeping that custom program running constantly, which can be		{{server_host}}	{{server_port}}
+iinconvenient.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iASF (ArchiSteamFarm) is a program that simulates game play to farm		{{server_host}}	{{server_port}}
+iSteam trading cards. Since it can simulate game play, it can naturally		{{server_host}}	{{server_port}}
+ialso simulate playing "Greedy Moon" - achieving the effect shown below		{{server_host}}	{{server_port}}
+iwithout any local configuration:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iTo implement this effect, modify the ASF configuration on your host		{{server_host}}	{{server_port}}
+imachine running ASF. Open `config/[BotName].json` and modify these		{{server_host}}	{{server_port}}
+ithree parameters:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The first parameter sets the displayed name while farming cards.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The second parameter sets the name shown after completing card		{{server_host}}	{{server_port}}
+ifarming.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- The third parameter controls "offline farming" (not showing online		{{server_host}}	{{server_port}}
+istatus while farming). This must be disabled (false), otherwise		{{server_host}}	{{server_port}}
+ifriends won't see your status.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iAfter making these changes, restart ASF to activate the Greedy Moon		{{server_host}}	{{server_port}}
+ieffect.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

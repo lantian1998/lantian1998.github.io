@@ -1,0 +1,204 @@
+i和全国大多数高校一样，我所在的大学以“一人一账号”的方式提供网络。通过有		{{server_host}}	{{server_port}}
+i线网络或者
+Wi-Fi 联网时，所有请求会被暂时重定向到一个登录界面（即		{{server_host}}	{{server_port}}
+iCaptive		{{server_host}}	{{server_port}}
+iPortal），输入用
+户名密码后才可以访问互联网。这个做法也是大多数公共场所（		{{server_host}}	{{server_port}}
+i例如机场，咖啡厅）的标
+配，对于电脑、手机等设备也还算友好。但是一些不带显		{{server_host}}	{{server_port}}
+i示屏的设备（例如树莓
+派，ESP8266 等）就难以访问网络了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i对于树莓派、ESP8266		{{server_host}}	{{server_port}}
+i等可以运行自定义代码的系统，可以模拟提交表单来登录网络，但是
+一旦模拟提		{{server_host}}	{{server_port}}
+i交表单的程序出现问题，你就得手动将设备取下来，连上自己的电脑上传新的登
+		{{server_host}}	{{server_port}}
+i录程序，这一过程非常的麻烦。至于其余只能运行预定程序的智能设备就完全无		{{server_host}}	{{server_port}}
+i法联网了。
+由于我并没有智能台灯等设备，本文暂时只考虑可以运行		{{server_host}}	{{server_port}}
+iWindows、macOS、Linux		{{server_host}}	{{server_port}}
+i三大操
+作系统之一的智能设备，包括电脑及单板计算机（Single Board		{{server_host}}	{{server_port}}
+iComputer）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i另外还有几个小问题：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我的寝室里只有一个网络端口供我使用，我需要将它分给我的各台设备。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我的大学一个账号可以登录多台设备，且带宽是每台设备独立计算的。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 假设我的账号限速是 10 Mbps，那么如果我接三台设备，每台设备都可以获得		{{server_host}}	{{server_port}}
+i10 Mbps
+的带宽。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我最终购买了一只千兆交换机，并通过设置各台设备建立		{{server_host}}	{{server_port}}
+iVLAN，组建了一个内网。这个内
+网不受学校网络要求登录的限制，设备只要配置		{{server_host}}	{{server_port}}
+i好 VLAN，插上的瞬间就可以与同 VLAN		{{server_host}}	{{server_port}}
+i下
+其它设备通信。如果某台设备出现问题无法登录学校网络，我就可以通过这个		{{server_host}}	{{server_port}}
+iVLAN 连上去
+管理了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 为什么不买路由器？		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 因为		{{server_host}}	{{server_port}}
+i。我购买的是水星（Mercury）的一款迷你五口千兆交换机，只要 39		{{server_host}}	{{server_port}}
+i元；
+五口千兆的路由器需要上百元。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 而且路由器无法实现每台设备		{{server_host}}	{{server_port}}
+i获得独立带宽		{{server_host}}	{{server_port}}
+i。路由器以下的网络拓扑对上层网关来
+说并不透明，一般都会被认为是同一台设		{{server_host}}	{{server_port}}
+i备，共享上述的 10 Mbps		{{server_host}}	{{server_port}}
+i带宽。而交换机只
+转发数据包，会将每一台设备都暴露给上层网关，每台设备独		{{server_host}}	{{server_port}}
+i立登录，获得独享带宽。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 但是，如果你需要连接不可编程的智能设备（智能台灯），加钱上路由器是		{{server_host}}	{{server_port}}
+i最方
+便		{{server_host}}	{{server_port}}
+i的选择。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 会与学校网络产生干扰吗？		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 交换机可能会把 VLAN		{{server_host}}	{{server_port}}
+i内的数据包转发给学校的网关。但是在没有特殊设置的情况下，
+因为来自终端网		{{server_host}}	{{server_port}}
+i络端口的数据包不应该带 VLAN		{{server_host}}	{{server_port}}
+i标记，学校网关一般会直接丢弃这些
+包，不会干扰任何一台设备。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 不排除有些变态的网络行为管理系统会检测 VLAN		{{server_host}}	{{server_port}}
+i数据包并封禁你的账号，你只能自己
+去试，或者咨询你学校的 IT 部门。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i准备材料		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 一台五口千兆交换机。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如上所述，我用的水星五口千兆交换机价格是 39 元，从天猫上购得。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果还想省钱，淘宝上有 19 元的五口百兆交换机。但因为今年已经是 2020		{{server_host}}	{{server_port}}
+i年
+了，		{{server_host}}	{{server_port}}
+i完全不推荐		{{server_host}}	{{server_port}}
+i购买百兆网络产品。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 足够的网线，连接交换机到学校的网络接口，以及每台设备。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果要走千兆，淘宝上的六类网线随便买。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 如果只要走百兆，淘宝超五类网线随便买。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i-		{{server_host}}	{{server_port}}
+i理论上超五类网线也可以走千兆带宽，但超五类网线的信号干扰更严重。再加上		{{server_host}}	{{server_port}}
+i可能
+的偷工减料，超五类网线很有可能在一段时间使用后无法稳定在千兆速率，		{{server_host}}	{{server_port}}
+i甚至降级
+到百兆。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 我就有一条一开始能走千兆的超五类网线。用到最后虽然测线仪显示 8		{{server_host}}	{{server_port}}
+i根线全通，
+但是使用时双方网卡会协商半分钟之久，随后只能稳定在百兆。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- 想一个 1-4094 之间的数（包含两端）作为你的 VLAN 编号（Tag）。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如何连线		{{server_host}}	{{server_port}}
+i将交换机的任何一个网口连接到学校的网络接口，随后将剩余的网口连到各台设		{{server_host}}	{{server_port}}
+i备即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i与路由器不同，（傻瓜式）交换机完全不需要配置，且各个端口是完全等价的，可以		{{server_host}}	{{server_port}}
+i随意换
+顺序。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWindows 设备的 VLAN 配置		{{server_host}}	{{server_port}}
+iWindows 本身并不支持		{{server_host}}	{{server_port}}
+iVLAN，但是部分网卡提供了自己的设置程序，可以创建虚拟的网络
+适配器。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i我的 Windows 电脑使用的是 Realtek 瑞昱网卡，可以使用
+`Realtek Ethernet		{{server_host}}	{{server_port}}
+iDiagnostic Utility` 进行配置。这个工具可以在		{{server_host}}	{{server_port}}
+hRealtek 的下载页面（英文）	URL:https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software	{{server_host}}	{{server_port}}
+i找
+到，下载 `Diagnostic Program for Win7/Win8/Win10` 一项即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i这个工具内有 VLAN 的选项，直接添加你之前选好的 VLAN 编号就可以：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+IRealtek Ethernet Diagnostic Utility VLAN 界面	/usr/uploads/202001/rtl8168-vlan.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i（图片来自		{{server_host}}	{{server_port}}
+hGough's Tech Zone 的这篇文章	URL:https://goughlui.com/2018/10/01/note-multiple-vlan-operation-on-realtek-rtl8111d-nic-others/	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i之后系统的网络选项里会多出一张虚拟的网卡，配置好 IP 地址即可。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+imacOS 的 VLAN 配置		{{server_host}}	{{server_port}}
+imacOS 的网络选项里可以直接添加 VLAN 虚拟网卡。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i进入 `Network Preferences`（网络配置），点击左下角齿轮选择
+`Manage		{{server_host}}	{{server_port}}
+iVirtual Interfaces`（管理虚拟网卡）：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ImacOS 管理虚拟网卡	/usr/uploads/202001/macos-manage-virtual-interfaces.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后点击左下角加号创建新的 VLAN（`New VLAN`）：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ImacOS 创建 VLAN	/usr/uploads/202001/macos-new-vlan.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后输入你的 VLAN 编号（Tag），选择对应的网卡，保存即可：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ImacOS 管理虚拟网卡	/usr/uploads/202001/macos-vlan-config.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后依然是对新的虚拟网卡配置 IP 即可使用。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLinux Network Manager 的 VLAN 配置		{{server_host}}	{{server_port}}
+iNetwork Manager 是多数带有图形界面的 Linux 系统，例如		{{server_host}}	{{server_port}}
+iUbuntu、Debian，使用的网络
+管理软件。它可以管理各种连接方式，包括有线网，		{{server_host}}	{{server_port}}
+iWi-Fi，VPN 等等。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNetwork Manager 有对 VLAN 的原生支持，配置也极其简单。进入
+`Edit		{{server_host}}	{{server_port}}
+iConnections`（编辑连接信息），直接新建网络连接，类型选择 VLAN：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ILinux Network Manager 创建 VLAN 网络	/usr/uploads/202001/linux-network-manager-new-vlan.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后照例选择物理网卡和 VLAN 编号（Tag）即可：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+ILinux Network Manager VLAN 详细信息	/usr/uploads/202001/linux-network-manager-vlan.png	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iLinux Systemd-networkd 配置		{{server_host}}	{{server_port}}
+iSystemd-networkd 是 Systemd		{{server_host}}	{{server_port}}
+i自带的一个网络管理程序，一般使用在服务器等网络条件固
+定的设备上。在这些		{{server_host}}	{{server_port}}
+i设备上很少用 Network Manager。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i假设你的物理网卡是 `eth0`，先修改物理网卡 `eth0`		{{server_host}}	{{server_port}}
+i对应的配置文件，一般是
+`/etc/systemd/network/20-eth0.network`：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后在设备上创建 `/etc/systemd/network/30-eth0-vlan.netdev`		{{server_host}}	{{server_port}}
+i网络设备定义，内容如
+下：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i然后创建 `/etc/systemd/network/30-eth0-vlan.network`，指定 IP：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i最后重启 Systemd-networkd：		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iVLAN 网络就配置完成了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i配置完成之后		{{server_host}}	{{server_port}}
+i各台设备配置完成之后，只要接到这个交换机下，就可以直接用 VLAN 内的 IP		{{server_host}}	{{server_port}}
+i互相访问
+了。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i如果你的学校网络隔离做的不好，有可能你从另一个寝室甚至另一栋楼的网络接		{{server_host}}	{{server_port}}
+i口也可以访
+问你的		{{server_host}}	{{server_port}}
+iVLAN。但这样的情况较少出现，且一旦出现意味着学校网络存在着一定的安全隐
+		{{server_host}}	{{server_port}}
+i患。		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

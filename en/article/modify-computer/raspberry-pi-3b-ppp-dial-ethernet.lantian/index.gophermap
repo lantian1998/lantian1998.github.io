@@ -1,0 +1,63 @@
+i		{{server_host}}	{{server_port}}
+i- Is it 9102 already?		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Yes, it is.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWhy Do This		{{server_host}}	{{server_port}}
+iI have a Raspberry Pi 3B and an ASUS Tinker Board. Sometimes issues		{{server_host}}	{{server_port}}
+ilike Wi-Fi failures/configuration errors/`pacman -Syu` system breakage		{{server_host}}	{{server_port}}
+imight cause one board to lose network connection. By connecting the		{{server_host}}	{{server_port}}
+iserial ports of both boards and establishing a dial-up network		{{server_host}}	{{server_port}}
+iconnection, I can SSH into the problematic board from the other one		{{server_host}}	{{server_port}}
+iwhen Wi-Fi or Ethernet fails.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i(Also, if you buy a Raspberry Pi without tinkering with GPIO, you		{{server_host}}	{{server_port}}
+imight as well get an x86 Atom mini PC instead)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHow to Set Up		{{server_host}}	{{server_port}}
+iHardware Setup:		{{server_host}}	{{server_port}}
+iConnect the serial ports of both boards. The Raspberry Pi's serial		{{server_host}}	{{server_port}}
+iport uses Pin 8 (TX) for transmission and Pin 10 (RX) for reception		{{server_host}}	{{server_port}}
+i(check		{{server_host}}	{{server_port}}
+ipinout.xyz		{{server_host}}	{{server_port}}
+i). The Tinker Board's serial port also uses Pin 8 (TX) and Pin 10		{{server_host}}	{{server_port}}
+i(RX). Use two jumper wires to connect:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Raspberry Pi Pin 8 → Tinker Board Pin 10		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- Raspberry Pi Pin 10 → Tinker Board Pin 8		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIf the boards use separate power supplies (like mine), connect a third		{{server_host}}	{{server_port}}
+ijumper wire between their GND pins (Pin 6 on both boards). This		{{server_host}}	{{server_port}}
+iensures a common ground reference for voltage level consistency.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSoftware Setup:		{{server_host}}	{{server_port}}
+iInstall pppd on both devices:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iStart pppd services:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iParameter Explanation:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `-detach`: Keep process in foreground		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `noauth`: Disable authentication		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `/dev/ttyS1`: Serial device path (default for RPi 3B & Tinker Board)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `1000000`: Baud rate (tested maximum stable speed)		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `172.18.233.1:172.18.233.2`: Local IP : Peer IP		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `local`: Disable modem control lines		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `nocrtscts`: Disable hardware flow control		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i- `xonxoff`: Enable software flow control		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iNow you can ping between both boards.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iPerformance		{{server_host}}	{{server_port}}
+iAt 1,000,000 baud rate:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iWell... just enough for SSH usage.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}

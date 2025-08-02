@@ -1,0 +1,67 @@
+iIn the 1980s, Chen Deliang from Dongzhuang Town became locally famous		{{server_host}}	{{server_port}}
+ias an itinerant doctor treating skin diseases (scabies) using his		{{server_host}}	{{server_port}}
+iself-developed folk remedies. He later took on disciples and expanded		{{server_host}}	{{server_port}}
+inationwide. Initially posting advertisements for sexually transmitted		{{server_host}}	{{server_port}}
+idiseases and skin conditions on utility poles, they earned their		{{server_host}}	{{server_port}}
+i"first bucket of gold" across mainland China before shifting to TV and		{{server_host}}	{{server_port}}
+inewspaper ads. Their primary treatments included STDs, rhinitis, body		{{server_host}}	{{server_port}}
+iodor, hepatitis, rheumatism, and skin diseases. The Putian system is		{{server_host}}	{{server_port}}
+iprimarily controlled by four families: the Zhans, Lins, Chens, and		{{server_host}}	{{server_port}}
+iHuangs.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThese itinerant doctors initially contracted hospital departments,		{{server_host}}	{{server_port}}
+ilegitimizing and covertly scaling their operations while recruiting		{{server_host}}	{{server_port}}
+ipublic hospital doctors with high salaries. In 1998, Wang Hai—known as		{{server_host}}	{{server_port}}
+i"China's No.1 Anti-Counterfeiting Crusader"—investigated the		{{server_host}}	{{server_port}}
+icontroversial STD clinics and discovered nearly all originated from		{{server_host}}	{{server_port}}
+iDongzhuang Town, Putian City, Fujian. Though Wang's campaign dealt a		{{server_host}}	{{server_port}}
+iblow to their expansion, the Putian system adapted by upgrading		{{server_host}}	{{server_port}}
+ioperations. In 2000, the State Council banned non-profit medical		{{server_host}}	{{server_port}}
+iinstitutions from collaborating on for-profit "departments," "wards,"		{{server_host}}	{{server_port}}
+ior "projects." By 2004, contracted departments faced strict		{{server_host}}	{{server_port}}
+icrackdowns, terminating many Putian partnerships. Wang later exposed		{{server_host}}	{{server_port}}
+ihow Putian hospitals used false advertising to exaggerate or fabricate		{{server_host}}	{{server_port}}
+iillnesses for profit. Their online "doctors" lacked medical training,		{{server_host}}	{{server_port}}
+iinstead relying on self-education via Baidu Baike.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iSubsequently, some shifted to acquiring public hospitals or bribing		{{server_host}}	{{server_port}}
+iofficials for partnerships, now controlling 80% of China's private		{{server_host}}	{{server_port}}
+ihealthcare market. Most still specialize in niche ailments,		{{server_host}}	{{server_port}}
+iaggressively advertising to attract patients—e.g., Baidu sold "Patient		{{server_host}}	{{server_port}}
+iForum" and "Hemophilia Forum" to them for hefty commissions. They also		{{server_host}}	{{server_port}}
+iexpanded upstream, producing medical supplies sold internally at		{{server_host}}	{{server_port}}
+iinflated prices. Successful hospitals scale up; failed ones relocate.		{{server_host}}	{{server_port}}
+iIn 2013, 12 of Baidu's 26 billion RMB ad revenue came from Putian		{{server_host}}	{{server_port}}
+ihospitals. Some public hospital clinics remain under their control, as		{{server_host}}	{{server_port}}
+iexposed by the 2016 Wei Zexi incident.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+i— Wikipedia,		{{server_host}}	{{server_port}}
+hhttps://zh.wikipedia.org/wiki/%E8%8E%86%E7%94%B0%E7%B3%BB	URL:https://zh.wikipedia.org/wiki/%E8%8E%86%E7%94%B0%E7%B3%BB	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iIn short, Putian hospitals harm patients through deceptive advertising		{{server_host}}	{{server_port}}
+iand exaggerated diagnoses, sparking public outrage. In response,		{{server_host}}	{{server_port}}
+iGitHub programmers formed the Open Power Group and created the		{{server_host}}	{{server_port}}
+hopen-power-workgroup/Hospital	URL:https://github.com/open-power-workgroup/Hospital	{{server_host}}	{{server_port}}
+iproject to catalog these hospitals. The data is open for clients and		{{server_host}}	{{server_port}}
+ibrowser extensions, downloadable at:		{{server_host}}	{{server_port}}
+hhttps://raw.githubusercontent.com/open-power-workgroup/Hospital/master/resource/API_resource/hospital_list.json	URL:https://raw.githubusercontent.com/open-power-workgroup/Hospital/master/resource/API_resource/hospital_list.json	{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThis JSON data is easily parsable. A sample snippet:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe JSON has three layers: region → hospital name → hospital details.		{{server_host}}	{{server_port}}
+iUsing this, I created a PHP script to generate a Hosts file blocking		{{server_host}}	{{server_port}}
+ithese hospitals' websites, preventing patient exposure.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iHowever, directly fetching this JSON from GitHub in software is		{{server_host}}	{{server_port}}
+iunwise—recall when 12306 ticket plugins overloaded GitHub with		{{server_host}}	{{server_port}}
+imillions of requests. Local caching is essential to reduce GitHub		{{server_host}}	{{server_port}}
+iload.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iMy Hosts file is available at:		{{server_host}}	{{server_port}}
+hhttps://lab.lantian.pub/putianhosts.php	URL:https://lab.lantian.pub/putianhosts.php	{{server_host}}	{{server_port}}
+iIt updates from GitHub every 30 minutes, blocking both www and non-www		{{server_host}}	{{server_port}}
+idomains. Add this URL to AdAway or similar tools for automatic		{{server_host}}	{{server_port}}
+iupdates.		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
+iThe PHP source:		{{server_host}}	{{server_port}}
+i		{{server_host}}	{{server_port}}
