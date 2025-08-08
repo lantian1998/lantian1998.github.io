@@ -1,0 +1,349 @@
+i> Changelog:		{{server_addr}}	{{server_port}}
+i> 		{{server_addr}}	{{server_port}}
+i> 2023-02-18: Fix config not applied to the root user, in the "Move		{{server_addr}}	{{server_port}}
+i> Temp Directory of Nix Daemon" section.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOne of the most famous features of NixOS is that most software		{{server_addr}}	{{server_port}}
+iconfigurations on the system are generated and managed exclusively by		{{server_addr}}	{{server_port}}
+ia Nix-language config file. Even if such software modifies its config		{{server_addr}}	{{server_port}}
+ifile while running, the config file will still be overwritten on the		{{server_addr}}	{{server_port}}
+inext Nix config switch or the next reboot.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor example, if you run `ls -alh /etc` on a computer running NixOS,		{{server_addr}}	{{server_port}}
+iyou can observe that most config files are simply soft links to `/etc/static` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Unrelated lines omitted		{{server_addr}}	{{server_port}}
+i  lrwxrwxrwx  1 root root     18 Jan 13 03:02 bashrc -> /etc/static/bashrc		{{server_addr}}	{{server_port}}
+i  lrwxrwxrwx  1 root root     18 Jan 13 03:02 dbus-1 -> /etc/static/dbus-1		{{server_addr}}	{{server_port}}
+i  lrwxrwxrwx  1 root root     17 Jan 13 03:02 fonts -> /etc/static/fonts		{{server_addr}}	{{server_port}}
+i  lrwxrwxrwx  1 root root     17 Jan 13 03:02 fstab -> /etc/static/fstab		{{server_addr}}	{{server_port}}
+i  lrwxrwxrwx  1 root root     21 Jan 13 03:02 fuse.conf -> /etc/static/fuse.conf		{{server_addr}}	{{server_port}}
+i  -rw-r--r--  1 root root    913 Jan 13 03:02 group		{{server_addr}}	{{server_port}}
+i  lrwxrwxrwx  1 root root     21 Jan 13 03:02 host.conf -> /etc/static/host.conf		{{server_addr}}	{{server_port}}
+i  lrwxrwxrwx  1 root root     18 Jan 13 03:02 hostid -> /etc/static/hostid		{{server_addr}}	{{server_port}}
+i  lrwxrwxrwx  1 root root     20 Jan 13 03:02 hostname -> /etc/static/hostname		{{server_addr}}	{{server_port}}
+i  lrwxrwxrwx  1 root root     17 Jan 13 03:02 hosts -> /etc/static/hosts		{{server_addr}}	{{server_port}}
+i  # ...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i`/etc/static` itself, by the way, is linked to `/nix/store` and		{{server_addr}}	{{server_port}}
+imanaged by NixOS:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  lrwxrwxrwx 1 root root 51 Jan 13 03:02 /etc/static -> /nix/store/41plm7py84sp29w3bg4ahb41dpfxwf9l-etc/etc		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere's the question: is it really necessary to store the contents of `/etc`		{{server_addr}}	{{server_port}}
+ion the disk drive? They're going to be regenerated on each reboot or		{{server_addr}}	{{server_port}}
+iconfig switch anyway.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSimilarly, it seems that most files on the NixOS root partition can be		{{server_addr}}	{{server_port}}
+igenerated with the config file:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `/bin` folder only contains `/bin/sh` , which is soft linked to Bash		{{server_addr}}	{{server_port}}
+i  in `/nix/store` ;		{{server_addr}}	{{server_port}}
+i- `/etc` folder contains mostly files managed by NixOS;		{{server_addr}}	{{server_port}}
+i- `/usr` folder only contains `/usr/bin/env` , which is soft linked to		{{server_addr}}	{{server_port}}
+i  Coreutils in `/nix/store` ;		{{server_addr}}	{{server_port}}
+i- `/mnt` and `/srv` are empty by default;		{{server_addr}}	{{server_port}}
+i  - And instead of actual data, `/mnt` is usually used to store mount		{{server_addr}}	{{server_port}}
+i    points for other partitions.		{{server_addr}}	{{server_port}}
+i- `/dev` , `/proc` and `/sys` are virtual folders that store the state		{{server_addr}}	{{server_port}}
+i  of hardware devices and the system itself;		{{server_addr}}	{{server_port}}
+i- `/run` and `/tmp` are RAM-backed storages for temporary files.		{{server_addr}}	{{server_port}}
+i  - Note: Nix Daemon stores its temporary files under `/tmp` while		{{server_addr}}	{{server_port}}
+i    packaging. If `/tmp` is backed by RAM, the system may run out of		{{server_addr}}	{{server_port}}
+i    memory while building large packages (such as the Linux kernel).		{{server_addr}}	{{server_port}}
+i    Therefore, `/tmp` in NixOS is **NOT BACKED BY RAM BY DEFAULT** ,		{{server_addr}}	{{server_port}}
+i    and needs to be enabled with `boot.tmpOnTmpfs = true;` .		{{server_addr}}	{{server_port}}
+iExcluding these folders, only a few folders store data that actually		{{server_addr}}	{{server_port}}
+ineed preserving on disk:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `/boot` for the bootloader;		{{server_addr}}	{{server_port}}
+i- `/home` and `/root` for home directories of users;		{{server_addr}}	{{server_port}}
+i- `/nix` for all packages of NixOS;		{{server_addr}}	{{server_port}}
+i- `/var` for data files of system-level software.		{{server_addr}}	{{server_port}}
+iIn fact, NixOS itself only requires `/boot` and `/nix` to boot. The		{{server_addr}}	{{server_port}}
+iISO downloaded from the		{{server_addr}}	{{server_port}}
+hOfficial NixOS download page	URL:https://nixos.org/download.html	{{server_addr}}	{{server_port}}
+icontains, in addition to the ISOLinux bootloader, only a `nix-store.squashfs`		{{server_addr}}	{{server_port}}
+icontaining data in `/nix/store` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # unsquashfs -l nix-store.squashfs | head		{{server_addr}}	{{server_port}}
+i  squashfs-root		{{server_addr}}	{{server_port}}
+i  squashfs-root/01qm2r3cihmf4np82mim8vy9phzgc9cn-rtw88-firmware-unstable-2022-11-05-xz		{{server_addr}}	{{server_port}}
+i  squashfs-root/01qm2r3cihmf4np82mim8vy9phzgc9cn-rtw88-firmware-unstable-2022-11-05-xz/lib		{{server_addr}}	{{server_port}}
+i  squashfs-root/01qm2r3cihmf4np82mim8vy9phzgc9cn-rtw88-firmware-unstable-2022-11-05-xz/lib/firmware		{{server_addr}}	{{server_port}}
+i  squashfs-root/01qm2r3cihmf4np82mim8vy9phzgc9cn-rtw88-firmware-unstable-2022-11-05-xz/lib/firmware/rtw88		{{server_addr}}	{{server_port}}
+i  squashfs-root/01qm2r3cihmf4np82mim8vy9phzgc9cn-rtw88-firmware-unstable-2022-11-05-xz/lib/firmware/rtw88/rtl8822cu_fw.bin.xz		{{server_addr}}	{{server_port}}
+i  squashfs-root/01qm2r3cihmf4np82mim8vy9phzgc9cn-rtw88-firmware-unstable-2022-11-05-xz/lib/firmware/rtw88/rtw8723d_fw.bin.xz		{{server_addr}}	{{server_port}}
+i  squashfs-root/01qm2r3cihmf4np82mim8vy9phzgc9cn-rtw88-firmware-unstable-2022-11-05-xz/lib/firmware/rtw88/rtw8821c_fw.bin.xz		{{server_addr}}	{{server_port}}
+i  squashfs-root/01qm2r3cihmf4np82mim8vy9phzgc9cn-rtw88-firmware-unstable-2022-11-05-xz/lib/firmware/rtw88/rtw8822b_fw.bin.xz		{{server_addr}}	{{server_port}}
+i  squashfs-root/01qm2r3cihmf4np82mim8vy9phzgc9cn-rtw88-firmware-unstable-2022-11-05-xz/lib/firmware/rtw88/rtw8822c_fw.bin.xz		{{server_addr}}	{{server_port}}
+i  # ...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, is it possible to modify NixOS to mimic the behavior of the		{{server_addr}}	{{server_port}}
+iinstallation ISO, and only save the necessary folders of `/boot` , `/home` , `/nix` , `/root` , `/var`		{{server_addr}}	{{server_port}}
+ito disk? Or to put it in a direct way, is it possible to set the root		{{server_addr}}	{{server_port}}
+idirectory `/` backed by RAM, and mount these folders to their expected		{{server_addr}}	{{server_port}}
+ilocations?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe answer is yes, and there's no modification needed. Except mounting `nix-store.squashfs` ,		{{server_addr}}	{{server_port}}
+ithe NixOS on installation ISO uses the exact same boot sequence as a		{{server_addr}}	{{server_port}}
+iregular NixOS on hard drive.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Pros for going "Stateless"		{{server_addr}}	{{server_port}}
+iCompared to a regular NixOS, such a "stateless" NixOS only stores the "states"		{{server_addr}}	{{server_port}}
+iyou designated onto your disk. Such state may contain files of your		{{server_addr}}	{{server_port}}
+iwebsite, contents of your database, or browsing history of your		{{server_addr}}	{{server_port}}
+ibrowser. The rest of the states, which you did not designate to save,		{{server_addr}}	{{server_port}}
+iare discarded upon reboot.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis is the most significant "pro" for such a configuration: you only		{{server_addr}}	{{server_port}}
+ipreserve the states you want.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- If some software secretly changes its config file, or stores its		{{server_addr}}	{{server_port}}
+i  data on a different location, such modifications are lost on reboot,		{{server_addr}}	{{server_port}}
+i  and the software's configuration will be exactly the same as the		{{server_addr}}	{{server_port}}
+i  expected value in your Nix-language config file.		{{server_addr}}	{{server_port}}
+i- There will be no left over config files in your `/etc` folder. They		{{server_addr}}	{{server_port}}
+i  are gone on the next reboot.		{{server_addr}}	{{server_port}}
+i- You only need to backup those states not managed by Nix (such as `/home` , `/root`		{{server_addr}}	{{server_port}}
+i  and `/var` ), in addition to the Nix-language config file, to ensure		{{server_addr}}	{{server_port}}
+i  that you can restore the system to the exact state.		{{server_addr}}	{{server_port}}
+i- Since most files in the root directory are soft links generated		{{server_addr}}	{{server_port}}
+i  according to the config file, it takes almost no space. On one of my		{{server_addr}}	{{server_port}}
+i  servers, the root directory takes as small as 660KB of space:		{{server_addr}}	{{server_port}}
+i  # sudo du -h -d1 -x /		{{server_addr}}	{{server_port}}
+i  0       /srv		{{server_addr}}	{{server_port}}
+i  0       /mnt		{{server_addr}}	{{server_port}}
+i  0       /usr		{{server_addr}}	{{server_port}}
+i  0       /bin		{{server_addr}}	{{server_port}}
+i  0       /home		{{server_addr}}	{{server_port}}
+i  572K    /root		{{server_addr}}	{{server_port}}
+i  0       /tmp		{{server_addr}}	{{server_port}}
+i  84K     /etc		{{server_addr}}	{{server_port}}
+i  4.0K    /var		{{server_addr}}	{{server_port}}
+i  660K    /		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Preparation		{{server_addr}}	{{server_port}}
+iTo set up a NixOS following steps in this post, you need to prepare:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. A NixOS installation, managing its configuration with Flake.		{{server_addr}}	{{server_port}}
+i2. A LiveCD of NixOS or any other Linux distro, since we need to move		{{server_addr}}	{{server_port}}
+i   critical files of NixOS.		{{server_addr}}	{{server_port}}
+i## Convert Root to RAM Drive		{{server_addr}}	{{server_port}}
+iWith a regular NixOS installation, you usually have a config entry for		{{server_addr}}	{{server_port}}
+ithe root partition similar to this:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  fileSystems."/" = {		{{server_addr}}	{{server_port}}
+i    device = "/dev/vda1";		{{server_addr}}	{{server_port}}
+i    fsType = "btrfs";		{{server_addr}}	{{server_port}}
+i    options = [ "compress-force=zstd" ];		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # You may also mounted other partitions, like /boot		{{server_addr}}	{{server_port}}
+i  fileSystems."/boot" = {};		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe most important folder for NixOS is `/nix` , so we change the root		{{server_addr}}	{{server_port}}
+ifolder `/` to a RAM drive `tmpfs` , and mount the original partition		{{server_addr}}	{{server_port}}
+ionto `/nix` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  fileSystems."/" = {		{{server_addr}}	{{server_port}}
+i    device = "tmpfs";		{{server_addr}}	{{server_port}}
+i    fsType = "tmpfs";		{{server_addr}}	{{server_port}}
+i    # You must set mode=755. The default is 777, and OpenSSH will complain and disallow logins		{{server_addr}}	{{server_port}}
+i    options = [ "relatime" "mode=755" ];		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  fileSystems."/nix" = {		{{server_addr}}	{{server_port}}
+i    device = "/dev/vda1";		{{server_addr}}	{{server_port}}
+i    fsType = "btrfs";		{{server_addr}}	{{server_port}}
+i    options = [ "compress-force=zstd" ];		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # No need to change config for other partitions		{{server_addr}}	{{server_port}}
+i  fileSystems."/boot" = {};		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTheoretically, if you apply this config, shutdown, move the files to		{{server_addr}}	{{server_port}}
+ithe correct location in LiveCD, you will get a NixOS that **only		{{server_addr}}	{{server_port}}
+ipersists whatever is in your Nix configuration** . This is good for		{{server_addr}}	{{server_port}}
+iusing temporarily (like the NixOS installation ISO), but since other		{{server_addr}}	{{server_port}}
+iimportant states not managed by Nix is not persisted, this is not		{{server_addr}}	{{server_port}}
+iideal for everyday usage.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSuch important states not preserved include:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `/etc/machine-id` , random ID generated by SystemD, used for log		{{server_addr}}	{{server_port}}
+i  management		{{server_addr}}	{{server_port}}
+i- `/etc/NetworkManager/system-connections` , connections stored by		{{server_addr}}	{{server_port}}
+i  Network Manager		{{server_addr}}	{{server_port}}
+i- `/etc/ssh/ssh_host_ed25519_key.pub` , OpenSSH public key		{{server_addr}}	{{server_port}}
+i- `/etc/ssh/ssh_host_rsa_key.pub` , OpenSSH public key		{{server_addr}}	{{server_port}}
+i- `/etc/ssh/ssh_host_ed25519_key` , OpenSSH private key		{{server_addr}}	{{server_port}}
+i- `/etc/ssh/ssh_host_rsa_key` , OpenSSH private key		{{server_addr}}	{{server_port}}
+i- and data files in `/home` , `/root` , `/var`		{{server_addr}}	{{server_port}}
+iOur next step is to add rules for each of these files/folders, to		{{server_addr}}	{{server_port}}
+ipersist them on disk.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Persisting Important State Files		{{server_addr}}	{{server_port}}
+iSince `/nix` partition is already mounted, I elected to store the		{{server_addr}}	{{server_port}}
+istates in `/nix/persistent` . You can store them on another partition		{{server_addr}}	{{server_port}}
+iat your discretion.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, use bind mounts to map the files back to where they should be:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  fileSystems."/etc/machine-id" = {		{{server_addr}}	{{server_port}}
+i    device = "/nix/persistent/etc/machine-id";		{{server_addr}}	{{server_port}}
+i    options = [ "bind" ];		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i  # ...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you need to persist lots of files, you need one mount for each file		{{server_addr}}	{{server_port}}
+ior folder, which is cumbersome and error-prone. The good news is that		{{server_addr}}	{{server_port}}
+ithe Nix community provided a NixOS module		{{server_addr}}	{{server_port}}
+hImpermanence	URL:https://github.com/nix-community/impermanence	{{server_addr}}	{{server_port}}
+ifor such scenario, which provides a convenient way to map files to		{{server_addr}}	{{server_port}}
+ianother location.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, add Impermanence to `inputs` in your `flake.nix` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    inputs = {		{{server_addr}}	{{server_port}}
+i      impermanence.url = "github:nix-community/impermanence";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen add Impermanence to the module list of NixOS:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    outputs = { self, nixpkgs, ... }@inputs: {		{{server_addr}}	{{server_port}}
+i      nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {		{{server_addr}}	{{server_port}}
+i        system = "x86_64-linux";		{{server_addr}}	{{server_port}}
+i        modules = [		{{server_addr}}	{{server_port}}
+i          # Add the following line		{{server_addr}}	{{server_port}}
+i          inputs.impermanence.nixosModules.impermanence		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          ./configuration.nix		{{server_addr}}	{{server_port}}
+i        ];		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou will be able to map files in batch with the following format, no		{{server_addr}}	{{server_port}}
+ilonger needing a lot of mounts in `fileSystems` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # /nix/persistent is the location you plan to store the files		{{server_addr}}	{{server_port}}
+i  environment.persistence."/nix/persistent" = {		{{server_addr}}	{{server_port}}
+i    # Hide these mount from the sidebar of file managers		{{server_addr}}	{{server_port}}
+i    hideMounts = true;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Folders you want to map		{{server_addr}}	{{server_port}}
+i    directories = [		{{server_addr}}	{{server_port}}
+i      "/etc/NetworkManager/system-connections"		{{server_addr}}	{{server_port}}
+i      "/home"		{{server_addr}}	{{server_port}}
+i      "/root"		{{server_addr}}	{{server_port}}
+i      "/var"		{{server_addr}}	{{server_port}}
+i    ];		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Files you want to map		{{server_addr}}	{{server_port}}
+i    files = [		{{server_addr}}	{{server_port}}
+i      "/etc/machine-id"		{{server_addr}}	{{server_port}}
+i      "/etc/ssh/ssh_host_ed25519_key.pub"		{{server_addr}}	{{server_port}}
+i      "/etc/ssh/ssh_host_ed25519_key"		{{server_addr}}	{{server_port}}
+i      "/etc/ssh/ssh_host_rsa_key.pub"		{{server_addr}}	{{server_port}}
+i      "/etc/ssh/ssh_host_rsa_key"		{{server_addr}}	{{server_port}}
+i    ];		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Similarly, you can map files and folders in users' home directories		{{server_addr}}	{{server_port}}
+i    users.lantian = {		{{server_addr}}	{{server_port}}
+i      directories = [		{{server_addr}}	{{server_port}}
+i        # Personal files		{{server_addr}}	{{server_port}}
+i        "Desktop"		{{server_addr}}	{{server_port}}
+i        "Documents"		{{server_addr}}	{{server_port}}
+i        "Downloads"		{{server_addr}}	{{server_port}}
+i        "Music"		{{server_addr}}	{{server_port}}
+i        "Pictures"		{{server_addr}}	{{server_port}}
+i        "Videos"		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i        # Config folders		{{server_addr}}	{{server_port}}
+i        ".cache"		{{server_addr}}	{{server_port}}
+i        ".config"		{{server_addr}}	{{server_port}}
+i        ".gnupg"		{{server_addr}}	{{server_port}}
+i        ".local"		{{server_addr}}	{{server_port}}
+i        ".ssh"		{{server_addr}}	{{server_port}}
+i      ];		{{server_addr}}	{{server_port}}
+i      files = [ ];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Move Temp Directory of Nix Daemon		{{server_addr}}	{{server_port}}
+iNix Daemon stores its temporary files under `/tmp` while packaging. If `/tmp`		{{server_addr}}	{{server_port}}
+iis backed by RAM, the system may run out of memory while building		{{server_addr}}	{{server_port}}
+ilarge packages (such as the Linux kernel).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i`/tmp` in NixOS is not backed by RAM by default, but with our		{{server_addr}}	{{server_port}}
+iconfiguration, `/tmp` will be placed on root folder's RAM drive.		{{server_addr}}	{{server_port}}
+iTherefore, we can move Nix Daemon's temp files onto the disk. I'm		{{server_addr}}	{{server_port}}
+imoving it to `/var/cache/nix` for example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  systemd.services.nix-daemon = {		{{server_addr}}	{{server_port}}
+i    environment = {		{{server_addr}}	{{server_port}}
+i      # Location for temporary files		{{server_addr}}	{{server_port}}
+i      TMPDIR = "/var/cache/nix";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i    serviceConfig = {		{{server_addr}}	{{server_port}}
+i      # Create /var/cache/nix automatically on Nix Daemon start		{{server_addr}}	{{server_port}}
+i      CacheDirectory = "nix";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, this option does not apply to the root user. This is caused		{{server_addr}}	{{server_port}}
+iby the nix command handling the build request itself under root user,		{{server_addr}}	{{server_port}}
+irather than passing it to the Nix Daemon. Therefore, we need to add an		{{server_addr}}	{{server_port}}
+ienvironment variable `NIX_REMOTE=daemon` , to force the nix command to		{{server_addr}}	{{server_port}}
+icall the daemon:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  environment.variables.NIX_REMOTE = "daemon";		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Thanks for NixOS CN Telegram group user " 洗白白 " for pointing out		{{server_addr}}	{{server_port}}
+i> the problem, and "Nick Cao" for providing a fix.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Activate Config		{{server_addr}}	{{server_port}}
+iWith the configuration complete, it's finally time to activate it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, run `sudo nixos-rebuild boot --flake .` to activate the config		{{server_addr}}	{{server_port}}
+ion next reboot. Remember not to use `sudo nixos-rebuild switch --flake .` ,		{{server_addr}}	{{server_port}}
+isince we need to move the files to their correct locations in LiveCD		{{server_addr}}	{{server_port}}
+ibefore we can use that config.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iReboot the computer into the LiveCD, and mount and `cd` into the		{{server_addr}}	{{server_port}}
+ioriginal root partition:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- **BACK UP YOUR DATA if you're unfamiliar with the process!**		{{server_addr}}	{{server_port}}
+i- Create a `persistent` folder, correspondong to `/nix/persistent`		{{server_addr}}	{{server_port}}
+i  after system starts;		{{server_addr}}	{{server_port}}
+i- Move all preserved paths listed above into the `persistent` folder;		{{server_addr}}	{{server_port}}
+i- Remove all folders except `nix` and `persistent` ;		{{server_addr}}	{{server_port}}
+i  - **BACK UP YOUR DATA BEFORE REMOVAL!**		{{server_addr}}	{{server_port}}
+i- Move all folders in `nix` to the current directory;		{{server_addr}}	{{server_port}}
+i- Finally, remove the `nix` directory and reboot.		{{server_addr}}	{{server_port}}
+iIf you did everything correctly, you will boot into a "stateless"		{{server_addr}}	{{server_port}}
+iNixOS. Everything you elected to persist will be mounted back to their		{{server_addr}}	{{server_port}}
+ioriginal location, so the system should behave exactly the same.		{{server_addr}}	{{server_port}}
+iHowever, your root partition has become a `tmpfs` RAM disk, all states		{{server_addr}}	{{server_port}}
+iyou don't intend to keep will disappear after a reboot, and you will		{{server_addr}}	{{server_port}}
+iget a "brand new" operating system each time you start your computer.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## References		{{server_addr}}	{{server_port}}
+iDuring my configuration process, I referenced the following resources:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+h- Erase your darlings - Graham Christensen	URL:https://grahamc.com/blog/erase-your-darlings	{{server_addr}}	{{server_port}}
+i  - The earliest "stateless" implementation, restoring states with ZFS		{{server_addr}}	{{server_port}}
+i    snapshots.		{{server_addr}}	{{server_port}}
+h- NixOS: tmpfs as root - Elis Hirwing	URL:https://elis.nu/blog/2020/05/nixos-tmpfs-as-root/	{{server_addr}}	{{server_port}}
+h- Impermanence	URL:https://github.com/nix-community/impermanence	{{server_addr}}	{{server_port}}
+i  - NixOS helper module for going stateless.		{{server_addr}}	{{server_port}}
+iYou can find my relate configuration in these links:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Impermanence module config:		{{server_addr}}	{{server_port}}
+h  https://github.com/xddxdd/nixos-config/blob/f7cbc14f23a7d6bb21ca4edb153f704735fe5419/nixos/common-components/impermanence.nix	URL:https://github.com/xddxdd/nixos-config/blob/f7cbc14f23a7d6bb21ca4edb153f704735fe5419/nixos/common-components/impermanence.nix	{{server_addr}}	{{server_port}}
+i- User home directory config:		{{server_addr}}	{{server_port}}
+h  https://github.com/xddxdd/nixos-config/blob/f7cbc14f23a7d6bb21ca4edb153f704735fe5419/nixos/client-components/impermanence.nix	URL:https://github.com/xddxdd/nixos-config/blob/f7cbc14f23a7d6bb21ca4edb153f704735fe5419/nixos/client-components/impermanence.nix	{{server_addr}}	{{server_port}}

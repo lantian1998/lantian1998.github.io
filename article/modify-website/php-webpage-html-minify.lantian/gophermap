@@ -1,0 +1,234 @@
+i  <body id="wordpress-org" class="home blog">		{{server_addr}}	{{server_port}}
+i    <div id="header">		{{server_addr}}	{{server_port}}
+i      <div class="wrapper">		{{server_addr}}	{{server_port}}
+i        <h1>[WordPress.org ](http://cn.wordpress.org/)</h1>		{{server_addr}}	{{server_port}}
+i        <h2 class="rosetta">		{{server_addr}}	{{server_port}}
+i          [China &#31616;&#20307;&#20013;&#25991; ](http://cn.wordpress.org/)		{{server_addr}}	{{server_port}}
+i        </h2>		{{server_addr}}	{{server_port}}
+i        <div style="clear:both"></div>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i        <ul>		{{server_addr}}	{{server_port}}
+i          <li>		{{server_addr}}	{{server_port}}
+i            <a href="/" title="&#39318;&#39029;" class="current"		{{server_addr}}	{{server_port}}
+i              >&#39318;&#39029;		{{server_addr}}	{{server_port}}
+i            </a>		{{server_addr}}	{{server_port}}
+i          </li>		{{server_addr}}	{{server_port}}
+i          <li>		{{server_addr}}	{{server_port}}
+i            <a		{{server_addr}}	{{server_port}}
+i              href="http://zh-cn.forums.wordpress.org/"		{{server_addr}}	{{server_port}}
+i              title="&#22312;&#27492;&#25552;&#20986;&#23433;&#35013;&#12289;&#20351;&#29992;&#19978;&#30340;&#38382;&#39064;&#65292;&#25110;&#19982;&#20854;&#23427; WordPress &#29233;&#22909;&#32773;&#36827;&#34892;&#20132;&#27969;"		{{server_addr}}	{{server_port}}
+i              >&#35770;&#22363;		{{server_addr}}	{{server_port}}
+i            </a>		{{server_addr}}	{{server_port}}
+i          </li>		{{server_addr}}	{{server_port}}
+i          <li>		{{server_addr}}	{{server_port}}
+i            <a		{{server_addr}}	{{server_port}}
+i              href="http://codex.wordpress.org/zh-cn:Main_Page"		{{server_addr}}	{{server_port}}
+i              title="WordPress &#23448;&#26041;&#20013;&#25991;&#25991;&#26723;"		{{server_addr}}	{{server_port}}
+i              >&#25991;&#26723;		{{server_addr}}	{{server_port}}
+i            </a>		{{server_addr}}	{{server_port}}
+i          </li>		{{server_addr}}	{{server_port}}
+i          <li>		{{server_addr}}	{{server_port}}
+i            <a		{{server_addr}}	{{server_port}}
+i              href="http://codex.wordpress.org/Category:zh-cn:%E9%9C%80%E8%A6%81%E6%82%A8%E7%9A%84%E5%B8%AE%E5%8A%A9"		{{server_addr}}	{{server_port}}
+i              title="&#20026;&#20013;&#25991; WordPress &#20570;&#20986;&#36129;&#29486;"		{{server_addr}}	{{server_port}}
+i              >&#36129;&#29486;		{{server_addr}}	{{server_port}}
+i            </a>		{{server_addr}}	{{server_port}}
+i          </li>		{{server_addr}}	{{server_port}}
+i          <li>		{{server_addr}}	{{server_port}}
+i            <a		{{server_addr}}	{{server_port}}
+i              href="http://cn.wordpress.org/validators/"		{{server_addr}}	{{server_port}}
+i              title="WordPress China &#24403;&#21069;&#21508;&#20010;&#39033;&#30446;&#30340;&#20998;&#24037;&#24773;&#20917;"		{{server_addr}}	{{server_port}}
+i              >&#22242;&#38431;		{{server_addr}}	{{server_port}}
+i            </a>		{{server_addr}}	{{server_port}}
+i          </li>		{{server_addr}}	{{server_port}}
+i          <li>		{{server_addr}}	{{server_port}}
+i            <a href="/contact/" title="&#32852;&#31995;&#35793;&#32773;"		{{server_addr}}	{{server_port}}
+i              >&#32852;&#31995;		{{server_addr}}	{{server_port}}
+i            </a>		{{server_addr}}	{{server_port}}
+i          </li>		{{server_addr}}	{{server_port}}
+i        </ul>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i        <div style="clear:both"></div>		{{server_addr}}	{{server_port}}
+i      </div>		{{server_addr}}	{{server_port}}
+i    </div>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    <div class="outer" id="mid-wrapper">		{{server_addr}}	{{server_port}}
+i      <div class="wrapper">		{{server_addr}}	{{server_port}}
+i        <div class="section">		{{server_addr}}	{{server_port}}
+i          <h3>&#27426;&#36814;</h3>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          <img		{{server_addr}}	{{server_port}}
+i            class="shot"		{{server_addr}}	{{server_port}}
+i            width="466"		{{server_addr}}	{{server_port}}
+i            height="303"		{{server_addr}}	{{server_port}}
+i            src="http://cn.wordpress.org/files/2011/07/dashboard-2.jpg"		{{server_addr}}	{{server_port}}
+i            alt="Localized version screenshot"		{{server_addr}}	{{server_port}}
+i          />&#27426;&#36814;&#35775;&#38382; WordPress		{{server_addr}}	{{server_port}}
+i          &#31616;&#20307;&#20013;&#25991;&#31449;&#28857;&#65292;&#36825;&#37324;&#25552;&#20379;&#21487;&#38752;&#30340;&#23448;&#26041;		{{server_addr}}	{{server_port}}
+i          WordPress		{{server_addr}}	{{server_port}}
+i          &#20013;&#25991;&#29256;&#26412;&#20197;&#21450;&#30456;&#20851;&#25903;&#25345;&#12290;		{{server_addr}}	{{server_port}}
+i          WordPress		{{server_addr}}	{{server_port}}
+i          &#26159;&#19968;&#20010;&#27880;&#37325;&#32654;&#23398;&#12289;&#26131;&#29992;&#24615;&#21644;&#32593;&#32476;&#26631;&#20934;&#30340;&#20010;&#20154;&#20449;&#24687;&#21457;&#24067;&#24179;&#21488;&#12290;WordPress		{{server_addr}}	{{server_port}}
+i          &#34429;&#20026;&#20813;&#36153;&#30340;&#24320;&#28304;&#36719;&#20214;&#65292;&#20294;&#20854;&#20215;&#20540;&#26080;&#27861;&#29992;&#37329;&#38065;&#26469;&#34913;&#37327;&#12290;		{{server_addr}}	{{server_port}}
+i          &#20351;&#29992; WordPress		{{server_addr}}	{{server_port}}
+i          &#21487;&#20197;&#25645;&#24314;&#21151;&#33021;&#24378;&#22823;&#30340;&#32593;&#32476;&#20449;&#24687;&#21457;&#24067;&#24179;&#21488;&#65292;&#20294;&#26356;&#22810;&#30340;&#26159;&#24212;&#29992;&#20110;&#20010;&#24615;&#21270;&#30340;&#21338;&#23458;&#12290;&#38024;&#23545;&#21338;&#23458;&#30340;&#24212;&#29992;&#65292;WordPress		{{server_addr}}	{{server_port}}
+i          &#33021;&#35753;&#24744;&#30465;&#21364;&#23545;&#21518;&#21488;&#25216;&#26415;&#30340;&#25285;&#24515;&#65292;&#38598;&#20013;&#31934;&#21147;&#20570;&#22909;&#32593;&#31449;&#30340;&#20869;&#23481;&#12290;		{{server_addr}}	{{server_port}}
+i          &#33509;&#24744;&#38656;&#35201;&#24110;&#21161;&#65292;&#21487;&#20197;&#27983;&#35272;&#25105;&#20204;&#30340;		{{server_addr}}	{{server_port}}
+i          [&#20013;&#25991;&#25991;&#26723;		{{server_addr}}	{{server_port}}
+i          ](http://codex.wordpress.org/zh-cn:Main_Page)&#12289;&#22312;		{{server_addr}}	{{server_port}}
+i          [&#20013;&#25991;&#35770;&#22363;		{{server_addr}}	{{server_port}}
+i          ](http://zh-cn.forums.wordpress.org/)&#21457;&#24086;&#65292;&#25110;&#32773;&#36890;&#36807;		{{server_addr}}	{{server_port}}
+i          [&#32852;&#31995;&#34920;&#21333;		{{server_addr}}	{{server_port}}
+i          ](http://cn.wordpress.org/contact/)&#32852;&#31995;&#25105;&#20204;&#12290;&#31069;&#24744;&#20351;&#29992;&#24841;&#24555;&#65281;		{{server_addr}}	{{server_port}}
+i        </div>		{{server_addr}}	{{server_port}}
+i      </div>		{{server_addr}}	{{server_port}}
+i    </div>		{{server_addr}}	{{server_port}}
+i  </body>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i有兴趣的同学可以数数上面的这段代码里有几个 tab 符。上面还只是		{{server_addr}}	{{server_port}}
+icn.wordpress.org 的一小段。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 HTML 编程过程中，为了让代码对网站主和技术员简明易懂，程序猿们经常会		{{server_addr}}	{{server_port}}
+i在代码前加上分层缩进的 Tab 或者空格。但对于最终用户来说，这些 tab 和空		{{server_addr}}	{{server_port}}
+i格都是无用的。所以在网站输出中，我们应该把这些东西都干掉，甚至包括换行		{{server_addr}}	{{server_port}}
+i符，除了 textarea 和 pre 内容的换行符，这两个你懂的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i有国外大神开发出了 HTML Minify PHP 文件，可以全自动清除这些浪费流量的		{{server_addr}}	{{server_port}}
+i内容。不过，原始 PHP 执行效率较低，因为它有一个将绝对路径转换成相对路		{{server_addr}}	{{server_port}}
+i径的功能，耗时比清除这些内容的时间还要长，所以我进行了修改，把这个功能		{{server_addr}}	{{server_port}}
+i干掉了。还有其它一些修改，都是牺牲小部分功能来加快代码执行的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i使用方法：把这段代码保存成 html-minify.php，上传到和你的主题模板		{{server_addr}}	{{server_port}}
+iindex.php 在同一目录下，在你模板 header.php 里最上头增加这么一行话：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <?php include "html-minify.php"; ?>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存，搞定。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以下为我修改的代码：（要原版请移步		{{server_addr}}	{{server_port}}
+hhttp://github.com/stevenvachon/html-minify/	URL:http://github.com/stevenvachon/html-minify/	{{server_addr}}	{{server_port}}
+i）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <?php		{{server_addr}}	{{server_port}}
+i  /*		{{server_addr}}	{{server_port}}
+i  HTML Minify 0.5.7 <http://www.svachon.com/blog/html-minify/>		{{server_addr}}	{{server_port}}
+i  Reduce file size by shortening URLs and safely removing all standard comments and unnecessary white space from an HTML document.		{{server_addr}}	{{server_port}}
+i  */		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  class HTML_Minify		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i      // Settings		{{server_addr}}	{{server_port}}
+i      protected $compress_css;		{{server_addr}}	{{server_port}}
+i      protected $compress_js;		{{server_addr}}	{{server_port}}
+i      protected $info_comment;		{{server_addr}}	{{server_port}}
+i      protected $remove_comments;		{{server_addr}}	{{server_port}}
+i      // Variables		{{server_addr}}	{{server_port}}
+i      protected $html = '';		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      public function __construct($html, $compress_css=false, $compress_js=false, $remove_comments=true)		{{server_addr}}	{{server_port}}
+i      {		{{server_addr}}	{{server_port}}
+i          if ($html !== '')		{{server_addr}}	{{server_port}}
+i          {		{{server_addr}}	{{server_port}}
+i              $this->compress_css = $compress_css;		{{server_addr}}	{{server_port}}
+i              $this->compress_js = $compress_js;		{{server_addr}}	{{server_port}}
+i              $this->info_comment = $info_comment;		{{server_addr}}	{{server_port}}
+i              $this->remove_comments = $remove_comments;		{{server_addr}}	{{server_port}}
+i              $this->html = $this->minifyHTML($html);		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      public function __toString()		{{server_addr}}	{{server_port}}
+i      {		{{server_addr}}	{{server_port}}
+i          return $this->html;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      protected function minifyHTML($html)		{{server_addr}}	{{server_port}}
+i      {		{{server_addr}}	{{server_port}}
+i          $pattern = '/<(?<script>script).*?<\/script\s*>|<(?<style>style).*?<\/style\s*>|<!(?<comment>--).*?-->|<(?<tag>[\/\w.:-]*)(?:".*?"|\'.*?\'|[^\'">]+)*>|(?<text>((<[^!\/\w.:-])?[^<]*)+)|/si';		{{server_addr}}	{{server_port}}
+i          if (preg_match_all($pattern, $html, $matches, PREG_SET_ORDER) === false)		{{server_addr}}	{{server_port}}
+i          {		{{server_addr}}	{{server_port}}
+i              // Invalid markup		{{server_addr}}	{{server_port}}
+i              return $html;		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i          $overriding = false;		{{server_addr}}	{{server_port}}
+i          $raw_tag = false;		{{server_addr}}	{{server_port}}
+i          // Variable reused for output		{{server_addr}}	{{server_port}}
+i          $html = '';		{{server_addr}}	{{server_port}}
+i          foreach ($matches as $token)		{{server_addr}}	{{server_port}}
+i          {		{{server_addr}}	{{server_port}}
+i              $tag = (isset($token['tag'])) ? strtolower($token['tag']) : null;		{{server_addr}}	{{server_port}}
+i              $content = $token[0];		{{server_addr}}	{{server_port}}
+i              $relate = false;		{{server_addr}}	{{server_port}}
+i              $strip = false;		{{server_addr}}	{{server_port}}
+i              if (is_null($tag))		{{server_addr}}	{{server_port}}
+i              {		{{server_addr}}	{{server_port}}
+i                  $content = preg_replace('/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->).)*-->/s', '', $content);		{{server_addr}}	{{server_port}}
+i                  $relate = true;		{{server_addr}}	{{server_port}}
+i                  $strip = true;		{{server_addr}}	{{server_port}}
+i              }		{{server_addr}}	{{server_port}}
+i              else    // All tags except script, style and comments		{{server_addr}}	{{server_port}}
+i              {		{{server_addr}}	{{server_port}}
+i                  if ($tag === 'pre' || $tag === 'textarea')		{{server_addr}}	{{server_port}}
+i                  {		{{server_addr}}	{{server_port}}
+i                      $raw_tag = $tag;		{{server_addr}}	{{server_port}}
+i                  }		{{server_addr}}	{{server_port}}
+i                  else if ($tag === '/pre' || $tag === '/textarea')		{{server_addr}}	{{server_port}}
+i                  {		{{server_addr}}	{{server_port}}
+i                      $raw_tag = false;		{{server_addr}}	{{server_port}}
+i                  }		{{server_addr}}	{{server_port}}
+i                  else if (!$raw_tag && !$overriding)		{{server_addr}}	{{server_port}}
+i                  {		{{server_addr}}	{{server_port}}
+i                      if ($tag !== '')		{{server_addr}}	{{server_port}}
+i                      {		{{server_addr}}	{{server_port}}
+i                          // Remove any space before the end of a tag (including closing tags and self-closing tags)		{{server_addr}}	{{server_port}}
+i                          $content = preg_replace('/\s+(\/?\>)/', '$1', $content);		{{server_addr}}	{{server_port}}
+i                          // Do not shorten canonical URL		{{server_addr}}	{{server_port}}
+i                          if ($tag !== 'link')		{{server_addr}}	{{server_port}}
+i                          {		{{server_addr}}	{{server_port}}
+i                              $relate = true;		{{server_addr}}	{{server_port}}
+i                          }		{{server_addr}}	{{server_port}}
+i                          else if (preg_match('/rel=(?:\'|\")\s*canonical\s*(?:\'|\")/i', $content) === 0)		{{server_addr}}	{{server_port}}
+i                          {		{{server_addr}}	{{server_port}}
+i                              $relate = true;		{{server_addr}}	{{server_port}}
+i                          }		{{server_addr}}	{{server_port}}
+i                      }		{{server_addr}}	{{server_port}}
+i                      else    // Content between opening and closing tags		{{server_addr}}	{{server_port}}
+i                      {		{{server_addr}}	{{server_port}}
+i                          // Avoid multiple spaces by checking previous character in output HTML		{{server_addr}}	{{server_port}}
+i                          if (strrpos($html,' ') === strlen($html)-1)		{{server_addr}}	{{server_port}}
+i                          {		{{server_addr}}	{{server_port}}
+i                              // Remove white space at the content beginning		{{server_addr}}	{{server_port}}
+i                              $content = preg_replace('/^[\s\r\n]+/', '', $content);		{{server_addr}}	{{server_port}}
+i                          }		{{server_addr}}	{{server_port}}
+i                      }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i                      $strip = true;		{{server_addr}}	{{server_port}}
+i                  }		{{server_addr}}	{{server_port}}
+i              }		{{server_addr}}	{{server_port}}
+i              if ($strip)		{{server_addr}}	{{server_port}}
+i              {		{{server_addr}}	{{server_port}}
+i                  $content = $this->removeWhiteSpace($content, $html);		{{server_addr}}	{{server_port}}
+i              }		{{server_addr}}	{{server_port}}
+i              $html .= $content;		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i          return $html;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      protected function removeWhiteSpace($html, $full_html)		{{server_addr}}	{{server_port}}
+i      {		{{server_addr}}	{{server_port}}
+i          $html = str_replace("\t", '', $html);		{{server_addr}}	{{server_port}}
+i          $html = str_replace("\r", '', $html);		{{server_addr}}	{{server_port}}
+i          $html = str_replace("\n", '', $html);		{{server_addr}}	{{server_port}}
+i          return str_replace('  ', '', $html);		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  function html_minify_buffer($html)		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i      return new HTML_Minify($html);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  ob_start('html_minify_buffer');		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  ?>```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

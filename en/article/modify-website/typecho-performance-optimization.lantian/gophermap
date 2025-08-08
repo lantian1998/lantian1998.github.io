@@ -1,0 +1,177 @@
+iTo implement features like Lightbox and code highlighting, I added		{{server_addr}}	{{server_port}}
+ipost-processing code to my blog theme that performs an additional		{{server_addr}}	{{server_port}}
+ilayer of processing on the HTML output after Typecho's Markdown		{{server_addr}}	{{server_port}}
+iconversion. However, due to the large number of historical articles on		{{server_addr}}	{{server_port}}
+imy blog and my use of different editors over time (WordPress editor,		{{server_addr}}	{{server_port}}
+iBaidu UEditor, etc.), my processing logic became quite complex to		{{server_addr}}	{{server_port}}
+iensure compatibility with older articles. Combined with the limited		{{server_addr}}	{{server_port}}
+iperformance of my budget VPS, this resulted in longer webpage loading		{{server_addr}}	{{server_port}}
+itimes.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI added the following line to my nginx configuration to output		{{server_addr}}	{{server_port}}
+iserver-side processing time in HTTP headers:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  add_header LT-Latency $request_time;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInitially, this value was around 0.25, meaning each page took about		{{server_addr}}	{{server_port}}
+i250ms to process on the server. About a year ago (		{{server_addr}}	{{server_port}}
+iMarch 11, 2018, "Significantly Optimized Blog Theme Performance"		{{server_addr}}	{{server_port}}
+i), I overhauled the post-processing logic with these key changes:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Originally, I used multiple regular expressions to match and replace		{{server_addr}}	{{server_port}}
+i  content line by line for historical article compatibility. I		{{server_addr}}	{{server_port}}
+i  consolidated some regex patterns and directly modified the original		{{server_addr}}	{{server_port}}
+i  HTML of articles in the database to reduce unnecessary rendering		{{server_addr}}	{{server_port}}
+i  work.		{{server_addr}}	{{server_port}}
+i- Many Typecho functions directly echo output instead of returning		{{server_addr}}	{{server_port}}
+i  values. I previously used `ob_start` and `ob_get_flush` to capture		{{server_addr}}	{{server_port}}
+i  output, which was inefficient. After studying Typecho's code, I		{{server_addr}}	{{server_port}}
+i  discovered I could directly access rendered content via `$this->content`		{{server_addr}}	{{server_port}}
+i  in themes, and most required parameters could be obtained similarly.		{{server_addr}}	{{server_port}}
+iAfter these optimizations, LT-Latency dropped to 0.1 – a significant		{{server_addr}}	{{server_port}}
+iimprovement, but still insufficient. I then decided to implement Redis		{{server_addr}}	{{server_port}}
+icaching.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Where is the Time Spent?		{{server_addr}}	{{server_port}}
+iPHP's Xdebug extension provides profiling functionality to detail		{{server_addr}}	{{server_port}}
+ifunction execution times. First, install Xdebug via your package		{{server_addr}}	{{server_port}}
+imanager:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apk add php7-pecl-xdebug		{{server_addr}}	{{server_port}}
+i  apt-get install php-xdebug		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf unavailable in packages, compile from source (		{{server_addr}}	{{server_port}}
+iXdebug website		{{server_addr}}	{{server_port}}
+i):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  tar xvf xdebug.tar.gz		{{server_addr}}	{{server_port}}
+i  cd xdebug		{{server_addr}}	{{server_port}}
+i  phpize		{{server_addr}}	{{server_port}}
+i  ./configure --enable-xdebug		{{server_addr}}	{{server_port}}
+i  make -j4		{{server_addr}}	{{server_port}}
+i  make install		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen enable Xdebug in php.ini with:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [xdebug]		{{server_addr}}	{{server_port}}
+i  zend_extension=/usr/local/Cellar/php/7.3.1/pecl/20180731/xdebug.so		{{server_addr}}	{{server_port}}
+i  xdebug.profiler_enable=0;		{{server_addr}}	{{server_port}}
+i  xdebug.profiler_enable_trigger=1;		{{server_addr}}	{{server_port}}
+i  xdebug.profiler_output_dir="/Users/lantian/Htdocs";		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe first line specifies Xdebug's installation path. Lines 2-3 disable		{{server_addr}}	{{server_port}}
+iprofiling by default but enable it via trigger (activated by specific		{{server_addr}}	{{server_port}}
+iHTTP headers). Line 4 sets the profiling output directory.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext, install the "Xdebug Helper" extension in Chrome. Select "Profile"		{{server_addr}}	{{server_port}}
+iin the extension menu and refresh the page to generate a `cachegrind`		{{server_addr}}	{{server_port}}
+ireport in the specified directory. Open these reports with Kcachegrind		{{server_addr}}	{{server_port}}
+ior Qcachegrind.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn my case, significant time was spent on sidebar widgets (~40%),		{{server_addr}}	{{server_port}}
+iTypecho's Markdown rendering (15%), and my post-processing functions (10%).		{{server_addr}}	{{server_port}}
+iI added Redis caching to these components.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Implementation Details		{{server_addr}}	{{server_port}}
+iWhile Typecho has caching plugins like TpCache, they often failed to		{{server_addr}}	{{server_port}}
+iauto-refresh caches after article updates or new comments. They also		{{server_addr}}	{{server_port}}
+ionly cached the Markdown rendering layer, not covering my		{{server_addr}}	{{server_port}}
+ipost-processing functions.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI wanted to cache using the article's original Markdown hash as the		{{server_addr}}	{{server_port}}
+ikey and the fully processed HTML as the value. However, themes can't		{{server_addr}}	{{server_port}}
+idirectly access raw Markdown content without core modifications that		{{server_addr}}	{{server_port}}
+imight break future updates.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe solution came from the		{{server_addr}}	{{server_port}}
+iTypecho Parsedown		{{server_addr}}	{{server_port}}
+iplugin, which replaces Typecho's built-in HyperDown parser with		{{server_addr}}	{{server_port}}
+iParsedown. Crucially, its Plugin.php contains:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  public static function markdown($text)		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i      require_once dirname(__FILE__) . '/Parsedown.php';		{{server_addr}}	{{server_port}}
+i      return Parsedown::instance()		{{server_addr}}	{{server_port}}
+i          ->setBreaksEnabled(true)		{{server_addr}}	{{server_port}}
+i          ->text($text);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis allowed caching with the raw Markdown hash as key and rendered		{{server_addr}}	{{server_port}}
+ioutput as value. My post-processing layer could then cache its results		{{server_addr}}	{{server_port}}
+isimilarly. This approach requires no cache invalidation – unchanged		{{server_addr}}	{{server_port}}
+icontent keeps the same hash, while changed content automatically gets		{{server_addr}}	{{server_port}}
+inew cache entries.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor the heavy-load sidebar, I cached the HTML directly with a		{{server_addr}}	{{server_port}}
+i10-minute TTL.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI implemented these Redis get/set functions:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  function lantian_cache_set($key, $value, $ttl = 0) {		{{server_addr}}	{{server_port}}
+i      // Don't use cache if either Redis is not set, or Redis plugin isn't installed		{{server_addr}}	{{server_port}}
+i      if(!defined('__LANTIAN_REDIS_HOST__') || !defined('__LANTIAN_REDIS_PORT__')) return false;		{{server_addr}}	{{server_port}}
+i      if(!class_exists('Redis')) return false;		{{server_addr}}	{{server_port}}
+i      try {		{{server_addr}}	{{server_port}}
+i          $redis = new Redis();		{{server_addr}}	{{server_port}}
+i          if(!$redis->pconnect(__LANTIAN_REDIS_HOST__, __LANTIAN_REDIS_PORT__)) return false;		{{server_addr}}	{{server_port}}
+i          $key_prepend = 'lt-theme-v' . LANTIAN_THEME_REVISION . '-';		{{server_addr}}	{{server_port}}
+i          if($ttl != 0) {		{{server_addr}}	{{server_port}}
+i              return $redis->set($key_prepend . $key, $value, Array('ex' => $ttl));		{{server_addr}}	{{server_port}}
+i          } else {		{{server_addr}}	{{server_port}}
+i              return $redis->set($key_prepend . $key, $value);		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i      } catch (Exception $e) {		{{server_addr}}	{{server_port}}
+i          return false;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  function lantian_cache_get($key) {		{{server_addr}}	{{server_port}}
+i      // Don't use cache if either Redis is not set, or Redis plugin isn't installed		{{server_addr}}	{{server_port}}
+i      if(!defined('__LANTIAN_REDIS_HOST__') || !defined('__LANTIAN_REDIS_PORT__')) return false;		{{server_addr}}	{{server_port}}
+i      if(!class_exists('Redis')) return false;		{{server_addr}}	{{server_port}}
+i      try {		{{server_addr}}	{{server_port}}
+i          $redis = new Redis();		{{server_addr}}	{{server_port}}
+i          if(!$redis->pconnect(__LANTIAN_REDIS_HOST__, __LANTIAN_REDIS_PORT__)) return false;		{{server_addr}}	{{server_port}}
+i          $key_prepend = 'lt-theme-v' . LANTIAN_THEME_REVISION . '-';		{{server_addr}}	{{server_port}}
+i          return $redis->get($key_prepend . $key);		{{server_addr}}	{{server_port}}
+i      } catch (Exception $e) {		{{server_addr}}	{{server_port}}
+i          return false;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo simplify integration, I created a wrapper for caching function I/O:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  function lantian_cache_wrap($key, $func, $args = NULL, $ttl = 0) {		{{server_addr}}	{{server_port}}
+i      if($cache = lantian_cache_get($key)) return "<!-- LT Cache Hit Start -->" . $cache . "<!-- LT Cache Hit End -->";		{{server_addr}}	{{server_port}}
+i      ob_start();		{{server_addr}}	{{server_port}}
+i      $value = '';		{{server_addr}}	{{server_port}}
+i      if($args != NULL) {		{{server_addr}}	{{server_port}}
+i          $value = call_user_func_array($func, $args);		{{server_addr}}	{{server_port}}
+i      } else {		{{server_addr}}	{{server_port}}
+i          $value = call_user_func($func);		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i      $value .= ob_get_flush();		{{server_addr}}	{{server_port}}
+i      lantian_cache_set($key, $value, $ttl);		{{server_addr}}	{{server_port}}
+i      return "<!-- LT Cache Miss Start -->" . $value . "<!-- LT Cache Miss End -->";		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iApplied to existing functions:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  // Parameterized function, no expiration		{{server_addr}}	{{server_port}}
+i  function lantian_content_processor($html) {		{{server_addr}}	{{server_port}}
+i      return lantian_cache_wrap($key, function($html) {		{{server_addr}}	{{server_port}}
+i          // Slow code		{{server_addr}}	{{server_port}}
+i      }, array($html));		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  // Parameterless function, 600s cache		{{server_addr}}	{{server_port}}
+i  echo lantian_cache_wrap($key, function() {		{{server_addr}}	{{server_port}}
+i      // Slow code		{{server_addr}}	{{server_port}}
+i  }, NULL, 600);		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter caching, homepage LT-Latency stabilized at ~0.04 (due to many		{{server_addr}}	{{server_port}}
+iarticles) – another 50% reduction. Inner page latency can drop to		{{server_addr}}	{{server_port}}
+i0.015 (15ms). Combined with InstantClick, pages load nearly instantly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Though recent network instability in China might currently mask these		{{server_addr}}	{{server_port}}
+iimprovements)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

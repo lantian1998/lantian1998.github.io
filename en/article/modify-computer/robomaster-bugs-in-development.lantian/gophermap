@@ -1,0 +1,114 @@
+iOur school organized a RoboMaster team and planned to attend the		{{server_addr}}	{{server_port}}
+icompetition this year. Since we are all new students at a new campus,		{{server_addr}}	{{server_port}}
+iwe do not have any reference materials available from previous		{{server_addr}}	{{server_port}}
+istudents, and we have to figure out bugs after bugs on our own.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis post describes some of the problems we met during software		{{server_addr}}	{{server_port}}
+idevelopment.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Hardware: RoboMaster Official Development Board MCU Model:		{{server_addr}}	{{server_port}}
+i> STM32F427IIHx Software: ChibiOS 18.2.0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Board Has 12 MHz HSE Clock Instead of Commonly Seen 8MHz		{{server_addr}}	{{server_port}}
+iThe pitfall is that neither the manual nor the hardware schematics		{{server_addr}}	{{server_port}}
+imentioned the clock frequency.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDue to this problem, the actual frequency we programmatically set with		{{server_addr}}	{{server_port}}
+iSTM32CubeMX or other software is much higher than expected. This		{{server_addr}}	{{server_port}}
+icaused the following problems:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Mysterious failure in setting frequency (Board unresponsive after		{{server_addr}}	{{server_port}}
+i  setting a core frequency well below maximum, had to short a resistor		{{server_addr}}	{{server_port}}
+i  to recover)		{{server_addr}}	{{server_port}}
+i- USART timing error (Receiving or sending garbage despite same		{{server_addr}}	{{server_port}}
+i  baud-rate / format, unable to use the remote controller)		{{server_addr}}	{{server_port}}
+i- Cannot respond to CAN data (Both board and motors are sending CAN		{{server_addr}}	{{server_port}}
+i  frames, and the oscilloscope can decode them, but neither the board		{{server_addr}}	{{server_port}}
+i  nor the motor ACKs successful transmission)		{{server_addr}}	{{server_port}}
+iAll of the problems are solved by readjusting the clock frequency.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Delay Required Sending CAN Frames in  `while(true);`  Loop		{{server_addr}}	{{server_port}}
+iKinda a minor problem. During CAN communication, all devices are		{{server_addr}}	{{server_port}}
+iconnected to the same bus, and only one device can send data		{{server_addr}}	{{server_port}}
+isimultaneously. If you are sending frames in a `while(true);` loop		{{server_addr}}	{{server_port}}
+iwithout delay, other devices will not have a chance to send out		{{server_addr}}	{{server_port}}
+imessages, and naturally, the development board cannot respond to them.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iA simple addition of `chThdSleepMilliseconds(100);` solves the		{{server_addr}}	{{server_port}}
+iproblem.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## CAN and USB Cannot be Used Simultaneously on Our STM32		{{server_addr}}	{{server_port}}
+iThe UART port on the development board is some kind of connector		{{server_addr}}	{{server_port}}
+iinstead of bare pins, and we don't have wires for it, so we tried to		{{server_addr}}	{{server_port}}
+iuse the Serial over USB feature of ChibiOS, or emulating a serial port		{{server_addr}}	{{server_port}}
+iover the USB connection, for debugging.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter testing and searching for information for 2 hours without		{{server_addr}}	{{server_port}}
+isuccess, we finally found out that CAN and USB cannot be enabled		{{server_addr}}	{{server_port}}
+isimultaneously on this specific STM32 board.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, CAN is necessary for us since we need it to talk to the		{{server_addr}}	{{server_port}}
+imotors. Therefore... we reverted back to debugging with blinking LEDs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## `while(true);`  in Main Thread Blocks Execution of Sub Threads		{{server_addr}}	{{server_port}}
+iMy teammate wrote the main logic (checking button status and driving		{{server_addr}}	{{server_port}}
+imotors) in another thread, and the main thread is expected to do		{{server_addr}}	{{server_port}}
+inothing with `while(true);` after initializing everything. Later he		{{server_addr}}	{{server_port}}
+ifound out that the other thread should have a priority of at least (2 +		{{server_addr}}	{{server_port}}
+inormal priority), or it wouldn't run.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter a quick investigation, I concluded that ChibiOS sets the		{{server_addr}}	{{server_port}}
+ipriority of main thread to (1 + normal priority). `while(true);` is		{{server_addr}}	{{server_port}}
+istill some code consuming CPU cycles, and it blocks other threads with		{{server_addr}}	{{server_port}}
+isame or lower priority. The solution is `while(true)		{{server_addr}}	{{server_port}}
+ichThdSleepMilliseconds(1000);` , which tells the main thread to sleep		{{server_addr}}	{{server_port}}
+iand ChibiOS to schedule other tasks.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Key Sequence Error in DJI Documentation		{{server_addr}}	{{server_port}}
+iThe status of 4 keys (Q, E, Shift, and Ctrl) are sent as 4 bits to the		{{server_addr}}	{{server_port}}
+idevelopment board with one-to-one correspondence. The document states		{{server_addr}}	{{server_port}}
+ithat the order from high bit to low bit is Q, E, Shift, and Ctrl, but		{{server_addr}}	{{server_port}}
+ian actual test shows that it is Ctrl, Shift, E, and Q.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Almost hit by the robot)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Weird Data Type Conversion		{{server_addr}}	{{server_port}}
+iMy teammate wrote code for PID adjustment of chassis motors, but the		{{server_addr}}	{{server_port}}
+imotors will always accelerate to full "reverse" speed once they are		{{server_addr}}	{{server_port}}
+iturned on, no matter what direction they are supposed to be running.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter 2 hours of debugging, I found out that my teammate has written		{{server_addr}}	{{server_port}}
+ithe following code:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  uint8_t x = 0xff; // Example response data from motor,		{{server_addr}}	{{server_port}}
+i  uint8_t y = 0x8f; // splitted to 2 uint8_t's		{{server_addr}}	{{server_port}}
+i  int a = (x << 8 | y); // What my teammate has done		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe int here is int32_t.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhat we expect to get is 0xffffff8f, or -113; but while executing the		{{server_addr}}	{{server_port}}
+icode above, C pads 0 to the beginning of a, and the result is		{{server_addr}}	{{server_port}}
+i0x0000ff8f, or 65423. Therefore, PID thinks the motor is running at		{{server_addr}}	{{server_port}}
+itremendous "forward" speed and behaves weirdly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iC does this since a 4 byte variable is generated at statement `x << 8` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  int c = sizeof(x << 8); // c = 4		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnd the actual operand of the OR operation is 0x0000ff00 and 0x8f，		{{server_addr}}	{{server_port}}
+iresulting in 0x0000ff8f.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOn the other hand, such phenomenon will not occur with uint16_t's:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  uint16_t x = 0xffff;		{{server_addr}}	{{server_port}}
+i  uint16_t y = 0xff8f;		{{server_addr}}	{{server_port}}
+i  int64_t a = (x << 16 | y); // a = -113		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince x << 16 = 0xffff0000, a = 0xffffff8f = -113.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor the original problem, the solution is replacing int to int16_t:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  int16_t a = (x << 8 | y);		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis time a = 0xff8f, or -113, which meets expectations.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,199 @@
+i## Foreword		{{server_addr}}	{{server_port}}
+hSideStore	URL:https://github.com/SideStore/SideStore	{{server_addr}}	{{server_port}}
+iis a commonly used iOS app sideloading tool that allows you to install		{{server_addr}}	{{server_port}}
+ithird-party apps bypassing the App Store. It works by using your Apple		{{server_addr}}	{{server_port}}
+iID to obtain a free Apple developer certificate, which is then used to		{{server_addr}}	{{server_port}}
+isign the app you want to install, allowing it to run normally on your		{{server_addr}}	{{server_port}}
+iiOS device.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, to maintain control over the iOS ecosystem, Apple prevents		{{server_addr}}	{{server_port}}
+ithird-party app stores from using developer certificates to bypass		{{server_addr}}	{{server_port}}
+irestrictions on a large scale, setting a 7-day expiration period for		{{server_addr}}	{{server_port}}
+ideveloper certificates. Users need to regularly obtain new developer		{{server_addr}}	{{server_port}}
+icertificates and re-sign their apps to continue using the third-party		{{server_addr}}	{{server_port}}
+iapps they have installed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTraditional sideloading tools, such as AltStore, rely on software like		{{server_addr}}	{{server_port}}
+iiTunes on a computer for the re-signing process. But unlike other		{{server_addr}}	{{server_port}}
+isideloading tools, SideStore only requires computer assistance for the		{{server_addr}}	{{server_port}}
+iinitial installation. After installation, SideStore can simulate a		{{server_addr}}	{{server_port}}
+icomputer with iTunes installed, allowing the iOS system to communicate		{{server_addr}}	{{server_port}}
+iwith it through a virtual network, thus achieving the effect of		{{server_addr}}	{{server_port}}
+ire-signing apps and even installing new third-party apps without a		{{server_addr}}	{{server_port}}
+icomputer.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSideStore's virtual network can generally be implemented in the		{{server_addr}}	{{server_port}}
+ifollowing two ways:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- WireGuard: SideStore can create a WireGuard server on the device		{{server_addr}}	{{server_port}}
+i  itself. Users can install a WireGuard client and connect to this		{{server_addr}}	{{server_port}}
+i  server, allowing the iOS system to communicate with the simulated		{{server_addr}}	{{server_port}}
+i  computer over the network.		{{server_addr}}	{{server_port}}
+i  - The disadvantage of this method is that due to iOS system		{{server_addr}}	{{server_port}}
+i    limitations, when the iPhone/iPad is using cellular data, the		{{server_addr}}	{{server_port}}
+i    WireGuard client cannot connect to the WireGuard server created		{{server_addr}}	{{server_port}}
+i    locally by SideStore. Therefore, SideStore only works properly		{{server_addr}}	{{server_port}}
+i    when the device is connected to Wi-Fi.		{{server_addr}}	{{server_port}}
+i  - Also, since the iOS system only supports connecting to one VPN at		{{server_addr}}	{{server_port}}
+i    a time, if the user needs to use another VPN software, they have		{{server_addr}}	{{server_port}}
+i    to manually switch between VPNs, which is quite troublesome.		{{server_addr}}	{{server_port}}
+h- StosVPN	URL:https://github.com/SideStore/StosVPN	{{server_addr}}	{{server_port}}
+i  : A dedicated VPN client developed by the SideStore team that works		{{server_addr}}	{{server_port}}
+i  exclusively for SideStore.		{{server_addr}}	{{server_port}}
+i  - Compared to WireGuard, StosVPN is not affected by iOS restrictions		{{server_addr}}	{{server_port}}
+i    and can work normally when the device is using cellular data.		{{server_addr}}	{{server_port}}
+i    However, after trying it out, I found that StosVPN often		{{server_addr}}	{{server_port}}
+i    disconnects automatically and cannot stay in the background for a		{{server_addr}}	{{server_port}}
+i    long time. If the iOS device is not used for a while and StosVPN		{{server_addr}}	{{server_port}}
+i    disconnects, and SideStore and other third-party apps fail to		{{server_addr}}	{{server_port}}
+i    renew in time, you will have to find a computer to sign these apps		{{server_addr}}	{{server_port}}
+i    again.		{{server_addr}}	{{server_port}}
+i  - Also, since StosVPN is also a VPN, it is also subject to the iOS's		{{server_addr}}	{{server_port}}
+i    limitation of only supporting one VPN connection at a time.		{{server_addr}}	{{server_port}}
+iSo I wanted to try to analyze the working principles of		{{server_addr}}	{{server_port}}
+iSideStore/StosVPN to see if I could integrate them into my home		{{server_addr}}	{{server_port}}
+inetwork or ZeroTier SDN network, allowing SideStore to refresh		{{server_addr}}	{{server_port}}
+inormally without extra VPN configuration.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## How StosVPN Works		{{server_addr}}	{{server_port}}
+iAccording to		{{server_addr}}	{{server_port}}
+hStosVPN's packet processing logic	URL:https://github.com/SideStore/StosVPN/blob/main/TunnelProv/PacketTunnelProvider.swift	{{server_addr}}	{{server_port}}
+i, StosVPN roughly does the following:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Assigns IP address `10.7.0.0` to the iOS device, and configure iOS		{{server_addr}}	{{server_port}}
+i  to send packets for `10.7.0.0/24` to StosVPN.		{{server_addr}}	{{server_port}}
+i- Defines an IP address `10.7.0.1` , where StosVPN will simulate a		{{server_addr}}	{{server_port}}
+i  computer with iTunes installed.		{{server_addr}}	{{server_port}}
+i- For each packet:		{{server_addr}}	{{server_port}}
+i  - If the packet is sent from `10.7.0.0` to `10.7.0.1` , swap the		{{server_addr}}	{{server_port}}
+i    source and destination IP addresses, to send the packet back to		{{server_addr}}	{{server_port}}
+i    the iOS device.		{{server_addr}}	{{server_port}}
+iThis logic is quite simple. SideStore essentially opens some ports		{{server_addr}}	{{server_port}}
+ilocally on the iOS device, simulating a computer with iTunes		{{server_addr}}	{{server_port}}
+iinstalled. Suppose iOS creates a connection like this when trying to		{{server_addr}}	{{server_port}}
+iconnect to the simulated computer:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  TCP 10.7.0.0:12345 -> 10.7.0.1:54321		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen WireGuard or StosVPN will swap the source and destination IP		{{server_addr}}	{{server_port}}
+iaddresses (but not the port numbers), rewrite the packet as follows,		{{server_addr}}	{{server_port}}
+iand send it back to the iOS device:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  TCP 10.7.0.1:12345 -> 10.7.0.0:54321		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFrom the iOS device's perspective, this is a new TCP connection from `10.7.0.1` ,		{{server_addr}}	{{server_port}}
+iunrelated to the previous connection sent to the computer. Since the		{{server_addr}}	{{server_port}}
+iport iOS is trying to connect to ( `54321` in this case) should be an		{{server_addr}}	{{server_port}}
+iiTunes port, and SideStore simulates iTunes locally, SideStore should		{{server_addr}}	{{server_port}}
+ibe listening on port `54321` at this time and receiving the data.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter SideStore's simulated iTunes logic processes the data and		{{server_addr}}	{{server_port}}
+igenerates a reply:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  TCP 10.7.0.0:54321 -> 10.7.0.1:12345		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWireGuard or StosVPN will again swap the source and destination IP		{{server_addr}}	{{server_port}}
+iaddresses:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  TCP 10.7.0.1:54321 -> 10.7.0.0:12345		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis reply packet matches the initial connection sent to the simulated		{{server_addr}}	{{server_port}}
+icomputer. iOS therefore believes it has received a reply from iTunes		{{server_addr}}	{{server_port}}
+ion the computer, and thus continues updating the developer		{{server_addr}}	{{server_port}}
+icertificate.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Simulating StosVPN's Working Logic with Nftables		{{server_addr}}	{{server_port}}
+iNow understanding how StosVPN works, we just need to mimic its logic		{{server_addr}}	{{server_port}}
+iin our own network.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you only have a few iOS devices, and they are all assigned static		{{server_addr}}	{{server_port}}
+iIP addresses, and you have a router running OpenWrt or another Linux		{{server_addr}}	{{server_port}}
+isystem, you can simply use the following Nftables rules:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  table inet sidestore {		{{server_addr}}	{{server_port}}
+i    chain RAW_PREROUTING {		{{server_addr}}	{{server_port}}
+i      type filter hook prerouting priority raw; policy accept;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # Replace 192.168.0.xxx here with your iOS device's IP address		{{server_addr}}	{{server_port}}
+i      ip saddr 192.168.0.123 ip daddr 10.7.0.1 ip saddr set 10.7.0.1 ip daddr set 192.168.0.123 notrack;		{{server_addr}}	{{server_port}}
+i      ip saddr 192.168.0.234 ip daddr 10.7.0.1 ip saddr set 10.7.0.1 ip daddr set 192.168.0.234 notrack;		{{server_addr}}	{{server_port}}
+i      # Add more rules as needed		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe purpose of the above rules is that if a packet is received from		{{server_addr}}	{{server_port}}
+iyour iOS device ( `192.168.0.123` or `192.168.0.234` ) destined for `10.7.0.1` (the		{{server_addr}}	{{server_port}}
+ivirtual computer), it changes the packet's source IP to `10.7.0.1` (the		{{server_addr}}	{{server_port}}
+ivirtual computer) and the destination IP to your iOS device ( `192.168.0.123`		{{server_addr}}	{{server_port}}
+ior `192.168.0.234` ), and then sends it out. The `notrack` here		{{server_addr}}	{{server_port}}
+idisables connection tracking, which prevents Linux from matching these		{{server_addr}}	{{server_port}}
+ipackets to previously received packets and connection tracking		{{server_addr}}	{{server_port}}
+ientries, which could make the rules ineffective.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince Nftables does not support using packet source/destination IP		{{server_addr}}	{{server_port}}
+iaddresses as variables, it's not possible to achieve the purpose of "swapping		{{server_addr}}	{{server_port}}
+isource and destination addresses" with a single set of rules.		{{server_addr}}	{{server_port}}
+iTherefore, we need to add a rule for each iOS device. If you have a		{{server_addr}}	{{server_port}}
+ismall number of iOS devices, you can write a separate rule for each		{{server_addr}}	{{server_port}}
+idevice's IP address. However, if you have many devices, or if they		{{server_addr}}	{{server_port}}
+idon't have static IP addresses, you will need to write a rule for		{{server_addr}}	{{server_port}}
+ievery IP address in your home network segment, which can be very		{{server_addr}}	{{server_port}}
+itroublesome. Also, if your router does not support Nftables or similar		{{server_addr}}	{{server_port}}
+ifirewall functions and cannot rewrite packets in a similar way, you		{{server_addr}}	{{server_port}}
+icannot achieve this functionality.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## SideStore VPN Tool		{{server_addr}}	{{server_port}}
+iIf you cannot use the above method, I have also written a small		{{server_addr}}	{{server_port}}
+iprogram that implements the above logic:		{{server_addr}}	{{server_port}}
+hSideStore VPN Tool	URL:https://github.com/xddxdd/sidestore-vpn	{{server_addr}}	{{server_port}}
+i. It can create a TUN interface on a Linux device, listen for packets		{{server_addr}}	{{server_port}}
+idestined for `10.7.0.1` , and process these packets with the same		{{server_addr}}	{{server_port}}
+ilogic as StosVPN.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo use this tool in your network, you need a device running Linux (such		{{server_addr}}	{{server_port}}
+ias a Raspberry Pi or a virtual machine), connect it to the same LAN as		{{server_addr}}	{{server_port}}
+iyour iOS devices, and set a static IP address. Since the packets		{{server_addr}}	{{server_port}}
+irewritten by the tool can be seen as a new connection from this Linux		{{server_addr}}	{{server_port}}
+idevice to the iOS device, there should be no firewall or NAT between		{{server_addr}}	{{server_port}}
+ithe iOS device and this Linux device, otherwise this new connection		{{server_addr}}	{{server_port}}
+iwill be blocked, preventing SideStore's simulated computer from		{{server_addr}}	{{server_port}}
+ireceiving requests normally.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, perform the following steps:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Enable IP Forwarding on the Linux device:		{{server_addr}}	{{server_port}}
+i  echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf		{{server_addr}}	{{server_port}}
+i  sudo sysctl -p		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Install Rust and Cargo on the device.		{{server_addr}}	{{server_port}}
+i2. Run the following commands to install and start the SideStore VPN		{{server_addr}}	{{server_port}}
+i   Tool:		{{server_addr}}	{{server_port}}
+i  git clone https://github.com/xddxdd/sidestore-vpn.git		{{server_addr}}	{{server_port}}
+i  cd sidestore-vpn		{{server_addr}}	{{server_port}}
+i  cargo build --release		{{server_addr}}	{{server_port}}
+i  sudo target/release/sidestore-vpn		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe SideStore VPN Tool will create a TUN device called `sidestore` and		{{server_addr}}	{{server_port}}
+iset up system routes to send all traffic destined for `10.7.0.1` to		{{server_addr}}	{{server_port}}
+ithe tool for processing.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Add a static route on your main router:		{{server_addr}}	{{server_port}}
+i  Route: 10.7.0.1/32		{{server_addr}}	{{server_port}}
+i  Subnet Mask (if needed): 255.255.255.255		{{server_addr}}	{{server_port}}
+i  Gateway: The IP address of the Linux device mentioned earlier.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo minimize IP conflicts, this static route only affects a single IP		{{server_addr}}	{{server_port}}
+iaddress, `10.7.0.1` . However, if your router does not support		{{server_addr}}	{{server_port}}
+icreating /32 routes, you can adjust the subnet mask to expand the		{{server_addr}}	{{server_port}}
+iscope of this routing rule, as long as it does not conflict with other		{{server_addr}}	{{server_port}}
+idevices:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Route: 10.7.0.0/24		{{server_addr}}	{{server_port}}
+i  Subnet Mask (if needed): 255.255.255.0		{{server_addr}}	{{server_port}}
+i  Gateway: The IP address of the Linux device mentioned earlier.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Ping `10.7.0.1` from any device on the LAN. It should now be		{{server_addr}}	{{server_port}}
+i   reachable.		{{server_addr}}	{{server_port}}
+i2. Disconnect WireGuard or StosVPN on your iOS device, and then try		{{server_addr}}	{{server_port}}
+i   refreshing apps with SideStore. SideStore should now be able to		{{server_addr}}	{{server_port}}
+i   refresh certificates normally even without a VPN.		{{server_addr}}	{{server_port}}

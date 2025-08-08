@@ -1,0 +1,54 @@
+iBad Apple 是岛国东方幻想乡制作的一个动画，全动画采用类似皮影戏的方式，		{{server_addr}}	{{server_port}}
+i只有黑白，但是做到了 3D 画面，而且全部手绘！效果非常好，没有任何跳帧丢		{{server_addr}}	{{server_port}}
+i帧现象。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因为它的黑白特性，大群人开始尝试将它移植到各种平台上，我见过的就有计算		{{server_addr}}	{{server_port}}
+i器、树莓派，还有人把它用 javascript 放了出来。我也写了一个 Pascal 程序		{{server_addr}}	{{server_port}}
+i用来放 Bad Apple，不过是全命令行的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i编译好的程序我懒得放了，而且我用的是 Linux，Windows 用户下载了也没用，		{{server_addr}}	{{server_port}}
+i所以我把源代码放出来，你们自己用 FPC 编译吧。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  uses crt;		{{server_addr}}	{{server_port}}
+i  var		{{server_addr}}	{{server_port}}
+i      fin:text;		{{server_addr}}	{{server_port}}
+i      i:longint;		{{server_addr}}	{{server_port}}
+i      s:string;		{{server_addr}}	{{server_port}}
+i  begin		{{server_addr}}	{{server_port}}
+i      // 链接源文件并准备读取		{{server_addr}}	{{server_port}}
+i      assign(fin,'badapple.txt');		{{server_addr}}	{{server_port}}
+i      reset(fin);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 读入第一幅画面并输出版权		{{server_addr}}	{{server_port}}
+i      for i:=1 to 24 do begin		{{server_addr}}	{{server_port}}
+i          readln(fin,s);		{{server_addr}}	{{server_port}}
+i          writeln(s);		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i      write('Bad Apple ASCII Art by Lan Tian - https://lantian.pub');		{{server_addr}}	{{server_port}}
+i      delay(50);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 输出之后画面，不覆盖版权		{{server_addr}}	{{server_port}}
+i      while(not(eof(fin)))do begin		{{server_addr}}	{{server_port}}
+i          gotoxy(1,1);		{{server_addr}}	{{server_port}}
+i          for i:=1 to 24 do begin		{{server_addr}}	{{server_port}}
+i              readln(fin,s);		{{server_addr}}	{{server_port}}
+i              writeln(s);		{{server_addr}}	{{server_port}}
+i          end;		{{server_addr}}	{{server_port}}
+i          //write('Bad Apple ASCII Art by Lan Tian - https://lantian.pub');		{{server_addr}}	{{server_port}}
+i          delay(50);		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 清屏		{{server_addr}}	{{server_port}}
+i      //gotoxy(1,1);		{{server_addr}}	{{server_port}}
+i      //for i:=1 to 25 do writeln;		{{server_addr}}	{{server_port}}
+i      clrscr;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 保持良好编程习惯		{{server_addr}}	{{server_port}}
+i      close(fin);		{{server_addr}}	{{server_port}}
+i  end.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i当然只执行主程序是没用的，还需要原始图形文件，就是我调用的那个 txt，下		{{server_addr}}	{{server_port}}
+i载地址：		{{server_addr}}	{{server_port}}
+1/usr/uploads/2013/03/badapple.7z	/usr/uploads/2013/03/badapple.7z	{{server_addr}}	{{server_port}}
+i。下载下来和主程序放在一起。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

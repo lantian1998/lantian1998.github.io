@@ -1,0 +1,28 @@
+iSince the support life of my OnePlus 8T's official ROM is about to		{{server_addr}}	{{server_port}}
+iend, I flashed Nameless OS, a Lineage OS based third party Android		{{server_addr}}	{{server_port}}
+iROM, onto my phone. But after flashing the ROM, I found that my China		{{server_addr}}	{{server_port}}
+iTelecom SIM card cannot roam on the 4G network of local mobile service		{{server_addr}}	{{server_port}}
+iproviders, only 2G or 3G work. Since the local providers are recently		{{server_addr}}	{{server_port}}
+ishutting down 2G and 3G networks, the roaming cellular signal strength		{{server_addr}}	{{server_port}}
+iis really bad. I experience a high latency on receiving or sending		{{server_addr}}	{{server_port}}
+imessages, nor can I use VoLTE to make calls normally.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI tested other Lineage OS based third party ROMS, and experienced the		{{server_addr}}	{{server_port}}
+isame problem.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter numerous attempts, I found that the problem **seems to be** with		{{server_addr}}	{{server_port}}
+ithe phone's APN settings. I use the term **seems to be** because while		{{server_addr}}	{{server_port}}
+ichanging APN settings fixed my problem, I have no idea why this works,		{{server_addr}}	{{server_port}}
+inor am I sure this is the correct way to fix it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere are my steps to resolve the problem:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Enter phone settings - SIMs - China Telecom - Access Point Name		{{server_addr}}	{{server_port}}
+i   settings.		{{server_addr}}	{{server_port}}
+i2. Select " 中国电信 NET 设置 " ( `ctnet` , China Telecom NET		{{server_addr}}	{{server_port}}
+i   Settings) to manage detailed options.		{{server_addr}}	{{server_port}}
+i3. Change `APN Type` to: `default,supl,dun,ims`		{{server_addr}}	{{server_port}}
+i   - The original value is `default,supl,dun`		{{server_addr}}	{{server_port}}
+i4. Click the three-dot menu on top right, and select Save.		{{server_addr}}	{{server_port}}
+i5. Select the radio button on the right of `ctnet` .		{{server_addr}}	{{server_port}}
+i6. Turn off the phone, wait a few minutes, and then turn it on again.		{{server_addr}}	{{server_port}}

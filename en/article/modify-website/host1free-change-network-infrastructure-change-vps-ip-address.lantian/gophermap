@@ -1,0 +1,21 @@
+iDear Host1Free User Lan Tian,		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i      We would like to announce that due to changes in our network infrastructure we will be changing current IP address of your free VPS server 5.175.206.68 to the new one 5.175.156.249.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      In order to allow you to prepare for this event we added IP address 5.175.206.68 as main IP address and old 5.175.156.249 IP left as additional to your free VPS server.		{{server_addr}}	{{server_port}}
+i      Next Wednesday (2013-06-13) old IP address will be removed.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      Please make sure to update your servers settings, DNS settings and etc. accordingly to avoid any inconience after old IP(5.175.156.249) address removal at Wednesday."		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      Please accept our apologies for the inconvenience.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  Regards,		{{server_addr}}	{{server_port}}
+i  Host1Free adminsitrators team		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn short, the VPS IP address has been changed to 5.175.206.68, while		{{server_addr}}	{{server_port}}
+ithe original 5.175.156.249 will remain until next Wednesday as a		{{server_addr}}	{{server_port}}
+itransition period. Please update your DNS settings accordingly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, it's impressive that a permanently free VPS has remained this		{{server_addr}}	{{server_port}}
+istable (?) for so long.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

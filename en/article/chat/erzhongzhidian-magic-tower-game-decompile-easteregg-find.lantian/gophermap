@@ -1,0 +1,125 @@
+iThese nights I've been attending chemistry Olympiad classes. During		{{server_addr}}	{{server_port}}
+iyesterday's session, our chemistry teacher invited several seniors to		{{server_addr}}	{{server_port}}
+ishare their experiences. As they chatted, they mentioned a Demon Tower		{{server_addr}}	{{server_port}}
+igame they developed in their free time — "The Legend of Class 63:		{{server_addr}}	{{server_port}}
+iSummit of No.2 High School".		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/530548245.png	/usr/uploads/2014/02/530548245.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSuch an impressive game with Hangzhou No.2 High School elements		{{server_addr}}	{{server_port}}
+inaturally made me curious about its Easter eggs. Instead of playing		{{server_addr}}	{{server_port}}
+ithrough, reverse engineering seemed more efficient.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe seniors mentioned using RPG Maker XP. Easy enough — downloaded it		{{server_addr}}	{{server_port}}
+ifrom		{{server_addr}}	{{server_port}}
+hhttp://xiazai.zol.com.cn/detail/43/426737.shtml	URL:http://xiazai.zol.com.cn/detail/43/426737.shtml	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNoticing the 9MB Game.rgssad file, I tried opening it with 7-Zip. No		{{server_addr}}	{{server_port}}
+iluck.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/2010882355.png	/usr/uploads/2014/02/2010882355.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe file properties revealed:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/1183876371.png	/usr/uploads/2014/02/1183876371.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEncrypted? Interesting. A game that doesn't require passwords must		{{server_addr}}	{{server_port}}
+ihave a decryption method.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGoogling led me to an RGSSAD unpacker:		{{server_addr}}	{{server_port}}
+hhttp://www.pc6.com/softview/SoftView_62304.html	URL:http://www.pc6.com/softview/SoftView_62304.html	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter extraction, I created a new RPG Maker XP project and replaced		{{server_addr}}	{{server_port}}
+iits data files. Now, let's hunt for Easter eggs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, examining the map list:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/1995936471.png	/usr/uploads/2014/02/1995936471.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**School History Museum:**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/3589412933.png	/usr/uploads/2014/02/3589412933.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1899 event:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> 1895: Demons obtained the power of Valor, Dominance, and Wisdom.		{{server_addr}}	{{server_port}}
+i> 1899: American missionary W.S. Sweet created the Demon-Slaying Sword		{{server_addr}}	{{server_port}}
+i> and Shield to seal the Three Demon Lords at our school site. He		{{server_addr}}	{{server_port}}
+i> founded Huilan Academy to protect the artifacts, later transformed		{{server_addr}}	{{server_port}}
+i> into the "Principal's Sword" and "Principal's Shield".		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1923 event:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> High school department added. Artifacts passed down through		{{server_addr}}	{{server_port}}
+i> principals.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1940 event:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Demon King She Tianwang invaded. Artifacts depleted energy during		{{server_addr}}	{{server_port}}
+i> defense. National Zhejiang University Affiliated High School		{{server_addr}}	{{server_port}}
+i> established to resist.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1951 event:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Merger of Huilan Academy and ZJU Affiliated High School into		{{server_addr}}	{{server_port}}
+i> Hangzhou No.2 High School.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1995 event:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> School designated as provincial key high school to combat revived		{{server_addr}}	{{server_port}}
+i> demons.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2000 event:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> New campus built on former seal site, preventing demon resurgence.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**Sage Tower**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGround floor NPC (Grandpa Lai):		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/2852339400.png	/usr/uploads/2014/02/2852339400.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> "The Sage's power resides here. Defeat the boss to summon the true		{{server_addr}}	{{server_port}}
+i> Sage!"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTop floor boss (Parrot):		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/109403124.png	/usr/uploads/2014/02/109403124.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> After battle: "I guarded this vial containing the Sage's essence.		{{server_addr}}	{{server_port}}
+i> The path is open now."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**Brave Tower**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGround floor:		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/2996602411.png	/usr/uploads/2014/02/2996602411.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Fat Bro: "Math is too hard!"		{{server_addr}}	{{server_port}}
+i> Player: "Is it?"		{{server_addr}}	{{server_port}}
+i> Fat Bro: "For the brave, nothing is difficult!"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThird floor:		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/3727711326.png	/usr/uploads/2014/02/3727711326.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Xiaohuihui: "CCZL is behind this!"		{{server_addr}}	{{server_port}}
+i> CCZL battle reveals: "The Dark Demon met with Class Monitor. Rescue		{{server_addr}}	{{server_port}}
+i> captured classmates!"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**Overlord Tower**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGround floor:		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/4079948483.png	/usr/uploads/2014/02/4079948483.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Divine Ox Bian: "Demons clone classmates! Defeat replicas to save		{{server_addr}}	{{server_port}}
+i> real ones."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTop floor:		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/02/1469884290.png	/usr/uploads/2014/02/1469884290.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Dark Demon: "Each tower corresponds to campus locations — Sage		{{server_addr}}	{{server_port}}
+i> Tower by the lake, Brave Tower at cafeteria, this one at lab		{{server_addr}}	{{server_port}}
+i> building with massive power needs."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe game intricately weaves school landmarks with RPG elements, packed		{{server_addr}}	{{server_port}}
+iwith inside jokes and historical references familiar to No.2 High		{{server_addr}}	{{server_port}}
+istudents. Reverse engineering revealed a treasure trove of creative		{{server_addr}}	{{server_port}}
+iworld-building hiding beneath its pixelated surface.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

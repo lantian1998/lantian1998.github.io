@@ -1,0 +1,21 @@
+i很多时候，在 WordPress、Typecho 等自建评论系统的网站中回复，只能靠自己		{{server_addr}}	{{server_port}}
+i不断访问来确定自己的评论有没有被别人回复。然而，对于大多数人来说这样做		{{server_addr}}	{{server_port}}
+i是非常麻烦的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i博主解决问题的常用方法，就是安装邮件提醒插件。当一名评论者的评论被回复，		{{server_addr}}	{{server_port}}
+i就会有邮件提醒评论者。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTypecho 上使用最广泛的插件是 CommentToMail，最早由		{{server_addr}}	{{server_port}}
+iDEFE		{{server_addr}}	{{server_port}}
+i开发，后来由		{{server_addr}}	{{server_port}}
+iByends Upd		{{server_addr}}	{{server_port}}
+i接手。该插件通过常用的 PHP Mail，SendMail 或者 SMTP 来发送邮件。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是，比起以前的注册一个邮箱来发提醒邮件，现在博主们也开始使用 Mailgun		{{server_addr}}	{{server_port}}
+i之类的邮件平台。这类邮件平台提供 API 发信功能，不需要再进行复杂的 SMTP		{{server_addr}}	{{server_port}}
+i发信设置，也不需要繁杂的处理代码。我就对这个插件进行修改，让它通过		{{server_addr}}	{{server_port}}
+iMailgun API 而不是 SMTP 发送邮件。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGitHub 项目地址：		{{server_addr}}	{{server_port}}
+ihttps://github.com/xddxdd/typecho-commentgun		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

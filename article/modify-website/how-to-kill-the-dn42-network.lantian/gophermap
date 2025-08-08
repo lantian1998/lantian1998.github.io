@@ -1,0 +1,743 @@
+iDN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型、去		{{server_addr}}	{{server_port}}
+i中心化的 VPN 网络。详细的介绍可以在		{{server_addr}}	{{server_port}}
+1DN42 实验网络介绍及注册教程	/article/modify-website/dn42-experimental-network-2020.lantian/	{{server_addr}}	{{server_port}}
+i这篇文章看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> DN42 是一个 ** 测试网络 **，所有人都在帮助所有人。即使你不小心搞砸了，		{{server_addr}}	{{server_port}}
+i> 也没有人会指责你。你可以在 DN42 的		{{server_addr}}	{{server_port}}
+h> IRC 频道	URL:https://wiki.dn42.us/services/IRC	{{server_addr}}	{{server_port}}
+i> ，		{{server_addr}}	{{server_port}}
+h> 邮件列表	URL:https://wiki.dn42.us/contact#contact_mailing-list	{{server_addr}}	{{server_port}}
+i> 或者		{{server_addr}}	{{server_port}}
+h> 非官方 Telegram 群组	URL:https://t.me/Dn42Chat	{{server_addr}}	{{server_port}}
+i> 寻求帮助。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于 DN42 是一个实验用网络，其中也有很多新手、小白参与，因此时不时会有		{{server_addr}}	{{server_port}}
+i新手配置出现错误，而对整个 DN42 网络造成影响，甚至炸掉整个网络。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i现在，作为一名长者（x），我将教各位小白如何操作才能炸掉 DN42，以及如果		{{server_addr}}	{{server_port}}
+i你作为小白的邻居（指 Peer 关系），应该如何防止他炸到你。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> 注意：你不应该在 DN42 网络中实际执行这些操作，你应该更加注重对破坏的		{{server_addr}}	{{server_port}}
+i> 防御。		{{server_addr}}	{{server_port}}
+i> 		{{server_addr}}	{{server_port}}
+i> 恶意破坏会导致你被踢出 DN42 网络。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i本文信息根据 Telegram 群及 IRC 中的 ** 真实惨案 ** 改编。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# 更新记录		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 2023-05-12：增加修改 BGP Localpref 导致环路的内容。		{{server_addr}}	{{server_port}}
+i- 2020-08-27：格式修改，添加完整 IRC 日志，部分内容的中文翻译，添加另		{{server_addr}}	{{server_port}}
+i  一段地址掩码填错的内容，以及 ASN 少了一位的内容。		{{server_addr}}	{{server_port}}
+i- 2020-07-13：添加 Registry IPv6 地址段掩码填错的内容，和 Bird 不同协		{{server_addr}}	{{server_port}}
+i  议左右互博的内容。		{{server_addr}}	{{server_port}}
+i- 2020-05-30：第一版，包含 OSPF、Babel、左右横跳。		{{server_addr}}	{{server_port}}
+i# OSPF 真好玩		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i你刚刚加入 DN42，并且准备把你手上的几台服务器都连接进去。你通过邮件，		{{server_addr}}	{{server_port}}
+iIRC 或者 Telegram 找了几个人分别和你的几台服务器 Peer，但是你还没有配		{{server_addr}}	{{server_port}}
+i置好你的内部路由分发。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i于是你准备配置 OSPF，并打开 Bird 的配置文件加了一个 protocol：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  protocol ospf {		{{server_addr}}	{{server_port}}
+i    ipv4 {		{{server_addr}}	{{server_port}}
+i      import all;		{{server_addr}}	{{server_port}}
+i      export all;		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i    area 0.0.0.0 {		{{server_addr}}	{{server_port}}
+i      interface zt0 {		{{server_addr}}	{{server_port}}
+i        type broadcast;		{{server_addr}}	{{server_port}}
+i        # 略掉一些不重要的参数		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i你心满意足地把配置文件复制到每台服务器上，然后 `bird configure`，看到		{{server_addr}}	{{server_port}}
+i你的各台服务器都通过 OSPF 获取到了其它服务器的路由。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i突然，你的 IRC / Telegram 弹出了一个提示框，你点开来一看：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <mc**> shit.... as424242**** is hijacking my prefixes, for example 172.23.*.*/27		{{server_addr}}	{{server_port}}
+i         草…… AS424242**** 在劫持我的地址前缀（即地址块），例如 172.23.*.*/27		{{server_addr}}	{{server_port}}
+i  <he**> yup, I see some roa fails for them as well		{{server_addr}}	{{server_port}}
+i         对，我也看到 ROA 验证失败了		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i恭喜你，你成功劫持了 DN42 网络（的一部分）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 发生了什么		{{server_addr}}	{{server_port}}
+i当你的服务器通过 BGP 协议和其他人 Peer 时，每一条路由都包含了路径信息，		{{server_addr}}	{{server_port}}
+i包括它从哪里来，经过了哪些节点到达你这里。例如 `172.22.76.184/29` 这条		{{server_addr}}	{{server_port}}
+i路由可能就带有 `4242422547 -> 4242422601 -> 424242****` 这条路径，其中 `4242422547`		{{server_addr}}	{{server_port}}
+i是路由来源（就是我），而 `4242422601` 是你的邻居（此处以 Burble 举例）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是，你的内网在传递路由时使用的是 OSPF 协议，而 OSPF 在传递路由信息时		{{server_addr}}	{{server_port}}
+i不会保留 BGP 的路径，因为它并不认识这些东西。此时你的另一台服务器通过		{{server_addr}}	{{server_port}}
+iOSPF 获取到了 `172.22.76.184/29` 这条路由，但是不包含任何路径信息，它		{{server_addr}}	{{server_port}}
+i在与邻居的 BGP 宣告中就会将这条路由使用你自己的 ASN 播出去，造成劫持效		{{server_addr}}	{{server_port}}
+i果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i画成图大概是这样的：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [2547] -> [2601] -> [你的 A 节点] -> [你的 B 节点] -> [你的 B 节点的邻居]		{{server_addr}}	{{server_port}}
+i   2547      2547      2547           没了！           你的 ASN（BOOM）		{{server_addr}}	{{server_port}}
+i             2601      2601		{{server_addr}}	{{server_port}}
+i                       你的 ASN		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Babel 也很好玩		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTelegram 里的老哥说话很好听，一边帮助你修上面那个 Bug，一边向你推荐		{{server_addr}}	{{server_port}}
+iBabel：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Babel 可以自动根据延迟选择最短路线；		{{server_addr}}	{{server_port}}
+i- Babel 配置非常简单。		{{server_addr}}	{{server_port}}
+i但是，群友不推荐你使用 Bird 自带的 Babel 协议支持，因为 Bird 的 Babel		{{server_addr}}	{{server_port}}
+i不能根据延迟选路。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i你心动了，删掉了 OSPF 的配置文件，并装了一个 Babeld。很快你的每台机器		{{server_addr}}	{{server_port}}
+i上都出现了其它节点通过 Babel 发来的路由。你等了几分钟，似乎没有爆炸。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是你注意到，你的 Bird 没有把这些路由通过 BGP 发出去。老哥们怂恿你开		{{server_addr}}	{{server_port}}
+i启 Bird Kernel Protocol 的 Learn：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  protocol kernel sys_kernel_v4 {		{{server_addr}}	{{server_port}}
+i    scan time 20;		{{server_addr}}	{{server_port}}
+i    # 群友怂恿你添加这一行		{{server_addr}}	{{server_port}}
+i    learn;		{{server_addr}}	{{server_port}}
+i    # 不重要的略过		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i你照做了。几分钟后，你被 IRC 和 Telegram 里的人疯狂艾特。是的，你又把		{{server_addr}}	{{server_port}}
+i其他人的网络劫持了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 发生了什么		{{server_addr}}	{{server_port}}
+i这和上面 OSPF 一段其实是相同的问题，Babel 在传递路由时丢弃了 BGP 的路		{{server_addr}}	{{server_port}}
+i径信息。只不过默认情况下，Bird 会忽略其它路由软件写入内核路由表的路由		{{server_addr}}	{{server_port}}
+i信息，除非你开了 learn。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 正确的操作		{{server_addr}}	{{server_port}}
+i- 永远记住一点原则：OSPF，Babel 等 IGP（内部路由协议）不应处理 BGP 路		{{server_addr}}	{{server_port}}
+i  由信息，BGP 路由就应该让 BGP 协议自己处理。		{{server_addr}}	{{server_port}}
+i  - 在网络内部配置 BGP 有多种方案，可以参考《		{{server_addr}}	{{server_port}}
+1    Bird 配置 BGP Confederation	/article/modify-website/bird-confederation.lantian/	{{server_addr}}	{{server_port}}
+i    》这篇文章。		{{server_addr}}	{{server_port}}
+i- 同时，内部路由协议的路由也不应漏到 BGP 中，除非内部路由协议中处理的		{{server_addr}}	{{server_port}}
+i  所有 IP 段都是你自己所有。		{{server_addr}}	{{server_port}}
+i- 所以你应该把 BGP 的 `export filter` 写成这样：		{{server_addr}}	{{server_port}}
+i  export filter {		{{server_addr}}	{{server_port}}
+i    # 只允许向外发送来自 STATIC（手动配置）和 BGP 协议的路由		{{server_addr}}	{{server_port}}
+i    if source ~ [RTS_STATIC, RTS_BGP] then accept;		{{server_addr}}	{{server_port}}
+i    # 拒绝掉其它路由协议的路由		{{server_addr}}	{{server_port}}
+i    reject;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 如何防御		{{server_addr}}	{{server_port}}
+i- 最佳的方法是 ROA，即路由来源验证（`Route Origin Authorization`），限		{{server_addr}}	{{server_port}}
+i  制每条路由的来源 ASN。		{{server_addr}}	{{server_port}}
+i  - 对于 DN42，ROA 配置文件根据 Registry 的信息自动生成，可以在		{{server_addr}}	{{server_port}}
+h    DN42 Wiki 的 Bird 配置页面	URL:https://wiki.dn42.us/howto/Bird#route-origin-authorization	{{server_addr}}	{{server_port}}
+i    下载，并且可以设置 Cron 定时任务自动更新。		{{server_addr}}	{{server_port}}
+i- 如果你不想配置 ROA，你可以尝试与尽量多的人 Peer。		{{server_addr}}	{{server_port}}
+i  - 由于 BGP 默认选择经过的 AS 最少的路径，如果你和很多人直连，即使有		{{server_addr}}	{{server_port}}
+i    人在劫持路由，你的网络仍然会优先选择这些直连路径。		{{server_addr}}	{{server_port}}
+i  - 但注意这样 ** 不能保证 ** 防住路由劫持，例如以下情况：		{{server_addr}}	{{server_port}}
+i    - 真实 AS 到你路径比劫持者的长；		{{server_addr}}	{{server_port}}
+i    - 劫持者与真实 AS 到你的 AS 路径等长，此时会选择哪个看脸；		{{server_addr}}	{{server_port}}
+i    - 你有配置 DN42 Community Filter，导致劫持者的路由优先级比较高。		{{server_addr}}	{{server_port}}
+i# 左右横跳		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i左右横跳是多种错误的总称，它们会造成 BGP 路由程序频繁切换获得的最优路		{{server_addr}}	{{server_port}}
+i径。由于最优路径会通过 Peering 传递给别的节点，这个切换过程会造成连锁		{{server_addr}}	{{server_port}}
+i反应，相连的多个节点都会因为一个节点的故障而一起切换，最终故障扩散到全		{{server_addr}}	{{server_port}}
+i网。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这一过程会造成大量的流量消耗，而由于 DN42 内多数人用的是便宜的 VPS 做		{{server_addr}}	{{server_port}}
+i节点，因此长期下来结果只有以下两种：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 你的邻居发现了流量消耗异常，主动切断了和你的 Peering；		{{server_addr}}	{{server_port}}
+i2. 你的主机商（可能还有你的邻居的主机商）发现你长期占用带宽（或者用完		{{server_addr}}	{{server_port}}
+i   了流量），停掉了你的 VPS。		{{server_addr}}	{{server_port}}
+i而且左右横跳错误可能会造成严重的影响：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 如果出错的 AS 和其它多个 AS 建立了 Peering，即使你断开了和他的直接连		{{server_addr}}	{{server_port}}
+i  接，路由切换仍然可能从其它 AS 传递到你的 AS。		{{server_addr}}	{{server_port}}
+i  - 为了解决一个 AS 的问题，可能需要断开好几个 AS。		{{server_addr}}	{{server_port}}
+i例如，某 Telegram 群友从 Fullmesh + Direct 转向 Multihop 时出现事故，		{{server_addr}}	{{server_port}}
+i造成了非常大量的路由切换。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I我永远喜欢 Niantic Network	/usr/uploads/202008/i-love-niantic-network.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i他在切换过程中没有断开 BGP，而 Babel 的配置错误导致大量路由被传递及撤		{{server_addr}}	{{server_port}}
+i销。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于上述路由切换的连锁传递，并且该群友接了较多的 Peering，多个较大的		{{server_addr}}	{{server_port}}
+iAS 被迫断开之间的连接，以（在该群友睡醒之前）控制住问题规模。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另外，该群友先前还有多次类似的路由切换事故，但这里地方太小了写不下。（		{{server_addr}}	{{server_port}}
+i滑稽）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 案情回顾		{{server_addr}}	{{server_port}}
+i  <bur*> is someone awake who is on telegram ?		{{server_addr}}	{{server_port}}
+i         有用 Telegram 的人醒着吗？		{{server_addr}}	{{server_port}}
+i  <bur*> Kio*, sun*, ie**, lantian perhaps ?		{{server_addr}}	{{server_port}}
+i         可能是 Kio*，sun*，ie**，Lan Tian？		{{server_addr}}	{{server_port}}
+i  <Kio*> Kio* is here		{{server_addr}}	{{server_port}}
+i         Kio* 在		{{server_addr}}	{{server_port}}
+i  <fox*> I am in that dn42 telegram chat too but I do not understand moon runes		{{server_addr}}	{{server_port}}
+i         我也在 DN42 的 Telegram 群，但我不懂月相		{{server_addr}}	{{server_port}}
+i  <fox*> also its midnight for china?		{{server_addr}}	{{server_port}}
+i         另外现在是中国的半夜？		{{server_addr}}	{{server_port}}
+i  <bur*> yes, I'm going to be nuking a lot of peerings if they are all asleep		{{server_addr}}	{{server_port}}
+i         对，如果他们全在睡觉，我就要炸掉一大堆 Peering 了		{{server_addr}}	{{server_port}}
+i  <bur*> I think its originating from NIA*, but a lovely multi mb/s flap going on for the past hour		{{server_addr}}	{{server_port}}
+i         我觉得问题来自 NIA*，一个小时前开始有一个好几 MB/s 的「可爱」的左右横跳		{{server_addr}}	{{server_port}}
+i  <bur*> and its like whack-a-mole, if I disable one peering the traffic just pops up on a different one		{{server_addr}}	{{server_port}}
+i         而且像打地鼠，如果我关掉一个 Peering，它又会从另一个 Peering 上跳出来		{{server_addr}}	{{server_port}}
+i  <fox*> petition for bur* network to stop accepting new peers to help save dn42 network health		{{server_addr}}	{{server_port}}
+i         建议 Bur* 的网络不要再接受新的 Peer 了，以保证「42 号去中心网络」的健康发展		{{server_addr}}	{{server_port}}
+i  <Kio*> NIA* is awake now		{{server_addr}}	{{server_port}}
+i         NIA* 现在醒了		{{server_addr}}	{{server_port}}
+i  <bur*> NIA* certainly has ipv4 next hop problems, they are advertising routes with next hops in other networks		{{server_addr}}	{{server_port}}
+i         NIA* 的 IPv4 Nexthop 肯定有问题，他们广播的路由的 Nexthop 都在其它网络		{{server_addr}}	{{server_port}}
+i  <Kio*> He says he is adjusting his "network from full-mesh to rr and multihops"		{{server_addr}}	{{server_port}}
+i         他说他在「把网络从 Full-mesh 调整成 Route Reflector 和 Multihop」		{{server_addr}}	{{server_port}}
+i  <bur*> well its not working ;)		{{server_addr}}	{{server_port}}
+i         唔姆，这没有正常工作 ;)		{{server_addr}}	{{server_port}}
+i  <stv*> bur*: I also took down our peering		{{server_addr}}	{{server_port}}
+i         bur*：我也把我们的 Peering 断了		{{server_addr}}	{{server_port}}
+i  <bur*> stv*, too much traffic from the grc?		{{server_addr}}	{{server_port}}
+i         stv*, 来自 GRC（全球路由收集节点）的流量太多了？		{{server_addr}}	{{server_port}}
+i  <stv*> I added a new peer around 1hr ago. Just to check that this hasnt be the cause..		{{server_addr}}	{{server_port}}
+i         我一小时前接了一个新的 Peer，只是为了确认这不是原因……		{{server_addr}}	{{server_port}}
+i  <stv*> bur*: no the grc is still up and running		{{server_addr}}	{{server_port}}
+i         bur*：不，GRC 还在正常工作		{{server_addr}}	{{server_port}}
+i  <bur*> ah, if you are getting a lot of route updates its cos of NIA*		{{server_addr}}	{{server_port}}
+i         啊，如果你收到很多路由更新，它们是来自 NIA* 的		{{server_addr}}	{{server_port}}
+i  <bur*> grc is currently pumping about 4mb/s to downstram peers		{{server_addr}}	{{server_port}}
+i         GRC 现在正在向下游发送 4 MB/s 的更新		{{server_addr}}	{{server_port}}
+i  <sun*> bur*: what happen?		{{server_addr}}	{{server_port}}
+i         bur*：发生了什么？		{{server_addr}}	{{server_port}}
+i  <bur*> NIA* is having issues		{{server_addr}}	{{server_port}}
+i         NIA* 出了问题		{{server_addr}}	{{server_port}}
+i  <bur*> sun* anyway, you are up late!		{{server_addr}}	{{server_port}}
+i         sun* 不管怎么说，你睡得好晚！		{{server_addr}}	{{server_port}}
+i  <sun*> I just came back from the bar:)		{{server_addr}}	{{server_port}}
+i         我刚从酒吧回来 :)		{{server_addr}}	{{server_port}}
+i  <do**> don't drink and root		{{server_addr}}	{{server_port}}
+i         酒后不要 root（指用管理员权限修改系统）		{{server_addr}}	{{server_port}}
+i  <bur*> nice :)		{{server_addr}}	{{server_port}}
+i         不错 :)		{{server_addr}}	{{server_port}}
+i  <sun*> l like drink ;)		{{server_addr}}	{{server_port}}
+i         我喜欢喝酒 ;)		{{server_addr}}	{{server_port}}
+i  <bur*> ok, I'm bored of this now, if you are currently sending me more than 1mb/s of bgp traffic your peering is about to get disabled.		{{server_addr}}	{{server_port}}
+i         行吧，我现在累了，如果你正在向我发送超过 1MB/s 的 BGP 流量，那你的 Peering 会被我禁用。		{{server_addr}}	{{server_port}}
+i  <bur*> Kio*, sun*, Tch*, jrb*, lantian, ie**, so far		{{server_addr}}	{{server_port}}
+i         目前是 Kio*，sun*，Tch*，jrb*，Lan Tian，ie** 几个		{{server_addr}}	{{server_port}}
+i  <Kio*> barely notice any flapping here, is it v4 or v6 ?		{{server_addr}}	{{server_port}}
+i         几乎没观察到左右横跳，是 IPv4 还是 IPv6？		{{server_addr}}	{{server_port}}
+i  <bur*> 4 mostly, I think. you got killed on us-nyc1		{{server_addr}}	{{server_port}}
+i         我觉得大部分是 IPv4，你和我美国纽约 1 号节点的 Peer 被关了		{{server_addr}}	{{server_port}}
+i  <bur*> Nap*		{{server_addr}}	{{server_port}}
+i         Nap*		{{server_addr}}	{{server_port}}
+i  <Nap*> Shut mine down if you need, I can't look into with much detail until tonight		{{server_addr}}	{{server_port}}
+i         有必要的话就把我的 Peer 关了吧，我今晚之前都不能仔细检查		{{server_addr}}	{{server_port}}
+i  <bau*> half of dn42 is about to loose connectivity due to bur* disableing peerings lol		{{server_addr}}	{{server_port}}
+i         哈哈，半个 DN42 会因为 Bur* 禁用 Peering 而断网		{{server_addr}}	{{server_port}}
+i  <do**> oh yeah, this looks nice		{{server_addr}}	{{server_port}}
+i         哦耶，太棒了		{{server_addr}}	{{server_port}}
+i  <Kio*> thats why everybody should be at least multi homed with two peers		{{server_addr}}	{{server_port}}
+i         因此所有人都应该至少接两个 Peer		{{server_addr}}	{{server_port}}
+i  <jrb*> bur*: and on which peering?		{{server_addr}}	{{server_port}}
+i         bur*：在哪个 Peering 上？		{{server_addr}}	{{server_port}}
+i  <Kio*> you shouldnt loose connectivity if only one peer drops		{{server_addr}}	{{server_port}}
+i         如果只有一个 Peer 掉线，你不应该也掉线		{{server_addr}}	{{server_port}}
+i  <bur*> jrb* us-nyc1 and us-lax1 for you so far		{{server_addr}}	{{server_port}}
+i         jrb* 目前是美国纽约 1 号和美国洛杉矶 1 号		{{server_addr}}	{{server_port}}
+i  <jrb*> mapping table says us-3 and us-5, let me check.		{{server_addr}}	{{server_port}}
+i         映射表显示是美国 3 号和 5 号，我检查一下。		{{server_addr}}	{{server_port}}
+i  <Nap*> Do we know what routes are flapping causing the updates?		{{server_addr}}	{{server_port}}
+i         我们知道是谁的路由造成这些更新吗？		{{server_addr}}	{{server_port}}
+i  <Kio*> filtering problematic ASN on my us node now		{{server_addr}}	{{server_port}}
+i         正在我的节点上过滤有问题的 ASN		{{server_addr}}	{{server_port}}
+i  <bur*> Nap* its NIA*		{{server_addr}}	{{server_port}}
+i         Nap*，是 NIA*		{{server_addr}}	{{server_port}}
+i  <bur*> AS42424213**		{{server_addr}}	{{server_port}}
+i         AS42424213**		{{server_addr}}	{{server_port}}
+i  <jrb*> sun*, rou*: disabling my peerings with you for now, there seems to be serious flapping		{{server_addr}}	{{server_port}}
+i         sun*，rou*：我现在禁用和你们的 Peering，看起来有严重的左右横跳		{{server_addr}}	{{server_port}}
+i  <do**> him again?		{{server_addr}}	{{server_port}}
+i         又是他？		{{server_addr}}	{{server_port}}
+i  <sun*> what?		{{server_addr}}	{{server_port}}
+i         啥？		{{server_addr}}	{{server_port}}
+i  <sun*> is me problem?		{{server_addr}}	{{server_port}}
+i         我的问题吗？		{{server_addr}}	{{server_port}}
+i  <bur*> sun*, I've killed all of our peerings		{{server_addr}}	{{server_port}}
+i         sun*，我关掉了我们所有的 Peering		{{server_addr}}	{{server_port}}
+i  <sun*> why?		{{server_addr}}	{{server_port}}
+i         为什么？		{{server_addr}}	{{server_port}}
+i  <bur*> sun*, you are distributing the problems from NIA*		{{server_addr}}	{{server_port}}
+i         sun*，你在传递 NIA* 造成的问题		{{server_addr}}	{{server_port}}
+i  <Nap*> bur*: K, gonna try to filter on ATL/CHI at least.		{{server_addr}}	{{server_port}}
+i         bur*：行，准备尝试至少在亚特兰大和芝加哥节点上做过滤。		{{server_addr}}	{{server_port}}
+i  <bur*> thanks Nap*		{{server_addr}}	{{server_port}}
+i         谢了 Nap*		{{server_addr}}	{{server_port}}
+i  <Kio*> recommend everybody to temporarily enable "bgp_path ~" filter for the problematic ASN		{{server_addr}}	{{server_port}}
+i         推荐所有人暂时打开「bgp_path ~」过滤掉有问题的 ASN		{{server_addr}}	{{server_port}}
+i  <sun*> i disabled NIA*, would fix problem?		{{server_addr}}	{{server_port}}
+i         我禁用了 NIA*，会解决问题吗？		{{server_addr}}	{{server_port}}
+i  <do**> bur*: I also peer with NIA* and I don't get any bgp updates from him		{{server_addr}}	{{server_port}}
+i         bur*：我也和 NIA* Peer 了，但没收到他的任何 BGP 更新		{{server_addr}}	{{server_port}}
+i  <do**> ah wait		{{server_addr}}	{{server_port}}
+i         啊等等		{{server_addr}}	{{server_port}}
+i  <bur*> sun*, depends if you are also getting the updates from other peers too		{{server_addr}}	{{server_port}}
+i         sun*，取决于你会不会也从其他 Peer 收到这些更新		{{server_addr}}	{{server_port}}
+i  <do**> now I see it		{{server_addr}}	{{server_port}}
+i         现在我看到了		{{server_addr}}	{{server_port}}
+i  <do**> disabling peering		{{server_addr}}	{{server_port}}
+i         正在禁用 Peering		{{server_addr}}	{{server_port}}
+i  <sun*> if bgp_path ~ [= 42424213** =] then reject;		{{server_addr}}	{{server_port}}
+i         （Bird Filter 命令）		{{server_addr}}	{{server_port}}
+i  <bur*> ~ [= * 42424213** * =] to reject all paths		{{server_addr}}	{{server_port}}
+i         用「~ [= * 42424213** * =]」过滤掉所有包含他的路径		{{server_addr}}	{{server_port}}
+i  <sun*> ohh		{{server_addr}}	{{server_port}}
+i         噢哦		{{server_addr}}	{{server_port}}
+i  <jrb*> bur*: seems to be mostly rou* from my perspective		{{server_addr}}	{{server_port}}
+i         bur*：从我这看主要是 rou*		{{server_addr}}	{{server_port}}
+i  <Kio*> Should be filtered on my side, if anyone continues to receive those updates please notify		{{server_addr}}	{{server_port}}
+i         我这里应该过滤好了，如果任何人继续收到这些更新，请通知我		{{server_addr}}	{{server_port}}
+i  <bur*> sun*, I tried re-enabling you on lax1 but you jumped striaght to 1mb/s+ again		{{server_addr}}	{{server_port}}
+i         sun*，我尝试在洛杉矶 1 号节点重新启用我们的 Peering，但流量马上到了 1 MB/s 多		{{server_addr}}	{{server_port}}
+i  <bur*> jrb*, re-enabled		{{server_addr}}	{{server_port}}
+i         jrb*，重新启用了		{{server_addr}}	{{server_port}}
+i  <sun*> i have disabled NIA*		{{server_addr}}	{{server_port}}
+i         我也禁用 NIA* 了		{{server_addr}}	{{server_port}}
+i  <bur*> Kio*, re-enabled		{{server_addr}}	{{server_port}}
+i         Kio*，重新启用了		{{server_addr}}	{{server_port}}
+i  <do**> oh btw, I have notified NIA* about this issue		{{server_addr}}	{{server_port}}
+i         哦顺便提一句，我已经告知 NIA* 这个问题了		{{server_addr}}	{{server_port}}
+i  <jrb*> do**: also tell him to notify everybody to get out of the blacklists.		{{server_addr}}	{{server_port}}
+i         do**：另外告诉他（修好网络后）通知所有人解除黑名单。		{{server_addr}}	{{server_port}}
+i  <do**> jrb*: will do		{{server_addr}}	{{server_port}}
+i         jib*：好的		{{server_addr}}	{{server_port}}
+i  <Nap*> bur*: I should have it filtered on my ATL (your CHI)		{{server_addr}}	{{server_port}}
+i         bur*：我应该在我的亚特兰大节点上过滤了（对应你的芝加哥节点）		{{server_addr}}	{{server_port}}
+i  <Kio*> wrote NIA* also directly on telegram		{{server_addr}}	{{server_port}}
+i         在 Telegram 上直接向 NIA* 发了消息		{{server_addr}}	{{server_port}}
+i  <sun*> bur*: is it better now?		{{server_addr}}	{{server_port}}
+i         bur*：现在好点了吗？		{{server_addr}}	{{server_port}}
+i  <bur*> for the record, this is the first time that I've mass disabled peerings, but this was causing issues across the board		{{server_addr}}	{{server_port}}
+i         这是我有史以来第一次大规模禁用 Peering，但这次的确造成了很多问题		{{server_addr}}	{{server_port}}
+i  <bur*> sun*, no not really		{{server_addr}}	{{server_port}}
+i         sun*，不，没有		{{server_addr}}	{{server_port}}
+i  <An**> I've stop importing route from NIA*		{{server_addr}}	{{server_port}}
+i         我已经停止从 NIA* 导入路由了		{{server_addr}}	{{server_port}}
+i  <stv*> I am also dropping NIA* now		{{server_addr}}	{{server_port}}
+i         我现在也丢弃 NIA*（的路由）了		{{server_addr}}	{{server_port}}
+i  <bur*> sun*, thats like 1k updates every few seconds		{{server_addr}}	{{server_port}}
+i         sun*，每过几秒就会有一千条路由更新		{{server_addr}}	{{server_port}}
+i  <Nap*> bur*: all host should have it filtered now.		{{server_addr}}	{{server_port}}
+i         bur*：所有节点都应该过滤了。		{{server_addr}}	{{server_port}}
+i  <bur*> Nap*, looks to me, thanks		{{server_addr}}	{{server_port}}
+i         Nap*，看起来没问题，谢谢		{{server_addr}}	{{server_port}}
+i  <sun*> bur*: seems to have reduced traffic		{{server_addr}}	{{server_port}}
+i         bur*：看起来流量降低了		{{server_addr}}	{{server_port}}
+i  <bur*> sun*, yes that looks better		{{server_addr}}	{{server_port}}
+i         sun*，的确看起来好些了		{{server_addr}}	{{server_port}}
+i  <bur*> sun*, is that now ok across all your nodes ?		{{server_addr}}	{{server_port}}
+i         sun*，现在你的所有节点都正常吗？		{{server_addr}}	{{server_port}}
+i  <sun*> yep		{{server_addr}}	{{server_port}}
+i         对		{{server_addr}}	{{server_port}}
+i  <bur*> sun*, ok re-enabled		{{server_addr}}	{{server_port}}
+i         sun*，好的，重新启用了		{{server_addr}}	{{server_port}}
+i  <do**> alright, also filtered 42424213**		{{server_addr}}	{{server_port}}
+i         好的，也把 42424213** 过滤了		{{server_addr}}	{{server_port}}
+i  <tm**> hi, also filtered 42424213**		{{server_addr}}	{{server_port}}
+i         大家好，我也把 42424213** 过滤了		{{server_addr}}	{{server_port}}
+i  <bur*> I guess they got the message, seems we're back to normal again and everyone I disabled is back again		{{server_addr}}	{{server_port}}
+i         我猜他们（指 NIA*）收到消息了，看起来我们再次回复正常了，所有我禁用的人都被重新启用了		{{server_addr}}	{{server_port}}
+i  <do**> bur*: I think NIA* is asleep, probably everyone filtered it		{{server_addr}}	{{server_port}}
+i         bur*：我觉得 NIA* 还在睡觉，也许所有人都过滤了		{{server_addr}}	{{server_port}}
+i  <do**> or disabled peering		{{server_addr}}	{{server_port}}
+i         或者禁用了 Peering		{{server_addr}}	{{server_port}}
+i  <bur*> do**, there is that, but I also renabled NIA* and am not getting the same errors now		{{server_addr}}	{{server_port}}
+i         do**，有可能，但我也重新启用了 NIA*，现在没有看到先前的错误		{{server_addr}}	{{server_port}}
+i  <do**> oh, interesting		{{server_addr}}	{{server_port}}
+i         哦，有趣		{{server_addr}}	{{server_port}}
+i  <bur*> I might regret doing that by morning, but hey. I do try and keep everything open as best as possible.		{{server_addr}}	{{server_port}}
+i         到了早上我有可能会后悔（指 NIA* 的问题在 bur* 睡觉时再次出现），但我尝试尽量公开/开放所有东西。		{{server_addr}}	{{server_port}}
+i  <do**> bur*: last time when NIA* did that I waited for their response		{{server_addr}}	{{server_port}}
+i         bur*：上次 NIA* 搞出这种事情的时候，我等他们的回复（后才采取行动）		{{server_addr}}	{{server_port}}
+i  <Kio*> Nope nia* just messaged in Telegram about it		{{server_addr}}	{{server_port}}
+i         不，NIA* 刚在 Telegram 上发了消息		{{server_addr}}	{{server_port}}
+i  <do**> ah		{{server_addr}}	{{server_port}}
+i         啊		{{server_addr}}	{{server_port}}
+i  <bur*> my peering hasn't re-established, so I guess they hit the big red shutdown button		{{server_addr}}	{{server_port}}
+i         我（和 NIA*）的 Peering 还没有重新建立，我猜他们按下了那个巨大的、红色的关闭按钮		{{server_addr}}	{{server_port}}
+i  <Kio*> He tried to migrate his network to a full mesh		{{server_addr}}	{{server_port}}
+i         他尝试把网络迁移到 Full mesh		{{server_addr}}	{{server_port}}
+i  <Kio*> and is now "pulling all the wires"		{{server_addr}}	{{server_port}}
+i         现在正在「全部拔线」		{{server_addr}}	{{server_port}}
+i  <do**> Kio*: did you message him directly or was that on any of the groups?		{{server_addr}}	{{server_port}}
+i         Kio*：你给他直接发了消息吗，还是在哪个群里？		{{server_addr}}	{{server_port}}
+i  <Kio*> on the telegram group		{{server_addr}}	{{server_port}}
+i         在 Telegram 群里		{{server_addr}}	{{server_port}}
+i  <do**> bur*: you didn't get that many bgp updates from me?		{{server_addr}}	{{server_port}}
+i         bur*：你没有从我这里收到那么多 BGP 更新？		{{server_addr}}	{{server_port}}
+i  <sun*> NIA* woke up :)		{{server_addr}}	{{server_port}}
+i         NIA* 醒了 :)		{{server_addr}}	{{server_port}}
+i  <bur*> do**, you went from an average of ~3kbs to ~10kbs+, peaking at 50kbs. In the grand scheme of things that was lost in the noise		{{server_addr}}	{{server_port}}
+i         do**，你从平均 3 KB/s 到十几 KB/s，峰值 50 KB/s。在如此巨大的量级中这点小问题被淹没了		{{server_addr}}	{{server_port}}
+i  <do**> interesting		{{server_addr}}	{{server_port}}
+i         有趣		{{server_addr}}	{{server_port}}
+i  <do**> I also peer directly with NIA*		{{server_addr}}	{{server_port}}
+i         我也和 NIA* 直接 Peer 了		{{server_addr}}	{{server_port}}
+i  <bur*> do**, yes, interesting. Is the link restricted in bandwidth ?		{{server_addr}}	{{server_port}}
+i         do**，是的，有趣。（你和他的）链路有带宽限制吗？		{{server_addr}}	{{server_port}}
+i  <do**> not at all		{{server_addr}}	{{server_port}}
+i         完全没有		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 如何防御		{{server_addr}}	{{server_port}}
+i- 最理想的方案是 Route Dampening，也就是限制一段时间能收到的路由更新数		{{server_addr}}	{{server_port}}
+i  量。		{{server_addr}}	{{server_port}}
+i  - 但是 Bird 不支持这个，没救了，等死吧，告辞 .heic		{{server_addr}}	{{server_port}}
+i- 次优的方法是使用 Prometheus、Grafana 等工具对各个节点进行监控，在流		{{server_addr}}	{{server_port}}
+i  量异常时收到提醒，上去手动处理。		{{server_addr}}	{{server_port}}
+i  - 显而易见的是，如果你当时不在线，当你看到提醒时有可能已经几 G 的流		{{server_addr}}	{{server_port}}
+i    量没了。		{{server_addr}}	{{server_port}}
+i- 再次优的方法是对 Peering 的端口进行限速。		{{server_addr}}	{{server_port}}
+i  - 由于 DN42 内目前几乎没有大流量应用，这种方法的确能保证安全。		{{server_addr}}	{{server_port}}
+i  - 缺点显而易见：性能下降。		{{server_addr}}	{{server_port}}
+i- 土豪的方法是买无限流量的服务器。		{{server_addr}}	{{server_port}}
+i# 这段地址到底多长		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因为今年是 2020 年，你准备给你的网络加一组 IPv6 地址。按照		{{server_addr}}	{{server_port}}
+1我的 DN42 注册教程	/article/modify-website/dn42-experimental-network-2020.lantian	{{server_addr}}	{{server_port}}
+i，你很快就给自己注册了一个 IPv6 地址块，并且很快被合并进了 Registry。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在你看来，一切都很正常。但在地球的另一边，一个人的手机 / 电脑上弹出消		{{server_addr}}	{{server_port}}
+i息，告诉他他的 DN42 ROA 记录生成器出现了错误。他打开 Registry，扶额叹		{{server_addr}}	{{server_port}}
+i息，并 commit 了这样一个修改：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IDN42 Registry 中的错误 IPv6 地址块	/usr/uploads/202007/dn42-registry-error.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+hhttps://git.dn42.dev/dn42/registry/commit/9f45ee31cdea4a997d59a262c4a8ac8eb3cbd1f1	URL:https://git.dn42.dev/dn42/registry/commit/9f45ee31cdea4a997d59a262c4a8ac8eb3cbd1f1	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 发生了什么		{{server_addr}}	{{server_port}}
+i这位群友添加了 `fd37:03b3:cae6:5158::/48` 这样一个地址块。因为一个		{{server_addr}}	{{server_port}}
+iIPv6 地址由 32 个 16 进制数构成（共 128 比特），而这个地址块显式定义了		{{server_addr}}	{{server_port}}
+i其中的前 16 个数（即 64 位），对应的子网掩码应该是 `/64` 或更高。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是由于未知原因，这个错误没有被 DN42 Registry 的内容检查程序检查出来，		{{server_addr}}	{{server_port}}
+i当时也没有被操作合并的管理员发现，就成功进入了 Registry。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i随后，ROA 记录生成器在解析 Registry 内容时遇到了这个格式错误的地址块，		{{server_addr}}	{{server_port}}
+i就直接报错退出了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# 再 放 送		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IDN42 Registry 中的错误 IPv6 地址块 - 再放送	/usr/uploads/202008/dn42-registry-error.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+hhttps://git.dn42.dev/dn42/registry/commit/00f90f592a35e325152ce28157f64d3fca7c8d7d	URL:https://git.dn42.dev/dn42/registry/commit/00f90f592a35e325152ce28157f64d3fca7c8d7d	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 正确的操作		{{server_addr}}	{{server_port}}
+i- 用户在注册地址块时应该检查子网掩码的大小和地址块的有效性。		{{server_addr}}	{{server_port}}
+i- DN42 Registry 的检查程序，或者操作合并的管理员，应该发现这个错误。		{{server_addr}}	{{server_port}}
+i- ROA 生成器应该跳过这条有问题的记录，正常处理剩下的数据，而非报错退出。		{{server_addr}}	{{server_port}}
+i万幸的是这个问题对整个 DN42 网络影响不大，只是 ROA 更新延迟了几小时而		{{server_addr}}	{{server_port}}
+i已。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 如何防御		{{server_addr}}	{{server_port}}
+i由于 DN42 从建立之初就在强调去中心特性，因此你可以写一个自己的 ROA 生		{{server_addr}}	{{server_port}}
+i成器作为备份。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> 虽然这次我的 ROA 生成器也挂掉了 … …		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i原因是不同人写的程序即使功能相同，也会在实现上有细微的差别。这样在遇到		{{server_addr}}	{{server_port}}
+i这样一个输入内容的 Bug 时，就有可能有人的程序仍能保持正常运行。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Bird 左右互搏		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我有一个朋友 … … 行吧就是我自己。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因为我同时接了 DN42 和 NeoNetwork，还有一段自己的内网，所以为了防止把		{{server_addr}}	{{server_port}}
+i内网路由发到 DN42 和 NeoNetwork，我采取了以下方法：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 把所有来自 Kernel 协议（从内核获取路由）和 Direct 协议（获取系统网络		{{server_addr}}	{{server_port}}
+i  界面（网卡）所在的网段）的路由打上一个 Community。		{{server_addr}}	{{server_port}}
+i- 在 DN42 和 NeoNetwork 的 Peering 中把它们过滤掉。		{{server_addr}}	{{server_port}}
+i- 这样我的内网 IP 就不会被广播出去，但因为 DN42 和 NeoNetwork 的路由被		{{server_addr}}	{{server_port}}
+i  配置在 Static Protocol 中，所以不受影响。		{{server_addr}}	{{server_port}}
+i配置完后一切看起来都很正常，直到几天后群友发现我的 Telegram Bot（就是		{{server_addr}}	{{server_port}}
+i我的 Looking Glass）Ping 不通任何 DN42 内的 IP。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 发生了什么		{{server_addr}}	{{server_port}}
+i刚开始一切都很正常，我的网段 `172.22.76.184/29` 被正常广播。直到某次		{{server_addr}}	{{server_port}}
+iDirect 协议刷新了一次，从系统的某个网络界面获取到了 `172.22.76.184/29`		{{server_addr}}	{{server_port}}
+i这个网段，并再次将它传进了路由表。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这条新的路由信息就把原先的路由覆盖了，同时因为这条路由来自 Direct 协议，		{{server_addr}}	{{server_port}}
+i被打上了 Community，就不再被广播了。并且 Static 如其名是「静态」协议，		{{server_addr}}	{{server_port}}
+i其内容不会改变，自然也不会产生新的路由再覆盖回去。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i此时我相当于停止宣告了我的 IP 段，自然就无法收到回程数据包了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 正确的操作		{{server_addr}}	{{server_port}}
+i在 Bird 中，尽量避免多个路由协议产生相同的路由条目，相互覆盖可能会造成		{{server_addr}}	{{server_port}}
+i不可预料的后果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我最终选择添加 Filter 将 Direct 协议限制在我的内网网段，避免它再次覆盖		{{server_addr}}	{{server_port}}
+i我的 DN42 网段。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# 星际玩家		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i一名新玩家注册了一个 ASN：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IDN42 Registry 中的错误 ASN	/usr/uploads/202008/dn42-asn-error.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这是 DN42 发生的变化：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Telegram 群：		{{server_addr}}	{{server_port}}
+I  Telegram 群友的反应	/usr/uploads/202008/dn42-asn-error-response.png	{{server_addr}}	{{server_port}}
+i- 蒂花之秀：		{{server_addr}}	{{server_port}}
+I  Telegram 群友的反应 2	/usr/uploads/202008/dn42-asn-error-response-2.png	{{server_addr}}	{{server_port}}
+i- IRC：		{{server_addr}}	{{server_port}}
+i    <lantian> Someone successfully registered in DN42 with ASN 424242236 (9 digits)		{{server_addr}}	{{server_port}}
+i              有人成功在 DN42 上注册了 ASN 424242236（9 位数）		{{server_addr}}	{{server_port}}
+i    <lantian> Is this expected?		{{server_addr}}	{{server_port}}
+i              这是正常的吗？		{{server_addr}}	{{server_port}}
+i       <xu**> doh		{{server_addr}}	{{server_port}}
+i              噢		{{server_addr}}	{{server_port}}
+i       <xu**> shouldt have happened		{{server_addr}}	{{server_port}}
+i              不应该发生		{{server_addr}}	{{server_port}}
+i       <xu**> probably forgot the extra 2		{{server_addr}}	{{server_port}}
+i              或许忘了个 2		{{server_addr}}	{{server_port}}
+i       <xu**> 424242 2236		{{server_addr}}	{{server_port}}
+i              424242 2236		{{server_addr}}	{{server_port}}
+i       <Kai*> too late tho. it already has one peer with tech9		{{server_addr}}	{{server_port}}
+i              太晚了，已经和 Tech9 Peer 上了		{{server_addr}}	{{server_port}}
+i       <dne*> filtering fail!		{{server_addr}}	{{server_port}}
+i              过滤器挂了！		{{server_addr}}	{{server_port}}
+i       <xu**> pomoke?		{{server_addr}}	{{server_port}}
+i              （用户名）		{{server_addr}}	{{server_port}}
+i    <lantian> yep, doesn't seem to be on irc though		{{server_addr}}	{{server_port}}
+i              对，但看起来不在 IRC 上		{{server_addr}}	{{server_port}}
+i    <lantian> nor on telegram		{{server_addr}}	{{server_port}}
+i              也不在 Telegram 上		{{server_addr}}	{{server_port}}
+i       <0x7*> so how a 9-digit ASN passed the schema checker...?		{{server_addr}}	{{server_port}}
+i              所以 9 位数 ASN 怎么过的检查程序……？		{{server_addr}}	{{server_port}}
+i    <lantian> I don't think schema checker checks ASN, or it will block out clearnet ASNs		{{server_addr}}	{{server_port}}
+i              我不觉得检查程序会检查 ASN，否则会阻挡掉公网 ASN		{{server_addr}}	{{server_port}}
+i    <lantian> But maybe we need a warning?		{{server_addr}}	{{server_port}}
+i              但也许需要加个警告？		{{server_addr}}	{{server_port}}
+i       <xu**> probably a bug in the policy checker		{{server_addr}}	{{server_port}}
+i              也许是检查程序的一个 Bug		{{server_addr}}	{{server_port}}
+i       <xu**> i wish we had gone with a prefix that had a visual space		{{server_addr}}	{{server_port}}
+i              我希望我们的 ASN 前缀有个看起来明显的分隔		{{server_addr}}	{{server_port}}
+i       <xu**> like AS424200xxxx		{{server_addr}}	{{server_port}}
+i              例如 AS424200xxxx		{{server_addr}}	{{server_port}}
+i    <lantian> Well pomoke tried to peer with me via email (but ended in spam folder)		{{server_addr}}	{{server_port}}
+i              总之 Pomoke 尝试发邮件找我 Peer（但进了垃圾箱）		{{server_addr}}	{{server_port}}
+i    <lantian> I'm going to tell him/her to correct the ASN		{{server_addr}}	{{server_port}}
+i              我准备告诉他/她改正自己的 ASN		{{server_addr}}	{{server_port}}
+i       <Kai*> 9 is a good number tho		{{server_addr}}	{{server_port}}
+i              不管怎么说 9 是个好数字		{{server_addr}}	{{server_port}}
+i       <Kai*> once in a blue moon that bur* made mistake		{{server_addr}}	{{server_port}}
+i              bur* 犯错，蓝月将至（英语成语，即千载难逢）		{{server_addr}}	{{server_port}}
+i       <sun*> westerners love digital 9		{{server_addr}}	{{server_port}}
+i              西方人喜欢数字 9		{{server_addr}}	{{server_port}}
+i       <bur*> crap		{{server_addr}}	{{server_port}}
+i              草		{{server_addr}}	{{server_port}}
+i       <bur*> lantian, are you in contact with pomoke? if they can submit a fix quickly		{{server_addr}}	{{server_port}}
+i              then I'll merge it. Otherwise I'll need to pull the commit		{{server_addr}}	{{server_port}}
+i              Lan Tian，你能联系上 Pomoke 吗？如果他们可以迅速提交修正信息我就马上把它合并了。		{{server_addr}}	{{server_port}}
+i              否则我就得撤销变更了		{{server_addr}}	{{server_port}}
+i    <lantian> bur*: I sent him/her an email, not sure about response time		{{server_addr}}	{{server_port}}
+i              bur*，我给他/她发了封邮件，不知什么时候会回		{{server_addr}}	{{server_port}}
+i       <bur*> umm, I'm going to have to pull it then		{{server_addr}}	{{server_port}}
+i              唔姆，那我就不得不撤销了		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i- 裁决之镰：		{{server_addr}}	{{server_port}}
+I  错误被撤销	/usr/uploads/202008/dn42-asn-error-correction.png	{{server_addr}}	{{server_port}}
+i## 如何防御		{{server_addr}}	{{server_port}}
+i- 看戏就完事了，这种事情太少见了：		{{server_addr}}	{{server_port}}
+i    <Kai*> once in a blue moon that bur* made mistake		{{server_addr}}	{{server_port}}
+i           bur* 犯错，蓝月将至		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i- 当然看戏归看戏，还是要上 IRC 说一句出问题了。		{{server_addr}}	{{server_port}}
+i- 在和别人 Peer 的时候，多检查一遍对方的信息。		{{server_addr}}	{{server_port}}
+i- 以及没事可以翻翻		{{server_addr}}	{{server_port}}
+h  DN42 New ASN	URL:https://t.me/DN42new	{{server_addr}}	{{server_port}}
+i  这个自动推送新 ASN 的 Telegram 频道。		{{server_addr}}	{{server_port}}
+i# 小心 BGP Local Pref		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 DN42 Telegram 群帮别人调试网络时，我突然发现我的两个节点之间出现了		{{server_addr}}	{{server_port}}
+i环路：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  traceroute to fd28:cb8f:4c92:1::1 (fd28:cb8f:4c92:1::1), 30 hops max, 80 byte packets		{{server_addr}}	{{server_port}}
+i   1  us-new-york-city.virmach-ny1g.lantian.dn42 (fdbc:f9dc:67ad:8::1)  88.023 ms		{{server_addr}}	{{server_port}}
+i   2  lu-bissen.buyvm.lantian.dn42 (fdbc:f9dc:67ad:2::1)  94.401 ms		{{server_addr}}	{{server_port}}
+i   3  us-new-york-city.virmach-ny1g.lantian.dn42 (fdbc:f9dc:67ad:8::1)  167.664 ms		{{server_addr}}	{{server_port}}
+i   4  lu-bissen.buyvm.lantian.dn42 (fdbc:f9dc:67ad:2::1)  174.235 ms		{{server_addr}}	{{server_port}}
+i   5  us-new-york-city.virmach-ny1g.lantian.dn42 (fdbc:f9dc:67ad:8::1)  247.213 ms		{{server_addr}}	{{server_port}}
+i   6  lu-bissen.buyvm.lantian.dn42 (fdbc:f9dc:67ad:2::1)  253.499 ms		{{server_addr}}	{{server_port}}
+i   7  us-new-york-city.virmach-ny1g.lantian.dn42 (fdbc:f9dc:67ad:8::1)  326.690 ms		{{server_addr}}	{{server_port}}
+i   8  lu-bissen.buyvm.lantian.dn42 (fdbc:f9dc:67ad:2::1)  333.412 ms		{{server_addr}}	{{server_port}}
+i   9  us-new-york-city.virmach-ny1g.lantian.dn42 (fdbc:f9dc:67ad:8::1)  406.978 ms		{{server_addr}}	{{server_port}}
+i  10  lu-bissen.buyvm.lantian.dn42 (fdbc:f9dc:67ad:2::1)  413.537 ms		{{server_addr}}	{{server_port}}
+i  11  us-new-york-city.virmach-ny1g.lantian.dn42 (fdbc:f9dc:67ad:8::1)  486.762 ms		{{server_addr}}	{{server_port}}
+i  12  lu-bissen.buyvm.lantian.dn42 (fdbc:f9dc:67ad:2::1)  493.147 ms		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  18 hops not responding.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我登录上这两个节点一看，VirMach 节点的确优先选择了 BuyVM 发来的路由，		{{server_addr}}	{{server_port}}
+i而 BuyVM 也选择了 VirMach 的路由。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBGP 不应该是防环路的吗？为什么这两个节点会互相选择对方的路由？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 发生了什么		{{server_addr}}	{{server_port}}
+i这个问题总共涉及到三个 AS 的四个节点：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  digraph {		{{server_addr}}	{{server_port}}
+i    rankdir=LR		{{server_addr}}	{{server_port}}
+i    node[shape=box]		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    subgraph cluster_1 {		{{server_addr}}	{{server_port}}
+i      style=filled;		{{server_addr}}	{{server_port}}
+i      color=lightgrey;		{{server_addr}}	{{server_port}}
+i      label="我的节点"		{{server_addr}}	{{server_port}}
+i      node[style=filled,color=white]		{{server_addr}}	{{server_port}}
+i      {rank=same; "VirMach" "BuyVM"}		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    {rank=same; "KSKB" -> "Lutoma"}		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    "VirMach" -> "BuyVM"		{{server_addr}}	{{server_port}}
+i    "BuyVM" -> "VirMach"		{{server_addr}}	{{server_port}}
+i    "KSKB" -> "VirMach"		{{server_addr}}	{{server_port}}
+i    "Lutoma" -> "BuyVM"		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i其中 KSKB 是 `fd28:cb8f:4c92::/48` 这条路由的源头，他将路由广播给了		{{server_addr}}	{{server_port}}
+iLutoma，以及我的 VirMach 节点。Lutoma 随后将这条路由广播给了我的 BuyVM		{{server_addr}}	{{server_port}}
+i节点。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i** 我的所有节点都开启了 `add paths yes;` 选项 **，也就是说节点间会互相		{{server_addr}}	{{server_port}}
+i交换所有收到的路由，而不只是节点选出来、写入内核路由表的最佳路由。因此，		{{server_addr}}	{{server_port}}
+i对于我的 BuyVM 节点来说，到路由的源头有两条路线：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  digraph {		{{server_addr}}	{{server_port}}
+i    rankdir=LR		{{server_addr}}	{{server_port}}
+i    node[shape=box]		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    subgraph cluster_1 {		{{server_addr}}	{{server_port}}
+i      style=filled;		{{server_addr}}	{{server_port}}
+i      color=lightgrey;		{{server_addr}}	{{server_port}}
+i      label="我的节点"		{{server_addr}}	{{server_port}}
+i      node[style=filled,color=white]		{{server_addr}}	{{server_port}}
+i      {rank=same; "VirMach" "BuyVM"}		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    {rank=same; "KSKB" "Lutoma"}		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    "BuyVM" -> "VirMach" -> "KSKB"		{{server_addr}}	{{server_port}}
+i    "BuyVM" -> "Lutoma" -> "KSKB"		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于 VirMach 节点也是一样的：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  digraph {		{{server_addr}}	{{server_port}}
+i    rankdir=LR		{{server_addr}}	{{server_port}}
+i    node[shape=box]		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    subgraph cluster_1 {		{{server_addr}}	{{server_port}}
+i      style=filled;		{{server_addr}}	{{server_port}}
+i      color=lightgrey;		{{server_addr}}	{{server_port}}
+i      label="我的节点"		{{server_addr}}	{{server_port}}
+i      node[style=filled,color=white]		{{server_addr}}	{{server_port}}
+i      {rank=same; "VirMach" "BuyVM"}		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    {rank=same; "KSKB" "Lutoma"}		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    "VirMach" -> "KSKB"		{{server_addr}}	{{server_port}}
+i    "VirMach" -> "BuyVM" -> "Lutoma" -> "KSKB"		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i一般来说，VirMach 节点肯定选择直连 KSKB 的路由，而不是经过 BuyVM 和		{{server_addr}}	{{server_port}}
+iLutoma，总共两跳（iBGP 同一 AS 内不计跳数）的路由。此时 BuyVM 节点下一		{{server_addr}}	{{server_port}}
+i跳无论选择 Lutoma 还是 VirMach 节点，都可以获得一条可达的路由，而不是		{{server_addr}}	{{server_port}}
+i出现环路。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i问题是，** 我用 BIRD 的 Filter 手动调整了路由优先级 **。		{{server_addr}}	{{server_port}}
+hDN42 有一组标准的 BGP Community，用于标记每条路由来源的地区。	URL:https://wiki.dn42.dev/howto/Bird-communities	{{server_addr}}	{{server_port}}
+i为了降低网络延迟，我使用下面的算法（简化后）来调整路由优先级：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  优先级 = 200 - 10 * 路由跳数		{{server_addr}}	{{server_port}}
+i  如果当前节点和路由来源在同一地区：		{{server_addr}}	{{server_port}}
+i    优先级 += 100		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i问题发生时，KSKB 的原始路由并没有添加来源地区的 Community。** 但是		{{server_addr}}	{{server_port}}
+iLutoma 的网络配置错误，给来自 KSKB 的路由也加上了来源地区 Community**，		{{server_addr}}	{{server_port}}
+i地区和我的 VirMach 节点相同。（根据 DN42 的标准，各个网络只应该给自己		{{server_addr}}	{{server_port}}
+i的路由添加来源地区 Community，不能给别人的路由添加。）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i此时我的 BuyVM 节点算出了以下的路由优先级，并选择了经过我的 VirMach 节		{{server_addr}}	{{server_port}}
+i点的路由：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  digraph {		{{server_addr}}	{{server_port}}
+i    rankdir=LR		{{server_addr}}	{{server_port}}
+i    node[shape=box]		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    subgraph cluster_1 {		{{server_addr}}	{{server_port}}
+i      style=filled;		{{server_addr}}	{{server_port}}
+i      color=lightgrey;		{{server_addr}}	{{server_port}}
+i      label="我的节点"		{{server_addr}}	{{server_port}}
+i      node[style=filled,color=white]		{{server_addr}}	{{server_port}}
+i      {rank=same; "VirMach" "BuyVM"}		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    {rank=same; "KSKB" "Lutoma"}		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    "BuyVM" -> "VirMach" [label="200 - 10 * 1 = 190",color=red]		{{server_addr}}	{{server_port}}
+i    "VirMach" -> "KSKB" [color=red]		{{server_addr}}	{{server_port}}
+i    "BuyVM" -> "Lutoma" [label="200 - 10 * 2 = 180"]		{{server_addr}}	{{server_port}}
+i    "Lutoma" -> "KSKB"		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i而我的 VirMach 节点反而选择了经过 BuyVM 节点的路由：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  digraph {		{{server_addr}}	{{server_port}}
+i    rankdir=LR		{{server_addr}}	{{server_port}}
+i    node[shape=box]		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    subgraph cluster_1 {		{{server_addr}}	{{server_port}}
+i      style=filled;		{{server_addr}}	{{server_port}}
+i      color=lightgrey;		{{server_addr}}	{{server_port}}
+i      label="我的节点"		{{server_addr}}	{{server_port}}
+i      node[style=filled,color=white]		{{server_addr}}	{{server_port}}
+i      {rank=same; "VirMach" "BuyVM"}		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    {rank=same; "KSKB" "Lutoma"}		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    "VirMach" -> "KSKB" [label="200 - 10 * 1 = 190\n（路由无地区信息）"]		{{server_addr}}	{{server_port}}
+i    "VirMach" -> "BuyVM" [label="200 - 10 * 2 + 100 = 280\n（地区相同）",color=red]		{{server_addr}}	{{server_port}}
+i    "BuyVM" -> "Lutoma" -> "KSKB" [color=red]		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样，环路就形成了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 正确的操作		{{server_addr}}	{{server_port}}
+i这个问题出现时，以下三个因素缺一不可：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. ** 开启 `add paths yes;` 选项 **，导致备选路由被同时发给其它节点。		{{server_addr}}	{{server_port}}
+i   如果不开启此选项，BuyVM 节点在选择 VirMach 作为下一跳时，就不会把经		{{server_addr}}	{{server_port}}
+i   过 Lutoma 的路由也发给 VirMach 节点了，此时 VirMach 节点只有直连		{{server_addr}}	{{server_port}}
+i   KSKB 的一条路由可走。		{{server_addr}}	{{server_port}}
+i2. 路由优先级调整算法导致 ** 其它节点的备选路由反而在当前节点被优先选		{{server_addr}}	{{server_port}}
+i   择 **。因此，如果要保持 `add paths yes;` 选项开启，就需要在设计		{{server_addr}}	{{server_port}}
+i   iBGP 用的优先级算法时，保证在任何情况下，来自同一节点的路由之间 **		{{server_addr}}	{{server_port}}
+i   优先级顺序都不变 **，从而保证总能选到这一节点的首选路由，而非备选路		{{server_addr}}	{{server_port}}
+i   由。		{{server_addr}}	{{server_port}}
+i3. 经过 Lutoma 的路由被异常加上了 BGP Community，导致了优先级顺序的变		{{server_addr}}	{{server_port}}
+i   化。		{{server_addr}}	{{server_port}}
+i我解决问题的方法是，不再在 iBGP 内部重新计算路由优先级，而是统一使用由		{{server_addr}}	{{server_port}}
+i收到路由的节点计算的、由 iBGP 传递来的优先级，来保证首选、备选路由的优		{{server_addr}}	{{server_port}}
+i先级顺序不变。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

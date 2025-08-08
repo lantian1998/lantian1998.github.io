@@ -1,0 +1,389 @@
+i你向浏览器里输入了一串网址后，浏览器并不能马上找到这个网站。它会先把网		{{server_addr}}	{{server_port}}
+i址发送给 DNS 服务器，DNS 服务器再向其它服务器一层层查询，直到根服务器，		{{server_addr}}	{{server_port}}
+i查出网站的 IP 地址，浏览器才能进行连接。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因此，每次你打开一个新的网站，这个过程都要重复一次，速度比较慢。而且，		{{server_addr}}	{{server_port}}
+i天朝电信的 DNS 还会劫持你到 114 导航之类的地方。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i所以，我们可以在自己电脑上搭建一个 DNS 服务器，用来加速浏览，并有抗解		{{server_addr}}	{{server_port}}
+i析干扰等附加效果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Linux 和 Mac 下，Pdnsd 就是一个这样的小软件。它通过向其它 DNS 服务		{{server_addr}}	{{server_port}}
+i器以 TCP 或 UDP 形式发出请求，查询到域名对应的 IP，并进行缓存，以便达		{{server_addr}}	{{server_port}}
+i到加速目的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 安装		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果是 Linux，以 Ubuntu 为例：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo apt-get install pdnsd		{{server_addr}}	{{server_port}}
+i  sudo gedit /etc/pdnsd.conf		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果是 Mac，需要先安装 Homebrew：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"		{{server_addr}}	{{server_port}}
+i  brew install pdnsd		{{server_addr}}	{{server_port}}
+i  sudo nano /Library/LaunchDaemons/pdnsd.plist		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i写入如下内容：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <?xml version="1.0" encoding="UTF-8"?>		{{server_addr}}	{{server_port}}
+i  <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">		{{server_addr}}	{{server_port}}
+i  <plist version="1.0">		{{server_addr}}	{{server_port}}
+i      <dict>		{{server_addr}}	{{server_port}}
+i          <key>Label</key>		{{server_addr}}	{{server_port}}
+i          <string>pdnsd</string>		{{server_addr}}	{{server_port}}
+i          <key>Program</key>		{{server_addr}}	{{server_port}}
+i          <string>/usr/local/sbin/pdnsd</string>		{{server_addr}}	{{server_port}}
+i          <key>RunAtLoad</key>		{{server_addr}}	{{server_port}}
+i          <true/>		{{server_addr}}	{{server_port}}
+i          <key>ServiceDescription</key>		{{server_addr}}	{{server_port}}
+i          <string>pdnsd dns caching daemon</string>		{{server_addr}}	{{server_port}}
+i      </dict>		{{server_addr}}	{{server_port}}
+i  </plist>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo nano /usr/local/etc/pdnsd.conf		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i操作完成后，应该打开了 Pdnsd 的配置文件，我们要进行修改。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. 开始配置 DNS 服务器。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先把整个配置文件清空，当然有可能本来就是空的。然后我们要先进行基本设		{{server_addr}}	{{server_port}}
+i置。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  global {		{{server_addr}}	{{server_port}}
+i          perm_cache=16384;		{{server_addr}}	{{server_port}}
+i          cache_dir="/var/pdnsd";		{{server_addr}}	{{server_port}}
+i          run_as="nobody";		{{server_addr}}	{{server_port}}
+i          server_ip=127.0.0.1;		{{server_addr}}	{{server_port}}
+i          status_ctl=on;		{{server_addr}}	{{server_port}}
+i          paranoid=off;		{{server_addr}}	{{server_port}}
+i          # 优先TCP方式查询抗干扰		{{server_addr}}	{{server_port}}
+i          query_method=tcp_udp;		{{server_addr}}	{{server_port}}
+i          min_ttl=600;		{{server_addr}}	{{server_port}}
+i          timeout=10;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在国内查询某些网站的 IP 地址时，会受到某些故障服务器的干扰，返回的 IP		{{server_addr}}	{{server_port}}
+i地址会不对，导致打不开这个网站。但是这是对于基于 UDP 53 端口的 DNS 来		{{server_addr}}	{{server_port}}
+i说的，如果改用 TCP 查询，就不会受到干扰。而 Win、Mac、Linux 默认使用		{{server_addr}}	{{server_port}}
+iUDP 53 端口查询。利用 Pdnsd，可以把 TCP 的 DNS 转换到 UDP 来使用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+imin_ttl 是域名解析的最短生效时间，单位是秒。比如这个设置成 600，那么你		{{server_addr}}	{{server_port}}
+i在第一次请求一个网站的 IP 之后 600 秒（10 分钟）内，Pdnsd 可以起到缓存		{{server_addr}}	{{server_port}}
+i效果。一般这个设置不宜过小也不宜过大，设置在 600-3600 之间较合理。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后，我们就可以开始设置上级 DNS 服务器了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i国内最干净安全的 DNS 服务器应该是 114DNS，它在各个省份都有节点，速度很		{{server_addr}}	{{server_port}}
+i快。因此我们可以先配置一个来使用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server{		{{server_addr}}	{{server_port}}
+i          # 优先走国内的114DNS解析		{{server_addr}}	{{server_port}}
+i          label="114 DNS";		{{server_addr}}	{{server_port}}
+i          ip=114.114.114.114;		{{server_addr}}	{{server_port}}
+i          # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i          edns_query=on;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i网民们发现那些故障服务器返回的 IP 有一个规律，就是属于上面那张表之中，		{{server_addr}}	{{server_port}}
+i而那些 IP 不指向任何已知网站，不会干扰正常访问。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i114DNS 由于同样受到干扰，因此从上游服务器查询时也会返回错误 IP，我们予		{{server_addr}}	{{server_port}}
+i以过滤即可。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另一个著名的 DNS 是谷歌提供的，优点是十分干净，TCP 下不会受到任何干扰。		{{server_addr}}	{{server_port}}
+i但是为什么我们不直接用谷歌 DNS 呢？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这是由于大型网站一般采用 CDN，如果直接用谷歌 DNS，部分网站会把你带到外		{{server_addr}}	{{server_port}}
+i国节点去，速度很慢。所以能用国内 114DNS 解析的就解析掉，受到故障影响再		{{server_addr}}	{{server_port}}
+i去谷歌 DNS。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i配置如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i          # Google DNS 基于TCP解析		{{server_addr}}	{{server_port}}
+i          label="Google DNS";		{{server_addr}}	{{server_port}}
+i          ip=8.8.8.8,8.8.4.4;		{{server_addr}}	{{server_port}}
+i          # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i          edns_query=on;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是我们无法确定故障今后会不会波及谷歌 DNS，因此还是予以过滤。对于接下		{{server_addr}}	{{server_port}}
+i来的 DNS 同理。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下一个著名的是 V2EX DNS，如果你把 google.com 敲成 google.cmo，它能自动		{{server_addr}}	{{server_port}}
+i帮你纠正，或者直接把你带到谷歌进行搜索。由于它支持非标准端口，所以一般		{{server_addr}}	{{server_port}}
+i也不会受到故障影响。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i          # V2EX DNS 进行域名拼写纠正		{{server_addr}}	{{server_port}}
+i          label="V2EX DNS";		{{server_addr}}	{{server_port}}
+i          ip=199.91.73.222,178.79.131.110;		{{server_addr}}	{{server_port}}
+i          port=3389;		{{server_addr}}	{{server_port}}
+i          # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i          edns_query=on;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后是 OpenDNS，通过 5353 端口，也不会受到影响。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i          # OpenDNS 走5353端口反干扰		{{server_addr}}	{{server_port}}
+i          label="OpenDNS";		{{server_addr}}	{{server_port}}
+i          ip=208.67.222.222,208.67.220.220;		{{server_addr}}	{{server_port}}
+i          port=5353;		{{server_addr}}	{{server_port}}
+i          # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39,		{{server_addr}}	{{server_port}}
+i                  # 拒绝OpenDNS域名导航		{{server_addr}}	{{server_port}}
+i                  208.69.32.0/24,208.69.34.0/24,208.67.219.0/24,208.67.217.0/24,		{{server_addr}}	{{server_port}}
+i                  208.67.216.0/24,67.215.82.0/24,67.215.65.0/24;		{{server_addr}}	{{server_port}}
+i          edns_query=on;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNameCoin 大家听说过没？这是和 BitCoin 差不多的东西，大家可以自己搜索。		{{server_addr}}	{{server_port}}
+i使用 NameCoin 可以注册 .BIT 域名，但是由于属于私下组织的域名，DNS 根服		{{server_addr}}	{{server_port}}
+i务器不认可，不给你解析。因此，有些网友就自己搭建了 BIT 域名的根服务器。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是由于 BIT 域名不多（几乎没人用），这个属于可选项目，不对其它域名产		{{server_addr}}	{{server_port}}
+i生任何影响。另外，如果要添加，这个就要直接放在第一块 global 的下面，放		{{server_addr}}	{{server_port}}
+i在别的地方是不行的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i          # BIT域名专用服务器		{{server_addr}}	{{server_port}}
+i          label="Bit DNS";		{{server_addr}}	{{server_port}}
+i          ip=192.249.59.89,192.184.89.74,64.31.48.60,192.3.27.117;		{{server_addr}}	{{server_port}}
+i          # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i          policy=excluded;		{{server_addr}}	{{server_port}}
+i          include=".bit";		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是如果以上服务器全挂掉了，我们就干脆自己去查询根服务器吧。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i          # 实在不行就走根服务器查询		{{server_addr}}	{{server_port}}
+i          label="Root DNS Servers";		{{server_addr}}	{{server_port}}
+i          root_server=discover;		{{server_addr}}	{{server_port}}
+i          randomize_servers=on;		{{server_addr}}	{{server_port}}
+i          ip=198.41.0.4,192.228.79.201,192.33.4.12,199.7.91.13,192.203.230.10,		{{server_addr}}	{{server_port}}
+i                  192.5.5.241,192.112.36.4,128.63.2.53,192.36.148.17,192.58.128.30,		{{server_addr}}	{{server_port}}
+i                  193.0.14.129,199.7.83.42,202.12.27.33;		{{server_addr}}	{{server_port}}
+i          # 检测到欺骗就跳过		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i          edns_query=on;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后再加一段本地解析，诸如 localhost 之类的：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  source {		{{server_addr}}	{{server_port}}
+i          owner=localhost;		{{server_addr}}	{{server_port}}
+i          file="/etc/hosts";		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  rr {		{{server_addr}}	{{server_port}}
+i          name=localhost;		{{server_addr}}	{{server_port}}
+i          reverse=on;		{{server_addr}}	{{server_port}}
+i          a=127.0.0.1;		{{server_addr}}	{{server_port}}
+i          owner=localhost;		{{server_addr}}	{{server_port}}
+i          soa=localhost,root.localhost,42,86400,900,86400,86400;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样，我们的配置就完成了，然后重启电脑，把电脑的 DNS 设置改成		{{server_addr}}	{{server_port}}
+i127.0.0.1 就可以了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i附完整配置文件：（赠送 HiNet 备用解析）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  global {		{{server_addr}}	{{server_port}}
+i      perm_cache=16384;		{{server_addr}}	{{server_port}}
+i      cache_dir="/var/pdnsd";		{{server_addr}}	{{server_port}}
+i      run_as="nobody";		{{server_addr}}	{{server_port}}
+i      server_ip=127.0.0.1;		{{server_addr}}	{{server_port}}
+i      status_ctl=on;		{{server_addr}}	{{server_port}}
+i        paranoid=off;		{{server_addr}}	{{server_port}}
+i      # 优先TCP方式查询抗干扰		{{server_addr}}	{{server_port}}
+i      query_method=tcp_udp;		{{server_addr}}	{{server_port}}
+i      min_ttl=600;		{{server_addr}}	{{server_port}}
+i      timeout=10;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # BIT域名专用服务器		{{server_addr}}	{{server_port}}
+i      label="Bit DNS";		{{server_addr}}	{{server_port}}
+i      ip=192.249.59.89,192.184.89.74,64.31.48.60,192.3.27.117;		{{server_addr}}	{{server_port}}
+i      # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i      policy=excluded;		{{server_addr}}	{{server_port}}
+i      include=".bit";		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server{		{{server_addr}}	{{server_port}}
+i      # 优先走国内的114DNS解析		{{server_addr}}	{{server_port}}
+i      label="114 DNS";		{{server_addr}}	{{server_port}}
+i      ip=114.114.114.114;		{{server_addr}}	{{server_port}}
+i      # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # Google DNS 基于TCP解析		{{server_addr}}	{{server_port}}
+i      label="Google DNS";		{{server_addr}}	{{server_port}}
+i      ip=8.8.8.8,8.8.4.4;		{{server_addr}}	{{server_port}}
+i      # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # OpenDNS 走5353端口反干扰		{{server_addr}}	{{server_port}}
+i      label="OpenDNS";		{{server_addr}}	{{server_port}}
+i      ip=208.67.222.222,208.67.220.220;		{{server_addr}}	{{server_port}}
+i      port=5353;		{{server_addr}}	{{server_port}}
+i      # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39,		{{server_addr}}	{{server_port}}
+i          # 拒绝OpenDNS域名导航		{{server_addr}}	{{server_port}}
+i          208.69.32.0/24,208.69.34.0/24,208.67.219.0/24,208.67.217.0/24,		{{server_addr}}	{{server_port}}
+i          208.67.216.0/24,67.215.82.0/24,67.215.65.0/24;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # V2EX DNS 进行域名拼写纠正		{{server_addr}}	{{server_port}}
+i      label="V2EX DNS";		{{server_addr}}	{{server_port}}
+i      ip=199.91.73.222,178.79.131.110;		{{server_addr}}	{{server_port}}
+i      port=3389;		{{server_addr}}	{{server_port}}
+i      # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # 台湾HiNet DNS备用		{{server_addr}}	{{server_port}}
+i      label="HiNet DNS";		{{server_addr}}	{{server_port}}
+i      ip=168.95.1.1,168.95.192.1,168.95.192.2;		{{server_addr}}	{{server_port}}
+i      # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # 实在不行就走根服务器查询		{{server_addr}}	{{server_port}}
+i      label="Root DNS Servers";		{{server_addr}}	{{server_port}}
+i      root_server=discover;		{{server_addr}}	{{server_port}}
+i      randomize_servers=on;		{{server_addr}}	{{server_port}}
+i      ip=198.41.0.4,192.228.79.201,192.33.4.12,199.7.91.13,192.203.230.10,		{{server_addr}}	{{server_port}}
+i          192.5.5.241,192.112.36.4,128.63.2.53,192.36.148.17,192.58.128.30,		{{server_addr}}	{{server_port}}
+i          193.0.14.129,199.7.83.42,202.12.27.33;		{{server_addr}}	{{server_port}}
+i      # 检测到干扰就跳过		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  source {		{{server_addr}}	{{server_port}}
+i      owner=localhost;		{{server_addr}}	{{server_port}}
+i      file="/etc/hosts";		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  rr {		{{server_addr}}	{{server_port}}
+i      name=localhost;		{{server_addr}}	{{server_port}}
+i      reverse=on;		{{server_addr}}	{{server_port}}
+i      a=127.0.0.1;		{{server_addr}}	{{server_port}}
+i      owner=localhost;		{{server_addr}}	{{server_port}}
+i      soa=localhost,root.localhost,42,86400,900,86400,86400;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

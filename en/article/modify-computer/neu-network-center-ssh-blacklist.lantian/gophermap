@@ -1,0 +1,30 @@
+iThe Network Center of Northeastern University provides an SSH		{{server_addr}}	{{server_port}}
+iblacklist on its official website, which records IP addresses detected		{{server_addr}}	{{server_port}}
+iusing port scanning tools on SSH ports. This system appears to be		{{server_addr}}	{{server_port}}
+ibased on statistics collected from their own honeypot servers. They		{{server_addr}}	{{server_port}}
+ialso offer a downloadable hosts.deny file corresponding to the		{{server_addr}}	{{server_port}}
+iblacklist, allowing users to automatically update the SSH blacklist		{{server_addr}}	{{server_port}}
+iand block these scanners (preventing them from logging in) using		{{server_addr}}	{{server_port}}
+ischeduling tools like cron.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIt's unclear exactly when this system was implemented, but it has been		{{server_addr}}	{{server_port}}
+ioperational for at least two years. Additionally, the blocking		{{server_addr}}	{{server_port}}
+iduration for these IP addresses appears to be 60 days from their last		{{server_addr}}	{{server_port}}
+idetection.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUsage method: Install cron on your server and run the following		{{server_addr}}	{{server_port}}
+icommands to set up the script:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ldd `which sshd` | grep libwrap		{{server_addr}}	{{server_port}}
+i  cd /usr/local/bin/		{{server_addr}}	{{server_port}}
+i  wget antivirus.neu.edu.cn/ssh/soft/fetch_neusshbl.sh		{{server_addr}}	{{server_port}}
+i  chmod +x fetch_neusshbl.sh		{{server_addr}}	{{server_port}}
+i  cd /etc/cron.hourly/		{{server_addr}}	{{server_port}}
+i  ln -s /usr/local/bin/fetch_neusshbl.sh .		{{server_addr}}	{{server_port}}
+i  ./fetch_neusshbl.sh		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis script will connect to the Northeastern University Network Center		{{server_addr}}	{{server_port}}
+iservers hourly, download the latest hosts.deny file, and apply it to		{{server_addr}}	{{server_port}}
+iyour system.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

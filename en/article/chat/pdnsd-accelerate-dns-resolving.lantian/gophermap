@@ -1,0 +1,371 @@
+iWhen you type a website address into your browser, the browser can't		{{server_addr}}	{{server_port}}
+iimmediately locate the site. It first sends the address to a DNS		{{server_addr}}	{{server_port}}
+iserver, which then queries other servers layer by layer until reaching		{{server_addr}}	{{server_port}}
+ithe root servers to obtain the website's IP address. Only then can the		{{server_addr}}	{{server_port}}
+ibrowser establish a connection.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis process repeats every time you visit a new website, resulting in		{{server_addr}}	{{server_port}}
+islow speeds. Additionally, DNS servers operated by Chinese telecom		{{server_addr}}	{{server_port}}
+iproviders may hijack your requests to redirect you to pages like 114		{{server_addr}}	{{server_port}}
+iNavigation.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo accelerate browsing and gain anti-interference benefits, we can set		{{server_addr}}	{{server_port}}
+iup a local DNS server on our computer. For Linux and Mac systems,		{{server_addr}}	{{server_port}}
+iPdnsd is a lightweight solution. It queries other DNS servers via TCP		{{server_addr}}	{{server_port}}
+ior UDP to resolve domain names, caches the results, and significantly		{{server_addr}}	{{server_port}}
+ispeeds up subsequent requests.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i### 1. Installation		{{server_addr}}	{{server_port}}
+i**For Linux (Ubuntu example):**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo apt-get install pdnsd		{{server_addr}}	{{server_port}}
+i  sudo gedit /etc/pdnsd.conf		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**For Mac (requires Homebrew):**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"		{{server_addr}}	{{server_port}}
+i  brew install pdnsd		{{server_addr}}	{{server_port}}
+i  sudo nano /Library/LaunchDaemons/pdnsd.plist		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdd the following content:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <?xml version="1.0" encoding="UTF-8"?>		{{server_addr}}	{{server_port}}
+i  <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">		{{server_addr}}	{{server_port}}
+i  <plist version="1.0">		{{server_addr}}	{{server_port}}
+i      <dict>		{{server_addr}}	{{server_port}}
+i          <key>Label</key>		{{server_addr}}	{{server_port}}
+i          <string>pdnsd</string>		{{server_addr}}	{{server_port}}
+i          <key>Program</key>		{{server_addr}}	{{server_port}}
+i          <string>/usr/local/sbin/pdnsd</string>		{{server_addr}}	{{server_port}}
+i          <key>RunAtLoad</key>		{{server_addr}}	{{server_port}}
+i          <true/>		{{server_addr}}	{{server_port}}
+i          <key>ServiceDescription</key>		{{server_addr}}	{{server_port}}
+i          <string>pdnsd dns caching daemon</string>		{{server_addr}}	{{server_port}}
+i      </dict>		{{server_addr}}	{{server_port}}
+i  </plist>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo nano /usr/local/etc/pdnsd.conf		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter these steps, the Pdnsd configuration file should be open for		{{server_addr}}	{{server_port}}
+imodification.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i### 2. Configuring the DNS Server		{{server_addr}}	{{server_port}}
+iFirst, clear the configuration file (if not already empty), then set		{{server_addr}}	{{server_port}}
+iup the basic configuration:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  global {		{{server_addr}}	{{server_port}}
+i          perm_cache=16384;		{{server_addr}}	{{server_port}}
+i          cache_dir="/var/pdnsd";		{{server_addr}}	{{server_port}}
+i          run_as="nobody";		{{server_addr}}	{{server_port}}
+i          server_ip=127.0.0.1;		{{server_addr}}	{{server_port}}
+i          status_ctl=on;		{{server_addr}}	{{server_port}}
+i          paranoid=off;		{{server_addr}}	{{server_port}}
+i          # Prefer TCP queries to resist interference		{{server_addr}}	{{server_port}}
+i          query_method=tcp_udp;		{{server_addr}}	{{server_port}}
+i          min_ttl=600;		{{server_addr}}	{{server_port}}
+i          timeout=10;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn China, DNS queries for certain websites may encounter interference		{{server_addr}}	{{server_port}}
+ifrom faulty servers that return incorrect IP addresses. While standard		{{server_addr}}	{{server_port}}
+iDNS uses UDP port 53, switching to TCP queries avoids this		{{server_addr}}	{{server_port}}
+iinterference. Pdnsd bridges TCP-based DNS to UDP usage.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i`min_ttl` sets the minimum time-to-live (in seconds) for cached DNS		{{server_addr}}	{{server_port}}
+irecords. For example, with 600 seconds (10 minutes), Pdnsd caches		{{server_addr}}	{{server_port}}
+iwebsite IPs after the first request. Recommended value: 600-3600		{{server_addr}}	{{server_port}}
+iseconds.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext, configure upstream DNS servers. 114DNS is a clean and fast		{{server_addr}}	{{server_port}}
+ioption with nationwide nodes in China:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server{		{{server_addr}}	{{server_port}}
+i          # Prefer 114DNS for domestic resolution		{{server_addr}}	{{server_port}}
+i          label="114 DNS";		{{server_addr}}	{{server_port}}
+i          ip=114.114.114.114;		{{server_addr}}	{{server_port}}
+i          # Skip if interference detected		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i          edns_query=on;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThese IPs are known to return invalid responses during DNS		{{server_addr}}	{{server_port}}
+iinterference. Since 114DNS may also be affected, we filter these		{{server_addr}}	{{server_port}}
+iaddresses.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGoogle DNS offers clean resolution via TCP but may route users to		{{server_addr}}	{{server_port}}
+iinternational CDN nodes, slowing access. Use it as a fallback:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i          # Google DNS via TCP		{{server_addr}}	{{server_port}}
+i          label="Google DNS";		{{server_addr}}	{{server_port}}
+i          ip=8.8.8.8,8.8.4.4;		{{server_addr}}	{{server_port}}
+i          # Skip if interference detected		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i          edns_query=on;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iV2EX DNS corrects typos (e.g., `google.cmo` → `google.com` ) and uses		{{server_addr}}	{{server_port}}
+inon-standard ports to resist interference:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i          # V2EX DNS for typo correction		{{server_addr}}	{{server_port}}
+i          label="V2EX DNS";		{{server_addr}}	{{server_port}}
+i          ip=199.91.73.222,178.79.131.110;		{{server_addr}}	{{server_port}}
+i          port=3389;		{{server_addr}}	{{server_port}}
+i          # Skip if interference detected		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i          edns_query=on;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOpenDNS uses port 5353 to avoid interference:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i          # OpenDNS via port 5353		{{server_addr}}	{{server_port}}
+i          label="OpenDNS";		{{server_addr}}	{{server_port}}
+i          ip=208.67.222.222,208.67.220.220;		{{server_addr}}	{{server_port}}
+i          port=5353;		{{server_addr}}	{{server_port}}
+i          # Skip if interference detected		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.极12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39,		{{server_addr}}	{{server_port}}
+i                  # Block OpenDNS navigation pages		{{server_addr}}	{{server_port}}
+i                  208.69.32.0/24,208.69.34.0/24,208.67.219.0/极24,208.67.217.0/24,		{{server_addr}}	{{server_port}}
+i                  208.67.216.0/24,67.215.82.0/24,67.215.65.0/24;		{{server_addr}}	{{server_port}}
+i          edns_query=on;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor .BIT domains (based on NameCoin, similar to Bitcoin), add		{{server_addr}}	{{server_port}}
+ispecialized servers. Place this block directly under `global` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i          # Special server for .BIT domains		{{server_addr}}	{{server_port}}
+i          label="Bit DNS";		{{server_addr}}	{{server_port}}
+i          ip=192.249.59.89,192.184.89.74,64.31.48.60,192.3.27.117;		{{server_addr}}	{{server_port}}
+i          # Skip if interference detected		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i          policy=excluded;		{{server_addr}}	{{server_port}}
+i          include=".bit";		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf all else fails, query root servers directly:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i          # Fallback to root servers		{{server_addr}}	{{server_port}}
+i          label="Root DNS Servers";		{{server_addr}}	{{server_port}}
+i          root_server=discover;		{{server_addr}}	{{server_port}}
+i          randomize_servers=on;		{{server_addr}}	{{server_port}}
+i          ip=198.41.0.4,192.228.79.201,192.33.4.12,199.7.91.13,192.203.230.10,		{{server_addr}}	{{server_port}}
+i                  192.5.5.241,192.112.36.4,128.63.2.53,192.36.148.17,192.58.128.30,		{{server_addr}}	{{server_port}}
+i                  193.0.14.129,199.7.83.42,202.12.27.33;		{{server_addr}}	{{server_port}}
+i          # Skip if spoofing detected		{{server_addr}}	{{server_port}}
+i          reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.极174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i                  64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i                  66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i                  128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i                  202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i                  209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i                  216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i          edns_query=on;		{{server_addr}}	{{server_port}}
+i          reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdd local resolution for entries like `localhost` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  source {		{{server_addr}}	{{server_port}}
+i          owner=localhost;		{{server_addr}}	{{server_port}}
+i          file="/etc/hosts";		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  rr {		{{server_addr}}	{{server_port}}
+i          name=localhost;		{{server_addr}}	{{server_port}}
+i          reverse=on;		{{server_addr}}	{{server_port}}
+i          a=127.0.0.1;		{{server_addr}}	{{server_port}}
+i          owner=localhost;		{{server_addr}}	{{server_port}}
+i          soa=localhost,root.localhost,42,86400,900,86400,86400;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter configuration, restart your computer and set your DNS to `127.0.0.1` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i### Complete Configuration File (with HiNet backup):		{{server_addr}}	{{server_port}}
+i  global {		{{server_addr}}	{{server_port}}
+i      perm_cache=16384;		{{server_addr}}	{{server_port}}
+i      cache_dir="/var/pdnsd";		{{server_addr}}	{{server_port}}
+i      run_as="nobody";		{{server_addr}}	{{server_port}}
+i      server_ip=127.0.0.1;		{{server_addr}}	{{server_port}}
+i      status_ctl=on;		{{server_addr}}	{{server_port}}
+i        paranoid=off;		{{server_addr}}	{{server_port}}
+i      # Prefer TCP queries to resist interference		{{server_addr}}	{{server_port}}
+i      query_method=tcp_udp;		{{server_addr}}	{{server_port}}
+i      min_ttl=600;		{{server_addr}}	{{server_port}}
+i      timeout=10;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # Special server for .BIT domains		{{server_addr}}	{{server_port}}
+i      label="Bit DNS";		{{server_addr}}	{{server_port}}
+i      ip=192.249.59.89,192.184.89.74,64.31.48.60,192.3.27.117;		{{server_addr}}	{{server_port}}
+i      # Skip if interference detected		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,极72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i      policy=excluded;		{{server_addr}}	{{server_port}}
+i      include=".bit";		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server{		{{server_addr}}	{{server_port}}
+i      # Prefer 114DNS for domestic resolution		{{server_addr}}	{{server_port}}
+i      label="114 DNS";		{{server_addr}}	{{server_port}}
+i      ip=114.114.114.114;		{{server_addr}}	{{server_port}}
+i      # Skip if interference detected		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # Google DNS via TCP		{{server_addr}}	{{server_port}}
+i      label="Google DNS";		{{server_addr}}	{{server_port}}
+i      ip=8.8.8.8,8.8.4.4;		{{server_addr}}	{{server_port}}
+i      # Skip if interference detected		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # OpenDNS via port 5353		{{server_addr}}	{{server_port}}
+i      label="OpenDNS";		{{server_addr}}	{{server_port}}
+i      ip=208.67.222.222,208.67.220.220;		{{server_addr}}	{{server_port}}
+i      port=5353;		{{server_addr}}	{{server_port}}
+i      # Skip if interference detected		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39,		{{server_addr}}	{{server_port}}
+i          # Block OpenDNS navigation pages		{{server_addr}}	{{server_port}}
+i          208.69.32.0/24,208.69.34.0/24,208.67.219.0/24,208.67.217.0/24,		{{server_addr}}	{{server_port}}
+i          208.67.216.0/24,67.215.82.0/24,67.215.65.0/24;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # V2EX DNS for typo correction		{{server_addr}}	{{server_port}}
+i      label="V2EX DNS";		{{server_addr}}	{{server_port}}
+i      ip=199.91.73.222,178.79.131.110;		{{server_addr}}	{{server_port}}
+i      port=3389;		{{server_addr}}	{{server_port}}
+i      # Skip if interference detected		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # HiNet DNS (Taiwan backup)		{{server_addr}}	{{server_port}}
+i      label="HiNet DNS";		{{server_addr}}	{{server_port}}
+i      ip=168.95.1.1,168.95.192.1,168.95.192.2;		{{server_addr}}	{{server_port}}
+i      # Skip if interference detected		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      # Fallback to root servers		{{server_addr}}	{{server_port}}
+i      label="Root DNS Servers";		{{server_addr}}	{{server_port}}
+i      root_server=discover;		{{server_addr}}	{{server_port}}
+i      randomize_servers=on;		{{server_addr}}	{{server_port}}
+i      ip=198.41.0.4,192.228.79.201,192.33.4.12,199.7.91.13,192.203.230.10,		{{server_addr}}	{{server_port}}
+i          192.5.5.241,192.112.36.4,128.63.2.53,192.36.148.17,192.58.128.30,		{{server_addr}}	{{server_port}}
+i          193.0.14.129,199.7.83.42,202.12.27.33;		{{server_addr}}	{{server_port}}
+i      # Skip if interference detected		{{server_addr}}	{{server_port}}
+i      reject=4.36.66.178,8.7.198.45,37.61.54.158,46.82.174.68,59.24.3.173,		{{server_addr}}	{{server_port}}
+i          64.33.88.161,64.33.99.47,64.66.163.251,65.104.202.252,65.160.219.113,		{{server_addr}}	{{server_port}}
+i          66.45.252.237,72.14.205.99,72.14.205.104,78.16.49.15,93.46.8.89,		{{server_addr}}	{{server_port}}
+i          128.121.126.139,159.106.121.75,169.132.13.103,192.67.198.6,202.106.1.2,		{{server_addr}}	{{server_port}}
+i          202.181.7.85,203.98.7.65,203.161.230.171,207.12.88.98,208.56.31.43,		{{server_addr}}	{{server_port}}
+i          209.36.73.33,209.145.54.50,209.220.30.174,211.94.66.147,213.169.251.35,		{{server_addr}}	{{server_port}}
+i          216.221.188.182,216.234.179.13,243.185.187.39;		{{server_addr}}	{{server_port}}
+i      edns_query=on;		{{server_addr}}	{{server_port}}
+i      reject_policy=fail;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  source {		{{server_addr}}	{{server_port}}
+i      owner=localhost;		{{server_addr}}	{{server_port}}
+i      file="/etc/hosts";		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  rr {		{{server_addr}}	{{server_port}}
+i      name=localhost;		{{server_addr}}	{{server_port}}
+i      reverse=on;		{{server_addr}}	{{server_port}}
+i      a=127.0.0.1;		{{server_addr}}	{{server_port}}
+i      owner=localhost;		{{server_addr}}	{{server_port}}
+i      soa=localhost,root.localhost,42,86400,900,86400,86400;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,50 @@
+i半年前，当我还在用 Ubuntu 的时候，我		{{server_addr}}	{{server_port}}
+1用XP虚拟机+gogoCLIENT搞定了IPv4与IPv6的互通	/article/modify-computer/ipv4-ipv6-porting.lantian	{{server_addr}}	{{server_port}}
+i。今天，我尝试在 Windows 8.1 下安装 gogoCLIENT（以下简称 GC）时，却出		{{server_addr}}	{{server_port}}
+i现了神一样的 Bug。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下载地址：		{{server_addr}}	{{server_port}}
+hhttp://www.gogo6.com/profile/gogoCLIENT	URL:http://www.gogo6.com/profile/gogoCLIENT	{{server_addr}}	{{server_port}}
+i，需要注册账号。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在我打开安装程序的时候，GC 就给了我一个下马威。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2013/10/3582034854.png	/usr/uploads/2013/10/3582034854.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个的解决方法倒也简单，右键选择安装程序，兼容性模式修改成 Vista 即可		{{server_addr}}	{{server_port}}
+i解决，主程序不会有任何异常。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2013/10/3762193501.png	/usr/uploads/2013/10/3762193501.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i安装完成后，我启动了主程序，输入了上次我就使用的 hg.tfn.net.tw，连接。		{{server_addr}}	{{server_port}}
+i10 秒后，右下角弹出提示，连接成功。但是我到网络连接里一看，IPv6，没有		{{server_addr}}	{{server_port}}
+i网络访问权限！我打开详细信息一看：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2013/10/3344136822.png	/usr/uploads/2013/10/3344136822.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我只想说，默认网关到哪里去了。（其实 DNS 也是我手动设置的）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i用百度搜了一通，无果。然后用谷歌改成英文搜「windows gogo6 default		{{server_addr}}	{{server_port}}
+igateway」，结果真的出来了，是个 Bug！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i修改方法：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 开始菜单（或者开始屏幕）找到记事本，右键管理员权限打开。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. 用记事本打开 C:\Program Files\gogo6\gogoCLIENT\template\windows.cmd，		{{server_addr}}	{{server_port}}
+i做以下替换：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i把所有的这句话：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  netsh int ipv6 add route ::/0 "%TSP_TUNNEL_INTERFACE%" publish=yes %NETSH_PERS% > NUL		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i改成：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  netsh int ipv6 add route ::/0 "%TSP_TUNNEL_INTERFACE%" nexthop=%TSP_SERVER_ADDRESS_IPV6%  publish=yes %NETSH_PERS% > NUL		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. 打开 GC，重新连接服务器。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样，默认网关就设置成功了，IPv6 也能连上 Internet 了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

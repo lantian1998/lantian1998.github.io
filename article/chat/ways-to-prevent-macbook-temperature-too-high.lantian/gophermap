@@ -1,0 +1,85 @@
+i苹果笔记本的过热传感好像不是很敏感，我摸着出风口都烫手了，风扇还是坚持		{{server_addr}}	{{server_port}}
+i以 2000rpm 的速度慢悠悠地转。当时的温度是 90 度。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i笔记本电脑测出的 CPU 温度，达到 70 度有一点问题但是不大，达到 80 度有		{{server_addr}}	{{server_port}}
+i必要注意，达到 90 度 … … 马上检查机器有没有问题吧。过高的 CPU 温度会		{{server_addr}}	{{server_port}}
+i影响你的 CPU 寿命，也会影响你用电脑的心情，甚至有可能在你把电脑放在腿		{{server_addr}}	{{server_port}}
+i上的时候烫你一下，你一激灵跳起来，你的一万块钱的 Macbook 可就掉地上了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在国外举行的一场「魔鬼级测试」中，测试人员在 Macbook 中安装专业测试软		{{server_addr}}	{{server_port}}
+i件，使 Macbook 满负荷运行，CPU 轻松烧到 100 度。之后，测试人员不得不将		{{server_addr}}	{{server_port}}
+iMacbook 晾了一个晚上以恢复常温，在测试过程中，这台可怜的 Macbook Pro		{{server_addr}}	{{server_port}}
+i也只能以这个姿态立着：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IMacbook Pro	/usr/uploads/2013/07/2453648692.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i所以，CPU 温度问题一定要注意。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1）监测 CPU 温度		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Windows 下，监测 CPU 温度的软件多如牛毛。不介意 360 的，可以用 360		{{server_addr}}	{{server_port}}
+i硬件大师（鲁大师）；或者你可以用驱动精灵；再或者你要强大，你就用		{{server_addr}}	{{server_port}}
+iEverest … …		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Linux 下，用 lm_sensors 就行。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo apt-get install lm-sensors		{{server_addr}}	{{server_port}}
+i  lm_sensors		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i忘了最后一句要不要 sudo。我记得不用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Mac 下，		{{server_addr}}	{{server_port}}
+1smcFanControl	/article/modify-computer/macbook-manual-config-cpu-fan-speed.lantian	{{server_addr}}	{{server_port}}
+i为你搞定一切。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2）控制 CPU 温度		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 设置风扇转速		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Mac 下，		{{server_addr}}	{{server_port}}
+1smcFanControl	/article/modify-computer/macbook-manual-config-cpu-fan-speed.lantian	{{server_addr}}	{{server_port}}
+i为你搞定一切。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Windows 下，自行搜索 LubbosFanControl。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Linux 下，我不知道。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. 选择合适的系统		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMac OS X 是专门为苹果电脑优化的系统，但是 Windows 不是。根据实测，在不		{{server_addr}}	{{server_port}}
+i打开任何软件仅保留桌面和测温度工具时，Windows 下 Macbook CPU 温度比		{{server_addr}}	{{server_port}}
+iLinux 高 5 摄氏度。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是，如果你看 Flash，Windows 可能更适合你。Mac 系统下 Flash 支持不佳，		{{server_addr}}	{{server_port}}
+i会导致较高的 CPU 占用率，从而给你的 CPU 增加热量。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. 减少后台程序		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i后台运行的程序，比如 Dropbox，没在下载东西的迅雷等等，都会消耗你的 CPU。		{{server_addr}}	{{server_port}}
+i消耗 CPU 意味着发热，所以这些东西平时关掉，要用了再开。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i4. 降低环境温度		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i为什么要这个方法我就不解释了吧。在大型的服务器机房里，每年夏天机房里的		{{server_addr}}	{{server_port}}
+i空调都会打到 20 度左右全速运行，因为那些服务器用的 E3E5E7 以及其它各种		{{server_addr}}	{{server_port}}
+i至强都是性能超强发热也超强的 CPU，如果散热不做好，轻则影响寿命，中则异		{{server_addr}}	{{server_port}}
+i常关机，重则 … … 煎鸡蛋 … …		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i夏天在家里，你在空调房里使用 Macbook，比在非空调房里使用，温度一般低 5		{{server_addr}}	{{server_port}}
+i到 10 度。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i当然，你别和我说冬天在空调房里使用 Macbook，热空调不在考虑范围。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i一句话总结：哪凉快哪呆着去。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i5. 选用轻量级软件，以及过滤广告		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iChrome 这种吃内存不眨眼的，可以用 Safari 代替，会好一点。Opera 或许也		{{server_addr}}	{{server_port}}
+i可以。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iChrome 插件不用的先关掉，可以减少一个后台进程。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i安装 Adblock Plus 以及 FlashControl，过滤广告和 Flash，减少 CPU 占用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i用了这些方法，你就不必担心你的电脑会煎鸡蛋了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

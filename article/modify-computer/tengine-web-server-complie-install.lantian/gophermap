@@ -1,0 +1,22 @@
+iTengine 是阿里巴巴基于 nginx 开发的一款高性能网页服务器，除了保留		{{server_addr}}	{{server_port}}
+inginx 原有的高性能特性外，还增加了这堆东西：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i虽然对于普通用户没什么区别，但是拿来玩玩还是不错的，听说土豆还是 56 已		{{server_addr}}	{{server_port}}
+i经用上 Tengine 了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下面是编译步骤。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ./configure --prefix=/usr --enable-mods-shared=all --with-rtsig_module --with-select_module --with-poll_module --with-file-aio --with-ipv6 --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_geoip_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_slice_module --with-http_mp4_module --with-http_gzip_static_module --with-http_concat_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_sysguard_module --with-http_lua_module --with-http_tfs_module --with-mail --with-mail_ssl_module --with-google_perftools_module --with-cpp_test_module --with-backtrace_module --with-pcre --with-pcre-jit --with-md5-asm --with-sha1-asm --with-libatomic --with-jemalloc		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i插一句：因为 Tengine 是模块化的，所以自然地我们就把模块多开一点，反正		{{server_addr}}	{{server_port}}
+i动态加载。如果看哪个模块不顺眼不想要，把对应的 with。。。删掉就可以。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果 configure 报错，一般是少 libxxx，直接到新立得软件包管理去搜就行了。		{{server_addr}}	{{server_port}}
+i安装时要安装 -dev 包，原始包也会自动安装。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  make -j4		{{server_addr}}	{{server_port}}
+i  sudo make install		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i安装完成。命令行输入 nginx 启动。Tengine 配置与 nginx 类似，可以参考		{{server_addr}}	{{server_port}}
+inginx 相关文档。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

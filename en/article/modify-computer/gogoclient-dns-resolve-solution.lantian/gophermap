@@ -1,0 +1,37 @@
+iGoogle services have been unstable recently, so I decided to use an		{{server_addr}}	{{server_port}}
+iIPv6 tunnel to connect to Google for better access speeds.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFollowing the article I wrote last October,		{{server_addr}}	{{server_port}}
+i"		{{server_addr}}	{{server_port}}
+1Installation, Usage, and Bug Fixes for gogoCLIENT on Windows 8.1	/en/article/modify-computer/windows-8-1-gogoclient-install-repair-bug.lantian	{{server_addr}}	{{server_port}}
+i",		{{server_addr}}	{{server_port}}
+iI set up the tunnel on my computer. But when I opened the command		{{server_addr}}	{{server_port}}
+iprompt and tried to ping ipv6.google.com, the system unexpectedly		{{server_addr}}	{{server_port}}
+ireported "Ping request could not find host ipv6.google.com".		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis meant I was still connecting to Google services via IPv4, which		{{server_addr}}	{{server_port}}
+ididn't achieve the desired effect. Normally, I would search on Google		{{server_addr}}	{{server_port}}
+ifor a solution, but the problem was that the connection to Google was		{{server_addr}}	{{server_port}}
+iintermittent...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter a long time, I finally found a solution.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe reason is that Microsoft, in designing the operating system, does		{{server_addr}}	{{server_port}}
+inot query DNS over IPv6 tunnels by default. The solution is as		{{server_addr}}	{{server_port}}
+ifollows:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Start → Run (or Win+R), type `regedit` and press Enter.		{{server_addr}}	{{server_port}}
+i1. In the left pane, navigate to `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Dnscache\Para		{{server_addr}}	{{server_port}}
+i   meters` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Right-click in the right pane, select **New → DWORD (32-bit)		{{server_addr}}	{{server_port}}
+i   Value** , and name it `AddrConfigControl` .		{{server_addr}}	{{server_port}}
+iAfter performing these steps, you can resolve IPv6 addresses normally		{{server_addr}}	{{server_port}}
+iwithout restarting the computer.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThanks to		{{server_addr}}	{{server_port}}
+hhttp://blog.ihipop.info/2012/01/2953.html	URL:http://blog.ihipop.info/2012/01/2953.html	{{server_addr}}	{{server_port}}
+iand		{{server_addr}}	{{server_port}}
+hhttp://ipv6-or-no-ipv6.blogspot.sg/2009/02/teredo-ipv6-on-vista-no-aaaa-resolving.html	URL:http://ipv6-or-no-ipv6.blogspot.sg/2009/02/teredo-ipv6-on-vista-no-aaaa-resolving.html	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

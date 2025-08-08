@@ -1,0 +1,153 @@
+i## 前言		{{server_addr}}	{{server_port}}
+hSideStore	URL:https://github.com/SideStore/SideStore	{{server_addr}}	{{server_port}}
+i是一款常用的 iOS 应用侧载工具，可以绕过 App Store 安装第三方应用。它的		{{server_addr}}	{{server_port}}
+i工作原理是用你的 Apple ID 获取免费的苹果开发者证书，给你要安装的应用签		{{server_addr}}	{{server_port}}
+i名，从而让应用可以在 iOS 设备上正常运行。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然而，苹果为了维护其对 iOS 生态系统的控制，阻止第三方应用商店使用开发		{{server_addr}}	{{server_port}}
+i者证书大规模地绕过限制，对开发者证书设置了 7 天的过期时间。用户需要定		{{server_addr}}	{{server_port}}
+i期获取新的开发者证书，重新给应用签名，才能一直使用自己安装的第三方应用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i传统的侧载工具，例如 AltStore，都依赖电脑上的 iTunes 等软件进行重新签		{{server_addr}}	{{server_port}}
+i名的操作。但 SideStore 与其它侧载工具不同，它只有首次安装时需要电脑辅		{{server_addr}}	{{server_port}}
+i助。安装完成后，SideStore 可以自己模拟一台安装了 iTunes 的电脑，让 iOS		{{server_addr}}	{{server_port}}
+i系统通过虚拟网络与其通信，从而实现无需电脑就能给应用重新签名，甚至安装		{{server_addr}}	{{server_port}}
+i新的第三方应用的效果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSideStore 的虚拟网络一般可以用下面两种方式实现：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- WireGuard：SideStore 可以在本机上创建一个 WireGuard 服务器。用户可以		{{server_addr}}	{{server_port}}
+i  自行安装 WireGuard 客户端，并连接到这个服务器上，从而让 iOS 系统可以		{{server_addr}}	{{server_port}}
+i  通过网络和模拟出的电脑通信。		{{server_addr}}	{{server_port}}
+i  - 这种方法的缺点是，受到 iOS 系统限制，当 iPhone/iPad 通过移动网络上		{{server_addr}}	{{server_port}}
+i    网时，WireGuard 客户端是连不上 SideStore 本地创建的 WireGuard 服务		{{server_addr}}	{{server_port}}
+i    器的。因此，SideStore 只有在设备连接到 Wi-Fi 时才能正常工作。		{{server_addr}}	{{server_port}}
+i  - 同时，由于 iOS 系统只支持同时连接一个 VPN，如果用户需要使用别的		{{server_addr}}	{{server_port}}
+i    VPN 软件，就只能手动切换 VPN，操作比较麻烦。		{{server_addr}}	{{server_port}}
+h- StosVPN	URL:https://github.com/SideStore/StosVPN	{{server_addr}}	{{server_port}}
+i  ：是 SideStore 团队开发的专用 VPN 客户端，只能用于 SideStore。		{{server_addr}}	{{server_port}}
+i  - 相比于 WireGuard，StosVPN 不会受到 iOS 的限制，可以在设备通过移动		{{server_addr}}	{{server_port}}
+i    网络上网时正常工作。但是我试用后发现，StosVPN 无法长时间保持在后台		{{server_addr}}	{{server_port}}
+i    运行，经常会自动断开。如果有一段时间没有使用 iOS 设备，同时		{{server_addr}}	{{server_port}}
+i    StosVPN 断开了连接，SideStore 以及其它第三方应用没能及时续期，就只		{{server_addr}}	{{server_port}}
+i    能重新连接电脑，给这些应用签名了。		{{server_addr}}	{{server_port}}
+i  - 同时，由于 StosVPN 也是 VPN，它同样受到 iOS 系统只支持同时连接一个		{{server_addr}}	{{server_port}}
+i    VPN 的限制。		{{server_addr}}	{{server_port}}
+i于是我就想尝试分析 SideStore/StosVPN 的工作原理，看看能不能把它们集成		{{server_addr}}	{{server_port}}
+i到我的家庭网络或者 ZeroTier SDN 网络里，让 SideStore 无需额外的 VPN 配		{{server_addr}}	{{server_port}}
+i置就能正常刷新。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## StosVPN 的工作原理		{{server_addr}}	{{server_port}}
+i根据		{{server_addr}}	{{server_port}}
+hStosVPN 的关键数据包处理逻辑	URL:https://github.com/SideStore/StosVPN/blob/main/TunnelProv/PacketTunnelProvider.swift	{{server_addr}}	{{server_port}}
+i，StosVPN 大致做了以下几件事：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 给 iOS 设备分配 IP `10.7.0.0`，让 iOS 把 `10.7.0.0/24` 这个网段的数		{{server_addr}}	{{server_port}}
+i  据包发送到 StosVPN。		{{server_addr}}	{{server_port}}
+i- 定义了一个 IP `10.7.0.1`，StosVPN 将在这个 IP 上模拟装了 iTunes 的电		{{server_addr}}	{{server_port}}
+i  脑。		{{server_addr}}	{{server_port}}
+i- 对于每个数据包：		{{server_addr}}	{{server_port}}
+i  - 如果数据包是从 `10.7.0.0` 发给 `10.7.0.1` 的，就交换数据包的来源和		{{server_addr}}	{{server_port}}
+i    目标 IP，从而把数据包发回给 iOS 设备。		{{server_addr}}	{{server_port}}
+i这个逻辑看起来很简单，实际上也一点都不复杂。实际上，SideStore 就是在		{{server_addr}}	{{server_port}}
+iiOS 设备本地打开了一系列端口，模拟安装了 iTunes 的电脑。假设 iOS 在尝		{{server_addr}}	{{server_port}}
+i试连接模拟出的电脑时创建了这样一条连接：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  TCP 10.7.0.0:12345 -> 10.7.0.1:54321		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i那么 WireGuard 或者 StosVPN 就会交换来源和目标 IP（但不交换端口号），		{{server_addr}}	{{server_port}}
+i将数据包改写成以下的样子并发回 iOS 设备：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  TCP 10.7.0.1:12345 -> 10.7.0.0:54321		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i从 iOS 设备看来，这是一条从 `10.7.0.1` 发来的新 TCP 连接，与上一条发往		{{server_addr}}	{{server_port}}
+i电脑的连接没什么关系。由于 iOS 尝试连接到的端口（此处以 `54321` 示例）		{{server_addr}}	{{server_port}}
+i应当是 iTunes 的端口，而 SideStore 又在本地模拟了 iTunes，所以		{{server_addr}}	{{server_port}}
+iSideStore 此时也应在监听 `54321` 端口，并收到了数据。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSideStore 模拟 iTunes 的逻辑处理完数据，并生成一个回复：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  TCP 10.7.0.0:54321 -> 10.7.0.1:12345		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWireGuard 或者 StosVPN 又会交换来源和目标 IP：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  TCP 10.7.0.1:54321 -> 10.7.0.0:12345		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这一个回复数据包就对上了最开始发往电脑的连接。iOS 因此认为自己收到了电		{{server_addr}}	{{server_port}}
+i脑上 iTunes 的回复，从而继续更新开发者证书。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 用 Nftables 模拟 StosVPN 的工作逻辑		{{server_addr}}	{{server_port}}
+i了解了 StosVPN 的工作原理，我们只需要在自己的网络里模仿它的工作逻辑就		{{server_addr}}	{{server_port}}
+i可以了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你只有少量的 iOS 设备，并且给它们都分配了固定 IP，而且有一台运行		{{server_addr}}	{{server_port}}
+iOpenWrt 或其它 Linux 系统的路由器，你直接用以下 Nftables 规则就可以了：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  table inet sidestore {		{{server_addr}}	{{server_port}}
+i    chain RAW_PREROUTING {		{{server_addr}}	{{server_port}}
+i      type filter hook prerouting priority raw; policy accept;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 此处 192.168.0.xxx 改成你的 iOS 设备的 IP		{{server_addr}}	{{server_port}}
+i      ip saddr 192.168.0.123 ip daddr 10.7.0.1 ip saddr set 10.7.0.1 ip daddr set 192.168.0.123 notrack;		{{server_addr}}	{{server_port}}
+i      ip saddr 192.168.0.234 ip daddr 10.7.0.1 ip saddr set 10.7.0.1 ip daddr set 192.168.0.234 notrack;		{{server_addr}}	{{server_port}}
+i      # 可以按需添加更多的规则		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i上述规则的用途是，如果收到了来自你的 iOS 设备（`192.168.0.123` 或 `192.168.0.234`）		{{server_addr}}	{{server_port}}
+i发往 `10.7.0.1`（虚拟电脑）的数据包，就把数据包的源 IP 改成 `10.7.0.1`（		{{server_addr}}	{{server_port}}
+i虚拟电脑），目标 IP 改成你的 iOS 设备（`192.168.0.123` 或 `192.168.0.234`），		{{server_addr}}	{{server_port}}
+i然后发送出去。此处的 `notrack` 是关闭连接跟踪，防止 Linux 用这些数据包		{{server_addr}}	{{server_port}}
+i去匹配之前收到的数据包和连接跟踪条目，导致规则不生效。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于 Nftables 不支持将数据包的来源 / 目标 IP 等信息用作变量，无法用一		{{server_addr}}	{{server_port}}
+i组规则实现「交换来源和目标地址」的目的，所以我们需要给每台 iOS 设备都		{{server_addr}}	{{server_port}}
+i添加一条规则。如果你的 iOS 设备比较少，可以给每个设备的 IP 都单独写一		{{server_addr}}	{{server_port}}
+i条规则。但如果你的设备很多，或者没有固定 IP，你就需要给家庭网段内的每		{{server_addr}}	{{server_port}}
+i一个 IP 都写一条规则，非常麻烦。同时，如果你的路由器不支持 Nftables 或		{{server_addr}}	{{server_port}}
+i类似的防火墙功能，无法用类似的方式改写数据包，也无法实现这样的功能。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## SideStore VPN 工具		{{server_addr}}	{{server_port}}
+i如果你无法使用上面的方法，我也写了一个实现上述逻辑的小工具：		{{server_addr}}	{{server_port}}
+hSideStore VPN 工具	URL:https://github.com/xddxdd/sidestore-vpn	{{server_addr}}	{{server_port}}
+i。它可以在 Linux 设备上创建一个 TUN 接口，监听发往 `10.7.0.1` 的数据包，		{{server_addr}}	{{server_port}}
+i并用和 StosVPN 相同的逻辑处理这些数据包。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i要在你的网络内使用这个工具，你需要准备一台运行 Linux 的设备（例如树莓		{{server_addr}}	{{server_port}}
+i派或者虚拟机），将它连接到 iOS 设备所在的同一个内网中，并设置一个固定		{{server_addr}}	{{server_port}}
+iIP。由于工具改写后的数据包可以看作是从这个 Linux 设备向 iOS 设备的一条		{{server_addr}}	{{server_port}}
+i新连接，所以 iOS 设备和这个 Linux 设备之间不能有防火墙或者 NAT，否则这		{{server_addr}}	{{server_port}}
+i条新连接会被拦截，导致 SideStore 的模拟电脑无法正常收到请求。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后，执行以下操作：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 在 Linux 设备上开启 IP 转发（IP Forwarding）：		{{server_addr}}	{{server_port}}
+i  echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf		{{server_addr}}	{{server_port}}
+i  sudo sysctl -p		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 在设备上安装 Rust 和 Cargo。		{{server_addr}}	{{server_port}}
+i2. 运行以下命令，安装并启动 SideStore VPN 工具：		{{server_addr}}	{{server_port}}
+i  git clone https://github.com/xddxdd/sidestore-vpn.git		{{server_addr}}	{{server_port}}
+i  cd sidestore-vpn		{{server_addr}}	{{server_port}}
+i  cargo build --release		{{server_addr}}	{{server_port}}
+i  sudo target/release/sidestore-vpn		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSideStore VPN 工具会创建一个名为 `sidestore` 的 TUN 设备，并设置系统路		{{server_addr}}	{{server_port}}
+i由将发往 `10.7.0.1` 的流量全部交给工具处理。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 在你的主路由器上添加一条静态路由：		{{server_addr}}	{{server_port}}
+i  路由: 10.7.0.1/32		{{server_addr}}	{{server_port}}
+i  子网掩码 (如果需要): 255.255.255.255		{{server_addr}}	{{server_port}}
+i  网关: 前文中 Linux 设备的 IP 地址。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i为了最大限度地避免 IP 冲突，这条静态路由只影响 `10.7.0.1` 一个 IP 地址。		{{server_addr}}	{{server_port}}
+i但如果你的路由器不支持创建 /32 路由，你可以调整子网掩码，扩大这条路由		{{server_addr}}	{{server_port}}
+i规则的影响范围，只要不与其他设备冲突即可：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  路由: 10.7.0.0/24		{{server_addr}}	{{server_port}}
+i  子网掩码 (如果需要): 255.255.255.0		{{server_addr}}	{{server_port}}
+i  网关: 前文中 Linux 设备的 IP 地址。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 用内网中的任何一个设备 Ping `10.7.0.1`，此时应该可以 Ping 通。		{{server_addr}}	{{server_port}}
+i2. 在你的 iOS 设备上断开 WireGuard 或者 StosVPN，然后用 SideStore 尝试		{{server_addr}}	{{server_port}}
+i   刷新应用。现在即使不开 VPN，SideStore 应该也可以正常刷新证书了。		{{server_addr}}	{{server_port}}

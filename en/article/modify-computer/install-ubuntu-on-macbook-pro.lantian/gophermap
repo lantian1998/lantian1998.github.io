@@ -1,0 +1,87 @@
+iThe macOS is indeed beautiful and smooth. However, VirtualBox runs		{{server_addr}}	{{server_port}}
+iterribly slow on it, and many functions that are simple to implement		{{server_addr}}	{{server_port}}
+ion Windows or Ubuntu require significant effort on Mac. Additionally,		{{server_addr}}	{{server_port}}
+iI've seen online articles showing that Ubuntu scores much higher than		{{server_addr}}	{{server_port}}
+imacOS in UnixBench tests. Therefore, I decided to install Ubuntu on my		{{server_addr}}	{{server_port}}
+iMacbook.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter researching, I found my Macbook is a mid-2012 model (Macbook		{{server_addr}}	{{server_port}}
+i9-2). According to Ubuntu's official wiki, Ubuntu can only coexist		{{server_addr}}	{{server_port}}
+iwith macOS on this model – it cannot be installed alone, otherwise		{{server_addr}}	{{server_port}}
+iboot issues will occur.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSeriously? Mac's bootloader and OS are separate!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGParted in Ubuntu's live environment shows macOS created three		{{server_addr}}	{{server_port}}
+ipartitions: a 200MB FAT32 EFI boot partition, an HFS+ formatted system		{{server_addr}}	{{server_port}}
+ipartition, and a ~600MB HFS+ recovery partition. Our task is to		{{server_addr}}	{{server_port}}
+ireplace the macOS system and recovery partitions with Ubuntu		{{server_addr}}	{{server_port}}
+ipartitions.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 1. Installing the Boot Manager		{{server_addr}}	{{server_port}}
+iSince the Macbook's default bootloader might not start Ubuntu (though		{{server_addr}}	{{server_port}}
+iI tested it could work directly), we need to install a third-party		{{server_addr}}	{{server_port}}
+iboot manager: rEFInd. rEFInd is a boot manager that enables EFI-based		{{server_addr}}	{{server_port}}
+icomputers to boot various OSes – essentially designed for Macbooks,		{{server_addr}}	{{server_port}}
+ias other PCs' EFI can usually be disabled. Only Macbooks are this		{{server_addr}}	{{server_port}}
+iproblematic.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- (In macOS) Download rEFInd and unzip:		{{server_addr}}	{{server_port}}
+h  http://sourceforge.net/projects/refind/files/0.8.3/refind-bin-0.8.3.zip/download	URL:http://sourceforge.net/projects/refind/files/0.8.3/refind-bin-0.8.3.zip/download	{{server_addr}}	{{server_port}}
+i- Open Launchpad > Utilities > Terminal, type `cd "` (cd + space +		{{server_addr}}	{{server_port}}
+i  double quote). Don't press Enter yet.		{{server_addr}}	{{server_port}}
+i- Drag the unzipped rEFInd folder icon into the Terminal to auto-fill		{{server_addr}}	{{server_port}}
+i  its path.		{{server_addr}}	{{server_port}}
+i- Type a closing double quote and press Enter.		{{server_addr}}	{{server_port}}
+i- Enter:		{{server_addr}}	{{server_port}}
+i  sudo ./install.sh --esp		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Enter your password (no visual feedback) and press Enter.		{{server_addr}}	{{server_port}}
+i- Reboot; you should see a boot selector with rEFInd branding.		{{server_addr}}	{{server_port}}
+i  Installation successful.		{{server_addr}}	{{server_port}}
+i## 2. Creating Ubuntu Boot Media		{{server_addr}}	{{server_port}}
+iBurn the Ubuntu ISO to a DVD, or use UltraISO on Windows/in a VM to		{{server_addr}}	{{server_port}}
+iwrite the ISO to a USB drive.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 3. Repairing Partition Table		{{server_addr}}	{{server_port}}
+i- In macOS Disk Utility, shrink your macOS partition and create a new		{{server_addr}}	{{server_port}}
+i  partition in the freed space.		{{server_addr}}	{{server_port}}
+i- Insert boot media, reboot, hold Alt (Option), select "Windows" and		{{server_addr}}	{{server_port}}
+i  press Enter.		{{server_addr}}	{{server_port}}
+i- Ubuntu installer will launch; select "Try Ubuntu".		{{server_addr}}	{{server_port}}
+i- Search for GParted in Unity, format the new partition as ext4 and		{{server_addr}}	{{server_port}}
+i  apply changes.		{{server_addr}}	{{server_port}}
+i- Shut down, remove boot media, boot into macOS.		{{server_addr}}	{{server_port}}
+i- Download GPT Fdisk:		{{server_addr}}	{{server_port}}
+h  http://sourceforge.net/projects/gptfdisk/	URL:http://sourceforge.net/projects/gptfdisk/	{{server_addr}}	{{server_port}}
+i  and install.		{{server_addr}}	{{server_port}}
+i- In Terminal:		{{server_addr}}	{{server_port}}
+i  sudo gdisk /dev/disk0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Type `r` > Enter, then `p` > Enter to view partitions (typically		{{server_addr}}	{{server_port}}
+i  partition 2 is macOS, 4 is Ubuntu's future partition).		{{server_addr}}	{{server_port}}
+i- Type `h` > Enter. Input `2 4` (partition numbers) > Enter.		{{server_addr}}	{{server_port}}
+i- Type `y` > Enter, then `AF` > Enter (set partition type). Then `n`		{{server_addr}}	{{server_port}}
+i  to skip boot flag.		{{server_addr}}	{{server_port}}
+i- Type `y` > Enter, then `83` > Enter, then `n` > Enter.		{{server_addr}}	{{server_port}}
+i- rEFInd doesn't require boot flags, so no need to set.		{{server_addr}}	{{server_port}}
+i- Type `w` > Enter to write changes. gdisk will exit automatically.		{{server_addr}}	{{server_port}}
+i- Reboot holding Alt (Option), select "Windows" to start Ubuntu		{{server_addr}}	{{server_port}}
+i  installation.		{{server_addr}}	{{server_port}}
+i## 4. Beginning Installation		{{server_addr}}	{{server_port}}
+i- In Ubuntu installer, choose "Try Ubuntu" again, then launch GParted.		{{server_addr}}	{{server_port}}
+i- Delete all partitions except the 200MB EFI partition, then set up		{{server_addr}}	{{server_port}}
+i  partitions as desired.		{{server_addr}}	{{server_port}}
+i- Launch Ubuntu installer, follow normal steps. Select "Something		{{server_addr}}	{{server_port}}
+i  else" for manual partitioning.		{{server_addr}}	{{server_port}}
+i- After installation, Ubuntu should boot normally.		{{server_addr}}	{{server_port}}
+i## 5. Configuring rEFInd		{{server_addr}}	{{server_port}}
+i- In Ubuntu:		{{server_addr}}	{{server_port}}
+i  sudo mkdir /media/efi		{{server_addr}}	{{server_port}}
+i  sudo mount /dev/sda1 /media/efi		{{server_addr}}	{{server_port}}
+i  cd /media/efi/EFI/refind		{{server_addr}}	{{server_port}}
+i  sudo nano refind.conf		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Change `timeout` to `-1` to skip the 20-second boot menu delay.		{{server_addr}}	{{server_port}}
+iThat's it – installation complete!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
