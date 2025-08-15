@@ -1,0 +1,72 @@
+i自从我建立这个博客开始，我就从来没考虑过 IE 用户的感受。当时我的浏览器		{{server_addr}}	{{server_port}}
+i是 Firefox，IE 对我的唯一用处是去下载 Firefox。现在我自己在 Win 下用		{{server_addr}}	{{server_port}}
+iChrome，Mac 下也用 Chrome，手机上用 Opera。本来我以为我可以对 IE 兼容		{{server_addr}}	{{server_port}}
+i说永别了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是，我没想到被杭二的电子阅览室打败了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirefox，安装包 20M。Chrome，安装包 30M。看起来都不大，对吧？但是杭二		{{server_addr}}	{{server_port}}
+i的电子阅览室貌似为了网页浏览流畅，貌似用了 QoS。QoS 就 QoS 吧，那 QoS		{{server_addr}}	{{server_port}}
+i还有 Bug，那里单机平均速度 50K，我每次去电阅只能上半个小时网，下载浏览		{{server_addr}}	{{server_port}}
+i器花个十几分钟真的令人无语！		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另外，那里用 XP 系统，IE8 浏览器。所以，为了让自己的网站看着舒心一点，		{{server_addr}}	{{server_port}}
+i我就勉为其难地给 IE 加上兼容吧。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1.HTML5 兼容		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我的网站广泛采用了 HTML5 技术，这个技术在新浏览器上可以告诉浏览器优先		{{server_addr}}	{{server_port}}
+i渲染文章主体部分什么的，加快页面加载速度，但是在不支持 HTML5 的 IE8 上		{{server_addr}}	{{server_port}}
+i惨不忍睹，右边的最近评论宽度变成 100% 真的大丈夫？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i所以，首先解决 HTML5 带来的排版问题才是关键。解决方法，就是让 IE 认		{{server_addr}}	{{server_port}}
+iHTML5 的标签。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHTML5Shiv 主要解决 HTML5 提出的新的元素不被 IE6-8 识别，这些新元素不能		{{server_addr}}	{{server_port}}
+i作为父节点包裹子元素，并且不能应用 CSS 样式。让 CSS 样式应用在未知元素		{{server_addr}}	{{server_port}}
+i上只需执行 document.createElement(elementName) 即可实现。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因此，我们加上 HTML5Shiv 就可以兼容 IE6-8 了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i方法：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 下载		{{server_addr}}	{{server_port}}
+hHTML5Shiv 源代码	URL:https://github.com/aFarkas/html5shiv/zipball/master	{{server_addr}}	{{server_port}}
+i，并上传到自己网站服务器。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. 在网页的 head 部分加入以下代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <!--[if lt IE 9]><script src="html5shiv.js"></script><![endif]-->		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. 刷新网页看效果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2.CSS3 兼容		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCSS3 在极大地美化了网页同时，却让网页在 IE 下惨不忍睹。所以第二个要解		{{server_addr}}	{{server_port}}
+i决的问题就是 CSS3。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCSS3Pie 是一款针对 IE6-9 的插件，可以让 IE 支持最常用的几个 CSS3 代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iborder-radius box-shadow border-image multiple background images		{{server_addr}}	{{server_port}}
+ilinear-gradient as background image		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因此我们就可以添加 CSS3Pie，优化网页的显示效果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 下载		{{server_addr}}	{{server_port}}
+hCSS3Pie 2.0	URL:http://css3pie.com/download-latest-2.x	{{server_addr}}	{{server_port}}
+i，把压缩包里所有文件传到服务器上。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. 在 CSS 中找到有上述支持的 CSS3 代码的部分，比如我的 CSS 中只有 #container		{{server_addr}}	{{server_port}}
+i有支持的 CSS3 部分。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. 在代码块中加上以下代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  behavior: url(PIE.htc);		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i注意，其中 PIE.htc 的路径是相对网页而非 CSS 的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i4. 清除缓存，刷新看效果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在实际测试中，需要在网页完全加载完成后，CSS3 效果才会出现，因此你的网		{{server_addr}}	{{server_port}}
+i页加载速度也很重要。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

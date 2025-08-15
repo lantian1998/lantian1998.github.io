@@ -1,0 +1,99 @@
+iLatest news from the CloudFlare blog		{{server_addr}}	{{server_port}}
+i(		{{server_addr}}	{{server_port}}
+hhttp://blog.cloudflare.com/google-now-factoring-https-support-into-ranking-cloudflare-on-track-to-make-it-free-and-easy	URL:http://blog.cloudflare.com/google-now-factoring-https-support-into-ranking-cloudflare-on-track-to-make-it-free-and-easy	{{server_addr}}	{{server_port}}
+i) indicates that Google may factor in SSL support as a positive		{{server_addr}}	{{server_port}}
+iranking signal. Therefore, I've enabled SSL for my blog.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Applying for a Certificate		{{server_addr}}	{{server_port}}
+iSSL requires a certificate on the server side. It's best not to		{{server_addr}}	{{server_port}}
+igenerate this certificate yourself, as most browsers will flag it as		{{server_addr}}	{{server_port}}
+iuntrusted.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iStartSSL is currently the only trusted certificate authority that		{{server_addr}}	{{server_port}}
+iissues free SSL certificates recognized by most browsers. You can		{{server_addr}}	{{server_port}}
+ifollow the steps in this article:		{{server_addr}}	{{server_port}}
+hhttp://www.freehao123.com/startssl-ssl/	URL:http://www.freehao123.com/startssl-ssl/	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn practice, since StartSSL connections can be slow, following the		{{server_addr}}	{{server_port}}
+iwizard might cause the process to hang. If it hangs, you'll have to		{{server_addr}}	{{server_port}}
+istart over. Instead, we can generate the certificate request ourselves		{{server_addr}}	{{server_port}}
+iand submit it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- On your Linux server (this example uses Debian 7), run the following		{{server_addr}}	{{server_port}}
+i  command to generate a private key:		{{server_addr}}	{{server_port}}
+i    openssl genrsa -out privkey.pem 4096		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i- Generate the certificate signing request (CSR file) with the command		{{server_addr}}	{{server_port}}
+i  below. The information can be filled arbitrarily — StartSSL doesn't		{{server_addr}}	{{server_port}}
+i  verify it, only your private key matters:		{{server_addr}}	{{server_port}}
+i    openssl req -new -key privkey.pem -out cert.csr		{{server_addr}}	{{server_port}}
+i    cat cert.csr		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i- Copy the output from the previous step.		{{server_addr}}	{{server_port}}
+i- Follow the article linked above until this step, select "Skip," then		{{server_addr}}	{{server_port}}
+i  paste your certificate request and proceed.		{{server_addr}}	{{server_port}}
+g- StartSSL	/usr/uploads/16501407479649.gif	{{server_addr}}	{{server_port}}
+i## Installing the Certificate		{{server_addr}}	{{server_port}}
+iAfter completing the steps above, you should have (at least) two		{{server_addr}}	{{server_port}}
+ifiles: your private key and the certificate file.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you manually generated the CSR file, `privkey.pem` is your private		{{server_addr}}	{{server_port}}
+ikey. If you used the web wizard, the private key was provided during		{{server_addr}}	{{server_port}}
+ithe process.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Save your certificate as `ssl.crt` . Subsequent steps will use this		{{server_addr}}	{{server_port}}
+i  filename. If you used the web wizard, save your private key as `ssl.key` .		{{server_addr}}	{{server_port}}
+i- If you used the web wizard, decrypt your private key using the		{{server_addr}}	{{server_port}}
+i  following command (the password is the one you set during the		{{server_addr}}	{{server_port}}
+i  wizard). Without decryption, nginx will prompt for the password on		{{server_addr}}	{{server_port}}
+i  every startup:		{{server_addr}}	{{server_port}}
+i    openssl rsa -in ssl.key -out privkey.pem		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i- Firefox has particular requirements for certificate verification —		{{server_addr}}	{{server_port}}
+i  it expects the certificate file to include the issuer's certificate		{{server_addr}}	{{server_port}}
+i  chain. Perform these steps:		{{server_addr}}	{{server_port}}
+i    wget http://www.startssl.com/certs/ca.pem		{{server_addr}}	{{server_port}}
+i    wget http://www.startssl.com/certs/sub.class1.server.ca.pem		{{server_addr}}	{{server_port}}
+i    cat ssl.crt sub.class1.server.ca.pem ca.pem > ssl-unified.crt		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i- You now have an `ssl-unified.crt` file. Move it and `privkey.pem` to		{{server_addr}}	{{server_port}}
+i  your preferred location.		{{server_addr}}	{{server_port}}
+i- **(Warning: Do not place them in web-accessible locations like `/var/www` —		{{server_addr}}	{{server_port}}
+i  that would be reckless! This example uses `/root` .)**		{{server_addr}}	{{server_port}}
+i- Edit your nginx configuration file:		{{server_addr}}	{{server_port}}
+i    cd /etc/nginx/sites-enabled```</li><li>```bashnano default # Replace if your config filename differs.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i- In your site configuration section under `listen 80` , add:		{{server_addr}}	{{server_port}}
+i    listen 443 ssl;		{{server_addr}}	{{server_port}}
+i    ssl_certificate /root/ssl-unified.crt;		{{server_addr}}	{{server_port}}
+i    ssl_certificate_key /root/privkey.pem;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i- Restart nginx to complete installation:		{{server_addr}}	{{server_port}}
+i    service nginx restart		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i## Installing and Enabling SPDY		{{server_addr}}	{{server_port}}
+iSPDY is a network protocol spearheaded by Google. It allows		{{server_addr}}	{{server_port}}
+imultiplexing multiple data streams within a single SSL connection.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWithout SPDY, browsers open multiple SSL connections simultaneously to		{{server_addr}}	{{server_port}}
+iload resources. Often, mid-page load, the browser discovers additional		{{server_addr}}	{{server_port}}
+ineeded resources and must open new connections, causing delays. SPDY		{{server_addr}}	{{server_port}}
+ieliminates this overhead by enabling concurrent downloads within one		{{server_addr}}	{{server_port}}
+iSSL connection.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Update your nginx version. The default nginx in Debian repositories		{{server_addr}}	{{server_port}}
+i  lacks SPDY support. Replace it with `nginx-full` :		{{server_addr}}	{{server_port}}
+i    apt-get install nginx-full		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i- Edit your nginx configuration file. Change:		{{server_addr}}	{{server_port}}
+i    listen 443 ssl;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  to:		{{server_addr}}	{{server_port}}
+i    listen 443 ssl spdy;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  Done.		{{server_addr}}	{{server_port}}
+iAfter enabling, if your website's images, CSS, JS, etc., are served		{{server_addr}}	{{server_port}}
+ifrom your server, this will significantly improve loading speeds under		{{server_addr}}	{{server_port}}
+iSSL.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

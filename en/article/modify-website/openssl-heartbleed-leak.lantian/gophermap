@@ -1,0 +1,52 @@
+iOn April 8, 2014, Microsoft officially discontinued support services		{{server_addr}}	{{server_port}}
+ifor Windows XP.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOn April 8, 2014, the renowned open-source SSL support software		{{server_addr}}	{{server_port}}
+iOpenSSL exposed the "Heartbleed" vulnerability. Against this		{{server_addr}}	{{server_port}}
+ivulnerability, nearly all current IDS systems and firewalls are		{{server_addr}}	{{server_port}}
+idefenseless.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSSL, fully known as Secure Socket Layer, is a widely used encryption		{{server_addr}}	{{server_port}}
+iprotocol on the internet that prevents data from being eavesdropped		{{server_addr}}	{{server_port}}
+iduring transmission between users and servers. OpenSSL is an		{{server_addr}}	{{server_port}}
+iopen-source SSL support software. By invoking it, any software can		{{server_addr}}	{{server_port}}
+ieasily implement SSL encrypted connections without needing to research		{{server_addr}}	{{server_port}}
+iSSL from scratch. The HTTPS protocol utilizes SSL to protect user		{{server_addr}}	{{server_port}}
+idata, and major websites redirect users to HTTPS pages during login to		{{server_addr}}	{{server_port}}
+isafeguard user information.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, the "Heartbleed" vulnerability exposed in OpenSSL has caused		{{server_addr}}	{{server_port}}
+imassive repercussions for all such software. What does this		{{server_addr}}	{{server_port}}
+ivulnerability lead to? Random memory reads, 64KB at a time.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i64KB per read — and this attack can be repeated continuously without		{{server_addr}}	{{server_port}}
+idetection by firewalls. Thus, hackers can repeatedly traverse the		{{server_addr}}	{{server_port}}
+ientire server's memory to extract critical data such as user		{{server_addr}}	{{server_port}}
+ipasswords, cookies, and website source code. Using this information,		{{server_addr}}	{{server_port}}
+ihackers can steal accounts and leverage the source code to launch		{{server_addr}}	{{server_port}}
+ifurther attacks on servers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe vulnerability affects OpenSSL versions 1.01 to 1.01f. The latest		{{server_addr}}	{{server_port}}
+iversion 1.01g has patched this vulnerability, and OpenSSL versions		{{server_addr}}	{{server_port}}
+iprior to 1.01 are unaffected.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis vulnerability impacts:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. (Almost) all SSL-enabled web servers on Linux, BSD, Mac, and		{{server_addr}}	{{server_port}}
+i   similar platforms, including Apache, Nginx, Lighttpd, Tengine (essentially		{{server_addr}}	{{server_port}}
+i   Nginx), etc. Affected websites include critical platforms like		{{server_addr}}	{{server_port}}
+i   Alipay, Taobao, and Tencent.		{{server_addr}}	{{server_port}}
+i2. All open-source web servers with SSL enabled running on Windows		{{server_addr}}	{{server_port}}
+i   platforms, such as Apache and Nginx.		{{server_addr}}	{{server_port}}
+i3. (Almost) all SSL-based email services (POP3, IMAP, SMTP), including		{{server_addr}}	{{server_port}}
+i   Gmail, QQ Mail, etc.		{{server_addr}}	{{server_port}}
+i4. All OpenVPN services and other SSL-based VPN services.		{{server_addr}}	{{server_port}}
+iAs a user, there is essentially no direct defense. If you've logged		{{server_addr}}	{{server_port}}
+iinto these services recently, change your password immediately (most		{{server_addr}}	{{server_port}}
+iproviders have patched the vulnerability).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs a website administrator:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- If using shared hosting, request your provider to upgrade the		{{server_addr}}	{{server_port}}
+i  system.		{{server_addr}}	{{server_port}}
+i- If managing your own VPS, simply perform a system upgrade.		{{server_addr}}	{{server_port}}

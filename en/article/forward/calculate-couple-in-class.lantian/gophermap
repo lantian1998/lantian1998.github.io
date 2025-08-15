@@ -1,0 +1,187 @@
+iSaw this on Bilibili,		{{server_addr}}	{{server_port}}
+hav1020723	URL:http://www.bilibili.tv/video/av1020723/	{{server_addr}}	{{server_port}}
+i. I might create a PHP version later.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe original program was in Java and wouldn't run on my computer (unknown		{{server_addr}}	{{server_port}}
+ireason). I translated the source code to Pascal.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Java version:		{{server_addr}}	{{server_port}}
+i> Program:		{{server_addr}}	{{server_port}}
+h> http://pan.baidu.com/s/1sjtZs1v	URL:http://pan.baidu.com/s/1sjtZs1v	{{server_addr}}	{{server_port}}
+i> Source code:		{{server_addr}}	{{server_port}}
+h> http://pan.baidu.com/s/1ntmFSLV	URL:http://pan.baidu.com/s/1ntmFSLV	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPascal version source code:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  uses math;		{{server_addr}}	{{server_port}}
+i  type		{{server_addr}}	{{server_port}}
+i      relation=record		{{server_addr}}	{{server_port}}
+i          p:longint;		{{server_addr}}	{{server_port}}
+i          q:longint;		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i  var		{{server_addr}}	{{server_port}}
+i      i,boy,girl,total,count:longint;		{{server_addr}}	{{server_port}}
+i      boylove,girllove:float;		{{server_addr}}	{{server_port}}
+i      cpresult:relation;		{{server_addr}}	{{server_port}}
+i      //Union variables		{{server_addr}}	{{server_port}}
+i      id,sz,lead:array[0..10000]of longint;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  //Simulate Java bernoulli function		{{server_addr}}	{{server_port}}
+i  function possibility(maybe:float):boolean;		{{server_addr}}	{{server_port}}
+i      var		{{server_addr}}	{{server_port}}
+i          i:longint;		{{server_addr}}	{{server_port}}
+i      begin		{{server_addr}}	{{server_port}}
+i          i:=random(10000);		{{server_addr}}	{{server_port}}
+i          if(i>maybe*10000)then exit(false) else exit(true);		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  //Pairing		{{server_addr}}	{{server_port}}
+i  function cp(i:integer):relation;		{{server_addr}}	{{server_port}}
+i      var		{{server_addr}}	{{server_port}}
+i          j:float;		{{server_addr}}	{{server_port}}
+i      begin		{{server_addr}}	{{server_port}}
+i          cp.p:=i;		{{server_addr}}	{{server_port}}
+i          j:=-1;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          if(i<boy)then begin		{{server_addr}}	{{server_port}}
+i              if(possibility(1-boylove))then begin		{{server_addr}}	{{server_port}}
+i                  //This person is single		{{server_addr}}	{{server_port}}
+i                  cp.q:=i;		{{server_addr}}	{{server_port}}
+i              end else begin		{{server_addr}}	{{server_port}}
+i                  //Randomly pair with a girl		{{server_addr}}	{{server_port}}
+i                  while(j<boy)or(j>boy+girl)do begin		{{server_addr}}	{{server_port}}
+i                      j:=randg(boy+girl/2,girl/2);		{{server_addr}}	{{server_port}}
+i                  end;		{{server_addr}}	{{server_port}}
+i                  cp.q:=trunc(j);		{{server_addr}}	{{server_port}}
+i              end;		{{server_addr}}	{{server_port}}
+i          end else begin		{{server_addr}}	{{server_port}}
+i              if(possibility(1-girllove))then begin		{{server_addr}}	{{server_port}}
+i                  //This person is single		{{server_addr}}	{{server_port}}
+i                  cp.q:=i;		{{server_addr}}	{{server_port}}
+i              end else begin		{{server_addr}}	{{server_port}}
+i                  //Randomly pair with a boy		{{server_addr}}	{{server_port}}
+i                  while(j<0)or(j>boy)do begin		{{server_addr}}	{{server_port}}
+i                      j:=randg(boy+girl/2,girl/2);		{{server_addr}}	{{server_port}}
+i                  end;		{{server_addr}}	{{server_port}}
+i                  cp.q:=trunc(j);		{{server_addr}}	{{server_port}}
+i              end;		{{server_addr}}	{{server_port}}
+i          end;		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  //Union-Find code		{{server_addr}}	{{server_port}}
+i  procedure unioninit(n:longint);		{{server_addr}}	{{server_port}}
+i      var		{{server_addr}}	{{server_port}}
+i          i:longint;		{{server_addr}}	{{server_port}}
+i      begin		{{server_addr}}	{{server_port}}
+i          for i:=0 to n-1 do begin		{{server_addr}}	{{server_port}}
+i              id[i]:=i;		{{server_addr}}	{{server_port}}
+i              sz[i]:=1;		{{server_addr}}	{{server_port}}
+i              lead[i]:=1;		{{server_addr}}	{{server_port}}
+i          end;		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i  function unionfind(p:longint):longint;		{{server_addr}}	{{server_port}}
+i      var		{{server_addr}}	{{server_port}}
+i          t:longint;		{{server_addr}}	{{server_port}}
+i      begin		{{server_addr}}	{{server_port}}
+i          t:=p;		{{server_addr}}	{{server_port}}
+i          //Find relationship root		{{server_addr}}	{{server_port}}
+i          while(t<>id[t])do t:=id[t];		{{server_addr}}	{{server_port}}
+i          unionfind:=t;		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i  function unionconnected(p,q:longint):boolean;		{{server_addr}}	{{server_port}}
+i      begin		{{server_addr}}	{{server_port}}
+i          unionconnected:=unionfind(p)=unionfind(q);		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i  procedure union(p,q:longint);		{{server_addr}}	{{server_port}}
+i      var		{{server_addr}}	{{server_port}}
+i          rootp,rootq:longint;		{{server_addr}}	{{server_port}}
+i      begin		{{server_addr}}	{{server_port}}
+i          rootp:=unionfind(p);		{{server_addr}}	{{server_port}}
+i          rootq:=unionfind(q);		{{server_addr}}	{{server_port}}
+i          //Relationship chains don't intersect		{{server_addr}}	{{server_port}}
+i          if(rootp<>rootq)then begin		{{server_addr}}	{{server_port}}
+i              if(sz[rootp]<sz[rootq])then begin		{{server_addr}}	{{server_port}}
+i                  //Link rootP to rootQ to form relationship		{{server_addr}}	{{server_port}}
+i                  id[rootp]:=rootq;		{{server_addr}}	{{server_port}}
+i                  //Combine chain lengths		{{server_addr}}	{{server_port}}
+i                  sz[rootq]:=sz[rootq]+sz[rootp];		{{server_addr}}	{{server_port}}
+i                  //Remove chain head flag		{{server_addr}}	{{server_port}}
+i                  lead[rootp]:=0;		{{server_addr}}	{{server_port}}
+i              end else begin		{{server_addr}}	{{server_port}}
+i                  id[rootq]:=rootp;		{{server_addr}}	{{server_port}}
+i                  sz[rootp]:=sz[rootq]+sz[rootp];		{{server_addr}}	{{server_port}}
+i                  lead[rootq]:=0;		{{server_addr}}	{{server_port}}
+i              end;		{{server_addr}}	{{server_port}}
+i              count:=count-1;		{{server_addr}}	{{server_port}}
+i          end;		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i  procedure unionshow;		{{server_addr}}	{{server_port}}
+i      var		{{server_addr}}	{{server_port}}
+i          i:longint;		{{server_addr}}	{{server_port}}
+i          poly:array[0..100]of longint;		{{server_addr}}	{{server_port}}
+i      begin		{{server_addr}}	{{server_port}}
+i          for i:=0 to 100 do poly[i]:=0;		{{server_addr}}	{{server_port}}
+i          for i:=0 to total do begin		{{server_addr}}	{{server_port}}
+i              if(lead[i]=0)then continue;		{{server_addr}}	{{server_port}}
+i              poly[sz[i]]:=poly[sz[i]]+1;		{{server_addr}}	{{server_port}}
+i          end;		{{server_addr}}	{{server_port}}
+i          for i:=1 to 100 do begin		{{server_addr}}	{{server_port}}
+i              if(poly[i]<>0)then begin		{{server_addr}}	{{server_port}}
+i                  if(i=1)then writeln('Lonely: ',poly[1])		{{server_addr}}	{{server_port}}
+i                  else if(i=2)then writeln('Couple: ',poly[2])		{{server_addr}}	{{server_port}}
+i                  else writeln(i,' angle love: ',poly[i]);		{{server_addr}}	{{server_port}}
+i              end;		{{server_addr}}	{{server_port}}
+i          end;		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i  begin		{{server_addr}}	{{server_port}}
+i      randomize;		{{server_addr}}	{{server_port}}
+i      write('Boy number:');		{{server_addr}}	{{server_port}}
+i      readln(boy);		{{server_addr}}	{{server_port}}
+i      write('Girl number:');		{{server_addr}}	{{server_port}}
+i      readln(girl);		{{server_addr}}	{{server_port}}
+i      total:=boy+girl;		{{server_addr}}	{{server_port}}
+i      count:=total;		{{server_addr}}	{{server_port}}
+i      unioninit(total);		{{server_addr}}	{{server_port}}
+i      write('Boy love rate:');		{{server_addr}}	{{server_port}}
+i      readln(boylove);		{{server_addr}}	{{server_port}}
+i      while(boylove>1)do boylove:=boylove/100;		{{server_addr}}	{{server_port}}
+i      write('Girl love rate:');		{{server_addr}}	{{server_port}}
+i      readln(girllove);		{{server_addr}}	{{server_port}}
+i      while(girllove>1)do girllove:=girllove/100;		{{server_addr}}	{{server_port}}
+i      for i:=0 to total-1 do begin		{{server_addr}}	{{server_port}}
+i          //Create a pair		{{server_addr}}	{{server_port}}
+i          cpresult:=cp(i);		{{server_addr}}	{{server_port}}
+i          //Record the pair		{{server_addr}}	{{server_port}}
+i          //if(cpresult.p<>cpresult.q)then writeln('Lovers logged: ',cpresult.p,' ',cpresult.q);		{{server_addr}}	{{server_port}}
+i          union(cpresult.p,cpresult.q);		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i      //Display relationship status		{{server_addr}}	{{server_port}}
+i      unionshow;		{{server_addr}}	{{server_port}}
+i  end.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAlgorithm explanation:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst initialize three arrays: `id` records a person's partner, `sz`		{{server_addr}}	{{server_port}}
+irecords relationship chain length, `lead` marks whether someone is a		{{server_addr}}	{{server_port}}
+ichain head.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInitially set all `id` to self, `sz` to 1, `lead` to 1 (true).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iScan all people using random numbers. If someone meets pairing		{{server_addr}}	{{server_port}}
+iconditions (random number within love rate), randomly assign an		{{server_addr}}	{{server_port}}
+iopposite-sex partner. The original author used a Gaussian algorithm -		{{server_addr}}	{{server_port}}
+iJava's version required square roots while Pascal's doesn't. I added		{{server_addr}}	{{server_port}}
+isquare roots during translation and spent 30 minutes debugging an		{{server_addr}}	{{server_port}}
+iinfinite loop.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen establishing relationships:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Find both individuals' relationship chain roots (e.g., 1→2→3 and		{{server_addr}}	{{server_port}}
+i   31→32)		{{server_addr}}	{{server_port}}
+i2. Link roots (3→32) to form complex relationships (pentagonal here)		{{server_addr}}	{{server_port}}
+i3. Combine chain lengths, set first chain to point to second		{{server_addr}}	{{server_port}}
+i4. Remove first chain's head flag		{{server_addr}}	{{server_port}}
+iFinally, scan the `sz` array to output group counts by relationship		{{server_addr}}	{{server_port}}
+icomplexity.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

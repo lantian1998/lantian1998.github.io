@@ -1,0 +1,160 @@
+i# 2020-03-16 Notice		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis article has an updated version: see		{{server_addr}}	{{server_port}}
+i《		{{server_addr}}	{{server_port}}
+1Introduction to the DN42 Experimental Network (2020 Edition)	/en/article/modify-website/dn42-experimental-network-2020.lantian	{{server_addr}}	{{server_port}}
+i》.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe new version features a more detailed registration process and has		{{server_addr}}	{{server_port}}
+ibeen updated to reflect changes in DN42 over the past three years.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe following content was written in 2017 and is for archival purposes		{{server_addr}}	{{server_port}}
+ionly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i----------------------------------------------------------------------		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDN42, short for Decentralized Network 42, is a large-scale VPN		{{server_addr}}	{{server_port}}
+inetwork. Unlike traditional VPNs, DN42 utilizes technologies commonly		{{server_addr}}	{{server_port}}
+ideployed on internet backbones (such as BGP), effectively simulating a		{{server_addr}}	{{server_port}}
+ireal-world network environment.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDue to its realistic nature, the barrier to entry for DN42 is		{{server_addr}}	{{server_port}}
+irelatively high. You'll need to act as an ISP (Internet Service		{{server_addr}}	{{server_port}}
+iProvider): register an ASN number, obtain IPv4 and IPv6 address pools,		{{server_addr}}	{{server_port}}
+iand broadcast them from your server using BGP. You'll also need to		{{server_addr}}	{{server_port}}
+icontact other users to establish peering connections, gradually		{{server_addr}}	{{server_port}}
+iintegrating into the complete DN42 network.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDN42 operates on the 172.20.0.0/14 and fd00::/8 address ranges – both		{{server_addr}}	{{server_port}}
+ireserved for private networks. This means your activities on DN42		{{server_addr}}	{{server_port}}
+iwon't interfere with your server's other internet connections.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDN42 provides		{{server_addr}}	{{server_port}}
+ia comprehensive tutorial on ASN and IP registration		{{server_addr}}	{{server_port}}
+i. Since you can follow those steps directly, this article focuses on		{{server_addr}}	{{server_port}}
+iaddress pool broadcasting and peering with other users. We assume		{{server_addr}}	{{server_port}}
+iyou've completed ASN and address pool registration as shown:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, log into your server, VPS, OpenWRT router, Raspberry Pi, or any		{{server_addr}}	{{server_port}}
+iLinux device with a fixed IP and persistent connectivity. This guide		{{server_addr}}	{{server_port}}
+iuses Debian 9; package names and config paths may differ for		{{server_addr}}	{{server_port}}
+iCentOS/Arch Linux.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Using OpenVPN to Peer with Other Users		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, install OpenVPN and Supervisor for management:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install openvpn supervisor		{{server_addr}}	{{server_port}}
+i  update-rc.d openvpn disable # Disable OpenVPN auto-start; manage via Supervisor		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGenerate a pre-shared key for OpenVPN P2P connections:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  openvpn --genrsa --secret [name].key		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext, contact existing DN42 users. Use		{{server_addr}}	{{server_port}}
+iDN42 PingFinder		{{server_addr}}	{{server_port}}
+ito measure latency between your server and others, helping identify		{{server_addr}}	{{server_port}}
+ilow-latency peers. Most nodes are concentrated in the US and Europe,		{{server_addr}}	{{server_port}}
+iwith few in Asia-Pacific (mainly Japan/Singapore).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNote: You can peer with multiple users simultaneously (like real		{{server_addr}}	{{server_port}}
+iISPs). Contact several nearby peers via email and establish		{{server_addr}}	{{server_port}}
+iconnections concurrently.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOnce you've chosen peers, exchange:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Public IPs and OpenVPN P2P ports		{{server_addr}}	{{server_port}}
+i2. Internal DN42 IPs		{{server_addr}}	{{server_port}}
+i3. DN42 AS numbers		{{server_addr}}	{{server_port}}
+i4. OpenVPN pre-shared key		{{server_addr}}	{{server_port}}
+iBoth parties should create this OpenVPN config:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  proto       udp		{{server_addr}}	{{server_port}}
+i  mode        p2p		{{server_addr}}	{{server_port}}
+i  remote      [peer's public IP]		{{server_addr}}	{{server_port}}
+i  rport       [peer's port]		{{server_addr}}	{{server_port}}
+i  local       [your public IP]		{{server_addr}}	{{server_port}}
+i  lport       [your port]		{{server_addr}}	{{server_port}}
+i  dev-type    tun		{{server_addr}}	{{server_port}}
+i  tun-ipv6		{{server_addr}}	{{server_port}}
+i  resolv-retry infinite		{{server_addr}}	{{server_port}}
+i  dev         [arbitrary TUN name]		{{server_addr}}	{{server_port}}
+i  comp-lzo		{{server_addr}}	{{server_port}}
+i  persist-key		{{server_addr}}	{{server_port}}
+i  persist-tun		{{server_addr}}	{{server_port}}
+i  cipher aes-256-cbc		{{server_addr}}	{{server_port}}
+i  ifconfig-ipv6 [your DN42 IPv6] [peer's DN42 IPv6]		{{server_addr}}	{{server_port}}
+i  ifconfig [your DN42 IPv4] [peer's DN42 IPv4]		{{server_addr}}	{{server_port}}
+i  secret [path-to-key].key		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRun `openvpn --config [file-path]` and verify connectivity by pinging		{{server_addr}}	{{server_port}}
+ieach other's DN42 IPs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdd to Supervisor ( `/etc/supervisor/conf.d/` ):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [program:[custom-name]]		{{server_addr}}	{{server_port}}
+i  command=openvpn --config [file-path]		{{server_addr}}	{{server_port}}
+i  autostart=true		{{server_addr}}	{{server_port}}
+i  autorestart=true		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRun `supervisorctl reload` to manage the connection.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Using Bird for BGP Announcement		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEstablishing VPN links is like laying cables between ISPs. Next,		{{server_addr}}	{{server_port}}
+iexchange reachability information via BGP. Install Bird:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install bird		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFollow the		{{server_addr}}	{{server_port}}
+iofficial guide		{{server_addr}}	{{server_port}}
+ito create config files (replace placeholders with your AS/IPs). For		{{server_addr}}	{{server_port}}
+ieach peer, create this in `/etc/bird/peers4/` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  protocol bgp [custom-name] from dnpeers {		{{server_addr}}	{{server_port}}
+i    neighbor [peer's DN42 IPv4] as [peer's ASN];		{{server_addr}}	{{server_port}}
+i    direct;		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe `direct` line prevents routes from being marked unreachable in		{{server_addr}}	{{server_port}}
+imultihop mode. Create similar configs in `/etc/bird/peers6/` for IPv6.		{{server_addr}}	{{server_port}}
+iReload with:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  birdc configure && birdc6 configure		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCheck status with `birdc show protocol` :		{{server_addr}}	{{server_port}}
+i"Established" indicates success. If "Idle," remove `direct` (may cause		{{server_addr}}	{{server_port}}
+irouting issues).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iView routes with `birdc show route` :		{{server_addr}}	{{server_port}}
+iPing 172.23.0.53 or fd42:d42:d42:53::1 (DN42 DNS) to confirm		{{server_addr}}	{{server_port}}
+iconnectivity.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Using ZeroTier One for Multi-Server Interconnection		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInstead of complex OpenVPN meshes, use ZeroTier One for simpler server		{{server_addr}}	{{server_port}}
+iinterconnects. Create a ZeroTier network and configure:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iManaged Routes with your DN42 IP ranges:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIPv4 Auto-Assign range:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIPv6 Auto-Assign (disable RFC4193/6PLANE):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInstall ZeroTier on all servers and join the network:		{{server_addr}}	{{server_port}}
+iAssign predefined IPs via the control panel to avoid conflicts.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter verifying internal connectivity, configure Bird BGP between		{{server_addr}}	{{server_port}}
+iservers using their ZeroTier-assigned IPs and your own ASN. Enable IP		{{server_addr}}	{{server_port}}
+iforwarding on all servers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# How to Peer with Me		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo join DN42 via peering with me, follow		{{server_addr}}	{{server_port}}
+ithis guide		{{server_addr}}	{{server_port}}
+ior comment below.		{{server_addr}}	{{server_port}}
+i*(Note: I'll contact you via email instead of replying to comments		{{server_addr}}	{{server_port}}
+ihere.)*		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,72 @@
+iOn the evening of October 4, 2014, attempts to access Microsoft		{{server_addr}}	{{server_port}}
+iaccount login pages from China triggered invalid SSL certificate		{{server_addr}}	{{server_port}}
+iwarnings, as shown:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/46671412433584.png	/usr/uploads/46671412433584.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  颁发对象		{{server_addr}}	{{server_port}}
+i  公用名 (CN)    hotmai.com		{{server_addr}}	{{server_port}}
+i  组织 (O)    hotmail.com		{{server_addr}}	{{server_port}}
+i  组织单位 (OU)     <未包含在证书中>		{{server_addr}}	{{server_port}}
+i  序列号    29		{{server_addr}}	{{server_port}}
+i  颁发者		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  颁发者		{{server_addr}}	{{server_port}}
+i  公用名 (CN)    hotmai.com		{{server_addr}}	{{server_port}}
+i  组织 (O)    hotmail.com		{{server_addr}}	{{server_port}}
+i  组织单位 (OU)     <未包含在证书中>		{{server_addr}}	{{server_port}}
+i  有效期		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  颁发日期    14-9-23		{{server_addr}}	{{server_port}}
+i  截止日期    15-9-23		{{server_addr}}	{{server_port}}
+i  指纹		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  SHA-256 指纹    7B AC CB 75 4D A5 BA 45 1F C5 FA E5 10 6B CE 22		{{server_addr}}	{{server_port}}
+i  34 E3 14 0C 8A 3B 05 9B 36 B0 8C 47 C7 C1 97 2D		{{server_addr}}	{{server_port}}
+i  SHA-1 指纹    30 F3 B3 AD C6 E5 70 BD A6 06 B9 F9 6D E2 41 90		{{server_addr}}	{{server_port}}
+i  CE 26 2C 67		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCopied from Chrome. The "issuer common name being only a domain" and "hotmai.com" (missing 'l')		{{server_addr}}	{{server_port}}
+iindicate this was an SSL man-in-the-middle attack.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe fake certificate content:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  -----BEGIN CERTIFICATE-----		{{server_addr}}	{{server_port}}
+i  MIICYjCCAcugAwIBAgIBKTANBgkqhkiG9w0BAQQFADA4MQswCQYDVQQGEwJjbjEU		{{server_addr}}	{{server_port}}
+i  MBIGA1UEChMLaG90bWFpbC5jb20xEzARBgNVBAMTCmhvdG1haS5jb20wHhcNMTQw		{{server_addr}}	{{server_port}}
+i  OTIzMTEzNDAzWhcNMTUwOTIzMTEzNDAzWjA4MQswCQYDVQQGEwJjbjEUMBIGA1UE		{{server_addr}}	{{server_port}}
+i  ChMLaG90bWFpbC5jb20xEzARBgNVBAMTCmhvdG1haS5jb20wgZ8wDQYJKoZIhvcN		{{server_addr}}	{{server_port}}
+i  AQEBBQADgY0AMIGJAoGBAJ0A+/fnNmwleMfxTRBS5iYkwq4jdOzdXMdWxJjYCJSL		{{server_addr}}	{{server_port}}
+i  izdyB2lfR1UFK0Q6230HkIYqUVzaUC4hsS9nvin3jQB37W5UESXAextNCIgpSQ9N		{{server_addr}}	{{server_port}}
+i  Baf4t5q5ud3AkbR11rdb559e/wMLzGsyD4CML3HlJwgcf4ZHAtrKIVbbBRcGt86J		{{server_addr}}	{{server_port}}
+i  AgMBAAGjfDB6MAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgQwMB0GA1UdDgQW		{{server_addr}}	{{server_port}}
+i  BBQ0j1vwhAYDwOUlEFdLxqlBjF0t6TARBglghkgBhvhCAQEEBAMCBeAwKAYJYIZI		{{server_addr}}	{{server_port}}
+i  AYb4QgENBBsWGWV4YW1wbGUgY29tbWVudCBleHRlbnNpb24wDQYJKoZIhvcNAQEE		{{server_addr}}	{{server_port}}
+i  BQADgYEANQTg2dSEXNPVBJYPSSEe6jLuFbAF7mULievq90yRzPDvXpzdBDxnevbg		{{server_addr}}	{{server_port}}
+i  A2bkXJJUJ3CimwvSg2WVgu4VK+fJMFiXBZthHjkcjGbPydtO7f+WeQKaEUK7EZe1		{{server_addr}}	{{server_port}}
+i  rNGBhbyz/1RpgXRwAw+oBp/Ii9ZoNsde1qD4hkP3OOlTTQNP2kg=		{{server_addr}}	{{server_port}}
+i  -----END CERTIFICATE-----		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSimultaneously, reports indicated login.windows.net experienced		{{server_addr}}	{{server_port}}
+isimilar issues. DNS queries confirmed no DNS poisoning occurred.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/26971412433584.png	/usr/uploads/26971412433584.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLeft: Google DNS (TCP query), Right: 114DNS (UDP query)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/96551412433589.png	/usr/uploads/96551412433589.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTesting via SSH tunnel through Windows Azure China showed no issues.		{{server_addr}}	{{server_port}}
+iLeft: Local query result; Right: Azure China query result,		{{server_addr}}	{{server_port}}
+ireconfirming DNS integrity.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/59401412433590.png	/usr/uploads/59401412433590.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+itcping tests (		{{server_addr}}	{{server_port}}
+hhttps://github.com/jlyo/tcping	URL:https://github.com/jlyo/tcping	{{server_addr}}	{{server_port}}
+i) to port 443 revealed clear hijacking. Normal ping latency to		{{server_addr}}	{{server_port}}
+ilogin.live.com is ~200ms, making sub-10ms responses impossible.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAround 10:30 PM, the issue resolved and SSL connections to		{{server_addr}}	{{server_port}}
+ilogin.live.com normalized.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

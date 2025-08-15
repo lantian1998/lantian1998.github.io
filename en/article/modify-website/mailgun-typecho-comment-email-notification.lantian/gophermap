@@ -1,0 +1,27 @@
+iOften, when replying on websites with self-hosted comment systems like		{{server_addr}}	{{server_port}}
+iWordPress or Typecho, one has to constantly check back to see if their		{{server_addr}}	{{server_port}}
+icomment has been replied to. However, for most people, this is very		{{server_addr}}	{{server_port}}
+iinconvenient.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iA common solution for bloggers is to install an email notification		{{server_addr}}	{{server_port}}
+iplugin. When a commenter's comment receives a reply, an email		{{server_addr}}	{{server_port}}
+inotification is sent to alert them.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe most widely used plugin on Typecho is CommentToMail, initially		{{server_addr}}	{{server_port}}
+ideveloped by		{{server_addr}}	{{server_port}}
+iDEFE		{{server_addr}}	{{server_port}}
+iand later maintained by		{{server_addr}}	{{server_port}}
+iByends Upd		{{server_addr}}	{{server_port}}
+i. This plugin sends emails using standard methods like PHP Mail,		{{server_addr}}	{{server_port}}
+iSendMail, or SMTP.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, instead of registering dedicated email accounts for		{{server_addr}}	{{server_port}}
+inotifications, bloggers are now adopting email platforms like Mailgun.		{{server_addr}}	{{server_port}}
+iThese platforms provide API-based email sending capabilities,		{{server_addr}}	{{server_port}}
+ieliminating the need for complex SMTP configurations or cumbersome		{{server_addr}}	{{server_port}}
+iprocessing code. I've modified this plugin to send emails through the		{{server_addr}}	{{server_port}}
+iMailgun API instead of SMTP.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGitHub project address:		{{server_addr}}	{{server_port}}
+ihttps://github.com/xddxdd/typecho-commentgun		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

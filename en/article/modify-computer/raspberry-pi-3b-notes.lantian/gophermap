@@ -1,0 +1,159 @@
+iDuring the National Day holiday, I purchased a Raspberry Pi 3B and a		{{server_addr}}	{{server_port}}
+ibunch of sensors from Taobao to start some projects. Due to holiday		{{server_addr}}	{{server_port}}
+ishipping delays, all components arrived piecemeal days after the		{{server_addr}}	{{server_port}}
+ivacation ended.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, a photo of the completed setup:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI ordered from five different stores:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Raspberry Pi 3B (with case, fan, heatsinks, power supply)		{{server_addr}}	{{server_port}}
+i2. SanDisk 32GB TF card		{{server_addr}}	{{server_port}}
+i3. Raspberry Pi sensor kit (3.3V compatible, 16 sensors total)		{{server_addr}}	{{server_port}}
+i4. 5-inch 800x480 touchscreen		{{server_addr}}	{{server_port}}
+i5. DS3231 RTC module and GPIO pin labels (purchased later)		{{server_addr}}	{{server_port}}
+i## Raspberry Pi Unit		{{server_addr}}	{{server_port}}
+iThe Pi 3B arrived first. However, the TF card hadn't arrived yet,		{{server_addr}}	{{server_port}}
+ileaving the Pi unusable. I proceeded to assemble the case and cooling		{{server_addr}}	{{server_port}}
+isystem.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEncountered an issue: The case's internal support pillars were		{{server_addr}}	{{server_port}}
+imisaligned. I resolved this by cutting off two obstructing pillars		{{server_addr}}	{{server_port}}
+iwith scissors:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe heatsinks used double-sided tape, which I suspect might hinder		{{server_addr}}	{{server_port}}
+iheat dissipation. The fan (connected to 5V and GND pins) felt more		{{server_addr}}	{{server_port}}
+ilike a placebo effect.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## TF Card Setup		{{server_addr}}	{{server_port}}
+iThe TF card arrived the next day. Flashed Raspbian Lite using:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo dd bs=1m if=raspbian.img of=/dev/rdisk2 conv=sync		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInserted into Pi and powered on.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## School Network Challenges		{{server_addr}}	{{server_port}}
+iFaced three hurdles:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Campus wired/WiFi required web login		{{server_addr}}	{{server_port}}
+i2. Eduroam WiFi used WPA2-EAP enterprise auth		{{server_addr}}	{{server_port}}
+i3. No display/keyboard for initial setup		{{server_addr}}	{{server_port}}
+iWorkaround: Shared internet from Windows PC via Ethernet. Used `arp -a`		{{server_addr}}	{{server_port}}
+ito find Pi's IP (192.168.137.xxx) and connected via PuTTY.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Eduroam Configuration		{{server_addr}}	{{server_port}}
+iCopied Android's wpa_supplicant configuration for Eduroam:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  network={		{{server_addr}}	{{server_port}}
+i      ssid="eduroam"		{{server_addr}}	{{server_port}}
+i      key_mgmt=WPA-EAP IEEE8021X		{{server_addr}}	{{server_port}}
+i      eap=PEAP		{{server_addr}}	{{server_port}}
+i      identity="username"		{{server_addr}}	{{server_port}}
+i      password="password"		{{server_addr}}	{{server_port}}
+i      phase2=""		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Port Forwarding		{{server_addr}}	{{server_port}}
+iUsed free ngrok services initially, then switched to self-hosted frp		{{server_addr}}	{{server_port}}
+ion Tencent Cloud for stable SSH access. Also deployed ZeroTier One for		{{server_addr}}	{{server_port}}
+iVPN connectivity.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Sensor Integration		{{server_addr}}	{{server_port}}
+iFirst test with DHT11 temp/humidity sensor:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- VCC: Pin 1 (3.3V)		{{server_addr}}	{{server_port}}
+i- GND: Pin 9		{{server_addr}}	{{server_port}}
+i- DATA: GPIO7 (wPi pin 7)		{{server_addr}}	{{server_port}}
+iUsed pre-built Python library from		{{server_addr}}	{{server_port}}
+iszazo/DHT11_Python		{{server_addr}}	{{server_port}}
+i:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Last valid input: 2017-10-13 18:37:13.232685		{{server_addr}}	{{server_port}}
+i  Temperature: 22 C		{{server_addr}}	{{server_port}}
+i  Humidity: 63 %		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Touchscreen Setup		{{server_addr}}	{{server_port}}
+i5" 800x480 display required config tweaks:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**/boot/config.txt**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  disable_overscan=1		{{server_addr}}	{{server_port}}
+i  framebuffer_width=800		{{server_addr}}	{{server_port}}
+i  framebuffer_height=480		{{server_addr}}	{{server_port}}
+i  hdmi_force_hotplug=1		{{server_addr}}	{{server_port}}
+i  hdmi_group=2		{{server_addr}}	{{server_port}}
+i  hdmi_mode=87		{{server_addr}}	{{server_port}}
+i  hdmi_cvt=800 480 60 6 0 0 0		{{server_addr}}	{{server_port}}
+i  dtoverlay=ads7846,penirq=22,speed=100000,xohms=150		{{server_addr}}	{{server_port}}
+i  dtparam=spi=on		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**/etc/lightdm/lightdm.conf**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  display-setup-script=xrandr --output default --mode 800x480		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInstalled touch drivers and configured long-press right-click:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Section "InputClass"		{{server_addr}}	{{server_port}}
+i      Identifier    "calibration"		{{server_addr}}	{{server_port}}
+i      MatchProduct    "ADS7846 Touchscreen"		{{server_addr}}	{{server_port}}
+i      Option    "Calibration"    "254 3911 153 3962"		{{server_addr}}	{{server_port}}
+i      Option    "SwapAxes"    "0"		{{server_addr}}	{{server_port}}
+i      Option "EmulateThirdButton" "1"		{{server_addr}}	{{server_port}}
+i      Option "EmulateThirdButtonTimeout" "700"		{{server_addr}}	{{server_port}}
+i      Option "EmulateThirdButtonMoveThreshold" "100"		{{server_addr}}	{{server_port}}
+i  EndSection		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Wired Network Automation		{{server_addr}}	{{server_port}}
+iScript for campus network login:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #!/bin/bash		{{server_addr}}	{{server_port}}
+i  ping -c 1 -W 1 114.114.114.114 >/dev/null 2>/dev/null		{{server_addr}}	{{server_port}}
+i  if [ $? -eq 1 ]		{{server_addr}}	{{server_port}}
+i  then		{{server_addr}}	{{server_port}}
+i      curl http://login-page --connect-timeout 1 -F "key1=value1" -F "key2=value2"		{{server_addr}}	{{server_port}}
+i  fi		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdded to crontab for periodic checks.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## NAS Implementation		{{server_addr}}	{{server_port}}
+iMounted external HDD and configured Netatalk for Time Machine:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**/etc/netatalk/afp.conf**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [Global]		{{server_addr}}	{{server_port}}
+i  vol preset = default_for_all		{{server_addr}}	{{server_port}}
+i  log file = /var/log/netatalk.log		{{server_addr}}	{{server_port}}
+i  uam list = uams_dhx2.so,uams_clrtxt.so		{{server_addr}}	{{server_port}}
+i  save password = no		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  [TimeMachine]		{{server_addr}}	{{server_port}}
+i  time machine = yes		{{server_addr}}	{{server_port}}
+i  spotlight = no		{{server_addr}}	{{server_port}}
+i  path = /mnt/timemachine		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMac configuration:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1		{{server_addr}}	{{server_port}}
+i  sudo tmutil setdestination "afp://user:pass@pi/Time Machine"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## DS3231 RTC Module		{{server_addr}}	{{server_port}}
+iReplaced fake-hwclock with hardware RTC:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**/boot/config.txt**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  dtoverlay=i2c-rtc,ds3231		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCommands:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo hwclock -w  # Write system time to RTC		{{server_addr}}	{{server_port}}
+i  sudo hwclock -r  # Read RTC time		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Conclusion		{{server_addr}}	{{server_port}}
+iCurrent setup includes basic environmental monitoring and NAS		{{server_addr}}	{{server_port}}
+ifunctionality. Future plans include expanding sensor integration and		{{server_addr}}	{{server_port}}
+ibuilding a monitoring dashboard. While fun for tinkering, the Pi's		{{server_addr}}	{{server_port}}
+ihardware limitations (USB 2.0, 100Mbps Ethernet) make it unsuitable		{{server_addr}}	{{server_port}}
+ifor serious NAS use.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

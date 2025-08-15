@@ -1,0 +1,29 @@
+IUS Visa Appointment Cancellation Email	/usr/uploads/202006/usvisa-mail.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IBut Appointments Are Still Available During This Period	/usr/uploads/202006/usvisa-time.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAttached cancellation email content:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> As of February 3, 2020, regular visa services at the U.S Embassy in		{{server_addr}}	{{server_port}}
+i> Beijing and the U.S. Consulates General in Chengdu, Guangzhou,		{{server_addr}}	{{server_port}}
+i> Shanghai and Shenyang are suspended. As a result, the United States		{{server_addr}}	{{server_port}}
+i> Embassy and Consulates in China are cancelling immigrant and		{{server_addr}}	{{server_port}}
+i> non-immigrant visa appointments for June 29 through July 10. Due to		{{server_addr}}	{{server_port}}
+i> the ongoing situation relating to the novel coronavirus, the U.S.		{{server_addr}}	{{server_port}}
+i> Embassy and Consulates have very limited staffing and may be unable		{{server_addr}}	{{server_port}}
+i> to respond to requests regarding regular visa services. While some		{{server_addr}}	{{server_port}}
+i> limited emergency appointments may be available, intending		{{server_addr}}	{{server_port}}
+i> applicants should note that on Sunday, February 2, a Presidential		{{server_addr}}	{{server_port}}
+i> Proclamation was issued that suspended entry for individuals who		{{server_addr}}	{{server_port}}
+i> have been in China, excluding the Special Administrative Regions of		{{server_addr}}	{{server_port}}
+i> Hong Kong and Macau, less than 14 days prior to their arrival in the		{{server_addr}}	{{server_port}}
+i> U.S. More information about the Proclamation can be found on our		{{server_addr}}	{{server_port}}
+i> website here:		{{server_addr}}	{{server_port}}
+h> https://travel.state.gov/content/travel/en/traveladvisories/ea/Presidential-Proclamation-Coronavirus.html	URL:https://travel.state.gov/content/travel/en/traveladvisories/ea/Presidential-Proclamation-Coronavirus.html	{{server_addr}}	{{server_port}}
+i> . If during this period you have urgent travel that you believe may		{{server_addr}}	{{server_port}}
+i> qualify for an exemption under the proclamation, please go to		{{server_addr}}	{{server_port}}
+h> https://ustraveldocs.com/cn/index.html	URL:https://ustraveldocs.com/cn/index.html	{{server_addr}}	{{server_port}}
+i> to submit an emergency appointment request. Please note if your		{{server_addr}}	{{server_port}}
+i> urgent travel does not qualify under an exemption, your request will		{{server_addr}}	{{server_port}}
+i> be denied until the proclamation is rescinded.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

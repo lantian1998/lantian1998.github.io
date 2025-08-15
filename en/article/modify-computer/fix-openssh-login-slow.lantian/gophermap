@@ -1,0 +1,30 @@
+iToday when connecting to an Azure China virtual machine, I noticed		{{server_addr}}	{{server_port}}
+iextremely slow login response. Even with a good network environment,		{{server_addr}}	{{server_port}}
+iit took over ten seconds to display the password prompt.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter searching on Google, I discovered the issue was caused by DNS		{{server_addr}}	{{server_port}}
+ireverse lookup.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOpenSSH performs a reverse lookup on your IP during login to determine		{{server_addr}}	{{server_port}}
+iif your IP is on the system's blacklist. However, China Telecom		{{server_addr}}	{{server_port}}
+idoesn't provide reverse lookup for residential IP addresses, causing		{{server_addr}}	{{server_port}}
+iOpenSSH to wait until the lookup times out before establishing the		{{server_addr}}	{{server_port}}
+iconnection.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe solution is simply to disable reverse lookup.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo nano /etc/ssh/sshd_config		{{server_addr}}	{{server_port}}
+i  # Add "UseDNS no" at the end of the file, then save and close		{{server_addr}}	{{server_port}}
+i  sudo service ssh restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf the connection remains slow after this configuration, try the		{{server_addr}}	{{server_port}}
+ifollowing settings:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo nano /etc/ssh/sshd_config		{{server_addr}}	{{server_port}}
+i  # Add "GSSAPIAuthentication no" at the end of the file, then save and close		{{server_addr}}	{{server_port}}
+i  sudo service ssh restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter applying these settings, SSH connections now complete within 2		{{server_addr}}	{{server_port}}
+iseconds - a significant improvement compared to the previous 10+		{{server_addr}}	{{server_port}}
+isecond wait time.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

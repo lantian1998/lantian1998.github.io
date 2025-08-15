@@ -1,0 +1,36 @@
+iWith the growing number of Bilibili users, many elementary school		{{server_addr}}	{{server_port}}
+istudents have joined the platform and posted a large volume of danmaku		{{server_addr}}	{{server_port}}
+ithat violates etiquette, significantly impacting other users' viewing		{{server_addr}}	{{server_port}}
+iexperience. Many users have even turned off danmaku entirely because		{{server_addr}}	{{server_port}}
+iof this, but what's the point of using Bilibili without danmaku?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI wrote a small program in Python 3 to filter out elementary		{{server_addr}}	{{server_port}}
+ischool-level danmaku (this program also served as practice for a		{{server_addr}}	{{server_port}}
+irecent Python programming class). The code can be found at		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/bilibili-dmshield	URL:https://github.com/xddxdd/bilibili-dmshield	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo use the filtering feature, you can either:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Point the IP of comment.bilibili.com to 127.0.0.1 via the hosts		{{server_addr}}	{{server_port}}
+i  file, or		{{server_addr}}	{{server_port}}
+i- Use browser extensions like FoxyProxy or SwitchyOmega to route		{{server_addr}}	{{server_port}}
+i  comment.bilibili.com traffic through the program's proxy port.		{{server_addr}}	{{server_port}}
+iThe program's features include:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. **Top/Bottom Danmaku Filtering** : Only retains "Science		{{server_addr}}	{{server_port}}
+i   Populizers" (users posting multiple top/bottom danmaku in a short		{{server_addr}}	{{server_port}}
+i   time) and "Subtitle Providers" (users posting multiple top/bottom		{{server_addr}}	{{server_port}}
+i   danmaku throughout the video). All others are reset to scrolling		{{server_addr}}	{{server_port}}
+i   danmaku.		{{server_addr}}	{{server_port}}
+i2. **Intelligent Keyword Filtering** : For certain keywords (e.g., "Jinkela"),		{{server_addr}}	{{server_port}}
+i   they are only allowed when appearing frequently in danmaku,		{{server_addr}}	{{server_port}}
+i   avoiding interference with videos related to these keywords.		{{server_addr}}	{{server_port}}
+i3. **Repetitive Text Truncation** : For danmaku with consecutive		{{server_addr}}	{{server_port}}
+i   repeated characters (e.g., "23333", "66666", "hhhhh"), reduces		{{server_addr}}	{{server_port}}
+i   repetitions to a maximum of 5 characters.		{{server_addr}}	{{server_port}}
+i4. **Danmaku Density Control** : When the screen floods with identical		{{server_addr}}	{{server_port}}
+i   danmaku, reduces the quantity to the square root of the original		{{server_addr}}	{{server_port}}
+i   count.		{{server_addr}}	{{server_port}}
+i5. **Font Size Reset** : Default scrolling danmaku are set to a small		{{server_addr}}	{{server_port}}
+i   font size.		{{server_addr}}	{{server_port}}

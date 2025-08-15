@@ -1,0 +1,35 @@
+I/usr/uploads/92411407737467.png	/usr/uploads/92411407737467.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn Chrome Developer Tools, there's a section called the "Console"		{{server_addr}}	{{server_port}}
+iwhere we can add some Easter egg messages, for example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Welcome to Lan Tian @ Blog.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you can see these lines, then you definitely don't have a		{{server_addr}}	{{server_port}}
+igirlfriend.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThese messages can be output using JavaScript with the following		{{server_addr}}	{{server_port}}
+iimplementation code:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  if(window.console){		{{server_addr}}	{{server_port}}
+i      var cons = console;		{{server_addr}}	{{server_port}}
+i      if (cons){		{{server_addr}}	{{server_port}}
+i          cons.warn('%cWelcome to Lan Tian @ Blog.','color:#09f');		{{server_addr}}	{{server_port}}
+i          cons.warn('If you can see these lines,');		{{server_addr}}	{{server_port}}
+i          cons.warn('then you definitely don\'t have a girlfriend.');		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen `cons.warn` takes only one parameter, it outputs that sentence in		{{server_addr}}	{{server_port}}
+ithe console. If it takes two parameters and the first parameter (the		{{server_addr}}	{{server_port}}
+imessage) starts with `%c` , then the second parameter is CSS code.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUsing `cons.warn` will display a yellow triangle at the beginning of		{{server_addr}}	{{server_port}}
+ithe output. Using `cons.log` shows nothing at the beginning, while `cons.error`		{{server_addr}}	{{server_port}}
+idisplays a red cross, as shown in the image.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/20140811/1407737826162144.png	/usr/uploads/20140811/1407737826162144.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPlace this modified code in your website's `footer.php` template and		{{server_addr}}	{{server_port}}
+irefresh the page to see the effect.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

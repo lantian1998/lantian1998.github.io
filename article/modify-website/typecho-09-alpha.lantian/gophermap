@@ -1,0 +1,37 @@
+i昨天下午回到家，打开 feedly，看到		{{server_addr}}	{{server_port}}
+h小蒋博客	URL:http://www.zntec.cn/archives/typecho-0-9.html	{{server_addr}}	{{server_port}}
+i上有篇 Typecho 0.9 的文章。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i啥，Typecho 居然在有生之年更新了！？果断打开		{{server_addr}}	{{server_port}}
+hTypecho 官网	URL:http://typecho.org	{{server_addr}}	{{server_port}}
+i，居然看到了 TE 那个简洁的默认主题。我记得以前官网不是长这样。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ITypecho 官方网站	/usr/uploads/2013/10/2214168162.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i发布文章上来就一句话「是的，你没有进错网址，目前这个简陋的地方确实是		{{server_addr}}	{{server_port}}
+iTypecho 的官方网站」。。。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i于是我马上下载、更新、安装。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i更新方法很简单，登上 FTP 删掉 admin、var 目录和 index.php，把 0.9 版本		{{server_addr}}	{{server_port}}
+i的这几个文件传上来，然后到后台更新数据库就行。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i打开登录页面，我瞬间觉得高端大气上档次。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I登陆界面	/usr/uploads/2013/10/1883541722.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i据说 TE0.9 增加了 Markdown 编辑器，要到个人面板开启。虽然不用，但是还		{{server_addr}}	{{server_port}}
+i是看一眼。个人面板也是高端大气上档次啊。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I个人面板	/usr/uploads/2013/10/467160611.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i文章编辑界面。和 WordPress 有点相像。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I文章编辑界面	/usr/uploads/2013/10/1758541712.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHTML5 的图片上传，终于告别 Flash 了。还支持拖放呢。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I图片上传	/usr/uploads/2013/10/1274762080.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不管怎么说，一年之后，TE 终于有了动静，接下来就是等 TE 完善了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

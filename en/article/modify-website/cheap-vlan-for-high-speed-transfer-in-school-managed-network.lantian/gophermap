@@ -1,0 +1,199 @@
+iLike most universities across the country, my university provides		{{server_addr}}	{{server_port}}
+inetwork access with a "one person, one account" policy. When		{{server_addr}}	{{server_port}}
+iconnecting via wired network or Wi-Fi, all requests are temporarily		{{server_addr}}	{{server_port}}
+iredirected to a login page (i.e., Captive Portal), and only after		{{server_addr}}	{{server_port}}
+ientering the username and password can one access the internet. This		{{server_addr}}	{{server_port}}
+ipractice is standard in most public places (such as airports, coffee		{{server_addr}}	{{server_port}}
+ishops) and is relatively friendly to devices like computers and		{{server_addr}}	{{server_port}}
+ismartphones. However, devices without a display (such as Raspberry Pi,		{{server_addr}}	{{server_port}}
+iESP8266, etc.) have difficulty accessing the network.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor systems like Raspberry Pi and ESP8266 that can run custom code, it		{{server_addr}}	{{server_port}}
+iis possible to simulate form submissions to log into the network.		{{server_addr}}	{{server_port}}
+iHowever, if the program that simulates the form submission encounters		{{server_addr}}	{{server_port}}
+ian issue, you have to manually disconnect the device, connect it to		{{server_addr}}	{{server_port}}
+iyour computer, and upload a new login program, which is a very		{{server_addr}}	{{server_port}}
+icumbersome process. As for other smart devices that can only run		{{server_addr}}	{{server_port}}
+ipredetermined programs, they are completely unable to connect to the		{{server_addr}}	{{server_port}}
+inetwork. Since I do not have devices like smart lamps, this article		{{server_addr}}	{{server_port}}
+iwill only consider smart devices that can run one of the three major		{{server_addr}}	{{server_port}}
+ioperating systems: Windows, macOS, or Linux, including computers and		{{server_addr}}	{{server_port}}
+isingle-board computers (SBC).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdditionally, there are a few minor issues:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- There is only one network port in my dorm room for me to use, and I		{{server_addr}}	{{server_port}}
+i  need to share it among my various devices.		{{server_addr}}	{{server_port}}
+i- My university allows one account to log in to multiple devices, and		{{server_addr}}	{{server_port}}
+i  the bandwidth is calculated independently for each device.		{{server_addr}}	{{server_port}}
+i  - Suppose my account has a speed limit of 10 Mbps; then if I connect		{{server_addr}}	{{server_port}}
+i    three devices, each device can get 10 Mbps of bandwidth.		{{server_addr}}	{{server_port}}
+iI eventually purchased a gigabit switch and set up a VLAN by		{{server_addr}}	{{server_port}}
+iconfiguring each device, creating an intranet. This intranet is not		{{server_addr}}	{{server_port}}
+isubject to the school network's login requirement; as long as the		{{server_addr}}	{{server_port}}
+idevice is configured for the VLAN, it can immediately communicate with		{{server_addr}}	{{server_port}}
+iother devices in the same VLAN upon connection. If a device has issues		{{server_addr}}	{{server_port}}
+iand cannot log into the school network, I can manage it via this VLAN.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Why not buy a router?		{{server_addr}}	{{server_port}}
+i  - Because it's **expensive** . I bought a Mercury mini 5-port		{{server_addr}}	{{server_port}}
+i    gigabit switch for only 39 yuan; a 5-port gigabit router would		{{server_addr}}	{{server_port}}
+i    cost over a hundred yuan.		{{server_addr}}	{{server_port}}
+i  - Moreover, a router cannot achieve **independent bandwidth for each		{{server_addr}}	{{server_port}}
+i    device** . The network topology below the router is not		{{server_addr}}	{{server_port}}
+i    transparent to the upper-layer gateway; it is generally considered		{{server_addr}}	{{server_port}}
+i    as a single device, sharing the aforementioned 10 Mbps bandwidth.		{{server_addr}}	{{server_port}}
+i    In contrast, a switch only forwards packets and exposes each		{{server_addr}}	{{server_port}}
+i    device to the upper-layer gateway, allowing each device to log in		{{server_addr}}	{{server_port}}
+i    independently and enjoy dedicated bandwidth.		{{server_addr}}	{{server_port}}
+i  - However, if you need to connect non-programmable smart devices (like		{{server_addr}}	{{server_port}}
+i    smart lamps), spending more on a router is the **most convenient**		{{server_addr}}	{{server_port}}
+i    option.		{{server_addr}}	{{server_port}}
+i- Will it interfere with the school network?		{{server_addr}}	{{server_port}}
+i  - The switch may forward VLAN-tagged packets to the school's		{{server_addr}}	{{server_port}}
+i    gateway. However, without special configuration, since packets		{{server_addr}}	{{server_port}}
+i    from the end network port should not carry VLAN tags, the school		{{server_addr}}	{{server_port}}
+i    gateway will generally discard these packets directly, without		{{server_addr}}	{{server_port}}
+i    interfering with any device.		{{server_addr}}	{{server_port}}
+i  - It cannot be ruled out that some abnormal network behavior		{{server_addr}}	{{server_port}}
+i    management systems might detect VLAN packets and ban your account.		{{server_addr}}	{{server_port}}
+i    You can only try it yourself or consult your school's IT		{{server_addr}}	{{server_port}}
+i    department.		{{server_addr}}	{{server_port}}
+i## Required Materials		{{server_addr}}	{{server_port}}
+i1. A 5-port gigabit switch.		{{server_addr}}	{{server_port}}
+i   - As mentioned, the Mercury 5-port gigabit switch I used costs 39		{{server_addr}}	{{server_port}}
+i     yuan, purchased from Tmall.		{{server_addr}}	{{server_port}}
+i   - If you want to save more money, there are 19 yuan 5-port 100Mbps		{{server_addr}}	{{server_port}}
+i     switches on Taobao. But since it's already 2020, **it is not		{{server_addr}}	{{server_port}}
+i     recommended at all** to buy 100Mbps network products.		{{server_addr}}	{{server_port}}
+i2. Sufficient network cables to connect the switch to the school's		{{server_addr}}	{{server_port}}
+i   network interface and to each device.		{{server_addr}}	{{server_port}}
+i   - For gigabit speeds, you can buy any Cat 6 network cable on		{{server_addr}}	{{server_port}}
+i     Taobao.		{{server_addr}}	{{server_port}}
+i   - For 100Mbps speeds, any Cat 5e network cable on Taobao will do.		{{server_addr}}	{{server_port}}
+i   - In theory, Cat 5e cables can also handle gigabit bandwidth, but		{{server_addr}}	{{server_port}}
+i     they suffer from more severe signal interference. Coupled with		{{server_addr}}	{{server_port}}
+i     possible corner-cutting in manufacturing, Cat 5e cables may		{{server_addr}}	{{server_port}}
+i     become unstable at gigabit speeds after some time, even		{{server_addr}}	{{server_port}}
+i     downgrading to 100Mbps.		{{server_addr}}	{{server_port}}
+i     - I have a Cat 5e cable that initially supported gigabit. After		{{server_addr}}	{{server_port}}
+i       prolonged use, although a cable tester shows all 8 wires are		{{server_addr}}	{{server_port}}
+i       connected, the network cards take half a minute to negotiate		{{server_addr}}	{{server_port}}
+i       and then only stabilize at 100Mbps.		{{server_addr}}	{{server_port}}
+i3. Choose a number between 1 and 4094 (inclusive) as your VLAN ID (Tag).		{{server_addr}}	{{server_port}}
+i## How to Connect		{{server_addr}}	{{server_port}}
+iConnect any port of the switch to the school's network interface, then		{{server_addr}}	{{server_port}}
+iconnect the remaining ports to each device.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUnlike a router, a (dumb) switch requires no configuration at all, and		{{server_addr}}	{{server_port}}
+iall ports are completely equivalent; you can swap them in any order.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## VLAN Configuration for Windows Devices		{{server_addr}}	{{server_port}}
+iWindows itself does not support VLANs, but some network cards provide		{{server_addr}}	{{server_port}}
+itheir own configuration utilities to create virtual network adapters.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMy Windows computer uses a Realtek network card and can be configured		{{server_addr}}	{{server_port}}
+iusing the `Realtek Ethernet Diagnostic Utility` . This tool can be		{{server_addr}}	{{server_port}}
+ifound on		{{server_addr}}	{{server_port}}
+hRealtek's download page (English)	URL:https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software	{{server_addr}}	{{server_port}}
+i; download the `Diagnostic Program for Win7/Win8/Win10` item.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis tool has a VLAN option; simply add your previously chosen VLAN		{{server_addr}}	{{server_port}}
+iID:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IRealtek Ethernet Diagnostic Utility VLAN Interface	/usr/uploads/202001/rtl8168-vlan.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Image from		{{server_addr}}	{{server_port}}
+hthis article on Gough's Tech Zone	URL:https://goughlui.com/2018/10/01/note-multiple-vlan-operation-on-realtek-rtl8111d-nic-others/	{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfterwards, a virtual network card will appear in the system's network		{{server_addr}}	{{server_port}}
+ioptions; just configure the IP address.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## VLAN Configuration for macOS		{{server_addr}}	{{server_port}}
+imacOS allows adding VLAN virtual network cards directly in the network		{{server_addr}}	{{server_port}}
+ioptions.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGo to `Network Preferences` , click the gear icon at the bottom left,		{{server_addr}}	{{server_port}}
+iand select `Manage Virtual Interfaces` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ImacOS Manage Virtual Interfaces	/usr/uploads/202001/macos-manage-virtual-interfaces.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen click the plus sign at the bottom left to create a new VLAN ( `New		{{server_addr}}	{{server_port}}
+iVLAN` ):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ImacOS Create VLAN	/usr/uploads/202001/macos-new-vlan.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen enter your VLAN ID (Tag), select the corresponding network card,		{{server_addr}}	{{server_port}}
+iand save:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ImacOS VLAN Configuration	/usr/uploads/202001/macos-vlan-config.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, configure the IP for the new virtual network card to use it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## VLAN Configuration with Linux Network Manager		{{server_addr}}	{{server_port}}
+iNetwork Manager is the network management software used by most Linux		{{server_addr}}	{{server_port}}
+isystems with a graphical interface, such as Ubuntu and Debian. It can		{{server_addr}}	{{server_port}}
+imanage various connection types, including wired, Wi-Fi, VPN, etc.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNetwork Manager has native support for VLANs, and the configuration is		{{server_addr}}	{{server_port}}
+iextremely simple. Go to `Edit Connections` , create a new network		{{server_addr}}	{{server_port}}
+iconnection, and select VLAN as the type:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ILinux Network Manager Creating VLAN Network	/usr/uploads/202001/linux-network-manager-new-vlan.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, as usual, select the physical network card and VLAN ID (Tag):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ILinux Network Manager VLAN Details	/usr/uploads/202001/linux-network-manager-vlan.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Configuration for Linux Systemd-networkd		{{server_addr}}	{{server_port}}
+iSystemd-networkd is a network management program that comes with		{{server_addr}}	{{server_port}}
+iSystemd, typically used on devices with fixed network conditions, such		{{server_addr}}	{{server_port}}
+ias servers. Network Manager is rarely used on these devices.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAssuming your physical network card is `eth0` , first modify the		{{server_addr}}	{{server_port}}
+iconfiguration file for `eth0` , usually `/etc/systemd/network/20-eth0.network` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [Network]		{{server_addr}}	{{server_port}}
+i  ...		{{server_addr}}	{{server_port}}
+i  VLAN=eth0-vlan (add this line)		{{server_addr}}	{{server_port}}
+i  ...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen create the network device definition file `/etc/systemd/network/30-eth0-vlan.netdev`		{{server_addr}}	{{server_port}}
+iwith the following content:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [NetDev]		{{server_addr}}	{{server_port}}
+i  Name=eth0-vlan		{{server_addr}}	{{server_port}}
+i  Kind=vlan		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  [VLAN]		{{server_addr}}	{{server_port}}
+i  Id=1234 (replace with your VLAN ID)		{{server_addr}}	{{server_port}}
+i  [Match]		{{server_addr}}	{{server_port}}
+i  Name=eth0-vlan		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen create `/etc/systemd/network/30-eth0-vlan.network` to specify the		{{server_addr}}	{{server_port}}
+iIP:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [Network]		{{server_addr}}	{{server_port}}
+i  DHCP=no		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  [Address]		{{server_addr}}	{{server_port}}
+i  Address=192.168.0.1/24		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, restart Systemd-networkd:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  systemctl restart systemd-networkd		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe VLAN network is now configured.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## After Configuration		{{server_addr}}	{{server_port}}
+iAfter configuring each device, as long as they are connected to this		{{server_addr}}	{{server_port}}
+iswitch, they can directly access each other using the VLAN's IP		{{server_addr}}	{{server_port}}
+iaddresses.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf your school's network isolation is poorly implemented, it might be		{{server_addr}}	{{server_port}}
+ipossible to access your VLAN from a network interface in another dorm		{{server_addr}}	{{server_port}}
+iroom or even another building. However, such cases are rare, and if		{{server_addr}}	{{server_port}}
+ithey occur, it indicates a certain security vulnerability in the		{{server_addr}}	{{server_port}}
+ischool's network.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

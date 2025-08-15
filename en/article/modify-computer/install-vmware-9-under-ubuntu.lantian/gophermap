@@ -1,0 +1,70 @@
+iThe VirtualBox in Ubuntu's software repositories is becoming		{{server_addr}}	{{server_port}}
+iincreasingly unreliable. Previously, it could at least be installed,		{{server_addr}}	{{server_port}}
+ibut now it fails even to install. The version from the official source		{{server_addr}}	{{server_port}}
+iworks, but it pulls down a massive bundle of KDE components — by the		{{server_addr}}	{{server_port}}
+itime VirtualBox finishes installing, KDE is practically installed too.		{{server_addr}}	{{server_port}}
+iSo I decided to try VMware instead.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDownload address:		{{server_addr}}	{{server_port}}
+hhttp://download.pchome.net/system/sysenhance/download-10771.html	URL:http://download.pchome.net/system/sysenhance/download-10771.html	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe downloaded file has a `.bundle` extension, which is VMware's		{{server_addr}}	{{server_port}}
+iinstaller. However, you can't run it directly — we first need to		{{server_addr}}	{{server_port}}
+igrant it execute permissions:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  chmod +x VMware-Workstation-Full-9.0.0-812388.i386.bundle		{{server_addr}}	{{server_port}}
+i  sudo ./VMware-Workstation-Full-9.0.0-812388.i386.bundle		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRemember to adjust the filename accordingly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe installer will launch as a setup wizard — just click "Next" all		{{server_addr}}	{{server_port}}
+ithe way through. After installation, it's not over yet. When I opened		{{server_addr}}	{{server_port}}
+iVMware via the shortcut, it immediately popped up an error: "Cannot		{{server_addr}}	{{server_port}}
+ifind the header files matching your current Linux kernel. Please		{{server_addr}}	{{server_port}}
+imanually specify the directory..."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI promptly ran `apt-get install linux-headers` in the terminal, but it		{{server_addr}}	{{server_port}}
+iindicated they were already installed. I clicked "Browse" — the		{{server_addr}}	{{server_port}}
+idefault directory was `/usr/src` , which seemed to have complete Linux		{{server_addr}}	{{server_port}}
+iheader files. Why couldn't it find them? After some Googling, I		{{server_addr}}	{{server_port}}
+idiscovered that the version file for Linux kernel 3.7 had been moved,		{{server_addr}}	{{server_port}}
+iso VMware couldn't locate it in the original path.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Note: Ubuntu vanilla users shouldn't encounter this issue since the		{{server_addr}}	{{server_port}}
+idefault kernel is 3.5. My Ubuntu was upgraded to 3.7 via PPA.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe solution is simple: create a symbolic link back:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ln -s /usr/src/linux-headers-3.7.0-7/include/generated/uapi/linux/version.h /usr/src/linux-headers-3.7.0-7/include/linux/version.h		{{server_addr}}	{{server_port}}
+i  ln -s /usr/src/linux-headers-3.7.0-7-generic/include/generated/uapi/linux/version.h /usr/src/linux-headers-3.7.0-7-generic/include/linux/version.h		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Note: If your Linux kernel version updates later, remember to replace `3.7.0-7`		{{server_addr}}	{{server_port}}
+iwith your actual kernel version.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter reopening VMware, it started normally and prompted that it was		{{server_addr}}	{{server_port}}
+icompiling kernel modules. Two minutes later, the compilation		{{server_addr}}	{{server_port}}
+icompleted. I created a virtual machine, loaded the Windows 8 ISO, and		{{server_addr}}	{{server_port}}
+iclicked "Start". Suddenly, my screen went black, filled with a wall of		{{server_addr}}	{{server_port}}
+iVMware kernel driver debug messages...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI pressed Ctrl+Alt+F8, then Ctrl+Alt+F7 to return to the X session.		{{server_addr}}	{{server_port}}
+iVMware showed an error: "Cannot find a valid peer process to connect		{{server_addr}}	{{server_port}}
+ito." Most likely, the peer process had crashed — definitely a kernel		{{server_addr}}	{{server_port}}
+icompatibility issue.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnother Google search led me to:		{{server_addr}}	{{server_port}}
+hSolution for VMware Workstation 9 causing kernel 3.5 (including latest Ubuntu) to crash	URL:http://forum.ubuntu.org.cn/viewtopic.php?f=65&t=391262	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+iIt provided a patch.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe described symptoms matched mine closely, so I gave it a try. After		{{server_addr}}	{{server_port}}
+idownloading the patch:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  tar xjfv vmware9_kernel35_patch.tar.bz2		{{server_addr}}	{{server_port}}
+i  cd vmware9_kernel3.5_patch		{{server_addr}}	{{server_port}}
+i  sudo ./patch-modules_3.5.0.sh		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDuring patching, the VMware drivers recompiled. After completion, I		{{server_addr}}	{{server_port}}
+ireopened VMware and clicked "Start" — the issue was resolved. The		{{server_addr}}	{{server_port}}
+iWindows 8 flag appeared on my screen.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

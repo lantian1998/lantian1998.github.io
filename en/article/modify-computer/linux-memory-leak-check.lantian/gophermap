@@ -1,0 +1,81 @@
+i## Root Cause		{{server_addr}}	{{server_port}}
+iI recently developed a VPS monitoring system using PHP, consisting of		{{server_addr}}	{{server_port}}
+iboth server-side and client-side components. At 3 PM today, I added a		{{server_addr}}	{{server_port}}
+iservice monitoring feature to check running services on VPS instances.		{{server_addr}}	{{server_port}}
+iSince all my VPSes run Debian 8, I used `service --status-all` to		{{server_addr}}	{{server_port}}
+iretrieve service statuses. After successful testing, I moved on to		{{server_addr}}	{{server_port}}
+iother tasks.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAround 9 PM, I received an alert email from NodeQuery indicating high		{{server_addr}}	{{server_port}}
+imemory usage on one of my VPS instances since 7 PM.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iChecking my monitoring system, I found this VPS consuming 400M/500M		{{server_addr}}	{{server_port}}
+imemory. Another VPS showed even higher usage at 600M/1G, though it		{{server_addr}}	{{server_port}}
+ididn't trigger alerts due to larger total memory.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe mystery was: How could these VPSes running only Shadowsocks and		{{server_addr}}	{{server_port}}
+iServerSpeeder consume so much memory? Using `ps -aux` revealed no		{{server_addr}}	{{server_port}}
+iprocesses with such high memory usage.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Is ServerSpeeder the Culprit?		{{server_addr}}	{{server_port}}
+iMy first suspect was ServerSpeeder. As the official version is no		{{server_addr}}	{{server_port}}
+ilonger available to new users, we use a modified version. Stopping		{{server_addr}}	{{server_port}}
+iServerSpeeder with `/serverspeeder/bin/serverSpeeder.sh stop` reduced		{{server_addr}}	{{server_port}}
+imemory by dozens of MB, but usage remained high. After rebooting,		{{server_addr}}	{{server_port}}
+imemory normalized temporarily.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, hours later, my monitoring system showed memory climbing		{{server_addr}}	{{server_port}}
+iagain at 1MB/minute. `ps -aux` still showed nothing unusual.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSomething was definitely wrong!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Investigation		{{server_addr}}	{{server_port}}
+iWith normal process listings, I suspected kernel issues. However,		{{server_addr}}	{{server_port}}
+ianother VPS with identical setup (hosting this blog) showed normal		{{server_addr}}	{{server_port}}
+imemory usage around 300M/500M despite unoptimized MySQL settings.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iReviewing NodeQuery data for affected VPSes revealed:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe memory spike coincided with when I added the service monitoring		{{server_addr}}	{{server_port}}
+ifeature 7 hours prior. But how could a simple PHP script reading `/proc`		{{server_addr}}	{{server_port}}
+ifiles and executing basic commands cause leaks? PHP itself is		{{server_addr}}	{{server_port}}
+ireliable.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPHP is the best language in the world.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI focused on the `service --status-all` command. Repeated execution of `service --status-all > /dev/null &&		{{server_addr}}	{{server_port}}
+ifree -m` showed memory increasing by 1MB per run - matching the		{{server_addr}}	{{server_port}}
+isymptom!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWho was consuming this memory? Research led me to		{{server_addr}}	{{server_port}}
+i《Investigating a Memory Usage Issue》		{{server_addr}}	{{server_port}}
+i, explaining Linux's Slab memory mechanism. While some Slab memory is		{{server_addr}}	{{server_port}}
+ireclaimable, `free -m` and my monitoring script didn't account for it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iChecking `/proc/meminfo` showed 100MB Slab memory (mostly SUnreclaim)		{{server_addr}}	{{server_port}}
+ishortly after reboot. Repeated execution of:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  service --status-all > /dev/null && cat /proc/meminfo | grep SUnreclaim		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iconfirmed SUnreclaim growth.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFurther tests revealed:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Output redirection to files didn't resolve the issue		{{server_addr}}	{{server_port}}
+i2. Individual service checks ( `service [name] status` ) showed no		{{server_addr}}	{{server_port}}
+i   leaks		{{server_addr}}	{{server_port}}
+i3. The leak only occurred with `service --status-all`		{{server_addr}}	{{server_port}}
+i## ServerSpeeder Confirmed as Culprit		{{server_addr}}	{{server_port}}
+iBy process of elimination, I identified `/etc/init.d/serverSpeeder` as		{{server_addr}}	{{server_port}}
+ithe leak source when running `service --status-all` . Removing the		{{server_addr}}	{{server_port}}
+iinit script and manually starting via `/etc/rc.local` resolved the		{{server_addr}}	{{server_port}}
+iissue.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI plan to further analyze ServerSpeeder's scripts to identify the		{{server_addr}}	{{server_port}}
+iexact leak source.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

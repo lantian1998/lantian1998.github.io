@@ -1,0 +1,375 @@
+i## 更新日志		{{server_addr}}	{{server_port}}
+i- 2021-03-24：改进文章处理逻辑，增加识别链接和图片的代码。		{{server_addr}}	{{server_port}}
+i- 2021-03-21：最初版本。		{{server_addr}}	{{server_port}}
+i## 什么是 Gopher		{{server_addr}}	{{server_port}}
+iGopher 是互联网发展早期的一种网络协议，由美国明尼苏达大学于 1991 年发		{{server_addr}}	{{server_port}}
+i明，用途类似于现在的 HTTP。它的基础协议非常简单：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 客户端连接服务端的 TCP 70 端口，并发送一串 URL，用 CRLF 结尾，例如：`some_dir/hello.txt`		{{server_addr}}	{{server_port}}
+i2. 服务端把这个文件的内容全部发过来，然后关闭连接。		{{server_addr}}	{{server_port}}
+i3. 没了。		{{server_addr}}	{{server_port}}
+i服务端返回的文件可能是一个 TXT、一张图片、一个二进制文件，也可能是一个		{{server_addr}}	{{server_port}}
+i有着特殊格式的 Gopher 列表文件，称为 `Gophermap`。这个文件每一行由以下		{{server_addr}}	{{server_port}}
+i几部分组成：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 一个字符，代表这一行的类型，是文字（`i`）、到一个 TXT 的链接（`0`）、		{{server_addr}}	{{server_port}}
+i   到另一个 Gophermap 的链接（`1`）、图片（`I`），还是二进制文件（`9`）。		{{server_addr}}	{{server_port}}
+i   当然还有一些现在已经不再使用的协议，可以参阅		{{server_addr}}	{{server_port}}
+h   RFC1436 Section 3.8	URL:https://tools.ietf.org/html/rfc1436#section-3.8	{{server_addr}}	{{server_port}}
+i   。		{{server_addr}}	{{server_port}}
+i2. 一句话，代表这一行显示的信息，例如 `Hello World`。		{{server_addr}}	{{server_port}}
+i3. 一个 TAB。		{{server_addr}}	{{server_port}}
+i4. 这个链接指向的路径，例如 `/some_dir/hello.txt`。		{{server_addr}}	{{server_port}}
+i5. 一个 TAB。		{{server_addr}}	{{server_port}}
+i6. 这个链接指向的服务器域名或 IP，例如 `gopher.lantian.pub`。		{{server_addr}}	{{server_port}}
+i7. 一个 TAB。		{{server_addr}}	{{server_port}}
+i8. 这个链接指向的服务器端口，一般是 `70`。		{{server_addr}}	{{server_port}}
+i9. CR+LF 换行符结尾。		{{server_addr}}	{{server_port}}
+i在所有内容结束后，`Gophermap` 的最后一行还会有一个单独的英文句点，表示		{{server_addr}}	{{server_port}}
+i文件结束。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i可以参考以下几个例子：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # 一行提示信息，提示信息没有要指向的路径，所以没有第四部分，指向 IP 端口也可以乱填		{{server_addr}}	{{server_port}}
+i  iHello World[TAB][TAB]invalid.host[TAB]70[CR][LF]		{{server_addr}}	{{server_port}}
+i  # 一个链接		{{server_addr}}	{{server_port}}
+i  iProject Description[TAB]/project/description.txt[TAB]gopher.lantian.pub[TAB]70[CR][LF]		{{server_addr}}	{{server_port}}
+i  # 一张图片		{{server_addr}}	{{server_port}}
+i  iScreenshot[TAB]/project/screenshot.jpg[TAB]gopher.lantian.pub[TAB]70[CR][LF]		{{server_addr}}	{{server_port}}
+i  # 标记 Gophermap 结束		{{server_addr}}	{{server_port}}
+i  .[CR][LF]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于 Gopher 协议极其简单，它在上世纪 90 年代计算机运算能力不足的背景下		{{server_addr}}	{{server_port}}
+i得到了广泛的运用。但由于客户端唯一能做的事情就是发送一串 URL，在		{{server_addr}}	{{server_port}}
+iGopher 协议上实现客户端向服务端上传数据功能比较复杂，例如搜索功能、评		{{server_addr}}	{{server_port}}
+i论区等等。此外，服务端返回数据时也只能返回文件本身的数据，而不能像		{{server_addr}}	{{server_port}}
+iHTTP 协议一样添加上其它的响应头，这就导致客户端必须根据之前收到的		{{server_addr}}	{{server_port}}
+iGophermap 中的信息来判断数据类型，或者干脆自己猜。因此 Gopher 协议最终		{{server_addr}}	{{server_port}}
+i被功能更加强大的 HTTP 协议替代了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是 Gopher 协议没有消亡。时至今日（2021 年），依然有在活跃更新的		{{server_addr}}	{{server_port}}
+iGopher 服务器端软件，例如		{{server_addr}}	{{server_port}}
+hGophernicus	URL:https://github.com/gophernicus/gophernicus	{{server_addr}}	{{server_port}}
+i，也有一些网站仍然在通过 Gopher 协议提供服务。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你想试着访问 Gopher 网站，可以尝试		{{server_addr}}	{{server_port}}
+hFirefox 的 Overbite 插件	URL:https://gopher.floodgap.com/overbite/	{{server_addr}}	{{server_port}}
+i，或者		{{server_addr}}	{{server_port}}
+hGopherus	URL:http://gopherus.sourceforge.net/	{{server_addr}}	{{server_port}}
+i等客户端软件。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 为什么要用 nginx？		{{server_addr}}	{{server_port}}
+i相比起 Gophernicus 等专用的 Gopher 服务端软件，nginx 对现代的动态网页		{{server_addr}}	{{server_port}}
+i技术有着更好的支持。例如它可以用 FastCGI 对接 PHP 和 ASP.NET（Mono）来		{{server_addr}}	{{server_port}}
+i动态生成内容，或者把请求代理到其它基于 HTTP 的服务器，作为一个 Gopher		{{server_addr}}	{{server_port}}
+i代理。相比之下，Gophernicus 只支持传统的 CGI，也没有代理功能。此外，		{{server_addr}}	{{server_port}}
+inginx 的高性能有目共睹。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过我选择 nginx 还有另一个原因：我正在		{{server_addr}}	{{server_port}}
+1把 nginx 魔改成一个 WHOIS 服务器	/article/modify-website/serve-dn42-whois-with-nginx.lantian/	{{server_addr}}	{{server_port}}
+i（给 DN42 用的），而 WHOIS 也是和 Gopher 一样，一问一答的协议。我把修		{{server_addr}}	{{server_port}}
+i改的功能稍微调整一下就可以直接支持 Gopher 了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 让 nginx 支持 Gopher		{{server_addr}}	{{server_port}}
+inginx 本身是一个 HTTP 服务器。我们先不考虑引入了二进制命令的现代		{{server_addr}}	{{server_port}}
+iHTTP/2.0，或者基于 UDP 的 QUIC 和 HTTP/3.0，先回头看曾经被广泛使用的		{{server_addr}}	{{server_port}}
+iHTTP/1.1 协议，当时的一个请求长这样：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  GET /test.php HTTP/1.1		{{server_addr}}	{{server_port}}
+i  Host: localhost		{{server_addr}}	{{server_port}}
+i  User-Agent: curl/7.75.0		{{server_addr}}	{{server_port}}
+i  Accept: */*		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  HTTP/1.1 200 OK		{{server_addr}}	{{server_port}}
+i  Server: nginx/1.18.0		{{server_addr}}	{{server_port}}
+i  Date: Sun, 21 Mar 2021 12:08:07 GMT		{{server_addr}}	{{server_port}}
+i  Content-Type: text/html; charset=UTF-8		{{server_addr}}	{{server_port}}
+i  Transfer-Encoding: chunked		{{server_addr}}	{{server_port}}
+i  Connection: keep-alive		{{server_addr}}	{{server_port}}
+i  X-Powered-By: PHP/8.0.3		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i上面一部分是客户端发起的请求，其中必要的是 `GET http://localhost/		{{server_addr}}	{{server_port}}
+iHTTP/1.1` 部分和 `Host: localhost`，它们分别告知了服务器访问的路径（`/test.php`）		{{server_addr}}	{{server_port}}
+i和域名（`localhost`）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i其余部分，例如常见的 User-Agent 等请求头，对于 HTTP 协议来说并不必要。		{{server_addr}}	{{server_port}}
+i我们可以用 `telnet localhost 80` 指令连接服务器，并只保留前两行手动发		{{server_addr}}	{{server_port}}
+i起请求：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  GET /test.php HTTP/1.1		{{server_addr}}	{{server_port}}
+i  Host: localhost		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  HTTP/1.1 200 OK		{{server_addr}}	{{server_port}}
+i  Server: nginx/1.18.0		{{server_addr}}	{{server_port}}
+i  Date: Sun, 21 Mar 2021 12:13:58 GMT		{{server_addr}}	{{server_port}}
+i  Content-Type: text/html; charset=UTF-8		{{server_addr}}	{{server_port}}
+i  Transfer-Encoding: chunked		{{server_addr}}	{{server_port}}
+i  Connection: keep-alive		{{server_addr}}	{{server_port}}
+i  X-Powered-By: PHP/8.0.3		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  c		{{server_addr}}	{{server_port}}
+i  Hello World		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  0		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  ^CConnection closed by foreign host.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i服务端依然返回了页面的内容。但是这比起我们需要的多了不少东西：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Gopher 客户端不认识 HTTP 的 200 状态码；		{{server_addr}}	{{server_port}}
+i- 多余的 Date、Content-Type 等响应头；		{{server_addr}}	{{server_port}}
+i- nginx 回复的响应内容经过 `Transfer-Encoding: chunked` 编码，Gopher		{{server_addr}}	{{server_port}}
+i  客户端也不认识。		{{server_addr}}	{{server_port}}
+i- 在输完 `Host:` 一行后我们按了两次回车，nginx 才发送响应。Gopher 客户		{{server_addr}}	{{server_port}}
+i  端只会发一次回车。		{{server_addr}}	{{server_port}}
+i- 最重要的是，注意到那个 `^C` 没？那是我手动按 `Ctrl+C` 中断了连接。		{{server_addr}}	{{server_port}}
+i  nginx 默认启用了 `Connection: keep-alive`，发送完请求后不会主动关闭		{{server_addr}}	{{server_port}}
+i  连接，而会等待客户端发起第二个请求，如果是 Gopher 客户端就只能一直等		{{server_addr}}	{{server_port}}
+i  下去了。		{{server_addr}}	{{server_port}}
+i因此，基于 HTTP/1.1 修改太过复杂。不过，有 1.1 就有 1.0。我们用		{{server_addr}}	{{server_port}}
+iHTTP/1.0 试试？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  GET /test.php HTTP/1.0		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  HTTP/1.1 200 OK		{{server_addr}}	{{server_port}}
+i  Server: nginx/1.18.0		{{server_addr}}	{{server_port}}
+i  Date: Sun, 21 Mar 2021 12:20:24 GMT		{{server_addr}}	{{server_port}}
+i  Content-Type: text/html; charset=UTF-8		{{server_addr}}	{{server_port}}
+i  Connection: close		{{server_addr}}	{{server_port}}
+i  X-Powered-By: PHP/8.0.3		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  Hello World		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这回服务端主动关闭了连接，并且返回的数据也不是 `chunk` 模式编码了，可		{{server_addr}}	{{server_port}}
+i喜可贺。但是 HTTP 的响应头还在，难道我们要把 nginx 发送响应头的逻辑全		{{server_addr}}	{{server_port}}
+i干掉？这个修改量有点大。另外，我们还是得按两次回车。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i好消息是，在 HTTP/1.0 之前，还有一版极简的协议 HTTP/0.9，就一行：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  GET /test.php		{{server_addr}}	{{server_port}}
+i  Hello World		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i客户端只发送了上面的 GET 一行。在发送换行符后，nginx 就直接把响应数据 `Hello		{{server_addr}}	{{server_port}}
+iWorld` 发过来了，不用按两次回车，没有带上 200 状态码或者别的响应头，还		{{server_addr}}	{{server_port}}
+i不忘关闭连接。这已经很接近我们想要的效果了：这里的 HTTP 客户端发送了 `GET /test.php[		{{server_addr}}	{{server_port}}
+i回车 ]`，而 Gopher 客户端会发送 `test.php[ 回车 ]`。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i此时我们的修改方法已经确定：在 nginx 中添加一版协议来解析 Gopher 请求，		{{server_addr}}	{{server_port}}
+i把请求类型锁定为 GET，在 URL 前面插入一个 `/` 斜杠，剩余逻辑全部照抄		{{server_addr}}	{{server_port}}
+iHTTP/0.9 的就好。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## nginx 补丁及用法		{{server_addr}}	{{server_port}}
+i按照以上方法，我做了一个补丁，可以直接打到 nginx 1.19.7 的源码里。这个		{{server_addr}}	{{server_port}}
+i补丁可以在这里下载到：		{{server_addr}}	{{server_port}}
+hhttps://gist.github.com/xddxdd/293becc41d805d7b8cfb5d11b6e326e1	URL:https://gist.github.com/xddxdd/293becc41d805d7b8cfb5d11b6e326e1	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个补丁总共做了三件事情：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 增加了一个 `listen` 的选项 `plain`，代表用于接收 Gopher 的、不带		{{server_addr}}	{{server_port}}
+i   GET 的请求。		{{server_addr}}	{{server_port}}
+i   - 例如 `listen 70 plain default_server;`		{{server_addr}}	{{server_port}}
+i   - 注意开启 `plain` 选项后，这个端口就不能接受普通的 HTTP 请求了！因		{{server_addr}}	{{server_port}}
+i     此不要把 80 端口的 `listen` 加上这个选项，更不要和 `http2` 之类的		{{server_addr}}	{{server_port}}
+i     选项一起开。		{{server_addr}}	{{server_port}}
+i   - 理论上也支持 SSL，但我没试过。		{{server_addr}}	{{server_port}}
+i2. 增加了一个 `plain` 模式专用的、解析 URL 用的状态机，相比 HTTP 的状		{{server_addr}}	{{server_port}}
+i   态机，删除了解析请求类型（`GET`）、域名（`http://localhost`）和		{{server_addr}}	{{server_port}}
+i   HTTP 版本（`HTTP/1.1`）相关的功能，请求类型锁定为 `GET`，域名设置为 `null`（		{{server_addr}}	{{server_port}}
+i   与 HTTP/1.0 相同），HTTP 版本锁定为 0.9。		{{server_addr}}	{{server_port}}
+i3. 在开始接收客户端的请求前，先往接收缓冲区存一个斜杠 `/`，以达到向		{{server_addr}}	{{server_port}}
+i   URL 开头插入斜杠的效果。nginx 后续处理流程需要频繁用到存放 URL 的指		{{server_addr}}	{{server_port}}
+i   针，相比修改所有用到 URL 的逻辑，直接插入一个斜杠是最简单粗暴、也是		{{server_addr}}	{{server_port}}
+i   最稳妥的方法。		{{server_addr}}	{{server_port}}
+i在编译 nginx 时，需要开启 `--with-http_plain_module` 参数。此外在配置		{{server_addr}}	{{server_port}}
+inginx 时，记得设置 `index gophermap;` 让 nginx 默认读取文件夹中的		{{server_addr}}	{{server_port}}
+iGophermap。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 生成 Gophermap 文件		{{server_addr}}	{{server_port}}
+i有了服务端，接下来需要的就是网站的文件了。由于我用的是静态网站生成器		{{server_addr}}	{{server_port}}
+iHexo，文章的文件格式都是 Markdown，我就偷了个懒，把 Markdown 文件用		{{server_addr}}	{{server_port}}
+hRemark	URL:https://github.com/remarkjs/remark	{{server_addr}}	{{server_port}}
+i稍微调整一下格式、再过一下		{{server_addr}}	{{server_port}}
+hPrettier	URL:https://github.com/prettier/prettier	{{server_addr}}	{{server_port}}
+i缩成 70 字符一行。然后我用正则表达式识别文章中的链接和图片，把他们放到		{{server_addr}}	{{server_port}}
+i单独的一行并设置为链接（`1`）或图片（`I`）格式，因为 Gophermap 不支持		{{server_addr}}	{{server_port}}
+i文字和链接混在同一行。最后把剩余文字全部设置为 `i`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  const crlf = '\r\n'		{{server_addr}}	{{server_port}}
+i  const gopherBefore = 'i'		{{server_addr}}	{{server_port}}
+i  const gopherBeforeLink = '1'		{{server_addr}}	{{server_port}}
+i  const gopherBeforeImage = 'I'		{{server_addr}}	{{server_port}}
+i  const gopherAfter = '\t\t{{server_addr}}\t{{server_port}}' + crlf		{{server_addr}}	{{server_port}}
+i  const gopherEOF = '.' + crlf		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  function markdown_formatter(rel_path, md) {		{{server_addr}}	{{server_port}}
+i    const markdownRegex = /([^!]?)(!?)\[([^\]]+)\]\(([^)]+)\)(.?)/g		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    var rows = md.split('\n')		{{server_addr}}	{{server_port}}
+i    for (var i = 0; i < rows.length; i++) {		{{server_addr}}	{{server_port}}
+i      // 识别所有的 [链接](url) 和 ![图片](image)		{{server_addr}}	{{server_port}}
+i      if (rows[i].match(markdownRegex)) {		{{server_addr}}	{{server_port}}
+i        var replace_at_beginning = false,		{{server_addr}}	{{server_port}}
+i          replace_at_end = false		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i        var replace_fn = (match, prefix, img_marker, label, href, suffix) => {		{{server_addr}}	{{server_port}}
+i          // 不要替换 http://，gopher:// 等外部链接，Gopher 浏览器不支持		{{server_addr}}	{{server_port}}
+i          if (href.match('://')) {		{{server_addr}}	{{server_port}}
+i            return match		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          if (prefix !== null) {		{{server_addr}}	{{server_port}}
+i            // 标记链接或图片在这行开头，不要再添加文字 i 前缀了		{{server_addr}}	{{server_port}}
+i            replace_at_beginning = true		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i          if (suffix !== null) {		{{server_addr}}	{{server_port}}
+i            // 标记链接或图片在这行开头，不要再添加后缀了		{{server_addr}}	{{server_port}}
+i            replace_at_end = true		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          href = path.join('/', rel_path, href)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          return (		{{server_addr}}	{{server_port}}
+i            (prefix ? prefix + gopherAfter : '') +		{{server_addr}}	{{server_port}}
+i            (img_marker === '!' ? gopherBeforeImage : gopherBeforeLink) +		{{server_addr}}	{{server_port}}
+i            label +		{{server_addr}}	{{server_port}}
+i            '\t' +		{{server_addr}}	{{server_port}}
+i            href +		{{server_addr}}	{{server_port}}
+i            '\t{{server_addr}}\t{{server_port}}' +		{{server_addr}}	{{server_port}}
+i            crlf +		{{server_addr}}	{{server_port}}
+i            (suffix ? gopherBefore + suffix : '')		{{server_addr}}	{{server_port}}
+i          )		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i        rows[i] = rows[i].replaceAll(markdownRegex, replace_fn)		{{server_addr}}	{{server_port}}
+i        rows[i] =		{{server_addr}}	{{server_port}}
+i          (replace_at_beginning ? '' : gopherBefore) +		{{server_addr}}	{{server_port}}
+i          rows[i] +		{{server_addr}}	{{server_port}}
+i          (replace_at_end ? '' : gopherAfter)		{{server_addr}}	{{server_port}}
+i      } else {		{{server_addr}}	{{server_port}}
+i        rows[i] = gopherBefore + rows[i] + gopherAfter		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    return rows.join('') + gopherEOF		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // 关键逻辑		{{server_addr}}	{{server_port}}
+i  unified()		{{server_addr}}	{{server_port}}
+i    .use(remark_parse)		{{server_addr}}	{{server_port}}
+i    .use(remark_stringify, {		{{server_addr}}	{{server_port}}
+i      bullet: '-',		{{server_addr}}	{{server_port}}
+i      fences: true,		{{server_addr}}	{{server_port}}
+i      listItemIndent: 'one',		{{server_addr}}	{{server_port}}
+i      resourceLink: false,		{{server_addr}}	{{server_port}}
+i    })		{{server_addr}}	{{server_port}}
+i    .process(data.page.raw) // 读取原始 Markdown 数据		{{server_addr}}	{{server_port}}
+i    .then(file => {		{{server_addr}}	{{server_port}}
+i      var md = String(file)		{{server_addr}}	{{server_port}}
+i      if (!md) return		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 缩到 70 字符一行		{{server_addr}}	{{server_port}}
+i      md = prettier.format(md, {		{{server_addr}}	{{server_port}}
+i        parser: 'markdown',		{{server_addr}}	{{server_port}}
+i        printWidth: 70,		{{server_addr}}	{{server_port}}
+i        tabWidth: 2,		{{server_addr}}	{{server_port}}
+i        proseWrap: 'always',		{{server_addr}}	{{server_port}}
+i        endOfLine: 'lf',		{{server_addr}}	{{server_port}}
+i      })		{{server_addr}}	{{server_port}}
+i      if (!md) return		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 全部行改成 Gophermap 文字格式		{{server_addr}}	{{server_port}}
+i      md = markdown_formatter(path.dirname(data.path), md)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 写文件等，略		{{server_addr}}	{{server_port}}
+i    })		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i生成文件的效果类似于：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  iDN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型、去          {{server_addr}} {{server_port}}		{{server_addr}}	{{server_port}}
+i  i中心化的 VPN 网络。但是与其它传统 VPN 不同的是，DN42 本身不提供 VPN 出         {{server_addr}} {{server_port}}		{{server_addr}}	{{server_port}}
+i  i口服务，即不提供规避网络审查、流媒体解锁等类似服务。相反，DN42 的目的          {{server_addr}} {{server_port}}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（实际文件中都是 Tab，我的编辑器自动把 Tab 都替换成了空格）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i注意到后面的 `{{server_addr}}` 和 `{{server_port}}` 了吗？它们是		{{server_addr}}	{{server_port}}
+iGophermap 中指定链接的目标主机和端口的参数。这两个参数不能遗漏，也不存		{{server_addr}}	{{server_port}}
+i在「相对于当前路径」的值。我选择把它们都交给 nginx 替换处理：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  location / {		{{server_addr}}	{{server_port}}
+i      sub_filter "{{server_addr}}\t{{server_port}}" "$gopher_addr\t$server_port";		{{server_addr}}	{{server_port}}
+i      sub_filter_once off;		{{server_addr}}	{{server_port}}
+i      sub_filter_types '*';		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i有了文章，我还需要一个目录作为首页。我直接写了一个 `for` 循环给每篇文		{{server_addr}}	{{server_port}}
+i章生成一个链接，并附上两行的内容概要，关键逻辑如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  const crlf = '\r\n'		{{server_addr}}	{{server_port}}
+i  const gopherBefore = 'i'		{{server_addr}}	{{server_port}}
+i  const gopherBeforeLink = '1'		{{server_addr}}	{{server_port}}
+i  const gopherAfter = '\t\t{{server_addr}}\t{{server_port}}' + crlf		{{server_addr}}	{{server_port}}
+i  const gopherEOF = '.' + crlf		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  var data = ''		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // 标题		{{server_addr}}	{{server_port}}
+i  data += gopherBefore + '# ' + hexo.config.title + gopherAfter		{{server_addr}}	{{server_port}}
+i  data += gopherBefore + gopherAfter		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // 文章列表		{{server_addr}}	{{server_port}}
+i  locals.posts.sort('date', 'desc').each(post => {		{{server_addr}}	{{server_port}}
+i    data +=		{{server_addr}}	{{server_port}}
+i      gopherBeforeLink +		{{server_addr}}	{{server_port}}
+i      '- ' +		{{server_addr}}	{{server_port}}
+i      post.title.slice(0, 56) +		{{server_addr}}	{{server_port}}
+i      ' (' +		{{server_addr}}	{{server_port}}
+i      new Date(post.date).toISOString().replace('T', ' ').substr(0, 19) +		{{server_addr}}	{{server_port}}
+i      ')' +		{{server_addr}}	{{server_port}}
+i      '\t/' +		{{server_addr}}	{{server_port}}
+i      post.path.replace(/index\.html$/g, '') +		{{server_addr}}	{{server_port}}
+i      '\t{{server_addr}}\t{{server_port}}' +		{{server_addr}}	{{server_port}}
+i      crlf		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    data += gopherBefore + '  ' + post.excerpt.slice(0, 68) + gopherAfter		{{server_addr}}	{{server_port}}
+i    data += gopherBefore + '  ' + post.excerpt.slice(68, 68) + gopherAfter		{{server_addr}}	{{server_port}}
+i    data += gopherBefore + gopherAfter		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i  data += gopherEOF		{{server_addr}}	{{server_port}}
+i  return data		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我把 Hexo 生成 Gophermap 的逻辑上传到了		{{server_addr}}	{{server_port}}
+hhttps://gist.github.com/xddxdd/99170395595e339ed5735cdf9b9b2cd1	URL:https://gist.github.com/xddxdd/99170395595e339ed5735cdf9b9b2cd1	{{server_addr}}	{{server_port}}
+i，把 `gopher.js` 放到主题的 `scripts` 目录（例如 `themes/lantian/scripts/gopher.js`）		{{server_addr}}	{{server_port}}
+i即可使用。但要注意的是，我手动删除了一些与我的网站相关的代码（主要是多		{{server_addr}}	{{server_port}}
+i语言支持相关），并且删除完后没有再测试，代码可能会有点问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 最终效果		{{server_addr}}	{{server_port}}
+i首先是用 Linux 终端下的 Gopherus 浏览器访问的效果：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IGopherus 访问中文内容	/usr/uploads/202103/gopher-gopherus.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i网站内容可以正常显示了，但是和预期还有些差别：Gopherus 将每行在 80 字		{{server_addr}}	{{server_port}}
+i节处截断了，而 UTF-8 编码的中文字每个占 3 字节，导致了有约		{{server_addr}}	{{server_port}}
+i的内容被挤到了下一行。英文站就没有这个问题：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IGopherus 访问英文内容	/usr/uploads/202103/gopher-gopherus-en.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i比起 Gopherus，还有更现代的解决方案，Firefox 浏览器加 Overbite 插件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IFirefox + Overbite 访问中文内容	/usr/uploads/202103/gopher-overbite.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i中文内容的排版比起 Gopherus 好了不少。当然英文内容也可以正常显示：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IFirefox + Overbite 访问英文内容	/usr/uploads/202103/gopher-overbite-en.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我们点进一篇文章看看。虽然只是 Markdown 没做太多额外的处理，但文章本身		{{server_addr}}	{{server_port}}
+i是可读的：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IFirefox + Overbite 访问中文文章	/usr/uploads/202103/gopher-overbite-article.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IFirefox + Overbite 访问英文文章	/usr/uploads/202103/gopher-overbite-article-en.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i你也可以用 Gopher 客户端访问		{{server_addr}}	{{server_port}}
+1gopher://gopher.lantian.pub	/gopher://gopher.lantian.pub	{{server_addr}}	{{server_port}}
+i自行查看效果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

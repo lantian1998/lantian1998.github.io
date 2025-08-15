@@ -1,0 +1,113 @@
+iIn the 1980s, Chen Deliang from Dongzhuang Town became locally famous		{{server_addr}}	{{server_port}}
+ias an itinerant doctor treating skin diseases (scabies) using his		{{server_addr}}	{{server_port}}
+iself-developed folk remedies. He later took on disciples and expanded		{{server_addr}}	{{server_port}}
+inationwide. Initially posting advertisements for sexually transmitted		{{server_addr}}	{{server_port}}
+idiseases and skin conditions on utility poles, they earned their "first		{{server_addr}}	{{server_port}}
+ibucket of gold" across mainland China before shifting to TV and		{{server_addr}}	{{server_port}}
+inewspaper ads. Their primary treatments included STDs, rhinitis, body		{{server_addr}}	{{server_port}}
+iodor, hepatitis, rheumatism, and skin diseases. The Putian system is		{{server_addr}}	{{server_port}}
+iprimarily controlled by four families: the Zhans, Lins, Chens, and		{{server_addr}}	{{server_port}}
+iHuangs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThese itinerant doctors initially contracted hospital departments,		{{server_addr}}	{{server_port}}
+ilegitimizing and covertly scaling their operations while recruiting		{{server_addr}}	{{server_port}}
+ipublic hospital doctors with high salaries. In 1998, Wang Hai — known		{{server_addr}}	{{server_port}}
+ias "China's No.1 Anti-Counterfeiting Crusader" — investigated the		{{server_addr}}	{{server_port}}
+icontroversial STD clinics and discovered nearly all originated from		{{server_addr}}	{{server_port}}
+iDongzhuang Town, Putian City, Fujian. Though Wang's campaign dealt a		{{server_addr}}	{{server_port}}
+iblow to their expansion, the Putian system adapted by upgrading		{{server_addr}}	{{server_port}}
+ioperations. In 2000, the State Council banned non-profit medical		{{server_addr}}	{{server_port}}
+iinstitutions from collaborating on for-profit "departments," "wards,"		{{server_addr}}	{{server_port}}
+ior "projects." By 2004, contracted departments faced strict		{{server_addr}}	{{server_port}}
+icrackdowns, terminating many Putian partnerships. Wang later exposed		{{server_addr}}	{{server_port}}
+ihow Putian hospitals used false advertising to exaggerate or fabricate		{{server_addr}}	{{server_port}}
+iillnesses for profit. Their online "doctors" lacked medical training,		{{server_addr}}	{{server_port}}
+iinstead relying on self-education via Baidu Baike.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSubsequently, some shifted to acquiring public hospitals or bribing		{{server_addr}}	{{server_port}}
+iofficials for partnerships, now controlling 80% of China's private		{{server_addr}}	{{server_port}}
+ihealthcare market. Most still specialize in niche ailments,		{{server_addr}}	{{server_port}}
+iaggressively advertising to attract patients — e.g., Baidu sold "Patient		{{server_addr}}	{{server_port}}
+iForum" and "Hemophilia Forum" to them for hefty commissions. They also		{{server_addr}}	{{server_port}}
+iexpanded upstream, producing medical supplies sold internally at		{{server_addr}}	{{server_port}}
+iinflated prices. Successful hospitals scale up; failed ones relocate.		{{server_addr}}	{{server_port}}
+iIn 2013, 12 of Baidu's 26 billion RMB ad revenue came from Putian		{{server_addr}}	{{server_port}}
+ihospitals. Some public hospital clinics remain under their control, as		{{server_addr}}	{{server_port}}
+iexposed by the 2016 Wei Zexi incident.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i— Wikipedia,		{{server_addr}}	{{server_port}}
+hhttps://zh.wikipedia.org/wiki/%E8%8E%86%E7%94%B0%E7%B3%BB	URL:https://zh.wikipedia.org/wiki/%E8%8E%86%E7%94%B0%E7%B3%BB	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn short, Putian hospitals harm patients through deceptive advertising		{{server_addr}}	{{server_port}}
+iand exaggerated diagnoses, sparking public outrage. In response,		{{server_addr}}	{{server_port}}
+iGitHub programmers formed the Open Power Group and created the		{{server_addr}}	{{server_port}}
+hopen-power-workgroup/Hospital	URL:https://github.com/open-power-workgroup/Hospital	{{server_addr}}	{{server_port}}
+iproject to catalog these hospitals. The data is open for clients and		{{server_addr}}	{{server_port}}
+ibrowser extensions, downloadable at:		{{server_addr}}	{{server_port}}
+hhttps://raw.githubusercontent.com/open-power-workgroup/Hospital/master/resource/API_resource/hospital_list.json	URL:https://raw.githubusercontent.com/open-power-workgroup/Hospital/master/resource/API_resource/hospital_list.json	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis JSON data is easily parsable. A sample snippet:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    "成都": {		{{server_addr}}	{{server_port}}
+i      "成都美莱医学美容医院": {		{{server_addr}}	{{server_port}}
+i        "证据": ["参见文末美莱医疗美容连锁医院集团条目"],		{{server_addr}}	{{server_port}}
+i        "电话": ["02868268888"],		{{server_addr}}	{{server_port}}
+i        "网址": ["hxxp://www.scmylike.com/（http 被我手动和谐成了 hxxp）"],		{{server_addr}}	{{server_port}}
+i        "地址": ["成都市青华路31号杜甫草堂北大门旁"]		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe JSON has three layers: region → hospital name → hospital details.		{{server_addr}}	{{server_port}}
+iUsing this, I created a PHP script to generate a Hosts file blocking		{{server_addr}}	{{server_port}}
+ithese hospitals' websites, preventing patient exposure.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, directly fetching this JSON from GitHub in software is unwise —		{{server_addr}}	{{server_port}}
+irecall when 12306 ticket plugins overloaded GitHub with millions of		{{server_addr}}	{{server_port}}
+irequests. Local caching is essential to reduce GitHub load.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMy Hosts file is available at:		{{server_addr}}	{{server_port}}
+hhttps://lab.lantian.pub/putianhosts.php	URL:https://lab.lantian.pub/putianhosts.php	{{server_addr}}	{{server_port}}
+iIt updates from GitHub every 30 minutes, blocking both www and non-www		{{server_addr}}	{{server_port}}
+idomains. Add this URL to AdAway or similar tools for automatic		{{server_addr}}	{{server_port}}
+iupdates.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe PHP source:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <?php		{{server_addr}}	{{server_port}}
+i      // fix charset bug		{{server_addr}}	{{server_port}}
+i      header("Content-Type: text/plain; charset=UTF-8");		{{server_addr}}	{{server_port}}
+i      echo "# Putian-Hosts 屏蔽莆田系医院的 Hosts\n";		{{server_addr}}	{{server_port}}
+i      echo "# 数据来自 Open Power Workgroup @ https://github.com/open-power-workgroup/Hospital\n";		{{server_addr}}	{{server_port}}
+i      error_reporting(0);		{{server_addr}}	{{server_port}}
+i      define("OPW_CACHE","hospital_list.json");		{{server_addr}}	{{server_port}}
+i      define("OPW_ORIGIN","https://raw.githubusercontent.com/open-power-workgroup/Hospital/master/resource/API_resource/hospital_list.json");		{{server_addr}}	{{server_port}}
+i      define("OPW_UPDATE_INTERVAL",1800);		{{server_addr}}	{{server_port}}
+i      if(time() - filemtime(OPW_CACHE) >= OPW_UPDATE_INTERVAL){		{{server_addr}}	{{server_port}}
+i          $ptjson = file_get_contents(OPW_ORIGIN) or die("# 无法获取源数据！");		{{server_addr}}	{{server_port}}
+i          $pttime = time();		{{server_addr}}	{{server_port}}
+i          file_put_contents(OPW_CACHE,$ptjson);		{{server_addr}}	{{server_port}}
+i      } else {		{{server_addr}}	{{server_port}}
+i          $ptjson = file_get_contents(OPW_CACHE);		{{server_addr}}	{{server_port}}
+i          $pttime = filemtime(OPW_CACHE);		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i      $ptdata = json_decode(file_get_contents(OPW_CACHE),true);		{{server_addr}}	{{server_port}}
+i      date_default_timezone_set("Asia/Shanghai");		{{server_addr}}	{{server_port}}
+i      echo "# 上次刷新日期 ".date("Y-m-d A h:i:s",$pttime)."\n";		{{server_addr}}	{{server_port}}
+i      // 列出所有的城市		{{server_addr}}	{{server_port}}
+i      foreach($ptdata as $ptcityinfo){		{{server_addr}}	{{server_port}}
+i          // 列出该城市所有莆田系医院		{{server_addr}}	{{server_port}}
+i          foreach($ptcityinfo as $pthospital => $pthospitalinfo){		{{server_addr}}	{{server_port}}
+i              // 列出网址		{{server_addr}}	{{server_port}}
+i              foreach($pthospitalinfo["网址"] as $ptwebsite){		{{server_addr}}	{{server_port}}
+i                  //处理出不带www的裸域名并屏蔽		{{server_addr}}	{{server_port}}
+i                  $pthost = str_replace(array("http://","/","www."),"",$ptwebsite);		{{server_addr}}	{{server_port}}
+i                  echo "0.0.0.0\t".$pthost."\t# ".$pthospital."\n";		{{server_addr}}	{{server_port}}
+i                  //带www的也屏蔽		{{server_addr}}	{{server_port}}
+i                  echo "0.0.0.0\twww.".$pthost."\t# ".$pthospital."\n";		{{server_addr}}	{{server_port}}
+i              }		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  ?>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

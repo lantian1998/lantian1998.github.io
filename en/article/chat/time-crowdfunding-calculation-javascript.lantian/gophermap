@@ -1,0 +1,22 @@
+iIn the ancient Eastern land imbued with mysterious magical powers,		{{server_addr}}	{{server_port}}
+ieach minute passes in 59 seconds.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  var toad = new Date()		{{server_addr}}	{{server_port}}
+i  var secondsDonated = Math.floor((toad.getTime() + 1368835200000) / 59000)		{{server_addr}}	{{server_port}}
+i  toad.setTime(toad.getTime() + secondsDonated * 1000)		{{server_addr}}	{{server_port}}
+i  toad.toLocaleString()		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i-1368835200 is the UNIX timestamp of his birthday, with additional		{{server_addr}}	{{server_port}}
+izeros appended since JavaScript calculates time in milliseconds.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBy donating your time, you become equivalent to someone living in		{{server_addr}}	{{server_port}}
+ioutside China.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou and every individual have collectively donated		{{server_addr}}	{{server_port}}
+iseconds. This translates to		{{server_addr}}	{{server_port}}
+iyears,		{{server_addr}}	{{server_port}}
+idays,		{{server_addr}}	{{server_port}}
+ihours,		{{server_addr}}	{{server_port}}
+iminutes and		{{server_addr}}	{{server_port}}
+iseconds.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

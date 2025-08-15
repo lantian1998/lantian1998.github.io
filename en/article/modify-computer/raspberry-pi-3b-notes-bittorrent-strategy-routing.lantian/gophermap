@@ -1,0 +1,153 @@
+iLet's get straight to the point this time. (Actually, I'm not sure how		{{server_addr}}	{{server_port}}
+ito start.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Installing Transmission for PT		{{server_addr}}	{{server_port}}
+iAs a compact computer that can freely connect to various sensors, the		{{server_addr}}	{{server_port}}
+iRaspberry Pi offers high playability. Even if you don't want to		{{server_addr}}	{{server_port}}
+iconnect a bunch of sensors to the GPIO (or like me, think additional		{{server_addr}}	{{server_port}}
+isensors are temporarily unnecessary), you can leverage its low-power		{{server_addr}}	{{server_port}}
+icharacteristics to run it 24/7 for tasks that don't require heavy CPU		{{server_addr}}	{{server_port}}
+icomputation but take a long time to complete due to other factors —		{{server_addr}}	{{server_port}}
+ilike... background downloading.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMy university has an intranet PT (Private Tracker) site. A PT site is		{{server_addr}}	{{server_port}}
+ia platform for releasing BT seeds, but it adds user management		{{server_addr}}	{{server_port}}
+ifeatures on top of traditional BT. By restricting client types and		{{server_addr}}	{{server_port}}
+ienforcing upload ratio requirements, it solves issues like leeching (downloading		{{server_addr}}	{{server_port}}
+iwithout uploading, e.g., Xunlei) and rapid seed expiration (due to		{{server_addr}}	{{server_port}}
+ilack of seeders) in traditional BT.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThese requirements mean PT users often need to run downloads/uploads		{{server_addr}}	{{server_port}}
+ifor extended periods — exactly what the Raspberry Pi excels at.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn the		{{server_addr}}	{{server_port}}
+iprevious article		{{server_addr}}	{{server_port}}
+i, I set up a simple NAS. Building on that, installing a BT client		{{server_addr}}	{{server_port}}
+iallows me to run PT. This PT site only allows Deluge, Rufus,		{{server_addr}}	{{server_port}}
+iTransmission, and rTorrent on Linux. I initially tried Deluge, but the		{{server_addr}}	{{server_port}}
+isite flagged that the latest Deluge 1.3.13 from Raspbian's repo wasn't		{{server_addr}}	{{server_port}}
+iallowed. They recommended Deluge 1.3.3 from Debian 7's repo, but		{{server_addr}}	{{server_port}}
+ilikely due to Debian 9's systemd base, the old version failed to start		{{server_addr}}	{{server_port}}
+iafter installation.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo I chose Transmission. First, apt-get:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install transmission-daemon		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen edit `/etc/transmission-daemon/settings.json` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Block leecher clients		{{server_addr}}	{{server_port}}
+i  "blocklist-enabled": true,		{{server_addr}}	{{server_port}}
+i  "blocklist-url": "http://john.bitsurge.net/public/biglist.p2p.gz",		{{server_addr}}	{{server_port}}
+i  # Change default download location		{{server_addr}}	{{server_port}}
+i  "download-dir": "/mnt/usb/Transmission",		{{server_addr}}	{{server_port}}
+i  # Must disable these for PT sites; no need to change for traditional BT		{{server_addr}}	{{server_port}}
+i  "dht-enabled": false,		{{server_addr}}	{{server_port}}
+i  "lpd-enabled": false,		{{server_addr}}	{{server_port}}
+i  "pex-enabled": false,		{{server_addr}}	{{server_port}}
+i  # Remote web management		{{server_addr}}	{{server_port}}
+i  "rpc-enabled": true,		{{server_addr}}	{{server_port}}
+i  "rpc-authentication-required": true,		{{server_addr}}	{{server_port}}
+i  "rpc-username": "username",		{{server_addr}}	{{server_port}}
+i  "rpc-password": "password (will be auto-encrypted after Transmission starts)",		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, run `service transmission-daemon start` . Access the web		{{server_addr}}	{{server_port}}
+iinterface at [Raspberry Pi IP]:9091 to upload torrents, adjust speed		{{server_addr}}	{{server_port}}
+ilimits, etc.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Adjustments for Campus Network Environment		{{server_addr}}	{{server_port}}
+iAs mentioned in the		{{server_addr}}	{{server_port}}
+iprevious article		{{server_addr}}	{{server_port}}
+i, my university provides one wired network and two Wi-Fi networks with		{{server_addr}}	{{server_port}}
+ithese characteristics:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Wired network: 1.5M speed limit, web-based login, accessible by		{{server_addr}}	{{server_port}}
+i   other devices on the LAN		{{server_addr}}	{{server_port}}
+i2. Wireless network: 1.5M speed limit, web-based login, inaccessible		{{server_addr}}	{{server_port}}
+i   to other wireless devices (Wi-Fi isolation, still accessible via		{{server_addr}}	{{server_port}}
+i   wired connection)		{{server_addr}}	{{server_port}}
+i3. eduroam: No speed limit, WPA2 Enterprise login, inaccessible to		{{server_addr}}	{{server_port}}
+i   other wireless devices (Wi-Fi isolation, still accessible via wired		{{server_addr}}	{{server_port}}
+i   connection)		{{server_addr}}	{{server_port}}
+iSince the Raspberry Pi has both wired and wireless NICs, the optimal		{{server_addr}}	{{server_port}}
+isetup is:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Raspberry Pi uses eduroam for PT downloads		{{server_addr}}	{{server_port}}
+i- I manage it via the wired NIC's IP from my computer		{{server_addr}}	{{server_port}}
+iBut if you connect both interfaces simultaneously, you'll notice only		{{server_addr}}	{{server_port}}
+ione NIC has traffic — the other can't even ping. This happens because		{{server_addr}}	{{server_port}}
+iwhen the Linux kernel receives a connection request (e.g., TCP SYN),		{{server_addr}}	{{server_port}}
+iit doesn't "return via the same path." Instead, it uses the routing		{{server_addr}}	{{server_port}}
+itable to decide which NIC to respond from. This causes responses from		{{server_addr}}	{{server_port}}
+ithe wireless NIC to be sent for requests arriving via the wired NIC,		{{server_addr}}	{{server_port}}
+iwhich get dropped due to isolation policies or IP mismatches.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWe need policy routing to enforce "return via the incoming path."		{{server_addr}}	{{server_port}}
+iPolicy routing directs packets matching specific conditions (e.g.,		{{server_addr}}	{{server_port}}
+iarriving via a certain NIC) to a dedicated routing table instead of		{{server_addr}}	{{server_port}}
+ithe main one. I used this before in "		{{server_addr}}	{{server_port}}
+iConfiguring Hurricane Electric IPv6 Tunnel on OpenVZ, Enabling Full		{{server_addr}}	{{server_port}}
+iAddress Pool with Native IPv6		{{server_addr}}	{{server_port}}
+i." Though that was for IPv6, Linux's IPv4/IPv6 commands are similar —		{{server_addr}}	{{server_port}}
+ijust tweak as needed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, check routes with `route` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Kernel IP routing table		{{server_addr}}	{{server_port}}
+i  Destination     Gateway         Genmask         Flags Metric Ref    Use Iface		{{server_addr}}	{{server_port}}
+i  default         10.106.65.1     0.0.0.0         UG    202    0        0 eth0		{{server_addr}}	{{server_port}}
+i  default         10.107.128.1    0.0.0.0         UG    303    0        0 wlan0		{{server_addr}}	{{server_port}}
+i  10.106.65.0     0.0.0.0         255.255.255.0   U     400    0        0 eth0		{{server_addr}}	{{server_port}}
+i  10.107.128.0    0.0.0.0         255.255.240.0   U     303    0        0 wlan0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNote the two default routes:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- eth0 (wired) gateway: 10.106.65.1		{{server_addr}}	{{server_port}}
+i- wlan0 (wireless) gateway: 10.107.128.1		{{server_addr}}	{{server_port}}
+iThen check IPs with `ip addr` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [...]		{{server_addr}}	{{server_port}}
+i  2: eth0: [...]		{{server_addr}}	{{server_port}}
+i      inet 10.106.65.213/24 [...]		{{server_addr}}	{{server_port}}
+i  3: wlan0: [...]		{{server_addr}}	{{server_port}}
+i      inet 10.107.134.208/20 [...]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iKey details:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Wired IP: 10.106.65.213/24 → Subnet: 10.106.65.0/24		{{server_addr}}	{{server_port}}
+i- Wireless IP: 10.107.134.208/20 → Subnet: 10.107.128.0/20		{{server_addr}}	{{server_port}}
+iEdit `/etc/iproute2/rt_tables` to add dedicated routing tables:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [...]		{{server_addr}}	{{server_port}}
+i  # Add these at the end:		{{server_addr}}	{{server_port}}
+i  100    university_eth		{{server_addr}}	{{server_port}}
+i  101    university_wlan		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSet up policy routing:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Route university_eth traffic via wired gateway		{{server_addr}}	{{server_port}}
+i  ip route add default via 10.106.65.1 dev eth0 table university_eth		{{server_addr}}	{{server_port}}
+i  # Route university_wlan traffic via wireless gateway		{{server_addr}}	{{server_port}}
+i  ip route add default via 10.107.128.1 dev wlan0 table university_wlan		{{server_addr}}	{{server_port}}
+i  # Route packets FROM wired subnet to university_eth table		{{server_addr}}	{{server_port}}
+i  ip rule add from 10.106.65.0/24 table university_eth		{{server_addr}}	{{server_port}}
+i  # Route packets FROM wireless subnet to university_wlan table		{{server_addr}}	{{server_port}}
+i  ip rule add from 10.107.128.0/20 table university_wlan		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdd these four commands to `/etc/rc.local` for auto-start. If they		{{server_addr}}	{{server_port}}
+ifail at boot, add `sleep 5` before them — network services may not be		{{server_addr}}	{{server_port}}
+iready.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, Linux prioritizes the wired NIC due to lower metric. To		{{server_addr}}	{{server_port}}
+iprioritize wireless instead, edit `/etc/dhcpcd.conf` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  interface eth0    # For eth0 (wired)		{{server_addr}}	{{server_port}}
+i  metric 400        # Set metric to 400 (wireless default is 303; any number >303 works)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iReboot. Now all traffic prefers the wireless NIC.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Final Result		{{server_addr}}	{{server_port}}
+iAll downloads on the Pi use the unlimited eduroam Wi-Fi. I manage SSH,		{{server_addr}}	{{server_port}}
+iTransmission, and file sharing via the slower wired IP (1.5M is		{{server_addr}}	{{server_port}}
+isufficient for 1080p video streaming).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

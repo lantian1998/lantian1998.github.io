@@ -1,0 +1,100 @@
+iNOIP gets easier every year. After being crushed by problems on XJOJ		{{server_addr}}	{{server_port}}
+ibefore, it was finally my turn to dominate the questions.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, Friday. Rumors spread all morning that XXY would rescue us from		{{server_addr}}	{{server_port}}
+iclass. We went to ask our homeroom teacher for leave. Then we AC'd (got		{{server_addr}}	{{server_port}}
+iAccepted). After lunch, we took our parents' car to XJ.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn the car, my dad told me he installed Win8 for me to try. When I		{{server_addr}}	{{server_port}}
+ibooted it up – x64... Turns out my sound card has bugs under Win8 x64		{{server_addr}}	{{server_port}}
+iand won't work... Arrived at XJ, downloaded the x86 ISO, and		{{server_addr}}	{{server_port}}
+ireinstalled. While reinstalling, I pulled out my Nokia N81 to browse		{{server_addr}}	{{server_port}}
+iXJOJ...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iJust arrived at XJ, the computer lab was packed. I immediately spotted		{{server_addr}}	{{server_port}}
+iJC and DZY – those two beasts heading to crush the advanced division.		{{server_addr}}	{{server_port}}
+iThey'd rooted the school's system two days early and unlocked		{{server_addr}}	{{server_port}}
+ithemselves.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHonestly, xuejun-wireless gets more godly by the day. It randomly		{{server_addr}}	{{server_port}}
+imakes the internet inaccessible. Previously, I struggled with short		{{server_addr}}	{{server_port}}
+inetwork cables, so this time I brought a super-long extension. Thought		{{server_addr}}	{{server_port}}
+iI'd solved the problem, only to discover XJ's network port had poor		{{server_addr}}	{{server_port}}
+icontact... Orz.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter installing the OS, I downloaded drivers while grinding OJ		{{server_addr}}	{{server_port}}
+iproblems. They released a bizarre contest, but I didn't want to		{{server_addr}}	{{server_port}}
+iattempt it – didn't want to lose confidence... Decisively submitted		{{server_addr}}	{{server_port}}
+isample answers. Scored 10 points total across 4 problems...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnother contest that night. I breezed through the first two easy		{{server_addr}}	{{server_port}}
+iproblems, skipped the last two. Turned out the test data was weak –		{{server_addr}}	{{server_port}}
+iscored 200...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext morning at XJ, another contest. XXY had already left to accompany		{{server_addr}}	{{server_port}}
+ithe advanced division at Fourteenth High School. So we stared blankly		{{server_addr}}	{{server_port}}
+iat the empty contest page (zero problems!) until 10 AM when XXY		{{server_addr}}	{{server_port}}
+ireturned, scolded us, and added the questions. Then 10 points – no		{{server_addr}}	{{server_port}}
+iexplanation needed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAt 11 AM, a group went to eat. XXY suddenly roared: "Don't go eat! Eat		{{server_addr}}	{{server_port}}
+iat Fourteenth High!" Collective silence. We waited for them until		{{server_addr}}	{{server_port}}
+i11:40. Then XXY told us to buy our own food and return by 12:00 – we		{{server_addr}}	{{server_port}}
+igot back at 12:06. Used those 20 minutes to download Perfect Decoder		{{server_addr}}	{{server_port}}
+ivia xuejun-wireless to watch videos. On the bus, people set up WiFi		{{server_addr}}	{{server_port}}
+ihotspots. Various entertainment activities ensued. Also: all kinds of		{{server_addr}}	{{server_port}}
+i3G, 2G, and other "G"s.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iArrived at Fourteenth High, immediately saw JC and DZY. I whipped out		{{server_addr}}	{{server_port}}
+imy phone for a photo – damn, it was blurry... Then we collected promo		{{server_addr}}	{{server_port}}
+ibags containing materials and an umbrella.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWent to the cafeteria. Took one look at the food and gave my meal		{{server_addr}}	{{server_port}}
+iticket away – survived on the 11:40 "Fatty Pancake". Truly a classic		{{server_addr}}	{{server_port}}
+ishop. Then headed to Fourteenth High's auditorium.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe auditorium was chaotic: people live-posting on Weibo. We watched		{{server_addr}}	{{server_port}}
+iFourteenth High's sports day footage. A kid sang at a frequency that		{{server_addr}}	{{server_port}}
+iput WiFi to shame – WiFi's 2.4Ghz, you know.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen we entered the exam hall. The teacher wrote the password on the		{{server_addr}}	{{server_port}}
+iblackboard: "DoubleIncome2020"... Last year's "SeeYouInAdvancedDivNextYear"		{{server_addr}}	{{server_port}}
+igot thoroughly mocked. When will CCF ever use Chinese character		{{server_addr}}	{{server_port}}
+ipasswords?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUnzipped the package, immediately moved everything to E: (no system		{{server_addr}}	{{server_port}}
+irestore). Win+R → cmd → e:\ → cd ZJ-xxxx → md xxx. Created all folders		{{server_addr}}	{{server_port}}
+iwith md commands. Copied the PDF inside.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOpened the PDF. Problem 1: Given the product of two primes, find the		{{server_addr}}	{{server_port}}
+ilarger one. RSA vibes. Brute-force was stressful, but generating a 27k		{{server_addr}}	{{server_port}}
+ilookup table worked.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iProblem 2: Treasure hunt – climbing floors while calculating		{{server_addr}}	{{server_port}}
+ipasswords. Straightforward simulation. With constrained data, time		{{server_addr}}	{{server_port}}
+iwasn't an issue.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMidway, staff handed out water and cake. (Brought my own Coke).		{{server_addr}}	{{server_port}}
+iSuddenly a girl's voice: "Teacher, I can't open this water bottle,		{{server_addr}}	{{server_port}}
+iWTF." Whole classroom paused for 3 seconds.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iProblem 3: Flower arrangement – 100+ flower types. Some online said		{{server_addr}}	{{server_port}}
+iDP; I disagreed. Tried brute-force, got TLE on max data. Then		{{server_addr}}	{{server_port}}
+iremembered memoization ("Step Up" method) and crushed it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iProblem 4: Cultural exchange with Bug – envoys learning cultures		{{server_addr}}	{{server_port}}
+iwhile avoiding conflicts. Clearly Dijkstra territory, but we'd crammed		{{server_addr}}	{{server_port}}
+iquicksort, 0/1 knapsack, bubble sort... Brute-force passed only 30%...		{{server_addr}}	{{server_port}}
+iAdded a check: if data too big, output -1. At least WA looks better		{{server_addr}}	{{server_port}}
+ithan TLE.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdded file I/O to all programs, included data generators and old		{{server_addr}}	{{server_port}}
+iversions in comments. Copied everything to my folder. Started reading		{{server_addr}}	{{server_port}}
+iPascal docs – same as last year. Some played Minesweeper. Others		{{server_addr}}	{{server_port}}
+iplayed Spider Solitaire.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iContest ended. Pulled out my phone immediately to post on Weibo – no		{{server_addr}}	{{server_port}}
+isignal jamming this year! Last year, jammed signals drained my		{{server_addr}}	{{server_port}}
+ibattery... After posting, walked out to meet parents and classmates.		{{server_addr}}	{{server_port}}
+iGame Over.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
