@@ -1,0 +1,53 @@
+iFont Awesome is an open-source icon library. Its latest version 4.1		{{server_addr}}	{{server_port}}
+iprovides 439 vector icons that can match screens of various sizes and		{{server_addr}}	{{server_port}}
+iresolutions. It exists as a font, and a single 71KB file contains all		{{server_addr}}	{{server_port}}
+ithese icons. These icons feature a unified style and can be		{{server_addr}}	{{server_port}}
+iconveniently used in various contexts.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Installation		{{server_addr}}	{{server_port}}
+iFirst, download Font Awesome:		{{server_addr}}	{{server_port}}
+hhttps://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.1.0.zip	URL:https://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.1.0.zip	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen unzip the file and upload its contents to your website.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdd the following code in the `<head>` section of your webpage:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <link		{{server_addr}}	{{server_port}}
+i    rel="stylesheet"		{{server_addr}}	{{server_port}}
+i    href="http://your-website/folder/font-awesome/css/font-awesome.min.css"		{{server_addr}}	{{server_port}}
+i  />		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis completes the installation.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Usage		{{server_addr}}	{{server_port}}
+hhttps://fortawesome.github.io/Font-Awesome/icons/	URL:https://fortawesome.github.io/Font-Awesome/icons/	{{server_addr}}	{{server_port}}
+iprovides a reference table of icon class names. Find your desired icon (e.g., `fa-cloud` )		{{server_addr}}	{{server_port}}
+iand insert this code in your webpage:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <i class="fa fa-cloud"></i>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEffect:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo enlarge icons, add classes like `fa-lg` , `fa-2x` , `fa-3x` , `fa-4x` ,		{{server_addr}}	{{server_port}}
+ior `fa-5x` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <i class="fa fa-cloud fa-lg"></i>		{{server_addr}}	{{server_port}}
+i  <i class="fa fa-cloud fa-2x"></i>		{{server_addr}}	{{server_port}}
+i  <i class="fa fa-cloud fa-3x"></i>		{{server_addr}}	{{server_port}}
+i  <i class="fa fa-cloud fa-4x"></i>		{{server_addr}}	{{server_port}}
+i  <i class="fa fa-cloud fa-5x"></i>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEffect:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSome icons also support animation:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <i class="fa fa-spinner fa-spin"></i>		{{server_addr}}	{{server_port}}
+i  <i class="fa fa-circle-o-notch fa-spin"></i>		{{server_addr}}	{{server_port}}
+i  <i class="fa fa-refresh fa-spin"></i>		{{server_addr}}	{{server_port}}
+i  <i class="fa fa-cog fa-spin"></i>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEffect:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUsing these icons allows for more intuitive representation of website		{{server_addr}}	{{server_port}}
+ifunctionalities without compromising loading speed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

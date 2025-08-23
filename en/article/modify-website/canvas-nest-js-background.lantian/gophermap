@@ -1,0 +1,35 @@
+iToday on		{{server_addr}}	{{server_port}}
+iAdvanced Blog		{{server_addr}}	{{server_port}}
+i, I discovered a stunning webpage background effect where dynamic		{{server_addr}}	{{server_port}}
+ilines form triangles and other geometric patterns that respond to		{{server_addr}}	{{server_port}}
+imouse movements.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo implement this on your own site, simply add the following code		{{server_addr}}	{{server_port}}
+ibefore `</body>` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <script src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRefresh the page to see the effect. If it doesn't appear, verify the		{{server_addr}}	{{server_port}}
+iplacement – this code **must not** be inserted between `<head>` and `</head>` !		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, this introduces an issue: when server-to-user speeds are slow (e.g.,		{{server_addr}}	{{server_port}}
+iduring peak-hour network congestion between China and the US), the		{{server_addr}}	{{server_port}}
+ibrowser won't detect the need to load this JavaScript until reaching		{{server_addr}}	{{server_port}}
+ithe code's position near the page bottom. Consequently, this		{{server_addr}}	{{server_port}}
+iJavaScript only begins downloading after page rendering completes,		{{server_addr}}	{{server_port}}
+isignificantly delaying overall load times.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo resolve this, add the following code between `<head>` and `</head>`		{{server_addr}}	{{server_port}}
+iat the beginning:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <link href="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js" rel="preload" as="script"/>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis instructs the browser to prioritize downloading the script during		{{server_addr}}	{{server_port}}
+iinitial `<head>` parsing, substantially improving load performance.		{{server_addr}}	{{server_port}}
+iDeveloper tools will show that despite being placed at the page		{{server_addr}}	{{server_port}}
+ibottom, the script now loads concurrently with `<head>` resources		{{server_addr}}	{{server_port}}
+iafter this optimization.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe final implementation can be observed on this site.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

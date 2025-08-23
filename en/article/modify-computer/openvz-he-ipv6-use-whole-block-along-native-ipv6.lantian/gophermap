@@ -1,0 +1,189 @@
+iAlphaRacks is a cost-effective hosting provider, offering VPS with 1		{{server_addr}}	{{server_port}}
+iCPU, 512MB RAM, and 10GB storage for just $9.9/year. However, this		{{server_addr}}	{{server_port}}
+iprovider is quite stingy with IPv6 addresses, requiring users to		{{server_addr}}	{{server_port}}
+ijustify their need for IPv6. It's said they provide up to 20		{{server_addr}}	{{server_port}}
+iaddresses? But they may not allocate the full amount. For example,		{{server_addr}}	{{server_port}}
+iwhen I explained I needed IPv6 to serve IPv6-only users, the provider		{{server_addr}}	{{server_port}}
+ireplied:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> We've added 1 IPv6 address to your VPS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iA single IPv6 address is insufficient for my needs. Fortunately,		{{server_addr}}	{{server_port}}
+iHurricane Electric in the US offers		{{server_addr}}	{{server_port}}
+hIPv6 tunneling services	URL:https://tunnelbroker.net/	{{server_addr}}	{{server_port}}
+i, providing each user with 5 tunnels. Each tunnel includes a /64		{{server_addr}}	{{server_port}}
+iaddress pool, and users can instantly activate a /48 address pool with		{{server_addr}}	{{server_port}}
+ione click.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDespite this generous service, using it on OpenVZ VPS requires extra		{{server_addr}}	{{server_port}}
+ieffort. OpenVZ kernels are often version 2.6.32, which lacks native		{{server_addr}}	{{server_port}}
+itunnel support. The newer 3.10 kernel that supports this feature has		{{server_addr}}	{{server_port}}
+ijust been released, and many providers haven't updated yet.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Enabling HE Tunnel on OpenVZ		{{server_addr}}	{{server_port}}
+iWe need a third-party utility that converts Hurricane Electric tunnels		{{server_addr}}	{{server_port}}
+iinto Tun/Tap tunnels (similar to OpenVPN's network adapter in Windows)		{{server_addr}}	{{server_port}}
+iand configures them on the server. Download and install as follows:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install iproute gcc		{{server_addr}}	{{server_port}}
+i  wget http://tb-tun.googlecode.com/files/tb-tun_r18.tar.gz		{{server_addr}}	{{server_port}}
+i  tar -xf tb-tun_r18.tar.gz		{{server_addr}}	{{server_port}}
+i  gcc tb_userspace.c -l pthread -o tb_userspace		{{server_addr}}	{{server_port}}
+i  mv tb_userspace /usr/bin/tb_userspace		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen create `/etc/init.d/ipv6tb` and input the startup script below (adapted		{{server_addr}}	{{server_port}}
+ifrom		{{server_addr}}	{{server_port}}
+hhttps://www.cybermilitia.net/2013/07/22/ipv6-tunnel-on-openvz/	URL:https://www.cybermilitia.net/2013/07/22/ipv6-tunnel-on-openvz/	{{server_addr}}	{{server_port}}
+i):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Note: Replace the IP addresses accordingly)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  touch /etc/init.d/ipv6tb		{{server_addr}}	{{server_port}}
+i  chmod +x /etc/init.d/ipv6tb		{{server_addr}}	{{server_port}}
+i  nano /etc/init.d/ipv6tb		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #!/bin/sh		{{server_addr}}	{{server_port}}
+i  case "$1" in		{{server_addr}}	{{server_port}}
+i    start)		{{server_addr}}	{{server_port}}
+i      echo "Starting ipv6tb"		{{server_addr}}	{{server_port}}
+i        setsid /usr/bin/tb_userspace tb [HE Tunnel Server IPv4 Address] [Your VPS IPv4 Address] sit > /dev/null 2>&1 &		{{server_addr}}	{{server_port}}
+i        sleep 1s		{{server_addr}}	{{server_port}}
+i        ifconfig tb up		{{server_addr}}	{{server_port}}
+i        ifconfig tb inet6 add [Your HE Tunnel Client IPv6 Address]/128		{{server_addr}}	{{server_port}}
+i        ifconfig tb inet6 add [Your Assigned /64 Address Pool]::1/64		{{server_addr}}	{{server_port}}
+i        ifconfig tb inet6 add [Your Assigned /48 Address Pool - delete if unavailable]::1/48		{{server_addr}}	{{server_port}}
+i        ifconfig tb mtu 1480		{{server_addr}}	{{server_port}}
+i        route -A inet6 add ::/0 dev tb		{{server_addr}}	{{server_port}}
+i        route -A inet6 del ::/0 dev venet0		{{server_addr}}	{{server_port}}
+i      ;;		{{server_addr}}	{{server_port}}
+i    stop)		{{server_addr}}	{{server_port}}
+i      echo "Stopping ipv6tb"		{{server_addr}}	{{server_port}}
+i        ifconfig tb down		{{server_addr}}	{{server_port}}
+i        route -A inet6 del ::/0 dev tb		{{server_addr}}	{{server_port}}
+i        killall tb_userspace		{{server_addr}}	{{server_port}}
+i      ;;		{{server_addr}}	{{server_port}}
+i    *)		{{server_addr}}	{{server_port}}
+i      echo "Usage: /etc/init.d/ipv6tb {start|stop}"		{{server_addr}}	{{server_port}}
+i      exit 1		{{server_addr}}	{{server_port}}
+i      ;;		{{server_addr}}	{{server_port}}
+i  esac		{{server_addr}}	{{server_port}}
+i  exit 0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen execute:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  /etc/init.d/ipv6tb start		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe tunnel will activate. However, you'll notice two issues:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Although you have an entire /64 (and possibly /48) pool, only		{{server_addr}}	{{server_port}}
+i   addresses ending with ::1 are usable;		{{server_addr}}	{{server_port}}
+i2. The VPS's native IPv6 stops working as all traffic routes through		{{server_addr}}	{{server_port}}
+i   the tunnel.		{{server_addr}}	{{server_port}}
+iWe'll resolve these step by step.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Enabling the Entire Address Pool		{{server_addr}}	{{server_port}}
+iLinux kernel supports an AnyIP feature, allowing you to assign entire		{{server_addr}}	{{server_port}}
+iaddress ranges to a network interface without manual configuration.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs an aside, a /64 address pool contains 18,446,744,073,709,551,616		{{server_addr}}	{{server_port}}
+iIPs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEnable it with:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ip -6 route add local [Your Assigned /64 Address Pool]/64 dev lo		{{server_addr}}	{{server_port}}
+i  ip -6 route add local [Your Assigned /48 Address Pool - delete if unavailable]/48 dev lo		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter execution, all IPs in your address pool become usable.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Using Native IPv6 and Tunnel Simultaneously		{{server_addr}}	{{server_port}}
+iWhen multiple IPv6 connections coexist on a VPS, you'll find only one		{{server_addr}}	{{server_port}}
+iworks at a time. Linux routes response packets through the default		{{server_addr}}	{{server_port}}
+iinterface instead of the originating path.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFortunately, Linux supports policy-based routing. Configure it as		{{server_addr}}	{{server_port}}
+ifollows:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Create routing table and stop existing tunnel:		{{server_addr}}	{{server_port}}
+i  echo 200 ipv6tb >> /etc/iproute2/rt_tables		{{server_addr}}	{{server_port}}
+i  /etc/init.d/ipv6tb stop		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Replace the contents of `/etc/init.d/ipv6tb` with the following (modified		{{server_addr}}	{{server_port}}
+i  from		{{server_addr}}	{{server_port}}
+h  http://itkia.com/ipv6-policy-routing-linux-gotchas/	URL:http://itkia.com/ipv6-policy-routing-linux-gotchas/	{{server_addr}}	{{server_port}}
+i  ):		{{server_addr}}	{{server_port}}
+i  #! /bin/sh		{{server_addr}}	{{server_port}}
+i  touch /var/lock/ipv6tb		{{server_addr}}	{{server_port}}
+i  case "$1" in		{{server_addr}}	{{server_port}}
+i      start)		{{server_addr}}	{{server_port}}
+i          setsid /usr/bin/tb_userspace tb [HE Tunnel Server IPv4 Address] [Your VPS IPv4 Address] sit > /dev/null 2>&1 &		{{server_addr}}	{{server_port}}
+i          sleep 1s		{{server_addr}}	{{server_port}}
+i          # bring up the tunnel interface & set mtu		{{server_addr}}	{{server_port}}
+i          ifconfig tb up		{{server_addr}}	{{server_port}}
+i          ifconfig tb mtu 1480		{{server_addr}}	{{server_port}}
+i          # hack: show ip in ifconfig		{{server_addr}}	{{server_port}}
+i          ifconfig tb inet6 add [Your HE Tunnel Client IPv6 Address]/128		{{server_addr}}	{{server_port}}
+i          ifconfig tb inet6 add [Your Assigned /64 Address Pool]::1/64		{{server_addr}}	{{server_port}}
+i          ifconfig tb inet6 add [Your Assigned /48 Address Pool - delete if unavailable]::1/48		{{server_addr}}	{{server_port}}
+i          # make use of the whole ipv6 block		{{server_addr}}	{{server_port}}
+i          ip -6 route add local [Your VPS Native IPv6 Address]/128 dev lo		{{server_addr}}	{{server_port}}
+i          ip -6 route add local [Your HE Tunnel Client IPv6 Address]/128 dev lo		{{server_addr}}	{{server_port}}
+i          ip -6 route add local [Your Assigned /64 Address Pool]/64 dev lo		{{server_addr}}	{{server_port}}
+i          ip -6 route add local [Your Assigned /48 Address Pool - delete if unavailable]/48 dev lo		{{server_addr}}	{{server_port}}
+i          # nullroute native ipv6 to prevent sending via wrong interface		{{server_addr}}	{{server_port}}
+i          ip -6 route add unreachable [Your VPS Native IPv6 Address]/128		{{server_addr}}	{{server_port}}
+i          # nullroute ipv6 tunnel to prevent sending via wrong interface		{{server_addr}}	{{server_port}}
+i          ip -6 route add unreachable [Your HE Tunnel Client IPv6 Address]/128		{{server_addr}}	{{server_port}}
+i          ip -6 route add unreachable [Your Assigned /64 Address Pool]/64		{{server_addr}}	{{server_port}}
+i          ip -6 route add unreachable [Your Assigned /48 Address Pool - delete if unavailable]/48		{{server_addr}}	{{server_port}}
+i          # flush route table & route the interfaces		{{server_addr}}	{{server_port}}
+i          ip -6 route flush table ipv6tb		{{server_addr}}	{{server_port}}
+i          ip -6 route add 2000::/3 dev venet0 src [Your VPS Native IPv6 Address]		{{server_addr}}	{{server_port}}
+i          ip -6 route add 2000::/3 dev tb src [Your HE Tunnel Client IPv6 Address] table ipv6tb		{{server_addr}}	{{server_port}}
+i          # flush rule table		{{server_addr}}	{{server_port}}
+i          ip -6 rule flush		{{server_addr}}	{{server_port}}
+i          # restore routing in ipv6 tunnel address block		{{server_addr}}	{{server_port}}
+i          ip -6 rule add priority 200 to [Your HE Tunnel Client IPv6 Address]/128 table main		{{server_addr}}	{{server_port}}
+i          ip -6 rule add priority 201 to [Your Assigned /64 Address Pool]/64 table main		{{server_addr}}	{{server_port}}
+i          ip -6 rule add priority 202 to [Your Assigned /48 Address Pool - delete if unavailable]/48 table main		{{server_addr}}	{{server_port}}
+i          # restore routing in native ipv6 address block		{{server_addr}}	{{server_port}}
+i          ip -6 rule add priority 210 to [Your VPS Native IPv6 Address]/128 table main		{{server_addr}}	{{server_port}}
+i          # restore routing to reserved ipv6 range		{{server_addr}}	{{server_port}}
+i          ip -6 rule add priority 1000 to 2001:db8::/32 table main		{{server_addr}}	{{server_port}}
+i          # route packets from tunnel back to the tunnel		{{server_addr}}	{{server_port}}
+i          ip -6 rule add priority 30000 from [Your HE Tunnel Client IPv6 Address]/128 to 2000::/3 table ipv6tb		{{server_addr}}	{{server_port}}
+i          ip -6 rule add priority 30001 from [Your Assigned /64 Address Pool]/64 to 2000::/3 table ipv6tb		{{server_addr}}	{{server_port}}
+i          ip -6 rule add priority 30002 from [Your Assigned /48 Address Pool - delete if unavailable]/48 to 2000::/3 table ipv6tb		{{server_addr}}	{{server_port}}
+i          # restore ipv6 main route & flush cache		{{server_addr}}	{{server_port}}
+i          ip -6 rule add priority 32766 from all table main		{{server_addr}}	{{server_port}}
+i          ip -6 route flush cache		{{server_addr}}	{{server_port}}
+i      ;;		{{server_addr}}	{{server_port}}
+i      stop)		{{server_addr}}	{{server_port}}
+i          ifconfig tb down		{{server_addr}}	{{server_port}}
+i          # restore rule table		{{server_addr}}	{{server_port}}
+i          ip -6 rule flush		{{server_addr}}	{{server_port}}
+i          ip -6 rule add priority 32766 from all table main		{{server_addr}}	{{server_port}}
+i          pkill -9 tb_userspace		{{server_addr}}	{{server_port}}
+i      ;;		{{server_addr}}	{{server_port}}
+i      *)		{{server_addr}}	{{server_port}}
+i          echo "Usage: /etc/init.d/ipv6tb {start|stop}"		{{server_addr}}	{{server_port}}
+i          exit 1		{{server_addr}}	{{server_port}}
+i          ;;		{{server_addr}}	{{server_port}}
+i  esac		{{server_addr}}	{{server_port}}
+i  exit 0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Restart the tunnel:		{{server_addr}}	{{server_port}}
+i  /etc/init.d/ipv6tb start		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- (Optional) Auto-start on boot: Edit `/etc/rc.local` , add before `exit		{{server_addr}}	{{server_port}}
+i  0` :		{{server_addr}}	{{server_port}}
+i  /etc/init.d/ipv6tb start		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter modification, the file should resemble:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2016/08/3015453537.png	/usr/uploads/2016/08/3015453537.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe tunnel will now auto-start. This configuration allows peaceful		{{server_addr}}	{{server_port}}
+icoexistence between IPv6 tunnel and native IPv6. System operations (e.g.,		{{server_addr}}	{{server_port}}
+isoftware updates) use native IPv6 instead of the tunnel, significantly		{{server_addr}}	{{server_port}}
+iimproving stability and speed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

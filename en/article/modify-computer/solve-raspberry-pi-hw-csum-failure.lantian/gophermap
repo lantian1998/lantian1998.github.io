@@ -1,0 +1,49 @@
+iToday when I logged into my Raspberry Pi and ran `df` to check disk		{{server_addr}}	{{server_port}}
+ispace as usual, I discovered the TF card was almost full. Initially I		{{server_addr}}	{{server_port}}
+ithought I had misconfigured settings, causing download files to save		{{server_addr}}	{{server_port}}
+ito the TF card instead of the external hard drive. After		{{server_addr}}	{{server_port}}
+itroubleshooting, I found that log files under `/var/log` occupied a		{{server_addr}}	{{server_port}}
+istaggering 18G of space. Checking the logs revealed continuous error		{{server_addr}}	{{server_port}}
+imessages like:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Jan 25 22:51:15 lantian-rpi3 kernel: [   22.143274] eth0: hw csum failure		{{server_addr}}	{{server_port}}
+i  ... [original log content unchanged] ...		{{server_addr}}	{{server_port}}
+i  Jan 25 22:51:15 lantian-rpi3 kernel: [   22.143755] 3fe0: 76f2ace4 7e9b5cc0 76b29dd4 0006ac00 60000010 ffffffff		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThat is, the Raspberry Pi's Ethernet interface was generating massive		{{server_addr}}	{{server_port}}
+ierrors, causing the kernel to continuously output stack traces that		{{server_addr}}	{{server_port}}
+ibloated the log files. Since my Raspberry Pi was used for on-campus PT		{{server_addr}}	{{server_port}}
+iseeding with sustained 5MB/s+ upload/download traffic, the log volume		{{server_addr}}	{{server_port}}
+iwas substantial.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe "HW CSum" error refers to "Hardware Checksum Offloading" – a		{{server_addr}}	{{server_port}}
+ifeature that offloads packet checksum verification to the NIC to		{{server_addr}}	{{server_port}}
+ireduce CPU usage. To troubleshoot, I disabled this feature using		{{server_addr}}	{{server_port}}
+iethtool:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install ethtool		{{server_addr}}	{{server_port}}
+i  ethtool --offload eth0 rx off tx off		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter disabling, `dmesg` stopped showing these errors. Re-enabling the		{{server_addr}}	{{server_port}}
+ifeature:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ethtool --offload eth0 rx on tx on		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iImmediately caused the errors to reappear in `dmesg` , confirming HW		{{server_addr}}	{{server_port}}
+iCSum as the culprit.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhile disabling HW CSum is a temporary fix, this should ideally be		{{server_addr}}	{{server_port}}
+iresolved through kernel/driver updates. However, after running `raspi-update`		{{server_addr}}	{{server_port}}
+ito update the kernel and drivers, the issue persisted, forcing me to		{{server_addr}}	{{server_port}}
+ikeep HW CSum disabled.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEdit `/etc/network/interfaces.d/eth0` (create it if missing) and add:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  allow-hotplug eth0		{{server_addr}}	{{server_port}}
+i  iface eth0 inet dhcp		{{server_addr}}	{{server_port}}
+i      offload-rx off		{{server_addr}}	{{server_port}}
+i      offload-tx off		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis will automatically disable HW CSum via ethtool during system		{{server_addr}}	{{server_port}}
+istartup.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

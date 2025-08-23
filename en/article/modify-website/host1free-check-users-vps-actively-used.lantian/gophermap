@@ -1,0 +1,55 @@
+iHost1Free's free VPS campaign has been running for quite some time.		{{server_addr}}	{{server_port}}
+iThey've deployed over 30 servers, allocating a total of 30,000 VPS		{{server_addr}}	{{server_port}}
+iinstances (severe overselling... but it's free, so we have to bear		{{server_addr}}	{{server_port}}
+iwith it). This attracted a massive number of user registrations, and		{{server_addr}}	{{server_port}}
+imost importantly, the official service doesn't discriminate against		{{server_addr}}	{{server_port}}
+iusers from China. However, Chinese users have a characteristic: after		{{server_addr}}	{{server_port}}
+igetting the VPS, they play around with it until they get bored, then		{{server_addr}}	{{server_port}}
+iabandon it. Or if they obtain other VPS services (like EC2 or VPS.me,		{{server_addr}}	{{server_port}}
+iwhich was available months ago), they stop using it entirely. But		{{server_addr}}	{{server_port}}
+iHost1Free is quite diligent overall – whenever a server goes down,		{{server_addr}}	{{server_port}}
+ithey restart all VPS instances. Consequently, those unused VPSes, each		{{server_addr}}	{{server_port}}
+iwith 128MB RAM + 640MB Swap, waste resources.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo Host1Free devised an unusual method to check user activity:		{{server_addr}}	{{server_port}}
+ishutdown! Last Thursday night, all VPSes were powered off.		{{server_addr}}	{{server_port}}
+iSimultaneously, Host1Free emailed all users, urging them to start		{{server_addr}}	{{server_port}}
+itheir VPS via SolusVM immediately, warning that inactive instances		{{server_addr}}	{{server_port}}
+iwould be terminated within days.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen I got home last week and tried to tinker with my VPS, I couldn't		{{server_addr}}	{{server_port}}
+iconnect. Checking SolusVM, I found it was shut down, so I started it		{{server_addr}}	{{server_port}}
+iup (assuming Host1Free was glitching) and played with it briefly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iToday, I happened to check Thunderbird and found Host1Free's email:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Dear Host1Free Users,		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  We have recently noticed that majority of the ONLINE free VPS servers are not being used and are simply kept online consuming resources.		{{server_addr}}	{{server_port}}
+i  A week ago we have issued a shutdown on all of free VPS servers and we are currently monitoring the system to see how many of the servers are being actively used.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  We would like to inform you that all of the servers that will not be turned back ONLINE after the initial shutdown will be TERMINATED next week.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  Please take your time and turn ON your free VPS if you intend to use it, otherwise you will lose all of the data present on your server.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  If you found this message in your spam folder - mark it as not spam for future service alerts.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  Keep in mind - Host1Free does not provide any backups for your free services. You should do it by yourself.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  Regards,		{{server_addr}}	{{server_port}}
+i  Host1Free		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe critical detail? This email was in my spam folder! Thankfully, my		{{server_addr}}	{{server_port}}
+iVPS was already running and in active use (tinkering). Then I		{{server_addr}}	{{server_port}}
+iremembered imbushuo – he also has a Host1Free VPS but switched to EC2		{{server_addr}}	{{server_port}}
+ilater. I decided to check his status.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHis VPS is linked to		{{server_addr}}	{{server_port}}
+hhttp://preview.imbushuo.net	URL:http://preview.imbushuo.net	{{server_addr}}	{{server_port}}
+i. When I opened the page, it showed CloudFlare's AlwaysOnline screen.		{{server_addr}}	{{server_port}}
+iI immediately notified him via Weibo to start his VPS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI also want to remind everyone (though my blog has few readers) to		{{server_addr}}	{{server_port}}
+istart your VPS immediately (unless you've abandoned it) to avoid		{{server_addr}}	{{server_port}}
+ilosing your data.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,17 @@
+Iwxoverflow.png	/usr/uploads/2013/05/67262779.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  Key adaptations:  		{{server_addr}}	{{server_port}}
+i  1. Title retains the provocative tone by translating "渣渣" as "a joke" for natural English sarcasm  		{{server_addr}}	{{server_port}}
+i  2. Category "转载" becomes "Repost" (standard term for shared content)  		{{server_addr}}	{{server_port}}
+i  3. Tags localized:  		{{server_addr}}	{{server_port}}
+i     - 编程 → Programming  		{{server_addr}}	{{server_port}}
+i     - 错误 → Errors  		{{server_addr}}	{{server_port}}
+i     - 微信 → WeChat (official branding)  		{{server_addr}}	{{server_port}}
+i  4. All technical elements preserved:  		{{server_addr}}	{{server_port}}
+i     - Frontmatter structure (---)  		{{server_addr}}	{{server_port}}
+i     - Image paths unchanged  		{{server_addr}}	{{server_port}}
+i     - Date format remains ISO standard  		{{server_addr}}	{{server_port}}
+i     - Markdown syntax intact  		{{server_addr}}	{{server_port}}
+i  5. Image alt text kept identical to filename as no descriptive text was provided		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

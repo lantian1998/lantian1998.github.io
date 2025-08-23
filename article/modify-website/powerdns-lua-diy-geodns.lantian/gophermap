@@ -1,0 +1,203 @@
+i之前，如果要为自己的网站自建权威 DNS 系统，那么（几乎）唯一的选择是		{{server_addr}}	{{server_port}}
+iPowerDNS 加上它的 GeoIP 后端。但是 GeoIP 后端使用的是 YAML 格式的配置		{{server_addr}}	{{server_port}}
+i文件，不能与 MySQL 等数据库一同使用。这意味着必须手动配置一套跨服务器		{{server_addr}}	{{server_port}}
+i同步文件的系统，而不能使用更为成熟的数据库同步技术。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过，PowerDNS 在最新的 4.2 版本中加入了 Lua 记录的支持。Lua 是一种专		{{server_addr}}	{{server_port}}
+i门用于「嵌入其它程序执行功能」的编程语言，你或许曾经在 nginx 上看到过		{{server_addr}}	{{server_port}}
+i它（作为一个插件）。Lua 记录支持使得 PowerDNS 可以根据用户查询请求的不		{{server_addr}}	{{server_port}}
+i同来返回不同的回答，分地区解析 GeoDNS 功能也就可以实现了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 更新 PowerDNS		{{server_addr}}	{{server_port}}
+i最新的 PowerDNS 4.2 版本没有加入 Debian 10 的软件仓库中，你需要从		{{server_addr}}	{{server_port}}
+iDebian Unstable 的软件仓库下载。但是由于 PowerDNS 依赖了一大堆新版的库		{{server_addr}}	{{server_port}}
+i文件，其中包括系统运行必须的库文件，如果用类似 `apt-get install -t		{{server_addr}}	{{server_port}}
+iunstable pdns-server` 的方法安装会把一些系统核心文件也升级到 Unstable		{{server_addr}}	{{server_port}}
+i版本。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在这种情况下，最好的解决方案就是 Docker。由于我们只需要从 Debian 软件		{{server_addr}}	{{server_port}}
+i源下载 PowerDNS，不需要自己编译，所以几行就可以搞定这个镜像：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  FROM amd64/debian:sid		{{server_addr}}	{{server_port}}
+i  RUN apt-get -qq update \		{{server_addr}}	{{server_port}}
+i      && DEBIAN_FRONTEND=noninteractive apt-get -qq install -y tini pdns-server pdns-tools pdns-backend-\* \		{{server_addr}}	{{server_port}}
+i      && apt-get clean		{{server_addr}}	{{server_port}}
+i  ENTRYPOINT ["/usr/bin/tini", "-g", "--", "/usr/sbin/pdns_server"]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我最终使用的 Dockerfile（的一部分）可以在		{{server_addr}}	{{server_port}}
+h我的 GitHub 上	URL:https://github.com/xddxdd/dockerfiles/blob/53295f2641dce30072f0f2ac5dd631e1f0b35687/dockerfiles/powerdns-bird/template.Dockerfile	{{server_addr}}	{{server_port}}
+i找到，不过这份 Dockerfile 被我多加了 Bird BGP 进去，并且需要经过 GPP		{{server_addr}}	{{server_port}}
+i处理才能生成完整的 Dockerfile（详情可以		{{server_addr}}	{{server_port}}
+1看这篇文章	/article/modify-website/gpp-preprocess-dockerfile-include-if.lantian/	{{server_addr}}	{{server_port}}
+i）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 配置 GeoIP 库		{{server_addr}}	{{server_port}}
+iPowerDNS 使用的 IP 地理信息库是 MaxMind GeoIP。虽然 MaxMind 提供免费的、		{{server_addr}}	{{server_port}}
+i精度稍低的 IP 地理信息库（GeoLite）给个人使用，但是自从 2019 年 12 月		{{server_addr}}	{{server_port}}
+i30 日开始，MaxMind 开始要求 GeoLite 的用户注册账户，获取授权密钥后才能		{{server_addr}}	{{server_port}}
+i下载数据库。大致步骤如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 去		{{server_addr}}	{{server_port}}
+h   GeoLite 2 数据库页面	URL:https://dev.maxmind.com/geoip/geoip2/geolite2/	{{server_addr}}	{{server_port}}
+i   ，点击页面下方的黄色按钮注册。过程中需要接收验证邮件，并且不能挂着		{{server_addr}}	{{server_port}}
+i   代理注册（毕竟人家就是干这个的）。		{{server_addr}}	{{server_port}}
+i2. 进入账户详情页面，点左边的 `My License Key` 管理授权密钥。		{{server_addr}}	{{server_port}}
+i3. 点击 `Generate License Key` 创建新的密钥，		{{server_addr}}	{{server_port}}
+i4. 填写一个密钥描述，并且如图选择密钥版本，点蓝色按钮确认：		{{server_addr}}	{{server_port}}
+I   - 密钥版本选择	/usr/uploads/202001/maxmind-license-version.png	{{server_addr}}	{{server_port}}
+i5. 提交后，你会看到两个重要的信息，记录下来，稍后要填写到配置文件中：		{{server_addr}}	{{server_port}}
+i   - `Account/User ID` 账户编号		{{server_addr}}	{{server_port}}
+i   - `License Key` 授权密钥		{{server_addr}}	{{server_port}}
+i接下来，就可以使用 MaxMind 官方的 `geoipupdate` 工具来自动更新数据库了。		{{server_addr}}	{{server_port}}
+i首先是安装，在 Debian 系统中可以直接：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install geoipupdate		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i之后创建文件夹 `/etc/geoip`，并修改 `/etc/GeoIP.conf`（注意大小写），		{{server_addr}}	{{server_port}}
+i填写如下内容：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  AccountID [账户编号]		{{server_addr}}	{{server_port}}
+i  LicenseKey [授权密钥]		{{server_addr}}	{{server_port}}
+i  EditionIDs GeoLite2-ASN GeoLite2-City GeoLite2-Country		{{server_addr}}	{{server_port}}
+i  DatabaseDirectory /etc/geoip		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i之后运行 `geoipupdate` 就可以自动更新数据库了，文件存放在 `/etc/geoip`		{{server_addr}}	{{server_port}}
+i文件夹内。可以用 Cron 设置上自动更新：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  crontab -e		{{server_addr}}	{{server_port}}
+i  # 加上一行：		{{server_addr}}	{{server_port}}
+i  0 0 * * 0 /usr/bin/geoipupdate		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 配置并启动 PowerDNS		{{server_addr}}	{{server_port}}
+i要启用 GeoIP 功能，还需要修改一下 PowerDNS 的配置文件。打开 `pdns.conf`，		{{server_addr}}	{{server_port}}
+i在你已经正常工作的 PowerDNS 配置的基础上，做出以下修改：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # 启用 Lua 记录		{{server_addr}}	{{server_port}}
+i  enable-lua-records=yes		{{server_addr}}	{{server_port}}
+i  # 此处在你用的数据库后面加一个 geoip		{{server_addr}}	{{server_port}}
+i  launch=gmysql,geoip		{{server_addr}}	{{server_port}}
+i  # 指定数据库文件的路径，此处使用精度最高的城市级数据库		{{server_addr}}	{{server_port}}
+i  geoip-database-files=/etc/geoip/GeoLite2-City.mmdb		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后启动 PowerDNS。如果你的主系统是 Debian Unstable，那么直接：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  systemctl start pdns		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果使用 Docker，以下是 `docker-compose.yml` 中填写的内容，供参考：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  powerdns:		{{server_addr}}	{{server_port}}
+i    image: [你创建的上述 Docker 镜像]		{{server_addr}}	{{server_port}}
+i    container_name: powerdns		{{server_addr}}	{{server_port}}
+i    restart: always		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - './conf/powerdns/pdns.conf:/etc/powerdns/pdns.conf:ro'		{{server_addr}}	{{server_port}}
+i      - '/etc/geoip:/etc/geoip:ro'		{{server_addr}}	{{server_port}}
+i    ports:		{{server_addr}}	{{server_port}}
+i      - '53:53'		{{server_addr}}	{{server_port}}
+i      - '53:53/udp'		{{server_addr}}	{{server_port}}
+i    depends_on:		{{server_addr}}	{{server_port}}
+i      - mysql		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 添加 Lua 解析记录		{{server_addr}}	{{server_port}}
+i在现代 DNS 解析体系里，DNS 服务器通常会将用户的 IP 一级一级告知上游服		{{server_addr}}	{{server_port}}
+i务器（称为 EDNS），从而让服务器根据用户 IP 分配最近的服务器地址。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 PowerDNS Lua 中，用户的 IP 地址作为一个变量 `bestwho` 存在。不过如		{{server_addr}}	{{server_port}}
+i果用户的 DNS 服务器没有告知上游服务器用户的地址，那么 `bestwho` 就会指		{{server_addr}}	{{server_port}}
+i向 DNS 服务器的地址。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先演示如何使用 `bestwho`。创建一条记录，类型为 `LUA`，内容如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  A ";if(bestwho:isIPv4()) then return bestwho:toString() else return '0.0.0.0' end"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i开始的 A 代表返回的记录类型，后面的字符串则是一小段 Lua 程序，如果来源		{{server_addr}}	{{server_port}}
+iIP 地址是 IPv4，就返回用户 IP，否则返回 `0.0.0.0` 代表失败。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i类似的，我们可以写出 IPv6 的版本。再创建一条同名记录，类型也为 `LUA`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  AAAA ";if(bestwho:isIPv6()) then return bestwho:toString() else return '::' end"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i或者使用 TXT 记录返回含端口号的连接信息：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  TXT "bestwho:toStringWithPort()"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i或者使用 LOC 记录返回 GeoIP 推测的地理位置：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  LOC "latlonloc()"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以上的功能都可以在 `whoami.lantian.pub` 看到：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  $ dig +short @1.1.1.1 whoami.lantian.pub		{{server_addr}}	{{server_port}}
+i  108.162.214.17		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  $ dig +short @1.1.1.1 AAAA whoami.lantian.pub		{{server_addr}}	{{server_port}}
+i  2400:cb00:12:1024::6ca2:d619		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  $ dig +short @1.1.1.1 TXT whoami.lantian.pub		{{server_addr}}	{{server_port}}
+i  "[2400:cb00:12:1024::6ca2:d626]:16668"		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  $ dig +short @1.1.1.1 LOC whoami.lantian.pub		{{server_addr}}	{{server_port}}
+i  34 3 15.840 N 118 14 38.400 W 0.00m 1m 10000m 10m		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（Cloudflare 的 1.1.1.1 服务器有意禁用了 EDNS，所以此处显示的是		{{server_addr}}	{{server_port}}
+iCloudflare 的服务器地址）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 配置 GeoDNS		{{server_addr}}	{{server_port}}
+i大致了解了 PowerDNS 的 Lua 是怎么工作的，就可以开始配置分地区解析的记		{{server_addr}}	{{server_port}}
+i录了。PowerDNS 提供了一个方便的函数 `pickclosest`，自动从一个 IP 列表		{{server_addr}}	{{server_port}}
+i中选择离用户最近的服务器返回。例如现在 `lantian.pub` 的 A 记录是这样的：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  A "pickclosest({'103.42.215.193','185.186.147.110','107.172.134.89','195.154.221.59'})"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i`pickclosest` 同样适用于 AAAA 记录：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  AAAA "pickclosest({'2001:470:19:10bb::1','2001:470:d:46e::1','2001:470:1f07:54d::1','2001:470:1f13:28::1'})"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（以上服务器按顺序分别在：中国香港，美国洛杉矶，美国纽约，法国）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样不同地区的用户就会获得不同的解析结果：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # 中国大陆		{{server_addr}}	{{server_port}}
+i  $ dig +short lantian.pub		{{server_addr}}	{{server_port}}
+i  103.42.215.193		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 美国洛杉矶		{{server_addr}}	{{server_port}}
+i  $ dig +short lantian.pub		{{server_addr}}	{{server_port}}
+i  185.186.147.110		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 法国		{{server_addr}}	{{server_port}}
+i  $ dig +short lantian.pub		{{server_addr}}	{{server_port}}
+i  195.154.221.59		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i全球 Ping 的延迟也漂亮了很多。各地延迟都小于 100 ms 用单一服务器是不可		{{server_addr}}	{{server_port}}
+i能做到的：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IKeyCDN 全球 Ping 工具结果	/usr/uploads/202001/geodns-global-ping.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 分国家解析		{{server_addr}}	{{server_port}}
+i比起按照地理位置选择最近服务器的方法，有时更好的方法是按照国家解析，例		{{server_addr}}	{{server_port}}
+i如常见的国内直连、国外启用 Cloudflare 的搭配。PowerDNS 对此也提供了一		{{server_addr}}	{{server_port}}
+i个好用的函数，`country`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  TXT ";if(country('CN')) then return 'YES' else return 'NO' end"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后从国内国外分别尝试：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # 中国大陆		{{server_addr}}	{{server_port}}
+i  $ dig +short @103.42.215.193 TXT is-china.lantian.pub		{{server_addr}}	{{server_port}}
+i  "YES"		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 美国洛杉矶		{{server_addr}}	{{server_port}}
+i  $ dig +short @103.42.215.193 TXT is-china.lantian.pub		{{server_addr}}	{{server_port}}
+i  "NO"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i上述代码稍作修改也可以用于 A、AAAA、CNAME 等记录上，将中国大陆及海外流		{{server_addr}}	{{server_port}}
+i量分配到不同的服务器上：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  CNAME ";if(country('CN')) then return 'cdn-china.lantian.pub' else return 'cdn-overseas.lantian.pub' end"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 参考资料		{{server_addr}}	{{server_port}}
+i可以在 PowerDNS 的官方文档查看更多函数的信息：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+hLua Records - PowerDNS Authoritative Server Documentation	URL:https://doc.powerdns.com/authoritative/lua-records/index.html	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

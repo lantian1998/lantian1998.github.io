@@ -1,0 +1,383 @@
+i> Some parts of the content come from		{{server_addr}}	{{server_port}}
+h> https://hostedtalk.net/t/connecting-uptime-robot-with-ns1-dns-api/3883	URL:https://hostedtalk.net/t/connecting-uptime-robot-with-ns1-dns-api/3883	{{server_addr}}	{{server_port}}
+i> 。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Goal		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI have quite a few VPSes around the world, but my website had been		{{server_addr}}	{{server_port}}
+iserved by a single VPS in Los Angeles for a long time. Because I		{{server_addr}}	{{server_port}}
+ipurchase VPSes from small providers for their specific routing		{{server_addr}}	{{server_port}}
+iconfiguration or low price, the network of this VPS can be unstable		{{server_addr}}	{{server_port}}
+ifrom time to time. Although it's rare, I had to manually point the DNS		{{server_addr}}	{{server_port}}
+ito another VPS in case of an outage and switch back after it's back		{{server_addr}}	{{server_port}}
+iup. Therefore, I want to serve my website with all my VPSes, and		{{server_addr}}	{{server_port}}
+iautomatically reroute traffic to other VPSes if one VPS is down.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSynchronizing website data is of no difficulty since I use Hexo, a		{{server_addr}}	{{server_port}}
+istatic site generator. Simply generate the files on one VPS and copy		{{server_addr}}	{{server_port}}
+ithem to others with Ansible. The bigger problem is DNS. I want to		{{server_addr}}	{{server_port}}
+iroute users to the nearest VPS with GeoDNS. For example, Asian users		{{server_addr}}	{{server_port}}
+ican be routed to my Hong Kong node, and United States users can access		{{server_addr}}	{{server_port}}
+imy Los Angeles node.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, most GeoDNS services on the market are kind of expensive. For		{{server_addr}}	{{server_port}}
+ia single domain:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+h- CloudNS costs $9.95/m	URL:https://www.cloudns.net/geodns/	{{server_addr}}	{{server_port}}
+i  ;		{{server_addr}}	{{server_port}}
+h- Constellix costs $10/m	URL:https://constellix.com/pricing/products	{{server_addr}}	{{server_port}}
+i  ;		{{server_addr}}	{{server_port}}
+h- AWS Route 53 costs $0.5/m, plus $0.7/million queries and $0.75/node for monitoring	URL:https://aws.amazon.com/route53/pricing/	{{server_addr}}	{{server_port}}
+i  ;		{{server_addr}}	{{server_port}}
+h- PerfOps provides a GeoDNS-enabled subdomain for CNAMEs, and is free for 100k queries, but monitoring costs $5/node	URL:https://perfops.net/pricing	{{server_addr}}	{{server_port}}
+i  。		{{server_addr}}	{{server_port}}
+i- Cloudflare Load Balancing costs $15/m (with 2 backends and Traffic		{{server_addr}}	{{server_port}}
+i  Steering) and $5 per extra node.		{{server_addr}}	{{server_port}}
+iThe good news is that		{{server_addr}}	{{server_port}}
+hNS1 provides GeoDNS for free	URL:https://ns1.com/plans	{{server_addr}}	{{server_port}}
+i. Although it can only monitor one node, it supports setting node		{{server_addr}}	{{server_port}}
+istatus over API or over		{{server_addr}}	{{server_port}}
+hAWS SNS	URL:https://aws.amazon.com/sns/	{{server_addr}}	{{server_port}}
+ifor switching nodes automatically.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Why not Self-host		{{server_addr}}	{{server_port}}
+iI tried		{{server_addr}}	{{server_port}}
+1GeoDNS on PowerDNS as an authoritative DNS server	/en/article/modify-website/powerdns-lua-diy-geodns.lantian/	{{server_addr}}	{{server_port}}
+ibefore, but it didn't work well. The main reason is that DNS recursors		{{server_addr}}	{{server_port}}
+iwill not choose the nearest authoritative server automatically.		{{server_addr}}	{{server_port}}
+iInstead, they randomly select one from the nameserver list of the		{{server_addr}}	{{server_port}}
+idomain. If one recursor ends up with an authoritative server on the		{{server_addr}}	{{server_port}}
+iother side of the planet or even a server that's down at the moment,		{{server_addr}}	{{server_port}}
+iDNS resolution will be slow or even fail and, in turn, harms the		{{server_addr}}	{{server_port}}
+iwebsite's loading speed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMost commercial DNS services fix the problem with Anycast, where the		{{server_addr}}	{{server_port}}
+isame IP is announced from multiple datacenters, and the DNS requests		{{server_addr}}	{{server_port}}
+iwill be routed to the nearest datacenter automatically. But in order		{{server_addr}}	{{server_port}}
+ito announce an IP, you need an ASN ($50-100 one time) and an IPv4		{{server_addr}}	{{server_port}}
+irange ($100/m), which costs more than a commercial DNS!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Preparation		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou need to prepare:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. An AWS account with your credit card on file. You may need to pay a		{{server_addr}}	{{server_port}}
+i   few cents per month. We will use:		{{server_addr}}	{{server_port}}
+h   - Lambda FaaS	URL:https://aws.amazon.com/lambda/pricing/	{{server_addr}}	{{server_port}}
+i     (Free for first 1 million requests per month);		{{server_addr}}	{{server_port}}
+h   - API Gateway	URL:https://aws.amazon.com/api-gateway/pricing/	{{server_addr}}	{{server_port}}
+i     (To expose Lambda functions to the Internet, free for first 1		{{server_addr}}	{{server_port}}
+i     million requests for the first 12 months, then $1.17 per million		{{server_addr}}	{{server_port}}
+i     requests);		{{server_addr}}	{{server_port}}
+h   - SNS messaging service	URL:https://aws.amazon.com/sns/pricing/	{{server_addr}}	{{server_port}}
+i     (To send up/down state messages to NS1, free for first 1 million		{{server_addr}}	{{server_port}}
+i     requests per month).		{{server_addr}}	{{server_port}}
+i2. A		{{server_addr}}	{{server_port}}
+h   NS1 account	URL:https://ns1.com/signup	{{server_addr}}	{{server_port}}
+i   . You need to verify your credit card, but it's free otherwise.		{{server_addr}}	{{server_port}}
+i3. A domain with less than 50 DNS records to be used with NS1. The		{{server_addr}}	{{server_port}}
+i   free version of NS1 limits you to 50 DNS records.		{{server_addr}}	{{server_port}}
+i   - You can register a 6-9 digits xyz domain		{{server_addr}}	{{server_port}}
+h     that costs $0.99 per year	URL:https://gen.xyz/1111b	{{server_addr}}	{{server_port}}
+i     for NS1 and CNAME your primary domain over.		{{server_addr}}	{{server_port}}
+i4. Add A/AAAA records for each node on your primary DNS, like `hostdare.lantian.pub ->		{{server_addr}}	{{server_port}}
+i   185.186.147.110` . Later we will point CNAMEs and monitors here.		{{server_addr}}	{{server_port}}
+i5. An UptimeRobot or Freshping account, with monitoring configured for		{{server_addr}}	{{server_port}}
+i   all your nodes.		{{server_addr}}	{{server_port}}
+i   - Use the domains from step 4 as the monitored URL. Take `hostdare.lantian.pub ->		{{server_addr}}	{{server_port}}
+i     185.186.147.110` as example: use `https://hostdare.lantian.pub`		{{server_addr}}	{{server_port}}
+i     rather than `https://185.186.147.110` as the monitored URL.		{{server_addr}}	{{server_port}}
+i   - UptimeRobot supports a minimum monitoring interval of 5 minutes.		{{server_addr}}	{{server_port}}
+i     Freshping's interval is 1 minute, but it doesn't support IPv6.		{{server_addr}}	{{server_port}}
+i     Make your own choice.		{{server_addr}}	{{server_port}}
+iUsually, the number of up/down notifications is limited, so your cost		{{server_addr}}	{{server_port}}
+ion AWS will be less than 1 cent per month, almost completely free.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe flow of all messages will be:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  digraph {		{{server_addr}}	{{server_port}}
+i    node[shape=box]		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    UptimeRobot -> "AWS Lambda" [label="Webhook"]		{{server_addr}}	{{server_port}}
+i    Freshping -> "AWS Lambda" [label="Webhook"]		{{server_addr}}	{{server_port}}
+i    "AWS Lambda" -> "AWS SNS" [label="Internal API"]		{{server_addr}}	{{server_port}}
+i    "AWS SNS" -> "NS1 API" [label="Webhook"]		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Why AWS Lambda and AWS SNS		{{server_addr}}	{{server_port}}
+iBecause NS1's Webhook API isn't quite stable, and AWS SNS supports		{{server_addr}}	{{server_port}}
+iautomatic retrying.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI used Cloudflare Workers in my initial testing, but I frequently		{{server_addr}}	{{server_port}}
+iencountered Bad Requests errors with NS1's API. Retrying immediately		{{server_addr}}	{{server_port}}
+ididn't fix the problem. Because Cloudflare Workers is only triggered		{{server_addr}}	{{server_port}}
+iby inbound requests and have limitations on execution time, there's no		{{server_addr}}	{{server_port}}
+iway for me to retry every few seconds in the background.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYet AWS SNS can retry automatically whenever the API is unstable, and		{{server_addr}}	{{server_port}}
+iAWS Lambda can conveniently send messages to SNS. Hence why I ended up		{{server_addr}}	{{server_port}}
+iwith the combination of AWS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Connecting NS1 to AWS SNS		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. On the		{{server_addr}}	{{server_port}}
+h   Integrations page at NS1	URL:https://my.nsone.net/#/integrations	{{server_addr}}	{{server_port}}
+i   , click `Add a Data Source` and select AWS CloudWatch. Name it		{{server_addr}}	{{server_port}}
+i   whatever you want.		{{server_addr}}	{{server_port}}
+i   - We're not going to use AWS CloudWatch. Instead, we're going to		{{server_addr}}	{{server_port}}
+i     send up/down events to NS1 in the format of CloudWatch.		{{server_addr}}	{{server_port}}
+i2. On the Incoming Feeds tab, click the CloudWatch icon and add a data		{{server_addr}}	{{server_port}}
+i   feed. The `Alarm Name` should be the domain configured on		{{server_addr}}	{{server_port}}
+i   UptimeRobot/Freshping. `Name (for internal reference)` can be		{{server_addr}}	{{server_port}}
+i   whatever you want, but I just set it to the same value as `Alarm		{{server_addr}}	{{server_port}}
+i   Name` .		{{server_addr}}	{{server_port}}
+i   - Take `hostdare.lantian.pub -> 185.186.147.110` for example, the `Alarm		{{server_addr}}	{{server_port}}
+i     Name` should be `hostdare.lantian.pub` .		{{server_addr}}	{{server_port}}
+I   NS1 Add Alarm	/usr/uploads/202202/ns1-alarm.png	{{server_addr}}	{{server_port}}
+i3. Repeat step 2 until you've added data feeds for all nodes.		{{server_addr}}	{{server_port}}
+i4. Now a CloudWatch `Feeds URL` will appear on the Incoming Feeds tab.		{{server_addr}}	{{server_port}}
+i   Make a note of it, which will be added to AWS SNS later.		{{server_addr}}	{{server_port}}
+I   NS1 Feeds URL	/usr/uploads/202202/ns1-feed.png	{{server_addr}}	{{server_port}}
+i5. Visit the		{{server_addr}}	{{server_port}}
+h   management page of AWS SNS	URL:https://us-west-1.console.aws.amazon.com/sns/v3/home?region=us-west-1#/topics	{{server_addr}}	{{server_port}}
+i   and create a Topic (a message queue). Select `Standard` as the type		{{server_addr}}	{{server_port}}
+i   and leave everything as default.		{{server_addr}}	{{server_port}}
+i   - Note that all my AWS links are for region `us-west-1` . Switch		{{server_addr}}	{{server_port}}
+i     regions if you want to create resources in other regions! The AWS		{{server_addr}}	{{server_port}}
+i     SNS must be in the same zone as the Lambda functions created		{{server_addr}}	{{server_port}}
+i     later!		{{server_addr}}	{{server_port}}
+I   AWS Create Topic	/usr/uploads/202202/aws-create-topic.png	{{server_addr}}	{{server_port}}
+i6. An ARN (resource ID) will appear on the Topic's page. Make a note		{{server_addr}}	{{server_port}}
+i   of it, which will be used when creating the Lambda function.		{{server_addr}}	{{server_port}}
+i7. Click the `Create subscription` button on the bottom to create a		{{server_addr}}	{{server_port}}
+i   data subscription. Set `Protocol` to `HTTPS` , `Endpoint` to the		{{server_addr}}	{{server_port}}
+i   feeds URL in step 4, and leave everything else at default.		{{server_addr}}	{{server_port}}
+I   AWS Create Subscription	/usr/uploads/202202/aws-create-subscription.png	{{server_addr}}	{{server_port}}
+iNow all messages sent to this Topic on AWS SNS will be forwarded to		{{server_addr}}	{{server_port}}
+iNS1's API, so the states of the nodes can be synchronized to NS1.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Create AWS Lambda Functions for Webhook		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe next step is to create a function on AWS Lambda, which converts		{{server_addr}}	{{server_port}}
+iWebhook messages from UptimeRobot or Freshping to AWS SNS messages.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Visit the		{{server_addr}}	{{server_port}}
+h   management page of AWS Lambda	URL:https://us-west-1.console.aws.amazon.com/lambda/home?region=us-west-1#/functions	{{server_addr}}	{{server_port}}
+i   , and create a function.		{{server_addr}}	{{server_port}}
+i   - Note that all my AWS links are for region `us-west-1` . Switch		{{server_addr}}	{{server_port}}
+i     regions if you want to create resources in other regions! The AWS		{{server_addr}}	{{server_port}}
+i     SNS must be in the same zone as the Lambda functions!		{{server_addr}}	{{server_port}}
+i   - Choose `Auto from scratch` , and then `Node.js 14.x` as Runtime.		{{server_addr}}	{{server_port}}
+i     Leave everything else at default.		{{server_addr}}	{{server_port}}
+I   AWS Create Lambda Function	/usr/uploads/202202/aws-create-lambda.png	{{server_addr}}	{{server_port}}
+i2. You'll be automatically taken to the edit page of that function. If		{{server_addr}}	{{server_port}}
+i   you want to use UptimeRobot, copy & paste this piece of code:		{{server_addr}}	{{server_port}}
+i     var AWS = require('aws-sdk')		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i     const SECRET_KEY = '**Change to a random string as password**'		{{server_addr}}	{{server_port}}
+i     const SNS_ARN = '**Change to ARN for the AWS SNS earlier'		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i     exports.handler = async event => {		{{server_addr}}	{{server_port}}
+i       if (event.queryStringParameters.key != SECRET_KEY) {		{{server_addr}}	{{server_port}}
+i         return { statusCode: 403, body: 'Forbidden' }		{{server_addr}}	{{server_port}}
+i       }		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i       let json = JSON.parse(event.body)		{{server_addr}}	{{server_port}}
+i       let ns1Object = {		{{server_addr}}	{{server_port}}
+i         AlarmName: new URL(json.url).hostname,		{{server_addr}}	{{server_port}}
+i         NewStateValue: json.state == 2 ? 'OK' : 'ALARM',		{{server_addr}}	{{server_port}}
+i       }		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i       try {		{{server_addr}}	{{server_port}}
+i         let sns = new AWS.SNS({ apiVersion: '2010-03-31' })		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i         let result = await sns		{{server_addr}}	{{server_port}}
+i           .publish({		{{server_addr}}	{{server_port}}
+i             TopicArn: SNS_ARN,		{{server_addr}}	{{server_port}}
+i             Message: JSON.stringify(ns1Object),		{{server_addr}}	{{server_port}}
+i           })		{{server_addr}}	{{server_port}}
+i           .promise()		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i         return {		{{server_addr}}	{{server_port}}
+i           statusCode: 200,		{{server_addr}}	{{server_port}}
+i           headers: { 'Content-Type': 'application/json' },		{{server_addr}}	{{server_port}}
+i           body: JSON.stringify(result),		{{server_addr}}	{{server_port}}
+i         }		{{server_addr}}	{{server_port}}
+i       } catch (e) {		{{server_addr}}	{{server_port}}
+i         return {		{{server_addr}}	{{server_port}}
+i           statusCode: 500,		{{server_addr}}	{{server_port}}
+i           body: e.stack,		{{server_addr}}	{{server_port}}
+i         }		{{server_addr}}	{{server_port}}
+i       }		{{server_addr}}	{{server_port}}
+i     }		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i   Use this piece of code if you want to use Freshping:		{{server_addr}}	{{server_port}}
+i     var AWS = require('aws-sdk')		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i     const SECRET_KEY = '**Change to a random string as password**'		{{server_addr}}	{{server_port}}
+i     const SNS_ARN = '**Change to ARN for the AWS SNS earlier'		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i     exports.handler = async event => {		{{server_addr}}	{{server_port}}
+i       if (event.queryStringParameters.key != SECRET_KEY) {		{{server_addr}}	{{server_port}}
+i         return { statusCode: 403, body: 'Forbidden' }		{{server_addr}}	{{server_port}}
+i       }		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i       let json = JSON.parse(event.body)		{{server_addr}}	{{server_port}}
+i       let ns1Object = {		{{server_addr}}	{{server_port}}
+i         AlarmName: new URL(json.check_url).hostname,		{{server_addr}}	{{server_port}}
+i         NewStateValue: json.response_status_code === '200' ? 'OK' : 'ALARM',		{{server_addr}}	{{server_port}}
+i       }		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i       try {		{{server_addr}}	{{server_port}}
+i         let sns = new AWS.SNS({ apiVersion: '2010-03-31' })		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i         let result = await sns		{{server_addr}}	{{server_port}}
+i           .publish({		{{server_addr}}	{{server_port}}
+i             TopicArn: SNS_ARN,		{{server_addr}}	{{server_port}}
+i             Message: JSON.stringify(ns1Object),		{{server_addr}}	{{server_port}}
+i           })		{{server_addr}}	{{server_port}}
+i           .promise()		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i         return {		{{server_addr}}	{{server_port}}
+i           statusCode: 200,		{{server_addr}}	{{server_port}}
+i           headers: { 'Content-Type': 'application/json' },		{{server_addr}}	{{server_port}}
+i           body: JSON.stringify(result),		{{server_addr}}	{{server_port}}
+i         }		{{server_addr}}	{{server_port}}
+i       } catch (e) {		{{server_addr}}	{{server_port}}
+i         return {		{{server_addr}}	{{server_port}}
+i           statusCode: 500,		{{server_addr}}	{{server_port}}
+i           body: e.stack,		{{server_addr}}	{{server_port}}
+i         }		{{server_addr}}	{{server_port}}
+i       }		{{server_addr}}	{{server_port}}
+i     }		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i   Click Deploy.		{{server_addr}}	{{server_port}}
+i3. On the Configuration tab of the function, select Permissions on the		{{server_addr}}	{{server_port}}
+i   left, and then click the link in Execution Role. This takes you to		{{server_addr}}	{{server_port}}
+i   the permission management page.		{{server_addr}}	{{server_port}}
+I   AWS Lambda Permissions Settings	/usr/uploads/202202/aws-lambda-permissions.png	{{server_addr}}	{{server_port}}
+i4. On the new page, click Add permissions - Create inline policy.		{{server_addr}}	{{server_port}}
+i5. On the Create Policy page, set Service to SNS:		{{server_addr}}	{{server_port}}
+I   AWS Policy - Setting Service	/usr/uploads/202202/aws-permission-service.png	{{server_addr}}	{{server_port}}
+i6. Set Actions to Publish under Write section:		{{server_addr}}	{{server_port}}
+I   AWS Policy - Setting Actions	/usr/uploads/202202/aws-permission-actions.png	{{server_addr}}	{{server_port}}
+i7. Click Add ARN under then Resources section, and fill in the ARN for		{{server_addr}}	{{server_port}}
+i   the AWS SNS created earlier:		{{server_addr}}	{{server_port}}
+I   AWS Policy - Setting Resources	/usr/uploads/202202/aws-permission-resources.png	{{server_addr}}	{{server_port}}
+i8. Click Review Policy on the bottom right, give it a name, and click		{{server_addr}}	{{server_port}}
+i   Create Policy.		{{server_addr}}	{{server_port}}
+iNow we have a Lambda function that parses messages from UptimeRobot or		{{server_addr}}	{{server_port}}
+iFreshping, and gave it the permissions to send messages to SNS.		{{server_addr}}	{{server_port}}
+iHowever, there's no way to send HTTP calls to that function yet. We		{{server_addr}}	{{server_port}}
+iwill create an API Gateway to accept HTTP requests and invoke the		{{server_addr}}	{{server_port}}
+ifunction.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Create AWS API Gateway for Accepting HTTP Requests		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. On the		{{server_addr}}	{{server_port}}
+h   AWS API Gateway management page	URL:https://us-west-1.console.aws.amazon.com/apigateway/main/apis?region=us-west-1	{{server_addr}}	{{server_port}}
+i   , create an API of type HTTP.		{{server_addr}}	{{server_port}}
+i   - Note that all my AWS links are for region `us-west-1` . Switch		{{server_addr}}	{{server_port}}
+i     regions if you want to create resources in other regions!		{{server_addr}}	{{server_port}}
+I   AWS API Gateway Select Type	/usr/uploads/202202/aws-api-type.png	{{server_addr}}	{{server_port}}
+i2. Click Add integration, set Type to Lambda, and choose the Lambda		{{server_addr}}	{{server_port}}
+i   function you created earlier. Give the API a name and click Next:		{{server_addr}}	{{server_port}}
+I   AWS API Gateway Choose Lambda Function	/usr/uploads/202202/aws-api-integrations.png	{{server_addr}}	{{server_port}}
+i3. On the Configure routes page, make a note of the path to your		{{server_addr}}	{{server_port}}
+i   Lambda function. My path is `/ns1-uptime` for example:		{{server_addr}}	{{server_port}}
+I   AWS API Gateway Configure Routes	/usr/uploads/202202/aws-api-routes.png	{{server_addr}}	{{server_port}}
+i4. Click Next until the API Gateway is created. Its URL is shown on		{{server_addr}}	{{server_port}}
+i   the Stages section at the center of the page.		{{server_addr}}	{{server_port}}
+I   AWS API Gateway URL	/usr/uploads/202202/aws-api-url.png	{{server_addr}}	{{server_port}}
+i   Concatenate that to the path from step 3, and you have the URL for		{{server_addr}}	{{server_port}}
+i   the function. Assuming my API Gateway URL is `https://1234567890.execute-api.us-west-1.amazonaws.com/` ,		{{server_addr}}	{{server_port}}
+i   my Lambda function URL will be `https://1234567890.execute-api.us-west-1.amazonaws.com/ns1-uptime` .		{{server_addr}}	{{server_port}}
+i   If you visit it directly, you should get `Internal Server Error` .		{{server_addr}}	{{server_port}}
+i# Connect UptimeRobot/Freshping to Webhook		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. As we have a password ( `SECRET_KEY` ) in the function, we need to		{{server_addr}}	{{server_port}}
+i   add it to the function URL. Assuming the password is `123456` , add `?key=123456`		{{server_addr}}	{{server_port}}
+i   to the end of the URL. The whole URL looks like `https://1234567890.execute-api.us-west-1.amazonaws.com/ns1-uptime?		{{server_addr}}	{{server_port}}
+i   key=123456` .		{{server_addr}}	{{server_port}}
+i2. If you use UptimeRobot, visit the		{{server_addr}}	{{server_port}}
+h   My Settings page	URL:https://uptimerobot.com/dashboard#mySettings	{{server_addr}}	{{server_port}}
+i   , and click Add Alert Contact:		{{server_addr}}	{{server_port}}
+i   - Set `Type` to `Webhook` ;		{{server_addr}}	{{server_port}}
+i   - Set `URL to Notify` to the full function URL with passwords;		{{server_addr}}	{{server_port}}
+i   - For `POST Value` , enter:		{{server_addr}}	{{server_port}}
+i       { "url": "*monitorURL*", "state": "*alertType*" }		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i   - Tick `Send as JSON` ;		{{server_addr}}	{{server_port}}
+i   - Set `Enable notification for` to `Up & down events` ;		{{server_addr}}	{{server_port}}
+i   - Save.		{{server_addr}}	{{server_port}}
+I   UptimeRobot Webhook Config	/usr/uploads/202202/uptimerobot-webhook.png	{{server_addr}}	{{server_port}}
+i   - Modify all monitoring jobs, and select the new Webhook in the		{{server_addr}}	{{server_port}}
+i     Alert Contacts section.		{{server_addr}}	{{server_port}}
+i3. If you use Freshping, on your management page, click the gear icon		{{server_addr}}	{{server_port}}
+i   on the left, followed by Integrations page. Click Create		{{server_addr}}	{{server_port}}
+i   Integration in the Webhook section:		{{server_addr}}	{{server_port}}
+i   - Set `Event Type` to `Up/Down` ;		{{server_addr}}	{{server_port}}
+i   - Set `Trigger the Webhook` to the full function URL with		{{server_addr}}	{{server_port}}
+i     passwords;		{{server_addr}}	{{server_port}}
+i   - Leave everything else at defaults and save.		{{server_addr}}	{{server_port}}
+i# Configure GeoDNS and Failover on NS1		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs the last step, we're going to add the records for each region in		{{server_addr}}	{{server_port}}
+ithe NS1 control panel, and connect them to their data feeds.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Back to the		{{server_addr}}	{{server_port}}
+h   Zones page on NS1 control panel	URL:https://my.nsone.net/#/zones	{{server_addr}}	{{server_port}}
+i   , enter your zone settings.		{{server_addr}}	{{server_port}}
+i2. Create a CNAME record without any Answers. Just fill out the name		{{server_addr}}	{{server_port}}
+i   and save.		{{server_addr}}	{{server_port}}
+i3. Click Edit Filter Chain on the left, and drag in these filters from		{{server_addr}}	{{server_port}}
+i   the right in order:		{{server_addr}}	{{server_port}}
+i   1. Up		{{server_addr}}	{{server_port}}
+i   2. Geotarget Country		{{server_addr}}	{{server_port}}
+i   3. Select First Group		{{server_addr}}	{{server_port}}
+i   4. Shuffle		{{server_addr}}	{{server_port}}
+i   5. Select First N		{{server_addr}}	{{server_port}}
+i4. Tick `Enable Client Subnet` and save.		{{server_addr}}	{{server_port}}
+I   NS1 Filter Chain	/usr/uploads/202202/ns1-filter-chain.png	{{server_addr}}	{{server_port}}
+i5. Add an Answer Group on the right. Here we will have each group		{{server_addr}}	{{server_port}}
+i   corresponding to a region. Click the menu icon on the right of that		{{server_addr}}	{{server_port}}
+i   Answer Group, and select `Edit Group Metadata` . Add its `Country`		{{server_addr}}	{{server_port}}
+i   and `Subdivisions` information. Take Los Angeles for example:		{{server_addr}}	{{server_port}}
+i   - Set `Country/countries` to `Americas / Northern America / United		{{server_addr}}	{{server_port}}
+i     States` ;		{{server_addr}}	{{server_port}}
+i   - Set `Subdivisions` to `North America / United States of America /		{{server_addr}}	{{server_port}}
+i     California` ;		{{server_addr}}	{{server_port}}
+i   - Set `US States` to `Western US / California` ;		{{server_addr}}	{{server_port}}
+i   - Save.		{{server_addr}}	{{server_port}}
+I   NS1 Answer Group	/usr/uploads/202202/ns1-answer-group.png	{{server_addr}}	{{server_port}}
+i6. Click `Add Answer to Group` in that Answer Group, and enter the		{{server_addr}}	{{server_port}}
+i   domain for the node, created in step 4 in preparation. Click the		{{server_addr}}	{{server_port}}
+i   menu icon on the right and select `Edit Answer Metadata` :		{{server_addr}}	{{server_port}}
+i   - Click the icon on the right of `Up/down` , select the data feed		{{server_addr}}	{{server_port}}
+i     for that node, and save.		{{server_addr}}	{{server_port}}
+I   NS1 Answer Metadata	/usr/uploads/202202/ns1-answer-meta.png	{{server_addr}}	{{server_port}}
+i7. Repeat step 5 and 6 to add all regions and nodes. Now GeoDNS and		{{server_addr}}	{{server_port}}
+i   failover are enabled for this record on its domain.		{{server_addr}}	{{server_port}}
+i8. CNAME your primary domain to this (sub-)domain on NS1.		{{server_addr}}	{{server_port}}
+i> Note that current DNS standards don't allow CNAMEing the root domain (the `@`		{{server_addr}}	{{server_port}}
+i> record of your primary domain) to another domain. If you want to		{{server_addr}}	{{server_port}}
+i> CNAME your root domain, you can opt for the CNAME Flattening		{{server_addr}}	{{server_port}}
+i> functionality of your primary DNS provider. Some provide this as `ALIAS`		{{server_addr}}	{{server_port}}
+i> or `ANAME` records, and some (including Cloudflare) enable it		{{server_addr}}	{{server_port}}
+i> automatically whenever a CNAME record is created for the root		{{server_addr}}	{{server_port}}
+i> domain.		{{server_addr}}	{{server_port}}
+i> 		{{server_addr}}	{{server_port}}
+i> But there's a catch. Now the client IP obtained by NS1 will be the		{{server_addr}}	{{server_port}}
+i> IP for your primary authoritative DNS. This isn't a problem for		{{server_addr}}	{{server_port}}
+i> providers with a large number of DNS servers globally, like		{{server_addr}}	{{server_port}}
+i> Cloudflare, as your users will generally be close to the DNS		{{server_addr}}	{{server_port}}
+i> servers. But this will be a problem if your provider has a limited		{{server_addr}}	{{server_port}}
+i> number of nodes, as the GeoDNS results may be far from your users.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow with everything set up, you can manually shut down a server to see		{{server_addr}}	{{server_port}}
+ithe system in action. By the time you received an alert from		{{server_addr}}	{{server_port}}
+iUptimeRobot or Freshping, the state for that node in NS1 control panel		{{server_addr}}	{{server_port}}
+iwill change to `Down` , and that node won't be included in DNS		{{server_addr}}	{{server_port}}
+iresponses; when the node is up again, its state will change back to `Up`		{{server_addr}}	{{server_port}}
+iand start serving users again.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

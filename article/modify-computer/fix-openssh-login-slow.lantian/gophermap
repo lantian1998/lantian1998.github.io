@@ -1,0 +1,24 @@
+i今天连接 Azure 中国版虚拟机时发现登录反应非常慢，在网络环境良好的情况		{{server_addr}}	{{server_port}}
+i下要等上十几秒才出现输入密码的提示。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i经过 Google 查询，发现是 DNS 反向解析的问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOpenSSH 会在你登录时把你的 IP 拿去做反向解析，从而判断你的 IP 在不在系		{{server_addr}}	{{server_port}}
+i统的黑名单内。但是中国电信不对民用网络的 IP 做反向解析，导致 OpenSSH		{{server_addr}}	{{server_port}}
+i要等待解析结果直到超时，然后才建立连接。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i解决方法就是把反向解析关掉就行。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo nano /etc/ssh/sshd_config		{{server_addr}}	{{server_port}}
+i  # 在文件末尾加上「UseDNS no」，关闭文件		{{server_addr}}	{{server_port}}
+i  sudo service ssh restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果这样设置后还是连接缓慢，可以尝试如下设置：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo nano /etc/ssh/sshd_config		{{server_addr}}	{{server_port}}
+i  # 在文件末尾加上「GSSAPIAuthentication no」，关闭文件		{{server_addr}}	{{server_port}}
+i  sudo service ssh restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如此设置之后，SSH 就可以在 2 秒内连通，相比之前十几秒的时间相比，速度		{{server_addr}}	{{server_port}}
+i大有改观。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

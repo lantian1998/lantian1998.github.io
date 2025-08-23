@@ -1,0 +1,42 @@
+i最近突然发现本来每天一封的自建贴吧签到系统的邮件突然没有了，但是贴吧还		{{server_addr}}	{{server_port}}
+i是正常签到。上 Mailgun 界面一看，状态全线飘红：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i日志里一大排发往我自己 Outlook 邮箱的退信，比如：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i看提示是 Mailgun 的整个 AS 都被 Outlook 拉黑了。这下子是完全没法用了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i好消息是，有许多和 Mailgun 提供类似服务的邮件服务商，例如 SendGrid。我		{{server_addr}}	{{server_port}}
+i很快在他们网站上注册了一个账号，并且开启了 SMTP，把我的贴吧签到、		{{server_addr}}	{{server_port}}
+iNextCloud 等都接了进去，非常顺利。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i坏消息是，我的博客用的是我专门给 Mailgun 写的		{{server_addr}}	{{server_port}}
+iCommentGun		{{server_addr}}	{{server_port}}
+i，需要修改一下才能接到 SendGrid 上。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i本来我可能修改一下插件，然后又能出一个 CommentGrid 之类的插件，但是每		{{server_addr}}	{{server_port}}
+i家邮件服务商的 API 都不一样。如果这些服务商轮着被 Outlook 屏蔽 … …		{{server_addr}}	{{server_port}}
+i画美不看。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另一个好消息是，这些邮件服务商普遍支持 SMTP 发信。这意味着我可以用		{{server_addr}}	{{server_port}}
+iCommentToMail。坏消息是，这个插件年久失修，在不少情况下会 GG（例如网站		{{server_addr}}	{{server_port}}
+i开了 SSL，或者邮件服务商的 SSL 过期了）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过长痛不如短痛，比起做一大堆 Comment 开头的插件，我还是直接改好		{{server_addr}}	{{server_port}}
+iCommentToMail，一劳永逸。基于		{{server_addr}}	{{server_port}}
+i这里		{{server_addr}}	{{server_port}}
+i和王忘杰的讨论以及我自己在 CommentGun 上的修改，我终于修好了		{{server_addr}}	{{server_port}}
+iCommentToMail。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i改动列表：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 去除异步发送（许多情况下邮件发不出去就是它造成的）		{{server_addr}}	{{server_port}}
+i2. 更新 PHPMailer，并关闭 SSL 证书验证（部分邮件商 SMTP 没配置好，开着		{{server_addr}}	{{server_port}}
+i   验证会出问题）		{{server_addr}}	{{server_port}}
+i因为去掉了异步发送，所以如果到 SMTP 服务器的连接很慢会卡网站访问速度。		{{server_addr}}	{{server_port}}
+i我的解决方法是在 VPS 上装了个 Postfix 来中继邮件。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最后，GitHub 项目地址：		{{server_addr}}	{{server_port}}
+ihttps://github.com/xddxdd/typecho-commenttomail		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,264 @@
+iDocker 镜像中存储的，可以看作是一个个小型 Linux 系统。它们大都以		{{server_addr}}	{{server_port}}
+iDebian、Ubuntu 或是 Alpine 作为基础，再在上面安装额外的软件而成。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以完整的 Linux 作为基础的好处就是镜像中会自带常用的命令（`ls`，`cat`		{{server_addr}}	{{server_port}}
+i等），在镜像构建过程中常常用到。另外它们也带有完善的包管理机制，简单使		{{server_addr}}	{{server_port}}
+i用 `apt-get` 就能装好软件，做出一份能用的镜像。但当镜像做出之后，上面		{{server_addr}}	{{server_port}}
+i这些工具就用不到了，占用了不必要的磁盘空间。另外，完整的操作系统也会带		{{server_addr}}	{{server_port}}
+i有 SystemD、OpenRC 等管理后台服务的程序，而 Docker 容器常常只用来运行		{{server_addr}}	{{server_port}}
+i一个程序，后台管理程序就多余了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i虽然 Docker 镜像采用分层设计，将基础的系统镜像（例如 Debian）和上层修		{{server_addr}}	{{server_port}}
+i改（例如安装的 nginx）分开存储并进行去重，从而减少了重复的空间占用，但		{{server_addr}}	{{server_port}}
+i没有完全解决问题。例如假设我先基于 Debian 构建了一个镜像 A，过了一个月		{{server_addr}}	{{server_port}}
+i又构建了镜像 B。但在这一个月中，Debian 的基础镜像进行了升级，于是		{{server_addr}}	{{server_port}}
+iDocker 就会存储新旧两份镜像，占用了大量的空间。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i可以看出，空间占用问题大都是基础系统镜像导致的。而且基础镜像也不小，		{{server_addr}}	{{server_port}}
+iDebian、Ubuntu 的都要 100 MB 以上，Alpine 好些，但也有 5-10 MB，而且它		{{server_addr}}	{{server_port}}
+i相比 Debian 等不常用。那么，能不能在做出的 Docker 镜像中，不使用基础操		{{server_addr}}	{{server_port}}
+i作系统，只留应用的可执行程序呢？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i可以，但比较难。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Docker 分阶段构建		{{server_addr}}	{{server_port}}
+i首先试着给一个 C 语言的 Hello World 程序做一个镜像，把这个文件保存为 `hello.c`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #include <stdio.h>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  int main() {		{{server_addr}}	{{server_port}}
+i      printf("Hello World\n");		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我们打算放弃基础系统，只保留应用程序。于是我们开始写 Dockerfile：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  FROM scratch		{{server_addr}}	{{server_port}}
+i  # 然后呢？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i此时我们发现，因为没有基础系统，我们根本没有 `ls`、`cat` 等命令可用，		{{server_addr}}	{{server_port}}
+i更不用说 `wget`、`gcc` 这些了。但好消息是，我们还有 `COPY` 命令可用：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  FROM scratch		{{server_addr}}	{{server_port}}
+i  COPY ./hello /		{{server_addr}}	{{server_port}}
+i  ENTRYPOINT [ "/hello" ]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我们把可执行文件 `hello` 复制进了镜像，然后把它设为 `ENTRYPOINT`，这样		{{server_addr}}	{{server_port}}
+i一个没有基础系统的镜像就做好了，是不是很简单？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i等等，`hello` 这个文件怎么来？你需要在宿主机上安装好编译器和依赖，提前		{{server_addr}}	{{server_port}}
+i编译好程序。但这一是需要额外的步骤，二是不同程序需要的编译环境可能是冲		{{server_addr}}	{{server_port}}
+i突的（这也是 Docker 解决的问题之一）。如果我们能把编译过程也放在容器里		{{server_addr}}	{{server_port}}
+i完成就好了，最好还能写在同一个 Dockerfile 里。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i好消息是，Docker 以「分阶段构建」的形式支持了这种操作：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  FROM gcc AS step_0		{{server_addr}}	{{server_port}}
+i  COPY hello.c /		{{server_addr}}	{{server_port}}
+i  RUN gcc /hello.c -o /hello		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  FROM scratch AS step_1		{{server_addr}}	{{server_port}}
+i  COPY --from=step_0 /hello /		{{server_addr}}	{{server_port}}
+i  ENTRYPOINT [ "/hello" ]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDocker 在容器构建过程中，会先创建一个装有 GCC 的容器运行编译命令，再 `FROM		{{server_addr}}	{{server_port}}
+iscratch` 创建一个空镜像，把可执行文件复制进去。而这一切都在同一个		{{server_addr}}	{{server_port}}
+iDockerfile 里完成。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 但是为什么不行？		{{server_addr}}	{{server_port}}
+i上面的 Dockerfile 看起来不错，我们实际构建一下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > docker build -t xddxdd/test .		{{server_addr}}	{{server_port}}
+i  Sending build context to Docker daemon  3.072kB		{{server_addr}}	{{server_port}}
+i  # ...		{{server_addr}}	{{server_port}}
+i  Successfully built 92004f08c63f		{{server_addr}}	{{server_port}}
+i  Successfully tagged xddxdd/test:latest		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  > docker images xddxdd/test		{{server_addr}}	{{server_port}}
+i  REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE		{{server_addr}}	{{server_port}}
+i  xddxdd/test         latest              92004f08c63f        About a minute ago   16.4kB		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i镜像构建完成，16.4 KB，相当小。我们运行一下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > docker run -it --rm xddxdd/test		{{server_addr}}	{{server_port}}
+i  standard_init_linux.go:219: exec user process caused: no such file or directory		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i等一下，找不到什么文件？这里只有一个 `hello` 程序，而且它也不会去打开		{{server_addr}}	{{server_port}}
+i其它文件啊。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i等等，真的不会吗？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## C 标准运行库与静态编译		{{server_addr}}	{{server_port}}
+i虽然我们的 C 代码里程序不会去打开任何文件，但是这个可执行文件本身还要		{{server_addr}}	{{server_port}}
+i依赖其它文件。用 `ldd` 命令看一下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > ldd hello		{{server_addr}}	{{server_port}}
+i  linux-vdso.so.1 (0x00007ffd3759d000)		{{server_addr}}	{{server_port}}
+i  libc.so.6 => /usr/lib/libc.so.6 (0x00007f5772a31000)		{{server_addr}}	{{server_port}}
+i  /lib64/ld-linux-x86-64.so.2 => /usr/lib64/ld-linux-x86-64.so.2 (0x00007f5772c53000)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLinux 使用的 ELF 可执行文件可以在启动时加载其它的 .so 文件，使用这些文		{{server_addr}}	{{server_port}}
+i件中预先编译好的函数。这些 .so 文件称作「动态库」，因为它们是在程序启		{{server_addr}}	{{server_port}}
+i动时被动态加载的，这个过程叫做「动态链接」。相应的，调用它们的程序被称		{{server_addr}}	{{server_port}}
+i作「动态可执行文件」。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i回头看我们的程序：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #include <stdio.h>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  int main() {		{{server_addr}}	{{server_port}}
+i      printf("Hello World\n");		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i它使用的 `printf` 函数来自上面的 `libc.so.6` 这个运行库，它是 Glibc，		{{server_addr}}	{{server_port}}
+i拥有三十多年悠久历史的 C 语言标准运行库，集成在大多数的常用 Linux 发行		{{server_addr}}	{{server_port}}
+i版，被绝大多数程序依赖。而我们的 Docker 镜像中没有 Glibc，只有一个 `hello`		{{server_addr}}	{{server_port}}
+i可执行文件，自然会运行失败。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i那么有没有办法把 `printf` 这个函数直接包含在程序文件中呢？有的，就是静		{{server_addr}}	{{server_port}}
+i态编译：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > gcc hello.c -o hello-static -static		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在给 gcc 加上 `-static` 参数后，GCC 会从 Glibc 提取 `printf` 函数（以		{{server_addr}}	{{server_port}}
+i及 printf 函数用到的函数），全部放到 `hello-static` 文件里。这样编译出		{{server_addr}}	{{server_port}}
+i来的程序就不用依赖 Glibc 等库文件了，被称作「静态可执行文件」。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > ldd hello-static		{{server_addr}}	{{server_port}}
+i  not a dynamic executable		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Dockerfile 里的编译命令加上 `-static` 后，我们再试一遍：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  FROM gcc AS step_0		{{server_addr}}	{{server_port}}
+i  COPY hello.c /		{{server_addr}}	{{server_port}}
+i  RUN gcc /hello.c -o /hello -static		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  FROM scratch AS step_1		{{server_addr}}	{{server_port}}
+i  COPY --from=step_0 /hello /		{{server_addr}}	{{server_port}}
+i  ENTRYPOINT [ "/hello" ]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i运行构建和运行命令：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > docker build -t xddxdd/test .		{{server_addr}}	{{server_port}}
+i  # ...		{{server_addr}}	{{server_port}}
+i  Successfully built 03a938aadafd		{{server_addr}}	{{server_port}}
+i  Successfully tagged xddxdd/test:latest		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  > docker run -it --rm xddxdd/test		{{server_addr}}	{{server_port}}
+i  Hello World		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i很好，运行成功了。我们再看一下这个镜像：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > docker images xddxdd/test		{{server_addr}}	{{server_port}}
+i  REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE		{{server_addr}}	{{server_port}}
+i  xddxdd/test         latest              03a938aadafd        2 minutes ago       945kB		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i等等，945 KB？刚才只有 16.4 KB 的，一个 `printf` 要占用这么多空间吗？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 放弃 Glibc，换用 Musl		{{server_addr}}	{{server_port}}
+i问题还是出在 Glibc，它不适合被静态编译到程序里去，因为：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 它的功能过于复杂，静态编译后会大幅增加程序的大小。		{{server_addr}}	{{server_port}}
+i2. 即使是静态编译，Glibc 还会调用其它动态库，例如用于 DNS 解析的 `nss`		{{server_addr}}	{{server_port}}
+i   库，如果找不到会导致 DNS 解析失败。这意味着我们的镜像里还得加入额外		{{server_addr}}	{{server_port}}
+i   的文件。		{{server_addr}}	{{server_port}}
+i当 Glibc 让问题变得复杂，我们可以换用简单一些的方案，例如 Musl 这个 C		{{server_addr}}	{{server_port}}
+i语言标准库。Musl 和 Glibc 的功能相似，都是提供 C 语言里最基础的函数（		{{server_addr}}	{{server_port}}
+i例如 `printf` 这些），但 Musl 更加轻量，结构更加精简。另外，它也不依赖 `nss`		{{server_addr}}	{{server_port}}
+i等额外的库，因此静态编译进程序后所有功能都可以正常使用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是 Musl 和 Glibc 并不完全兼容，程序必须要重新编译才能切换到另一个标		{{server_addr}}	{{server_port}}
+i准库。因此，我们不能直接用 Musl 的文件直接覆盖 Glibc，这会把整个系统搞		{{server_addr}}	{{server_port}}
+i挂。但我们仍然可以在常用的、基于 Glibc 的 Linux 发行版中装上 Musl：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Arch Linux		{{server_addr}}	{{server_port}}
+i  > pacman -S musl		{{server_addr}}	{{server_port}}
+i  # Debian		{{server_addr}}	{{server_port}}
+i  > apt-get install musl-dev musl-tools		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i安装后，Musl 会提供一个命令，`musl-gcc`。它会向 GCC 添加合适的参数，让		{{server_addr}}	{{server_port}}
+i编译的程序使用 Musl 而非 Glibc。例如我们来改一下 Dockerfile：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  FROM gcc AS step_0		{{server_addr}}	{{server_port}}
+i  RUN apt-get update && apt-get install -y musl-dev musl-tools		{{server_addr}}	{{server_port}}
+i  COPY hello.c /		{{server_addr}}	{{server_port}}
+i  RUN musl-gcc /hello.c -o /hello -static		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  FROM scratch AS step_1		{{server_addr}}	{{server_port}}
+i  COPY --from=step_0 /hello /		{{server_addr}}	{{server_port}}
+i  ENTRYPOINT [ "/hello" ]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i和上面一样构建、运行，并查看大小：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > docker build -t xddxdd/test .		{{server_addr}}	{{server_port}}
+i  # ...		{{server_addr}}	{{server_port}}
+i  Successfully built c3ee94508e4e		{{server_addr}}	{{server_port}}
+i  Successfully tagged xddxdd/test:latest		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  > docker run -it --rm xddxdd/test		{{server_addr}}	{{server_port}}
+i  Hello World		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  > docker images xddxdd/test		{{server_addr}}	{{server_port}}
+i  REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE		{{server_addr}}	{{server_port}}
+i  xddxdd/test         latest              c3ee94508e4e        49 seconds ago      26kB		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i26 KB，毕竟多了几个函数，比动态链接的版本大了一些，但比 Glibc 的版本小		{{server_addr}}	{{server_port}}
+i太多了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但使用 Musl 也不总是这么简单的。因为系统上所有的程序、库文件都是基于		{{server_addr}}	{{server_port}}
+iGlibc 编译的，当程序依赖其它库文件，我们不能直接用包管理装上完事，而是		{{server_addr}}	{{server_port}}
+i必须自己编译使用 Musl 的版本。例如我的 `Bird` 镜像中，就先后额外编译了 `ncurses`		{{server_addr}}	{{server_port}}
+i和 `readline，可以在 `		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/dockerfiles/blob/8b0484073c7ffd8926247688ba12425d3953f051/dockerfiles/bird/template.Dockerfile	URL:https://github.com/xddxdd/dockerfiles/blob/8b0484073c7ffd8926247688ba12425d3953f051/dockerfiles/bird/template.Dockerfile	{{server_addr}}	{{server_port}}
+i看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 静态编译与 Go 语言		{{server_addr}}	{{server_port}}
+i说到静态编译，就不能不提 Go 语言的程序。我们先创建一个 Go 语言的 Hello		{{server_addr}}	{{server_port}}
+iWorld：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  package main		{{server_addr}}	{{server_port}}
+i  import "fmt"		{{server_addr}}	{{server_port}}
+i  func main() {		{{server_addr}}	{{server_port}}
+i      fmt.Println("Hello World")		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后编译：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > go build main.go		{{server_addr}}	{{server_port}}
+i  > ldd main		{{server_addr}}	{{server_port}}
+i  not a dynamic executable		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iGo 语言编译出来的程序直接就是一个静态可执行文件，不需要调用 Glibc。这		{{server_addr}}	{{server_port}}
+i也意味着它可以直接单独一个文件放入 Docker 镜像中，还能正常运行。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i稍微复杂一些的 Go 程序可能还是会调用 Glibc，例如我的		{{server_addr}}	{{server_port}}
+hBird-lg-go 项目	URL:https://github.com/xddxdd/bird-lg-go	{{server_addr}}	{{server_port}}
+i：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > cd frontend		{{server_addr}}	{{server_port}}
+i  > go build		{{server_addr}}	{{server_port}}
+i  > ldd frontend		{{server_addr}}	{{server_port}}
+i  linux-vdso.so.1 (0x00007fff2ffe9000)		{{server_addr}}	{{server_port}}
+i  libpthread.so.0 => /usr/lib/libpthread.so.0 (0x00007fc81014a000)		{{server_addr}}	{{server_port}}
+i  libc.so.6 => /usr/lib/libc.so.6 (0x00007fc80ff81000)		{{server_addr}}	{{server_port}}
+i  /lib64/ld-linux-x86-64.so.2 => /usr/lib64/ld-linux-x86-64.so.2 (0x00007fc8101c0000)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i同样是 Go 程序，它就用到了 Glibc，以及 Pthread 多线程库。但与其它语言		{{server_addr}}	{{server_port}}
+i不同的是，Go 语言可以非常方便地禁止它链接 Glibc：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  > CGO_ENABLED=0 go build		{{server_addr}}	{{server_port}}
+i  > ldd frontend		{{server_addr}}	{{server_port}}
+i  not a dynamic executable		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i只要添加 `CGO_ENABLED=0` 这个环境变量就可以了。另外，Go 编译出的文件与		{{server_addr}}	{{server_port}}
+iGCC 静态编译出的不同。Go 的静态程序完全不包含 Glibc 的指令，不像 GCC		{{server_addr}}	{{server_port}}
+i只是把 Glibc 的指令复制了一份到程序里。因此，它也不存在 Glibc 导致的调		{{server_addr}}	{{server_port}}
+i用 `nss`、后续功能受限的问题。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因此，Go 程序可以非常容易地打成无基础系统的 Docker 镜像，大部分情况下		{{server_addr}}	{{server_port}}
+i不需要修改任何代码。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 总结		{{server_addr}}	{{server_port}}
+i静态编译法可以让你的 Docker 镜像从带有完整基础系统的 100 MB 往上，降低		{{server_addr}}	{{server_port}}
+i到只含一个可执行文件的几 MB 甚至 KB。从此你的服务器里再也不用为七八个		{{server_addr}}	{{server_port}}
+iDocker 镜像存上七八份不同版本的 Debian 了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

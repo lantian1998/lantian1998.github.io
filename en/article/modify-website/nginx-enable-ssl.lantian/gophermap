@@ -1,0 +1,74 @@
+iOne advantage of using your own VPS is the ability to enable SSL		{{server_addr}}	{{server_port}}
+iencryption, which ensures secure blog management in public spaces and		{{server_addr}}	{{server_port}}
+ireduces the likelihood of connection interruptions due to		{{server_addr}}	{{server_port}}
+ienvironmental factors. The nginx package in Debian 6's software		{{server_addr}}	{{server_port}}
+irepository comes with the SSL module pre-installed, making SSL setup		{{server_addr}}	{{server_port}}
+istraightforward. Simply duplicate `/etc/nginx/sites-available/default`		{{server_addr}}	{{server_port}}
+ias `default-ssl` and apply the following modifications:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      listen              443;		{{server_addr}}	{{server_port}}
+i      server_name         localhost;		{{server_addr}}	{{server_port}}
+i      ssl                 on;		{{server_addr}}	{{server_port}}
+i      ssl_certificate     lic.crt;		{{server_addr}}	{{server_port}}
+i      ssl_certificate_key lic.key;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ior (modify `default` directly as shown below):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      listen              80;		{{server_addr}}	{{server_port}}
+i      listen              443 ssl;		{{server_addr}}	{{server_port}}
+i      server_name         localhost;		{{server_addr}}	{{server_port}}
+i      ssl_certificate     lic.crt;		{{server_addr}}	{{server_port}}
+i      ssl_certificate_key lic.key;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRemember to replace `lic.crt` and `lic.key` with your actual		{{server_addr}}	{{server_port}}
+icertificate paths.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe real challenge lies in obtaining an SSL certificate. VeriSign and		{{server_addr}}	{{server_port}}
+iThawte certificates typically cost at least 500-600 RMB annually.		{{server_addr}}	{{server_port}}
+iCurrently, there are several ways to acquire free SSL certificates:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. **Self-generated certificates** (search online for methods).		{{server_addr}}	{{server_port}}
+i   Pros: Convenient.		{{server_addr}}	{{server_port}}
+i   Cons: Triggers untrusted certificate warnings in all browsers.		{{server_addr}}	{{server_port}}
+i2. **StartSSL**		{{server_addr}}	{{server_port}}
+i   > Like VeriSign, StartSSL (website:		{{server_addr}}	{{server_port}}
+h   > http://www.startssl.com	URL:http://www.startssl.com	{{server_addr}}	{{server_port}}
+i   > , company: StartCom) is a Certificate Authority (CA). Its root		{{server_addr}}	{{server_port}}
+i   > certificate has long been supported by open-source browsers (Firefox,		{{server_addr}}	{{server_port}}
+i   > Chrome, Safari).		{{server_addr}}	{{server_port}}
+i   > 		{{server_addr}}	{{server_port}}
+i   > In September [2012], StartSSL achieved a breakthrough with		{{server_addr}}	{{server_port}}
+i   > Microsoft: Windows update patches added StartCom to the Windows		{{server_addr}}	{{server_port}}
+i   > Root Certificate Program — marking Microsoft's first inclusion		{{server_addr}}	{{server_port}}
+i   > of a free certificate provider. Windows 7, Vista (patched), and		{{server_addr}}	{{server_port}}
+i   > XP now fully trust StartSSL certificates, extending support to IE		{{server_addr}}	{{server_port}}
+i   > browsers.		{{server_addr}}	{{server_port}}
+i   > 		{{server_addr}}	{{server_port}}
+i   > Register at StartSSL (		{{server_addr}}	{{server_port}}
+h   > http://www.startssl.com	URL:http://www.startssl.com	{{server_addr}}	{{server_port}}
+i   > ), verify via email, and you can apply for a trusted free SSL		{{server_addr}}	{{server_port}}
+i   > certificate.		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i   Excerpt from		{{server_addr}}	{{server_port}}
+h   http://blog.s135.com/startssl/	URL:http://blog.s135.com/startssl/	{{server_addr}}	{{server_port}}
+i   . The article also includes an application tutorial.		{{server_addr}}	{{server_port}}
+i   Pros: Trusted by most browsers (except Opera).		{{server_addr}}	{{server_port}}
+i   Cons: Manual approval required; free .tk domains ineligible; annual		{{server_addr}}	{{server_port}}
+i   renewal needed.		{{server_addr}}	{{server_port}}
+i3. **CAcert** (search online)		{{server_addr}}	{{server_port}}
+i   > CAcert.org is a community-driven public certificate authority. It		{{server_addr}}	{{server_port}}
+i   > issues free public key certificates (unlike paid CAs) and		{{server_addr}}	{{server_port}}
+i   > currently serves 200,000+ verified users with nearly 800,000		{{server_addr}}	{{server_port}}
+i   > certificates.		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i   Source: Wikipedia. CAcert certificates are auto-issued without		{{server_addr}}	{{server_port}}
+i   manual review, resulting in low trust levels — don』t expect		{{server_addr}}	{{server_port}}
+i   Microsoft support like StartSSL.		{{server_addr}}	{{server_port}}
+i   Pros: Trusted by most open-source browsers.		{{server_addr}}	{{server_port}}
+i   Cons:		{{server_addr}}	{{server_port}}
+i   Requires manual approval		{{server_addr}}	{{server_port}}
+i   , low credibility, annual renewal required.		{{server_addr}}	{{server_port}}

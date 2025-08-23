@@ -1,0 +1,40 @@
+iMacBook 的散热是用户们心中永远的痛，苹果的散热非常的保守，直到 CPU 温		{{server_addr}}	{{server_port}}
+i度高于 90 度，才开始加转速降温，对 CPU 和用户伤害很大。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i今天早上我装好 Win8.1，在网上看了会视频，然后拿起电脑准备放到旁边时，		{{server_addr}}	{{server_port}}
+i手不小心碰到了出风口 … … 你懂的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因此，既然苹果散热控制策略不行，那我们就自己用软件调整。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i一开始我试了一个 iFanAutoControl，看到软件识别出我的 CPU 温度是 70 度，		{{server_addr}}	{{server_port}}
+i风扇速度迅速变快，温度也降到了 50 度。我把电脑在旁边放了一会儿，风扇坚		{{server_addr}}	{{server_port}}
+i决以 6000 转的速度运行着，这个软件不会只能加速不能减速吧 … … 删。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i删完，风扇继续飞快地转着，最后我关机再开机才解决问题（重启都不行）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后我找到了一款神软，LubbosFanControl。软件年纪比较老，内置了一些策略，		{{server_addr}}	{{server_port}}
+i但是都是早期 N 卡苹果机的设置，对我这台集成显卡的电脑支持不佳。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我双击打开了软件，这东西居然不需要管理员权限。软件识别出我的 CPU 温度		{{server_addr}}	{{server_port}}
+i为 90 度，好高啊！风扇速度自然被调到最高值 6000 转。过了一会儿，我看到		{{server_addr}}	{{server_port}}
+i温度还是稳稳停留在 90 度，但是我摸了一下出风口，一点也不像 90 度烫手的		{{server_addr}}	{{server_port}}
+i样子。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ILubbos Fan Control	/usr/uploads/2013/10/2933104397.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我去谷歌上搜索，发现是因为版本太老，传感器参数不对的原因，到设置的 ini		{{server_addr}}	{{server_port}}
+i里就能改。在 ini 里我修改了传感器、GPU 数量和 CPU 数量设置，以和我的		{{server_addr}}	{{server_port}}
+iMacBook 对应。修改完成后，再次启动，LubbosFanControl 识别出我的 CPU 温		{{server_addr}}	{{server_port}}
+i度是 57 度，风速控制正常。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我去网上找了个 CPU 显卡杀手级的视频		{{server_addr}}	{{server_port}}
+h炮姐时代	URL:http://www.bilibili.tv/video/av719948/	{{server_addr}}	{{server_port}}
+i，这个是 2160P 的分辨率 +120fps 的帧率，集显电脑绝对不可能流畅播放。一		{{server_addr}}	{{server_port}}
+i打开视频，CPU 占用率迅速飙升，风扇速度也正常提升；关掉视频，风扇也自动		{{server_addr}}	{{server_port}}
+i减速，测试成功。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2013/10/566121349.png	/usr/uploads/2013/10/566121349.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i修改版 LubbosFanControl 下载地址（完美支持 12 年中版集显 MBP）：		{{server_addr}}	{{server_port}}
+1LubbosFanControl.7z	/usr/uploads/2013/10/1691255080.7z	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,83 @@
+iOIer 1：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  procedure qsort(l,r:longint);		{{server_addr}}	{{server_port}}
+i  var		{{server_addr}}	{{server_port}}
+i    i,j,m,t:longint;		{{server_addr}}	{{server_port}}
+i  begin		{{server_addr}}	{{server_port}}
+i    i:=l;		{{server_addr}}	{{server_port}}
+i    j:=r;		{{server_addr}}	{{server_port}}
+i    m:=a[(l+r) div 2];		{{server_addr}}	{{server_port}}
+i    repeat		{{server_addr}}	{{server_port}}
+i      while a[i]m do dec(j);		{{server_addr}}	{{server_port}}
+i      if ij;		{{server_addr}}	{{server_port}}
+i    if l <j then qsort(l,j);		{{server_addr}}	{{server_port}}
+i    if i <r then qsort(i,r);		{{server_addr}}	{{server_port}}
+i  end;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOIer 2：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Procedure QuickSort(Left, Right : Longint);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  Var		{{server_addr}}	{{server_port}}
+i    LeftPointer, RightPointer, Medium, Temp : Longint;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  Begin		{{server_addr}}	{{server_port}}
+i    LeftPointer := Left;		{{server_addr}}	{{server_port}}
+i    RightPointer := Right;		{{server_addr}}	{{server_port}}
+i    Medium := a[(Left + Right) Shr 1];		{{server_addr}}	{{server_port}}
+i    Repeat		{{server_addr}}	{{server_port}}
+i      While a[LeftPointer]  Medium Do		{{server_addr}}	{{server_port}}
+i        Dec(RightPointer);		{{server_addr}}	{{server_port}}
+i      If LeftPointer  j;		{{server_addr}}	{{server_port}}
+i    If Left  < RightPointer Then		{{server_addr}}	{{server_port}}
+i      QuickSort(Left,RightPointer);		{{server_addr}}	{{server_port}}
+i    If LeftPointer  < Right Then		{{server_addr}}	{{server_port}}
+i      QuickSort(LeftPointer,Right);		{{server_addr}}	{{server_port}}
+i  End; {End Procedure}		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOIer 3：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  procedure kuaipai(z,y:longint);var i,j,m,t:longint;begin i:=z;j:=y;m:=a[(z+y) div 2];repeat while a[i]m do dec(j);if ij;if z <j then kuaipai(z,j);if i <y then kuaipai(i,y);end;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOIer 3 Pro：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  program kuaipaiwithoutrecursive;{今天心情不好不想用递归}		{{server_addr}}	{{server_port}}
+i  var		{{server_addr}}	{{server_port}}
+i    sl,sr:array[1..1000] of longint;		{{server_addr}}	{{server_port}}
+i    i,j,n,t,p,r,x,q,t:longint;		{{server_addr}}	{{server_port}}
+i  begin		{{server_addr}}	{{server_port}}
+i    sl[1]:=1;		{{server_addr}}	{{server_port}}
+i    sr[1]:=n;		{{server_addr}}	{{server_port}}
+i    t:=1;		{{server_addr}}	{{server_port}}
+i    while t>0 do begin		{{server_addr}}	{{server_port}}
+i      p:=sl[t];		{{server_addr}}	{{server_port}}
+i      r:=sr[t];		{{server_addr}}	{{server_port}}
+i      t:=t-1;		{{server_addr}}	{{server_port}}
+i      if p <r then begin		{{server_addr}}	{{server_port}}
+i        x:=a[r];		{{server_addr}}	{{server_port}}
+i        i:=p-1;		{{server_addr}}	{{server_port}}
+i        for j:=p to r-1 do begin		{{server_addr}}	{{server_port}}
+i          if a[j] <=x then begin		{{server_addr}}	{{server_port}}
+i            i:=i+1;		{{server_addr}}	{{server_port}}
+i            t:=a[i];		{{server_addr}}	{{server_port}}
+i            a[i]:=a[j];		{{server_addr}}	{{server_port}}
+i            a[j]:=t;		{{server_addr}}	{{server_port}}
+i          end;		{{server_addr}}	{{server_port}}
+i        end;		{{server_addr}}	{{server_port}}
+i        t:=a[i+1];		{{server_addr}}	{{server_port}}
+i        a[i+1]:=a[r];		{{server_addr}}	{{server_port}}
+i        a[r]:=t;		{{server_addr}}	{{server_port}}
+i        q:=i+1;		{{server_addr}}	{{server_port}}
+i        t:=t+1;		{{server_addr}}	{{server_port}}
+i        sl[t]:=p;		{{server_addr}}	{{server_port}}
+i        sr[t]:=q-1;		{{server_addr}}	{{server_port}}
+i        t:=t+1;		{{server_addr}}	{{server_port}}
+i        sl[t]:=q+1;		{{server_addr}}	{{server_port}}
+i        sr[t]:=r;		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i    end;		{{server_addr}}	{{server_port}}
+i  end;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i原文：		{{server_addr}}	{{server_port}}
+ihttp://user.qzone.qq.com/1320719107/blog/1342412850		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,68 @@
+iBuyPass is a Norwegian Certificate Authority (CA) that provides		{{server_addr}}	{{server_port}}
+ivarious services including digital certificates and security		{{server_addr}}	{{server_port}}
+iauthentication products. Recently, BuyPass launched an ACME-based		{{server_addr}}	{{server_port}}
+iautomated certificate issuance service called BuyPass GO, similar to		{{server_addr}}	{{server_port}}
+iLet's Encrypt. The main difference from Let's Encrypt is that their		{{server_addr}}	{{server_port}}
+icertificates have a 180-day validity period per issuance — twice as		{{server_addr}}	{{server_port}}
+ilong as Let's Encrypt's. Therefore, if you need to manually replace		{{server_addr}}	{{server_port}}
+icertificates for your service, BuyPass certificates are more		{{server_addr}}	{{server_port}}
+iconvenient. Additionally, BuyPass currently doesn't support issuing		{{server_addr}}	{{server_port}}
+iwildcard certificates (commonly called wildcard certs?), requiring all		{{server_addr}}	{{server_port}}
+idomain names to be listed individually.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Though personally, if manual certificate replacement is needed, I		{{server_addr}}	{{server_port}}
+ithink it's better to apply for a one-year validity certificate from		{{server_addr}}	{{server_port}}
+iTrustAsia or similar providers.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Applying for Certificates		{{server_addr}}	{{server_port}}
+iI use the		{{server_addr}}	{{server_port}}
+iacme.sh		{{server_addr}}	{{server_port}}
+itool to apply for certificates. The first step is account		{{server_addr}}	{{server_port}}
+iregistration. Unlike Let's Encrypt, BuyPass requires providing a valid		{{server_addr}}	{{server_port}}
+iemail during registration:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  cd /root/.acme.sh		{{server_addr}}	{{server_port}}
+i  ./acme.sh --server https://api.buypass.com/acme/directory --register-account --accountemail [your email address]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf your domain has CAA records restricting which CAs can issue		{{server_addr}}	{{server_port}}
+icertificates, add a `0 issue buypass.com` record to allow BuyPass to		{{server_addr}}	{{server_port}}
+iissue certificates for you.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen proceed with the application. I used DNS validation with CloudXNS		{{server_addr}}	{{server_port}}
+ias the provider:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  export CX_Key=[API Key from CloudXNS user center]		{{server_addr}}	{{server_port}}
+i  export CX_Secret=[API Secret from CloudXNS user center]		{{server_addr}}	{{server_port}}
+i  ./acme.sh --server https://api.buypass.com/acme/directory --issue -d [domain1] -d [domain2] --days 150 --dns dns_cx		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI encountered a strange issue where the server returned a 500 error at		{{server_addr}}	{{server_port}}
+ithe "Getting new-authz" step. After re-running the account		{{server_addr}}	{{server_port}}
+iregistration command, it worked...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe certificate is then ready for use.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Results		{{server_addr}}	{{server_port}}
+iThe certificate appears in Chrome as follows:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSSLLabs test results:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI applied for one RSA and one ECC certificate. For the ECC		{{server_addr}}	{{server_port}}
+icertificate, the intermediate certificate is still RSA. The RSA		{{server_addr}}	{{server_port}}
+iintermediate requires the web server to send more data to clients.		{{server_addr}}	{{server_port}}
+iIdeally, there should be an ECC intermediate certificate. However,		{{server_addr}}	{{server_port}}
+isince Let's Encrypt also uses RSA intermediates for ECC certificates,		{{server_addr}}	{{server_port}}
+ithis is acceptable.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMy test site is at		{{server_addr}}	{{server_port}}
+ihttps://buypass-ssl.lantian.pub		{{server_addr}}	{{server_port}}
+ifor your reference.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Summary		{{server_addr}}	{{server_port}}
+iBeyond the longer validity period, BuyPass doesn't offer significant		{{server_addr}}	{{server_port}}
+iadvantages over Let's Encrypt. Given that ACME certificates are		{{server_addr}}	{{server_port}}
+iauto-renewed, the extended validity isn't a major benefit. Its greater		{{server_addr}}	{{server_port}}
+isignificance lies in serving as an emergency backup if Let's Encrypt		{{server_addr}}	{{server_port}}
+iexperiences outages.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

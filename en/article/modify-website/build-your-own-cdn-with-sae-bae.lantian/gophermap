@@ -1,0 +1,114 @@
+i**Warning: Due to my oversight, there was a mistake in a line of the		{{server_addr}}	{{server_port}}
+iSAE CDN index.php code. Please refer to the comment in the code below		{{server_addr}}	{{server_port}}
+ito correct it, otherwise it will cause issues with fetching remote		{{server_addr}}	{{server_port}}
+iimages.**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMost people host their blogs abroad for reasons I won't elaborate on.		{{server_addr}}	{{server_port}}
+iHowever, SAE and BAE servers are located in China and offer fast		{{server_addr}}	{{server_port}}
+ispeeds (though SAE, being in the China Telecom Access Network,		{{server_addr}}	{{server_port}}
+iexperiences occasional instability). Therefore, we can use them to		{{server_addr}}	{{server_port}}
+iaccelerate our blogs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Building CDN with SAE		{{server_addr}}	{{server_port}}
+iThis method uses SaeLayerCDN, available in SAE's App Store for		{{server_addr}}	{{server_port}}
+ione-click installation. After installation, just modify a few simple		{{server_addr}}	{{server_port}}
+isettings. What puzzles me is why something achievable in a single PHP		{{server_addr}}	{{server_port}}
+ifile was split into five files with object-oriented programming!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI've removed large portions of redundant code and consolidated it into		{{server_addr}}	{{server_port}}
+ione PHP file.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInstallation method: Create an application on SAE, create a storage		{{server_addr}}	{{server_port}}
+inamed "cache", create a code repository in code management, and create		{{server_addr}}	{{server_port}}
+ithe following files in code editing:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. config.yaml content:		{{server_addr}}	{{server_port}}
+i  name: your_appid		{{server_addr}}	{{server_port}}
+i  version: your_version (usually 1)		{{server_addr}}	{{server_port}}
+i  handle:		{{server_addr}}	{{server_port}}
+i    - compress:compress		{{server_addr}}	{{server_port}}
+i    - rewrite:goto "index.php?q=$1"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. index.php content:		{{server_addr}}	{{server_port}}
+i  <?php		{{server_addr}}	{{server_port}}
+i  define('STATIC_URL','your_website_url_including_http_and_trailing_slash');		{{server_addr}}	{{server_port}}
+i  define('DOMAIN','your_storage_name_default_is_cache');		{{server_addr}}	{{server_port}}
+i  $content_type = 'application/force-download';		{{server_addr}}	{{server_port}}
+i  $request = ltrim($_GET['q'],'/');		{{server_addr}}	{{server_port}}
+i  $temp = array();		{{server_addr}}	{{server_port}}
+i  if(preg_match('/\.(jpg|jpeg|png|gif|css|js)$/i', $request,$temp)===1){		{{server_addr}}	{{server_port}}
+i      switch($temp[1]){		{{server_addr}}	{{server_port}}
+i          case 'jpg':{$content_type="image/jpeg";}break;		{{server_addr}}	{{server_port}}
+i          case 'jpeg':{$content_type="image/jpeg";}break;		{{server_addr}}	{{server_port}}
+i          case 'png':{$content_type="image/png";}break;		{{server_addr}}	{{server_port}}
+i          case 'gif':{$content_type="image/gif";}break;		{{server_addr}}	{{server_port}}
+i          case 'css':{$content_type="text/css";}break;		{{server_addr}}	{{server_port}}
+i          case 'js':{$content_type="text/javascript";}break;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  $instance = new SaeStorage(SAE_ACCESSKEY,SAE_SECRETKEY);		{{server_addr}}	{{server_port}}
+i  if($instance->fileExists(DOMAIN,$request)){		{{server_addr}}	{{server_port}}
+i      $content = $instance->read(DOMAIN,$request);		{{server_addr}}	{{server_port}}
+i  }else{		{{server_addr}}	{{server_port}}
+i  //    $content = @file_get_contents(BASE_URL.$request);		{{server_addr}}	{{server_port}}
+i  // I previously mistyped the above line, please change to the line below		{{server_addr}}	{{server_port}}
+i      $content = @file_get_contents(STATIC_URL.$request);		{{server_addr}}	{{server_port}}
+i      $instance->write(DOMAIN,$request,$content);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  header("Expires:".date("D, j M Y H:i:s GMT",time()+315360000));		{{server_addr}}	{{server_port}}
+i  header("Last-Modified:Sat,26 Jul 1997 05:00:00 GMT");		{{server_addr}}	{{server_port}}
+i  header('Content-type:'.$content_type);		{{server_addr}}	{{server_port}}
+i  header('Cache-control:public');		{{server_addr}}	{{server_port}}
+i  echo $content;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSave, then change all URLs for images, videos, and other content you		{{server_addr}}	{{server_port}}
+iwant to serve via SAE from your original site to the secondary domain		{{server_addr}}	{{server_port}}
+iprovided by SAE.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Building CDN with BAE		{{server_addr}}	{{server_port}}
+iThere's no ready-made code for this, so I adapted the SAE version.		{{server_addr}}	{{server_port}}
+iUnfortunately, BAE's official documentation has issues, which caused		{{server_addr}}	{{server_port}}
+ime significant troubleshooting.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCreate a BAE application of type "PC Iframe", then enable BAE hosting.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCreate a bucket in cloud storage with a name of your choice.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdd a URL routing rule in app configuration: "/(.*)" (without quotes),		{{server_addr}}	{{server_port}}
+iexecuting index.php.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCreate a file named index.php in code management with the following		{{server_addr}}	{{server_port}}
+icontent:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <?php		{{server_addr}}	{{server_port}}
+i  define('STATIC_URL','your_website_URL_including_http_and_trailing_slash');		{{server_addr}}	{{server_port}}
+i  define('DOMAIN','your_BAE_Bucket_name');		{{server_addr}}	{{server_port}}
+i  $content_type = 'application/force-download';		{{server_addr}}	{{server_port}}
+i  $request = ltrim($_SERVER['REQUEST_URI'],'/');		{{server_addr}}	{{server_port}}
+i  $temp = array();		{{server_addr}}	{{server_port}}
+i  if(preg_match('/\.(jpg|jpeg|png|gif|css|js)$/i', $request,$temp)===1){		{{server_addr}}	{{server_port}}
+i      switch($temp[1]){		{{server_addr}}	{{server_port}}
+i          case 'jpg':{$content_type="image/jpeg";}break;		{{server_addr}}	{{server_port}}
+i          case 'jpeg':{$content_type="image/jpeg";}break;		{{server_addr}}	{{server_port}}
+i          case 'png':{$content_type="image/png";}break;		{{server_addr}}	{{server_port}}
+i          case 'gif':{$content_type="image/gif";}break;		{{server_addr}}	{{server_port}}
+i          case 'css':{$content_type="text/css";}break;		{{server_addr}}	{{server_port}}
+i          case 'js':{$content_type="text/javascript";}break;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  $instance = new BaiduBCS();		{{server_addr}}	{{server_port}}
+i  if($instance->is_object_exist(DOMAIN,'/'.$request)){		{{server_addr}}	{{server_port}}
+i    $content = $instance->get_object(DOMAIN,'/'.$request)->body;		{{server_addr}}	{{server_port}}
+i  }else{		{{server_addr}}	{{server_port}}
+i    $content = @file_get_contents(STATIC_URL.'/'.$request);		{{server_addr}}	{{server_port}}
+i    $instance->create_object_by_content(DOMAIN,'/'.$request,$content);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  header("Expires:".date("D, j M Y H:i:s GMT",time()+315360000));		{{server_addr}}	{{server_port}}
+i  header("Last-Modified:Sat,26 Jul 1997 05:00:00 GMT");		{{server_addr}}	{{server_port}}
+i  header('Content-type:'.$content_type);		{{server_addr}}	{{server_port}}
+i  header('Cache-control:public');		{{server_addr}}	{{server_port}}
+i  echo $content;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSave. I've already deployed this setup and will upload the data		{{server_addr}}	{{server_port}}
+ishortly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

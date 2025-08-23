@@ -1,0 +1,71 @@
+iMy various servers host different services, each with its own		{{server_addr}}	{{server_port}}
+iusername/password system, making unified management difficult. If my		{{server_addr}}	{{server_port}}
+ipassword were compromised in the future, changing them individually		{{server_addr}}	{{server_port}}
+iwould be extremely tedious. Therefore, I want to use a dedicated		{{server_addr}}	{{server_port}}
+iservice to manage usernames and passwords, with all other services		{{server_addr}}	{{server_port}}
+iobtaining authentication information from it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLDAP is one of the commonly used authentication protocols. Not only do		{{server_addr}}	{{server_port}}
+imany applications natively support it (including Jenkins, pfSense,		{{server_addr}}	{{server_port}}
+ietc.), but through plugins, nginx can also support it, adding unified		{{server_addr}}	{{server_port}}
+iauthentication management to any web-based service.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Adding the Plugin		{{server_addr}}	{{server_port}}
+iIf your nginx is compiled from source, adding the LDAP plugin only		{{server_addr}}	{{server_port}}
+irequires three steps:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. `apk add openldap-dev`		{{server_addr}}	{{server_port}}
+i2. `git clone https://github.com/kvspb/nginx-auth-ldap.git`		{{server_addr}}	{{server_port}}
+i3. `./configure --add-module=/path/to/nginx-auth-ldap`		{{server_addr}}	{{server_port}}
+iI still deploy nginx using Docker. The Dockerfile can be found at		{{server_addr}}	{{server_port}}
+ihttps://github.com/xddxdd/dockerfiles/blob/210f0f82c7bc1c0c3697d329b73		{{server_addr}}	{{server_port}}
+iea31abea6b14a/nginx/Dockerfile		{{server_addr}}	{{server_port}}
+i, where the compilation parameters can be referenced.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Configuring Authentication		{{server_addr}}	{{server_port}}
+iAfter installing the plugin, first add an `ldap_server` configuration		{{server_addr}}	{{server_port}}
+iblock in the http section of nginx.conf. To prevent a single point of		{{server_addr}}	{{server_port}}
+ifailure from taking down the entire authentication service, I		{{server_addr}}	{{server_port}}
+itemporarily used JumpCloud's LDAP service with the following		{{server_addr}}	{{server_port}}
+iconfiguration:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ldap_server jumpcloud {		{{server_addr}}	{{server_port}}
+i      url ldap://ldap.jumpcloud.com/ou=Users,o=[Your JumpCloud LDAP ID],dc=jumpcloud,dc=com?uid?sub?(objectClass=posixAccount);		{{server_addr}}	{{server_port}}
+i      binddn "uid=[LDAP Auth Username],ou=Users,o=[Your JumpCloud LDAP ID],dc=jumpcloud,dc=com";		{{server_addr}}	{{server_port}}
+i      binddn_passwd "[LDAP Auth Password]";		{{server_addr}}	{{server_port}}
+i      group_attribute "memberOf";		{{server_addr}}	{{server_port}}
+i      group_attribute_is_dn on;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      max_down_retries 3;		{{server_addr}}	{{server_port}}
+i      connections 1;		{{server_addr}}	{{server_port}}
+i      referral off;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      require valid_user;		{{server_addr}}	{{server_port}}
+i      satisfy any;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen add the following content to the server block or location block		{{server_addr}}	{{server_port}}
+iyou want to protect:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  location /private {		{{server_addr}}	{{server_port}}
+i      auth_ldap "Forbidden";		{{server_addr}}	{{server_port}}
+i      auth_ldap_servers jumpcloud;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis enables authentication using the specified LDAP server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNote: The LDAP authentication plugin conflicts with the http_addition		{{server_addr}}	{{server_port}}
+iplugin. The specific symptom is that when both `auth_ldap` and `add_after_body`		{{server_addr}}	{{server_port}}
+iare enabled in the same location, after successful username/password		{{server_addr}}	{{server_port}}
+iauthentication, nginx fails to send webpage data, causing the browser		{{server_addr}}	{{server_port}}
+ito spin until timeout. The temporary solution is to disable `add_after_body` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # LDAP auth doesn't work well with http_addition, disable it		{{server_addr}}	{{server_port}}
+i  add_after_body "";		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter these steps, LDAP authentication will be enabled for the		{{server_addr}}	{{server_port}}
+ispecified address. By using nginx as a reverse proxy for other		{{server_addr}}	{{server_port}}
+iinternal services and blocking direct external access to those		{{server_addr}}	{{server_port}}
+iservices, you can uniformly protect and authenticate these services		{{server_addr}}	{{server_port}}
+iwith LDAP.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

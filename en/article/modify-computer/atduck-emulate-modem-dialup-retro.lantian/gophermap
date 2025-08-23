@@ -1,0 +1,95 @@
+i- Is this really the year 2019?		{{server_addr}}	{{server_port}}
+i- Yes.		{{server_addr}}	{{server_port}}
+iFor nostalgic purposes, I wanted to try dial-up internet on legacy		{{server_addr}}	{{server_port}}
+ioperating systems like Windows 2000. Of course, in 2019, most people		{{server_addr}}	{{server_port}}
+ino longer use telephone line modems, and many might not even know they		{{server_addr}}	{{server_port}}
+iever existed. Modern computers no longer have telephone line		{{server_addr}}	{{server_port}}
+iinterfaces, and ISPs no longer provide dial-up services.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+hThis article by Doge Microsystems	URL:https://dogemicrosystems.ca/wiki/Dial_up_server	{{server_addr}}	{{server_port}}
+idescribes a method for self-hosting a dial-up ISP. The author		{{server_addr}}	{{server_port}}
+ipurchased a hardware telephone modem, used Asterisk to build a		{{server_addr}}	{{server_port}}
+iSIP-based VoIP network, and then connected the modem to the network		{{server_addr}}	{{server_port}}
+iusing an Analog Telephone Adapter (ATA). The author also used mgetty		{{server_addr}}	{{server_port}}
+ion Linux to operate the modem and combined it with pppd to provide a		{{server_addr}}	{{server_port}}
+iPPP dial-up service.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe main issues with this approach are: the entire set of equipment is		{{server_addr}}	{{server_port}}
+itoo expensive and takes up space. The author used a physical Windows		{{server_addr}}	{{server_port}}
+i98 host for dialing, unlike my virtual machine setup. If I adopted a		{{server_addr}}	{{server_port}}
+isimilar solution, I'd need various adapters and hubs to connect all		{{server_addr}}	{{server_port}}
+idevices to the host, plus passthrough configuration in the		{{server_addr}}	{{server_port}}
+ivirtualization software.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI prefer software that emulates modem serial port commands. Modern		{{server_addr}}	{{server_port}}
+ivirtualization software (e.g., VirtualBox, QEMU) can forward serial		{{server_addr}}	{{server_port}}
+iports to TCP ports or named pipes in Linux, and the emulation software		{{server_addr}}	{{server_port}}
+ionly needs to support one of these. I chose		{{server_addr}}	{{server_port}}
+hNandhp's ATduck	URL:https://github.com/nandhp/atduck	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUnlike		{{server_addr}}	{{server_port}}
+1《Raspberry Pi 3B Tinkering Notes: Serial Port Dial-up Internet》	/en/article/modify-computer/raspberry-pi-3b-ppp-dial-ethernet.lantian/	{{server_addr}}	{{server_port}}
+i, which uses "raw PPP protocol" without any modem component, this		{{server_addr}}	{{server_port}}
+iarticle simulates a complete Hayes-compatible modem.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Installing ATduck		{{server_addr}}	{{server_port}}
+iATduck itself is simple to install, but it depends on Perl's IO-Pty		{{server_addr}}	{{server_port}}
+imodule and Slirp software. Slirp can emulate a SLIP or PPP protocol		{{server_addr}}	{{server_port}}
+iserver on a TTY, while ATduck only implements the modem functionality,		{{server_addr}}	{{server_port}}
+ileaving the networking part to Slirp.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, for obvious reasons, Slirp is rarely used today. Arch Linux's		{{server_addr}}	{{server_port}}
+iofficial repositories don't include it, and it's not even in the AUR.		{{server_addr}}	{{server_port}}
+iAccording to		{{server_addr}}	{{server_port}}
+hSlirp's Wikipedia page	URL:https://en.wikipedia.org/wiki/Slirp	{{server_addr}}	{{server_port}}
+i, part of its maintenance is handled by Debian maintainers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTherefore, I created a Docker image for ATduck based on Debian Buster.		{{server_addr}}	{{server_port}}
+iThe image exposes TCP port 5555, which can be pointed to by virtual		{{server_addr}}	{{server_port}}
+iserial ports in VirtualBox, etc. The Dockerfile for the image can be		{{server_addr}}	{{server_port}}
+hviewed here	URL:https://github.com/xddxdd/dockerfiles/blob/master/dockerfiles/atduck/template.Dockerfile	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iStart it directly with docker-compose:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  version: '2.1'		{{server_addr}}	{{server_port}}
+i  services:		{{server_addr}}	{{server_port}}
+i    atduck:		{{server_addr}}	{{server_port}}
+i      image: xddxdd/atduck		{{server_addr}}	{{server_port}}
+i      container_name: atduck		{{server_addr}}	{{server_port}}
+i      restart: always		{{server_addr}}	{{server_port}}
+i      ports:		{{server_addr}}	{{server_port}}
+i        - '127.0.0.1:5555:5555'		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen configure VirtualBox as shown:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IVirtualBox Virtual Serial Port Configuration	/usr/uploads/2019/12/atduck-virtualbox-config.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Configuring Windows 2000		{{server_addr}}	{{server_port}}
+iAfter Windows 2000 starts, it will automatically detect an "Unknown		{{server_addr}}	{{server_port}}
+iModem". We need to install a driver compatible with the Hayes modem		{{server_addr}}	{{server_port}}
+iprotocol via Device Manager.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn the driver installation interface, choose manual driver selection (don't		{{server_addr}}	{{server_port}}
+iauto-detect), then select the "Hayes Compatible 9600" driver from		{{server_addr}}	{{server_port}}
+iHayes manufacturer, as shown:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IWindows 2000 Driver Selection	/usr/uploads/2019/12/atduck-win2000-driver.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter driver installation completes, create a dial-up network		{{server_addr}}	{{server_port}}
+iconnection. Set the dial number to 5555, select PPP protocol, and		{{server_addr}}	{{server_port}}
+ienter any username/password. ATduck will recognize this number and		{{server_addr}}	{{server_port}}
+iautomatically start Slirp to simulate the PPP handshake.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IWindows 2000 Dial-up Connection Configuration	/usr/uploads/2019/12/atduck-dialup-config.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDouble-click to dial, and the process completes:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IWindows 2000 Successful Dial-up	/usr/uploads/2019/12/atduck-win2000-success.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Minor Issues		{{server_addr}}	{{server_port}}
+iATduck has a small bug. If you disconnect the dial-up connection, the		{{server_addr}}	{{server_port}}
+isecond dial attempt may fail. It seems ATduck doesn't correctly		{{server_addr}}	{{server_port}}
+irecognize the hang-up command.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

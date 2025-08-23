@@ -1,0 +1,369 @@
+i（题图来自：		{{server_addr}}	{{server_port}}
+h维基百科 - 三角函数	URL:https://zh.wikipedia.org/zh-cn/%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0	{{server_addr}}	{{server_port}}
+i）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 起因		{{server_addr}}	{{server_port}}
+i我想计算我的所有 VPS 节点之间的网络延迟，并把延迟写入 Bird BGP 服务端		{{server_addr}}	{{server_port}}
+i的配置中，以便让节点之间的数据转发经过延迟最低的路径。但是，我的节点截		{{server_addr}}	{{server_port}}
+i至今天有 17 个，我不想在节点之间手动两两 Ping 获取延迟。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i于是我想了一种方法：标记所有节点所在物理地点的经纬度，根据经纬度计算物		{{server_addr}}	{{server_port}}
+i理距离，再将距离除以光速的一半即可获得大致的延迟。我随机抽样了几对节点，		{{server_addr}}	{{server_port}}
+i发现她们之间的路由都比较直，没有严重的绕路现象，此时物理距离就是一个可		{{server_addr}}	{{server_port}}
+i以满足我要求的近似值。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因为我的节点上用的都是 NixOS，统一使用 Nix 语言管理配置，所以我需要找		{{server_addr}}	{{server_port}}
+i到一种在 Nix 中计算这个距离的方法。一种常用的根据经纬度算距离的方法是		{{server_addr}}	{{server_port}}
+i半正矢公式（Haversine Formula），它将地球近似为一个半径为 6371 公里的		{{server_addr}}	{{server_port}}
+i球体，再使用以下公式计算经纬度之间的距离：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> 参考资料：		{{server_addr}}	{{server_port}}
+h> 维基百科 - 半正矢公式	URL:https://zh.wikipedia.org/zh-cn/%E5%8D%8A%E6%AD%A3%E7%9F%A2%E5%85%AC%E5%BC%8F	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> 注：半正矢公式有几种变体，我实际参考的是 Stackoverflow 上的这一版使		{{server_addr}}	{{server_port}}
+i> 用 arctan 函数的实现：		{{server_addr}}	{{server_port}}
+h> https://stackoverflow.com/a/27943	URL:https://stackoverflow.com/a/27943	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是，Nix 作为一个打包、写软件配置用的语言，自然没有三角函数的支持，只		{{server_addr}}	{{server_port}}
+i能完成一些简单的浮点数计算。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i于是我用了另一种方法，直接调用 Python 的 `geopy` 模块计算距离：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    pkgs,		{{server_addr}}	{{server_port}}
+i    lib,		{{server_addr}}	{{server_port}}
+i    ...		{{server_addr}}	{{server_port}}
+i  }: let		{{server_addr}}	{{server_port}}
+i  in {		{{server_addr}}	{{server_port}}
+i    # 计算两个经纬度之间的距离，单位是公里		{{server_addr}}	{{server_port}}
+i    distance = a: b: let		{{server_addr}}	{{server_port}}
+i      py = pkgs.python3.withPackages (p: with p; [geopy]);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      helper = a: b:		{{server_addr}}	{{server_port}}
+i        lib.toInt (builtins.readFile (pkgs.runCommandLocal		{{server_addr}}	{{server_port}}
+i          "geo-result.txt"		{{server_addr}}	{{server_port}}
+i          {nativeBuildInputs = [py];}		{{server_addr}}	{{server_port}}
+i          ''		{{server_addr}}	{{server_port}}
+i            python > $out <<EOF		{{server_addr}}	{{server_port}}
+i            import geopy.distance		{{server_addr}}	{{server_port}}
+i            print(int(geopy.distance.geodesic((${a.lat}, ${a.lng}), (${b.lat}, ${b.lng})).km))		{{server_addr}}	{{server_port}}
+i            EOF		{{server_addr}}	{{server_port}}
+i          ''));		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      if a.lat < b.lat || (a.lat == b.lat && a.lng < b.lng)		{{server_addr}}	{{server_port}}
+i      then helper a b		{{server_addr}}	{{server_port}}
+i      else helper b a;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这种方法能用，但这相当于为每组不同的经纬度单独创建了一个「软件包」，再		{{server_addr}}	{{server_port}}
+i让 Nix 进行构建。Nix 为了尽可能保持可重复打包，避免软件包打包过程中引		{{server_addr}}	{{server_port}}
+i入变量，会创建一个不联网、磁盘访问受限的沙盒环境，然后在这个虚拟环境中		{{server_addr}}	{{server_port}}
+i启动 Python，加载 `geopy`，进行计算。这个过程很慢，在我的笔记本电脑（		{{server_addr}}	{{server_port}}
+ii7-11800H）上需要为每个软件包花大约 0.5 秒，而且由于 Nix 的限制无法并		{{server_addr}}	{{server_port}}
+i行处理。截至今天，我的 17 个节点分散在全世界 10 个不同的城市，这意味着		{{server_addr}}	{{server_port}}
+i计算这些距离就要花费		{{server_addr}}	{{server_port}}
+i的时间。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i而且，由于构建软件包的函数 `pkgs.runCommandLocal` 的输出立即被 `builtins.readFile`		{{server_addr}}	{{server_port}}
+i读取，这些距离计算用的软件包并不会被我的 NixOS 配置直接引用，也就意味		{{server_addr}}	{{server_port}}
+i着它们的引用计数为 0，在运行 `nixos-collect-garbage -d` 时会被立即清理。		{{server_addr}}	{{server_port}}
+i之后构建下一次配置时，又要花费 22.5 秒再计算一遍。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i那么，我能不能不再依赖 Python，而是使用 Nix 的简单的浮点数功能实现 sin，		{{server_addr}}	{{server_port}}
+icos，tan 这些三角函数，从而实现计算半正矢函数呢？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i于是就有了今天的项目：使用纯 Nix 语言实现的三角函数库。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 正弦 sin，余弦 cos，正切 tan：泰勒级数		{{server_addr}}	{{server_port}}
+i正弦 sin 和余弦 cos 这两个三角函数都有比较简单的计算方法：泰勒级数。我		{{server_addr}}	{{server_port}}
+i们都知道，正弦 sin 有如下的泰勒展开式：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不难发现，每个泰勒展开项可以用基本的四则运算完成计算。我们就可以在 Nix		{{server_addr}}	{{server_port}}
+i中实现如下的函数：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    pi = 3.14159265358979323846264338327950288;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 辅助函数，对数列中的所有项求和/乘积		{{server_addr}}	{{server_port}}
+i    sum = builtins.foldl' builtins.add 0;		{{server_addr}}	{{server_port}}
+i    multiply = builtins.foldl' builtins.mul 1;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 取余函数，计算 a mod b，用于将 sin/cos 的输入限制到 (-2pi, 2pi)		{{server_addr}}	{{server_port}}
+i    mod = a: b:		{{server_addr}}	{{server_port}}
+i      if a < 0		{{server_addr}}	{{server_port}}
+i      then mod (b - mod (0 - a) b) b		{{server_addr}}	{{server_port}}
+i      else a - b * (div a b);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 乘方函数，计算 x^times，其中 times 为整数		{{server_addr}}	{{server_port}}
+i    pow = x: times: multiply (lib.replicate times x);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 正弦函数		{{server_addr}}	{{server_port}}
+i    sin = x: let		{{server_addr}}	{{server_port}}
+i      # 将 x 转为浮点数避免整数乘除法，并取余 2pi 限制输入范围，避免精度损失		{{server_addr}}	{{server_port}}
+i      x' = mod (1.0 * x) (2 * pi);		{{server_addr}}	{{server_port}}
+i      # 计算数列中的第 i 项，其中 i 从 1 开始		{{server_addr}}	{{server_port}}
+i      step = i: (pow (0 - 1) (i - 1)) * multiply (lib.genList (j: x' / (j + 1)) (i * 2 - 1));		{{server_addr}}	{{server_port}}
+i      # 注：此处 lib.genList 的调用相当于 for (j = 0; j < i*2-1; j++)		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      # TODO：咕咕咕		{{server_addr}}	{{server_port}}
+i      0;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i其中计算单个泰勒展开项时，为了避免浮点数的精度损失，没有分别计算分子分		{{server_addr}}	{{server_port}}
+i母两个大数再相除，而是将		{{server_addr}}	{{server_port}}
+i展开成		{{server_addr}}	{{server_port}}
+i，单独计算每一项，再将所有数值相对较小的结果相乘。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后，我们要决定计算多少项。我们可以选择计算固定的项数，比如 10 项：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    sin = x: let		{{server_addr}}	{{server_port}}
+i      x' = mod (1.0 * x) (2 * pi);		{{server_addr}}	{{server_port}}
+i      step = i: (pow (0 - 1) (i - 1)) * multiply (lib.genList (j: x' / (j + 1)) (i * 2 - 1));		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      # 如果 x < 0 就取负，进一步缩小要处理的范围		{{server_addr}}	{{server_port}}
+i      if x < 0		{{server_addr}}	{{server_port}}
+i      then -sin (0 - x)		{{server_addr}}	{{server_port}}
+i      # 计算 10 项泰勒展开项并求和		{{server_addr}}	{{server_port}}
+i      else sum (lib.genList (i: step (i + 1)) 10);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是计算固定项数时，输入值很小时泰勒展开项很快就小于浮点数精度，浪费计		{{server_addr}}	{{server_port}}
+i算次数，而输入值很大时计算 10 项又不能保证计算足够精确。于是我决定改成		{{server_addr}}	{{server_port}}
+i根据泰勒展开项的值决定，在这一步计算结果小于精度要求时结束计算：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # 精度限制，泰勒展开项小于该值时停止计算		{{server_addr}}	{{server_port}}
+i    epsilon = pow (0.1) 10;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 绝对值函数 abs 以及别名 fabs		{{server_addr}}	{{server_port}}
+i    abs = x:		{{server_addr}}	{{server_port}}
+i      if x < 0		{{server_addr}}	{{server_port}}
+i      then 0 - x		{{server_addr}}	{{server_port}}
+i      else x;		{{server_addr}}	{{server_port}}
+i    fabs = abs;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    sin = x: let		{{server_addr}}	{{server_port}}
+i      x' = mod (1.0 * x) (2 * pi);		{{server_addr}}	{{server_port}}
+i      step = i: (pow (0 - 1) (i - 1)) * multiply (lib.genList (j: x' / (j + 1)) (i * 2 - 1));		{{server_addr}}	{{server_port}}
+i      # 如果当前项的绝对值小于 epsilon 就停止计算，否则继续算下一步		{{server_addr}}	{{server_port}}
+i      # tmp 用于累加，i 是泰勒展开项的编号计数		{{server_addr}}	{{server_port}}
+i      helper = tmp: i: let		{{server_addr}}	{{server_port}}
+i        value = step i;		{{server_addr}}	{{server_port}}
+i      in		{{server_addr}}	{{server_port}}
+i        if (fabs value) < epsilon		{{server_addr}}	{{server_port}}
+i        then tmp		{{server_addr}}	{{server_port}}
+i        else helper (tmp + value) (i + 1);		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      if x < 0		{{server_addr}}	{{server_port}}
+i      then -sin (0 - x)		{{server_addr}}	{{server_port}}
+i      # 累加从 0 开始，编号从 1 开始		{{server_addr}}	{{server_port}}
+i      else helper 0 1;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i于是我们就有了一个足够精确的正弦 sin 函数。把它的输入值从 0 到 10（大		{{server_addr}}	{{server_port}}
+i于		{{server_addr}}	{{server_port}}
+i），每隔 0.001 扫描一遍：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # arange：生成一个从 min（含）到 max（不含），间隔 step 的数列		{{server_addr}}	{{server_port}}
+i    arange = min: max: step: let		{{server_addr}}	{{server_port}}
+i      count = floor ((max - min) / step);		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      lib.genList (i: min + step * i) count;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # arange2：生成一个从 min（含）到 max（含），间隔 step 的数列		{{server_addr}}	{{server_port}}
+i    arange2 = min: max: step: arange min (max + step) step;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 测试函数：将数组 inputs 中的每个值都用函数 fn 计算一遍，生成 input -> output 的 attrset		{{server_addr}}	{{server_port}}
+i    testOnInputs = inputs: fn:		{{server_addr}}	{{server_port}}
+i      builtins.listToAttrs (builtins.map (v: {		{{server_addr}}	{{server_port}}
+i          name = builtins.toString v;		{{server_addr}}	{{server_port}}
+i          value = fn v;		{{server_addr}}	{{server_port}}
+i        })		{{server_addr}}	{{server_port}}
+i        inputs);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 测试函数：将从 min（含）到 max（含），间隔 step 的输入都测试一遍		{{server_addr}}	{{server_port}}
+i    testRange = min: max: step: testOnInputs (math.arange2 min max step);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    testOutput = testRange (0 - 10) 10 0.001 math.sin;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i将 `testOutput` 和 Python Numpy 的 `np.sin` 比较，所有结果的差距都小于		{{server_addr}}	{{server_port}}
+i0.0001%，满足要求。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i类似的，我们可以实现余弦 cos 函数：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # 将余弦转换成正弦		{{server_addr}}	{{server_port}}
+i    cos = x: sin (0.5 * pi - x);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i你不会真以为我会从零开始再来一遍吧？不会吧不会吧？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i类似的，正切 tan 函数也很简单：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    tan = x: (sin x) / (cos x);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i将 `cos` 和 `tan` 用类似的方法测试，差距均小于 0.0001%。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 反正切 arctan：只能近似		{{server_addr}}	{{server_port}}
+iarctan 函数也有泰勒展开式：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是很容易发现，arctan 的泰勒展开式收敛远不如 sin 的展开式快。由于		{{server_addr}}	{{server_port}}
+iarctan 展开式的分母线性增加，计算到小于 epsilon 所需的项数大幅增加，甚		{{server_addr}}	{{server_port}}
+i至可能直接让 Nix 的栈溢出：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  error: stack overflow (possible infinite recursion)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i所以我们不能用泰勒展开式了，得用其它计算次数少的方法。受到		{{server_addr}}	{{server_port}}
+hhttps://stackoverflow.com/a/42542593	URL:https://stackoverflow.com/a/42542593	{{server_addr}}	{{server_port}}
+i的启发，我决定用多项式回归来拟合		{{server_addr}}	{{server_port}}
+i上的 arctan 曲线，并将其它范围的 arctan 按如下规则进行映射：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i启动 Python，加载 Numpy，开始拟合：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  import numpy as np		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 生成 arctan 函数的输入，[0, 1] 的 1000 个点：		{{server_addr}}	{{server_port}}
+i  a = np.linspace(0, 1, 1000)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 多项式回归，我指定用十次函数回归（x^10）		{{server_addr}}	{{server_port}}
+i  fit = np.polyfit(a, np.arctan(a), 10)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 输出回归结果		{{server_addr}}	{{server_port}}
+i  print('\n'.join(["{0:.7f}".format(i) for i in (fit[::-1])]))		{{server_addr}}	{{server_port}}
+i  # 0.0000000		{{server_addr}}	{{server_port}}
+i  # 0.9999991		{{server_addr}}	{{server_port}}
+i  # 0.0000361		{{server_addr}}	{{server_port}}
+i  # -0.3339481		{{server_addr}}	{{server_port}}
+i  # 0.0056166		{{server_addr}}	{{server_port}}
+i  # 0.1692346		{{server_addr}}	{{server_port}}
+i  # 0.1067547		{{server_addr}}	{{server_port}}
+i  # -0.3812212		{{server_addr}}	{{server_port}}
+i  # 0.3314050		{{server_addr}}	{{server_port}}
+i  # -0.1347016		{{server_addr}}	{{server_port}}
+i  # 0.0222228		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以上输出代表		{{server_addr}}	{{server_port}}
+i上的 arctan 可以近似为：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i于是我们就可以在 Nix 中实现以上多项式：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # 多项式计算，x^0*poly[0] + x^1*poly[1] + ... + x^n*poly[n]		{{server_addr}}	{{server_port}}
+i    polynomial = x: poly: let		{{server_addr}}	{{server_port}}
+i      step = i: (pow x i) * (builtins.elemAt poly i);		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      sum (lib.genList step (builtins.length poly));		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 反正切函数		{{server_addr}}	{{server_port}}
+i    atan = x: let		{{server_addr}}	{{server_port}}
+i      poly = [		{{server_addr}}	{{server_port}}
+i        0.0000000		{{server_addr}}	{{server_port}}
+i        0.9999991		{{server_addr}}	{{server_port}}
+i        0.0000366		{{server_addr}}	{{server_port}}
+i        (0 - 0.3339528)		{{server_addr}}	{{server_port}}
+i        0.0056430		{{server_addr}}	{{server_port}}
+i        0.1691462		{{server_addr}}	{{server_port}}
+i        0.1069422		{{server_addr}}	{{server_port}}
+i        (0 - 0.3814731)		{{server_addr}}	{{server_port}}
+i        0.3316130		{{server_addr}}	{{server_port}}
+i        (0 - 0.1347978)		{{server_addr}}	{{server_port}}
+i        0.0222419		{{server_addr}}	{{server_port}}
+i      ];		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      # x < 0 的映射		{{server_addr}}	{{server_port}}
+i      if x < 0		{{server_addr}}	{{server_port}}
+i      then -atan (0 - x)		{{server_addr}}	{{server_port}}
+i      # x > 1 的映射		{{server_addr}}	{{server_port}}
+i      else if x > 1		{{server_addr}}	{{server_port}}
+i      then pi / 2 - atan (1 / x)		{{server_addr}}	{{server_port}}
+i      # 0 <= x <= 1，多项式计算		{{server_addr}}	{{server_port}}
+i      else polynomial x poly;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i进行精度测试，所有结果误差小于 0.0001%。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 平方根 sqrt：牛顿法		{{server_addr}}	{{server_port}}
+i对于平方根函数，我们可以使用著名的牛顿法进行递推。我使用的递推公式是：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i其中		{{server_addr}}	{{server_port}}
+i是平方根函数的输入。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我们可以在 Nix 中如下实现牛顿法求平方根，递推到结果变化小于 epsilon 即		{{server_addr}}	{{server_port}}
+i可：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # 平方根函数		{{server_addr}}	{{server_port}}
+i    sqrt = x: let		{{server_addr}}	{{server_port}}
+i      helper = tmp: let		{{server_addr}}	{{server_port}}
+i        value = (tmp + 1.0 * x / tmp) / 2;		{{server_addr}}	{{server_port}}
+i      in		{{server_addr}}	{{server_port}}
+i        if (fabs (value - tmp)) < epsilon		{{server_addr}}	{{server_port}}
+i        then value		{{server_addr}}	{{server_port}}
+i        else helper value;		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      if x < epsilon		{{server_addr}}	{{server_port}}
+i      then 0		{{server_addr}}	{{server_port}}
+i      else helper (1.0 * x);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i精度测试显示所有结果的误差小于		{{server_addr}}	{{server_port}}
+i（绝对值）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 半正矢公式		{{server_addr}}	{{server_port}}
+i有了以上函数，终于可以开始实现半正矢公式了。我参考的是 Stackoverflow		{{server_addr}}	{{server_port}}
+i上这一版的实现：		{{server_addr}}	{{server_port}}
+hhttps://stackoverflow.com/a/27943	URL:https://stackoverflow.com/a/27943	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # 角度转换成弧度		{{server_addr}}	{{server_port}}
+i    deg2rad = x: x * pi / 180;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 半正矢公式，输入两个经纬度，输出地球上的球面距离		{{server_addr}}	{{server_port}}
+i    haversine = lat1: lon1: lat2: lon2: let		{{server_addr}}	{{server_port}}
+i      # 将地球视为半径 6371 公里的球体		{{server_addr}}	{{server_port}}
+i      radius = 6371000;		{{server_addr}}	{{server_port}}
+i      # 纬度差的弧度		{{server_addr}}	{{server_port}}
+i      rad_lat = deg2rad ((1.0 * lat2) - (1.0 * lat1));		{{server_addr}}	{{server_port}}
+i      # 经度差的弧度		{{server_addr}}	{{server_port}}
+i      rad_lon = deg2rad ((1.0 * lon2) - (1.0 * lon1));		{{server_addr}}	{{server_port}}
+i      # 按公式计算		{{server_addr}}	{{server_port}}
+i      a = (sin (rad_lat / 2)) * (sin (rad_lat / 2)) + (cos (deg2rad (1.0 * lat1))) * (cos (deg2rad (1.0 * lat2))) * (sin (rad_lon / 2)) * (sin (rad_lon / 2));		{{server_addr}}	{{server_port}}
+i      c = 2 * atan ((sqrt a) / (sqrt (1 - a)));		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      radius * c;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最后根据光速计算理论延迟：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # 150000：光每毫秒行进的米数，再除以 2（计算的是双向延迟）		{{server_addr}}	{{server_port}}
+i    rttMs = lat1: lon1: lat2: lon2: floor ((haversine lat1 lon1 lat2 lon2) / 150000);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 总结		{{server_addr}}	{{server_port}}
+i我终于达成了最开始的目标：用经纬度除以光速计算节点间网络理论延迟。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以上三角函数（和一些额外的数学函数）可以在我的 GitHub 获取：		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-math	URL:https://github.com/xddxdd/nix-math	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你使用 Nix Flake，可以用以下方式使用这些函数：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    inputs = {		{{server_addr}}	{{server_port}}
+i      nix-math.url = "github:xddxdd/nix-math";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    outputs = inputs: let		{{server_addr}}	{{server_port}}
+i      math = inputs.nix-math.lib.math;		{{server_addr}}	{{server_port}}
+i    in{		{{server_addr}}	{{server_port}}
+i      value = math.sin (math.deg2rad 45);		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

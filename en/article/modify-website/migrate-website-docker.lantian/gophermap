@@ -1,0 +1,251 @@
+iDocker is a container management software for Linux. Each container is		{{server_addr}}	{{server_port}}
+ifunctionally similar to an OpenVZ VPS, allowing isolation of		{{server_addr}}	{{server_port}}
+iapplications on a server. This isolation enables different versions of		{{server_addr}}	{{server_port}}
+ithe same software or conflicting applications to run on the same		{{server_addr}}	{{server_port}}
+iserver. For example, MySQL 5.7, MySQL 5.6, and MariaDB 10.1 can run		{{server_addr}}	{{server_port}}
+isimultaneously in three separate Docker containers on one server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, Docker surpasses OpenVZ in its more flexible Linux kernel		{{server_addr}}	{{server_port}}
+iversion requirements. OpenVZ kernels remain stuck at 2.6.32 (stable)		{{server_addr}}	{{server_port}}
+iand 3.10 (development), while Docker runs on any Linux kernel above		{{server_addr}}	{{server_port}}
+i3.10. My server currently uses Linux kernel 4.9 (for BBR support),		{{server_addr}}	{{server_port}}
+iwhich clearly cannot run OpenVZ but works perfectly with Docker.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnother advantage of Docker is its comprehensive image repository and		{{server_addr}}	{{server_port}}
+iautomation tools. With OpenVZ, I had to log into each VPS individually		{{server_addr}}	{{server_port}}
+ito configure networks, run `apt-get` , and perform regular backups.		{{server_addr}}	{{server_port}}
+iWith Docker, I can directly use pre-built software images (no need for `apt-get` )		{{server_addr}}	{{server_port}}
+iand map data folders directly to the host machine (eliminating		{{server_addr}}	{{server_port}}
+iseparate backups).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDocker also provides Docker Compose, which allows configuring multiple		{{server_addr}}	{{server_port}}
+icontainers via a configuration file for rapid deployment and removal.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Installing Docker and Docker Compose		{{server_addr}}	{{server_port}}
+iI use Debian 8, which allows direct installation from Docker's		{{server_addr}}	{{server_port}}
+iofficial repository.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install apt-transport-https ca-certificates gnupg2		{{server_addr}}	{{server_port}}
+i  apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D		{{server_addr}}	{{server_port}}
+i  echo "deb https://apt.dockerproject.org/repo debian-jessie main" >> /etc/apt/sources.list		{{server_addr}}	{{server_port}}
+i  apt-get update		{{server_addr}}	{{server_port}}
+i  apt-get install docker-engine		{{server_addr}}	{{server_port}}
+i  curl -L "https://github.com/docker/compose/releases/download/1.9.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose		{{server_addr}}	{{server_port}}
+i  chmod +x /usr/local/bin/docker-compose		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Migrating Using Existing Images		{{server_addr}}	{{server_port}}
+iMy server originally ran: Nginx, PHP7.0-FPM, MariaDB, Memcached,		{{server_addr}}	{{server_port}}
+iRedis, and SS. For unified management, I migrated them using Docker		{{server_addr}}	{{server_port}}
+iimages.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI stored all data in `/srv` , so I created a `docker-compose.yml` file		{{server_addr}}	{{server_port}}
+iin this directory. This is Docker Compose's configuration file. The		{{server_addr}}	{{server_port}}
+ibasic format is as follows: (Content after # is my explanatory note		{{server_addr}}	{{server_port}}
+iand doesn't exist in the original file)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  version: '2'		{{server_addr}}	{{server_port}}
+i  services:		{{server_addr}}	{{server_port}}
+i    container1: 		{{server_addr}}	{{server_port}}
+i      image: Container image name (Docker automatically downloads if missing)		{{server_addr}}	{{server_port}}
+i      container_name: Container name		{{server_addr}}	{{server_port}}
+i      environment: # Environment variables		{{server_addr}}	{{server_port}}
+i        - ENV_VAR_NAME=value		{{server_addr}}	{{server_port}}
+i        - PASSWORD=123456		{{server_addr}}	{{server_port}}
+i      restart: always # Restart immediately if container crashes		{{server_addr}}	{{server_port}}
+i      volumes: # Map host folders to container for data management		{{server_addr}}	{{server_port}}
+i        - '/host/data/path:/container/data/path'		{{server_addr}}	{{server_port}}
+i        - '/var/lib/mysql:/var/lib/mysql'		{{server_addr}}	{{server_port}}
+i      ports: # Port mapping		{{server_addr}}	{{server_port}}
+i        - 'host_port:container_port' # Publicly accessible		{{server_addr}}	{{server_port}}
+i        - '80:80'		{{server_addr}}	{{server_port}}
+i        - 'host_ip:host_port:container_port' # Only accessible locally		{{server_addr}}	{{server_port}}
+i        - '127.0.0.1:11211:11211'		{{server_addr}}	{{server_port}}
+i    container2: ... (same as container1)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext, we'll create a `docker-compose.yml` to run the MariaDB image and		{{server_addr}}	{{server_port}}
+iimport data. (Content after # is my note)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  version: '2'		{{server_addr}}	{{server_port}}
+i  services:		{{server_addr}}	{{server_port}}
+i    lantian-mariadb:		{{server_addr}}	{{server_port}}
+i      image: mariadb:latest		{{server_addr}}	{{server_port}}
+i      container_name: lantian-mariadb		{{server_addr}}	{{server_port}}
+i      restart: always		{{server_addr}}	{{server_port}}
+i      volumes:		{{server_addr}}	{{server_port}}
+i        - '/srv/mysql:/var/lib/mysql'		{{server_addr}}	{{server_port}}
+i        - '/etc/timezone:/etc/timezone' # Sync host timezone		{{server_addr}}	{{server_port}}
+i        - '/etc/localtime:/etc/localtime'		{{server_addr}}	{{server_port}}
+i      ports:		{{server_addr}}	{{server_port}}
+i        - '127.0.0.1:3306:3306'		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, stop the original MariaDB: `service mysql stop` (no seamless		{{server_addr}}	{{server_port}}
+imigration considered)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMove the data folder: `mv /var/lib/mysql /srv/mysql`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, load the configuration: `docker-compose up -d`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMariaDB is now running in Docker!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRedis and Memcached can be migrated similarly using their official		{{server_addr}}	{{server_port}}
+iimages.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Creating an Image from apt-get Installed Software		{{server_addr}}	{{server_port}}
+iPHP7.0-FPM is more complex. The official PHP-FPM image uses unusual		{{server_addr}}	{{server_port}}
+icompilation flags and configuration paths that differ from my DotDeb		{{server_addr}}	{{server_port}}
+iinstallation. To avoid issues, I created a custom Docker image.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBuilding Docker images requires only basic bash knowledge. Create a		{{server_addr}}	{{server_port}}
+inew folder, then add a Dockerfile with the following structure: (Comments		{{server_addr}}	{{server_port}}
+iafter # are mine)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  FROM debian:jessie # Base image		{{server_addr}}	{{server_port}}
+i  MAINTAINER Lan Tian "lantian@lantian.pub" # Optional author info		{{server_addr}}	{{server_port}}
+i  ADD somefile.txt /somefile.txt # Add local file to image		{{server_addr}}	{{server_port}}
+i  RUN apt-get update # Execute command during build		{{server_addr}}	{{server_port}}
+i  EXPOSE 80 # Expose port to other containers		{{server_addr}}	{{server_port}}
+i  ENTRYPOINT ["php-fpm7.0"] # Startup command (container stops when this exits)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor this image, I need to: add DotDeb repository, run `apt-get` , add		{{server_addr}}	{{server_port}}
+icustom configs, expose ports, and set the startup command. My		{{server_addr}}	{{server_port}}
+iDockerfile:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  FROM debian:jessie		{{server_addr}}	{{server_port}}
+i  MAINTAINER Lan Tian "lantian@lantian.pub"		{{server_addr}}	{{server_port}}
+i  ADD dotdeb.gpg /dotdeb.gpg		{{server_addr}}	{{server_port}}
+i  RUN echo "deb http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list \		{{server_addr}}	{{server_port}}
+i      && echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list \		{{server_addr}}	{{server_port}}
+i      && apt-key add /dotdeb.gpg \		{{server_addr}}	{{server_port}}
+i      && apt-get update \		{{server_addr}}	{{server_port}}
+i      && apt-get install -y php7.0-fpm php7.0-bz2 php7.0-curl php7.0-gd php7.0-json php7.0-mbstring php7.0-mcrypt php7.0-memcached php7.0-mysql php7.0-redis php7.0-sqlite3 php7.0-xml php7.0-xmlrpc php7.0-zip \		{{server_addr}}	{{server_port}}
+i      && apt-get clean		{{server_addr}}	{{server_port}}
+i  ADD www.conf /etc/php/7.0/fpm/pool.d/www.conf		{{server_addr}}	{{server_port}}
+i  ADD php.ini /etc/php/7.0/fpm/php.ini		{{server_addr}}	{{server_port}}
+i  ADD php-fpm.conf /etc/php/7.0/fpm/php-fpm.conf		{{server_addr}}	{{server_port}}
+i  EXPOSE 9000		{{server_addr}}	{{server_port}}
+i  ENTRYPOINT ["php-fpm7.0"]		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPrepare files:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  wget https://www.dotdeb.org/dotdeb.gpg		{{server_addr}}	{{server_port}}
+i  cp /etc/php/7.0/fpm/pool.d/www.conf ./		{{server_addr}}	{{server_port}}
+i  cp /etc/php/7.0/fpm/php.ini ./		{{server_addr}}	{{server_port}}
+i  cp /etc/php/7.0/fpm/php-fpm.conf ./		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBuild the image:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  docker build -t lt-php7-fpm .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdd to `docker-compose.yml` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  lt-php-fpm:		{{server_addr}}	{{server_port}}
+i    image: lt-php7-fpm		{{server_addr}}	{{server_port}}
+i    container_name: lt-php-fpm		{{server_addr}}	{{server_port}}
+i    restart: always		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - './www:/srv/www' # Website root		{{server_addr}}	{{server_port}}
+i      - './owncloud:/srv/owncloud' # Remove if not using OwnCloud		{{server_addr}}	{{server_port}}
+i      - '/etc/timezone:/etc/timezone' # Timezone		{{server_addr}}	{{server_port}}
+i      - '/etc/localtime:/etc/localtime'		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Building a Custom Software Image		{{server_addr}}	{{server_port}}
+iMy Nginx setup is more complex due to custom patches: HTTP2/SPDY,		{{server_addr}}	{{server_port}}
+iGoogle PageSpeed, Certificate Transparency, and Brotli compression.		{{server_addr}}	{{server_port}}
+iSince no existing image fits, I compiled my own.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe solution: convert all compilation commands into a Dockerfile. Use		{{server_addr}}	{{server_port}}
+ivariables for version numbers to simplify updates:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ENV NGINX_VERSION=1.11.8 # Set variable		{{server_addr}}	{{server_port}}
+i  RUN cd nginx-${NGINX_VERSION} # Use variable		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMy Dockerfile:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  FROM debian		{{server_addr}}	{{server_port}}
+i  MAINTAINER Lan Tian "lantian@lantian.pub"		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  ENV NGINX_VERSION=1.11.8 OPENSSL_VERSION=1.1.0c NPS_VERSION=1.12.34.2		{{server_addr}}	{{server_port}}
+i  RUN mkdir /tmp/build && cd /tmp/build \		{{server_addr}}	{{server_port}}
+i      && apt-get update -q\		{{server_addr}}	{{server_port}}
+i      && apt-get -y install build-essential git autoconf automake libtool wget tar zlib1g-dev libpcre3 libpcre3-dev unzip \		{{server_addr}}	{{server_port}}
+i      && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \		{{server_addr}}	{{server_port}}
+i        && tar xvf nginx-${NGINX_VERSION}.tar.gz \		{{server_addr}}	{{server_port}}
+i      && git clone https://github.com/bagder/libbrotli.git \		{{server_addr}}	{{server_port}}
+i        && cd /tmp/build/libbrotli && ./autogen.sh && ./configure && make && make install && cd /tmp/build \		{{server_addr}}	{{server_port}}
+i        && ln -s /usr/local/lib/libbrotlienc.so.1 /usr/lib/libbrotlienc.so.1 \		{{server_addr}}	{{server_port}}
+i      && git clone https://github.com/google/ngx_brotli.git \		{{server_addr}}	{{server_port}}
+i        && cd /tmp/build/ngx_brotli && git submodule update --init && cd /tmp/build/ \		{{server_addr}}	{{server_port}}
+i      && git clone https://github.com/grahamedgecombe/nginx-ct.git \		{{server_addr}}	{{server_port}}
+i      && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \		{{server_addr}}	{{server_port}}
+i        && tar xvf openssl-${OPENSSL_VERSION}.tar.gz \		{{server_addr}}	{{server_port}}
+i      && wget https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}-beta.zip \		{{server_addr}}	{{server_port}}
+i        && unzip v${NPS_VERSION}-beta.zip \		{{server_addr}}	{{server_port}}
+i        && cd /tmp/build/ngx_pagespeed-${NPS_VERSION}-beta/ \		{{server_addr}}	{{server_port}}
+i        && wget https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}-x64.tar.gz \		{{server_addr}}	{{server_port}}
+i        && tar -xvf ${NPS_VERSION}-x64.tar.gz \		{{server_addr}}	{{server_port}}
+i        && cd /tmp/build \		{{server_addr}}	{{server_port}}
+i      && wget https://raw.githubusercontent.com/cujanovic/nginx-http2-spdy-patch/master/nginx-spdy-1.11.5%2B.patch -O nginx-spdy.patch \		{{server_addr}}	{{server_port}}
+i      && cd nginx-${NGINX_VERSION} \		{{server_addr}}	{{server_port}}
+i      && patch -p1 < /tmp/build/nginx-spdy.patch \		{{server_addr}}	{{server_port}}
+i      && ./configure \		{{server_addr}}	{{server_port}}
+i         --with-threads \		{{server_addr}}	{{server_port}}
+i         --with-file-aio \		{{server_addr}}	{{server_port}}
+i         --with-ipv6 \		{{server_addr}}	{{server_port}}
+i         --with-http_ssl_module \		{{server_addr}}	{{server_port}}
+i         --with-http_spdy_module \		{{server_addr}}	{{server_port}}
+i         --with-http_v2_module \		{{server_addr}}	{{server_port}}
+i         --with-http_gzip_static_module \		{{server_addr}}	{{server_port}}
+i         --with-http_gunzip_module \		{{server_addr}}	{{server_port}}
+i         --with-http_stub_status_module \		{{server_addr}}	{{server_port}}
+i         --with-http_sub_module \		{{server_addr}}	{{server_port}}
+i         --add-module=/tmp/build/ngx_pagespeed-${NPS_VERSION}-beta \		{{server_addr}}	{{server_port}}
+i         --add-module=/tmp/build/nginx-ct \		{{server_addr}}	{{server_port}}
+i         --add-module=/tmp/build/ngx_brotli \		{{server_addr}}	{{server_port}}
+i         --with-openssl=/tmp/build/openssl-${OPENSSL_VERSION} \		{{server_addr}}	{{server_port}}
+i         --with-cc-opt="-O3 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wno-deprecated-declarations" \		{{server_addr}}	{{server_port}}
+i      && make \		{{server_addr}}	{{server_port}}
+i      && make install \		{{server_addr}}	{{server_port}}
+i      && cd / && rm -rf /tmp/build \		{{server_addr}}	{{server_port}}
+i      && apt-get purge -y unzip git autoconf libtool wget automake build-essential \		{{server_addr}}	{{server_port}}
+i      && apt-get autoremove -y --purge \		{{server_addr}}	{{server_port}}
+i      && ln -sf /dev/stdout /usr/local/nginx/logs/access.log \		{{server_addr}}	{{server_port}}
+i        && ln -sf /dev/stderr /usr/local/nginx/logs/error.log		{{server_addr}}	{{server_port}}
+i  EXPOSE 80 443		{{server_addr}}	{{server_port}}
+i  ADD start.sh /start.sh		{{server_addr}}	{{server_port}}
+i  ENTRYPOINT /bin/bash /start.sh		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCritical issue: Nginx runs in background by default, causing Docker to		{{server_addr}}	{{server_port}}
+iterminate the container. Solution via `start.sh` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #!/bin/bash		{{server_addr}}	{{server_port}}
+i  /usr/local/nginx/sbin/nginx		{{server_addr}}	{{server_port}}
+i  tail -F /usr/local/nginx/logs/access.log		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i`tail -F` keeps the container running by continuously monitoring logs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBuild the image:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  docker build -t lt-nginx .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdd to `docker-compose.yml` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  lt-nginx:		{{server_addr}}	{{server_port}}
+i    image: lt-nginx		{{server_addr}}	{{server_port}}
+i    container_name: lt-nginx		{{server_addr}}	{{server_port}}
+i    restart: always		{{server_addr}}	{{server_port}}
+i    volumes:		{{server_addr}}	{{server_port}}
+i      - './nginx:/usr/local/nginx/conf' # Config files		{{server_addr}}	{{server_port}}
+i      - './www:/srv/www' # Website root		{{server_addr}}	{{server_port}}
+i      - '/etc/timezone:/etc/timezone' # Timezone		{{server_addr}}	{{server_port}}
+i      - '/etc/localtime:/etc/localtime'		{{server_addr}}	{{server_port}}
+i    ports:		{{server_addr}}	{{server_port}}
+i      - '80:80'		{{server_addr}}	{{server_port}}
+i      - '443:443'		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Conclusion		{{server_addr}}	{{server_port}}
+iWe've set up MariaDB, PHP-FPM, and Nginx containers. They can now be		{{server_addr}}	{{server_port}}
+imanaged uniformly via:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Start: `docker-compose up -d`		{{server_addr}}	{{server_port}}
+i- Stop: `docker-compose down` This greatly simplifies deployment and		{{server_addr}}	{{server_port}}
+i  maintenance.		{{server_addr}}	{{server_port}}

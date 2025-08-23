@@ -1,0 +1,223 @@
+i## What is a Static Site Generator		{{server_addr}}	{{server_port}}
+iCommon CMS platforms like WordPress and Typecho are dynamic websites.		{{server_addr}}	{{server_port}}
+iWhen users access a webpage, the server runs programs written in		{{server_addr}}	{{server_port}}
+ilanguages like PHP, Python, or Node.js to **dynamically generate** the		{{server_addr}}	{{server_port}}
+iwebpage in real-time based on the user's request and returns it to the		{{server_addr}}	{{server_port}}
+iuser.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iStatic site generators like Jekyll, Hexo, and Hugo take a different		{{server_addr}}	{{server_port}}
+iapproach: they **pre-generate** HTML files in advance to match		{{server_addr}}	{{server_port}}
+ianticipated user requests.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe main advantages and disadvantages of these two approaches are as		{{server_addr}}	{{server_port}}
+ifollows:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdvantage		{{server_addr}}	{{server_port}}
+iDynamic Website		{{server_addr}}	{{server_port}}
+iStatic Website		{{server_addr}}	{{server_port}}
+iDynamic		{{server_addr}}	{{server_port}}
+iSupports complex interactions and content updates based on user input		{{server_addr}}	{{server_port}}
+iLimited flexibility, only responds to predefined inputs		{{server_addr}}	{{server_port}}
+iDynamic		{{server_addr}}	{{server_port}}
+iMost CMS provide user-friendly admin panels for easy content updates		{{server_addr}}	{{server_port}}
+iNo online admin panel; requires local software for updates		{{server_addr}}	{{server_port}}
+iStatic		{{server_addr}}	{{server_port}}
+iServer-side script runtime environment requires complex configuration		{{server_addr}}	{{server_port}}
+iMinimal server configuration; no script runtime needed		{{server_addr}}	{{server_port}}
+iStatic		{{server_addr}}	{{server_port}}
+iReal-time page generation consumes significant resources (script		{{server_addr}}	{{server_port}}
+iexecution, DB queries)		{{server_addr}}	{{server_port}}
+iNear-zero server computation; extremely fast response		{{server_addr}}	{{server_port}}
+iStatic		{{server_addr}}	{{server_port}}
+iServer migration requires moving scripts, databases, and		{{server_addr}}	{{server_port}}
+ireconfiguration		{{server_addr}}	{{server_port}}
+iEffortless migration; simply copy HTML files		{{server_addr}}	{{server_port}}
+i## Why I Switched from Typecho to a Static Site		{{server_addr}}	{{server_port}}
+i1. As I installed more programs on my VPS, server resources became		{{server_addr}}	{{server_port}}
+i   strained, slowing down Typecho (especially MySQL)		{{server_addr}}	{{server_port}}
+i   - Without configuration changes, the LT-Latency HTTP header value		{{server_addr}}	{{server_port}}
+i     increased from 0.02 to 0.1, negating		{{server_addr}}	{{server_port}}
+1     previous optimizations	/en/article/modify-website/typecho-performance-optimization.lantian/	{{server_addr}}	{{server_port}}
+i   - My VPS was purchased at a discount and couldn't be upgraded		{{server_addr}}	{{server_port}}
+i   - New Hong Kong VPS with similar specs cost 3-4 times more		{{server_addr}}	{{server_port}}
+i2. Historical article formats required complex post-processing scripts		{{server_addr}}	{{server_port}}
+i   for compatibility		{{server_addr}}	{{server_port}}
+i   - Used WordPress, Typecho's Baidu UEditor, and Typecho Markdown		{{server_addr}}	{{server_port}}
+i     editors		{{server_addr}}	{{server_port}}
+i   - Post-processing scripts were slow and hard to optimize		{{server_addr}}	{{server_port}}
+i   - Automatic conversion of legacy articles to Markdown was		{{server_addr}}	{{server_port}}
+i     impossible; manual conversion too tedious		{{server_addr}}	{{server_port}}
+i3. Recent (Sept 2019) international network instability necessitated		{{server_addr}}	{{server_port}}
+i   frequent migration		{{server_addr}}	{{server_port}}
+i   - 5 VPS IPs became inaccessible from mainland China this month,		{{server_addr}}	{{server_port}}
+i     including my web server		{{server_addr}}	{{server_port}}
+i   - Currently using a discounted Hong Kong VPS (		{{server_addr}}	{{server_port}}
+1     0.1% off 50KVM VPS	/en/article/modify-website/got-50kvm-99off-vps.lantian/	{{server_addr}}	{{server_port}}
+i     ) as relay		{{server_addr}}	{{server_port}}
+i   - This VPS has only 5Mbps bandwidth, unsuitable for primary use (backups		{{server_addr}}	{{server_port}}
+i     problematic)		{{server_addr}}	{{server_port}}
+i4. Static sites enable easier load balancing and high availability		{{server_addr}}	{{server_port}}
+i   - Dynamic sites require syncing both CMS and databases		{{server_addr}}	{{server_port}}
+i     - Traditional MySQL master-slave replication lacks real-time		{{server_addr}}	{{server_port}}
+i       capability		{{server_addr}}	{{server_port}}
+i       - Writes to other nodes must return to master, causing high		{{server_addr}}	{{server_port}}
+i         latency		{{server_addr}}	{{server_port}}
+i     - MySQL Galera multi-master replication unstable across		{{server_addr}}	{{server_port}}
+i       continents		{{server_addr}}	{{server_port}}
+i       - Spent 2 full days attempting Galera configuration without		{{server_addr}}	{{server_port}}
+i         success		{{server_addr}}	{{server_port}}
+i## Preparation: Architecture Selection		{{server_addr}}	{{server_port}}
+iMigration goals:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Preserve all articles with original URLs		{{server_addr}}	{{server_port}}
+i  - Custom URL extensions (.lantian) require static generator support		{{server_addr}}	{{server_port}}
+i- Migrate all comments with functioning comment system		{{server_addr}}	{{server_port}}
+i  - Target system must support Typecho/WordPress import tools		{{server_addr}}	{{server_port}}
+i  - Must be accessible in China		{{server_addr}}	{{server_port}}
+i  - Must allow anonymous comments		{{server_addr}}	{{server_port}}
+i  - Must support article IDs to ensure comment display		{{server_addr}}	{{server_port}}
+i    - Minor URL changes possible during migration		{{server_addr}}	{{server_port}}
+i- Prioritize static generator extensibility over speed		{{server_addr}}	{{server_port}}
+i  - Need plugin/modification support for customization		{{server_addr}}	{{server_port}}
+i  - Acceptable to spend minutes regenerating site		{{server_addr}}	{{server_port}}
+i    - Could offload generation to Jenkins on another VPS		{{server_addr}}	{{server_port}}
+iFinal choices:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- **Static Generator** : Hexo		{{server_addr}}	{{server_port}}
+i  - Node.js-based with JavaScript extensibility		{{server_addr}}	{{server_port}}
+i  - Large community, abundant plugins/resources		{{server_addr}}	{{server_port}}
+i  - Compared to Hugo: Faster but lacks plugin system and complex theme		{{server_addr}}	{{server_port}}
+i    logic		{{server_addr}}	{{server_port}}
+i- **Comment System** : Disqus		{{server_addr}}	{{server_port}}
+i  - Supports WordPress comment import (Typecho→WordPress tools		{{server_addr}}	{{server_port}}
+i    available)		{{server_addr}}	{{server_port}}
+i  - Established service with long-term stability		{{server_addr}}	{{server_port}}
+i  - Supports URL/ID mapping for comment preservation		{{server_addr}}	{{server_port}}
+i  - Workaround for mainland access (explained later)		{{server_addr}}	{{server_port}}
+i  - Alternatives considered:		{{server_addr}}	{{server_port}}
+i    - Valine: Uses LeanCloud, no import tools, free tier limitations		{{server_addr}}	{{server_port}}
+i    - Isso: SQLite-only, no article ID support		{{server_addr}}	{{server_port}}
+i    - HashOver: No article ID support		{{server_addr}}	{{server_port}}
+i    - GitHub-based systems: Rejected due to anonymous comment		{{server_addr}}	{{server_port}}
+i      limitations		{{server_addr}}	{{server_port}}
+i## Converting Typecho Articles to Hexo		{{server_addr}}	{{server_port}}
+iUsed Newbmiao's		{{server_addr}}	{{server_port}}
+hPHP script	URL:https://github.com/NewbMiao/typecho2Hexo/blob/master/converter.php	{{server_addr}}	{{server_port}}
+iwith modifications:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Output Markdown filenames use slug (URL-friendly title)		{{server_addr}}	{{server_port}}
+i- Files organized by category folders		{{server_addr}}	{{server_port}}
+iModified code:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <?php		{{server_addr}}	{{server_port}}
+i  // 运行 php converter.php		{{server_addr}}	{{server_port}}
+i  $db = new mysqli();		{{server_addr}}	{{server_port}}
+i  // 根据实际情况更改		{{server_addr}}	{{server_port}}
+i  $db->connect('127.0.0.1','root','password','typecho');		{{server_addr}}	{{server_port}}
+i  $prefix = 'typecho_';		{{server_addr}}	{{server_port}}
+i  $sql = <<<TEXT		{{server_addr}}	{{server_port}}
+i  select title,text,created,category,tags,slug from {$prefix}contents c,		{{server_addr}}	{{server_port}}
+i   (select cid,group_concat(m.name) tags from {$prefix}metas m,{$prefix}relationships r where m.mid=r.mid and m.type='tag' group by cid ) t1,		{{server_addr}}	{{server_port}}
+i  (select cid,m.slug category from {$prefix}metas m,{$prefix}relationships r where m.mid=r.mid and m.type='category') t2		{{server_addr}}	{{server_port}}
+i  where t1.cid=t2.cid and c.cid=t1.cid		{{server_addr}}	{{server_port}}
+i  TEXT;		{{server_addr}}	{{server_port}}
+i  $res = $db->query($sql);		{{server_addr}}	{{server_port}}
+i  if ($res) {		{{server_addr}}	{{server_port}}
+i      if ($res->num_rows > 0) {		{{server_addr}}	{{server_port}}
+i          while ($r = $res->fetch_object()) {		{{server_addr}}	{{server_port}}
+i              $_c = @date('Y-m-d H:i:s', $r->created);		{{server_addr}}	{{server_port}}
+i              $_t = str_replace('<!--markdown-->', '', $r->text);		{{server_addr}}	{{server_port}}
+i              $_tmp = <<<TMP		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  title: '{$r->title}'		{{server_addr}}	{{server_port}}
+i  categories: Website and Servers		{{server_addr}}	{{server_port}}
+i  tags: [{$r->tags}]		{{server_addr}}	{{server_port}}
+i  date: {$_c}		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  {$_t}		{{server_addr}}	{{server_port}}
+i  TMP;		{{server_addr}}	{{server_port}}
+i              $name = $r->slug;		{{server_addr}}	{{server_port}}
+i              if (strpos(PHP_OS, "WIN") !== false) {		{{server_addr}}	{{server_port}}
+i                  $name = iconv("UTF-8", "GBK//IGNORE", $r->slug);		{{server_addr}}	{{server_port}}
+i              }		{{server_addr}}	{{server_port}}
+i              $name = str_replace(array(" ", "?", "\\", "/", ":", "|", "*"), '-', $name);		{{server_addr}}	{{server_port}}
+i              echo $name."\n";		{{server_addr}}	{{server_port}}
+i              mkdir($r->category);		{{server_addr}}	{{server_port}}
+i              file_put_contents($r->category . '/' . $name . ".md", $_tmp);		{{server_addr}}	{{server_port}}
+i          }		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i      $res->free();		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  $db->close();		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Migrating Typecho Comments to Disqus		{{server_addr}}	{{server_port}}
+iDirectly importing TypExport's WordPress XML to Disqus caused URL		{{server_addr}}	{{server_port}}
+imismatches. Solution:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Install WordPress		{{server_addr}}	{{server_port}}
+i2. Import comments		{{server_addr}}	{{server_port}}
+i3. Re-export from WordPress This corrected URL mappings.		{{server_addr}}	{{server_port}}
+i## Enabling Disqus Access from Mainland China		{{server_addr}}	{{server_port}}
+iUsed fooleap's open-source		{{server_addr}}	{{server_port}}
+hDisqus API proxy	URL:https://github.com/fooleap/disqus-php-api	{{server_addr}}	{{server_port}}
+ito provide a simplified comment box accessible in mainland China.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdded to Hexo template:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <div id="comments"></div>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <% var removeTrailingSlash = function(s) { if(s[s.length - 1] == '/') { return		{{server_addr}}	{{server_port}}
+i  s.substring(0, s.length - 1); } else if(s.substring(s.length - 11) ==		{{server_addr}}	{{server_port}}
+i  '/index.html') { return s.substring(0, s.length - 11); } else { return s; } } %>		{{server_addr}}	{{server_port}}
+i  <script>		{{server_addr}}	{{server_port}}
+i    addLoadEvent(function () {		{{server_addr}}	{{server_port}}
+i      var disq = new iDisqus('comments', {		{{server_addr}}	{{server_port}}
+i        forum: 'lantian',		{{server_addr}}	{{server_port}}
+i        api: 'https://comments.lantian.pub',		{{server_addr}}	{{server_port}}
+i        site: 'https://lantian.pub',		{{server_addr}}	{{server_port}}
+i        identifier: '/<%= removeTrailingSlash(page.path) %>',		{{server_addr}}	{{server_port}}
+i        url: '<%= removeTrailingSlash(page.permalink) %>',		{{server_addr}}	{{server_port}}
+i        mode: 1,		{{server_addr}}	{{server_port}}
+i        timeout: 1000,		{{server_addr}}	{{server_port}}
+i        init: true,		{{server_addr}}	{{server_port}}
+i        emojiPreview: true,		{{server_addr}}	{{server_port}}
+i        autoCreate: true,		{{server_addr}}	{{server_port}}
+i      })		{{server_addr}}	{{server_port}}
+i    })		{{server_addr}}	{{server_port}}
+i  </script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iURL normalization handles changes:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Articles: `.lantian` → `.lantian/` (to avoid browser download		{{server_addr}}	{{server_port}}
+i  prompts)		{{server_addr}}	{{server_port}}
+i- Pages: Added `/index.html` suffix (e.g., `/page/archive/index.html` )		{{server_addr}}	{{server_port}}
+i  The script trims trailing slashes and `/index.html` to maintain		{{server_addr}}	{{server_port}}
+i  comment thread consistency.		{{server_addr}}	{{server_port}}
+i## Hexo Plugin Configuration		{{server_addr}}	{{server_port}}
+iEnabled plugins for optimization:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- **hexo-generator-feed** : RSS feed		{{server_addr}}	{{server_port}}
+i  - Nginx redirect: `/feed` → `/feed.xml`		{{server_addr}}	{{server_port}}
+i- **hexo-generator-sitemap** : Sitemap		{{server_addr}}	{{server_port}}
+i- **hexo-renderer-markdown-it-plus** : Markdown renderer with syntax		{{server_addr}}	{{server_port}}
+i  highlighting and Katex math		{{server_addr}}	{{server_port}}
+i- **hexo-yam** :		{{server_addr}}	{{server_port}}
+i  - Minifies CSS/JS/HTML (no runtime penalty)		{{server_addr}}	{{server_port}}
+i  - Pre-generates GZip/Brotli files ( `index.html.gz` , `index.html.br` )		{{server_addr}}	{{server_port}}
+i    - Enable with `gzip_static on` and `brotli_static on` in nginx		{{server_addr}}	{{server_port}}
+i    - Higher compression levels than real-time compression		{{server_addr}}	{{server_port}}
+i## Results After Migration		{{server_addr}}	{{server_port}}
+iSuccessful migration with full data preservation:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- **Significant speed boost** (LT-Latency header: 0.000)		{{server_addr}}	{{server_port}}
+i- **Preserved frontend functionality** :		{{server_addr}}	{{server_port}}
+i  - Article display, navigation, pagination identical		{{server_addr}}	{{server_port}}
+i- **Minor changes** :		{{server_addr}}	{{server_port}}
+i  - Removed sidebar "Recent Comments" (Disqus limitation)		{{server_addr}}	{{server_port}}
+i  - Removed dynamic HTTPS info display		{{server_addr}}	{{server_port}}
+i  - Switched to Disqus comments		{{server_addr}}	{{server_port}}
+i  - Added "Powered by Hexo" and page generation time		{{server_addr}}	{{server_port}}
+iGeneration time: ~1 minute for 150 articles (slower than Hugo but		{{server_addr}}	{{server_port}}
+iacceptable for extensibility). Considering building a custom static		{{server_addr}}	{{server_port}}
+igenerator in the future.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
