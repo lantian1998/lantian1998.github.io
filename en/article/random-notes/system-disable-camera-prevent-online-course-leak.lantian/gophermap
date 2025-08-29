@@ -1,0 +1,38 @@
+iThis post will explain the way to disable your webcam on Windows and		{{server_addr}}	{{server_port}}
+iLinux, so:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. On the OS level, prevent you from turning on the webcam by mistake,		{{server_addr}}	{{server_port}}
+i   and live-stream your footage of		{{server_addr}}	{{server_port}}
+i   having a meal		{{server_addr}}	{{server_port}}
+i   lying on the bed		{{server_addr}}	{{server_port}}
+i   playing
+games		{{server_addr}}	{{server_port}}
+i   (NSFW)		{{server_addr}}	{{server_port}}
+i2. Prevent certain online lecturing software from secretly turning on		{{server_addr}}	{{server_port}}
+i   the webcam.		{{server_addr}}	{{server_port}}
+i## Windows Procedures		{{server_addr}}	{{server_port}}
+iPress the `Win+R` combination key to open the Run window, type `devmgmt.msc`		{{server_addr}}	{{server_port}}
+iand enter to open the Device Manager. Your camera will be in `Image		{{server_addr}}	{{server_port}}
+iAcquisition Devices` category, right-click on it to disable it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(The following picture is taken from a Simplified Chinese Windows XP,		{{server_addr}}	{{server_port}}
+ibut the procedure and icons should be similar for Windows 7 and 10.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IWindows Disabling Camera	/usr/uploads/202003/windows-disable-camera.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen you need to use the camera, come back to re-enable it, and then		{{server_addr}}	{{server_port}}
+iclose and reopen your browser or online lecturing software.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Linux Procedures		{{server_addr}}	{{server_port}}
+i  # First, close any software that uses your webcam,		{{server_addr}}	{{server_port}}
+i  # like your browser, online lecturing software, etc		{{server_addr}}	{{server_port}}
+i  sudo modprobe -rv uvcvideo		{{server_addr}}	{{server_port}}
+i  sudo nano /etc/modprobe.d/disablecamera.conf		{{server_addr}}	{{server_port}}
+i  # Type in this line and save		{{server_addr}}	{{server_port}}
+i  blacklist uvcvideo		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen you need your webcam, run `sudo modprobe -v uvcvideo` to load the		{{server_addr}}	{{server_port}}
+idrivers. After you're done, run `sudo modprobe -rv uvcvideo` to unload		{{server_addr}}	{{server_port}}
+iit. After the load/unload, you simply need to close and reopen your		{{server_addr}}	{{server_port}}
+ibrowser or online lecturing software.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

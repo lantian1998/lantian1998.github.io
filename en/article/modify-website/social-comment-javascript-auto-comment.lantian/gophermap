@@ -1,0 +1,33 @@
+iInspired by		{{server_addr}}	{{server_port}}
+1WP Blog One-click Check-in JS	/en/article/chat/wordpress-blog-onekey-comment-javascript.lantian	{{server_addr}}	{{server_port}}
+i, I modified the JS code to implement one-click check-in functionality		{{server_addr}}	{{server_port}}
+ifor Youyan and Duoshuo comment systems.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**Youyan Version:**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  javascript: try {		{{server_addr}}	{{server_port}}
+i    document.getElementById('uyan_l_uname').value = 'Your Nickname'		{{server_addr}}	{{server_port}}
+i  } catch (err) {}		{{server_addr}}	{{server_port}}
+i  var myDate = new Date()		{{server_addr}}	{{server_port}}
+i  var mytime = myDate.toLocaleTimeString()		{{server_addr}}	{{server_port}}
+i  document.getElementById('uyan_comment').value = 'Checked in today! Time: ' + mytime		{{server_addr}}	{{server_port}}
+i  UYAN.addCmt(document.getElementById('uyan_cmt_btn'))		{{server_addr}}	{{server_port}}
+i  void 0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUsage: Open a page with Youyan and click once. Can be used without		{{server_addr}}	{{server_port}}
+ilogin, or after logging in via Weibo first.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**Duoshuo Version:**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  javascript: var myDate = new Date()		{{server_addr}}	{{server_port}}
+i  var mytime = myDate.toLocaleTimeString()		{{server_addr}}	{{server_port}}
+i  document.getElementsByName('message').item(0).value =		{{server_addr}}	{{server_port}}
+i    'Checked in today! Time: ' + mytime		{{server_addr}}	{{server_port}}
+i  document.getElementsByClassName('ds-post-button').item(0).click()		{{server_addr}}	{{server_port}}
+i  void 0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUsage: Open a page with Duoshuo, log in via Weibo first, then click to		{{server_addr}}	{{server_port}}
+iuse.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI tested this on my guestbook. Feel free to continue testing~		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

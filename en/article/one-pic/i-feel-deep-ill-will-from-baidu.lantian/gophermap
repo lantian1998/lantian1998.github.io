@@ -1,0 +1,17 @@
+i### Translation Notes:		{{server_addr}}	{{server_port}}
+i1. **Title** : " 我感受到了来自百度深深的恶意 " → "I Felt the Deep		{{server_addr}}	{{server_port}}
+i   Malice from Baidu"		{{server_addr}}	{{server_port}}
+i   (Captures the emotional tone and specifies "Baidu" as the source of		{{server_addr}}	{{server_port}}
+i   malice)		{{server_addr}}	{{server_port}}
+i2. **Categories** : " 一图流 " → "One-Picture Post"		{{server_addr}}	{{server_port}}
+i   (Common translation for image-focused blog/forum content)		{{server_addr}}	{{server_port}}
+i3. **Tags** : "[ 百度 ]" → "[Baidu]"		{{server_addr}}	{{server_port}}
+i   (Proper noun retained without translation)		{{server_addr}}	{{server_port}}
+i4. **Structure Preservation** :		{{server_addr}}	{{server_port}}
+i   - Frontmatter formatting (e.g., `---` , key-value pairs) unchanged		{{server_addr}}	{{server_port}}
+i   - Image path ( `/usr/uploads/...` ) and HTML tag syntax preserved		{{server_addr}}	{{server_port}}
+i   - Untranslated elements: date format, image filename ( `wow.PNG` ),		{{server_addr}}	{{server_port}}
+i     technical paths		{{server_addr}}	{{server_port}}
+iAll non-text elements (dates, URLs, filenames) remain intact per		{{server_addr}}	{{server_port}}
+iMarkdown preservation rules.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

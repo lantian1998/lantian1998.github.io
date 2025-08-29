@@ -1,0 +1,174 @@
+i应		{{server_addr}}	{{server_port}}
+hDN42 Telegram 群	URL:https://t.me/Dn42Chat	{{server_addr}}	{{server_port}}
+i群友的要求，我打算给我的		{{server_addr}}	{{server_port}}
+1Bird Looking Glass	/article/modify-website/go-bird-looking-glass.lantian	{{server_addr}}	{{server_port}}
+i加上 Telegram Bot 的支持，方便群友现场查询 Whois、测试网络通断、检查		{{server_addr}}	{{server_port}}
+i漏油		{{server_addr}}	{{server_port}}
+i路由泄漏源头等。这个 Bot 要能识别以斜线 `/` 开头的命令，然后对命令消息		{{server_addr}}	{{server_port}}
+i进行回复。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我的 Looking Glass 使用 Go 语言写成，因此我一开始先查找了 Go 语言的		{{server_addr}}	{{server_port}}
+iTelegram Bot API。但流行的 API 库无一例外都遵循了同样的请求结构：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Telegram 服务器发送一个回调到自己的服务器；		{{server_addr}}	{{server_port}}
+i- 自己的程序处理请求，期间可能根据本地配置的 Token 向 Telegram 服务器		{{server_addr}}	{{server_port}}
+i  多次主动请求；		{{server_addr}}	{{server_port}}
+i- 自己的程序最终主动请求 Telegram 服务器，发送回复信息。		{{server_addr}}	{{server_port}}
+i这套方案功能强大，但有点复杂，而多余的功能我根本用不上。我更希望使用		{{server_addr}}	{{server_port}}
+hTelegram 官方提供的另一种方式	URL:https://core.telegram.org/bots/faq#how-can-i-make-requests-in-response-to-updates	{{server_addr}}	{{server_port}}
+i，直接回复回调 HTTP 请求的方式：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Telegram 服务器发送一个回调到自己的服务器；		{{server_addr}}	{{server_port}}
+i- 自己的程序处理请求后，直接以 HTTP Response 方式回复回调请求，执行操		{{server_addr}}	{{server_port}}
+i  作。		{{server_addr}}	{{server_port}}
+i虽然这种方法限制我对一个请求只能做出一个回复，但因为我的 Bot 也只需要		{{server_addr}}	{{server_port}}
+i回复一次，对我来说已经够用。同时这种方法也具有以下的优点：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 写起程序来极其简单，根本不需要第三方库。		{{server_addr}}	{{server_port}}
+i2. 服务端无需知道 Token，减少了配置量。同时也可以创建多个机器人，仅以		{{server_addr}}	{{server_port}}
+i   回调地址区分。		{{server_addr}}	{{server_port}}
+i3. 消除了额外 HTTP 请求的 CPU 周期、网络流量及延迟的消耗。		{{server_addr}}	{{server_port}}
+i## 解析回调请求		{{server_addr}}	{{server_port}}
+iTelegram 的回调请求以 JSON 发送，附在 HTTP POST 请求的 Body 上。		{{server_addr}}	{{server_port}}
+iTelegram 官方文档中给出了一个例子：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    "update_id": 10000,		{{server_addr}}	{{server_port}}
+i    "message": {		{{server_addr}}	{{server_port}}
+i      "date": 1441645532,		{{server_addr}}	{{server_port}}
+i      "chat": {		{{server_addr}}	{{server_port}}
+i        "last_name": "Test Lastname",		{{server_addr}}	{{server_port}}
+i        "id": 1111111,		{{server_addr}}	{{server_port}}
+i        "first_name": "Test",		{{server_addr}}	{{server_port}}
+i        "username": "Test"		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i      "message_id": 1365,		{{server_addr}}	{{server_port}}
+i      "from": {		{{server_addr}}	{{server_port}}
+i        "last_name": "Test Lastname",		{{server_addr}}	{{server_port}}
+i        "id": 1111111,		{{server_addr}}	{{server_port}}
+i        "first_name": "Test",		{{server_addr}}	{{server_port}}
+i        "username": "Test"		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i      "text": "/start"		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i作为一个只关心命令本身的机器人，在这些请求中，我们只需要提取这些内容：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `message/message_id`：消息的编号，回复时需要设置这个编号以「回复 /		{{server_addr}}	{{server_port}}
+i  引用」原始消息。		{{server_addr}}	{{server_port}}
+i- `message/chat/id`：聊天窗口的编号。		{{server_addr}}	{{server_port}}
+i- `message/text`：用户发送的命令。		{{server_addr}}	{{server_port}}
+iGo 语言解析 JSON 没有 Python 那么方便。不像 Python 直接解析然后当作一		{{server_addr}}	{{server_port}}
+i个 `dict` 访问，Go 语言中我们需要自己建好基本的数据结构来接收需要的信		{{server_addr}}	{{server_port}}
+i息。因此建立如下数据结构：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  type tgChat struct {		{{server_addr}}	{{server_port}}
+i    ID int64 `json:"id"`		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  type tgMessage struct {		{{server_addr}}	{{server_port}}
+i    MessageID int64  `json:"message_id"`		{{server_addr}}	{{server_port}}
+i    Chat      tgChat `json:"chat"`		{{server_addr}}	{{server_port}}
+i    Text      string `json:"text"`		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  type tgWebhookRequest struct {		{{server_addr}}	{{server_port}}
+i    Message tgMessage `json:"message"`		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后用这样一个函数来处理 `net/http` 服务器收到的请求：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  func webHandlerTelegramBot(w http.ResponseWriter, r *http.Request) {		{{server_addr}}	{{server_port}}
+i    // Parse only needed fields of incoming JSON body		{{server_addr}}	{{server_port}}
+i    var err error		{{server_addr}}	{{server_port}}
+i    var request tgWebhookRequest		{{server_addr}}	{{server_port}}
+i    err = json.NewDecoder(r.Body).Decode(&request)		{{server_addr}}	{{server_port}}
+i    if err != nil {		{{server_addr}}	{{server_port}}
+i      println(err.Error())		{{server_addr}}	{{server_port}}
+i      return		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    ...		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 提取指令目标		{{server_addr}}	{{server_port}}
+i当 Telegram 用户调用 Bot 时，根据用户输入的不同，可能包含额外的参数，		{{server_addr}}	{{server_port}}
+i或者机器人的 Telegram ID。以调用 `/traceroute` 命令为例，可能是如下任		{{server_addr}}	{{server_port}}
+i意一种：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i用户输入的命令（		{{server_addr}}	{{server_port}}
+i）		{{server_addr}}	{{server_port}}
+i命令本身		{{server_addr}}	{{server_port}}
+i命令的参数		{{server_addr}}	{{server_port}}
+i无		{{server_addr}}	{{server_port}}
+i无		{{server_addr}}	{{server_port}}
+i因此需要考虑各种情况进行解析：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  // 使用这个函数判断某条消息是不是要执行某个命令		{{server_addr}}	{{server_port}}
+i  func telegramIsCommand(message string, command string) bool {		{{server_addr}}	{{server_port}}
+i    b := false		{{server_addr}}	{{server_port}}
+i    b = b || strings.HasPrefix(message, "/"+command+"@")		{{server_addr}}	{{server_port}}
+i    b = b || strings.HasPrefix(message, "/"+command+" ")		{{server_addr}}	{{server_port}}
+i    b = b || message == "/"+command		{{server_addr}}	{{server_port}}
+i    return b		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // 使用这段代码提取参数		{{server_addr}}	{{server_port}}
+i  target := ""		{{server_addr}}	{{server_port}}
+i  if strings.Contains(request.Message.Text, " ") {		{{server_addr}}	{{server_port}}
+i    target = strings.Join(strings.Split(request.Message.Text, " ")[1:], " ")		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 构建回复消息		{{server_addr}}	{{server_port}}
+i返回给 Telegram 回调的响应信息同样是一个 JSON，含有如下内容：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `method`：响应的类型，在我的用例中固定为 `sendMessage`，即发送消息。		{{server_addr}}	{{server_port}}
+i- `chat_id`：聊天窗口编号，与回调请求相同。		{{server_addr}}	{{server_port}}
+i- `text`：回复的具体内容，根据需要由程序设置。		{{server_addr}}	{{server_port}}
+i- `reply_to_message_id`：回复哪条信息，设置为回调请求中的 `message_id`。		{{server_addr}}	{{server_port}}
+i- `parse_mode`：设置为 `Markdown` 可以让 Telegram 以 Markdown 格式解析		{{server_addr}}	{{server_port}}
+i  文本，也可以去掉。		{{server_addr}}	{{server_port}}
+i在 Go 中的结构体如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  type tgWebhookResponse struct {		{{server_addr}}	{{server_port}}
+i    Method           string `json:"method"`		{{server_addr}}	{{server_port}}
+i    ChatID           int64  `json:"chat_id"`		{{server_addr}}	{{server_port}}
+i    Text             string `json:"text"`		{{server_addr}}	{{server_port}}
+i    ReplyToMessageID int64  `json:"reply_to_message_id"`		{{server_addr}}	{{server_port}}
+i    ParseMode        string `json:"parse_mode"`		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后将 JSON 序列化并作为 HTTP 响应输出即可。注意要设置 `Content-Type:		{{server_addr}}	{{server_port}}
+iapplication/json`，否则 Telegram 服务器将不会解析这段 JSON，也就不会执		{{server_addr}}	{{server_port}}
+i行任何操作。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  commandResult = "Hello World"		{{server_addr}}	{{server_port}}
+i  if len(commandResult) > 0 {		{{server_addr}}	{{server_port}}
+i    // Create a JSON response		{{server_addr}}	{{server_port}}
+i    w.Header().Add("Content-Type", "application/json")		{{server_addr}}	{{server_port}}
+i    response := &tgWebhookResponse{		{{server_addr}}	{{server_port}}
+i      Method:           "sendMessage",		{{server_addr}}	{{server_port}}
+i      ChatID:           request.Message.Chat.ID,		{{server_addr}}	{{server_port}}
+i      Text:             commandResult,		{{server_addr}}	{{server_port}}
+i      ReplyToMessageID: request.Message.MessageID,		{{server_addr}}	{{server_port}}
+i      ParseMode:        "Markdown",		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    data, err := json.Marshal(response)		{{server_addr}}	{{server_port}}
+i    if err != nil {		{{server_addr}}	{{server_port}}
+i      println(err.Error())		{{server_addr}}	{{server_port}}
+i      return		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    // println(string(data))		{{server_addr}}	{{server_port}}
+i    w.Write(data)		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 完整示例		{{server_addr}}	{{server_port}}
+i以上代码均节选自我的		{{server_addr}}	{{server_port}}
+1Go 语言 Bird Looking Glass	/article/modify-website/go-bird-looking-glass.lantian	{{server_addr}}	{{server_port}}
+i，完整的代码可以在以下地址看到：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 最新版本：		{{server_addr}}	{{server_port}}
+h  https://github.com/xddxdd/bird-lg-go/blob/master/frontend/telegram_bot.go	URL:https://github.com/xddxdd/bird-lg-go/blob/master/frontend/telegram_bot.go	{{server_addr}}	{{server_port}}
+i- 写本文时的版本：		{{server_addr}}	{{server_port}}
+h  https://github.com/xddxdd/bird-lg-go/blob/c262ee3bdf26b963d6320483cae856f186a1f59b/frontend/telegram_bot.go	URL:https://github.com/xddxdd/bird-lg-go/blob/c262ee3bdf26b963d6320483cae856f186a1f59b/frontend/telegram_bot.go	{{server_addr}}	{{server_port}}

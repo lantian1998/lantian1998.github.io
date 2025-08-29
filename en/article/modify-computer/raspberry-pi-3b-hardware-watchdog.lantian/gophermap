@@ -1,0 +1,64 @@
+iIn computing, a "watchdog" refers to a hardware timer designed to		{{server_addr}}	{{server_port}}
+irestart a computer when it becomes unresponsive (crashes). The		{{server_addr}}	{{server_port}}
+icomputer's operating system must run a program that continuously		{{server_addr}}	{{server_port}}
+icommunicates with the watchdog hardware. When communication is		{{server_addr}}	{{server_port}}
+iinterrupted for a preset duration, the watchdog will forcibly reboot		{{server_addr}}	{{server_port}}
+ithe system by sending a RESET signal or cutting and restoring power,		{{server_addr}}	{{server_port}}
+iensuring services running on the computer aren't disrupted for		{{server_addr}}	{{server_port}}
+iextended periods.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDuring my Raspberry Pi tinkering, I've crashed it multiple times,		{{server_addr}}	{{server_port}}
+iforcing manual power cycling to restart. Enabling the hardware		{{server_addr}}	{{server_port}}
+iwatchdog feature on the Raspberry Pi can minimize such occurrences.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Loading the Driver		{{server_addr}}	{{server_port}}
+iThanks to Linux's "everything is a file" philosophy, you can directly		{{server_addr}}	{{server_port}}
+icheck the watchdog driver status using the ls command:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ls /dev/watchdog		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf this file exists, proceed to the next section. If not, load the		{{server_addr}}	{{server_port}}
+idriver based on your Raspberry Pi model:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Raspberry Pi 1st gen driver: bcm2708_wdog		{{server_addr}}	{{server_port}}
+i2. Raspberry Pi 2nd gen driver: bcm2709_wdog		{{server_addr}}	{{server_port}}
+i3. Raspberry Pi 3rd gen driver: bcm2835_wdt		{{server_addr}}	{{server_port}}
+iLoad the driver using `modprobe -v [driver_name]` , then recheck with `ls /dev/watchdog` .		{{server_addr}}	{{server_port}}
+iIf successful, configure the driver to load at boot by editing `/etc/modules`		{{server_addr}}	{{server_port}}
+iand adding the driver name on a new line.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Installing Communication Software		{{server_addr}}	{{server_port}}
+iAs mentioned, the hardware watchdog requires software communication to		{{server_addr}}	{{server_port}}
+imonitor system status. On Raspbian, this software is `watchdog` ,		{{server_addr}}	{{server_port}}
+iinstallable via apt-get:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install watchdog		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, enable it to start at boot:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  systemctl enable watchdog		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEdit the configuration file `/etc/watchdog.conf` with these changes:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Uncomment `#max-load-1 = 24` (remove the leading `#` ). This		{{server_addr}}	{{server_port}}
+i   reboots the system if the 1-minute load average exceeds 24 (extremely		{{server_addr}}	{{server_port}}
+i   high).		{{server_addr}}	{{server_port}}
+i2. Uncomment `#watchdog-device = /dev/watchdog` to set the watchdog		{{server_addr}}	{{server_port}}
+i   path.		{{server_addr}}	{{server_port}}
+i3. Add `watchdog-timeout = 15` to reboot after 15 seconds of		{{server_addr}}	{{server_port}}
+i   unresponsiveness. The maximum value for Raspberry Pi 3B is 15.		{{server_addr}}	{{server_port}}
+i   Avoid setting it too low to prevent reboot loops.		{{server_addr}}	{{server_port}}
+iSave changes and restart the service:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  service watchdog restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe watchdog feature is now active.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Testing		{{server_addr}}	{{server_port}}
+iSimulate a system crash by terminating the watchdog service:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  pkill -9 watchdog		{{server_addr}}	{{server_port}}
+i  pkill -9 wd_keepalive		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter 15 seconds, the Raspberry Pi will automatically reboot.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

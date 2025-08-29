@@ -1,0 +1,25 @@
+i早在一年前，Adobe 公司停止了其 Flash 插件在 Linux 系统下的新功能开发，		{{server_addr}}	{{server_port}}
+i只提供安全更新。Linux 版 Flash 的版本号也停留在了 11.2，而最新的		{{server_addr}}	{{server_port}}
+iWindows 版 Flash 已经更新到了 15.0 版本。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过，Adobe 又和 Google 合作开发了 Pepper Flash，集成在 Chrome 浏览器		{{server_addr}}	{{server_port}}
+i中，而 Chrome 以及其内置的 Pepper Flash 一直在 Linux 上保持最新。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i那么问题来了，Pepper Flash 是 Chrome 独占的，如何让 Firefox 也用上呢？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i有人希望 Mozilla 来主动支持 Pepper Flash，但是被 Firefox 开发组否决了：		{{server_addr}}	{{server_port}}
+hhttps://bugzilla.mozilla.org/show_bug.cgi?id=729481	URL:https://bugzilla.mozilla.org/show_bug.cgi?id=729481	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i于是国外网友		{{server_addr}}	{{server_port}}
+hRinat Ibragimov	URL:https://github.com/i-rinat	{{server_addr}}	{{server_port}}
+i开发了一款插件，支持 Firefox 使用 Pepper Flash。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这款插件虽然还不完善（硬件加速功能不稳定，部分功能缺失），但是基本功能		{{server_addr}}	{{server_port}}
+i已经可以正常使用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Ubuntu 下，可以通过添加 WebUpd8 的 PPA 源来安装这款软件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo add-apt-repository ppa:nilarimogard/webupd8		{{server_addr}}	{{server_port}}
+i  sudo apt-get update		{{server_addr}}	{{server_port}}
+i  sudo apt-get install freshplayerplugin pepperflashplugin-nonfree		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

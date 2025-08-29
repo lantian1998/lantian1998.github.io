@@ -1,0 +1,84 @@
+iIn a blog, when the author replies to a visitor's comment, it's		{{server_addr}}	{{server_port}}
+idifficult for the visitor to notice the reply unless they revisit the		{{server_addr}}	{{server_port}}
+ipage. However, with the comment reply email notification feature,		{{server_addr}}	{{server_port}}
+ivisitors receive an email when the author or another visitor replies		{{server_addr}}	{{server_port}}
+ito their comment, allowing them to promptly learn about the response.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn the widely used WordPress blog system, emails are typically sent		{{server_addr}}	{{server_port}}
+ivia the system's default sendmail, which often ends up in spam		{{server_addr}}	{{server_port}}
+ifolders. Therefore, we usually opt for email services like Tencent,		{{server_addr}}	{{server_port}}
+iMicrosoft, or Google that provide domain-specific email solutions,		{{server_addr}}	{{server_port}}
+iwhich require sending emails via SMTP. The issue is that sendmail		{{server_addr}}	{{server_port}}
+idoesn't natively support SMTP, though this can be resolved using		{{server_addr}}	{{server_port}}
+iplugins within the blog system.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, this approach has limitations. If the VPS provider blocks		{{server_addr}}	{{server_port}}
+iport 25 (the standard SMTP port), blog systems that don't support		{{server_addr}}	{{server_port}}
+iSSL-encrypted SMTP will fail to send emails. Additionally, if your VPS		{{server_addr}}	{{server_port}}
+ihosts multiple websites with different platforms, configuring each one		{{server_addr}}	{{server_port}}
+iindividually is cumbersome and error-prone.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTherefore, we can solve this by installing SMTP email-sending software		{{server_addr}}	{{server_port}}
+idirectly on the VPS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ieSMTP is a sendmail syntax-compatible tool that redirects		{{server_addr}}	{{server_port}}
+isendmail-generated emails through SMTP.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLog in to your VPS and enter the following commands:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo apt-get install esmtp		{{server_addr}}	{{server_port}}
+i  sudo ln -s /usr/bin/esmtp /usr/bin/sendmail		{{server_addr}}	{{server_port}}
+i  sudo nano /etc/esmtprc		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter `hostname=` , enter the SMTP server address. If it's not using		{{server_addr}}	{{server_port}}
+iport 25, specify the port (e.g., Gmail uses `smtp.gmail.com:587` ).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter `username=` , enter your email address.		{{server_addr}}	{{server_port}}
+iAfter `password=` , enter your email password.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf the mail server supports StartTLS (like Gmail), change `starttls=`		{{server_addr}}	{{server_port}}
+ifrom `disabled` to `enabled` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter `mda=` , enter `"/usr/bin/procmail -d %T"` (including quotes).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe final file should resemble:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Config file for ESMTP sendmail		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # The SMTP host and service (port)		{{server_addr}}	{{server_port}}
+i  hostname=smtp.gmail.com:587		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # SECURITY WARNING: Do NOT set username and password in the system wide		{{server_addr}}	{{server_port}}
+i  # configuration file unless you are the only user of this machine. See		{{server_addr}}	{{server_port}}
+i  # esmtprc(5).		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # The user name		{{server_addr}}	{{server_port}}
+i  username=email@gmail.com		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # The password		{{server_addr}}	{{server_port}}
+i  password=your_password		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # Whether to use Starttls		{{server_addr}}	{{server_port}}
+i  starttls=enabled		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # The certificate passphrase		{{server_addr}}	{{server_port}}
+i  #certificate_passphrase=		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # The Mail Delivery Agent		{{server_addr}}	{{server_port}}
+i  mda="/usr/bin/procmail -d %T"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPress `Ctrl+X` to save and exit.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iModify your `php.ini` file, locate the `sendmail_path` line, and		{{server_addr}}	{{server_port}}
+ichange it to:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sendmail_path = /usr/bin/esmtp -t -i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSave the changes, then run:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo service apache2 restart  # If using Apache2		{{server_addr}}	{{server_port}}
+i  sudo service php5-fpm restart # If using nginx or other php5-fpm setups		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iConfiguration complete. You can now send a test email from your blog		{{server_addr}}	{{server_port}}
+isystem to verify.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

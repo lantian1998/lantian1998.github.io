@@ -1,0 +1,130 @@
+iSince I have multiple devices with different architectures running		{{server_addr}}	{{server_port}}
+iDocker (including x86_64 computers and servers, ARM32v7 Tinker Board,		{{server_addr}}	{{server_port}}
+iand ARM64v8 Raspberry Pi 3B), each of my Docker images needs to be		{{server_addr}}	{{server_port}}
+ibuilt in multiple versions. Initially, I		{{server_addr}}	{{server_port}}
+iwrote a separate Dockerfile for each architecture		{{server_addr}}	{{server_port}}
+i, but this approach proved difficult to manage uniformly, often		{{server_addr}}	{{server_port}}
+ileading to missed updates when modifying Dockerfiles during software		{{server_addr}}	{{server_port}}
+iupgrades. Later, I adopted		{{server_addr}}	{{server_port}}
+iDocker's build argument feature		{{server_addr}}	{{server_port}}
+i, using the `--build-arg` parameter to select different base images		{{server_addr}}	{{server_port}}
+iand download architecture-specific files based on arguments.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, this approach still has significant limitations. First,		{{server_addr}}	{{server_port}}
+idifferent projects use varying naming conventions for architectures.		{{server_addr}}	{{server_port}}
+iFor example, the x86 32-bit architecture (i386) is called "386" in Go		{{server_addr}}	{{server_port}}
+iand many Go-based projects. Similarly, ARM32v7 may be referred to as		{{server_addr}}	{{server_port}}
+iARMHF, while ARM64v8 has three common variants (ARM64v8, ARM64,		{{server_addr}}	{{server_port}}
+iAARCH64). Previously, I had to use bash scripts to convert between		{{server_addr}}	{{server_port}}
+ithese naming conventions for different contexts, requiring numerous		{{server_addr}}	{{server_port}}
+ivariables and complicating the process.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdditionally, some images require architecture-specific handling. For		{{server_addr}}	{{server_port}}
+iinstance:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- The nginx image cannot use Cloudflare-optimized zlib on i386 or		{{server_addr}}	{{server_port}}
+i  ARM32v7 and must use the vanilla version.		{{server_addr}}	{{server_port}}
+i- Compiling nginx for i386 on x86_64 requires `setarch i386` to avoid		{{server_addr}}	{{server_port}}
+i  generating 64-bit binaries.		{{server_addr}}	{{server_port}}
+i- OpenLiteSpeed's official packages don't support ARM architectures,		{{server_addr}}	{{server_port}}
+i  causing ARM image builds to fail — making it preferable to fail		{{server_addr}}	{{server_port}}
+i  immediately rather than during the build process.		{{server_addr}}	{{server_port}}
+iMoreover, many images share repetitive sections, such as initializing		{{server_addr}}	{{server_port}}
+ibuild parameters and invoking base images.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDockerfile's native functionality is too simplistic — some of these		{{server_addr}}	{{server_port}}
+irequirements are cumbersome to implement, while others are outright		{{server_addr}}	{{server_port}}
+iimpossible. Having `#include` , `#define` , and similar preprocessor		{{server_addr}}	{{server_port}}
+idirectives in Dockerfiles, like in C++, would greatly simplify the		{{server_addr}}	{{server_port}}
+iprocess.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn		{{server_addr}}	{{server_port}}
+ithis Docker Issue		{{server_addr}}	{{server_port}}
+i, commenter jfinkhaeuser suggested using m4 or cpp for Dockerfile		{{server_addr}}	{{server_port}}
+ipreprocessing. Note: "cpp" here refers to the C preprocessor (not		{{server_addr}}	{{server_port}}
+iC++), available in systems with gcc. These preprocessors can handle		{{server_addr}}	{{server_port}}
+iany text files.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDuring testing, I encountered issues: For example, cpp treated `/*` in `rm -rf /tmp/*`		{{server_addr}}	{{server_port}}
+ias a comment start, deleting subsequent content. Adding backslashes		{{server_addr}}	{{server_port}}
+iwould preserve them in the output, affecting execution; adding spaces (like `/ *` )		{{server_addr}}	{{server_port}}
+iis also problematic —		{{server_addr}}	{{server_port}}
+ias demonstrated by the Bumblebee incident		{{server_addr}}	{{server_port}}
+i. Similarly, `https://www.example.com` lost content after `//` . m4's		{{server_addr}}	{{server_port}}
+isyntax was too different and complex for my needs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFortunately, alternatives exist. I ultimately chose		{{server_addr}}	{{server_port}}
+iGPP (Generic Preprocessor)		{{server_addr}}	{{server_port}}
+ibecause its syntax is highly configurable. Unlike cpp, I can disable		{{server_addr}}	{{server_port}}
+icomment processing to preserve critical content like URLs and paths.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Installing GPP		{{server_addr}}	{{server_port}}
+iOn Debian:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install gpp		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOn Arch Linux (via AUR):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  pikaur -S gpp		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Why isn't it in Arch's main repository...)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Using GPP		{{server_addr}}	{{server_port}}
+iAssume I have a template Dockerfile with `#include` directives named `template.Dockerfile` ,		{{server_addr}}	{{server_port}}
+iand included files reside in another directory. Generate the complete		{{server_addr}}	{{server_port}}
+iDockerfile with:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  gpp -I /path/to/include --nostdinc -U "" "" "(" "," ")" "(" ")" "#" "" -M "#" "\n" " " " " "\n" "(" ")" +c "\\\n" "" -o Dockerfile /path/to/template.Dockerfile		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis produces a Dockerfile ready for `docker build` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe custom parameters enable:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `#define` macros (e.g., `#define WGET(url) wget --no-check-certificate -q		{{server_addr}}	{{server_port}}
+i  url` )		{{server_addr}}	{{server_port}}
+i- Backslash line continuation handling		{{server_addr}}	{{server_port}}
+i- `#if` / `#else` logic similar to cpp		{{server_addr}}	{{server_port}}
+iFor advanced usage,		{{server_addr}}	{{server_port}}
+iconsult GPP's documentation		{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBeyond the lengthy parameters, GPP functions like cpp. For example, `-D		{{server_addr}}	{{server_port}}
+iARCH_ARM64V8` defines variables for conditional processing in		{{server_addr}}	{{server_port}}
+iDockerfiles.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow I can write architecture-specific logic:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #if defined(ARCH_AMD64)		{{server_addr}}	{{server_port}}
+i  FROM multiarch/alpine:amd64-edge		{{server_addr}}	{{server_port}}
+i  #elif defined(ARCH_I386)		{{server_addr}}	{{server_port}}
+i  FROM multiarch/alpine:i386-edge		{{server_addr}}	{{server_port}}
+i  #elif defined(ARCH_ARM32V7)		{{server_addr}}	{{server_port}}
+i  FROM multiarch/alpine:armhf-edge		{{server_addr}}	{{server_port}}
+i  #elif defined(ARCH_ARM64V8)		{{server_addr}}	{{server_port}}
+i  FROM multiarch/alpine:arm64-edge		{{server_addr}}	{{server_port}}
+i  #else		{{server_addr}}	{{server_port}}
+i  #error "Architecture not set"		{{server_addr}}	{{server_port}}
+i  #endif		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOr execute architecture-dependent commands:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #ifdef ARCH_I386		{{server_addr}}	{{server_port}}
+i  RUN setarch i386 make -j4 \		{{server_addr}}	{{server_port}}
+i      && setarch i386 make install		{{server_addr}}	{{server_port}}
+i  #else		{{server_addr}}	{{server_port}}
+i  RUN make -j4 \		{{server_addr}}	{{server_port}}
+i      && make install		{{server_addr}}	{{server_port}}
+i  #endif		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo streamline usage, I created a Makefile for generating Dockerfiles,		{{server_addr}}	{{server_port}}
+ibuilding images, and pushing to Docker Hub (		{{server_addr}}	{{server_port}}
+iview here		{{server_addr}}	{{server_port}}
+i).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis approach significantly extends Dockerfile capabilities, enabling		{{server_addr}}	{{server_port}}
+imore flexible workflows and simplifying maintenance.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMy Dockerfiles are		{{server_addr}}	{{server_port}}
+iavailable on GitHub		{{server_addr}}	{{server_port}}
+ias always.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

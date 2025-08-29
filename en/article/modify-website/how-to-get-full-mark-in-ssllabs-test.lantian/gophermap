@@ -1,0 +1,170 @@
+iQualys SSL Labs		{{server_addr}}	{{server_port}}
+iis a website for testing server SSL functionality, often used as a		{{server_addr}}	{{server_port}}
+ireference when configuring servers. Typically, we only consider its		{{server_addr}}	{{server_port}}
+irating (A+, A, B, C, D, E, F, T), where achieving A+ is considered		{{server_addr}}	{{server_port}}
+iexcellent server configuration. However, SSL Labs also displays		{{server_addr}}	{{server_port}}
+isub-scores next to the rating, and my main site hasn't maxed out all		{{server_addr}}	{{server_port}}
+iof them. What would it take to achieve perfect scores across all SSL		{{server_addr}}	{{server_port}}
+iLabs subcategories, and what practical significance does it hold? I		{{server_addr}}	{{server_port}}
+iinstalled nginx on a VPS not hosting any website and configured it to		{{server_addr}}	{{server_port}}
+isuccessfully achieve a perfect score, as shown in the image or		{{server_addr}}	{{server_port}}
+ihere		{{server_addr}}	{{server_port}}
+i:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor comparison, here's this site's rating (also viewable		{{server_addr}}	{{server_port}}
+ihere		{{server_addr}}	{{server_port}}
+i):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAll SSL Labs scoring criteria mentioned in this article are based on		{{server_addr}}	{{server_port}}
+ithe		{{server_addr}}	{{server_port}}
+iofficial SSL Labs scoring document		{{server_addr}}	{{server_port}}
+ias of the writing date.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Preparation		{{server_addr}}	{{server_port}}
+iFirst, we need to install nginx. Since this VPS uses OpenVZ and can't		{{server_addr}}	{{server_port}}
+irun Docker, I couldn't deploy it as easily as my other VPS instances.		{{server_addr}}	{{server_port}}
+iHowever, since both my VPS and OS image are Debian, I directly copied		{{server_addr}}	{{server_port}}
+iinstructions from my previous		{{server_addr}}	{{server_port}}
+iDockerfile		{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Certificate Requirements		{{server_addr}}	{{server_port}}
+iSSL Labs requires certificates must NOT have:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Domain name mismatch		{{server_addr}}	{{server_port}}
+i- Certificate not yet valid or expired		{{server_addr}}	{{server_port}}
+i- Self-signed or untrusted certificates		{{server_addr}}	{{server_port}}
+i- Revoked certificates		{{server_addr}}	{{server_port}}
+i- Insecure certificate signatures or keys		{{server_addr}}	{{server_port}}
+iEssentially, if your certificate was recently issued and browsers can		{{server_addr}}	{{server_port}}
+iaccess your site normally, it should be fine.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Protocol Support		{{server_addr}}	{{server_port}}
+iProtocol support accounts for 30% of the rating, calculated as the		{{server_addr}}	{{server_port}}
+iaverage of the highest and lowest scores.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iProtocol scoring:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- SSL 2.0: 0 points		{{server_addr}}	{{server_port}}
+i- SSL 3.0: 80 points		{{server_addr}}	{{server_port}}
+i- TLS 1.0: 90 points		{{server_addr}}	{{server_port}}
+i- TLS 1.1: 95 points		{{server_addr}}	{{server_port}}
+i- TLS 1.2: 100 points		{{server_addr}}	{{server_port}}
+i- TLS 1.3: 100 points		{{server_addr}}	{{server_port}}
+i(Note: TLS 1.3 scoring isn't specified in documentation but is		{{server_addr}}	{{server_port}}
+ipractically counted as 100 points) (Refers to draft 18)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSSL 2.0 is full of vulnerabilities and must be disabled. SSL 3.0 isn't		{{server_addr}}	{{server_port}}
+imuch better but may be needed for legacy browsers (yes, IE6).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTLS 1.0 also has issues, though major browser vendors have largely		{{server_addr}}	{{server_port}}
+imitigated them. TLS 1.1, 1.2 and 1.3 are currently secure.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo achieve full points here, disable all protocols except TLS 1.2 (including		{{server_addr}}	{{server_port}}
+iTLS 1.3 – explained later). Configure in nginx:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ssl_protocols TLSv1.2;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Key Exchange		{{server_addr}}	{{server_port}}
+iKey exchange verifies identities between server/client and generates		{{server_addr}}	{{server_port}}
+isymmetric session keys. Scoring uses the same high-low average method.		{{server_addr}}	{{server_port}}
+iDetailed scoring:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Anonymous key exchange: 0 points (vulnerable to MITM attacks)		{{server_addr}}	{{server_port}}
+i- Key strength 0-511 bit: 20 points		{{server_addr}}	{{server_port}}
+i- Export-grade key exchange: 40 points (historically weakened		{{server_addr}}	{{server_port}}
+i  algorithms)		{{server_addr}}	{{server_port}}
+i- Key strength 512-1023 bit: 40 points		{{server_addr}}	{{server_port}}
+i- Key strength 1024-2047 bit: 80 points		{{server_addr}}	{{server_port}}
+i- Key strength 2048-4095 bit: 90 points		{{server_addr}}	{{server_port}}
+i- Key strength 4096+ bit: 100 points		{{server_addr}}	{{server_port}}
+i"Strength" refers to RSA equivalent strength. For RSA certificates (most		{{server_addr}}	{{server_port}}
+icommon), use 4096-bit keys. For ECC certificates (newer format),		{{server_addr}}	{{server_port}}
+i384-bit provides equivalent strength to 4096-bit RSA.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor Let's Encrypt via Certbot:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  certbot certonly --webroot -w /var/www/ -d vmbox.lantian.pub --rsa-key-size 4096		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(ECC certificates require third-party clients, not covered here)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEven with a 4096-bit certificate, you might not get full points due to		{{server_addr}}	{{server_port}}
+ikey exchange algorithms. Observe this algorithm list from my site:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAlgorithm annotations:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- ECDH secp256r1 (eq. 3072 bits RSA)		{{server_addr}}	{{server_port}}
+i- ECDH secp384r1 (eq. 7680 bits RSA)		{{server_addr}}	{{server_port}}
+i- DH 4096 bit		{{server_addr}}	{{server_port}}
+iKey exchange strength depends on the weaker of the key or algorithm.		{{server_addr}}	{{server_port}}
+iFor perfect scores, disable all algorithms below 4096-bit RSA		{{server_addr}}	{{server_port}}
+iequivalent.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTLS 1.3 algorithms only reach 3072-bit RSA equivalence, so we must		{{server_addr}}	{{server_port}}
+idisable them all – hence why TLS 1.3 was excluded earlier.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdditionally, ECDH algorithms require a DHparams file. Generate with:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  openssl dhparam -out dhparam.pem 4096		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(This runs extremely slow – took nearly 1 hour on my i5-3210M		{{server_addr}}	{{server_port}}
+ilaptop). Configure in nginx:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ssl_dhparam /etc/dhparam.pem;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Cipher Strength		{{server_addr}}	{{server_port}}
+iFinally, the strength of the symmetric session keys. Scoring remains		{{server_addr}}	{{server_port}}
+ithe high-low average:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 0 bit (no encryption): 0 points		{{server_addr}}	{{server_port}}
+i- 1-127 bit: 20 points		{{server_addr}}	{{server_port}}
+i- 128-255 bit: 80 points		{{server_addr}}	{{server_port}}
+i- 256+ bit: 100 points		{{server_addr}}	{{server_port}}
+iCipher strength is determined by the key exchange algorithm, so only		{{server_addr}}	{{server_port}}
+iretain 256-bit ciphers like CHACHA20-POLY1305 and AES-256. My		{{server_addr}}	{{server_port}}
+iconfiguration:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ssl_ciphers 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:AES256-GCM-SHA384:AES256-SHA256:AES256-SHA:!DSS';		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Additional Tweaks		{{server_addr}}	{{server_port}}
+iEnable HSTS (force SSL in browsers). Preferably enable HPKP (require		{{server_addr}}	{{server_port}}
+ibrowsers to trust specific CAs):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  add_header Strict-Transport-Security 'max-age=15768000;includeSubDomains;preload';		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(HSTS: affects subdomains and allows submission to browser preload		{{server_addr}}	{{server_port}}
+ilists)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  add_header Public-Key-Pins 'pin-sha256="9uthMA8OzB/wVGSR3w5bzlt6jAFLWEI533bM+vNDkts=";pin-sha256="YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=";pin-sha256="sRHdihwgkaib1P1gxX8HFszlD+7/gTfNvuAybgLPNis=";pin-sha256="58qRu/uxh4gFezqAcERupSkRYBlBAvfcw7mEjGPLnNU=";max-age=2592000';		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Pins include two Let's Encrypt intermediate certificates and two		{{server_addr}}	{{server_port}}
+iothers, possibly TrustAsia/Comodo)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter these steps, SSL Labs will show a perfect score.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Practical Value?		{{server_addr}}	{{server_port}}
+iWhile impressive, what's the real-world value? We're using		{{server_addr}}	{{server_port}}
+isignificantly slower 4096-bit keys and algorithms, whereas 2048-bit is		{{server_addr}}	{{server_port}}
+ialready sufficient against modern computing power. This creates extra		{{server_addr}}	{{server_port}}
+iCPU overhead (encryption/decryption) and network overhead (key		{{server_addr}}	{{server_port}}
+itransmission). We've also sacrificed compatibility with older clients,		{{server_addr}}	{{server_port}}
+isome of which remain important:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Android ≤4.3 (old phones, smart TVs/boxes)		{{server_addr}}	{{server_port}}
+i- Baidu search crawler (2015 version per SSL Labs)		{{server_addr}}	{{server_port}}
+i- IE ≤10 (unupdated Windows 7, Windows Phone 8.0)		{{server_addr}}	{{server_port}}
+i- Java 6/7 (no TLS 1.2 support)		{{server_addr}}	{{server_port}}
+i- Java 8 (incompatible with retained algorithms)		{{server_addr}}	{{server_port}}
+i- Safari ≤6		{{server_addr}}	{{server_port}}
+iJava 8 compatibility is particularly crucial. Most websites don't need		{{server_addr}}	{{server_port}}
+isuch extreme security and can allow slightly weaker algorithms for		{{server_addr}}	{{server_port}}
+ibetter compatibility.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDemo site:		{{server_addr}}	{{server_port}}
+ihttp://vmbox.lantian.pub/		{{server_addr}}	{{server_port}}
+iFull report:		{{server_addr}}	{{server_port}}
+ihttps://www.ssllabs.com/ssltest/analyze.html?d=vmbox.lantian.pub		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

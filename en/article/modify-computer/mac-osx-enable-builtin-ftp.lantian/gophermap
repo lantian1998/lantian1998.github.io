@@ -1,0 +1,28 @@
+iFor certain reasons, I wanted to access files on my computer via FTP		{{server_addr}}	{{server_port}}
+ifrom my phone. Since Mac OS X has always included built-in FTP and SSH		{{server_addr}}	{{server_port}}
+iservices, I decided to enable them.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iClick the Apple icon in the top-left corner → System Preferences →		{{server_addr}}	{{server_port}}
+iSharing, then check the box for "Remote Login" on the left. Also,		{{server_addr}}	{{server_port}}
+iensure your username is in the allowed users list.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn the ES File Explorer app on your phone, select the SFTP connection		{{server_addr}}	{{server_port}}
+imethod, enter your computer's IP address along with your username and		{{server_addr}}	{{server_port}}
+ipassword to connect. However, in practice, since SFTP is based on SSH		{{server_addr}}	{{server_port}}
+iwith high security requirements, the transfer speed is slow — only		{{server_addr}}	{{server_port}}
+iabout 100KB/s — which isn't sufficient for smooth video playback.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn older Mac versions, you could enable FTP file sharing directly in		{{server_addr}}	{{server_port}}
+iSharing settings, but this option has been removed in newer systems.		{{server_addr}}	{{server_port}}
+iThe built-in FTP server remains functional, though. Simply open		{{server_addr}}	{{server_port}}
+iTerminal from Utilities and activate it with one command:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo -s launchctl load -w /System/Library/LaunchDaemons/ftp.plist		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou'll be prompted to enter your password during the process. Note		{{server_addr}}	{{server_port}}
+ithat no characters (not even asterisks) will appear as you type.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter pressing Enter, select the FTP connection method on your phone		{{server_addr}}	{{server_port}}
+iand enter your computer's local IP address, username, and password.		{{server_addr}}	{{server_port}}
+iOnce connected, you can achieve speeds up to 1MB/s in actual use.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

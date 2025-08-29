@@ -1,0 +1,578 @@
+iWelcome to my third development log. In the two previous logs, I		{{server_addr}}	{{server_port}}
+idiscussed the pitfalls I met in the		{{server_addr}}	{{server_port}}
+1RoboMaster competition	/en/article/modify-computer/robomaster-bugs-in-development.lantian	{{server_addr}}	{{server_port}}
+iand		{{server_addr}}	{{server_port}}
+1FPGA course final project	/en/article/modify-computer/cyclone-iv-fpga-development-bugs-resolve.lantian	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis time I will be talking about my graduate design project, an air		{{server_addr}}	{{server_port}}
+iquality sensor network built by a 3-person group. The whole project is		{{server_addr}}	{{server_port}}
+istructured as follow:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Obtain data from installed sensor modules and upload them to		{{server_addr}}	{{server_port}}
+i  InfluxDB running on a server		{{server_addr}}	{{server_port}}
+i  - Sensors we used:		{{server_addr}}	{{server_port}}
+i    1. MiCS6814, measures NO2, CO, and NH3		{{server_addr}}	{{server_port}}
+i       - Analog output		{{server_addr}}	{{server_port}}
+i    2. BME680, measures temperature, humidity, atmospheric pressure,		{{server_addr}}	{{server_port}}
+i       and TVOC		{{server_addr}}	{{server_port}}
+i       - I2C interface		{{server_addr}}	{{server_port}}
+i    3. PMS5003, measures particle matters		{{server_addr}}	{{server_port}}
+i       - UART serial output		{{server_addr}}	{{server_port}}
+i  - Extra modules:		{{server_addr}}	{{server_port}}
+i    1. ATGM336H, global positioning module with GPS+BeiDou support		{{server_addr}}	{{server_port}}
+i       - UART serial output		{{server_addr}}	{{server_port}}
+i    2. ESP8266, a widely used Wi-Fi module		{{server_addr}}	{{server_port}}
+i       - UART serial output		{{server_addr}}	{{server_port}}
+i    3. MH-CD42, power & battery management module		{{server_addr}}	{{server_port}}
+i       - Purely power output, no control signal		{{server_addr}}	{{server_port}}
+i- Need to consume little energy, enough to run for around a week with		{{server_addr}}	{{server_port}}
+i  the battery power		{{server_addr}}	{{server_port}}
+i  - And battery life and voltage needs to be monitored		{{server_addr}}	{{server_port}}
+i- Waterproof in rain conditions (to some extent)		{{server_addr}}	{{server_port}}
+i- Display data and short predictions on a web page		{{server_addr}}	{{server_port}}
+i  - Professor already has a weather station device that measures wind		{{server_addr}}	{{server_port}}
+i    conditions		{{server_addr}}	{{server_port}}
+iThis post is a record of pitfalls we've met during the development.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Choosing Appropriate MCU		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Why Not Arduino		{{server_addr}}	{{server_port}}
+iIn the beginning, I simply got myself a random Arduino Nano from my		{{server_addr}}	{{server_port}}
+ipile of electronic modules, but soon I found problems:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Arduino Nano has only one hardware serial port, but 3 serial ports		{{server_addr}}	{{server_port}}
+i   are needed to talk to all of the above modules.		{{server_addr}}	{{server_port}}
+i   - Yes, I know SoftwareSerial (a software emulated serial port), but		{{server_addr}}	{{server_port}}
+i     it is quite unstable in testing, especially in the (relatively)		{{server_addr}}	{{server_port}}
+i     high-speed communication with ESP8266 at 115200 baud rate, where		{{server_addr}}	{{server_port}}
+i     signals are frequently garbled.		{{server_addr}}	{{server_port}}
+i2. Arduino Nano's clock frequency is fixed at 16 MHz. We know we can		{{server_addr}}	{{server_port}}
+i   adjust it, but it's too much of a hassle.		{{server_addr}}	{{server_port}}
+i   - We don't need that much performance and would rather reduce the		{{server_addr}}	{{server_port}}
+i     frequency to save some battery juice.		{{server_addr}}	{{server_port}}
+i3. The Arduino IDE is horrible.		{{server_addr}}	{{server_port}}
+iSo I bought an STM32 development board from Taobao with the following		{{server_addr}}	{{server_port}}
+ispecs:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- STM32F103C8T6 chip		{{server_addr}}	{{server_port}}
+i  - 64 KB ROM, 20 KB RAM		{{server_addr}}	{{server_port}}
+i    - ROM is a bit too small		{{server_addr}}	{{server_port}}
+i  - 3 hardware UART serial ports, just enough		{{server_addr}}	{{server_port}}
+i  - 2 I2Cs		{{server_addr}}	{{server_port}}
+i    - But since one I2C can talk to multiple peripherals with		{{server_addr}}	{{server_port}}
+i      different IDs, one is enough		{{server_addr}}	{{server_port}}
+i  - Up to 72 MHz clock frequency, freely adjustable		{{server_addr}}	{{server_port}}
+i    - Since we don't run astronomic calculations on the MCU, we		{{server_addr}}	{{server_port}}
+i      clocked it as low as 4 MHz		{{server_addr}}	{{server_port}}
+i  - 1 RTC that allows timed sleep and wakeup		{{server_addr}}	{{server_port}}
+i  - A lot of ADC (Analog-Digital Converter)		{{server_addr}}	{{server_port}}
+i    - Can also measure input voltage and MCU chip temperature		{{server_addr}}	{{server_port}}
+i  - 1 CAN, 2 SPI, etc. Stuff we don't need		{{server_addr}}	{{server_port}}
+i- External 8 MHz crystal oscillator and 32.768KHz crystal oscillator		{{server_addr}}	{{server_port}}
+i  - STM32 does have integrated oscillators, but guides online show		{{server_addr}}	{{server_port}}
+i    that they may be affected by chip temperature and provide		{{server_addr}}	{{server_port}}
+i    imprecise output, so external oscillators are definitely helpful		{{server_addr}}	{{server_port}}
+i- For just CNY 10		{{server_addr}}	{{server_port}}
+i  - Pay less to get better performance		{{server_addr}}	{{server_port}}
+i  - In fact, the performance to cost ratio of Arduino is not high, but		{{server_addr}}	{{server_port}}
+i    its ecosystem is awesome		{{server_addr}}	{{server_port}}
+iSpeaking of STM32 development, a lot of people may have the first		{{server_addr}}	{{server_port}}
+iimpression that it involves direct register manipulations, and you		{{server_addr}}	{{server_port}}
+ineed to spend a lot of time reading documentation, such as datasheets.		{{server_addr}}	{{server_port}}
+iBut STMicroelectronics has released some STM32CubeMX software years		{{server_addr}}	{{server_port}}
+iago, which allows visualized configuration of on-chip components,		{{server_addr}}	{{server_port}}
+ione-key code template generation, and a fully-featured set of library		{{server_addr}}	{{server_port}}
+ifunctions that hide register operations. Thanks to this, STM32		{{server_addr}}	{{server_port}}
+idevelopment is not much more difficult than Arduino.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ISTM32CubeMX User Interface	/usr/uploads/202006/stm32cubemx.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## When We Don't Have Enough ROM		{{server_addr}}	{{server_port}}
+iBut in the later stage of the project, we found that the 64 KB ROM of		{{server_addr}}	{{server_port}}
+iSTM32F103C8T6 is no longer enough for us. The ROM space is mainly		{{server_addr}}	{{server_port}}
+ioccupied by the following parts:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- BME680's closed source BSEC library		{{server_addr}}	{{server_port}}
+i  - BSEC is the only source of BME680's TVOC reading. The sensor only		{{server_addr}}	{{server_port}}
+i    provides a resistor value, and there is no simple formula to		{{server_addr}}	{{server_port}}
+i    convert resistor value to actual TVOC readings.		{{server_addr}}	{{server_port}}
+i- Floating-point logic of `printf` and `scanf`		{{server_addr}}	{{server_port}}
+i  - InfluxDB, what we use, accepts only ASCII-formatted upload data,		{{server_addr}}	{{server_port}}
+i    so the IEEE 754 floating-point readings from sensors must be		{{server_addr}}	{{server_port}}
+i    converted to ASCII text.		{{server_addr}}	{{server_port}}
+i  - For the same reason, the latitude and longitude information must		{{server_addr}}	{{server_port}}
+i    be extracted from the GPS module's NMEA0183 statements and		{{server_addr}}	{{server_port}}
+i    converted to IEEE 754 floating-point numbers.		{{server_addr}}	{{server_port}}
+i- STM32's library functions		{{server_addr}}	{{server_port}}
+i  - Those responsible for register operations.		{{server_addr}}	{{server_port}}
+iTherefore we tried to shrink the code size in these places:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- For BME680, while we cannot modify the closed source library itself,		{{server_addr}}	{{server_port}}
+i  we greatly reduced the size of the logic that calls the library.		{{server_addr}}	{{server_port}}
+i- For GPS, instead of conversion to/from floating-point numbers, we		{{server_addr}}	{{server_port}}
+i  chose to simply copy the latitude/longitude text from NMEA0183		{{server_addr}}	{{server_port}}
+i  statements.		{{server_addr}}	{{server_port}}
+i  - A NMEA0183 statement that involves latitude and longitude is		{{server_addr}}	{{server_port}}
+i    formatted as follow:		{{server_addr}}	{{server_port}}
+i    - `$GNGGA,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,		{{server_addr}}	{{server_port}}
+i      xxxx*hh`		{{server_addr}}	{{server_port}}
+i    - `$GNGGA,074023.000,1234.56789,N,12345.67891,E,1,13,0.9,32.3,M,0.		{{server_addr}}	{{server_port}}
+i      0,M,,*46`		{{server_addr}}	{{server_port}}
+i  - Separated by comma, each field represents (from left to right):		{{server_addr}}	{{server_port}}
+i    - `$GNGGA` means that this statement contains latitude and		{{server_addr}}	{{server_port}}
+i      longitude information		{{server_addr}}	{{server_port}}
+i    - 2nd column is the current time		{{server_addr}}	{{server_port}}
+i      - The time above is AM 07:40:23, in UTC timezone		{{server_addr}}	{{server_port}}
+i    - 3rd column is latitude, in format `degree * 100 + minute`		{{server_addr}}	{{server_port}}
+i      - The latitude above is 12 degrees, 34.56789 minutes		{{server_addr}}	{{server_port}}
+i    - 4th column represents north/south of the equator		{{server_addr}}	{{server_port}}
+i      - The number in the third column is always positive, no matter		{{server_addr}}	{{server_port}}
+i        north/south of the equator		{{server_addr}}	{{server_port}}
+i    - 5th column is longitude, still in format `degree * 100 + minute`		{{server_addr}}	{{server_port}}
+i      - The longitude above is 123 degrees, 45.67891 minutes		{{server_addr}}	{{server_port}}
+i    - 6th column is east/west of the prime meridian		{{server_addr}}	{{server_port}}
+i      - The number in the fifth column is also always positive, no		{{server_addr}}	{{server_port}}
+i        matter east/west of the prime meridian		{{server_addr}}	{{server_port}}
+i    - We don't care about the rest information		{{server_addr}}	{{server_port}}
+i  - Here is our logic:		{{server_addr}}	{{server_port}}
+i    - Copy the third column to the latitude character array, **starting		{{server_addr}}	{{server_port}}
+i      from the second character of the array**		{{server_addr}}	{{server_port}}
+i    - If the 4th column is N (north of the equator), set the first		{{server_addr}}	{{server_port}}
+i      character of the array to `0`		{{server_addr}}	{{server_port}}
+i      - Result has format 01234.56789, can be recognized by InfluxDB		{{server_addr}}	{{server_port}}
+i    - If the 4th column is S (south of the equator), set the first		{{server_addr}}	{{server_port}}
+i      character of the array to `-` (minus sign)		{{server_addr}}	{{server_port}}
+i      - Result has format -1234.56789, can also be recognized by		{{server_addr}}	{{server_port}}
+i        InfluxDB		{{server_addr}}	{{server_port}}
+i    - Do the same to longitude data in columns 5 and 6		{{server_addr}}	{{server_port}}
+i    - For conversion from `degree * 100 + minute` to more commonly		{{server_addr}}	{{server_port}}
+i      used `degree` , we choose to do it on the more powerful server		{{server_addr}}	{{server_port}}
+i- For STM32 library functions, we can switch to LL library for the		{{server_addr}}	{{server_port}}
+i  parts we don't need to directly operate on (ex. frequency setup done		{{server_addr}}	{{server_port}}
+i  automatically by STM32CubeMX)		{{server_addr}}	{{server_port}}
+i  - STM32 provide 2 different sets of library functions for each		{{server_addr}}	{{server_port}}
+i    component, HAL and LL		{{server_addr}}	{{server_port}}
+i    - HAL is more abstracted and easier to use but takes more space		{{server_addr}}	{{server_port}}
+i    - LL is closer to register manipulations, small yet difficult to		{{server_addr}}	{{server_port}}
+i      use		{{server_addr}}	{{server_port}}
+i  - In `Project Manager - Advanced Settings` , switching RCC (frequency		{{server_addr}}	{{server_port}}
+i    setup) to LL saves a few kilobytes		{{server_addr}}	{{server_port}}
+i- For standard library functions, if multiple functions are doing		{{server_addr}}	{{server_port}}
+i  similar things, try to use only one of them		{{server_addr}}	{{server_port}}
+i  - Ex. if you use `printf` and `sprintf` together, you may replace `printf`		{{server_addr}}	{{server_port}}
+i    with a combination of `sprintf` and `HAL_UART_Transmit` ; saves		{{server_addr}}	{{server_port}}
+i    quite some space		{{server_addr}}	{{server_port}}
+i- Remember to turn on compiler optimizations and disable debugging		{{server_addr}}	{{server_port}}
+i  - Set `DEBUG = 0` and `OPT = -Os` in Makefile		{{server_addr}}	{{server_port}}
+i  - By the way, for STM32's `printf` to support floating-point		{{server_addr}}	{{server_port}}
+i    numbers, you need to add `-u _printf_float` in `LDFLAGS` in		{{server_addr}}	{{server_port}}
+i    Makefile to enable that support		{{server_addr}}	{{server_port}}
+i# Logging on to School Wi-Fi		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Sensors Need to Connect to School Wi-Fi		{{server_addr}}	{{server_port}}
+iMy school provides 2 Wi-Fi networks:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. One is an open network (no password), and a login page with HTTPS		{{server_addr}}	{{server_port}}
+i   encryption will pop up after connecting to it, where you enter your		{{server_addr}}	{{server_port}}
+i   username and password to log in.		{{server_addr}}	{{server_port}}
+i2. The other is eduroam that authenticates with WPA2 enterprise mode.		{{server_addr}}	{{server_port}}
+iAfter research on the capabilities of ESP8266 Wi-Fi module, I		{{server_addr}}	{{server_port}}
+iconcluded that:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. ESP8266 comes with an AT firmware by default, where we connect to		{{server_addr}}	{{server_port}}
+i   Wi-Fi networks via serial port commands.		{{server_addr}}	{{server_port}}
+i   - In this case, it only supports open networks and WPA2 personal		{{server_addr}}	{{server_port}}
+i     networks, but not eduroam, which uses WPA2 enterprise.		{{server_addr}}	{{server_port}}
+i   - But there is no room left in STM32 for HTTPS encryption		{{server_addr}}	{{server_port}}
+i     libraries, which means we cannot submit credentials to log in.		{{server_addr}}	{{server_port}}
+i2. ESP8266 can be reprogrammed with custom code.		{{server_addr}}	{{server_port}}
+i   - But finding the official SDK of ESP8266 along with documentation		{{server_addr}}	{{server_port}}
+i     is a bit hard.		{{server_addr}}	{{server_port}}
+i   - Although ESP8266 supports the Arduino platform, it still doesn't		{{server_addr}}	{{server_port}}
+i     include an SSL encryption library.		{{server_addr}}	{{server_port}}
+i   - In addition, ESP8266 only supports PAP-encrypted WPA2 enterprise		{{server_addr}}	{{server_port}}
+i     networks, while my school uses MSCHAPv2.		{{server_addr}}	{{server_port}}
+iThe solution is kind of a cheat: I went through the code on my		{{server_addr}}	{{server_port}}
+iRaspberry Pi and found a login script to the school network. Back when		{{server_addr}}	{{server_port}}
+iI wrote that script, the login page wasn't using HTTPS, and what I was		{{server_addr}}	{{server_port}}
+isending was a plain HTTP request. I tested it and found out		{{server_addr}}	{{server_port}}
+isurprisingly that it still works!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe final solution is: STM32 instructs ESP8266 to connect to that open		{{server_addr}}	{{server_port}}
+inetwork via AT commands, and also sends HTTP request via AT commands		{{server_addr}}	{{server_port}}
+ito simulate a login attempt. In this case, one less program needs to		{{server_addr}}	{{server_port}}
+ibe coded.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Can't you set up a Wi-Fi access point with a router?		{{server_addr}}	{{server_port}}
+i> 		{{server_addr}}	{{server_port}}
+i> Well, you can't put a router around every sensor, can you?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Weather Station Needs to Connect to School Wi-Fi		{{server_addr}}	{{server_port}}
+iProfessor's weather station device also needs to connect to school		{{server_addr}}	{{server_port}}
+iWi-Fi, so it can upload data to its cloud service. Unlike our ESP8266,		{{server_addr}}	{{server_port}}
+iwe cannot modify its program, which means we cannot ask it to send		{{server_addr}}	{{server_port}}
+ianother HTTP request to log on to the network.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe solution is to use a computer to spoof the MAC address of the		{{server_addr}}	{{server_port}}
+iweather station, log on to the school network, and then disconnect.		{{server_addr}}	{{server_port}}
+iThe device will not be kicked out from logged-on status during short		{{server_addr}}	{{server_port}}
+idisconnections, and when the weather station is powered on at this		{{server_addr}}	{{server_port}}
+itime, it will be able to connect to the Internet without logging on		{{server_addr}}	{{server_port}}
+iitself.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnother problem is that the school Wi-Fi restricts to 4 devices per		{{server_addr}}	{{server_port}}
+iuser account, and previously connected devices will be kicked out when		{{server_addr}}	{{server_port}}
+ithat number is exceeded. Our sensor network consists of 10 devices;		{{server_addr}}	{{server_port}}
+ialthough they can log on again when they are kicked out, the weather		{{server_addr}}	{{server_port}}
+istation cannot do so.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe solution is again simple: since we're a 3-person group, we		{{server_addr}}	{{server_port}}
+iconnected the weather station with another student's account.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Obtaining Sensor Data		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## BME680		{{server_addr}}	{{server_port}}
+iIn our program, BME680 is solely controlled by its closed source BSEC		{{server_addr}}	{{server_port}}
+ilibrary. However, BSEC only supports measurements every 30 seconds or		{{server_addr}}	{{server_port}}
+i300 seconds; if that interval is incorrect, BSEC will neither perform		{{server_addr}}	{{server_port}}
+imeasurements nor return valid data.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut since BSEC relies on us to provide timing and communication		{{server_addr}}	{{server_port}}
+ifunctions, we made a dangerous move: decoupling the BSEC timing from		{{server_addr}}	{{server_port}}
+ithe actual system time. Specifically, when we run BSEC every 15		{{server_addr}}	{{server_port}}
+iminutes, instead of telling it 15 minutes has passed, we tell it that		{{server_addr}}	{{server_port}}
+ionly 300 seconds has passed, or it's exactly the time for the next		{{server_addr}}	{{server_port}}
+imeasurement, to force BSEC to do its job.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## PMS5003		{{server_addr}}	{{server_port}}
+iPMS5003 is quite simple to use. Simply pull the enable signal high to		{{server_addr}}	{{server_port}}
+iturn on its fan - wait 30 seconds - and read data from the serial		{{server_addr}}	{{server_port}}
+iport.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPMS5003 sends 32 bytes of data each time, with a fixed packet header		{{server_addr}}	{{server_port}}
+iand a checksum of the whole packet. To avoid reading only half of a		{{server_addr}}	{{server_port}}
+ipacket, thanks to the characteristic of PMS5003 sending data every		{{server_addr}}	{{server_port}}
+isecond, we did the following:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. First, try to read 32 bytes from the serial port within 100 ms. If		{{server_addr}}	{{server_port}}
+i   it succeeds, it means the PMS5003 happens to be sending data right		{{server_addr}}	{{server_port}}
+i   now.		{{server_addr}}	{{server_port}}
+i2. If the data read the first time is not full 32 bytes, try to read		{{server_addr}}	{{server_port}}
+i   again, but with a time limit of 2 seconds. We are effectively		{{server_addr}}	{{server_port}}
+i   waiting for PMS5003 to send its next packet of data.		{{server_addr}}	{{server_port}}
+i3. Then verify the data with checksumming and parse it.		{{server_addr}}	{{server_port}}
+i## MiCS6814		{{server_addr}}	{{server_port}}
+iMiCS6814 is the most difficult sensor to be used in our project. Since		{{server_addr}}	{{server_port}}
+iit is manufactured with micro-nano fabrication and represents		{{server_addr}}	{{server_port}}
+ipollutant gas concentration with resistance, every individual sensor		{{server_addr}}	{{server_port}}
+imodule behaves differently to gases, has different resistance under		{{server_addr}}	{{server_port}}
+ithe same concentration of gas, and has different slopes of resistance		{{server_addr}}	{{server_port}}
+iwhen concentration changes.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDue to the limitation of available devices, we had to assume that		{{server_addr}}	{{server_port}}
+ithere wouldn't be major changes in gas concentrations and ignore the		{{server_addr}}	{{server_port}}
+idifference of slope of resistance. For resistance differences under		{{server_addr}}	{{server_port}}
+ithe same condition, we swapped the fixed value voltage divider		{{server_addr}}	{{server_port}}
+iresistor to a potentiometer (variable resistor). Now instead of		{{server_addr}}	{{server_port}}
+icalculating absolute resistance values, the program computes the		{{server_addr}}	{{server_port}}
+iresistance ratio to the reference value (resistance of the		{{server_addr}}	{{server_port}}
+ipotentiometer). Then, put all devices in the same environment, and		{{server_addr}}	{{server_port}}
+iadjust the potentiometers (and their readings in turn) with reference		{{server_addr}}	{{server_port}}
+ito weather reports and professional devices, so that they have the		{{server_addr}}	{{server_port}}
+isame reading.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Battery Status and Voltage		{{server_addr}}	{{server_port}}
+i18650 lithium batteries usually have a voltage range of around		{{server_addr}}	{{server_port}}
+i3.0-4.5V (not exact), which is above the 3.3V input voltage limit of		{{server_addr}}	{{server_port}}
+iSTM32. Therefore two resistors are needed to divide the voltage, and		{{server_addr}}	{{server_port}}
+ithe result is connected to STM32's ADC.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSTM32 can also monitor the input voltage to the chip since it has an		{{server_addr}}	{{server_port}}
+iinternal stable 1.2V power source connected to ADC. Since ADC readings		{{server_addr}}	{{server_port}}
+iare relative to the chip input voltage, the input voltage can be		{{server_addr}}	{{server_port}}
+icalculated back from the reading on this power source.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSTM32 also has a built-in temperature sensor, which represents values		{{server_addr}}	{{server_port}}
+iwith ADC readings. However, the temperature sensor on STM32F103C8T6 is		{{server_addr}}	{{server_port}}
+inot calibrated and is vastly different from the actual temperature,		{{server_addr}}	{{server_port}}
+iand as we already have BME680, this sensor is kind of useless for us.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## One More Thing on STM32 ADC		{{server_addr}}	{{server_port}}
+iAnother thing about STM32F103C8T6's ADC is that if it needs to read in		{{server_addr}}	{{server_port}}
+imultiple inputs at the same time, a plain `HAL_ADC_Start` won't work,		{{server_addr}}	{{server_port}}
+iand DMA is a must.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDMA, or direct memory access, tells peripherals to write data directly		{{server_addr}}	{{server_port}}
+ito a specified position in memory, with no help from the CPU. DMA can		{{server_addr}}	{{server_port}}
+ibe used to reduce CPU usage or implement continuous sampling.		{{server_addr}}	{{server_port}}
+iCorresponding DMA channels need to be added in the DMA Settings tab on		{{server_addr}}	{{server_port}}
+ithe ADC page of STM32CubeMX to be used.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut since we don't need continuous sampling, we can set a "sample		{{server_addr}}	{{server_port}}
+icomplete" flag after receiving the interrupt in the DMA's interrupt		{{server_addr}}	{{server_port}}
+ihandler (usually in `stm32f1xx_it.c` ). Now when the program is		{{server_addr}}	{{server_port}}
+irunning, it first calls `HAL_ADC_Start_DMA` to start sampling, and		{{server_addr}}	{{server_port}}
+ithen repeatedly checks the flag until the task is complete, and call `HAL_ADC_Stop_DMA`		{{server_addr}}	{{server_port}}
+ito stop. If you're brave enough, you may live without that flag and		{{server_addr}}	{{server_port}}
+isimply do a delay.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# One Week Battery Life		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## STM32 Low Power Consumption Mode		{{server_addr}}	{{server_port}}
+iOur device needs to sample data every 15 minutes with the battery as		{{server_addr}}	{{server_port}}
+ithe power source and continuously run for a week. This poses a high		{{server_addr}}	{{server_port}}
+irequirement for its power consumption in sleep mode.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo reach that goal, we need to switch STM32 and sensors to either low		{{server_addr}}	{{server_port}}
+ipower consumption mode or off position.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- According to		{{server_addr}}	{{server_port}}
+h  Datasheet	URL:https://www.st.com/resource/en/datasheet/stm32f103c8.pdf	{{server_addr}}	{{server_port}}
+i  , STM32F103C8T6 has 3 different low power modes:		{{server_addr}}	{{server_port}}
+i  - SLEEP mode, where only CPU is switched off, peripherals such as		{{server_addr}}	{{server_port}}
+i    ADC, I2C, and UART are still running.		{{server_addr}}	{{server_port}}
+i    - 5.5 mA at 8 MHz, obviously too high		{{server_addr}}	{{server_port}}
+i  - STOP mode, where CPU and most of the peripherals are off, but RAM		{{server_addr}}	{{server_port}}
+i    and registers are retained and can be woken up via RTC or external		{{server_addr}}	{{server_port}}
+i    interrupt.		{{server_addr}}	{{server_port}}
+i    - 13.5 uA, acceptable moderate power consumption (little enough		{{server_addr}}	{{server_port}}
+i      compared to other modules)		{{server_addr}}	{{server_port}}
+i    - Easy programming with almost no special handling		{{server_addr}}	{{server_port}}
+i  - STANDBY mode, where CPU and peripherals are off, RAM and registers		{{server_addr}}	{{server_port}}
+i    are cleared.		{{server_addr}}	{{server_port}}
+i    - Program runs from the beginning every time, so status has to be		{{server_addr}}	{{server_port}}
+i      recorded in ROM		{{server_addr}}	{{server_port}}
+i    - 2.4 uA, lowest, but difficult to code for		{{server_addr}}	{{server_port}}
+i- We chose STOP mode at last, with a few notes:		{{server_addr}}	{{server_port}}
+i  - Enable RTC's `Clock Source` (turn on its functionality).		{{server_addr}}	{{server_port}}
+i  - Set `RTC OUT` to `No RTC Output` , or turn on its output without		{{server_addr}}	{{server_port}}
+i    pin mapping.		{{server_addr}}	{{server_port}}
+i    - In this case, the RTC output is connected to an interrupt		{{server_addr}}	{{server_port}}
+i      controller, so when a specific time is reached, an interrupt		{{server_addr}}	{{server_port}}
+i      will be triggered, and the CPU will be turned back on.		{{server_addr}}	{{server_port}}
+i    - If you don't do this (set to `Disable` ), STM32's CPU will never		{{server_addr}}	{{server_port}}
+i      wake up again.		{{server_addr}}	{{server_port}}
+i  - Enable `RTC alarm interrupt through EXTI line` in `NVIC Settings`		{{server_addr}}	{{server_port}}
+i    below.		{{server_addr}}	{{server_port}}
+i    - Let the CPU accept RTC interrupts, or the CPU will also sleep		{{server_addr}}	{{server_port}}
+i      forever.		{{server_addr}}	{{server_port}}
+i  - When calling such functionality, first reset the time of RTC (out		{{server_addr}}	{{server_port}}
+i    of safety), then set the alarm, and finally enter low power mode.		{{server_addr}}	{{server_port}}
+i  - RTC only has a precision of 1 second.		{{server_addr}}	{{server_port}}
+iHere is an example code snippet of sleep and timed wake up:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  void deep_sleep(uint32_t seconds) {		{{server_addr}}	{{server_port}}
+i      RTC_TimeTypeDef rtc_time = {0, 0, 0};		{{server_addr}}	{{server_port}}
+i      RTC_AlarmTypeDef rtc_alarm = {		{{server_addr}}	{{server_port}}
+i          {		{{server_addr}}	{{server_port}}
+i              seconds / 3600,		{{server_addr}}	{{server_port}}
+i              (seconds % 3600) / 60,		{{server_addr}}	{{server_port}}
+i              seconds % 60		{{server_addr}}	{{server_port}}
+i          },		{{server_addr}}	{{server_port}}
+i          RTC_ALARM_A		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      HAL_RTC_SetTime(&hrtc, &rtc_time, RTC_FORMAT_BIN);		{{server_addr}}	{{server_port}}
+i      HAL_RTC_SetAlarm_IT(&hrtc, &rtc_alarm, RTC_FORMAT_BIN);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);		{{server_addr}}	{{server_port}}
+i      HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Turning Off External Modules		{{server_addr}}	{{server_port}}
+iTurning off PMS5003 and ESP8266 is easy since they both have a pin to		{{server_addr}}	{{server_port}}
+icontrol power status. When that pin is pulled low, they will both		{{server_addr}}	{{server_port}}
+iautomatically enter the hibernate mode, with a few microamps of power		{{server_addr}}	{{server_port}}
+iconsumption.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTurning of BME680 is also easy, which is done by BSEC.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut neither ATGM336H nor MiCS6814 has built-in power control, and they		{{server_addr}}	{{server_port}}
+iwill continuously run and consume a lot of power. Therefore an		{{server_addr}}	{{server_port}}
+iexternal switch is needed to cut their power.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInitially, we planned to use an N-channel MOSFET to cut the power:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IMOSFET Power Switching Circuit	/usr/uploads/202006/circuit-mosfet.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCTL in the schematic represents the digital output of STM32, and R1 is		{{server_addr}}	{{server_port}}
+ithe corresponding module. When CTL outputs 0, MOSFET M1 will cut the		{{server_addr}}	{{server_port}}
+icircuit to turn off R1 and vice versa.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut in our testing, when the STM32 outputs 1, its output voltage 3.3V		{{server_addr}}	{{server_port}}
+iis not enough for the MOSFET to turn on completely. The MOSFET still		{{server_addr}}	{{server_port}}
+ihas a resistance of around 30Ω, which divides too much voltage away,		{{server_addr}}	{{server_port}}
+iand the module cannot obtain enough power to work normally.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo we added a BJT triode to pull the digital output to 5V:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IPower Switching Circuit with BJT Triode	/usr/uploads/202006/circuit-bjt.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen STM32 outputs 1, triode Q1 lets current through and pulls low the		{{server_addr}}	{{server_port}}
+icontrol voltage of MOSFET, turning off the modules; when STM32 outputs		{{server_addr}}	{{server_port}}
+i0, Q1 cuts power, the control voltage of MOSFET is pulled high to 5V		{{server_addr}}	{{server_port}}
+iby R2, and the module is turned on normally. Note that the STM32		{{server_addr}}	{{server_port}}
+ioutput is inverted from the module's power state.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSome stores on Taobao sell power level shifters that uses 2 levels of		{{server_addr}}	{{server_port}}
+iresistors and triodes to correct the inversion; but we don't care		{{server_addr}}	{{server_port}}
+iabout this, as it's a simple modification of the program.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut in our testing, the circuit consumed a lot of power, up to 50 mA		{{server_addr}}	{{server_port}}
+iwhen power is cut off. Closer inspection reveals that the BJT triode		{{server_addr}}	{{server_port}}
+ipulls the STM32 output to as low as 0.8V, and the output is almost in		{{server_addr}}	{{server_port}}
+ia "shorted" state, outputting a large current.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe solution is an additional resistor for limiting current, R3, in		{{server_addr}}	{{server_port}}
+ithe following schematic:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IPower Switching Circuit with BJT Triode and Resistor	/usr/uploads/202006/circuit-bjt-resistor.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> So STM32 can work normally while outputting 50 mA...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Keeping Power Supply On		{{server_addr}}	{{server_port}}
+iThe MH-CD42 power module is originally designed as a battery		{{server_addr}}	{{server_port}}
+imanagement module for power banks. One of its functionality is to turn		{{server_addr}}	{{server_port}}
+ioff the power output when no devices are connected. MH-CD42 measures		{{server_addr}}	{{server_port}}
+ithe output current, and when the current is below 45 mA for around 30		{{server_addr}}	{{server_port}}
+iseconds, it turns off automatically.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor power bank users, this is a useful feature, but for us with a		{{server_addr}}	{{server_port}}
+isleep mode current of a few mA, this functionality greatly interferes		{{server_addr}}	{{server_port}}
+iwith normal operation. What's more complicated is that, since MH-CD42		{{server_addr}}	{{server_port}}
+iis a highly integrated module, there is no power pin we can forcefully		{{server_addr}}	{{server_port}}
+ipull up to keep the power on.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWe first searched for the datasheet of MH-CD42 but almost found no		{{server_addr}}	{{server_port}}
+iuseful information. But we did find		{{server_addr}}	{{server_port}}
+ha post on MH-CD42	URL:https://techobsessed.net/tag/mh-cd42/	{{server_addr}}	{{server_port}}
+i, in which the author found that the MH-CD42 module has the same		{{server_addr}}	{{server_port}}
+iexternal circuit as another IP5306 chip and confirmed that they have		{{server_addr}}	{{server_port}}
+iequivalent functionality.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+hThis post (Chinese)	URL:https://www.jianshu.com/p/25fa6ec89953	{{server_addr}}	{{server_port}}
+iintroduces a way to keep the output of IP5306 on, specifically to		{{server_addr}}	{{server_port}}
+iconnect an output of the MCU to the button of the power module, and		{{server_addr}}	{{server_port}}
+isend a low signal every ten seconds. It simulates pressing the power		{{server_addr}}	{{server_port}}
+ibutton every few seconds and keeps the power on.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo we soldered a wire from STM32 to the soldering pad on the power		{{server_addr}}	{{server_port}}
+imodule, and wrote some code:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  for(size_t i = 0; i < 85; i++) {		{{server_addr}}	{{server_port}}
+i      deep_sleep(10);		{{server_addr}}	{{server_port}}
+i      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);		{{server_addr}}	{{server_port}}
+i      HAL_Delay(500);		{{server_addr}}	{{server_port}}
+i      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEach loop takes 10.5 seconds, and at 85 loops the total time is around		{{server_addr}}	{{server_port}}
+i15 minutes or 900 seconds. In each loop, STM32 stays in low power STOP		{{server_addr}}	{{server_port}}
+imode for 10 seconds, and wakes up in the other 500 ms.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Uploading to InfluxDB		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Generating HTTP Requests		{{server_addr}}	{{server_port}}
+iAll SQL queries on InfluxDB are done over HTTP requests, so our STM32		{{server_addr}}	{{server_port}}
+ionly needs to send a simple HTTP request. We can even disregard		{{server_addr}}	{{server_port}}
+iwhatever data from the server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> The main reason is that we are out of space on STM32's ROM, and		{{server_addr}}	{{server_port}}
+i> cannot afford to add code to parse HTTP replies.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere is an example request:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  POST /write?u=INFLUXUSER&p=INFLUXPASS&db=INFLUXDB HTTP/1.1\r\n		{{server_addr}}	{{server_port}}
+i  Host: influxdb.lantian.pub:8086\r\n		{{server_addr}}	{{server_port}}
+i  User-Agent: lantian/2.3.3\r\n		{{server_addr}}	{{server_port}}
+i  Content-Type: application/x-www-form-urlencoded\r\n		{{server_addr}}	{{server_port}}
+i  Connection: close\r\n		{{server_addr}}	{{server_port}}
+i  Content-Length: 26\r\n		{{server_addr}}	{{server_port}}
+i  \r\n		{{server_addr}}	{{server_port}}
+i  stm32_vref,id=1 value=3.5\n		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis request creates a datapoint called `stm32_vref` in database `INFLUXDB`		{{server_addr}}	{{server_port}}
+iwith an extra tag `id=1` for device identification and a value of 3.5.		{{server_addr}}	{{server_port}}
+iActually, one request may contain multiple data points separated by		{{server_addr}}	{{server_port}}
+iLinux line feed `\n` . Note that you cannot use `\r\n` instead; this		{{server_addr}}	{{server_port}}
+iwill cause an error.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere we have our code (simplified) to generate the HTTP request:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  void loop_print() {		{{server_addr}}	{{server_port}}
+i      char tcp_content_buf[TCP_BUF_SIZE];		{{server_addr}}	{{server_port}}
+i      uint32_t tcp_content_len;		{{server_addr}}	{{server_port}}
+i      tcp_content_len = snprintf(		{{server_addr}}	{{server_port}}
+i          tcp_content_buf,		{{server_addr}}	{{server_port}}
+i          TCP_BUF_SIZE,		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          "stm32_tmp,id=%lu value=%f\n"		{{server_addr}}	{{server_port}}
+i          "stm32_vref,id=%lu value=%f\n"		{{server_addr}}	{{server_port}}
+i          "stm32_vbat,id=%lu value=%f\n"		{{server_addr}}	{{server_port}}
+i          "gps_lat,id=%lu value=%s\n"		{{server_addr}}	{{server_port}}
+i          "gps_lon,id=%lu value=%s\n"		{{server_addr}}	{{server_port}}
+i          // Add more data points from sensors here		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          ,		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          id, measure_value.stm32.temp,		{{server_addr}}	{{server_port}}
+i          id, measure_value.stm32.vrefint,		{{server_addr}}	{{server_port}}
+i          id, measure_value.stm32.vbat,		{{server_addr}}	{{server_port}}
+i          id, measure_value.gps.latitude,		{{server_addr}}	{{server_port}}
+i          id, measure_value.gps.longitude		{{server_addr}}	{{server_port}}
+i          // Add more data points from sensors here		{{server_addr}}	{{server_port}}
+i      );		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      extern char tcp_send_buf[TCP_BUF_SIZE];		{{server_addr}}	{{server_port}}
+i      extern uint32_t tcp_send_len;		{{server_addr}}	{{server_port}}
+i      const char template[] =		{{server_addr}}	{{server_port}}
+i          "POST /write?u=" HTTP_INFLUXDB_USER "&p=" HTTP_INFLUXDB_PASS "&db=" HTTP_INFLUXDB_DB " HTTP/1.1\r\n"		{{server_addr}}	{{server_port}}
+i          "Host: " HTTP_INFLUXDB_IP ":" HTTP_INFLUXDB_PORT "\r\n"		{{server_addr}}	{{server_port}}
+i          "User-Agent: lantian/2.3.3\r\n"		{{server_addr}}	{{server_port}}
+i          "Content-Type: application/x-www-form-urlencoded\r\n"		{{server_addr}}	{{server_port}}
+i          "Connection: close\r\n"		{{server_addr}}	{{server_port}}
+i          "Content-Length: %lu\r\n"		{{server_addr}}	{{server_port}}
+i          "\r\n"		{{server_addr}}	{{server_port}}
+i          "%s"		{{server_addr}}	{{server_port}}
+i      ;		{{server_addr}}	{{server_port}}
+i      tcp_send_len = snprintf(		{{server_addr}}	{{server_port}}
+i          tcp_send_buf,		{{server_addr}}	{{server_port}}
+i          TCP_BUF_SIZE,		{{server_addr}}	{{server_port}}
+i          template,		{{server_addr}}	{{server_port}}
+i          tcp_content_len,		{{server_addr}}	{{server_port}}
+i          tcp_content_buf		{{server_addr}}	{{server_port}}
+i      );		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iVariables `tcp_send_buf` and `tcp_send_len` will be used by the code		{{server_addr}}	{{server_port}}
+ithat interacts with ESP8266, where the HTTP request is actually sent.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Communicating with ESP8266		{{server_addr}}	{{server_port}}
+iThe AT instruction manual of ESP8266 is a bit difficult to find, but		{{server_addr}}	{{server_port}}
+hwe did it finally	URL:https://www.itead.cc/wiki/images/5/53/Esp8266_at_instruction_set_en_v1.5.4_0.pdf	{{server_addr}}	{{server_port}}
+i. We need a few instructions:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `ATE0` turns off echoing of commands. This simplifies parsing of		{{server_addr}}	{{server_port}}
+i  results and reduces the amount of data transferred (thus reducing		{{server_addr}}	{{server_port}}
+i  latency)		{{server_addr}}	{{server_port}}
+i- `AT+CWMODE=1` sets ESP8266 to Wi-Fi client mode		{{server_addr}}	{{server_port}}
+i- `AT+CWJAP_CUR="SchoolWiFi",""` connects ESP8266 to open Wi-Fi		{{server_addr}}	{{server_port}}
+i  network without password		{{server_addr}}	{{server_port}}
+i- `AT+CIPSTART="TCP","influxdb.lantian.pub",8086` creates a TCP		{{server_addr}}	{{server_port}}
+i  connection to specified host and port		{{server_addr}}	{{server_port}}
+i- `AT+CIPSEND=123` sends 123 bytes of data		{{server_addr}}	{{server_port}}
+i- `AT+CIPCLOSE` closes connection		{{server_addr}}	{{server_port}}
+i- `AT+GSLP=2147483647` enter a long sleep (until the next "enable"		{{server_addr}}	{{server_port}}
+i  signal)		{{server_addr}}	{{server_port}}
+iA few points to remember:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- ESP8266 commands end with Windows CRLF `\r\n` , but some serial		{{server_addr}}	{{server_port}}
+i  communication software in Linux sends `\n` when pressing enter. In		{{server_addr}}	{{server_port}}
+i  this case, the command will not be executed correctly.		{{server_addr}}	{{server_port}}
+i- All the commands above need ESP8266 to respond with OK to work, so		{{server_addr}}	{{server_port}}
+i  you cannot simply send two commands together. In this case, the		{{server_addr}}	{{server_port}}
+i  second command may be ignored.		{{server_addr}}	{{server_port}}
+i- Sometimes, one attempt of command may fail (such as connecting to		{{server_addr}}	{{server_port}}
+i  Wi-Fi), you may retry for a few times.		{{server_addr}}	{{server_port}}

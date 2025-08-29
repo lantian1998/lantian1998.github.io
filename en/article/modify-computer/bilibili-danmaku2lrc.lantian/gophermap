@@ -1,0 +1,83 @@
+iBilibili is never short of amazing works from talented creators,		{{server_addr}}	{{server_port}}
+iincluding original music, covers, and captivating "guichu" remixes.		{{server_addr}}	{{server_port}}
+iSometimes we want to save these to devices that can play music with		{{server_addr}}	{{server_port}}
+ilyrics but not video (like certain MP3 players), or use them as		{{server_addr}}	{{server_port}}
+ibackground music while displaying lyrics on our desktop.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe problem is, many excellent works can't be found in mainstream		{{server_addr}}	{{server_port}}
+imusic apps. Even when available (e.g., on NetEase Cloud Music, rumored		{{server_addr}}	{{server_port}}
+ito have close ties with Bilibili), some tracks lack lyrics —		{{server_addr}}	{{server_port}}
+iespecially new releases.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut when you turn on Bilibili's danmaku, you'll find many volunteer "subtitle		{{server_addr}}	{{server_port}}
+imasters" have created bottom-aligned danmaku. By extracting the		{{server_addr}}	{{server_port}}
+itimestamps and content of these danmaku, we can quickly generate lyric		{{server_addr}}	{{server_port}}
+ifiles (like LRC).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI wrote a small Python program to automate this. You can download it		{{server_addr}}	{{server_port}}
+iat:		{{server_addr}}	{{server_port}}
+ihttps://github.com/xddxdd/bilibili-danmaku2lrc		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNote: This tool requires the Python Requests module. Install it first		{{server_addr}}	{{server_port}}
+iwith:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  pip install requests # Python 2		{{server_addr}}	{{server_port}}
+i  pip3 install requests # Python 3		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iExample usage:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  lantian-macbook:bilibili-danmaku2lrc lantian$ python3 danmaku2lrc.py		{{server_addr}}	{{server_port}}
+i  ? 输入视频 av 号: av655385		{{server_addr}}	{{server_port}}
+i  i 视频标题: 【洛天依原创】战场之花2.0【重编曲调教版】		{{server_addr}}	{{server_port}}
+i  i 视频av号: 655385		{{server_addr}}	{{server_port}}
+i  i 弹幕池号: 962931		{{server_addr}}	{{server_port}}
+i  i 发现以下野生字幕君		{{server_addr}}	{{server_port}}
+i  - 1. 17adb281: 17 条字幕		{{server_addr}}	{{server_port}}
+i  - 2. 665d8c9c: 21 条字幕		{{server_addr}}	{{server_port}}
+i  - 3. c0f142f8: 44 条字幕		{{server_addr}}	{{server_port}}
+i  - 4. d02b6a85: 40 条字幕		{{server_addr}}	{{server_port}}
+i  ? 您想要查看谁的字幕 #4		{{server_addr}}	{{server_port}}
+i  i 野生字幕君 d02b6a85 的字幕如下：		{{server_addr}}	{{server_port}}
+i  - [00:17.55]战场之花 绚烂开放		{{server_addr}}	{{server_port}}
+i  - [00:21.03]这一切都 无人欣赏		{{server_addr}}	{{server_port}}
+i  - [00:24.29]最后只能 见证所有的 悲伤		{{server_addr}}	{{server_port}}
+i  - [00:30.61]边境之上 孤独流浪		{{server_addr}}	{{server_port}}
+i  - [00:34.50]我想要的 幸福在哪		{{server_addr}}	{{server_port}}
+i  - [00:37.35]近在咫尺 结果却远在天涯		{{server_addr}}	{{server_port}}
+i  - [00:43.40]每天都说服自己要保持坚强		{{server_addr}}	{{server_port}}
+i  - [00:46.67]习惯了牺牲也不能感到彷徨		{{server_addr}}	{{server_port}}
+i  - [00:49.92]像机器那样 握住被夕阳染成红色的枪		{{server_addr}}	{{server_port}}
+i  - [00:55.66]冲上场		{{server_addr}}	{{server_port}}
+i  - [00:56.78]曾经心中有过许多许多迷茫		{{server_addr}}	{{server_port}}
+i  - [00:59.77]现在已经饱受风霜 坚定了信仰		{{server_addr}}	{{server_port}}
+i  - [01:03.09]不舍弃稚嫩的心 最后只有被打败的下场		{{server_addr}}	{{server_port}}
+i  - [01:10.16]无论明天是否还能看见阳光		{{server_addr}}	{{server_port}}
+i  - [01:13.28]也只能够舍弃所有私心向前闯		{{server_addr}}	{{server_port}}
+i  - [01:16.66]眼前的一切象征着生存还是会带来死亡		{{server_addr}}	{{server_port}}
+i  - [01:21.96]已没时间再想		{{server_addr}}	{{server_port}}
+i  - [01:41.68]昨日同窗 相隔阴阳 不是说好  来日方长		{{server_addr}}	{{server_port}}
+i  - [01:47.69]如今只在 照片上保留残像		{{server_addr}}	{{server_port}}
+i  - [01:54.57]血液流淌 战旗飘扬 紧握着的 是什么啊		{{server_addr}}	{{server_port}}
+i  - [02:01.53]曾经快乐 化为了碎片飞扬		{{server_addr}}	{{server_port}}
+i  - [02:07.54]牺牲的战士已永远不会说话		{{server_addr}}	{{server_port}}
+i  - [02:10.58]付出的努力也会渐渐被遗忘		{{server_addr}}	{{server_port}}
+i  - [02:13.83]逝去的生命就来由活着的心来报答		{{server_addr}}	{{server_port}}
+i  - [02:19.33]有机会吗		{{server_addr}}	{{server_port}}
+i  - [02:22.42]就算一次一次在危险中受伤		{{server_addr}}	{{server_port}}
+i  - [02:25.53]就算与死神擦肩而过又会怎样		{{server_addr}}	{{server_port}}
+i  - [02:29.12]完成再多再好也换不回大家曾经的微笑		{{server_addr}}	{{server_port}}
+i  - [02:35.80]舍弃不必要的欢乐愤怒恐慌		{{server_addr}}	{{server_port}}
+i  - [02:38.89]此时此刻收起破茧而出的锋芒		{{server_addr}}	{{server_port}}
+i  - [02:42.33]擦干眼角泛起的泪光 去把胜利号角吹响		{{server_addr}}	{{server_port}}
+i  - [02:47.78]一切都结束了啊		{{server_addr}}	{{server_port}}
+i  - [02:52.55]透过变得粉身碎骨的那扇窗		{{server_addr}}	{{server_port}}
+i  - [02:55.56]是否能看到明天世界的新希望		{{server_addr}}	{{server_port}}
+i  - [03:05.86]双手触碰不到放晴了的天空		{{server_addr}}	{{server_port}}
+i  - [03:09.17]意识离去感受不到周围的芬芳		{{server_addr}}	{{server_port}}
+i  - [03:12.38]请代替我在和平之后去感受久违的光芒		{{server_addr}}	{{server_port}}
+i  - [03:17.67]不再去想过往		{{server_addr}}	{{server_port}}
+i  - [03:20.88]我仿佛看到身下开满鲜花		{{server_addr}}	{{server_port}}
+i  - [03:28.11]在战场上怒放		{{server_addr}}	{{server_port}}
+i  ? 您想要保存他的字幕吗 [y/N] y		{{server_addr}}	{{server_port}}
+i  i 字幕文件已保存到 av655385-P1.lrc		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

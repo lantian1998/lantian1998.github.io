@@ -1,0 +1,27 @@
+iTengine is a high-performance web server developed by Alibaba based on		{{server_addr}}	{{server_port}}
+inginx. In addition to retaining nginx's original high-performance		{{server_addr}}	{{server_port}}
+ifeatures, it adds the following capabilities:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhile ordinary users may not notice a difference, it's still great for		{{server_addr}}	{{server_port}}
+iexperimentation. I've heard sites like Tudou or 56.com have already		{{server_addr}}	{{server_port}}
+iadopted Tengine.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBelow are the compilation steps.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ./configure --prefix=/usr --enable-mods-shared=all --with-rtsig_module --with-select_module --with-poll_module --with-file-aio --with-ipv6 --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_geoip_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_slice_module --with-http_mp4_module --with-http_gzip_static_module --with-http_concat_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_sysguard_module --with-http_lua_module --with-http_tfs_module --with-mail --with-mail_ssl_module --with-google_perftools_module --with-cpp_test_module --with-backtrace_module --with-pcre --with-pcre-jit --with-md5-asm --with-sha1-asm --with-libatomic --with-jemalloc		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNote: Since Tengine is modular, we're enabling extra modules for		{{server_addr}}	{{server_port}}
+iflexibility (they load dynamically). Remove any `--with-...` option		{{server_addr}}	{{server_port}}
+ifor modules you don't need.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf `configure` fails, it's usually due to missing `libxxx`		{{server_addr}}	{{server_port}}
+idependencies. Search for them in Synaptic Package Manager. Remember to		{{server_addr}}	{{server_port}}
+iinstall `-dev` packages (base packages install automatically).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  make -j4		{{server_addr}}	{{server_port}}
+i  sudo make install		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInstallation complete. Start with `nginx` in the terminal. Tengine		{{server_addr}}	{{server_port}}
+iconfiguration is similar to nginx – refer to nginx documentation for		{{server_addr}}	{{server_port}}
+iguidance.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

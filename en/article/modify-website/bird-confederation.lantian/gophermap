@@ -1,0 +1,428 @@
+i## Changelog		{{server_addr}}	{{server_port}}
+i- 2020-10-01: Add warning to not filter private ASNs within the		{{server_addr}}	{{server_port}}
+i  internal network		{{server_addr}}	{{server_port}}
+i- 2020-06-07: Add limitations of Bird confederation and a way to		{{server_addr}}	{{server_port}}
+i  simulate confederation		{{server_addr}}	{{server_port}}
+i- 2020-05-17: Initial version		{{server_addr}}	{{server_port}}
+i## Comparison of BGP Interconnection Schemes within an ISP		{{server_addr}}	{{server_port}}
+iMost ISPs, or Internet Service Providers, use the BGP protocol to		{{server_addr}}	{{server_port}}
+iexchange their route information. Each ISP will obtain an ASN (Autonomous		{{server_addr}}	{{server_port}}
+iSystem Number) from the regional NIC (Network Information Center,		{{server_addr}}	{{server_port}}
+ie.g., APNIC, RIPE), like China Telecom's ASN is 4134 for example.		{{server_addr}}	{{server_port}}
+iThen, ISPs connect their boundary routers via physical links (copper		{{server_addr}}	{{server_port}}
+iline, fiber, satellite link, etc.), and configure BGP protocol on the		{{server_addr}}	{{server_port}}
+iboundary routers, so they will tell the other part that: "I'm AS4134,		{{server_addr}}	{{server_port}}
+iand I can provide access to the IP block of `202.101.0.0/18` ".		{{server_addr}}	{{server_port}}
+iRouters directly connected to China Telecom will proceed on repeating		{{server_addr}}	{{server_port}}
+ithat message: "I'm ASxxxx, and I'm 1 step from the source of `202.101.0.0/18` ".		{{server_addr}}	{{server_port}}
+iAnd it goes on. Routers of each ISP will then consider parameters,		{{server_addr}}	{{server_port}}
+iincluding distance to the target, and send packets to the best target		{{server_addr}}	{{server_port}}
+ithat this router can reach.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Note: The scenario above is simplified, and there are more		{{server_addr}}	{{server_port}}
+icomplicated rules for ISP interconnection and best path selection in		{{server_addr}}	{{server_port}}
+ithe real world.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBGP can also be necessary within a large-scale AS. For example, China		{{server_addr}}	{{server_port}}
+iTelecom, which operates a network across the entire Mainland China,		{{server_addr}}	{{server_port}}
+ihas its core routers in each city. Each core router is responsible for		{{server_addr}}	{{server_port}}
+ia small fraction of IP ranges China Telecom owns. To make the routers		{{server_addr}}	{{server_port}}
+iaware of the responsible router for a specific IP, there is a couple		{{server_addr}}	{{server_port}}
+iof ways:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Manually setting a static route.		{{server_addr}}	{{server_port}}
+i   - This is the most simple and naive way, in which a human operator		{{server_addr}}	{{server_port}}
+i     tells the router to send packets to an IP range to a specific		{{server_addr}}	{{server_port}}
+i     router.		{{server_addr}}	{{server_port}}
+i   - The downside is also apparent: for a network sized like China		{{server_addr}}	{{server_port}}
+i     Telecom, the burden on operators is so much that errors can be		{{server_addr}}	{{server_port}}
+i     easily made.		{{server_addr}}	{{server_port}}
+i   - In addition, if there is a physical connection issue between two		{{server_addr}}	{{server_port}}
+i     places, the static route will fail, and the network connection		{{server_addr}}	{{server_port}}
+i     between them will stop working. Whenever this happens, human		{{server_addr}}	{{server_port}}
+i     intervention is required to reroute the network traffic to		{{server_addr}}	{{server_port}}
+i     another place.		{{server_addr}}	{{server_port}}
+i2. Using iBGP		{{server_addr}}	{{server_port}}
+i   - Just like peering with other ISPs, BGP sessions can be set up		{{server_addr}}	{{server_port}}
+i     between routers where both ends use the same ASN. This type of		{{server_addr}}	{{server_port}}
+i     BGP session is called iBGP, while sessions with different ASNs		{{server_addr}}	{{server_port}}
+i     are called eBGP.		{{server_addr}}	{{server_port}}
+i   - Only some one-time BGP session setup is needed on each of the		{{server_addr}}	{{server_port}}
+i     routers. Then on a physical link failure, all routers will		{{server_addr}}	{{server_port}}
+i     automatically remove the invalid route information and choose the		{{server_addr}}	{{server_port}}
+i     next available best route.		{{server_addr}}	{{server_port}}
+i   - But there is a severe limitation of iBGP: all routers should be		{{server_addr}}	{{server_port}}
+i     connected to each other. The reason is that:		{{server_addr}}	{{server_port}}
+i     - Suppose we have such a network topology:		{{server_addr}}	{{server_port}}
+i         graph {		{{server_addr}}	{{server_port}}
+i           rankdir=LR		{{server_addr}}	{{server_port}}
+i           node[shape=box]		{{server_addr}}	{{server_port}}
+i         		{{server_addr}}	{{server_port}}
+i           subgraph cluster_1 {		{{server_addr}}	{{server_port}}
+i             style=filled;		{{server_addr}}	{{server_port}}
+i             color=lightgrey;		{{server_addr}}	{{server_port}}
+i             label="AS1";		{{server_addr}}	{{server_port}}
+i             node[style=filled,color=white]		{{server_addr}}	{{server_port}}
+i             {rank=same; A -- "10.0.0.0/8"; }		{{server_addr}}	{{server_port}}
+i             "10.0.0.0/8"[shape=oval]		{{server_addr}}	{{server_port}}
+i           }		{{server_addr}}	{{server_port}}
+i         		{{server_addr}}	{{server_port}}
+i           subgraph cluster_2 {		{{server_addr}}	{{server_port}}
+i             style=filled;		{{server_addr}}	{{server_port}}
+i             color=lightgrey;		{{server_addr}}	{{server_port}}
+i             label="AS2";		{{server_addr}}	{{server_port}}
+i             node[style=filled,color=white]		{{server_addr}}	{{server_port}}
+i             {rank=same; B -- C; }		{{server_addr}}	{{server_port}}
+i             B -- D;		{{server_addr}}	{{server_port}}
+i             C -- D;		{{server_addr}}	{{server_port}}
+i           }		{{server_addr}}	{{server_port}}
+i         		{{server_addr}}	{{server_port}}
+i           A -- B		{{server_addr}}	{{server_port}}
+i         }		{{server_addr}}	{{server_port}}
+i       		{{server_addr}}	{{server_port}}
+i       - A belongs to AS1, and B, C, D belong to AS2.		{{server_addr}}	{{server_port}}
+i       - Now A broadcasts that it provides access to `10.0.0.0/8` .		{{server_addr}}	{{server_port}}
+i       - B receives A's broadcast and tells C and D that it's 1 step		{{server_addr}}	{{server_port}}
+i         away from `10.0.0.0/8` , with path `AS2 -> AS1` .		{{server_addr}}	{{server_port}}
+i         - Note that for a BGP path, the information of exact routers		{{server_addr}}	{{server_port}}
+i           chosen is not available; only the ASes (or ISPs) it has		{{server_addr}}	{{server_port}}
+i           passed will be recorded.		{{server_addr}}	{{server_port}}
+i       - C receives B's announcement and tells D that it's 2 steps		{{server_addr}}	{{server_port}}
+i         away from the target, with path `AS2 -> AS2 -> AS1` .		{{server_addr}}	{{server_port}}
+i         Meanwhile, D tells C the same thing.		{{server_addr}}	{{server_port}}
+i       - Since BGP's path selection algorithm is not always minimizing		{{server_addr}}	{{server_port}}
+i         the path length, and can be adjusted manually or via code		{{server_addr}}	{{server_port}}
+i         assigning priority, C may route packets to D with path `AS2 ->		{{server_addr}}	{{server_port}}
+i         AS2 -> AS2 -> AS1` .		{{server_addr}}	{{server_port}}
+i       - Now, B thinks it can reach the target via either A or C. Then		{{server_addr}}	{{server_port}}
+i         after running a weird selection algorithm, B gives up on the		{{server_addr}}	{{server_port}}
+i         route to A (dumb but possible!) and routes packets to C.		{{server_addr}}	{{server_port}}
+i       - Now, the path is `B -> C -> D -> B -> A` , where a loop is		{{server_addr}}	{{server_port}}
+i         formed, and the packet will never reach its destination.		{{server_addr}}	{{server_port}}
+i       - What's worse, this path will be further announced to D, then		{{server_addr}}	{{server_port}}
+i         C, then B... With such an infinite loop going on, the RAM of		{{server_addr}}	{{server_port}}
+i         each router will be exhausted, the system will crash, and all		{{server_addr}}	{{server_port}}
+i         packet forwarding will come to a complete stop.		{{server_addr}}	{{server_port}}
+i     - To prevent such an accident from happening, there is an		{{server_addr}}	{{server_port}}
+i       additional limitation of iBGP: If a route is announced from an		{{server_addr}}	{{server_port}}
+i       router from the same AS, the route will not be announced to		{{server_addr}}	{{server_port}}
+i       other routers in the same AS. Now:		{{server_addr}}	{{server_port}}
+i       - B sends the route to C and D.		{{server_addr}}	{{server_port}}
+i       - Both C and D receive the route information but will not		{{server_addr}}	{{server_port}}
+i         proceed to exchange this route.		{{server_addr}}	{{server_port}}
+i       - Now, there is a unique path from either C or D to the target,		{{server_addr}}	{{server_port}}
+i         and the infinite loop of forwarding won't happen anymore.		{{server_addr}}	{{server_port}}
+i     - But now a disaster strikes, and B and D are disconnected.		{{server_addr}}	{{server_port}}
+i       - Since C won't announce `10.0.0.0/8` to D, D doesn't know how		{{server_addr}}	{{server_port}}
+i         to reach the target anymore.		{{server_addr}}	{{server_port}}
+i   - This means that each and every pair of routers in an AS must be		{{server_addr}}	{{server_port}}
+i     connected, with BGP sessions configured.		{{server_addr}}	{{server_port}}
+i     - In an actual setup, a physical link between each pair is not		{{server_addr}}	{{server_port}}
+i       necessary, and routing protocols such as OSPF, Babel, etc., can		{{server_addr}}	{{server_port}}
+i       handle routing within an ISP. But since routes involving packet		{{server_addr}}	{{server_port}}
+i       forwarding across ASes (ISPs) must be handled by BGP, there		{{server_addr}}	{{server_port}}
+i       must be a configured session between each pair of routers.		{{server_addr}}	{{server_port}}
+i     - Such a setup is unrealistic for a China-Telecom-level ISP. We		{{server_addr}}	{{server_port}}
+i       need better solutions.		{{server_addr}}	{{server_port}}
+i3. Using BGP Route Reflector		{{server_addr}}	{{server_port}}
+i   - Route Reflector is a router with special configurations. It		{{server_addr}}	{{server_port}}
+i     collects route information from all other routers within the same		{{server_addr}}	{{server_port}}
+i     AS and distributes them to all other routers.		{{server_addr}}	{{server_port}}
+i   - In this case, only one BGP session from each other router to the		{{server_addr}}	{{server_port}}
+i     route reflector is needed.		{{server_addr}}	{{server_port}}
+i   - But this also means that if the Route Reflector crashes, other		{{server_addr}}	{{server_port}}
+i     routers will not have complete route information anymore, and the		{{server_addr}}	{{server_port}}
+i     network will fail.		{{server_addr}}	{{server_port}}
+i   - Of course, you can set up multiple Route Reflectors for		{{server_addr}}	{{server_port}}
+i     redundancy, but undeniably the concept of Route Reflector is		{{server_addr}}	{{server_port}}
+i     opposing to the decentralized nature of the Internet.		{{server_addr}}	{{server_port}}
+i4. Applying for a lot of ASNs from NIC, assign different ASNs to each		{{server_addr}}	{{server_port}}
+i   router, and configure eBGP		{{server_addr}}	{{server_port}}
+i   - Yes, this does result in a fully decentralized architecture. No		{{server_addr}}	{{server_port}}
+i     matter the connectivity status between any two routers, each		{{server_addr}}	{{server_port}}
+i     router will obtain full routing information, and a single point		{{server_addr}}	{{server_port}}
+i     failure will not kill the whole network.		{{server_addr}}	{{server_port}}
+i   - The downside is obvious: Lots of ASN adds to the workload of ISP		{{server_addr}}	{{server_port}}
+i     and NIC staff, and there is a high handling fee to pay.		{{server_addr}}	{{server_port}}
+i5. Using BGP Confederation		{{server_addr}}	{{server_port}}
+i   - In BGP Confederation, each router also gets a different ASN. But		{{server_addr}}	{{server_port}}
+i     unlike 4, these internally-used ASNs do not have to be assigned		{{server_addr}}	{{server_port}}
+i     from a NIC.		{{server_addr}}	{{server_port}}
+i     - The range of ASN 4200000000 - 4294967295 is reserved for "internal		{{server_addr}}	{{server_port}}
+i       use", and ISPs can directly use them internally. Of course,		{{server_addr}}	{{server_port}}
+i       these ASNs aren't recognized by a NIC and (usually) cannot be		{{server_addr}}	{{server_port}}
+i       announced to other ISPs.		{{server_addr}}	{{server_port}}
+1       - DN42 Experimental Network	/en/article/modify-website/dn42-experimental-network-2020.lantian	{{server_addr}}	{{server_port}}
+i         , for example, takes a small fraction of the ASN space.		{{server_addr}}	{{server_port}}
+i   - Then, the ISP assigned a different internal ASN from the range to		{{server_addr}}	{{server_port}}
+i     each router. While BGP routing only does bookkeeping on ASNs		{{server_addr}}	{{server_port}}
+i     passed, since each router has a different ASN, it's the same as		{{server_addr}}	{{server_port}}
+i     keeping the list of routers passed, and therefore a loop will not		{{server_addr}}	{{server_port}}
+i     happen.		{{server_addr}}	{{server_port}}
+i   - But these private ASNs aren't recognized by other networks and		{{server_addr}}	{{server_port}}
+i     may even conflict with them (when other ISPs are using them for		{{server_addr}}	{{server_port}}
+i     testing, for example), so when sending the router information to		{{server_addr}}	{{server_port}}
+i     another ISP, all private ASNs need to be removed and replaced		{{server_addr}}	{{server_port}}
+i     with the official ASN of the ISP assigned from NIC.		{{server_addr}}	{{server_port}}
+i   - But since each router has a different ASN, how can they know if a		{{server_addr}}	{{server_port}}
+i     router is "friendly" (within the same ISP) or "hostile" (from		{{server_addr}}	{{server_port}}
+i     another ISP)? A common identifier can be assigned to all routers		{{server_addr}}	{{server_port}}
+i     in the same ISP (called Confederation Identifier) to assist.		{{server_addr}}	{{server_port}}
+i   - Suppose we have such a network topology:		{{server_addr}}	{{server_port}}
+i       graph {		{{server_addr}}	{{server_port}}
+i         rankdir=LR		{{server_addr}}	{{server_port}}
+i         node[shape=box]		{{server_addr}}	{{server_port}}
+i       		{{server_addr}}	{{server_port}}
+i         subgraph cluster_1 {		{{server_addr}}	{{server_port}}
+i           style=filled;		{{server_addr}}	{{server_port}}
+i           color=lightgrey;		{{server_addr}}	{{server_port}}
+i           label="AS1";		{{server_addr}}	{{server_port}}
+i           node[style=filled,color=white]		{{server_addr}}	{{server_port}}
+i           {rank=same; A -- "10.0.0.0/8"; }		{{server_addr}}	{{server_port}}
+i           "10.0.0.0/8"[shape=oval]		{{server_addr}}	{{server_port}}
+i         }		{{server_addr}}	{{server_port}}
+i       		{{server_addr}}	{{server_port}}
+i         subgraph cluster_2 {		{{server_addr}}	{{server_port}}
+i           style=filled;		{{server_addr}}	{{server_port}}
+i           color=lightgrey;		{{server_addr}}	{{server_port}}
+i           label="AS2";		{{server_addr}}	{{server_port}}
+i           node[style=filled,color=white]		{{server_addr}}	{{server_port}}
+i           {rank=same; B -- C; }		{{server_addr}}	{{server_port}}
+i           B -- D;		{{server_addr}}	{{server_port}}
+i           C -- D;		{{server_addr}}	{{server_port}}
+i         }		{{server_addr}}	{{server_port}}
+i       		{{server_addr}}	{{server_port}}
+i         subgraph cluster_3 {		{{server_addr}}	{{server_port}}
+i           style=filled;		{{server_addr}}	{{server_port}}
+i           color=lightgrey;		{{server_addr}}	{{server_port}}
+i           label="AS3";		{{server_addr}}	{{server_port}}
+i           node[style=filled,color=white]		{{server_addr}}	{{server_port}}
+i           E		{{server_addr}}	{{server_port}}
+i         }		{{server_addr}}	{{server_port}}
+i       		{{server_addr}}	{{server_port}}
+i         A -- B		{{server_addr}}	{{server_port}}
+i         D -- E		{{server_addr}}	{{server_port}}
+i       }		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i     - A belongs to AS1, B, C, D belongs to AS2, and E belongs to AS3.		{{server_addr}}	{{server_port}}
+i     - AS2 has BGP Confederation configured, and B, C, D has private		{{server_addr}}	{{server_port}}
+i       ASNs 21, 22, and 23.		{{server_addr}}	{{server_port}}
+i     - A announces `10.0.0.0/8` , and when B, C, D receives that, they		{{server_addr}}	{{server_port}}
+i       obtain the path:		{{server_addr}}	{{server_port}}
+i       - B: `AS21 -> AS1` .		{{server_addr}}	{{server_port}}
+i       - C: `AS22 -> AS21 -> AS1` or `AS22 -> AS23 -> AS21 -> AS1` .		{{server_addr}}	{{server_port}}
+i       - D: `AS23 -> AS21 -> AS1` or `AS23 -> AS22 -> AS21 -> AS1` .		{{server_addr}}	{{server_port}}
+i     - When C sends route information to E, it removes the		{{server_addr}}	{{server_port}}
+i       confederation route within AS2 and replaces it with `AS2` , the		{{server_addr}}	{{server_port}}
+i       identifier for the whole AS.		{{server_addr}}	{{server_port}}
+i       - E: `AS3 -> AS2 -> AS1` .		{{server_addr}}	{{server_port}}
+i     - Now, when a disaster strikes and cuts connection from B to D, D		{{server_addr}}	{{server_port}}
+i       can still obtain the path `AS23 -> AS22 -> AS21 -> AS1` , and		{{server_addr}}	{{server_port}}
+i       maintain normal packet forwarding.		{{server_addr}}	{{server_port}}
+i   - This solution preserves the decentralized nature of the Internet		{{server_addr}}	{{server_port}}
+i     against a single point failure while also reducing the workload		{{server_addr}}	{{server_port}}
+i     of NIC.		{{server_addr}}	{{server_port}}
+i   - But there is some problem when using Confederation in Bird:		{{server_addr}}	{{server_port}}
+i     - Bird won't consider the confederation part while calculating		{{server_addr}}	{{server_port}}
+i       distance, which leads to weird routing results.		{{server_addr}}	{{server_port}}
+i       - For example C receives `A -> B -> C` and `A -> B -> D -> C`		{{server_addr}}	{{server_port}}
+i         at the same time, and they have the same priority. Now Bird		{{server_addr}}	{{server_port}}
+i         thinks the two paths have **equal** lengths, and selects a		{{server_addr}}	{{server_port}}
+i         route **randomly** , which may lead to unnecessary traffic		{{server_addr}}	{{server_port}}
+i         detours.		{{server_addr}}	{{server_port}}
+i     - Bird neither provides a variable for the filter to calculate		{{server_addr}}	{{server_port}}
+i       confederation length and make manual adjustments.		{{server_addr}}	{{server_port}}
+i       - `bgp_path.len` in Bird doesn't contain the length of		{{server_addr}}	{{server_port}}
+i         Confederation, as stated above;		{{server_addr}}	{{server_port}}
+i       - The functionality that is most similar to my need is AIGP, a		{{server_addr}}	{{server_port}}
+i         path cost that accumulates across AS. But the value cannot be		{{server_addr}}	{{server_port}}
+i         accessed by a filter.		{{server_addr}}	{{server_port}}
+i         - The		{{server_addr}}	{{server_port}}
+i           variable is of void type. Dunno what developers		{{server_addr}}	{{server_port}}
+i           are
+thinking.		{{server_addr}}	{{server_port}}
+i6. Manual Emulation of BGP Confederation		{{server_addr}}	{{server_port}}
+i   - It's the same thing as Confederation, but instead of assigning a		{{server_addr}}	{{server_port}}
+i     common Confederation Identifier, all routers still run		{{server_addr}}	{{server_port}}
+i     individually.		{{server_addr}}	{{server_port}}
+i   - Then while broadcasting routes to other ASes, a filter is used to		{{server_addr}}	{{server_port}}
+i     remove private ASNs to simulate the effect of Confederation.		{{server_addr}}	{{server_port}}
+i     - **WARNING:** Do not filter your private ASNs within your		{{server_addr}}	{{server_port}}
+i       network! Or you will end up with a routing loop.		{{server_addr}}	{{server_port}}
+i   - The advantage is that all goodness of Confederation is kept, and		{{server_addr}}	{{server_port}}
+i     the path length is calculated normally (no more detours);		{{server_addr}}	{{server_port}}
+i   - The disadvantage is that it's easier to make configuration		{{server_addr}}	{{server_port}}
+i     mistakes, like broadcasting routes without removing private ASNs.		{{server_addr}}	{{server_port}}
+iNext I will first introduce the configuration of native Confederation		{{server_addr}}	{{server_port}}
+iin Bird, then the emulation of Confederation.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Confederation in Bird		{{server_addr}}	{{server_port}}
+iI will take my DN42 network as an example. Except the		{{server_addr}}	{{server_port}}
+14 nodes that I publically accept peerings	/en/page/dn42	{{server_addr}}	{{server_port}}
+i, I have 14 other nodes that aren't open to peerings due to duplicated		{{server_addr}}	{{server_port}}
+iregion, stability, or system configuration reasons. However all of		{{server_addr}}	{{server_port}}
+ithem are still connected to DN42 and run Bird to exchange BGP routes.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBefore I setup Confederation, it's cumbersome to monitor and maintain		{{server_addr}}	{{server_port}}
+iBGP sessions between 18 nodes. The ZeroTier One VPN has stability		{{server_addr}}	{{server_port}}
+iissues from time to time, and a BGP session disconnection will occur,		{{server_addr}}	{{server_port}}
+istopping nodes from obtaining full route information.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI had a configuration file similar to:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  template bgp lantian_internal {		{{server_addr}}	{{server_port}}
+i    local as DN42_AS;		{{server_addr}}	{{server_port}}
+i    path metric 1;		{{server_addr}}	{{server_port}}
+i    direct;		{{server_addr}}	{{server_port}}
+i    enable extended messages on;		{{server_addr}}	{{server_port}}
+i    ipv4 {		{{server_addr}}	{{server_port}}
+i      next hop self yes;		{{server_addr}}	{{server_port}}
+i      import filter { ltnet_filter_v4(); };		{{server_addr}}	{{server_port}}
+i      export filter { ltnet_filter_v4(); };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i    ipv6 {		{{server_addr}}	{{server_port}}
+i      next hop self yes;		{{server_addr}}	{{server_port}}
+i      import filter { ltnet_filter_v6(); };		{{server_addr}}	{{server_port}}
+i      export filter { ltnet_filter_v6(); };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  protocol bgp ltnet_other_server from lantian_internal {		{{server_addr}}	{{server_port}}
+i    neighbor NEIGHBOR_IP as DN42_AS;		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis is a standard iBGP configuration (except that I enabled extended		{{server_addr}}	{{server_port}}
+imessage and next-hop self).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor Confederation I need to assign a private ASN to each node. Since		{{server_addr}}	{{server_port}}
+imy nodes are connected to both DN42 and NeoNetwork, which occupy `424242XXXX`		{{server_addr}}	{{server_port}}
+iand `420127XXXX` respectively, I chose `422547XXXX` as my private ASN		{{server_addr}}	{{server_port}}
+irange to avoid conflicts.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(No hobby network will take this range right? Right?)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince I use ZeroTier One for my internal network, and each node gets		{{server_addr}}	{{server_port}}
+ian automatically assign IP in `172.18.0.0/24` , I simply format the		{{server_addr}}	{{server_port}}
+iASN as `4225470000 + Last digits of IP` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext, let's modify Bird configuration. First set Confederation		{{server_addr}}	{{server_port}}
+iIdentifier to identify friendlies:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  confederation DN42_AS;		{{server_addr}}	{{server_port}}
+i  confederation member yes;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI simply used my DN42 ASN (4242422547) as Confederation Identifier and		{{server_addr}}	{{server_port}}
+ienabled `confederation member` option to tell Bird that it's a fellow		{{server_addr}}	{{server_port}}
+ipeer on the other side.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen change the local ASN from what's assigned from DN42 into		{{server_addr}}	{{server_port}}
+isomething in the private range:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  local as LTNET_AS;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe next problem is deciding the ASN for the neighbor (the other		{{server_addr}}	{{server_port}}
+iside). Yes, I can fill in the neighbor ASNs one by one, but this is		{{server_addr}}	{{server_port}}
+itoo much of a hassle. Luckily Bird supports setting a neighbor as "External"		{{server_addr}}	{{server_port}}
+iwithout specifying an ASN. Now, as long as the neighbor ASN isn't the		{{server_addr}}	{{server_port}}
+isame as yours, a BGP session can be established:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  neighbor NEIGHBOR_IP external;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe updated configuration file looks like:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  template bgp lantian_internal {		{{server_addr}}	{{server_port}}
+i    local as LTNET_AS;		{{server_addr}}	{{server_port}}
+i    confederation DN42_AS;		{{server_addr}}	{{server_port}}
+i    confederation member yes;		{{server_addr}}	{{server_port}}
+i    path metric 1;		{{server_addr}}	{{server_port}}
+i    direct;		{{server_addr}}	{{server_port}}
+i    enable extended messages on;		{{server_addr}}	{{server_port}}
+i    ipv4 {		{{server_addr}}	{{server_port}}
+i      next hop self yes;		{{server_addr}}	{{server_port}}
+i      import filter { ltnet_filter_v4(); };		{{server_addr}}	{{server_port}}
+i      export filter { ltnet_filter_v4(); };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i    ipv6 {		{{server_addr}}	{{server_port}}
+i      next hop self yes;		{{server_addr}}	{{server_port}}
+i      import filter { ltnet_filter_v6(); };		{{server_addr}}	{{server_port}}
+i      export filter { ltnet_filter_v6(); };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  protocol bgp ltnet_other_server from lantian_internal {		{{server_addr}}	{{server_port}}
+i    neighbor NEIGHBOR_IP external;		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Checking Confederation Status		{{server_addr}}	{{server_port}}
+iAfter modifying all configuration and running `birdc configure` ,		{{server_addr}}	{{server_port}}
+icheck the route on one of the nodes:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # birdc show route for 172.23.0.53 all		{{server_addr}}	{{server_port}}
+i  # Only one route is kept to shorten the paragraph		{{server_addr}}	{{server_port}}
+i  BIRD 2.0.7 ready.		{{server_addr}}	{{server_port}}
+i  Table master4:		{{server_addr}}	{{server_port}}
+i  172.23.0.53/32       unicast [ltnet_hostdare 20:16:32.922 from fcf9:a876:eddd:c85a:8a93::1] * (100) [AS4242422601i]		{{server_addr}}	{{server_port}}
+i          via 172.18.0.65 on ztppir7etp		{{server_addr}}	{{server_port}}
+i          Type: BGP univ		{{server_addr}}	{{server_port}}
+i          BGP.origin: IGP		{{server_addr}}	{{server_port}}
+i          BGP.as_path: (4225470065) 4242422601		{{server_addr}}	{{server_port}}
+i          BGP.next_hop: 172.18.0.65		{{server_addr}}	{{server_port}}
+i          BGP.med: 0		{{server_addr}}	{{server_port}}
+i          BGP.local_pref: 9103		{{server_addr}}	{{server_port}}
+i          BGP.community: (64511,6) (64511,24) (64511,33) (64511,44)		{{server_addr}}	{{server_port}}
+i          BGP.large_community: (4242422601, 120, 26)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow an ASN is put into brackets in `BGP.as_path` , which is the		{{server_addr}}	{{server_port}}
+iprivate ASN in Confederation. From the perspective of another ASN,		{{server_addr}}	{{server_port}}
+ithis route looks like:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # birdc show route for 172.23.0.53 all		{{server_addr}}	{{server_port}}
+i  # Only one route is kept to shorten the paragraph		{{server_addr}}	{{server_port}}
+i  BIRD 2.0.7 ready.		{{server_addr}}	{{server_port}}
+i  Table master4:		{{server_addr}}	{{server_port}}
+i  172.23.0.53/32       unicast [ltnet_gigsgigscloud 16:39:43.377 from fcf9:a876:ed8b:c606:ba01::1] * (100) [AS4242422601i]		{{server_addr}}	{{server_port}}
+i          via 172.18.0.1 on zt0		{{server_addr}}	{{server_port}}
+i          Type: BGP univ		{{server_addr}}	{{server_port}}
+i          BGP.origin: IGP		{{server_addr}}	{{server_port}}
+i          BGP.as_path: 4242422547 4242422601		{{server_addr}}	{{server_port}}
+i          BGP.next_hop: 172.18.0.1		{{server_addr}}	{{server_port}}
+i          BGP.local_pref: 9103		{{server_addr}}	{{server_port}}
+i          BGP.community: (64511,6) (64511,24) (64511,33) (64511,44)		{{server_addr}}	{{server_port}}
+i          BGP.large_community: (4242422601, 120, 26)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe private ASN previously in brackets is automatically replaced with		{{server_addr}}	{{server_port}}
+i4242422547, the ASN assigned by DN42. Now when viewed outside, the		{{server_addr}}	{{server_port}}
+iwhole AS is still a whole AS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Emulating a Confederation		{{server_addr}}	{{server_port}}
+iThe internal network configuration is mostly the same as Bird		{{server_addr}}	{{server_port}}
+iConfederation, assigning different ASNs and updating neighbor		{{server_addr}}	{{server_port}}
+idefinitions:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # See Bird Confederation for details		{{server_addr}}	{{server_port}}
+i  local as LTNET_AS;		{{server_addr}}	{{server_port}}
+i  neighbor NEIGHBOR_IP external;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut **do not** add the following lines which enable Bird's own		{{server_addr}}	{{server_port}}
+iConfederation:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  confederation DN42_AS;		{{server_addr}}	{{server_port}}
+i  confederation member yes;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInstead, we modify all external BGP sessions and add this filter:=		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  export filter {		{{server_addr}}	{{server_port}}
+i    # Add this line which removes all internal ASNs		{{server_addr}}	{{server_port}}
+i    # Remember to change to your own range!		{{server_addr}}	{{server_port}}
+i    bgp_path.delete([4225470000..4225479999]);		{{server_addr}}	{{server_port}}
+i    # Other rules may exist here, but omitted		{{server_addr}}	{{server_port}}
+i    accept;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**WARNING Again:** Do not add this filter to internal peerings, or you		{{server_addr}}	{{server_port}}
+iwill end up with a loop.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou need to make sure that **every** external BGP session is properly		{{server_addr}}	{{server_port}}
+iconfigured, or something interesting will happen.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

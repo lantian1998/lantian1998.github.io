@@ -1,0 +1,69 @@
+i- It's the year 2020. Why are you still using OpenVZ 6 VPSes?		{{server_addr}}	{{server_port}}
+i- Because they only cost one dollar per year.		{{server_addr}}	{{server_port}}
+iSince the kernel of OpenVZ 6 is extremely old (Linux 2.6.32), newer		{{server_addr}}	{{server_port}}
+isystems cannot function normally on an old kernel, so I had to stick		{{server_addr}}	{{server_port}}
+ito Debian 8 with my previous OpenVZ VPSes.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut I found a		{{server_addr}}	{{server_port}}
+hmodified Glibc (C language runtime library)	URL:https://github.com/sdwru/glibc-debian-10/releases	{{server_addr}}	{{server_port}}
+ithat allows running Debian 10 normally on OpenVZ 6.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## WARNING		{{server_addr}}	{{server_port}}
+iI don't guarantee that the steps below are suitable for all OpenVZ		{{server_addr}}	{{server_port}}
+iVPSes, nor do I ensure the safety/integrity of this Glibc (I didn't		{{server_addr}}	{{server_port}}
+ilook into its modifications, but speaking of security, the end-of-life		{{server_addr}}	{{server_port}}
+iOpenVZ 6 is probably the farthest thing from security).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**Backup your data** , since in worst scenarios, you need to reinstall		{{server_addr}}	{{server_port}}
+ithe OS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Steps		{{server_addr}}	{{server_port}}
+iThe author only provided DEB packages, but among them are debug		{{server_addr}}	{{server_port}}
+isymbols, etc., that normal users don't need, so I don't recommend		{{server_addr}}	{{server_port}}
+irunning `dpkg -i *.deb` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe author suggests to build a simple package repository locally		{{server_addr}}	{{server_port}}
+ibefore using it, with the following steps:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Download the latest version of modified glibc, due by the date this post is posted		{{server_addr}}	{{server_port}}
+i  wget https://github.com/sdwru/glibc-debian-10/releases/download/2.28-9910.0/glibc_2.28-9910.0+custom1.1_amd64.deb.zip		{{server_addr}}	{{server_port}}
+i  unzip glibc_2.28-9910.0+custom1.1_amd64.deb.zip		{{server_addr}}	{{server_port}}
+i  # Create a package repo at /opt/packages		{{server_addr}}	{{server_port}}
+i  apt -y install dpkg-dev software-properties-common		{{server_addr}}	{{server_port}}
+i  mkdir -p /opt/packages/binary		{{server_addr}}	{{server_port}}
+i  cp *.deb /opt/packages/binary		{{server_addr}}	{{server_port}}
+i  cd /opt/packages		{{server_addr}}	{{server_port}}
+i  dpkg-scanpackages . | gzip -9c > Packages.gz		{{server_addr}}	{{server_port}}
+i  # Add this package repo		{{server_addr}}	{{server_port}}
+i  add-apt-repository 'deb [trusted=yes] file:/opt/packages/ ./'		{{server_addr}}	{{server_port}}
+i  apt update		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhile following the steps above, I also uploaded the packages to my		{{server_addr}}	{{server_port}}
+iserver. You may use them directly, but it's a bit dangerous since the		{{server_addr}}	{{server_port}}
+ipackages aren't digitally signed:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  echo "deb [trusted=yes] http://lab.lantian.pub/glibc-for-debian-10-on-openvz ./" > /etc/apt/sources.list.d/glibc-for-debian-10-on-openvz.list		{{server_addr}}	{{server_port}}
+i  apt update		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter adding the repo, follow the normal Debian upgrade sequence, but		{{server_addr}}	{{server_port}}
+idon't reboot yet (actually, you can't):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Depends on your previous Debian version, corresponds to Debian 7, 8 and 9		{{server_addr}}	{{server_port}}
+i  sed -i "s/wheezy/buster/g" /etc/apt/sources.list /etc/apt/sources.list.d/*		{{server_addr}}	{{server_port}}
+i  sed -i "s/jessie/buster/g" /etc/apt/sources.list /etc/apt/sources.list.d/*		{{server_addr}}	{{server_port}}
+i  sed -i "s/stretch/buster/g" /etc/apt/sources.list /etc/apt/sources.list.d/*		{{server_addr}}	{{server_port}}
+i  # Start the upgrade		{{server_addr}}	{{server_port}}
+i  apt update		{{server_addr}}	{{server_port}}
+i  apt dist-upgrade		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow `hold` the Glibc package, or disallow apt from upgrading it		{{server_addr}}	{{server_port}}
+iautomatically:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-mark hold libc6		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter the upgrade process finishes, nothing should happen when you		{{server_addr}}	{{server_port}}
+itype `reboot` and enter. Now you just need to reboot the server in		{{server_addr}}	{{server_port}}
+iyour provider's control panel.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IDebian 10 Running on OpenVZ 6 Kernel	/usr/uploads/202003/debian-10-on-openvz-6.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

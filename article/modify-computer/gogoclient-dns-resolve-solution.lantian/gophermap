@@ -1,0 +1,32 @@
+i这几天 Google 服务不怎么正常，所以我决定使用 IPv6 隧道来连接 Google，		{{server_addr}}	{{server_port}}
+i以便获得较好的访问速度。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i按照我去年 10 月写的文章《		{{server_addr}}	{{server_port}}
+1Windows 8.1 下 gogoCLIENT 的安装使用与Bug修复	/article/modify-computer/windows-8-1-gogoclient-install-repair-bug.lantian	{{server_addr}}	{{server_port}}
+i》，我在我的电脑上设置好了隧道。但是此时我打开命令提示符 Ping		{{server_addr}}	{{server_port}}
+iipv6.google.com，系统竟然提示「Ping 请求找不到主机 ipv6.google.com」。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样我相当于还是在通过 IPv4 连接谷歌服务，无法达到我想要的效果。一般这		{{server_addr}}	{{server_port}}
+i个时候我都会去 Google，但是问题是 Google 连接时断时通 … …		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i很长时间过后，我终于找到了解决方案。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i原因是微软在设计操作系统的时候，默认不会从 IPv6 隧道中查询 DNS。解决方		{{server_addr}}	{{server_port}}
+i法如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 开始 - 运行（或者 Win+R），输入 regedit 回车。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. 在左边窗口打开 HKEY_LOCAL_MACHINE - SYSTEM - CurrentControlSet -		{{server_addr}}	{{server_port}}
+iservices - Dnscache - Parameters。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. 在右边窗口右键新建 -DWORD 值，名字为 AddrConfigControl。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i经过以上操作，无需重启计算机，你就可以正常解析 IPv6 地址了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i感谢		{{server_addr}}	{{server_port}}
+hhttp://blog.ihipop.info/2012/01/2953.html	URL:http://blog.ihipop.info/2012/01/2953.html	{{server_addr}}	{{server_port}}
+i和		{{server_addr}}	{{server_port}}
+hhttp://ipv6-or-no-ipv6.blogspot.sg/2009/02/teredo-ipv6-on-vista-no-aaaa-resolving.html	URL:http://ipv6-or-no-ipv6.blogspot.sg/2009/02/teredo-ipv6-on-vista-no-aaaa-resolving.html	{{server_addr}}	{{server_port}}
+i。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
