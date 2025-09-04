@@ -1,0 +1,31 @@
+i受		{{server_addr}}	{{server_port}}
+1WP博客一键签到JS	/article/chat/wordpress-blog-onekey-comment-javascript.lantian	{{server_addr}}	{{server_port}}
+i启发，我自己修改 JS 代码，实现了友言和多说的一键签到功能。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i友言版：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  javascript: try {		{{server_addr}}	{{server_port}}
+i    document.getElementById('uyan_l_uname').value = '你的昵称'		{{server_addr}}	{{server_port}}
+i  } catch (err) {}		{{server_addr}}	{{server_port}}
+i  var myDate = new Date()		{{server_addr}}	{{server_port}}
+i  var mytime = myDate.toLocaleTimeString()		{{server_addr}}	{{server_port}}
+i  document.getElementById('uyan_comment').value = '今天签到啦！时间：' + mytime		{{server_addr}}	{{server_port}}
+i  UYAN.addCmt(document.getElementById('uyan_cmt_btn'))		{{server_addr}}	{{server_port}}
+i  void 0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i用法：打开有友言的页面，点一下即可。可以不登陆，也可以先用微博之类的登		{{server_addr}}	{{server_port}}
+i陆好。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i多说版：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  javascript: var myDate = new Date()		{{server_addr}}	{{server_port}}
+i  var mytime = myDate.toLocaleTimeString()		{{server_addr}}	{{server_port}}
+i  document.getElementsByName('message').item(0).value =		{{server_addr}}	{{server_port}}
+i    '今天签到啦！时间：' + mytime		{{server_addr}}	{{server_port}}
+i  document.getElementsByClassName('ds-post-button').item(0).click()		{{server_addr}}	{{server_port}}
+i  void 0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i用法：打开有多说的页面，先用微博登陆好，然后点击使用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我是拿我的留言版做的测试，欢迎大家继续测试 ~		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,39 @@
+1LubbosFanControl	/en/article/modify-computer/windows-control-macbook-fan.lantian	{{server_addr}}	{{server_port}}
+iis indeed a magical tool for controlling fan speeds in Windows, but		{{server_addr}}	{{server_port}}
+iadjusting fan speed only treats the symptoms, not the root cause — it		{{server_addr}}	{{server_port}}
+iaddresses heat dissipation without solving the core issue of excessive		{{server_addr}}	{{server_port}}
+iheat generation.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn macOS, when I use Chrome to browse Bilibili, CPU temperatures		{{server_addr}}	{{server_port}}
+itypically stabilize around 60°C and never exceed 70°C. However,		{{server_addr}}	{{server_port}}
+iperforming the same operation in Windows 8 often pushes CPU		{{server_addr}}	{{server_port}}
+itemperatures above 70°C. I initially assumed Windows consumed more CPU		{{server_addr}}	{{server_port}}
+iresources, hence the higher temperatures.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut one day while watching videos, I opened Task Manager and		{{server_addr}}	{{server_port}}
+idiscovered CPU usage was only around 53%. Meanwhile, my Core i5		{{server_addr}}	{{server_port}}
+iprocessor had activated Turbo Boost, ramping up to 2.88GHz with		{{server_addr}}	{{server_port}}
+itemperatures hovering near 75°C.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTurbo Boost technology in Core i5/i7 processors temporarily increases		{{server_addr}}	{{server_port}}
+iclock speeds under heavy workloads. The problem? This performance		{{server_addr}}	{{server_port}}
+iboost generates significantly more heat — a disaster for thermally		{{server_addr}}	{{server_port}}
+iconstrained MBPs. Bizarrely, Windows often activates Turbo Boost		{{server_addr}}	{{server_port}}
+iunnecessarily during light tasks, maxing out CPU frequency and		{{server_addr}}	{{server_port}}
+icreating excessive heat. Thus, we need to disable Turbo Boost. A Core		{{server_addr}}	{{server_port}}
+ii5 without Turbo Boost still handles most tasks adequately.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**Steps:**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Click the battery icon in the system tray → "More power options" →		{{server_addr}}	{{server_port}}
+i   Next to your active power plan, select "Change plan settings" → "Change		{{server_addr}}	{{server_port}}
+i   advanced power settings".		{{server_addr}}	{{server_port}}
+i2. Under "Processor power management":		{{server_addr}}	{{server_port}}
+i   - Set both cooling policies to **Passive**		{{server_addr}}	{{server_port}}
+i   - Set maximum processor state to **99%** for all modes		{{server_addr}}	{{server_port}}
+i     This prevents the system from triggering Turbo Boost when CPU		{{server_addr}}	{{server_port}}
+i     usage peaks. Note: This won't affect LubbosFanControl's fan		{{server_addr}}	{{server_port}}
+i     adjustments.		{{server_addr}}	{{server_port}}
+i1. Click "OK". Now performing the same tasks, CPU frequency stays at		{{server_addr}}	{{server_port}}
+i   2.45GHz with temperatures between 65-70°C — significantly reduced		{{server_addr}}	{{server_port}}
+i   heat output.		{{server_addr}}	{{server_port}}

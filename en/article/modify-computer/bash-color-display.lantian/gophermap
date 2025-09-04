@@ -1,0 +1,8 @@
+iThe default Bash command line in Linux is always black text on a white		{{server_addr}}	{{server_port}}
+ibackground, which can appear somewhat monotonous. However, we can add		{{server_addr}}	{{server_port}}
+ia few lines of commands to make Bash display information in color.		{{server_addr}}	{{server_port}}
+iThis not only enhances visual appeal but also helps highlight		{{server_addr}}	{{server_port}}
+iimportant content.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEdit the `.profile` file in your home directory:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

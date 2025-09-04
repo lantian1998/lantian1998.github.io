@@ -1,0 +1,22 @@
+iThe school's course selection system opened at 12:00 for club		{{server_addr}}	{{server_port}}
+isign-ups, using a snatching mechanism — limited spots,		{{server_addr}}	{{server_port}}
+ifirst-come-first-served.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHaving used this system before for elective courses, I logged in early (no		{{server_addr}}	{{server_port}}
+icourses were displayed yet). Starting at 11:59:30, I kept refreshing		{{server_addr}}	{{server_port}}
+ithe page repeatedly, waiting for the courses to appear.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAt exactly 12:00, the courses popped up. I immediately clicked on my		{{server_addr}}	{{server_port}}
+idesired club. Instantly, a window flashed on the screen: "Registration		{{server_addr}}	{{server_port}}
+ifailed! Schedule conflict!"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUpon closer inspection: The club sessions were all scheduled for		{{server_addr}}	{{server_port}}
+iMonday and Tuesday's eighth period (though not actually at that time),		{{server_addr}}	{{server_port}}
+iwhile my previous electics occupied Monday/Tuesday/Thursday's		{{server_addr}}	{{server_port}}
+iseventh-eighth periods and Wednesday's fifth-sixth periods. Total		{{server_addr}}	{{server_port}}
+iconflict...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLater, the school sent a text: "Reopening at 13:00 for another round."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPending...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

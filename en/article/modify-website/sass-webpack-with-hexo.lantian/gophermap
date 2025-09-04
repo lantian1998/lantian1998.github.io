@@ -1,0 +1,138 @@
+i## Why Use Sass and Webpack		{{server_addr}}	{{server_port}}
+iSass is a superset of CSS that extends CSS syntax with numerous		{{server_addr}}	{{server_port}}
+ifeatures, including rule nesting, variable definition, includes, and		{{server_addr}}	{{server_port}}
+imathematical operations. Key functionalities can be explored in the		{{server_addr}}	{{server_port}}
+hOfficial Getting Started Guide	URL:https://sass-lang.com/guide	{{server_addr}}	{{server_port}}
+i. Sass originally used the .sass file extension with a YAML-like		{{server_addr}}	{{server_port}}
+istructure that wasn't fully compatible with traditional CSS. The		{{server_addr}}	{{server_port}}
+icurrent Sass format (.scss) maintains full CSS compatibility.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI use Sass for two primary reasons: First, for clearer CSS rule		{{server_addr}}	{{server_port}}
+imanagement. For example, when I have CSS rules that only apply to the		{{server_addr}}	{{server_port}}
+iwebsite header, I can group them within a single block:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  header {		{{server_addr}}	{{server_port}}
+i      h1 { ... }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSecond, to reduce CSS file size during page loading. Although my site		{{server_addr}}	{{server_port}}
+iuses Bootstrap, I only utilize a small portion of its features (grid		{{server_addr}}	{{server_port}}
+isystem, navigation bar, and dropdowns). By selectively including		{{server_addr}}	{{server_port}}
+icomponents, unnecessary CSS isn't loaded. Additionally, I've		{{server_addr}}	{{server_port}}
+icustomized Bootstrap's colors and shapes using `!important` overrides,		{{server_addr}}	{{server_port}}
+iwhich adds extra code.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn my .scss files, I define global control colors and font sizes while		{{server_addr}}	{{server_port}}
+iselectively including Bootstrap's .scss files. By commenting out		{{server_addr}}	{{server_port}}
+iunused features, the final CSS file size is significantly reduced.		{{server_addr}}	{{server_port}}
+iSass also compiles CSS into a single minified file for server		{{server_addr}}	{{server_port}}
+ideployment.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSimilarly, I use Webpack to eliminate unused Bootstrap JavaScript		{{server_addr}}	{{server_port}}
+ifeatures and compress/merge JS code into a single file. Another		{{server_addr}}	{{server_port}}
+iadvantage is that Sass and Webpack integrate with npm, allowing me to		{{server_addr}}	{{server_port}}
+iupdate frameworks like Bootstrap and use them consistently across Sass		{{server_addr}}	{{server_port}}
+iand Webpack JS files.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Using Sass and Webpack in Hexo		{{server_addr}}	{{server_port}}
+iHexo, as a popular static site generator, has numerous plugins. I use		{{server_addr}}	{{server_port}}
+hhexo-renderer-sass	URL:https://github.com/knksmith57/hexo-renderer-sass	{{server_addr}}	{{server_port}}
+iand		{{server_addr}}	{{server_port}}
+hhexo-webpack	URL:https://github.com/cowsay-blog/hexo-webpack	{{server_addr}}	{{server_port}}
+i:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  npm install --save hexo-renderer-sass		{{server_addr}}	{{server_port}}
+i  npm install --save hexo-webpack		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor Sass, since I need to include framework code installed via npm, I		{{server_addr}}	{{server_port}}
+iadd the following to my theme's `_config.yml` to direct Sass to the		{{server_addr}}	{{server_port}}
+inode_modules folder:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  node_sass:		{{server_addr}}	{{server_port}}
+i    includePaths:		{{server_addr}}	{{server_port}}
+i      - 'node_modules'		{{server_addr}}	{{server_port}}
+i    outputStyle: compressed		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor Bootstrap, first install via npm:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  npm install --save bootstrap		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen include in your styles.scss file:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/functions';		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/variables';		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/mixins';		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/root';		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/reboot';		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/type';		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/images";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/code";		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/grid';		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/tables";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/forms";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/buttons";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/transitions";		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/dropdown';		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/button-group";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/input-group";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/custom-forms";		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/nav';		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/navbar';		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/card";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/breadcrumb";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/pagination";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/badge";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/jumbotron";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/alert";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/progress";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/media";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/list-group";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/close";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/toasts";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/modal";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/tooltip";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/popover";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/carousel";		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/spinners";		{{server_addr}}	{{server_port}}
+i  @import 'bootstrap/scss/utilities';		{{server_addr}}	{{server_port}}
+i  // @import "bootstrap/scss/print";		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor Webpack, since some JS modules depend on jQuery but lack proper		{{server_addr}}	{{server_port}}
+iWebpack loading instructions, create a `webpack.config.js` file in		{{server_addr}}	{{server_port}}
+iyour theme directory (same level as `_config.yml` ). Use Webpack's		{{server_addr}}	{{server_port}}
+iProvidePlugin to inject jQuery:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  const webpack = require('webpack')		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  module.exports = {		{{server_addr}}	{{server_port}}
+i    entry: 'assets/script.js',		{{server_addr}}	{{server_port}}
+i    output: {		{{server_addr}}	{{server_port}}
+i      filename: 'script.bundle.js',		{{server_addr}}	{{server_port}}
+i      path: 'assets',		{{server_addr}}	{{server_port}}
+i    },		{{server_addr}}	{{server_port}}
+i    mode: 'production',		{{server_addr}}	{{server_port}}
+i    plugins: [		{{server_addr}}	{{server_port}}
+i      new webpack.ProvidePlugin({		{{server_addr}}	{{server_port}}
+i        $: 'jquery',		{{server_addr}}	{{server_port}}
+i        jQuery: 'jquery',		{{server_addr}}	{{server_port}}
+i      }),		{{server_addr}}	{{server_port}}
+i    ],		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis configuration uses `assets/script.js` as the entry point and		{{server_addr}}	{{server_port}}
+ioutputs to `assets/script.bundle.js` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo import Bootstrap's dropdown module (with jQuery and Popper.js		{{server_addr}}	{{server_port}}
+idependencies) in `script.js` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  import 'bootstrap/js/src/dropdown'		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOther modules follow the same pattern.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, update your theme's head section to load the generated files:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <link rel="stylesheet" href="<%- url_for('assets/style.css') %>" />		{{server_addr}}	{{server_port}}
+i  <script src="<%- url_for('assets/script.bundle.js') %>"></script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRun `hexo generate` to build.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,173 @@
+iPS：第一次发完文章发现忘了写 nginx 和 php5-fpm 的对接，准备连上自己的		{{server_addr}}	{{server_port}}
+iVPS 去看设置，打开终端 - 上键 - 回车，才发现自己打的上一行代码居然是		{{server_addr}}	{{server_port}}
+iexit … …		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPS2：VPS 用 22 端口的童鞋请小心，你很有可能敲命令敲到一半断掉，换个端		{{server_addr}}	{{server_port}}
+i口就行，比如 2222。（好 2）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPS3：今天自己在 VBox 上搭了一个 Debian 6 实验，结果发现 Lighttpd 有插		{{server_addr}}	{{server_port}}
+i件功能 … … 修改。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于一个 VPS 来说，CPU、硬盘等对于像建一个像我这样的博客，一般已经足够，		{{server_addr}}	{{server_port}}
+i但是最烦的就是内存不足。一个 VPS 商可以把母鸡的一个 CPU 核心划给十几台		{{server_addr}}	{{server_port}}
+iVPS 来用（虽然只有最坑爹的 VPS 商才会这样做），但是比如你主机的内存是		{{server_addr}}	{{server_port}}
+i4G，你永远无法分出 20 台 256M 内存的 VPS，因为那会占你 5G 内存。而且，		{{server_addr}}	{{server_port}}
+i你的主系统还要跑 OpenVZ 之类的虚拟化技术和 HyperVM 之类的管理界面，你		{{server_addr}}	{{server_port}}
+i连 16 台（刚好占满 4G）都分不出。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于我们这些 VPS 用户来说，当你拿到一台 VPS，你一定要把它的内存占用精		{{server_addr}}	{{server_port}}
+i简精简再精简，否则一旦内存爆满，你的 VPS 也就废了。我自己的 Host1Free		{{server_addr}}	{{server_port}}
+iVPS 有 128M 内存和 640M Swap（感觉没什么用），对于那 128M 内存，就得好		{{server_addr}}	{{server_port}}
+i好优化一番。一些 VPS 内存 64M 甚至 32M 的人，就更加杯具。（PS：我觉得		{{server_addr}}	{{server_port}}
+i买这种 VPS 的人都是钱多的没处花）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1.OS 的选择		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于一台 Linux 的 VPS，你可以选择 Debian，Ubuntu，CentOS，Gentoo 等等。		{{server_addr}}	{{server_port}}
+i不同发行版各有不同，Debian 的软件比较古老（原生源里的 PHP 连 FPM 都没		{{server_addr}}	{{server_port}}
+i有）但是都很实用，Ubuntu 软件暴多，CentOS 的软件源 … … 反正可以让你		{{server_addr}}	{{server_port}}
+i练习 GCC 编译程序。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在各个发行版中，个人感觉 Debian 最省内存，因为我记得上次弄出过整个系统		{{server_addr}}	{{server_port}}
+i跑 nginx+php-fastcgi+mysql 才占 10M 内存的状况。我试用 CentOS 时，内置		{{server_addr}}	{{server_port}}
+i的 OpenSSH 反映很慢，而且我用不习惯 yum 和编译程序，而 Ubuntu 的软件源		{{server_addr}}	{{server_port}}
+i太多太杂，每次 apt-get update 都会占用我 5 分钟以上的时间，因为		{{server_addr}}	{{server_port}}
+iHost1Free 对于每一台 VPS 都做了 100K 的网络限速。最终，我安装了 Debian		{{server_addr}}	{{server_port}}
+i6。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另外罗嗦一句，在 VPS 上装 64 位操作系统可以让你的内存直接炸掉。当然你		{{server_addr}}	{{server_port}}
+i有 512M 及以上的内存那么随你。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. 网站程序的选择		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i现在 Linux 平台上最著名的服务器软件有 3 款：Nginx，Apache，Lighttpd。		{{server_addr}}	{{server_port}}
+iApache 是最古老也是功能最强大的一款，通过插件，它可以支持 PHP，可以支		{{server_addr}}	{{server_port}}
+i持 Mono（Linux 下运行 ASP.NET），还可以搭建一个简单的 FTP 服务器。但是		{{server_addr}}	{{server_port}}
+i在一台小内存 VPS 上，「功能强大」完全不是我们所考虑的。我们需要一个更		{{server_addr}}	{{server_port}}
+i加简单，速度快，而且省内存的方案。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLighttpd 是一个简化过的服务器软件，它		{{server_addr}}	{{server_port}}
+i没有插件功能，所有模块都直接编译在源代码中		{{server_addr}}	{{server_port}}
+i（纠正：Lighttpd 有简单的插件功能），所以速度也会快一些，但是这东西不		{{server_addr}}	{{server_port}}
+i符合我的使用习惯，所以我没有深入地查过关于它的资料。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNginx 比 Lighttpd 功能强一些，但是内存和执行效率也同样比 Lighttpd 好。		{{server_addr}}	{{server_port}}
+i据网上有人说，在同一台服务器上跑网站，如果 Apache 在 1000 并发下会卡死		{{server_addr}}	{{server_port}}
+i服务器，那么 Nginx 上 10 万并发毫无压力。这也许有夸张的成分，但是		{{server_addr}}	{{server_port}}
+iNginx 性能高是毋庸置疑的。Apache 的网络架构是 select，就是当客户端发出		{{server_addr}}	{{server_port}}
+i一个数据包，服务器收到后，Apache 需要从现有的连接中找到数据包对应的连		{{server_addr}}	{{server_port}}
+i接，这就需要一条条地找，性能自然上不去。但 Nginx 的 epoll 网络模型则维		{{server_addr}}	{{server_port}}
+i护一张表，数据包到达时查表而不是查连接，从而获得了更高的效率。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在高效率的同时，Nginx 由于没有插件功能，更省内存。所以我可以用 10M 内		{{server_addr}}	{{server_port}}
+i存跑上 LNMP 三件套。但是 Nginx 的缺点是不支持插件，所以 PHP 无法直接集		{{server_addr}}	{{server_port}}
+i成到 Nginx 里，必须通过 FastCGI 进行转发。转发也会留 1-2 个内存，这两		{{server_addr}}	{{server_port}}
+i个进程是占服务器内存的大户，具体看你的网站程序决定。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. 系统基础程序的选择		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于一个 VPS，系统最基础的程序就是 Shell，OpenSSH 和日志管理。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDebian 6 默认集成了 Bash，其功能强大，但是和 Apache 一个德行，内存占用		{{server_addr}}	{{server_port}}
+i也偏大。对于我这种平时只开一两个 Shell 的人还好，听说有的人一登 VPS 就		{{server_addr}}	{{server_port}}
+i要连开 6 个 Shell，那内存占用可以吃掉你一半的内存。所以我们需要换		{{server_addr}}	{{server_port}}
+iShell。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i网上一些文章推荐了 pdksh，它的特点就是小。它没有 Bash 强大，但是我在前		{{server_addr}}	{{server_port}}
+i面说过，强大一点用也没有，够用就行。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于 SSH，所有发行版都带了 OpenSSH，但是它也有不足：你登上 Shell 的时		{{server_addr}}	{{server_port}}
+i候，如果你是 root，那么会给你新开一个 SSH 进程，但是如果你不是 root，		{{server_addr}}	{{server_port}}
+i那就是两个。相信大家都不会像我这样偷懒直接 root 的，所以内存占用也较可		{{server_addr}}	{{server_port}}
+i观。另外，OpenSSH 支持 SFTP，功能强大，我就不解释了。DropBear 则是一个		{{server_addr}}	{{server_port}}
+i替代品，它不支持 SFTP，但是内存占用也小，最重要的是不会开上好几个进程		{{server_addr}}	{{server_port}}
+i耗你内存。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i日志管理中 Debian 6 带了 sysklogd，本身非常轻量，但是 Debian 5 没那么		{{server_addr}}	{{server_port}}
+i幸运，自带的 rsyslog 过分强大。这时可以直接 apt-get install sysklogd，		{{server_addr}}	{{server_port}}
+iapt-get remove rsyslog 就可以了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i4. 博客程序的选择。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i现在以 PHP 为语言的建站程序中，WordPress 简直空前绝后，它的插件功能和		{{server_addr}}	{{server_port}}
+i强大的自定义设置让它的功能有了很大的提高，它可以搭建个人博客，也可以搭		{{server_addr}}	{{server_port}}
+i建企业官方网站等等。但是一路走到 3.5.1 的路上，WP 已经变得非常臃肿，连		{{server_addr}}	{{server_port}}
+i打开后台都会耗掉服务器 30 多 M 内存，对于一个 VPS 来说有些吃不消。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另一个选择是 Typecho。作为一款国人的作品，它的代码也就 300 多 K，相比		{{server_addr}}	{{server_port}}
+i于 WP 的 5M … … 而且它的插件功能有所减弱，这也使它有了更快的速度。最		{{server_addr}}	{{server_port}}
+i重要的是省内存。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i接下来就可以开始实战优化了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 安装好 Debian 6，SSH 登上。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. 安装 pdksh		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install pdksh		{{server_addr}}	{{server_port}}
+i  chsh -s /bin/pdksh		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i重新登录，搞定。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. 安装 DropBear		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #不让OpenSSH启动		{{server_addr}}	{{server_port}}
+i  touch /etc/ssh/sshd_not_to_be_run		{{server_addr}}	{{server_port}}
+i  #安装		{{server_addr}}	{{server_port}}
+i  apt-get install dropbear		{{server_addr}}	{{server_port}}
+i  nano /etc/default/dropbear		{{server_addr}}	{{server_port}}
+i  #找到NO_START=1一行，改成0		{{server_addr}}	{{server_port}}
+i  service dropbear start		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i4. 安装 LAMP 组合		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #增加DotDeb软件源以获得php-fpm软件包		{{server_addr}}	{{server_port}}
+i  nano /etc/apt/sources.list		{{server_addr}}	{{server_port}}
+i  #在末尾增加一行deb http://packages.dotdeb.org stable all		{{server_addr}}	{{server_port}}
+i  cd ~		{{server_addr}}	{{server_port}}
+i  wget http://www.dotdeb.org/dotdeb.gpg		{{server_addr}}	{{server_port}}
+i  cat dotdeb.gpg | apt-key add -		{{server_addr}}	{{server_port}}
+i  rm dotdeb.gpg		{{server_addr}}	{{server_port}}
+i  #以上增加软件源证书		{{server_addr}}	{{server_port}}
+i  apt-get update		{{server_addr}}	{{server_port}}
+i  apt-get upgrade		{{server_addr}}	{{server_port}}
+i  apt-get install mysql-server nginx php5-fpm php5-mysql php5-gd		{{server_addr}}	{{server_port}}
+i  cd /etc/php5/fpm/pool.d		{{server_addr}}	{{server_port}}
+i  nano www.conf		{{server_addr}}	{{server_port}}
+i  #自己修改设置		{{server_addr}}	{{server_port}}
+i  #listen = /var/run/php5-fpm.sock		{{server_addr}}	{{server_port}}
+i  #用Unix套接字，比TCP省资源，但是稳定性略差		{{server_addr}}	{{server_port}}
+i  #pm = static		{{server_addr}}	{{server_port}}
+i  #pm.max_children = 2		{{server_addr}}	{{server_port}}
+i  #pm.start_servers = 1		{{server_addr}}	{{server_port}}
+i  #pm.min_spare_servers = 1		{{server_addr}}	{{server_port}}
+i  #pm.max_spare_servers = 1		{{server_addr}}	{{server_port}}
+i  #pm.max_requests = 512		{{server_addr}}	{{server_port}}
+i  #以上是我的设置		{{server_addr}}	{{server_port}}
+i  cd /etc/mysql		{{server_addr}}	{{server_port}}
+i  nano my.cnf		{{server_addr}}	{{server_port}}
+i  #在[mysqldump]前面加上		{{server_addr}}	{{server_port}}
+i  #default-storage-engine = MyISAM		{{server_addr}}	{{server_port}}
+i  #skip-innodb		{{server_addr}}	{{server_port}}
+i  #InnoDB占内存巨大，MyISAM可以满足常用WP、DZ等99%以上需求，禁止掉！		{{server_addr}}	{{server_port}}
+i  #注意：这里加#号是为了语法高亮不乱，加进去时别忘了删掉#！		{{server_addr}}	{{server_port}}
+i  cd /etc/nginx/sites-available		{{server_addr}}	{{server_port}}
+i  nano default		{{server_addr}}	{{server_port}}
+i  #root行改成root /var/www或者你喜欢的路径		{{server_addr}}	{{server_port}}
+i  #加上这堆代码（PHP用）		{{server_addr}}	{{server_port}}
+i  #location ~ \.php$ {		{{server_addr}}	{{server_port}}
+i  #if (!-f $request_filename){return 404;}		{{server_addr}}	{{server_port}}
+i  # #不加上面这行一旦找不到文件只能显示File not found，连Nginx里定义的404错误页也弄不出来		{{server_addr}}	{{server_port}}
+i  #fastcgi_split_path_info ^(.+\.php)(/.+)$;		{{server_addr}}	{{server_port}}
+i  #fastcgi_pass unix:/var/run/php5-fpm.sock;		{{server_addr}}	{{server_port}}
+i  #fastcgi_index index.php;		{{server_addr}}	{{server_port}}
+i  #include fastcgi_params;		{{server_addr}}	{{server_port}}
+i  #}		{{server_addr}}	{{server_port}}
+i  cd ..		{{server_addr}}	{{server_port}}
+i  nano nginx.conf		{{server_addr}}	{{server_port}}
+i  #worker_processes 2;		{{server_addr}}	{{server_port}}
+i  service nginx restart		{{server_addr}}	{{server_port}}
+i  service mysql restart		{{server_addr}}	{{server_port}}
+i  service php5-fpm restart		{{server_addr}}	{{server_port}}
+i  #搞定！看你内存占用，空载一般不超过20M，当然跑上WP占个70M+没问题，但是128M绝对够		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

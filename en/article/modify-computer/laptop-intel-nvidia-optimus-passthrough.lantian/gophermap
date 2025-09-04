@@ -1,0 +1,871 @@
+i## Changelog		{{server_addr}}	{{server_port}}
+i2022-07-21: Add starting GVT-g on startup. Thanks to comment from		{{server_addr}}	{{server_port}}
+iOwsmyf (on Chinese version of this post). 2022-01-22: Revisions on		{{server_addr}}	{{server_port}}
+iNVIDIA driver updates and comments.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+1> I successfully passed through an Optimus MUXed GPU on my new laptop.	/en/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Abstract (Spoiler Alert!)		{{server_addr}}	{{server_port}}
+iI successfully passed through Intel's GVT-g virtual GPU, as well as		{{server_addr}}	{{server_port}}
+ithe dedicated NVIDIA GPU itself, into a virtual machine on Lenovo R720		{{server_addr}}	{{server_port}}
+igaming laptop.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, due to the limitation of the architecture itself, this GPU		{{server_addr}}	{{server_port}}
+ipassthrough scheme is severely limited. For example, the dGPU is		{{server_addr}}	{{server_port}}
+iunusable in many games, and the performance is still relatively worse		{{server_addr}}	{{server_port}}
+idespite the complicated setup it needs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTherefore, you may attempt the passthrough purely for the fun of		{{server_addr}}	{{server_port}}
+itinkering, but I don't recommend using it for anything important.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Why?		{{server_addr}}	{{server_port}}
+iI do my daily routines, including web browsing and coding, on Arch		{{server_addr}}	{{server_port}}
+iLinux, and I rarely boot into the dual-booted Windows that exists		{{server_addr}}	{{server_port}}
+ialongside Linux. But sometimes I had to boot to Windows when, for		{{server_addr}}	{{server_port}}
+iexample, I wanted to play games with my friends.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Although there are compatibility layers, such as Wine and Proton, to		{{server_addr}}	{{server_port}}
+i> run Windows programs, as well as DXVK that translates DirectX		{{server_addr}}	{{server_port}}
+i> commands to Vulkan for some 3D performance boost, there are still		{{server_addr}}	{{server_port}}
+i> lots of games that won't work under Wine, such as those games with		{{server_addr}}	{{server_port}}
+i> DRM or anti-cheat protection, or some games that call		{{server_addr}}	{{server_port}}
+i> strange		{{server_addr}}	{{server_port}}
+i> private Windows APIs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut dual-booting means I have to maintain two operating systems,		{{server_addr}}	{{server_port}}
+iincluding their system updates, data sharing, and synchronization. For		{{server_addr}}	{{server_port}}
+iinstance, I had to run a Hyper-V virtual machine running Linux and		{{server_addr}}	{{server_port}}
+ipassthrough the disk with the Linux ZFS partition and share the files		{{server_addr}}	{{server_port}}
+iover Samba in order to access them from Windows.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Instant 1GB less memory, and it takes 2-3 minutes to connect to the		{{server_addr}}	{{server_port}}
+i> share after logging on.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOn the other hand, traditional virtual machine hypervisors (QEMU,		{{server_addr}}	{{server_port}}
+iVirtualBox, VMware, etc.) have **horrible** 3D performance.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- QEMU: What is 3D acceleration anyway?		{{server_addr}}	{{server_port}}
+i  - For QXL, which only supports 2D acceleration		{{server_addr}}	{{server_port}}
+i  - There is an attempt in 3D acceleration called Virtio-GPU, but it's		{{server_addr}}	{{server_port}}
+i    incomplete and doesn't support Windows (yet)		{{server_addr}}	{{server_port}}
+i- VirtualBox: Better than nothing		{{server_addr}}	{{server_port}}
+i  - It supports a fraction of DirectX APIs but is incomplete		{{server_addr}}	{{server_port}}
+i  - And on my system VirtualBox sometimes outputs corrupted images		{{server_addr}}	{{server_port}}
+i    with 2D acceleration		{{server_addr}}	{{server_port}}
+i  - And on my system VirtualBox sometimes freezes (compatibility		{{server_addr}}	{{server_port}}
+i    problem with ZFS?)		{{server_addr}}	{{server_port}}
+i- VMware: Best among the three		{{server_addr}}	{{server_port}}
+i  - Still, not enough		{{server_addr}}	{{server_port}}
+i  - And it's closed source and requires a fee		{{server_addr}}	{{server_port}}
+iAnother common solution is the PCIe passthrough functionality of the		{{server_addr}}	{{server_port}}
+iVM hypervisor, which gives full control of the high-performance GPU to		{{server_addr}}	{{server_port}}
+ithe VM, where it directly runs the official drivers and talks to the		{{server_addr}}	{{server_port}}
+iGPU.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- You'll need a CPU that supports either VT-d (Intel) or AMD-Vi (AMD),		{{server_addr}}	{{server_port}}
+i  but you'd be fine with CPUs made in recent years		{{server_addr}}	{{server_port}}
+i  - Unless you are		{{server_addr}}	{{server_port}}
+i    filming Scrapyard Wars		{{server_addr}}	{{server_port}}
+i    picking up old PC components		{{server_addr}}	{{server_port}}
+i- And you'll need at least 2 GPUs (including integrated ones)		{{server_addr}}	{{server_port}}
+i  - Since the high-performance GPU is taken by the VM, the host system		{{server_addr}}	{{server_port}}
+i    cannot display anything without another GPU		{{server_addr}}	{{server_port}}
+i- And you'll need a hypervisor that supports PCIe passthrough		{{server_addr}}	{{server_port}}
+i  - VirtualBox and VMware Workstation can't do this (as far as I know)		{{server_addr}}	{{server_port}}
+i  - VMware ESXi (an OS dedicated to virtualization) can do this		{{server_addr}}	{{server_port}}
+i    - Free for personal users with a simple web UI		{{server_addr}}	{{server_port}}
+i    - But closed-source, picky on network cards, and is a resource hog (on		{{server_addr}}	{{server_port}}
+i      RAM, for example)		{{server_addr}}	{{server_port}}
+i  - Proxmox VE can do this as well		{{server_addr}}	{{server_port}}
+i    - A Debian-based OS for virtualization		{{server_addr}}	{{server_port}}
+i    - The system itself is open source and free, but it charges a fee		{{server_addr}}	{{server_port}}
+i      on technical support		{{server_addr}}	{{server_port}}
+i    - Based on QEMU		{{server_addr}}	{{server_port}}
+i  - Or simply install QEMU on your Linux distribution		{{server_addr}}	{{server_port}}
+i    - QEMU: free and open-source,		{{server_addr}}	{{server_port}}
+i      the chosen one (by multiple Linux VM
+solutions)		{{server_addr}}	{{server_port}}
+i    - You need to type a long command to start the VM, but easier		{{server_addr}}	{{server_port}}
+i      management is possible with Libvirt and Virt-manager		{{server_addr}}	{{server_port}}
+iBut for NVIDIA GPUs and laptops, things are more complicated:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- NVIDIA drivers refuse to load in VMs		{{server_addr}}	{{server_port}}
+i  - NVIDIA doesn't want you to go with a consumer card that costs a		{{server_addr}}	{{server_port}}
+i    mere few hundred dollars. They want you to spend thousands on a		{{server_addr}}	{{server_port}}
+i    GRID GPU dedicated to virtualization.		{{server_addr}}	{{server_port}}
+I    - Linus Torvalds Fxxk Nvidia	/usr/uploads/202007/linus-torvalds-nvidia.png	{{server_addr}}	{{server_port}}
+i  - Therefore, you need a lot of hacks to hide the fact that you're		{{server_addr}}	{{server_port}}
+i    running a VM and make NVIDIA drivers load.		{{server_addr}}	{{server_port}}
+i    - Will be discussed in detail later.		{{server_addr}}	{{server_port}}
+i- Laptop NVIDIA GPUs are different from desktop GPUs		{{server_addr}}	{{server_port}}
+i  - No, I don't just mean performance. The overall architecture is		{{server_addr}}	{{server_port}}
+i    also different.		{{server_addr}}	{{server_port}}
+i  - On a desktop, the GPU is connected in the following scheme:		{{server_addr}}	{{server_port}}
+i      digraph {		{{server_addr}}	{{server_port}}
+i        rankdir=LR		{{server_addr}}	{{server_port}}
+i        node[shape=box]		{{server_addr}}	{{server_port}}
+i      		{{server_addr}}	{{server_port}}
+i        CPU -> NVIDIA		{{server_addr}}	{{server_port}}
+i        NVIDIA -> HDMI		{{server_addr}}	{{server_port}}
+i        NVIDIA -> Monitor		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i    		{{server_addr}}	{{server_port}}
+i    The GPU only connects to the CPU and monitors and doesn't care		{{server_addr}}	{{server_port}}
+i    about other components.		{{server_addr}}	{{server_port}}
+i  - But on laptops, things are different. They even differ between		{{server_addr}}	{{server_port}}
+i    laptops.		{{server_addr}}	{{server_port}}
+i    - If you spent a few hundred dollars on a low-to-mid-range gaming		{{server_addr}}	{{server_port}}
+i      laptop, the connections may look like:		{{server_addr}}	{{server_port}}
+i        digraph {		{{server_addr}}	{{server_port}}
+i          rankdir=LR		{{server_addr}}	{{server_port}}
+i          node[shape=box]		{{server_addr}}	{{server_port}}
+i        		{{server_addr}}	{{server_port}}
+i          CPU -> NVIDIA		{{server_addr}}	{{server_port}}
+i          CPU -> "Intel GPU"		{{server_addr}}	{{server_port}}
+i          {rank=same; NVIDIA -> "Intel GPU"; }		{{server_addr}}	{{server_port}}
+i          "Intel GPU" -> HDMI		{{server_addr}}	{{server_port}}
+i          "Intel GPU" -> Monitor		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i      		{{server_addr}}	{{server_port}}
+i      The difference is, instead of directly connecting to the		{{server_addr}}	{{server_port}}
+i      monitor, the dGPU transfers the rendered image to iGPU, which in		{{server_addr}}	{{server_port}}
+i      turn sends them to the monitor.		{{server_addr}}	{{server_port}}
+i      It is called the MUXless scheme of NVIDIA Optimus.		{{server_addr}}	{{server_port}}
+i      - Pros:		{{server_addr}}	{{server_port}}
+i        - Saves battery juice (dGPU turns off when not needed)		{{server_addr}}	{{server_port}}
+i        - Saves cost (compared to other schemes)		{{server_addr}}	{{server_port}}
+i      - Cons:		{{server_addr}}	{{server_port}}
+i        - High latency when rendering game frames (since an extra		{{server_addr}}	{{server_port}}
+i          transfer is required)		{{server_addr}}	{{server_port}}
+i        - Severe technical difficulty when passing through the GPU:		{{server_addr}}	{{server_port}}
+i          - Windows prefers to run games on the GPU connected to the		{{server_addr}}	{{server_port}}
+i            current monitor.		{{server_addr}}	{{server_port}}
+i            - Since the dGPU isn't connected to any monitor, games		{{server_addr}}	{{server_port}}
+i              won't prefer to use the dGPU. Instead, they will use the		{{server_addr}}	{{server_port}}
+i              low-performance virtualized GPU (ex. QXL) or the Intel		{{server_addr}}	{{server_port}}
+i              GVT-g virtual GPU (with Intel-level performance).		{{server_addr}}	{{server_port}}
+i          - In the combination of Intel + NVIDIA Optimus, NVIDIA		{{server_addr}}	{{server_port}}
+i            drivers are in charge of moving the workload to dGPU.		{{server_addr}}	{{server_port}}
+i            - But NVIDIA drivers won't accept Intel GVT-g into the		{{server_addr}}	{{server_port}}
+i              combination, and Optimus won't be enabled.		{{server_addr}}	{{server_port}}
+i          - This means games will run on the integrated graphics		{{server_addr}}	{{server_port}}
+i            unless the game engine proactively detects and uses the		{{server_addr}}	{{server_port}}
+i            dGPU.		{{server_addr}}	{{server_port}}
+i    - If you spent a bit more than a thousand on a mid-to-higher-range		{{server_addr}}	{{server_port}}
+i      laptop, you may get:		{{server_addr}}	{{server_port}}
+i        digraph {		{{server_addr}}	{{server_port}}
+i          rankdir=LR		{{server_addr}}	{{server_port}}
+i          node[shape=box]		{{server_addr}}	{{server_port}}
+i        		{{server_addr}}	{{server_port}}
+i          CPU -> NVIDIA		{{server_addr}}	{{server_port}}
+i          CPU -> "Intel GPU"		{{server_addr}}	{{server_port}}
+i          {rank=same; NVIDIA -> "Intel GPU" [dir=none]; }		{{server_addr}}	{{server_port}}
+i          "Intel GPU" -> HDMI		{{server_addr}}	{{server_port}}
+i          "Intel GPU" -> Monitor		{{server_addr}}	{{server_port}}
+i          NVIDIA -> HDMI		{{server_addr}}	{{server_port}}
+i          NVIDIA -> Monitor		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i      		{{server_addr}}	{{server_port}}
+i      Compared to the last scheme, there is a switch on the		{{server_addr}}	{{server_port}}
+i      motherboard circuit, and the HDMI port and the monitor can be		{{server_addr}}	{{server_port}}
+i      allocated to different GPUs on-demand.		{{server_addr}}	{{server_port}}
+i      This is another scheme of NVIDIA Optimus, called MUXed scheme.		{{server_addr}}	{{server_port}}
+i      - Pros:		{{server_addr}}	{{server_port}}
+i        - Saves power (dGPU turns off when not needed)		{{server_addr}}	{{server_port}}
+i        - Low frame latency (when the monitor is switched to run on		{{server_addr}}	{{server_port}}
+i          dGPU)		{{server_addr}}	{{server_port}}
+i        - Easier passthroughs.		{{server_addr}}	{{server_port}}
+i          - For example, you may switch the HDMI port to the dGPU, and		{{server_addr}}	{{server_port}}
+i            spend a few dollars on a fake HDMI dongle from Aliexpress,		{{server_addr}}	{{server_port}}
+i            to let games in VM run on the dGPU; then you can see the		{{server_addr}}	{{server_port}}
+i            outputs with remote desktop software.		{{server_addr}}	{{server_port}}
+i      - Cons:		{{server_addr}}	{{server_port}}
+i        - Expensive (with all those circuits)		{{server_addr}}	{{server_port}}
+i    - If you spent thousands on a top-end laptop, you may get this:		{{server_addr}}	{{server_port}}
+i        digraph {		{{server_addr}}	{{server_port}}
+i          rankdir=LR		{{server_addr}}	{{server_port}}
+i          node[shape=box]		{{server_addr}}	{{server_port}}
+i        		{{server_addr}}	{{server_port}}
+i          CPU -> NVIDIA		{{server_addr}}	{{server_port}}
+i          NVIDIA -> HDMI		{{server_addr}}	{{server_port}}
+i          NVIDIA -> Monitor		{{server_addr}}	{{server_port}}
+i        }		{{server_addr}}	{{server_port}}
+i      		{{server_addr}}	{{server_port}}
+i      Wonder where the iGPU had gone? How come you need it on a		{{server_addr}}	{{server_port}}
+i      multi-thousand-dollar laptop for gaming?		{{server_addr}}	{{server_port}}
+i      Under this scheme, the manufacturer cuts power to the iGPU		{{server_addr}}	{{server_port}}
+i      component, so all the power budget can be allocated to CPU and		{{server_addr}}	{{server_port}}
+i      dGPU for better performance. This is basically the same as a		{{server_addr}}	{{server_port}}
+i      desktop computer.		{{server_addr}}	{{server_port}}
+i      - Pros:		{{server_addr}}	{{server_port}}
+i        - High performance with low latency (direct connection from		{{server_addr}}	{{server_port}}
+i          dGPU to monitor, and no unnecessary power budget on iGPU)		{{server_addr}}	{{server_port}}
+i        - Saves cost (no complicated switching circuits)		{{server_addr}}	{{server_port}}
+i      - Cons:		{{server_addr}}	{{server_port}}
+i        - Costs more power (with the dGPU always on)		{{server_addr}}	{{server_port}}
+i          - But you likely don't need it anyway with a		{{server_addr}}	{{server_port}}
+i            multi-thousand-dollar laptop.		{{server_addr}}	{{server_port}}
+i        - Catastrophic for GPU passthrough		{{server_addr}}	{{server_port}}
+i          - Since you only have one GPU, your host OS won't get to use		{{server_addr}}	{{server_port}}
+i            any GPU when it is passed through.		{{server_addr}}	{{server_port}}
+i          - If you insist, you need to code your own switching scripts		{{server_addr}}	{{server_port}}
+i            and find your way to debug without any display output.		{{server_addr}}	{{server_port}}
+i          - Try this if you are brave enough (YOLO!)		{{server_addr}}	{{server_port}}
+i    - How to determine the actual scheme:		{{server_addr}}	{{server_port}}
+i      Run `lspci` on the Linux OS, and look for entries about Intel HD		{{server_addr}}	{{server_port}}
+i      Graphics or NVIDIA.		{{server_addr}}	{{server_port}}
+i      - If the dGPU starts with `3D Controller` , you have the first		{{server_addr}}	{{server_port}}
+i        Optimus scheme (iGPU connected to monitor).		{{server_addr}}	{{server_port}}
+i      - If the dGPU starts with `VGA Controller` , and there is an `HD		{{server_addr}}	{{server_port}}
+i        Graphics` GPU, you have the second Optimus scheme (switching		{{server_addr}}	{{server_port}}
+i        between two GPUs).		{{server_addr}}	{{server_port}}
+i      - If the dGPU starts with `VGA Controller` , and there is no `HD		{{server_addr}}	{{server_port}}
+i        Graphics` GPU, you have the last scheme without iGPU.		{{server_addr}}	{{server_port}}
+i## My Environment		{{server_addr}}	{{server_port}}
+iWhen writing this post, I'm using this laptop and OS;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Lenovo Legion R720-15IKBN (i7-7700HQ, GTX1050)		{{server_addr}}	{{server_port}}
+i  - The first Optimus MUXless scheme, with the iGPU connected to the		{{server_addr}}	{{server_port}}
+i    monitor.		{{server_addr}}	{{server_port}}
+i- Host OS is Arch Linux, up to date when writing this article		{{server_addr}}	{{server_port}}
+i- QEMU hypervisor with Libvirt and Virt-Manager for graphical		{{server_addr}}	{{server_port}}
+i  management		{{server_addr}}	{{server_port}}
+i- Windows 10 LTSC 2019 in VM		{{server_addr}}	{{server_port}}
+iAnd here are my goals:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Create an Intel GVT-g virtual GPU and pass it to VM		{{server_addr}}	{{server_port}}
+i- Disable NVIDIA GPU on the host, and hand it over completely to VM		{{server_addr}}	{{server_port}}
+iBefore starting, you need to prepare:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- A QEMU (Libvirt) virtual machine with Windows 10 installed		{{server_addr}}	{{server_port}}
+i  - With UEFI (OVMF) firmware. Not guaranteed to work with BIOS (SeaBIOS)		{{server_addr}}	{{server_port}}
+i    firmware.		{{server_addr}}	{{server_port}}
+i  - With QXL virtual GPU.		{{server_addr}}	{{server_port}}
+i- A Windows that boots on the physical computer		{{server_addr}}	{{server_port}}
+i  - Dual boot, Windows To Go, etc.		{{server_addr}}	{{server_port}}
+i  - Windows PE may work as long as you can use the Device Manager.		{{server_addr}}	{{server_port}}
+i- Host OS displaying contents with the iGPU. dGPU either disabled or		{{server_addr}}	{{server_port}}
+i  driver unloaded.		{{server_addr}}	{{server_port}}
+i  - Or you cannot passthrough the GVT-g GPU (Virt-Manager will crash).		{{server_addr}}	{{server_port}}
+i  - And you cannot passthrough the dGPU (taken by Host OS).		{{server_addr}}	{{server_port}}
+iImportant tips:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Multiple reboots of the host OS is required, and your host OS may		{{server_addr}}	{{server_port}}
+i  crash! Back up your data.		{{server_addr}}	{{server_port}}
+i- You don't need to download any drivers manually. Windows will do it		{{server_addr}}	{{server_port}}
+i  for you automatically.		{{server_addr}}	{{server_port}}
+i  - If it doesn't, don't go any further than downloading the driver		{{server_addr}}	{{server_port}}
+i    EXE and double-clicking		{{server_addr}}	{{server_port}}
+i  - **Never** specify the exact driver to be used in Device Manager		{{server_addr}}	{{server_port}}
+i  - Debugging will be harder if you do this		{{server_addr}}	{{server_port}}
+i## Stop Host OS from Tampering with NVIDIA GPU		{{server_addr}}	{{server_port}}
+iThe NVIDIA driver on the Host OS will hold control of the dGPU, and		{{server_addr}}	{{server_port}}
+istop VM from using it. Therefore you need to replace the driver with `vfio-pci` ,		{{server_addr}}	{{server_port}}
+ibuilt solely for PCIe passthrough.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iEven if you don't plan to passthrough the dGPU, you need to switch the		{{server_addr}}	{{server_port}}
+igraphics display of Host OS to the iGPU, or later Virt-Manager will		{{server_addr}}	{{server_port}}
+icrash. You may disable NVIDIA drivers with the steps below or use		{{server_addr}}	{{server_port}}
+isoftware such as `optimus-manager` for management.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere are the steps for disabling the NVIDIA driver and passing control		{{server_addr}}	{{server_port}}
+ito the PCIe passthrough module:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Run `lspci -nn | grep NVIDIA` and obtain an output similar to:		{{server_addr}}	{{server_port}}
+i     01:00.0 3D controller [0302]: NVIDIA Corporation GP107M [GeForce GTX 1050 Mobile] [10de:1c8d] (rev a1)		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i   Here `[10de:1c8d]` is the vendor ID and device ID of the dGPU,		{{server_addr}}	{{server_port}}
+i   where `10de` means this device is manufactured by NVIDIA, and `1c8d`		{{server_addr}}	{{server_port}}
+i   means this is a GTX 1050.		{{server_addr}}	{{server_port}}
+i2. Create `/etc/modprobe.d/lantian.conf` with the following content:		{{server_addr}}	{{server_port}}
+i     options vfio-pci ids=10de:1c8d		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i   This configures `vfio-pci` , the kernel module responsible for PCIe		{{server_addr}}	{{server_port}}
+i   passthrough, to manage the dGPU. `ids` is the vendor ID and device		{{server_addr}}	{{server_port}}
+i   ID of the device to be passed through.		{{server_addr}}	{{server_port}}
+i3. Modify `/etc/mkinitcpio.conf` , add the following contents to `MODULES` :		{{server_addr}}	{{server_port}}
+i     MODULES=(vfio_pci vfio vfio_iommu_type1 vfio_virqfd)		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i   And remove anything related to NVIDIA drivers (such as `nvidia` )		{{server_addr}}	{{server_port}}
+i   Now PCIe passthrough module will take control of the dGPU in the		{{server_addr}}	{{server_port}}
+i   early booting process, preventing NVIDIA drivers from taking		{{server_addr}}	{{server_port}}
+i   control.		{{server_addr}}	{{server_port}}
+i4. Run `mkinitcpio -P` to update the initramfs.		{{server_addr}}	{{server_port}}
+i5. Reboot.		{{server_addr}}	{{server_port}}
+i   - Or you may wait until the first step of iGPU passthrough.		{{server_addr}}	{{server_port}}
+i## Setting up Intel GVT-g Virtual iGPU		{{server_addr}}	{{server_port}}
+iRemember the multi-thousand-dollar NVIDIA GRID GPUs? If you get hold		{{server_addr}}	{{server_port}}
+iof one of these, the GPU driver itself will support creating multiple		{{server_addr}}	{{server_port}}
+ivirtual GPUs to be used on different VMs, just like the CPU		{{server_addr}}	{{server_port}}
+ivirtualization technology.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut different from NVIDIA, 5th gen and later Intel CPUs support this		{{server_addr}}	{{server_port}}
+iout of the box, and you don't need to pay the ransom for an expensive		{{server_addr}}	{{server_port}}
+iGPU. Although iGPU is weak, at least it allows for smooth web browsing		{{server_addr}}	{{server_port}}
+iin VM compared to QXL, etc.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPassing through this virtual Intel GPU is also relatively easy and may		{{server_addr}}	{{server_port}}
+iserve as a practice.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Enable kernel parameters for GVT-g, and load kernel modules		{{server_addr}}	{{server_port}}
+i   - Modify your kernel parameters (Usually located at `/boot/loader/entries/arch.conf`		{{server_addr}}	{{server_port}}
+i     if you use Systemd-boot), and add:		{{server_addr}}	{{server_port}}
+i       i915.enable_gvt=1 kvm.ignore_msrs=1 intel_iommu=on		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i   - Modify `/etc/modules-load.d/lantian.conf` and add the next 3		{{server_addr}}	{{server_port}}
+i     lines:		{{server_addr}}	{{server_port}}
+i       kvmgt		{{server_addr}}	{{server_port}}
+i       vfio-iommu-type1		{{server_addr}}	{{server_port}}
+i       vfio-mdev		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i     These 3 lines correspond to the required kernel modules.		{{server_addr}}	{{server_port}}
+i   - Reboot.		{{server_addr}}	{{server_port}}
+i2. Create virtual GPU		{{server_addr}}	{{server_port}}
+i   - Run `lspci | grep "HD Graphics"` to look for the PCIe address of		{{server_addr}}	{{server_port}}
+i     the iGPU. I get this output for example:		{{server_addr}}	{{server_port}}
+i       00:02.0 VGA compatible controller: Intel Corporation HD Graphics 630 (rev 04)		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i     In this case, iGPU is located at `00:02.0` on the PCIe bus.		{{server_addr}}	{{server_port}}
+i   - Run the following command to create the virtual GPU:		{{server_addr}}	{{server_port}}
+i       # Must run as root		{{server_addr}}	{{server_port}}
+i       sudo su		{{server_addr}}	{{server_port}}
+i       echo "af5972fb-5530-41a7-0000-fd836204445b" > "/sys/devices/pci0000:00/0000:00:02.0/mdev_supported_types/i915-GVTg_V5_4/create"		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i     Pay attention to the iGPU PCIe bus location. In addition you can		{{server_addr}}	{{server_port}}
+i     optionally replace the UUID.		{{server_addr}}	{{server_port}}
+i     In addition, each time you restart the system, you need to run		{{server_addr}}	{{server_port}}
+i     this command manually before starting the VM. You can also add		{{server_addr}}	{{server_port}}
+i     this command to `/etc/rc.local` to create the virtual GPU on		{{server_addr}}	{{server_port}}
+i     startup. It does not have performance impacts when the VM is off.		{{server_addr}}	{{server_port}}
+i3. Modify the VM configuration to expose the virtual GPU		{{server_addr}}	{{server_port}}
+i   - Run `virsh edit Win10` , where `Win10` is the name of your VM.		{{server_addr}}	{{server_port}}
+i     Insert the following contents above `</devices>` :		{{server_addr}}	{{server_port}}
+i       <hostdev mode='subsystem' type='mdev' managed='no' model='vfio-pci' display='off'>		{{server_addr}}	{{server_port}}
+i         <source>		{{server_addr}}	{{server_port}}
+i           <address uuid='af5972fb-5530-41a7-0000-fd836204445b'/>		{{server_addr}}	{{server_port}}
+i         </source>		{{server_addr}}	{{server_port}}
+i       </hostdev>		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i     Replace the UUID to match the last step. Also, `display` here is		{{server_addr}}	{{server_port}}
+i     set to `off` , which is intentional (normal).		{{server_addr}}	{{server_port}}
+i   - Do not remove the QXL GPU yet.		{{server_addr}}	{{server_port}}
+i   - Start the VM and open Device Manager. You should see a `Microsoft		{{server_addr}}	{{server_port}}
+i     Basic Display Adapter` .		{{server_addr}}	{{server_port}}
+i   - Connect the VM to the Internet and wait. Windows will		{{server_addr}}	{{server_port}}
+i     automatically install the iGPU drivers, and you will see the		{{server_addr}}	{{server_port}}
+i     Intel Control Panel in Start Menu.		{{server_addr}}	{{server_port}}
+i     - If the driver isn't installed after a long time, you may		{{server_addr}}	{{server_port}}
+i       download the iGPU driver (just the regular ones) from the Intel		{{server_addr}}	{{server_port}}
+i       website, copy it to the VM, and try to install it.		{{server_addr}}	{{server_port}}
+i     - If it still doesn't work, it means you've done something wrong,		{{server_addr}}	{{server_port}}
+i       or there is a hypervisor bug.		{{server_addr}}	{{server_port}}
+i   - After the driver is installed, the VM can use the Intel GPU now.		{{server_addr}}	{{server_port}}
+i     But since the current monitor is displaying images from QXL GPU,		{{server_addr}}	{{server_port}}
+i     and Intel GPU is not the primary GPU, Windows hasn't set any		{{server_addr}}	{{server_port}}
+i     program to run on Intel GPU yet.		{{server_addr}}	{{server_port}}
+i     - We will disable the QXL GPU next.		{{server_addr}}	{{server_port}}
+i4. Shut down the VM and edit the configuration again:		{{server_addr}}	{{server_port}}
+i   - In the `<hostdev>` added above, change `display='off'` to `display='on'` .		{{server_addr}}	{{server_port}}
+i   - Remove everything in `<graphics>...</graphics>` and `<video>...</video>` ,		{{server_addr}}	{{server_port}}
+i     and replace with:		{{server_addr}}	{{server_port}}
+i       <graphics type='spice'>		{{server_addr}}	{{server_port}}
+i         <listen type='none'/>		{{server_addr}}	{{server_port}}
+i         <image compression='off'/>		{{server_addr}}	{{server_port}}
+i         <gl enable='yes'/>		{{server_addr}}	{{server_port}}
+i       </graphics>		{{server_addr}}	{{server_port}}
+i       <video>		{{server_addr}}	{{server_port}}
+i         <model type='none'/>		{{server_addr}}	{{server_port}}
+i       </video>		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i   - Add these lines before `</domain>` :		{{server_addr}}	{{server_port}}
+i       <qemu:commandline>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='device.hostdev0.ramfb=on'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='device.hostdev0.driver=vfio-pci-nohotplug'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='device.hostdev0.x-igd-opregion=on'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='device.hostdev0.xres=1920'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='device.hostdev0.yres=1080'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i           <qemu:arg value='device.hostdev0.romfile=/vbios_gvt_uefi.rom'/>		{{server_addr}}	{{server_port}}
+i           <qemu:env name='MESA_LOADER_DRIVER_OVERRIDE' value='i965'/>		{{server_addr}}	{{server_port}}
+i       </qemu:commandline>		{{server_addr}}	{{server_port}}
+i     		{{server_addr}}	{{server_port}}
+i     The `vbios_gvt_uefi.rom` can be downloaded from		{{server_addr}}	{{server_port}}
+h     http://120.25.59.132:3000/vbios_gvt_uefi.rom	URL:http://120.25.59.132:3000/vbios_gvt_uefi.rom	{{server_addr}}	{{server_port}}
+i     , or		{{server_addr}}	{{server_port}}
+1     from this site	/usr/uploads/202007/vbios_gvt_uefi.rom	{{server_addr}}	{{server_port}}
+i     , and should be put to root folder. If you moved it elsewhere,		{{server_addr}}	{{server_port}}
+i     you need to modify the `romfile` parameter correspondingly.		{{server_addr}}	{{server_port}}
+i   - Change the first line of the configuration file, `<domain		{{server_addr}}	{{server_port}}
+i     type='kvm'>` , to `<domain type='kvm'		{{server_addr}}	{{server_port}}
+i     xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>` .		{{server_addr}}	{{server_port}}
+i5. Reboot the VM, and you should see normal graphics output. Now the		{{server_addr}}	{{server_port}}
+i   VM is using the GVT-g virtual GPU.		{{server_addr}}	{{server_port}}
+i## Setting up NVIDIA dGPU Passthrough		{{server_addr}}	{{server_port}}
+iIn previous steps, the official NVIDIA drivers on the host OS are		{{server_addr}}	{{server_port}}
+idisabled, and the dGPU is managed by `vfio-pci` for PCIe passthrough.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPassing through the dGPU itself is simple, but NVIDIA added a lot of		{{server_addr}}	{{server_port}}
+idriver limitations for money:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- GPU must be on the correct PCIe bus location.		{{server_addr}}	{{server_port}}
+i- System should not expose VM characteristics.		{{server_addr}}	{{server_port}}
+i- System must have a battery.		{{server_addr}}	{{server_port}}
+i- GPU BIOS must be available in the ACPI table.		{{server_addr}}	{{server_port}}
+i- etc...		{{server_addr}}	{{server_port}}
+iSo we have to hack through all these pitfalls.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Update on 2022-01-22:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+h> Since version 465, NVIDIA lifted most of the restrictions	URL:https://nvidia.custhelp.com/app/answers/detail/a_id/5173	{{server_addr}}	{{server_port}}
+i> , so theoretically, you pass a GPU into the VM, and everything		{{server_addr}}	{{server_port}}
+i> should just work.		{{server_addr}}	{{server_port}}
+i> 		{{server_addr}}	{{server_port}}
+i> But that's just the theory.		{{server_addr}}	{{server_port}}
+i> 		{{server_addr}}	{{server_port}}
+i> I still recommend everyone to follow all the steps and hide the VM		{{server_addr}}	{{server_port}}
+i> characteristics, because:		{{server_addr}}	{{server_port}}
+i> 1. Not all restructions are lifted for laptops.		{{server_addr}}	{{server_port}}
+i>    - At least in my tests, an incorrect PCIe bus address for the GPU		{{server_addr}}	{{server_port}}
+i>      and the absence of a battery still causes passthrough to fail,		{{server_addr}}	{{server_port}}
+i>      and the driver will error out with the infamous code 43.		{{server_addr}}	{{server_port}}
+i> 2. Even if NVIDIA driver isn't detecting VMs, the programs you run		{{server_addr}}	{{server_port}}
+i>    might. Hiding VM characteristics increases the chance to run them		{{server_addr}}	{{server_port}}
+i>    successfully.		{{server_addr}}	{{server_port}}
+i>    - Examples include online games with anti-cheat systems, or		{{server_addr}}	{{server_port}}
+i>      commercial software that require online activation.		{{server_addr}}	{{server_port}}
+i> 3. Because of architectural limitations of Optimus MUXless, you		{{server_addr}}	{{server_port}}
+i>    still need to modify the UEFI firmware so the VM can see the GPU		{{server_addr}}	{{server_port}}
+i>    vBIOS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. First reboot the physical machine to Windows and do the following		{{server_addr}}	{{server_port}}
+i   things:		{{server_addr}}	{{server_port}}
+i   - (Optionally) Download GPU-Z and export the GPU vBIOS.		{{server_addr}}	{{server_port}}
+i   - Find your dGPU in Device Manager and look for its Hardware ID,		{{server_addr}}	{{server_port}}
+i     such as `PCI\VEN_10DE&DEV_1C8D&SUBSYS_39D117AA&REV_A1` , and		{{server_addr}}	{{server_port}}
+i     record this somewhere.		{{server_addr}}	{{server_port}}
+i2. Then reboot back to Linux. If you haven't exported the GPU vBIOS,		{{server_addr}}	{{server_port}}
+i   you may use `VBiosFinder` software to extract it from the BIOS		{{server_addr}}	{{server_port}}
+i   update of your computer.		{{server_addr}}	{{server_port}}
+i     # Download VBiosFinder		{{server_addr}}	{{server_port}}
+i     git clone https://github.com/coderobe/VBiosFinder.git		{{server_addr}}	{{server_port}}
+i     # Download BIOS update from your computer's manufacturer site, usually an EXE file.		{{server_addr}}	{{server_port}}
+i     # My BIOS update is named as BIOS-4KCN45WW.exe, replace accordingly		{{server_addr}}	{{server_port}}
+i     mv BIOS-4KCN45WW.exe VBiosFinder/		{{server_addr}}	{{server_port}}
+i     # Install dependencies		{{server_addr}}	{{server_port}}
+i     pikaur -S ruby ruby-bundler innoextract p7zip upx		{{server_addr}}	{{server_port}}
+i     # Install rom-parser		{{server_addr}}	{{server_port}}
+i     git clone https://github.com/awilliam/rom-parser.git		{{server_addr}}	{{server_port}}
+i     cd rom-parser		{{server_addr}}	{{server_port}}
+i     make		{{server_addr}}	{{server_port}}
+i     mv rom-parser ../VBiosFinder/3rdparty		{{server_addr}}	{{server_port}}
+i     cd ..		{{server_addr}}	{{server_port}}
+i     # Install UEFIExtract		{{server_addr}}	{{server_port}}
+i     git clone https://github.com/LongSoft/UEFITool.git -b new_engine		{{server_addr}}	{{server_port}}
+i     cd UEFITool		{{server_addr}}	{{server_port}}
+i     ./unixbuild.sh		{{server_addr}}	{{server_port}}
+i     mv UEFIExtract/UEFIExtract ../VBiosFinder/3rdparty		{{server_addr}}	{{server_port}}
+i     cd ..		{{server_addr}}	{{server_port}}
+i     # Extract vBIOS		{{server_addr}}	{{server_port}}
+i     cd VBiosFinder		{{server_addr}}	{{server_port}}
+i     bundle update --bundler		{{server_addr}}	{{server_port}}
+i     bundle install --path=vendor/bundle		{{server_addr}}	{{server_port}}
+i     ./vbiosfinder extract BIOS-4KCN45WW.exe		{{server_addr}}	{{server_port}}
+i     ls output		{{server_addr}}	{{server_port}}
+i     # There will be a few files in the output folder:		{{server_addr}}	{{server_port}}
+i     # - vbios_10de_1c8c.rom		{{server_addr}}	{{server_port}}
+i     # - vbios_10de_1c8d.rom		{{server_addr}}	{{server_port}}
+i     # - vbios_10de_1c8e.rom		{{server_addr}}	{{server_port}}
+i     # - ...		{{server_addr}}	{{server_port}}
+i     # Find the one corresponding to the vendor ID and device ID, which is your vBIOS.		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i3. Then add the vBIOS to VM's UEFI firmware (or OVMF).		{{server_addr}}	{{server_port}}
+i   On an Optimus laptop, NVIDIA drivers will search for the vBIOS from		{{server_addr}}	{{server_port}}
+i   the system's ACPI table and load it to the GPU. The ACPI table is		{{server_addr}}	{{server_port}}
+i   managed by the UEFI firmware, so it needs to be modified to add the		{{server_addr}}	{{server_port}}
+i   vBIOS.		{{server_addr}}	{{server_port}}
+i     # Based on reports on GitHub, UEFI firmware shouldn't be moved once built		{{server_addr}}	{{server_port}}
+i     # So find somewhere to permanently store the files		{{server_addr}}	{{server_port}}
+i     cd /opt		{{server_addr}}	{{server_port}}
+i     git clone https://github.com/tianocore/edk2.git		{{server_addr}}	{{server_port}}
+i     # Install dependencies		{{server_addr}}	{{server_port}}
+i     pikaur -S git python2 iasl nasm subversion perl-libwww vim dos2unix gcc5		{{server_addr}}	{{server_port}}
+i     # Assuming your vBIOS is at /vbios.rom		{{server_addr}}	{{server_port}}
+i     cd edk2/OvmfPkg/AcpiPlatformDxe		{{server_addr}}	{{server_port}}
+i     xxd -i /vbios.rom vrom.h		{{server_addr}}	{{server_port}}
+i     # Modify vrom.h, and rename the unsigned char array to VROM_BIN		{{server_addr}}	{{server_port}}
+i     # and modify the length variable at the end to VROM_BIN_LEN, and record the number, 167936 in my case		{{server_addr}}	{{server_port}}
+i     wget https://github.com/jscinoz/optimus-vfio-docs/files/1842788/ssdt.txt -O ssdt.asl		{{server_addr}}	{{server_port}}
+i     # Modify ssdt.asl, change line 37 to match VROM_BIN_LEN		{{server_addr}}	{{server_port}}
+i     # Run the following commands. Errors may pop up, but they're fine as long as Ssdt.aml is generated		{{server_addr}}	{{server_port}}
+i     iasl -f ssdt.asl		{{server_addr}}	{{server_port}}
+i     xxd -c1 Ssdt.aml | tail -n +37 | cut -f2 -d' ' | paste -sd' ' | sed 's/ //g' | xxd -r -p > vrom_table.aml		{{server_addr}}	{{server_port}}
+i     xxd -i vrom_table.aml | sed 's/vrom_table_aml/vrom_table/g' > vrom_table.h		{{server_addr}}	{{server_port}}
+i     # Switch back to edk2's folder and apply a patch		{{server_addr}}	{{server_port}}
+i     cd ../..		{{server_addr}}	{{server_port}}
+i     wget https://gist.github.com/jscinoz/c43a81882929ceaf7ec90afd820cd470/raw/139799c87fc806a966250e5686e15a28676fc84e/nvidia-hack.diff		{{server_addr}}	{{server_port}}
+i     patch -p1 < nvidia-hack.diff		{{server_addr}}	{{server_port}}
+i     # Compile OVMF		{{server_addr}}	{{server_port}}
+i     make -C BaseTools		{{server_addr}}	{{server_port}}
+i     . ./edksetup.sh BaseTools		{{server_addr}}	{{server_port}}
+i     # Modify these variables in Conf/target.txt:		{{server_addr}}	{{server_port}}
+i     # - ACTIVE_PLATFORM       = OvmfPkg/OvmfPkgX64.dsc		{{server_addr}}	{{server_port}}
+i     # - TARGET_ARCH           = X64		{{server_addr}}	{{server_port}}
+i     # - TOOL_CHAIN_TAG        = GCC5		{{server_addr}}	{{server_port}}
+i     build		{{server_addr}}	{{server_port}}
+i     # Wait until compilation is complete, and verify file's existence in Build/OvmfX64/DEBUG_GCC5/FV:		{{server_addr}}	{{server_port}}
+i     # - OVMF_CODE.fd		{{server_addr}}	{{server_port}}
+i     # - OVMF_VARS.fd		{{server_addr}}	{{server_port}}
+i     # Replace UEFI variables of your VM, remember to change VM names		{{server_addr}}	{{server_port}}
+i     cp Build/OvmfX64/DEBUG_GCC5/FV/OVMF_VARS.fd /var/lib/libvirt/qemu/nvram/Win10_VARS.fd		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i4. Modify your VM configuration, `virsh edit Win10` , and do the		{{server_addr}}	{{server_port}}
+i   following changes:		{{server_addr}}	{{server_port}}
+i     <!-- Modify the os section, remember to match the path to OVMF_CODE.fd -->		{{server_addr}}	{{server_port}}
+i     <os>		{{server_addr}}	{{server_port}}
+i       <type arch='x86_64' machine='pc-q35-4.2'>hvm</type>		{{server_addr}}	{{server_port}}
+i       <loader readonly='yes' type='pflash'>/opt/edk2/Build/OvmfX64/DEBUG_GCC5/FV/OVMF_CODE.fd</loader>		{{server_addr}}	{{server_port}}
+i       <nvram>/var/lib/libvirt/qemu/nvram/Win10_VARS.fd</nvram>		{{server_addr}}	{{server_port}}
+i     </os>		{{server_addr}}	{{server_port}}
+i     <!-- Modify the features section, so QEMU will hide the fact that this is a VM -->		{{server_addr}}	{{server_port}}
+i     <features>		{{server_addr}}	{{server_port}}
+i       <acpi/>		{{server_addr}}	{{server_port}}
+i       <apic/>		{{server_addr}}	{{server_port}}
+i       <hyperv>		{{server_addr}}	{{server_port}}
+i         <relaxed state='on'/>		{{server_addr}}	{{server_port}}
+i         <vapic state='on'/>		{{server_addr}}	{{server_port}}
+i         <spinlocks state='on' retries='8191'/>		{{server_addr}}	{{server_port}}
+i         <vendor_id state='on' value='GenuineIntel'/>		{{server_addr}}	{{server_port}}
+i       </hyperv>		{{server_addr}}	{{server_port}}
+i       <kvm>		{{server_addr}}	{{server_port}}
+i         <hidden state='on'/>		{{server_addr}}	{{server_port}}
+i       </kvm>		{{server_addr}}	{{server_port}}
+i       <vmport state='off'/>		{{server_addr}}	{{server_port}}
+i     </features>		{{server_addr}}	{{server_port}}
+i     <!-- Add the PCIe passthrough device, must be below the hostdev for iGPU -->		{{server_addr}}	{{server_port}}
+i     <hostdev mode='subsystem' type='pci' managed='yes'>		{{server_addr}}	{{server_port}}
+i       <source>		{{server_addr}}	{{server_port}}
+i         <address domain='0x0000' bus='0x01' slot='0x00' function='0x0'/>		{{server_addr}}	{{server_port}}
+i       </source>		{{server_addr}}	{{server_port}}
+i       <rom bar='off'/>		{{server_addr}}	{{server_port}}
+i       <!-- The PCIe bus address here MUST BE EXACTLY 01:00.0 -->		{{server_addr}}	{{server_port}}
+i       <!-- If there is a PCIe bus address conflict when saving config changes, -->		{{server_addr}}	{{server_port}}
+i       <!-- Remove <address> of all other devices -->		{{server_addr}}	{{server_port}}
+i       <!-- And Libvirt will reallocate PCIe bus addresses -->		{{server_addr}}	{{server_port}}
+i       <address type='pci' domain='0x0000' bus='0x01' slot='0x00' function='0x0' multifunction='on'/>		{{server_addr}}	{{server_port}}
+i     </hostdev>		{{server_addr}}	{{server_port}}
+i     <!-- Add these parameters before </qemu:commandline> -->		{{server_addr}}	{{server_port}}
+i     <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i     <qemu:arg value='device.hostdev1.x-pci-vendor-id=0x10de'/>		{{server_addr}}	{{server_port}}
+i     <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i     <qemu:arg value='device.hostdev1.x-pci-device-id=0x1c8d'/>		{{server_addr}}	{{server_port}}
+i     <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i     <qemu:arg value='device.hostdev1.x-pci-sub-vendor-id=0x17aa'/>		{{server_addr}}	{{server_port}}
+i     <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i     <qemu:arg value='device.hostdev1.x-pci-sub-device-id=0x39d1'/>		{{server_addr}}	{{server_port}}
+i     <qemu:arg value='-acpitable'/>		{{server_addr}}	{{server_port}}
+i     <qemu:arg value='file=/ssdt1.dat'/>		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i   The IDs here should match the hardware ID from Device Manager, `PCI\VEN_10DE&DEV_1C8D&SUBSYS_39D117AA&REV_A1` .		{{server_addr}}	{{server_port}}
+i   Replace accordingly.		{{server_addr}}	{{server_port}}
+i   The ssdt1.dat corresponds to the Base64 below. It can be converted		{{server_addr}}	{{server_port}}
+i   to a binary file with		{{server_addr}}	{{server_port}}
+h   Base64 decoding website	URL:https://base64.guru/converter/decode/file	{{server_addr}}	{{server_port}}
+i   or		{{server_addr}}	{{server_port}}
+1   downloaded from this site	/usr/uploads/202007/ssdt1.dat	{{server_addr}}	{{server_port}}
+i   . Put it in the root folder. If you moved its location, you should		{{server_addr}}	{{server_port}}
+i   modify the file parameter accordingly. It's also an ACPI table, and		{{server_addr}}	{{server_port}}
+i   it emulates a fully-charged battery, but instead of being merged to		{{server_addr}}	{{server_port}}
+i   OVMF, it simply works as a QEMU argument addition.		{{server_addr}}	{{server_port}}
+i     U1NEVKEAAAAB9EJPQ0hTAEJYUENTU0RUAQAAAElOVEwYEBkgoA8AFVwuX1NCX1BDSTAGABBMBi5f		{{server_addr}}	{{server_port}}
+i     U0JfUENJMFuCTwVCQVQwCF9ISUQMQdAMCghfVUlEABQJX1NUQQCkCh8UK19CSUYApBIjDQELcBcL		{{server_addr}}	{{server_port}}
+i     cBcBC9A5C1gCCywBCjwKPA0ADQANTElPTgANABQSX0JTVACkEgoEAAALcBcL0Dk=		{{server_addr}}	{{server_port}}
+i   		{{server_addr}}	{{server_port}}
+i   **Do not miss any steps, or you will be welcomed by Code 43 (Driver		{{server_addr}}	{{server_port}}
+i   load failure).**		{{server_addr}}	{{server_port}}
+i5. Start the VM and wait a while. Windows will automatically install		{{server_addr}}	{{server_port}}
+i   NVIDIA drivers.		{{server_addr}}	{{server_port}}
+i   - If Device Manager shows the dGPU with an exclamation sign and		{{server_addr}}	{{server_port}}
+i     code 43 or driver load failure, you need to check if you've		{{server_addr}}	{{server_port}}
+i     missed any steps and if you've configured everything correctly.		{{server_addr}}	{{server_port}}
+i     - Switch Device Manager to `Device by Connection` , and verify		{{server_addr}}	{{server_port}}
+i       that dGPU is at Bus 1, Slot 0, Function 0. The parent PCIe port		{{server_addr}}	{{server_port}}
+i       to the dGPU should be at Bus 0, Slot 1, Function 0.		{{server_addr}}	{{server_port}}
+i     - Yes, that's how harsh NVIDIA drivers' checks are.		{{server_addr}}	{{server_port}}
+i     - If they don't match, you need to reallocate PCIe addresses with		{{server_addr}}	{{server_port}}
+i       the method above.		{{server_addr}}	{{server_port}}
+i   - If the OS didn't automatically install the NVIDIA driver, and		{{server_addr}}	{{server_port}}
+i     your manually downloaded driver installer also shows that the		{{server_addr}}	{{server_port}}
+i     system is incompatible, or the GPU cannot be found, you need to		{{server_addr}}	{{server_port}}
+i     check if the hardware ID matches what's found on the host.		{{server_addr}}	{{server_port}}
+i   - Even if dGPU is working correctly, you still won't be able to		{{server_addr}}	{{server_port}}
+i     open NVIDIA Control Panel (which tells you monitors aren't		{{server_addr}}	{{server_port}}
+i     found). This is normal.		{{server_addr}}	{{server_port}}
+i## What's Next?		{{server_addr}}	{{server_port}}
+iEven if you've done every step above and got both iGPU and dGPU		{{server_addr}}	{{server_port}}
+iworking in VM, this is still not very helpful to gaming:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Since Windows thinks the primary monitor is connected to GVT-g		{{server_addr}}	{{server_port}}
+i  virtual iGPU, the OS will let the weak iGPU handle all 3D		{{server_addr}}	{{server_port}}
+i  applications.		{{server_addr}}	{{server_port}}
+i  - If you didn't passthrough the GVT-g iGPU, then QXL will be in		{{server_addr}}	{{server_port}}
+i    charge.		{{server_addr}}	{{server_port}}
+i  - Exceptions: it is reported that some Unreal Engine games will		{{server_addr}}	{{server_port}}
+i    actively detect and use the dGPU.		{{server_addr}}	{{server_port}}
+i- Since a MUXless Optimus dGPU isn't connected to monitors, there is		{{server_addr}}	{{server_port}}
+i  no way to select dGPU as the primary GPU.		{{server_addr}}	{{server_port}}
+i- Since GVT-g iGPU and NVIDIA dGPU cannot form Optimus configuration,		{{server_addr}}	{{server_port}}
+i  NVIDIA drivers won't move game workloads to dGPU.		{{server_addr}}	{{server_port}}
+i- If you only leave the dGPU in VM, although Windows will put render		{{server_addr}}	{{server_port}}
+i  works on the dGPU (there were no other choices), the resolution will		{{server_addr}}	{{server_port}}
+i  be limited to 640x480, and you will have to rely on remote desktop		{{server_addr}}	{{server_port}}
+i  software.		{{server_addr}}	{{server_port}}
+iTherefore, Optimus GPU passthrough is currently more for tinkerers		{{server_addr}}	{{server_port}}
+ithan actual gamers. If you are experienced in driver development, you		{{server_addr}}	{{server_port}}
+imay research in the following directions;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Let GVT-g iGPU and NVIDIA dGPU form Optimus configuration normally		{{server_addr}}	{{server_port}}
+i2. Let QXL and NVIDIA dGPU form Optimus configuration		{{server_addr}}	{{server_port}}
+i3. Modify NVIDIA drivers and add a virtual monitor		{{server_addr}}	{{server_port}}
+i## References		{{server_addr}}	{{server_port}}
+iHuge thanks to previous explorers on the topic of GPU passthrough.		{{server_addr}}	{{server_port}}
+iWithout their efforts, this post won't have existed in the first		{{server_addr}}	{{server_port}}
+iplace.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere are the sources I referenced when I did my configuration:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Intel GVT-g virtual GPU		{{server_addr}}	{{server_port}}
+i  - Arch Linux Wiki		{{server_addr}}	{{server_port}}
+h    https://wiki.archlinux.org/index.php/Intel_GVT-g	URL:https://wiki.archlinux.org/index.php/Intel_GVT-g	{{server_addr}}	{{server_port}}
+i  - Gentoo Wiki / Shunlir's VM configuration		{{server_addr}}	{{server_port}}
+h    https://wiki.gentoo.org/wiki/User:Shunlir/Intel_GVT-g#Install_Intel_driver_in_Guest	URL:https://wiki.gentoo.org/wiki/User:Shunlir/Intel_GVT-g#Install_Intel_driver_in_Guest	{{server_addr}}	{{server_port}}
+i- NVIDIA dGPU passthrough		{{server_addr}}	{{server_port}}
+i  - GitHub Misairu-G's NVIDIA Optimus MUXed passthrough guide		{{server_addr}}	{{server_port}}
+h    https://gist.github.com/Misairu-G/616f7b2756c488148b7309addc940b28	URL:https://gist.github.com/Misairu-G/616f7b2756c488148b7309addc940b28	{{server_addr}}	{{server_port}}
+i  - GitHub jscinoz's Optimus MUXless passthrough exploration		{{server_addr}}	{{server_port}}
+h    https://github.com/jscinoz/optimus-vfio-docs	URL:https://github.com/jscinoz/optimus-vfio-docs	{{server_addr}}	{{server_port}}
+i  - GitHub arne-claeys' OVMF patches and related discussion		{{server_addr}}	{{server_port}}
+h    https://github.com/jscinoz/optimus-vfio-docs/issues/2	URL:https://github.com/jscinoz/optimus-vfio-docs/issues/2	{{server_addr}}	{{server_port}}
+i  - Reddit r/VFIO's guide compilation		{{server_addr}}	{{server_port}}
+h    https://www.reddit.com/r/VFIO/comments/8gv60l/current_state_of_optimus_muxless_laptop_gpu/	URL:https://www.reddit.com/r/VFIO/comments/8gv60l/current_state_of_optimus_muxless_laptop_gpu/	{{server_addr}}	{{server_port}}
+i  - Reddit r/VFIO's emulated battery patch		{{server_addr}}	{{server_port}}
+h    https://www.reddit.com/r/VFIO/comments/ebo2uk/nvidia_geforce_rtx_2060_mobile_success_qemu_ovmf/	URL:https://www.reddit.com/r/VFIO/comments/ebo2uk/nvidia_geforce_rtx_2060_mobile_success_qemu_ovmf/	{{server_addr}}	{{server_port}}
+i## Appendix: Final Libvirt XML File		{{server_addr}}	{{server_port}}
+i  <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>		{{server_addr}}	{{server_port}}
+i    <name>Win10</name>		{{server_addr}}	{{server_port}}
+i    <uuid>6f0e09e1-a7d4-4d33-b4f8-0dc69eaaed9b</uuid>		{{server_addr}}	{{server_port}}
+i    <metadata>		{{server_addr}}	{{server_port}}
+i      <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">		{{server_addr}}	{{server_port}}
+i        <libosinfo:os id="http://microsoft.com/win/10"/>		{{server_addr}}	{{server_port}}
+i      </libosinfo:libosinfo>		{{server_addr}}	{{server_port}}
+i    </metadata>		{{server_addr}}	{{server_port}}
+i    <memory unit='KiB'>4194304</memory>		{{server_addr}}	{{server_port}}
+i    <currentMemory unit='KiB'>4194304</currentMemory>		{{server_addr}}	{{server_port}}
+i    <vcpu placement='static'>8</vcpu>		{{server_addr}}	{{server_port}}
+i    <os>		{{server_addr}}	{{server_port}}
+i      <type arch='x86_64' machine='pc-q35-4.2'>hvm</type>		{{server_addr}}	{{server_port}}
+i      <loader readonly='yes' type='pflash'>/opt/edk2/Build/OvmfX64/DEBUG_GCC5/FV/OVMF_CODE.fd</loader>		{{server_addr}}	{{server_port}}
+i      <nvram>/var/lib/libvirt/qemu/nvram/Win10_VARS.fd</nvram>		{{server_addr}}	{{server_port}}
+i    </os>		{{server_addr}}	{{server_port}}
+i    <features>		{{server_addr}}	{{server_port}}
+i      <acpi/>		{{server_addr}}	{{server_port}}
+i      <apic/>		{{server_addr}}	{{server_port}}
+i      <hyperv>		{{server_addr}}	{{server_port}}
+i        <relaxed state='on'/>		{{server_addr}}	{{server_port}}
+i        <vapic state='on'/>		{{server_addr}}	{{server_port}}
+i        <spinlocks state='on' retries='8191'/>		{{server_addr}}	{{server_port}}
+i        <vendor_id state='on' value='GenuineIntel'/>		{{server_addr}}	{{server_port}}
+i      </hyperv>		{{server_addr}}	{{server_port}}
+i      <kvm>		{{server_addr}}	{{server_port}}
+i        <hidden state='on'/>		{{server_addr}}	{{server_port}}
+i      </kvm>		{{server_addr}}	{{server_port}}
+i      <vmport state='off'/>		{{server_addr}}	{{server_port}}
+i    </features>		{{server_addr}}	{{server_port}}
+i    <cpu mode='host-model' check='partial'>		{{server_addr}}	{{server_port}}
+i      <topology sockets='1' dies='1' cores='4' threads='2'/>		{{server_addr}}	{{server_port}}
+i    </cpu>		{{server_addr}}	{{server_port}}
+i    <clock offset='localtime'>		{{server_addr}}	{{server_port}}
+i      <timer name='rtc' tickpolicy='catchup'/>		{{server_addr}}	{{server_port}}
+i      <timer name='pit' tickpolicy='delay'/>		{{server_addr}}	{{server_port}}
+i      <timer name='hpet' present='no'/>		{{server_addr}}	{{server_port}}
+i      <timer name='hypervclock' present='yes'/>		{{server_addr}}	{{server_port}}
+i    </clock>		{{server_addr}}	{{server_port}}
+i    <on_poweroff>destroy</on_poweroff>		{{server_addr}}	{{server_port}}
+i    <on_reboot>restart</on_reboot>		{{server_addr}}	{{server_port}}
+i    <on_crash>destroy</on_crash>		{{server_addr}}	{{server_port}}
+i    <pm>		{{server_addr}}	{{server_port}}
+i      <suspend-to-mem enabled='no'/>		{{server_addr}}	{{server_port}}
+i      <suspend-to-disk enabled='no'/>		{{server_addr}}	{{server_port}}
+i    </pm>		{{server_addr}}	{{server_port}}
+i    <devices>		{{server_addr}}	{{server_port}}
+i      <emulator>/usr/bin/qemu-system-x86_64</emulator>		{{server_addr}}	{{server_port}}
+i      <disk type='file' device='disk'>		{{server_addr}}	{{server_port}}
+i        <driver name='qemu' type='raw'/>		{{server_addr}}	{{server_port}}
+i        <source file='/var/lib/libvirt/images/Win10.img'/>		{{server_addr}}	{{server_port}}
+i        <target dev='vda' bus='virtio'/>		{{server_addr}}	{{server_port}}
+i        <boot order='1'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x07' slot='0x00' function='0x0'/>		{{server_addr}}	{{server_port}}
+i      </disk>		{{server_addr}}	{{server_port}}
+i      <disk type='file' device='cdrom'>		{{server_addr}}	{{server_port}}
+i        <driver name='qemu' type='raw'/>		{{server_addr}}	{{server_port}}
+i        <source file='/mnt/files/LegacyOS/Common/virtio-win-0.1.141.iso'/>		{{server_addr}}	{{server_port}}
+i        <target dev='sda' bus='sata'/>		{{server_addr}}	{{server_port}}
+i        <readonly/>		{{server_addr}}	{{server_port}}
+i        <boot order='2'/>		{{server_addr}}	{{server_port}}
+i        <address type='drive' controller='0' bus='0' target='0' unit='0'/>		{{server_addr}}	{{server_port}}
+i      </disk>		{{server_addr}}	{{server_port}}
+i      <controller type='usb' index='0' model='qemu-xhci' ports='15'>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x04' slot='0x00' function='0x0'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='sata' index='0'>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x1f' function='0x2'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='0' model='pcie-root'/>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='1' model='pcie-root-port'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-root-port'/>		{{server_addr}}	{{server_port}}
+i        <target chassis='1' port='0x10'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x0' multifunction='on'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='2' model='pcie-root-port'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-root-port'/>		{{server_addr}}	{{server_port}}
+i        <target chassis='2' port='0x11'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='3' model='pcie-root-port'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-root-port'/>		{{server_addr}}	{{server_port}}
+i        <target chassis='3' port='0x12'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='4' model='pcie-root-port'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-root-port'/>		{{server_addr}}	{{server_port}}
+i        <target chassis='4' port='0x13'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x3'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='5' model='pcie-root-port'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-root-port'/>		{{server_addr}}	{{server_port}}
+i        <target chassis='5' port='0x14'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x4'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='6' model='pcie-root-port'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-root-port'/>		{{server_addr}}	{{server_port}}
+i        <target chassis='6' port='0x15'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x5'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='7' model='pcie-root-port'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-root-port'/>		{{server_addr}}	{{server_port}}
+i        <target chassis='7' port='0x8'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x6'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='8' model='pcie-root-port'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-root-port'/>		{{server_addr}}	{{server_port}}
+i        <target chassis='8' port='0x9'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x7'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='9' model='pcie-to-pci-bridge'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-pci-bridge'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x02' slot='0x00' function='0x0'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='10' model='pcie-root-port'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-root-port'/>		{{server_addr}}	{{server_port}}
+i        <target chassis='10' port='0xa'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0' multifunction='on'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='pci' index='11' model='pcie-root-port'>		{{server_addr}}	{{server_port}}
+i        <model name='pcie-root-port'/>		{{server_addr}}	{{server_port}}
+i        <target chassis='11' port='0xb'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x1'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='virtio-serial' index='0'>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x05' slot='0x00' function='0x0'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <controller type='scsi' index='0' model='virtio-scsi'>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x06' slot='0x00' function='0x0'/>		{{server_addr}}	{{server_port}}
+i      </controller>		{{server_addr}}	{{server_port}}
+i      <interface type='bridge'>		{{server_addr}}	{{server_port}}
+i        <mac address='52:54:00:b0:65:5a'/>		{{server_addr}}	{{server_port}}
+i        <source bridge='br0'/>		{{server_addr}}	{{server_port}}
+i        <model type='virtio'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x03' slot='0x00' function='0x0'/>		{{server_addr}}	{{server_port}}
+i      </interface>		{{server_addr}}	{{server_port}}
+i      <serial type='pty'>		{{server_addr}}	{{server_port}}
+i        <target type='isa-serial' port='0'>		{{server_addr}}	{{server_port}}
+i          <model name='isa-serial'/>		{{server_addr}}	{{server_port}}
+i        </target>		{{server_addr}}	{{server_port}}
+i      </serial>		{{server_addr}}	{{server_port}}
+i      <console type='pty'>		{{server_addr}}	{{server_port}}
+i        <target type='serial' port='0'/>		{{server_addr}}	{{server_port}}
+i      </console>		{{server_addr}}	{{server_port}}
+i      <channel type='spicevmc'>		{{server_addr}}	{{server_port}}
+i        <target type='virtio' name='com.redhat.spice.0'/>		{{server_addr}}	{{server_port}}
+i        <address type='virtio-serial' controller='0' bus='0' port='1'/>		{{server_addr}}	{{server_port}}
+i      </channel>		{{server_addr}}	{{server_port}}
+i      <input type='tablet' bus='usb'>		{{server_addr}}	{{server_port}}
+i        <address type='usb' bus='0' port='1'/>		{{server_addr}}	{{server_port}}
+i      </input>		{{server_addr}}	{{server_port}}
+i      <input type='mouse' bus='ps2'/>		{{server_addr}}	{{server_port}}
+i      <input type='keyboard' bus='ps2'/>		{{server_addr}}	{{server_port}}
+i      <graphics type='spice'>		{{server_addr}}	{{server_port}}
+i        <listen type='none'/>		{{server_addr}}	{{server_port}}
+i        <image compression='off'/>		{{server_addr}}	{{server_port}}
+i        <gl enable='yes'/>		{{server_addr}}	{{server_port}}
+i      </graphics>		{{server_addr}}	{{server_port}}
+i      <sound model='ich9'>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x00' slot='0x1b' function='0x0'/>		{{server_addr}}	{{server_port}}
+i      </sound>		{{server_addr}}	{{server_port}}
+i      <video>		{{server_addr}}	{{server_port}}
+i        <model type='none'/>		{{server_addr}}	{{server_port}}
+i      </video>		{{server_addr}}	{{server_port}}
+i      <hostdev mode='subsystem' type='mdev' managed='no' model='vfio-pci' display='on'>		{{server_addr}}	{{server_port}}
+i        <source>		{{server_addr}}	{{server_port}}
+i          <address uuid='af5972fb-5530-41a7-0000-fd836204445b'/>		{{server_addr}}	{{server_port}}
+i        </source>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x0a' slot='0x00' function='0x0'/>		{{server_addr}}	{{server_port}}
+i      </hostdev>		{{server_addr}}	{{server_port}}
+i      <hostdev mode='subsystem' type='pci' managed='yes'>		{{server_addr}}	{{server_port}}
+i        <source>		{{server_addr}}	{{server_port}}
+i          <address domain='0x0000' bus='0x01' slot='0x00' function='0x0'/>		{{server_addr}}	{{server_port}}
+i        </source>		{{server_addr}}	{{server_port}}
+i        <rom bar='off'/>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x01' slot='0x00' function='0x0' multifunction='on'/>		{{server_addr}}	{{server_port}}
+i      </hostdev>		{{server_addr}}	{{server_port}}
+i      <redirdev bus='usb' type='spicevmc'>		{{server_addr}}	{{server_port}}
+i        <address type='usb' bus='0' port='2'/>		{{server_addr}}	{{server_port}}
+i      </redirdev>		{{server_addr}}	{{server_port}}
+i      <redirdev bus='usb' type='spicevmc'>		{{server_addr}}	{{server_port}}
+i        <address type='usb' bus='0' port='3'/>		{{server_addr}}	{{server_port}}
+i      </redirdev>		{{server_addr}}	{{server_port}}
+i      <memballoon model='virtio'>		{{server_addr}}	{{server_port}}
+i        <address type='pci' domain='0x0000' bus='0x08' slot='0x00' function='0x0'/>		{{server_addr}}	{{server_port}}
+i      </memballoon>		{{server_addr}}	{{server_port}}
+i    </devices>		{{server_addr}}	{{server_port}}
+i    <qemu:commandline>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='device.hostdev0.ramfb=on'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='device.hostdev0.driver=vfio-pci-nohotplug'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='device.hostdev0.x-igd-opregion=on'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='device.hostdev0.xres=1920'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='device.hostdev0.yres=1080'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='device.hostdev0.romfile=/vbios_gvt_uefi.rom'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='device.hostdev1.x-pci-vendor-id=0x10de'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='device.hostdev1.x-pci-device-id=0x1c8d'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='device.hostdev1.x-pci-sub-vendor-id=0x17aa'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-set'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='device.hostdev1.x-pci-sub-device-id=0x39d1'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='-acpitable'/>		{{server_addr}}	{{server_port}}
+i      <qemu:arg value='file=/ssdt1.dat'/>		{{server_addr}}	{{server_port}}
+i      <qemu:env name='MESA_LOADER_DRIVER_OVERRIDE' value='i965'/>		{{server_addr}}	{{server_port}}
+i    </qemu:commandline>		{{server_addr}}	{{server_port}}
+i  </domain>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,125 @@
+iIPv4 is currently the most widely supported network protocol, where		{{server_addr}}	{{server_port}}
+icomputers are identified by IP addresses. Theoretically, it can		{{server_addr}}	{{server_port}}
+iaccommodate up to		{{server_addr}}	{{server_port}}
+inetwork devices (IPv4: 8 hexadecimal digits). Unfortunately, these		{{server_addr}}	{{server_port}}
+iaddresses have been exhausted, and it's truly a mystery how major ISPs		{{server_addr}}	{{server_port}}
+iallocate limited IP addresses to an infinite number of computers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIPv6 is far more impressive, with each address containing 32		{{server_addr}}	{{server_port}}
+ihexadecimal digits, allowing for		{{server_addr}}	{{server_port}}
+inetwork devices. These IP addresses will be more than sufficient		{{server_addr}}	{{server_port}}
+ibefore humanity perishes due to Earth's inability to sustain us. This		{{server_addr}}	{{server_port}}
+iprotocol is championed by major internet companies including Google,		{{server_addr}}	{{server_port}}
+iDNSPod, and others. However, currently in China, IPv6 seems to be used		{{server_addr}}	{{server_port}}
+ionly in universities, while ordinary households are limited to IPv4.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Note: Even universities have incomplete implementations.		{{server_addr}}	{{server_port}}
+iInternationally, IPv4 and IPv6 are generally supported simultaneously,		{{server_addr}}	{{server_port}}
+ibut within China's education network, only IPv6 is available.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs IPv6 resources become increasingly abundant, we can leverage		{{server_addr}}	{{server_port}}
+isoftware solutions to access IPv6 before Chinese ISPs take action.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i### 1. Miredo (Teredo) Section		{{server_addr}}	{{server_port}}
+iMiredo appears to be a program developed by an open-source		{{server_addr}}	{{server_port}}
+iorganization to achieve IPv4-IPv6 interoperability. Later, the		{{server_addr}}	{{server_port}}
+iprotocol was adopted by Microsoft and integrated into Windows 7, with		{{server_addr}}	{{server_port}}
+iMicrosoft also donating a server. Miredo can enable basic IPv4-IPv6		{{server_addr}}	{{server_port}}
+iinteroperability, but due to its extremely limited nodes, speeds are		{{server_addr}}	{{server_port}}
+ipainfully slow.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo apt-get install miredo		{{server_addr}}	{{server_port}}
+i  sudo gedit /etc/miredo/miredo.conf		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iModify the content to the following:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  InterfaceName teredo		{{server_addr}}	{{server_port}}
+i  #ServerAddress teredo.ipv6.microsoft.com		{{server_addr}}	{{server_port}}
+i  ServerAddress teredo-debian.remlab.net		{{server_addr}}	{{server_port}}
+i  #ServerAddress teredo.managemydedi.com		{{server_addr}}	{{server_port}}
+i  BindPort 3545		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe three ServerAddresses listed are the only remaining available		{{server_addr}}	{{server_port}}
+iservers: the first is Microsoft's, the second is the default (maintained		{{server_addr}}	{{server_port}}
+iby the open-source community), and the third is of unknown origin.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThese servers are geographically distant from China, resulting in slow		{{server_addr}}	{{server_port}}
+ispeeds. They can barely open Google and struggle with Baidu, making		{{server_addr}}	{{server_port}}
+ithem suitable only for demonstration purposes.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter modification, execute:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo service miredo restart		{{server_addr}}	{{server_port}}
+i  ifconfig		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLook for a network device named "teredo" – that's the one.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i### 2. gogoCLIENT Section		{{server_addr}}	{{server_port}}
+igogoCLIENT was developed by the gogo6 website, which specializes in		{{server_addr}}	{{server_port}}
+iselling IPv6-compatible devices. They created gogoCLIENT and made it		{{server_addr}}	{{server_port}}
+iopen-source. The drawback is that nodes remain scarce. Another issue:		{{server_addr}}	{{server_port}}
+ithe gogo6 package in Ubuntu's repositories doesn't work, and manual		{{server_addr}}	{{server_port}}
+icompilation consistently fails.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTherefore, I installed an XP virtual machine using QEMU:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo apt-get install kvm qemu		{{server_addr}}	{{server_port}}
+i  qemu-img create -f raw winxp.img 4G		{{server_addr}}	{{server_port}}
+i  qemu-kvm -hda winxp.img -cdrom winxp.iso -boot d -m 1024 # Install system		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen download gogoCLIENT (requires registration):		{{server_addr}}	{{server_port}}
+hhttp://www.gogo6.com/profile/gogoCLIENT	URL:http://www.gogo6.com/profile/gogoCLIENT	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInstall it in the virtual machine. After installation, open		{{server_addr}}	{{server_port}}
+igogoCLIENT, change the Server Address to "hg.tfn.net.tw", and click		{{server_addr}}	{{server_port}}
+iConnect. Soon, you'll be connected to the IPv6 network. I recommend		{{server_addr}}	{{server_port}}
+ithis method because gogo6 has more servers than Miredo. The Taiwanese		{{server_addr}}	{{server_port}}
+iserver above offers fast speeds. Official alternatives include		{{server_addr}}	{{server_port}}
+imontreal.freenet6.net (Montreal), amsterdam.freenet6.net (Amsterdam),		{{server_addr}}	{{server_port}}
+iand taiwan.freenet6.net (Taiwan, which I couldn't connect to). Note:		{{server_addr}}	{{server_port}}
+iThe first two require a username/password, obtainable via gogo6		{{server_addr}}	{{server_port}}
+iregistration (separate from account credentials).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext, we'll route IPv6 to the host. First, solve QEMU autostart. To		{{server_addr}}	{{server_port}}
+iavoid a large window on the screen, I chose a VNC background desktop:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo apt-get install vnc4server		{{server_addr}}	{{server_port}}
+i  vncpasswd		{{server_addr}}	{{server_port}}
+i  # Enter password twice		{{server_addr}}	{{server_port}}
+i  wget http://www.zhujis.com/myvps/vncserver		{{server_addr}}	{{server_port}}
+i  sudo cp vncserver /etc/init.d/		{{server_addr}}	{{server_port}}
+i  sudo chmod +x /etc/init.d/vncserver		{{server_addr}}	{{server_port}}
+i  sudo update-rc.d vncserver defaults		{{server_addr}}	{{server_port}}
+i  # Credits: www.freehao123.com		{{server_addr}}	{{server_port}}
+i  vncserver		{{server_addr}}	{{server_port}}
+i  vncserver -kill :1		{{server_addr}}	{{server_port}}
+i  leafpad ~/.vnc/xstartup		{{server_addr}}	{{server_port}}
+i  # Add at the end:		{{server_addr}}	{{server_port}}
+i  # qemu-kvm -hda /path/to/winxp.img -m 1024 -smp 4 -localtime -usbdevice tablet -vga std -redir tcp:3389::3389 -redir tcp:1080::1080 &		{{server_addr}}	{{server_port}}
+i  # Do not add the "#" at the beginning!		{{server_addr}}	{{server_port}}
+i  # Notes: -m 1024 = RAM (MB), -smp 4 = CPU cores,		{{server_addr}}	{{server_port}}
+i  # -localtime uses current timezone, -usbdevice tablet fixes mouse bugs,		{{server_addr}}	{{server_port}}
+i  # -vga std expands resolution range, -redir forwards ports		{{server_addr}}	{{server_port}}
+i  # I enabled remote desktop (3389) – remove this parameter if unneeded!		{{server_addr}}	{{server_port}}
+i  sudo service vncserver restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iConnect to the VM using Remmina and install the proxy software Apache. (CCProxy		{{server_addr}}	{{server_port}}
+idoesn't support IPv6.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, install Apache 1.3. Then stop Apache 1.3 via the service		{{server_addr}}	{{server_port}}
+imanager, delete all files in C:\Program Files\Apache Group\Apache, and		{{server_addr}}	{{server_port}}
+ireplace them with the following:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNote: The original Apache version has poor IPv6 support. Download my		{{server_addr}}	{{server_port}}
+imodified Apache 1.3 version, preconfigured for HTTP proxy.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDownload:		{{server_addr}}	{{server_port}}
+1/usr/uploads/2013/04/1343548325.7z	/usr/uploads/2013/04/1343548325.7z	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iStart the service via the service manager. It should work immediately.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSet your host browser's proxy to HTTP 127.0.0.1:1080 and visit		{{server_addr}}	{{server_port}}
+hwww.kame.net	URL:http://www.kame.net	{{server_addr}}	{{server_port}}
+i. The turtle animation should move – if not, your configuration has		{{server_addr}}	{{server_port}}
+iissues.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

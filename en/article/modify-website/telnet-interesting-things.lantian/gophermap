@@ -1,0 +1,50 @@
+iTelnet is one of the oldest network protocols released in 1969, yet it		{{server_addr}}	{{server_port}}
+iremains enduringly popular due to its simple implementation and		{{server_addr}}	{{server_port}}
+iability to enable various interesting applications.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSome developers have created Nyancat that can be viewed in Telnet		{{server_addr}}	{{server_port}}
+iterminals, as well as Star Wars animations accessible via Telnet.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo see the ASCII version of Star Wars in your terminal, enter the		{{server_addr}}	{{server_port}}
+ifollowing command (Windows 7+ users need to enable Telnet Client first		{{server_addr}}	{{server_port}}
+ivia Control Panel > Programs and Features > Turn Windows features on		{{server_addr}}	{{server_port}}
+ior off):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  telnet towel.blinkenlights.nl		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo view Nyancat, enter:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  telnet nyancat.dakko.us		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou can also set up a similar Telnet service on your own server to		{{server_addr}}	{{server_port}}
+idisplay custom content. We'll use CMatrix (which shows the digital		{{server_addr}}	{{server_port}}
+irain from The Matrix) as an example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Log into your Debian server and run:		{{server_addr}}	{{server_port}}
+i  apt-get install openbsd-inetd telnetd cmatrix		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWait for installation to complete.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Create `/opt/cmatrix.sh` with:		{{server_addr}}	{{server_port}}
+i  #!/bin/sh		{{server_addr}}	{{server_port}}
+i  cmatrix -abu 2		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Edit `/etc/inetd.conf` and append:		{{server_addr}}	{{server_port}}
+i  telnet stream tcp nowait nobody /usr/sbin/tcpd /usr/sbin/in.telnetd -L /opt/cmatrix.sh		{{server_addr}}	{{server_port}}
+i  telnet stream tcp6 nowait nobody /usr/sbin/tcpd /usr/sbin/in.telnetd -L /opt/cmatrix.sh		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Restart the inetd service:		{{server_addr}}	{{server_port}}
+i  service inetd restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow run `telnet «your server address»` from your computer to see the		{{server_addr}}	{{server_port}}
+idigital rain effect.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI've also set this up on my server. Use these commands to see:		{{server_addr}}	{{server_port}}
+iNyancat:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  telnet lantian.pub 2001		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDigital rain:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  telnet lantian.pub 2002		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

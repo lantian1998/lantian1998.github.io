@@ -1,0 +1,104 @@
+iIn the		{{server_addr}}	{{server_port}}
+iprevious article		{{server_addr}}	{{server_port}}
+i, I built a self-hosted NTP server using Tinker Board and an ATGM336H		{{server_addr}}	{{server_port}}
+iGPS/BeiDou module, with GPS as the time reference. In addition to the		{{server_addr}}	{{server_port}}
+itraditional serial output of NMEA sentences, the GPS module also		{{server_addr}}	{{server_port}}
+iprovides a PPS signal that changes once per second. Originally, gpsd		{{server_addr}}	{{server_port}}
+ineeded to continuously parse NMEA sentences from the GPS module, which		{{server_addr}}	{{server_port}}
+itook considerable time and was prone to being preempted by other		{{server_addr}}	{{server_port}}
+iprocesses, causing delay and jitter. The PPS signal, however, can		{{server_addr}}	{{server_port}}
+idirectly trigger a CPU interrupt to run a simple handler at high		{{server_addr}}	{{server_port}}
+ipriority, unaffected by other programs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTypically, Linux kernel provides native driver support for PPS. But in		{{server_addr}}	{{server_port}}
+ithe previous setup, since Armbian Linux kernel on Tinker Board lacked		{{server_addr}}	{{server_port}}
+iPPS support, we couldn't enable it directly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Solution 1: Recompile the Kernel		{{server_addr}}	{{server_port}}
+iIf the kernel lacks support, recompile it with the required feature.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis post on the Tinker Board forum		{{server_addr}}	{{server_port}}
+iprovides a kernel patch that adds PPS support. After applying the		{{server_addr}}	{{server_port}}
+ipatch and compiling the kernel, connect the PPS signal to pin 22 to		{{server_addr}}	{{server_port}}
+iuse it.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, recompiling the Armbian kernel is complex (requiring a		{{server_addr}}	{{server_port}}
+ispecific OS like Ubuntu 18.04, cross-compilation tools, etc.) and		{{server_addr}}	{{server_port}}
+icannot be packaged as a deb file (which might be overwritten by system		{{server_addr}}	{{server_port}}
+iupdates). Therefore, I opted for an alternative approach:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Solution 2: Using User-Space Programs		{{server_addr}}	{{server_port}}
+iWithout kernel support, user-space programs can provide a solution.		{{server_addr}}	{{server_port}}
+iThe program at		{{server_addr}}	{{server_port}}
+ihttps://github.com/flok99/rpi_gpio_ntpd		{{server_addr}}	{{server_port}}
+ireads signals from a specified GPIO pin and sends them to ntpd for		{{server_addr}}	{{server_port}}
+itime synchronization.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUser-space programs face an issue: like gpsd, they can be interrupted		{{server_addr}}	{{server_port}}
+iby other processes, affecting accuracy. To address this, the program		{{server_addr}}	{{server_port}}
+isets itself to real-time scheduling ( `SCHED_RR` ) during startup.		{{server_addr}}	{{server_port}}
+iSimply put, real-time scheduled programs have the highest priority,		{{server_addr}}	{{server_port}}
+iresponding to events immediately and (almost) never being interrupted.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnother issue arose: when I compiled and ran this program, I		{{server_addr}}	{{server_port}}
+iencountered the error `sched_setscheduler() failed: Operation not		{{server_addr}}	{{server_port}}
+ipermitted` even as root. Research revealed that Docker uses cgroup		{{server_addr}}	{{server_port}}
+ifunctionality, which conflicts with priority settings. Details can be		{{server_addr}}	{{server_port}}
+ifound in		{{server_addr}}	{{server_port}}
+ithis StackOverflow post		{{server_addr}}	{{server_port}}
+iand		{{server_addr}}	{{server_port}}
+ithis RedHat Bugzilla discussion		{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe solution is to prevent the program from self-configuring real-time		{{server_addr}}	{{server_port}}
+ischeduling during startup. Instead, after launching, add the program		{{server_addr}}	{{server_port}}
+ito the main cgroup and then adjust its priority. The specific		{{server_addr}}	{{server_port}}
+ioperations can be seen in		{{server_addr}}	{{server_port}}
+ihttps://github.com/xddxdd/rpi_gpio_ntpd/blob/master/systemd/rpi_gpio_n		{{server_addr}}	{{server_port}}
+itp.service		{{server_addr}}	{{server_port}}
+i. The modified program is available at		{{server_addr}}	{{server_port}}
+ihttps://github.com/xddxdd/rpi_gpio_ntpd		{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf Docker isn't used, the original program can be used directly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter downloading the program, install it with `make && make install` .		{{server_addr}}	{{server_port}}
+iThen in `/etc/default/gps0` , set ORIG_DEVICE to the corresponding		{{server_addr}}	{{server_port}}
+iserial port (I used `ttyS1` ):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ORIG_DEVICE="ttyS1"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn `/etc/default/rpi_gpio_ntp` , configure the GPIO pin. Here, 171		{{server_addr}}	{{server_port}}
+icorresponds to pin 22 on Tinker Board (check with `gpio readall` ):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Configuration file for rpi_gpio_ntp.service		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # Shared memory segment to communicate on		{{server_addr}}	{{server_port}}
+i  SHMSEG=1		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # GPIO pin to listen on		{{server_addr}}	{{server_port}}
+i  # 4 for Adafruit Ultimate GPS HAT for Raspberry Pi		{{server_addr}}	{{server_port}}
+i  GPIO=171		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # Other options, if any		{{server_addr}}	{{server_port}}
+i  OPTS=		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iStart the PPS service:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  systemctl enable gps0 rpi_gpio_ntp		{{server_addr}}	{{server_port}}
+i  systemctl start gps0 rpi_gpio_ntp		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdd PPS configuration to `/etc/ntp.conf` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # PPS reference		{{server_addr}}	{{server_port}}
+i  server 127.127.28.1 minpoll 4 maxpoll 4 prefer		{{server_addr}}	{{server_port}}
+i  fudge  127.127.28.1 refid PPS		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRestart NTP service:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  systemctl restart ntp		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRun `ntpq -pn` to see PPS with minimal jitter:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

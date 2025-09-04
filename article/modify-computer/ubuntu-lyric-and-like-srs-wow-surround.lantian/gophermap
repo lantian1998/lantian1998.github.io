@@ -1,0 +1,58 @@
+i我的华硕笔记本原先 Windows 7 下的声卡驱动自带一个叫 ASUS Sonic Focus		{{server_addr}}	{{server_port}}
+i的技术，原理就是通过对音频的均衡器调节做到心理学杜比环绕，也就是让人心		{{server_addr}}	{{server_port}}
+i理上以为声音是环绕声。开启 Sonic Focus 后，我觉得音效好多了。（我不是		{{server_addr}}	{{server_port}}
+i耳机党）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是在 Ubuntu 上，自然不会有 Sonic Focus，华硕才没空对付这样一个升级频		{{server_addr}}	{{server_port}}
+i繁的系统。Dolby 和 SRS 等也不会给 Linux 支持，所以开源社区有大神就写出		{{server_addr}}	{{server_port}}
+i了 Extra Stereo，用于替代这些功能。还有一个 Crystalizer，也就是增强高		{{server_addr}}	{{server_port}}
+i频声音响度让声音清澈动听，用过创新声卡和创新 X-Fi 的人应该知道。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i同时，在 Ubuntu 上听歌，没有歌词是最痛苦的。Rhythmbox 自带个什么歌词自		{{server_addr}}	{{server_port}}
+i动下载，结果我打开根本没用 … … 没办法，自己去网上找吧。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i于是，我找到了 OSD Lyrics。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> OSD Lyrics is a lyrics show compatible with various media players.		{{server_addr}}	{{server_port}}
+i> It is not a plugin but a standalone program. OSD Lyrics shows lyrics		{{server_addr}}	{{server_port}}
+i> on your desktop, in the style similar to KaraOK. It also provides		{{server_addr}}	{{server_port}}
+i> another displaying style, in which lyrics scroll from bottom to top.		{{server_addr}}	{{server_port}}
+i> OSD Lyrics can download lyrics from the network automatically.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这款软件是一个桌面歌词软件，支持 Audacious，Banshee（Ubuntu 12.04 还是		{{server_addr}}	{{server_port}}
+i11.10 内置的，我忘了），Rhythmbox（Ubuntu 12.10 内置）等等，效果和酷我		{{server_addr}}	{{server_port}}
+i之类的差不多，还能从千千静听的歌词数据库自动搜索下载。软件官方提供 PPA		{{server_addr}}	{{server_port}}
+i源，可以直接添加安装。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo add-apt-repository ppa:osd-lyrics/ppa		{{server_addr}}	{{server_port}}
+i  sudo apt-get update		{{server_addr}}	{{server_port}}
+i  sudo apt-get install osdlyrics		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i软件默认把歌词存在 ~/.lyrics 下面，比较难找，我喜欢和歌存在一起。你可		{{server_addr}}	{{server_port}}
+i以先打开 OSD Lyrics（会让你选择启动哪个播放器），点右上角的那个图标里		{{server_addr}}	{{server_port}}
+i的选项，翻到歌词位置，路径一栏删到只留 %，文件名只留 %f。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2. 开启类 SRS WOW 音效		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个东西有难度，最重要的是 Extra Stereo 没有独立安装，也不是驱动级别的。		{{server_addr}}	{{server_port}}
+i所以我们要安装支持这个功能的播放器。目前支持的有 MPlayer（SMPlayer），		{{server_addr}}	{{server_port}}
+i和 Audacious。听歌当然用 Audacious。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo apt-get install audacious		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i完事后打开 Audacious，顶上菜单 - 输出 - 音效，Crystalizer 和 Extra		{{server_addr}}	{{server_port}}
+iStereo 就都有了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPS：对于一般电脑音箱用户，Extra Stereo 开 2.8 左右（大于 3.5 破音）。		{{server_addr}}	{{server_port}}
+iCrystalizer 开 2 左右（大于 3 破音），Echo（回声功能）从上到下分别调成		{{server_addr}}	{{server_port}}
+i180、28、24。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i对于 SMPlayer，你可以每放一部片子自己改一次设置，也可以直接设到		{{server_addr}}	{{server_port}}
+iMPlayer 启动参数里。菜单 - 选项 - 首选项 - 高级，在「每次打开文件时执		{{server_addr}}	{{server_port}}
+i行下列动作「什么的下面的框里写上：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  extrastereo_filter true		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存设置就可以了。罗嗦一句，手动开启方法是菜单 - 音频 - 过滤器 - 增强		{{server_addr}}	{{server_port}}
+i立体声。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

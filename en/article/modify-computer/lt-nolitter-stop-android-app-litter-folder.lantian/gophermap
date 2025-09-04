@@ -1,0 +1,26 @@
+iThe Android system provides user-accessible storage space, allowing		{{server_addr}}	{{server_port}}
+iusers to manage their files with ease (compared to iOS). However, some		{{server_addr}}	{{server_port}}
+iapplications create numerous folders directly in the storage root		{{server_addr}}	{{server_port}}
+idirectory, disrupting file management and posing a significant		{{server_addr}}	{{server_port}}
+inuisance for users with organizational preferences.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo address this, I developed an Xposed module. This module hooks into		{{server_addr}}	{{server_port}}
+iAndroid's File class. Whenever an app attempts to read or write		{{server_addr}}	{{server_port}}
+ifiles/folders in the root directory, the module first checks if the		{{server_addr}}	{{server_port}}
+itarget exists. If it exists, the operation proceeds normally; if not,		{{server_addr}}	{{server_port}}
+ithe operation is redirected to the `/Android/files` directory.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCompared to XInternalSD, this approach effectively handles		{{server_addr}}	{{server_port}}
+iundisciplined apps that bypass Android's storage path APIs by directly		{{server_addr}}	{{server_port}}
+iwriting to generic paths like `/sdcard` . XInternalSD only modifies		{{server_addr}}	{{server_port}}
+iretrieved storage paths, making it ineffective in such cases.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCompared to SD redirect solutions, this method eliminates complex		{{server_addr}}	{{server_port}}
+iconfiguration. Users simply need to whitelist their file manager app		{{server_addr}}	{{server_port}}
+iduring setup, then delete or move unwanted root directory folders to `/Android/files` .		{{server_addr}}	{{server_port}}
+iShould you later want an app to store data in a specific root		{{server_addr}}	{{server_port}}
+idirectory folder, just create that folder directly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iProject address:		{{server_addr}}	{{server_port}}
+ihttps://github.com/xddxdd/lantian-nolitter		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

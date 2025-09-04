@@ -1,0 +1,190 @@
+iBased on the requests of		{{server_addr}}	{{server_port}}
+hDN42 Telegram Group	URL:https://t.me/Dn42Chat	{{server_addr}}	{{server_port}}
+imembers, I plan to add Telegram Bot support to my		{{server_addr}}	{{server_port}}
+1Bird Looking Glass	/en/article/modify-website/go-bird-looking-glass.lantian	{{server_addr}}	{{server_port}}
+i, so it is easier for them to look up whois information, testing		{{server_addr}}	{{server_port}}
+inetworks and finding sources of route leaks. The bot is supposed to		{{server_addr}}	{{server_port}}
+irecognize commands starting with `/` , and respond to the message.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMy Looking Glass is written in Go, so at the beginning, I looked for		{{server_addr}}	{{server_port}}
+iTelegram Bot APIs in the Go language. However, those popular API		{{server_addr}}	{{server_port}}
+ilibraries all use the same scheme for handling requests:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Telegram server sends a callback to my own server;		{{server_addr}}	{{server_port}}
+i- My program handles the request and may send multiple requests		{{server_addr}}	{{server_port}}
+i  actively to the Telegram server, authenticated with a locally		{{server_addr}}	{{server_port}}
+i  configured Token;		{{server_addr}}	{{server_port}}
+i- Finally, the program actively sends a request to the Telegram server		{{server_addr}}	{{server_port}}
+i  to send the response.		{{server_addr}}	{{server_port}}
+iWhile powerful, this scheme is a bit too complicated, and I don't need		{{server_addr}}	{{server_port}}
+ithe extra functionalities anyway. I rather prefer to use		{{server_addr}}	{{server_port}}
+hthe other way provided by Telegram	URL:https://core.telegram.org/bots/faq#how-can-i-make-requests-in-response-to-updates	{{server_addr}}	{{server_port}}
+i, by directly responding to the callback HTTP request:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Telegram server sends a callback to my own server;		{{server_addr}}	{{server_port}}
+i- My program handles the request and replies to the callback request		{{server_addr}}	{{server_port}}
+i  directly to send the response message.		{{server_addr}}	{{server_port}}
+iAlthough this has the limitation of one reply (or action) per request (or		{{server_addr}}	{{server_port}}
+imessage), this is enough for me, considering that my bot only needs to		{{server_addr}}	{{server_port}}
+ireply once anyway. In addition, this scheme has the following		{{server_addr}}	{{server_port}}
+ibenefits:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Extremely easy to program, and no dependency on third-party		{{server_addr}}	{{server_port}}
+i   libraries.		{{server_addr}}	{{server_port}}
+i2. The server no longer needs the token, which reduces needed		{{server_addr}}	{{server_port}}
+i   configuration efforts and improved security. It's also much easier		{{server_addr}}	{{server_port}}
+i   to configure multiple bots which perform different tasks based on		{{server_addr}}	{{server_port}}
+i   callback URLs.		{{server_addr}}	{{server_port}}
+i3. No CPU cycle, network bandwidth, and latency spent on the extra		{{server_addr}}	{{server_port}}
+i   HTTP requests.		{{server_addr}}	{{server_port}}
+i## Parsing Callback Requests		{{server_addr}}	{{server_port}}
+iTelegram's callback requests are sent as JSON attached to the body of		{{server_addr}}	{{server_port}}
+iHTTP POST requests. Telegram's official document provided an example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    "update_id": 10000,		{{server_addr}}	{{server_port}}
+i    "message": {		{{server_addr}}	{{server_port}}
+i      "date": 1441645532,		{{server_addr}}	{{server_port}}
+i      "chat": {		{{server_addr}}	{{server_port}}
+i        "last_name": "Test Lastname",		{{server_addr}}	{{server_port}}
+i        "id": 1111111,		{{server_addr}}	{{server_port}}
+i        "first_name": "Test",		{{server_addr}}	{{server_port}}
+i        "username": "Test"		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i      "message_id": 1365,		{{server_addr}}	{{server_port}}
+i      "from": {		{{server_addr}}	{{server_port}}
+i        "last_name": "Test Lastname",		{{server_addr}}	{{server_port}}
+i        "id": 1111111,		{{server_addr}}	{{server_port}}
+i        "first_name": "Test",		{{server_addr}}	{{server_port}}
+i        "username": "Test"		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i      "text": "/start"		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAs a bot that only cares about the command itself, we only need to		{{server_addr}}	{{server_port}}
+iextract the following information from the request:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `message/message_id` : ID of the message, needed to reply/quote the		{{server_addr}}	{{server_port}}
+i  original message.		{{server_addr}}	{{server_port}}
+i- `message/chat/id` : ID of the chat window.		{{server_addr}}	{{server_port}}
+i- `message/text` : Command from the user.		{{server_addr}}	{{server_port}}
+iCompared to Python, which parses JSON directly and formats it into a `dict` ,		{{server_addr}}	{{server_port}}
+iGo's approach is more complicated, where we have to set up data		{{server_addr}}	{{server_port}}
+istructures to store the needed messages. Therefore the following		{{server_addr}}	{{server_port}}
+istructure is needed:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  type tgChat struct {		{{server_addr}}	{{server_port}}
+i    ID int64 `json:"id"`		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  type tgMessage struct {		{{server_addr}}	{{server_port}}
+i    MessageID int64  `json:"message_id"`		{{server_addr}}	{{server_port}}
+i    Chat      tgChat `json:"chat"`		{{server_addr}}	{{server_port}}
+i    Text      string `json:"text"`		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  type tgWebhookRequest struct {		{{server_addr}}	{{server_port}}
+i    Message tgMessage `json:"message"`		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnd this function is used to handle requests from the `net/http`		{{server_addr}}	{{server_port}}
+iserver:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  func webHandlerTelegramBot(w http.ResponseWriter, r *http.Request) {		{{server_addr}}	{{server_port}}
+i    // Parse only needed fields of incoming JSON body		{{server_addr}}	{{server_port}}
+i    var err error		{{server_addr}}	{{server_port}}
+i    var request tgWebhookRequest		{{server_addr}}	{{server_port}}
+i    err = json.NewDecoder(r.Body).Decode(&request)		{{server_addr}}	{{server_port}}
+i    if err != nil {		{{server_addr}}	{{server_port}}
+i      println(err.Error())		{{server_addr}}	{{server_port}}
+i      return		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    ...		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Extracting Command Arguments		{{server_addr}}	{{server_port}}
+iWhen a Telegram user calls a bot, based on user input differences, the		{{server_addr}}	{{server_port}}
+icommand may contain extra parameters or the Telegram ID of the bot		{{server_addr}}	{{server_port}}
+iitself. Suppose we're calling the `/traceroute` command, the input may		{{server_addr}}	{{server_port}}
+ibe any of:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUser command (		{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+iCommand		{{server_addr}}	{{server_port}}
+iArgument		{{server_addr}}	{{server_port}}
+iNone		{{server_addr}}	{{server_port}}
+iNone		{{server_addr}}	{{server_port}}
+iSo while parsing we need to consider all possibilities:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  // Used to check if a command is the intended one		{{server_addr}}	{{server_port}}
+i  func telegramIsCommand(message string, command string) bool {		{{server_addr}}	{{server_port}}
+i    b := false		{{server_addr}}	{{server_port}}
+i    b = b || strings.HasPrefix(message, "/"+command+"@")		{{server_addr}}	{{server_port}}
+i    b = b || strings.HasPrefix(message, "/"+command+" ")		{{server_addr}}	{{server_port}}
+i    b = b || message == "/"+command		{{server_addr}}	{{server_port}}
+i    return b		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // Used to extract parameters		{{server_addr}}	{{server_port}}
+i  target := ""		{{server_addr}}	{{server_port}}
+i  if strings.Contains(request.Message.Text, " ") {		{{server_addr}}	{{server_port}}
+i    target = strings.Join(strings.Split(request.Message.Text, " ")[1:], " ")		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Construct Reply		{{server_addr}}	{{server_port}}
+iThe response message to Telegram's callback is also a JSON, containing		{{server_addr}}	{{server_port}}
+ithe following contents:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `method` : Type of response, hardcoded to `sendMessage` in my case.		{{server_addr}}	{{server_port}}
+i- `chat_id` : ID of the chat window, same as the request.		{{server_addr}}	{{server_port}}
+i- `text` : Content of the message, set in the processing logic as		{{server_addr}}	{{server_port}}
+i  needed.		{{server_addr}}	{{server_port}}
+i- `reply_to_message_id` : ID of the message to be replied, set to `message_id`		{{server_addr}}	{{server_port}}
+i  in request.		{{server_addr}}	{{server_port}}
+i- `parse_mode` : Set to `Markdown` so Telegram parses your message as		{{server_addr}}	{{server_port}}
+i  Markdown. Or remove if you don't want this.		{{server_addr}}	{{server_port}}
+iThe structure in Go is:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  type tgWebhookResponse struct {		{{server_addr}}	{{server_port}}
+i    Method           string `json:"method"`		{{server_addr}}	{{server_port}}
+i    ChatID           int64  `json:"chat_id"`		{{server_addr}}	{{server_port}}
+i    Text             string `json:"text"`		{{server_addr}}	{{server_port}}
+i    ReplyToMessageID int64  `json:"reply_to_message_id"`		{{server_addr}}	{{server_port}}
+i    ParseMode        string `json:"parse_mode"`		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen serialize JSON and output it as an HTTP request. Note that you		{{server_addr}}	{{server_port}}
+ishould set `Content-Type: application/json` , or Telegram won't parse		{{server_addr}}	{{server_port}}
+ithis JSON, nor would it perform any operation.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  commandResult = "Hello World"		{{server_addr}}	{{server_port}}
+i  if len(commandResult) > 0 {		{{server_addr}}	{{server_port}}
+i    // Create a JSON response		{{server_addr}}	{{server_port}}
+i    w.Header().Add("Content-Type", "application/json")		{{server_addr}}	{{server_port}}
+i    response := &tgWebhookResponse{		{{server_addr}}	{{server_port}}
+i      Method:           "sendMessage",		{{server_addr}}	{{server_port}}
+i      ChatID:           request.Message.Chat.ID,		{{server_addr}}	{{server_port}}
+i      Text:             commandResult,		{{server_addr}}	{{server_port}}
+i      ReplyToMessageID: request.Message.MessageID,		{{server_addr}}	{{server_port}}
+i      ParseMode:        "Markdown",		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    data, err := json.Marshal(response)		{{server_addr}}	{{server_port}}
+i    if err != nil {		{{server_addr}}	{{server_port}}
+i      println(err.Error())		{{server_addr}}	{{server_port}}
+i      return		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    // println(string(data))		{{server_addr}}	{{server_port}}
+i    w.Write(data)		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Full example		{{server_addr}}	{{server_port}}
+iAll code above are taken from by		{{server_addr}}	{{server_port}}
+1Bird Looking Glass Written in Go	/en/article/modify-website/go-bird-looking-glass.lantian	{{server_addr}}	{{server_port}}
+i, with the full code available at:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Latest version:		{{server_addr}}	{{server_port}}
+h  https://github.com/xddxdd/bird-lg-go/blob/master/frontend/telegram_bot.go	URL:https://github.com/xddxdd/bird-lg-go/blob/master/frontend/telegram_bot.go	{{server_addr}}	{{server_port}}
+i- Version when writing this post:		{{server_addr}}	{{server_port}}
+h  https://github.com/xddxdd/bird-lg-go/blob/c262ee3bdf26b963d6320483cae856f186a1f59b/frontend/telegram_bot.go	URL:https://github.com/xddxdd/bird-lg-go/blob/c262ee3bdf26b963d6320483cae856f186a1f59b/frontend/telegram_bot.go	{{server_addr}}	{{server_port}}

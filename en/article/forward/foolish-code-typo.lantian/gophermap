@@ -1,0 +1,94 @@
+iBumblebee is an auxiliary tool for NVidia graphics cards on the Linux		{{server_addr}}	{{server_port}}
+iplatform. It enables NVidia cards to utilize Optimus technology,		{{server_addr}}	{{server_port}}
+iallowing laptops to render with dedicated graphics while displaying		{{server_addr}}	{{server_port}}
+ithrough integrated graphics — essentially hardware-accelerated		{{server_addr}}	{{server_port}}
+igraphics switching.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis is an extremely useful tool, but it once suffered a severe bug (though		{{server_addr}}	{{server_port}}
+ithree years ago) where a single space caused the deletion of the `/usr`		{{server_addr}}	{{server_port}}
+idirectory for a large number of Ubuntu users.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIt happened during a Git update, with changes in `install.sh` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  @@ -37,7 +37,7 @@		{{server_addr}}	{{server_port}}
+i    #    You should have received a copy of the GNU General Public License		{{server_addr}}	{{server_port}}
+i    #    along with bumblebee.  If not, see <http://www.gnu.org/licenses/>.		{{server_addr}}	{{server_port}}
+i    #		{{server_addr}}	{{server_port}}
+i   -BUMBLEBEEVERSION=1.4.31		{{server_addr}}	{{server_port}}
+i   +BUMBLEBEEVERSION=1.4.32		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    ROOT_UID=0		{{server_addr}}	{{server_port}}
+i   @@ -348,7 +348,7 @@ case "$DISTRO" in		{{server_addr}}	{{server_port}}
+i      ln -s /usr/lib/mesa/ld.so.conf /etc/alternatives/gl_conf		{{server_addr}}	{{server_port}}
+i      rm -rf /etc/alternatives/xorg_extra_modules		{{server_addr}}	{{server_port}}
+i      rm -rf /etc/alternatives/xorg_extra_modules-bumblebee		{{server_addr}}	{{server_port}}
+i   -  rm -rf /usr /lib/nvidia-current/xorg/xorg		{{server_addr}}	{{server_port}}
+i   +  rm -rf /usr/lib/nvidia-current/xorg/xorg		{{server_addr}}	{{server_port}}
+i      ln -s /usr/lib/nvidia-current/xorg /etc/alternatives/xorg_extra_modules-bumblebee		{{server_addr}}	{{server_port}}
+i      ldconfig		{{server_addr}}	{{server_port}}
+i     ;;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDue to a single space, the deletion command shifted from targeting `/usr/lib/nvidia-current/xorg/xorg`		{{server_addr}}	{{server_port}}
+ito deleting two separate directories: `/usr` and `/lib/nvidia-current/xorg/xorg` .		{{server_addr}}	{{server_port}}
+iThe `/usr` directory is where all your programs reside, including `apt-get` ...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOn		{{server_addr}}	{{server_port}}
+hGitHub	URL:https://github.com/MrMEEE/bumblebee-Old-and-abbandoned/commit/a047be85247755cdbe0acce6#diff-1	{{server_addr}}	{{server_port}}
+i, programmers worldwide furiously mocked this bug:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i"So I have to format my hard drive first?" "Yes, I usually use		{{server_addr}}	{{server_port}}
+iBumblebee for formatting."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/3298154581	/usr/uploads/2014/01/3298154581.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i"Did you install Bumblebee?" "Yes, but I backed up the usr folder..."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/2909647635	/usr/uploads/2014/01/2909647635.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i"They will kill us, but they won't kill our usr"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/723043973	/usr/uploads/2014/01/723043973.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i"usr, why did you leave me?"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/1115107318	/usr/uploads/2014/01/1115107318.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i"Bumblebee, I need to have a word with you"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/3261213394	/usr/uploads/2014/01/3261213394.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i"usr? Gone since June 2011, lol."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/4006259684	/usr/uploads/2014/01/4006259684.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSELinux and AppArmor are speechless...		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/2872907203	/usr/uploads/2014/01/2872907203.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i"I installed Bumblebee on the company server, now I need to work..."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/2792998614	/usr/uploads/2014/01/2792998614.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i"I rarely back up, but when I do, it's always too late..."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/2548332387	/usr/uploads/2014/01/2548332387.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iJobs: "Ever heard of Bumblebee?" Gates: "I recommend every Linux user		{{server_addr}}	{{server_port}}
+iinstall it."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/1807140881	/usr/uploads/2014/01/1807140881.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLow Orbit Bumblebee Cannon:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/3115206340	/usr/uploads/2014/01/3115206340.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i"What's wrong with adding a space after /usr? That path doesn't		{{server_addr}}	{{server_port}}
+iexist." "I forgot to wrap the path in quotes..."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/1434800310	/usr/uploads/2014/01/1434800310.png	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i"My Führer, we installed Bumblebee on your machine."		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+I/usr/uploads/2014/01/1519896961	/usr/uploads/2014/01/1519896961.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,65 @@
+i用自己的 VPS 的一个好处就是可以开 SSL 加密，可以实现在公共场所管理博客		{{server_addr}}	{{server_port}}
+i的安全，以及减小某些自然因素导致连接异常中断的几率。Debian 6 软件源里		{{server_addr}}	{{server_port}}
+i的 nginx 已经带了 SSL 模块，所以很简单就可以开启 SSL。只要把 /etc/nginx/sites-available/default		{{server_addr}}	{{server_port}}
+i复制一份成 default-ssl，做下面的修改就行。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      listen              443;		{{server_addr}}	{{server_port}}
+i      server_name         localhost;		{{server_addr}}	{{server_port}}
+i      ssl                 on;		{{server_addr}}	{{server_port}}
+i      ssl_certificate     lic.crt;		{{server_addr}}	{{server_port}}
+i      ssl_certificate_key lic.key;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+ior（下面这种直接改 default 就行）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  server {		{{server_addr}}	{{server_port}}
+i      listen              80;		{{server_addr}}	{{server_port}}
+i      listen              443 ssl;		{{server_addr}}	{{server_port}}
+i      server_name         localhost;		{{server_addr}}	{{server_port}}
+i      ssl_certificate     lic.crt;		{{server_addr}}	{{server_port}}
+i      ssl_certificate_key lic.key;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i其中的 lic.crt 和 lic.key 记得改成自己的证书路径。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是最难弄到的就是 SSL 证书，VeriSign 和 Thawte 的证书每年没个五六百		{{server_addr}}	{{server_port}}
+iRMB 是搞不到的。目前有以下几种途径可以获取免费的 SSL：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 自己生成证书，方法自行谷歌。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i优点：方便。缺点：用任何浏览器浏览都会报证书不信任错误。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2.StartSSL		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在今年 9 月份，StartSSL 竟然搞定了微软：微软在升级补丁中，更新了通过		{{server_addr}}	{{server_port}}
+iWindows 根证书认证程序（Windows Root Certificate Program）的厂商清单，		{{server_addr}}	{{server_port}}
+i并首次将 StartCom 公司列入了该认证清单，这是微软首次将提供免费数字验证		{{server_addr}}	{{server_port}}
+i技术的厂商加入根证书认证列表中。现在，在 Windows 7 或安装了升级补丁的		{{server_addr}}	{{server_port}}
+iWindows Vista 或 Windows XP 操作系统中，系统会完全信任由 StartCom 这类		{{server_addr}}	{{server_port}}
+i免费数字认证机构认证的数字证书，从而使 StartSSL 也得到了 IE 浏览器的支		{{server_addr}}	{{server_port}}
+i持。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i注册成为 StartSSL（		{{server_addr}}	{{server_port}}
+hhttp://www.startssl.com）用户，并通过邮件验证后，就可以申请免费的可信任的SSL证书了。	URL:http://www.startssl.com）用户，并通过邮件验证后，就可以申请免费的可信任的SSL证书了。	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i以上摘自		{{server_addr}}	{{server_port}}
+hhttp://blog.s135.com/startssl/	URL:http://blog.s135.com/startssl/	{{server_addr}}	{{server_port}}
+i。申请教程这篇文章里也有。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i优点：可以被大多数浏览器（除 Opera）信任。缺点：需要人工审核，而且免费		{{server_addr}}	{{server_port}}
+i的 TK 域名无法使用，还要一年续期一次。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3.CAcert，自己谷歌。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> CAcert.org 是一个社群推动的公共认证机构。它可以对个人发放免费公钥证		{{server_addr}}	{{server_port}}
+i> 书 ( 其他证书颁发机构需要收费 )。该机构目前已经有 200,000 名认证用户，		{{server_addr}}	{{server_port}}
+i> 以及接近 800,000 份证书。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i摘自维基。CACert 的证书是程序自动签发的，不会有人工审核，证书可信度也		{{server_addr}}	{{server_port}}
+i不高，所以别想让它和 StartSSL 一样搞定微软了。别想了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i优点：可以被大多数开源背景浏览器信任。缺点：		{{server_addr}}	{{server_port}}
+i需要人工审核		{{server_addr}}	{{server_port}}
+i，没有可信度，还要一年续期一次。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

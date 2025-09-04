@@ -1,0 +1,802 @@
+i# Preface		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAlmost four and a half years ago, I		{{server_addr}}	{{server_port}}
+1migrated the blog's site system from Typecho to Hexo	/en/article/modify-website/switching-to-hexo-static-site-generator.lantian/	{{server_addr}}	{{server_port}}
+i. Hexo is a static site generator that by itself doesn't connect to		{{server_addr}}	{{server_port}}
+idatabases like MySQL and PostgreSQL and dynamically generate pages.		{{server_addr}}	{{server_port}}
+iInstead, it generated all HTML pages in one go based on the given		{{server_addr}}	{{server_port}}
+iMarkdown files. Compared to dynamic solutions like WordPress and		{{server_addr}}	{{server_port}}
+iTypecho, pre-generating static pages eliminates the need of dynamic		{{server_addr}}	{{server_port}}
+ilanguage support on the web server (like PHP), and has lower		{{server_addr}}	{{server_port}}
+iperformance requirements on the server.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHexo itself, however, is not a new solution.		{{server_addr}}	{{server_port}}
+hIt's first version was released back in July 2013	URL:https://github.com/hexojs/hexo/releases/tag/1.0.0	{{server_addr}}	{{server_port}}
+i. By then, single page application frameworks, leaded by React, were		{{server_addr}}	{{server_port}}
+ijust released (React: May 2013). Webpack and other frameworks needed		{{server_addr}}	{{server_port}}
+iin modern web frontend workflow also did not exist (Webpack: February		{{server_addr}}	{{server_port}}
+i2014). As expected, Hexo didn't make use of these tools, and is		{{server_addr}}	{{server_port}}
+iinstead concatenating HTML strings in the old-fashioned way. The		{{server_addr}}	{{server_port}}
+itemplate systems used by Hexo, such as EJS and Pug, are all based on		{{server_addr}}	{{server_port}}
+istring concatenation.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNot using a modern web frontend workflow means that:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- I have to manually handle all the details of concatenating HTML		{{server_addr}}	{{server_port}}
+i  string. Every time I make changes to the templates, I got reminded		{{server_addr}}	{{server_port}}
+i  of the good old days of working with PHP.		{{server_addr}}	{{server_port}}
+i- I cannot easily make use of CSS tools like Sass and PostCSS, or		{{server_addr}}	{{server_port}}
+i  extensible Markdown parsers like Unified.js (Remark/Rehype).		{{server_addr}}	{{server_port}}
+i  Although there are some Hexo plugins that brings them into play,		{{server_addr}}	{{server_port}}
+i  that usually ends at "as long as it runs" stage, and only supports		{{server_addr}}	{{server_port}}
+i  whatever features the plugin author decides that they need. The		{{server_addr}}	{{server_port}}
+i  dependency versions are also likely to stay in the era when the		{{server_addr}}	{{server_port}}
+i  author first wrote the plugin.		{{server_addr}}	{{server_port}}
+i  - For example: the dependency version of		{{server_addr}}	{{server_port}}
+h    hexo-renderer-webpack	URL:https://github.com/nejj/hexo-renderer-webpack	{{server_addr}}	{{server_port}}
+i    stayed in 5 years ago.		{{server_addr}}	{{server_port}}
+h    hexo-renderer-sass	URL:https://github.com/knksmith57/hexo-renderer-sass	{{server_addr}}	{{server_port}}
+i    was last updated 10 months ago.		{{server_addr}}	{{server_port}}
+h    hexo-renderer-unified	URL:https://github.com/LikaKavkasidze/hexo-renderer-unified	{{server_addr}}	{{server_port}}
+i    is also frozen 5 years ago.		{{server_addr}}	{{server_port}}
+i  - I do have a way to use Webpack though: I created a separate		{{server_addr}}	{{server_port}}
+i    Webpack config file, added the necessary calls into the CI build		{{server_addr}}	{{server_port}}
+i    script, which puts the generated JS and CSS files into the correct		{{server_addr}}	{{server_port}}
+i    place in Hexo's theme directroy. Finally, I add the necessary		{{server_addr}}	{{server_port}}
+i    calls by hand into Hexo's HTML template.		{{server_addr}}	{{server_port}}
+iOther than that, I'm also motivated to find a new static site		{{server_addr}}	{{server_port}}
+igenerator framework for a few more reasons:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Hexo doesn't support ESM modules in themes and plugins, even at the		{{server_addr}}	{{server_port}}
+i  latest version of 7.x. This means that it's difficult to use		{{server_addr}}	{{server_port}}
+i  Typescript. Yet it is widely known that hand writing weakly typed		{{server_addr}}	{{server_port}}
+i  Javascript code is bound to attracting bugs.		{{server_addr}}	{{server_port}}
+IJavascript Trinity	/usr/uploads/202404/the-javascript-trinity.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Source:		{{server_addr}}	{{server_port}}
+hhttps://javascriptwtf.com/	URL:https://javascriptwtf.com/	{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Hexo doesn't support some of my personal needs well, like		{{server_addr}}	{{server_port}}
+i  multi-language support. These required me to customize and/or		{{server_addr}}	{{server_port}}
+i  replace them with my plugins. As the plugins added up, I noticed		{{server_addr}}	{{server_port}}
+i  that the entire system becomes a Ship of Theseus: why do I need Hexo		{{server_addr}}	{{server_port}}
+i  after all if I'm customizing all my logics?		{{server_addr}}	{{server_port}}
+iTherefore, to satisfy my needs, I started looking for a new static		{{server_addr}}	{{server_port}}
+isite generator.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Choosing Solution		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI have the following requires for the new solution:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Integrates with modern web frontend toolchain.		{{server_addr}}	{{server_port}}
+i- Do the step of converting template to HTML/CSS/JS well, ideally with		{{server_addr}}	{{server_port}}
+i  a template format similar to React JSX, rather than concatenating		{{server_addr}}	{{server_port}}
+i  strings manually.		{{server_addr}}	{{server_port}}
+i  - However, I don't want to render the entire webpage on user's		{{server_addr}}	{{server_port}}
+i    browser with Javascript. My personal blog is not a complex single		{{server_addr}}	{{server_port}}
+i    page application. I hope Javascript is optional for my blog's web		{{server_addr}}	{{server_port}}
+i    pages, rather than mandatory.		{{server_addr}}	{{server_port}}
+i- Have a customizable page routing system. I need to keep the post		{{server_addr}}	{{server_port}}
+i  URLs unchanges before/after the migration.		{{server_addr}}	{{server_port}}
+i- (Ideally) have a simple system for managing posts, to load my		{{server_addr}}	{{server_port}}
+i  Markdown posts and read their information from their frontmatters.		{{server_addr}}	{{server_port}}
+i  However, since writing a post management system by hand is simple		{{server_addr}}	{{server_port}}
+i  enough, this is not a necessity.		{{server_addr}}	{{server_port}}
+iAfter searching around, I took the following solutions into		{{server_addr}}	{{server_port}}
+iconsideration:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Single Page Applications like React, Vue, Svelte		{{server_addr}}	{{server_port}}
+iReact is the mother to all modern single page application frameworks.		{{server_addr}}	{{server_port}}
+iIt drastically changed how the web frontend development work is done.		{{server_addr}}	{{server_port}}
+iNatually, you won't encounter issues while using modern web frontend		{{server_addr}}	{{server_port}}
+itoolchains with React, because React is the modern web frontend		{{server_addr}}	{{server_port}}
+iitself. Most if not all frontend tools consider React support from the		{{server_addr}}	{{server_port}}
+ibeginning of their development.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut React has one major drawback: the whole web page is rendered on		{{server_addr}}	{{server_port}}
+ibrowser with Javascript. This means:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Users need to load a large Javascript file while browsing the pages,		{{server_addr}}	{{server_port}}
+i  which consumes a lot of CPU cycles to render the HTML DOM.		{{server_addr}}	{{server_port}}
+i- If the user cannot or doesn't want Javascript, for example using		{{server_addr}}	{{server_port}}
+i  NoScript browser plugin or having a slow network connection, they		{{server_addr}}	{{server_port}}
+i  will be completely unable to view the page content, unlike		{{server_addr}}	{{server_port}}
+i  traditional HTMLs which allows them to at least see the text even		{{server_addr}}	{{server_port}}
+i  without CSS/JS.		{{server_addr}}	{{server_port}}
+iIn short, I hope even browsers that have Javascript disabled can		{{server_addr}}	{{server_port}}
+inormally view the page (while losing some less important features).		{{server_addr}}	{{server_port}}
+iTherefore, I excluded React, as well as similar single page		{{server_addr}}	{{server_port}}
+iapplication frameworks like Vue and Svelte, from my consideration.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Sukka's Hexo + Next.js Solution		{{server_addr}}	{{server_port}}
+hSukka migrated his blog from Hexo to Hexo + Next.js in 2022 (Chinese only link)	URL:https://blog.skk.moe/post/use-nextjs-and-hexo-to-rebuild-my-blog/	{{server_addr}}	{{server_port}}
+i. He retained Hexo to manage posts, yet used Next.js framework to		{{server_addr}}	{{server_port}}
+irender the web pages for the blog.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCompared to React, Next.js will prerender the entire HTML DOM, so that		{{server_addr}}	{{server_port}}
+ieven if Javascript is disabled, users can see the basic content of the		{{server_addr}}	{{server_port}}
+iweb page. After the page is loaded, some Javascript code from the		{{server_addr}}	{{server_port}}
+iNext.js framework will add dynamic features to the static components		{{server_addr}}	{{server_port}}
+iin the browser.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis solution does indeed meet my requirements for "optional		{{server_addr}}	{{server_port}}
+iJavascript", but still have some downsides:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- I have almost zero use for the additional Javascript code added by		{{server_addr}}	{{server_port}}
+i  Next.js.		{{server_addr}}	{{server_port}}
+i  - Single page applications are mainly used for website that		{{server_addr}}	{{server_port}}
+i    interacts a lot with users. My blog, however, is content-based and		{{server_addr}}	{{server_port}}
+i    do not have as much interactive controls.		{{server_addr}}	{{server_port}}
+i  - Another advantage of single page applications is seamless loading,		{{server_addr}}	{{server_port}}
+i    but I can achieve a similar fast speed with		{{server_addr}}	{{server_port}}
+h    Instant.page	URL:https://instant.page/	{{server_addr}}	{{server_port}}
+i    and browser caching.		{{server_addr}}	{{server_port}}
+i- Sukka chose Hexo because he is a core developer for Hexo, and Hexo		{{server_addr}}	{{server_port}}
+i  happens to satisfy his needs. I am not. I don't need the complicated		{{server_addr}}	{{server_port}}
+i  system for managing blog posts. I don't use drafts, don't use		{{server_addr}}	{{server_port}}
+i  autogenerated post templates, and almost never runs any command		{{server_addr}}	{{server_port}}
+i  other than `hexo generate` . In addition, I already do another round		{{server_addr}}	{{server_port}}
+i  of filtering on Hexo's post and page list to satisfy my		{{server_addr}}	{{server_port}}
+i  multi-language support needs.		{{server_addr}}	{{server_port}}
+iTherefore, I didn't choose this solution as well. Instead, I went with		{{server_addr}}	{{server_port}}
+ianother framework:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Final Solution: Astro.js		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+hAstro.js	URL:https://astro.build/	{{server_addr}}	{{server_port}}
+iadvertises it as "the web framework for content-driven websites".		{{server_addr}}	{{server_port}}
+iCompared to frameworks targeted at single page applications like React		{{server_addr}}	{{server_port}}
+iand Next.js, it has some major differences:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Astro.js doesn't support complex components for single page		{{server_addr}}	{{server_port}}
+i  applications. However, this also means that it doesn't need to load		{{server_addr}}	{{server_port}}
+i  additional Javascript codes into the web page. If I do not actively		{{server_addr}}	{{server_port}}
+i  add any Javascript, the web page generated by Astro.js will be		{{server_addr}}	{{server_port}}
+i  completely static with zero Javascript code.		{{server_addr}}	{{server_port}}
+i- But this doesn't mean there needs to be zero complex interactions on		{{server_addr}}	{{server_port}}
+i  the website. The major selling feature of Astro.js called Island		{{server_addr}}	{{server_port}}
+i  allows us to add isolated regions inside the webpage, and run		{{server_addr}}	{{server_port}}
+i  frameworks such as React or Vue in them. Since the Islands are		{{server_addr}}	{{server_port}}
+i  isolated from each other, you can even mix and match multiple		{{server_addr}}	{{server_port}}
+i  frameworks.		{{server_addr}}	{{server_port}}
+iOther than that, Astro.js also satisfies my other needs:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- The template system of Astro.js works by combining components		{{server_addr}}	{{server_port}}
+i  similar to JSX, instead of combining HTML strings. If you have		{{server_addr}}	{{server_port}}
+i  experience with React, you will find the template syntax familiar.		{{server_addr}}	{{server_port}}
+i- Astro.js comes with a routing system that allows complete		{{server_addr}}	{{server_port}}
+i  customization of each page. It also allows us to generate multiple		{{server_addr}}	{{server_port}}
+i  pages for the collection of posts from the same template.		{{server_addr}}	{{server_port}}
+i- Astro.js also comes with a simple post management system (called		{{server_addr}}	{{server_port}}
+i  Collection), that supports Markdown and MDX. It doesn't do any		{{server_addr}}	{{server_port}}
+i  additional processing other than loading Markdown Frontmatters and		{{server_addr}}	{{server_port}}
+i  rendering Markdown files, which provides users with maximum		{{server_addr}}	{{server_port}}
+i  flexibility.		{{server_addr}}	{{server_port}}
+i- Astro.js is built on modern web frontend toolchains (Rollup.js,		{{server_addr}}	{{server_port}}
+i  Vite.js, Unified.js, etc.), and has great support for all varieties		{{server_addr}}	{{server_port}}
+i  of plugins.		{{server_addr}}	{{server_port}}
+iHowever, Astro.js is not a blogging system out of the box. It's only a		{{server_addr}}	{{server_port}}
+iframework that requires a fair bit of additional development. I also		{{server_addr}}	{{server_port}}
+imet some limitations of Astro.js while developing my blog system:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Astro.js misses one relatively important feature: it cannot render a		{{server_addr}}	{{server_port}}
+i  single Astro component into HTML. It can only render an entire page		{{server_addr}}	{{server_port}}
+i  at a time. This makes it hard to generate excerpts for my posts.		{{server_addr}}	{{server_port}}
+i  However, it is still possible to obtain component HTMLs while		{{server_addr}}	{{server_port}}
+i  rendering the entire page, so this is still possible to implement.		{{server_addr}}	{{server_port}}
+i- Astro.js still has a small amount of details that the user cannot		{{server_addr}}	{{server_port}}
+i  control. For example, it automatically inserts Javascript and CSS		{{server_addr}}	{{server_port}}
+i  used by the page into `<head>` , with no control to specify the		{{server_addr}}	{{server_port}}
+i  exact position. I had to do additional postprocessing after HTML		{{server_addr}}	{{server_port}}
+i  generation is complete.		{{server_addr}}	{{server_port}}
+i# Blog Architecture		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter the solution is chosen, I got around to developing my blog		{{server_addr}}	{{server_port}}
+isystem. All commits from my development process can be found in		{{server_addr}}	{{server_port}}
+hthe astro-dev branch of my GitHub	URL:https://github.com/xddxdd/blog/tree/astro-dev	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Generating a Basic Template		{{server_addr}}	{{server_port}}
+iAstro.js provides a very simple blog template, which can be generated		{{server_addr}}	{{server_port}}
+iwith `npm create astro@latest` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Need to install the following packages:		{{server_addr}}	{{server_port}}
+i  create-astro@4.8.0		{{server_addr}}	{{server_port}}
+i  Ok to proceed? (y)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i   astro   Launch sequence initiated.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i     dir   Where should we create your new project?		{{server_addr}}	{{server_port}}
+i           ./blog		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    tmpl   How would you like to start your new project?		{{server_addr}}	{{server_port}}
+i           Use blog template		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      ts   Do you plan to write TypeScript?		{{server_addr}}	{{server_port}}
+i           Yes		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i     use   How strict should TypeScript be?		{{server_addr}}	{{server_port}}
+i           Strict		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    deps   Install dependencies?		{{server_addr}}	{{server_port}}
+i           Yes		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i     git   Initialize a new git repository?		{{server_addr}}	{{server_port}}
+i           Yes		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i        ✔  Project initialized!		{{server_addr}}	{{server_port}}
+i           ■ Template copied		{{server_addr}}	{{server_port}}
+i           ■ TypeScript customized		{{server_addr}}	{{server_port}}
+i           ■ Dependencies installed		{{server_addr}}	{{server_port}}
+i           ■ Git initialized		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    next   Liftoff confirmed. Explore your project!		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i           Enter your project directory using cd ./blog		{{server_addr}}	{{server_port}}
+i           Run npm run dev to start the dev server. CTRL+C to stop.		{{server_addr}}	{{server_port}}
+i           Add frameworks like react or tailwind using astro add.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i           Stuck? Join us at https://astro.build/chat		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  ╭─────╮  Houston:		{{server_addr}}	{{server_port}}
+i  │ ◠ ◡ ◠  Good luck out there, astronaut! 🚀		{{server_addr}}	{{server_port}}
+i  ╰─────╯		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Displaying Posts		{{server_addr}}	{{server_port}}
+iAstro.js comes with a simple post management system (called		{{server_addr}}	{{server_port}}
+iCollection), that automatically loads Markdown files and read their		{{server_addr}}	{{server_port}}
+iFrontmatter information. After generating a project with the blog		{{server_addr}}	{{server_port}}
+itemplate, you can find the `src/content/config.ts` file:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  import { defineCollection, z } from 'astro:content'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const blog = defineCollection({		{{server_addr}}	{{server_port}}
+i    type: 'content',		{{server_addr}}	{{server_port}}
+i    // Type-check frontmatter using a schema		{{server_addr}}	{{server_port}}
+i    schema: z.object({		{{server_addr}}	{{server_port}}
+i      title: z.string(),		{{server_addr}}	{{server_port}}
+i      description: z.string(),		{{server_addr}}	{{server_port}}
+i      // Transform string to Date object		{{server_addr}}	{{server_port}}
+i      pubDate: z.coerce.date(),		{{server_addr}}	{{server_port}}
+i      updatedDate: z.coerce.date().optional(),		{{server_addr}}	{{server_port}}
+i      heroImage: z.string().optional(),		{{server_addr}}	{{server_port}}
+i    }),		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // Note: in Typescript, { blog } is equivalent to { blog: blog }		{{server_addr}}	{{server_port}}
+i  export const collections = { blog }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis file defines a Collection named `blog` , and sets five		{{server_addr}}	{{server_port}}
+iinformations to be read from Markdown Frontmatter: `title` , `description` , `pubDate` , `updatedDate` , `heroImage` .		{{server_addr}}	{{server_port}}
+iThese namings are different from what Hexo uses, so we change it to a		{{server_addr}}	{{server_port}}
+iformat similar to Hexo:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  import { defineCollection, z } from 'astro:content'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const article = defineCollection({		{{server_addr}}	{{server_port}}
+i    type: 'content',		{{server_addr}}	{{server_port}}
+i    // Type-check frontmatter using a schema		{{server_addr}}	{{server_port}}
+i    schema: z.object({		{{server_addr}}	{{server_port}}
+i      title: z.string(),		{{server_addr}}	{{server_port}}
+i      categories: z.string(),		{{server_addr}}	{{server_port}}
+i      tags: z.array(z.string()).optional(),		{{server_addr}}	{{server_port}}
+i      date: z.coerce.date(),		{{server_addr}}	{{server_port}}
+i      image: z.string().optional(),		{{server_addr}}	{{server_port}}
+i    }),		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export const collections = {		{{server_addr}}	{{server_port}}
+i    article: article,		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(The more complex `config.ts` I actually use can be found at		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/astro-dev/src/content/config.ts	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/content/config.ts	{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext step is to put the posts into the `src/content/[Collection Name]`		{{server_addr}}	{{server_port}}
+ifolder. Since I renamed the Collection for my posts to `article` , I'm		{{server_addr}}	{{server_port}}
+igoing to copy all my posts into the `src/content/article` folder.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWith this Collection handy, we can obtain the list of posts and		{{server_addr}}	{{server_port}}
+igenerate web pages. Astro's blog template provides a simple example at `src/pages/blog/[...slug].astro` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  import { type CollectionEntry, getCollection } from 'astro:content';		{{server_addr}}	{{server_port}}
+i  import BlogPost from '../../layouts/BlogPost.astro';		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export async function getStaticPaths() {		{{server_addr}}	{{server_port}}
+i  	const posts = await getCollection('blog');		{{server_addr}}	{{server_port}}
+i  	return posts.map((post) => ({		{{server_addr}}	{{server_port}}
+i  		params: { slug: post.slug },		{{server_addr}}	{{server_port}}
+i  		props: post,		{{server_addr}}	{{server_port}}
+i  	}));		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  type Props = CollectionEntry<'blog'>;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const post = Astro.props;		{{server_addr}}	{{server_port}}
+i  const { Content } = await post.render();		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <BlogPost {...post.data}>		{{server_addr}}	{{server_port}}
+i  	<Content />		{{server_addr}}	{{server_port}}
+i  </BlogPost>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis template reads all posts under the `blog` Collection by calling `getCollection('blog')`		{{server_addr}}	{{server_port}}
+ifrom the `getStaticPaths()` , and generated an object `{params: ...,		{{server_addr}}	{{server_port}}
+iprops: ...}` for each post. Parameters in `params` are used for		{{server_addr}}	{{server_port}}
+igenerating URLs, e.g. the `slug` parameter will replace the `[...slug]`		{{server_addr}}	{{server_port}}
+ipart in the file path. Parameters in `props` , on the other hand, are		{{server_addr}}	{{server_port}}
+ipassed to the Astro template, and the entire `props` object can be		{{server_addr}}	{{server_port}}
+iread with `const post = Astro.props` . Since the `props` parameter		{{server_addr}}	{{server_port}}
+ireturned by `getStaticPaths()` here is the post itself, the return		{{server_addr}}	{{server_port}}
+ivalue of `Astro.props` is exactly the post object.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince I changed the format of the Collection, I need to update the		{{server_addr}}	{{server_port}}
+itemplate as well. Namely, I need to replace `blog` with `article` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  import { type CollectionEntry, getCollection } from 'astro:content';		{{server_addr}}	{{server_port}}
+i  import BlogPost from '../../../layouts/BlogPost.astro';		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export async function getStaticPaths() {		{{server_addr}}	{{server_port}}
+i    const posts = await getCollection('article');		{{server_addr}}	{{server_port}}
+i    return posts.map((post) => ({		{{server_addr}}	{{server_port}}
+i      params: { slug: post.slug, language: undefined },		{{server_addr}}	{{server_port}}
+i      props: post,		{{server_addr}}	{{server_port}}
+i    }));		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  type Props = CollectionEntry<'article'>;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const post = Astro.props;		{{server_addr}}	{{server_port}}
+i  const { Content } = await post.render();		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <BlogPost {...post.data}>		{{server_addr}}	{{server_port}}
+i    <Content />		{{server_addr}}	{{server_port}}
+i  </BlogPost>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(The more complex template I actually use can be found at		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/astro-dev/src/pages/%5B...language%5D/article/%5B...path%5D.lantian/index.astro	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/pages/[...language]/article/[...path].lantian/index.astro	{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Multi Language Support		{{server_addr}}	{{server_port}}
+iThe next feature I'm working on is multi language support. I already		{{server_addr}}	{{server_port}}
+iplaced Chinese posts in `src/content/article/zh` and English ones in `src/content/article/en` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWith that organization, I can determine the language of the post from		{{server_addr}}	{{server_port}}
+iits file path:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  export class Post {		{{server_addr}}	{{server_port}}
+i    public readonly title: string		{{server_addr}}	{{server_port}}
+i    public readonly language: string		{{server_addr}}	{{server_port}}
+i    public readonly path: string		{{server_addr}}	{{server_port}}
+i    public readonly body: string		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    constructor(post: CollectionEntry<'article'>) {		{{server_addr}}	{{server_port}}
+i      this.collectionEntry = post		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      const [language, ...paths] = post.slug.split('/')		{{server_addr}}	{{server_port}}
+i      const path = paths.join('/')		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      this.title = post.data.title		{{server_addr}}	{{server_port}}
+i      this.language = language		{{server_addr}}	{{server_port}}
+i      this.path = path		{{server_addr}}	{{server_port}}
+i      this.body = post.body		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    public static fromCollectionEntry(post: CollectionEntry<'article'>): Post {		{{server_addr}}	{{server_port}}
+i      return new Post(post)		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export async function getPosts(): Promise<Post[]> {		{{server_addr}}	{{server_port}}
+i    return (await getCollection('article'))		{{server_addr}}	{{server_port}}
+i      .map(Post.fromCollectionEntry)		{{server_addr}}	{{server_port}}
+i      .sort((a, b) => b.date.valueOf() - a.date.valueOf())		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(The full code I actually use can be found at		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/astro-dev/src/lib/posts.ts	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/lib/posts.ts	{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis piece of code obtains the file's path under `src/content/article`		{{server_addr}}	{{server_port}}
+ifrom `post.slug` , and splits the language code from the first part of		{{server_addr}}	{{server_port}}
+ithe path.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWith the language code, we can generate page URLs in our templates		{{server_addr}}	{{server_port}}
+ibased on the language. I placed my template under the `src/pages/[...language]/article/[...path].lantian/index.astro`		{{server_addr}}	{{server_port}}
+ipath:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  import PageLayout from '../../../../components/PageLayout.astro'		{{server_addr}}	{{server_port}}
+i  import PagePost from '../../../../components/PagePost.astro'		{{server_addr}}	{{server_port}}
+i  import { Post, getPosts } from '../../../../lib/posts'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export async function getStaticPaths() {		{{server_addr}}	{{server_port}}
+i    const posts = await getPosts()		{{server_addr}}	{{server_port}}
+i    return posts.map((post, index) => ({		{{server_addr}}	{{server_port}}
+i      params: {		{{server_addr}}	{{server_port}}
+i        // Follows original path under src/content/article, path was defined in Post class earlier		{{server_addr}}	{{server_port}}
+i        path: post.path,		{{server_addr}}	{{server_port}}
+i        // Path parts are omitted if defined as [...language] and set to undefined		{{server_addr}}	{{server_port}}
+i        // My English posts are in /en/article and Chinese posts in /article without prefix		{{server_addr}}	{{server_port}}
+i        language: post.language == "zh"		{{server_addr}}	{{server_port}}
+i          ? undefined		{{server_addr}}	{{server_port}}
+i          : post.language,		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i      props: {		{{server_addr}}	{{server_port}}
+i        post: post,		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i    }))		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  type Props = {		{{server_addr}}	{{server_port}}
+i    post: Post		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  const { post } = Astro.props		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <PageLayout title={post.title} language={post.language} post={post}>		{{server_addr}}	{{server_port}}
+i    <PagePost		{{server_addr}}	{{server_port}}
+i      language={post.language}		{{server_addr}}	{{server_port}}
+i      post={post}		{{server_addr}}	{{server_port}}
+i    />		{{server_addr}}	{{server_port}}
+i  </PageLayout>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(The more complex template I actually use can be found at		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/astro-dev/src/pages/%5B...language%5D/article/%5B...path%5D.lantian/index.astro	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/pages/[...language]/article/[...path].lantian/index.astro	{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince Hexo also generates URLs based on Markdown file paths, all posts		{{server_addr}}	{{server_port}}
+iwill have the same URL as before.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Post Excerpt		{{server_addr}}	{{server_port}}
+iNow we have the post content, the next step is to display the excerpt		{{server_addr}}	{{server_port}}
+iin post lists. Astro's default blog template doesn't offer this		{{server_addr}}	{{server_port}}
+ifeature, as it only shows the title and picture of each post. However,		{{server_addr}}	{{server_port}}
+iI ran into some difficulties while adding the excerpt feature.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMy initial thought is that Astro will provide an API for rendering a		{{server_addr}}	{{server_port}}
+icomponent to HTML, something similar to:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  const component = PostContent(post)		{{server_addr}}	{{server_port}}
+i  const html = component.renderToHTML()		{{server_addr}}	{{server_port}}
+i  const excerpt = createExcerpt(html)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut a round of searches revealed that Astro.js doesn't have this		{{server_addr}}	{{server_port}}
+ifeature implemented yet:		{{server_addr}}	{{server_port}}
+hhttps://github.com/withastro/roadmap/issues/533	URL:https://github.com/withastro/roadmap/issues/533	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut the only limitation is that Astro.js cannot render a component		{{server_addr}}	{{server_port}}
+iindependently. It is still possible to obtain the component's HTML		{{server_addr}}	{{server_port}}
+iwhile rendering the entire page using the Slot feature.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe Slot feature of Astro.js is similar to `props.children` in React.		{{server_addr}}	{{server_port}}
+iIt is used for passing child components. For example, I have a		{{server_addr}}	{{server_port}}
+icomponent `PostExcerpt.astro` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  import { createExcerpt } from '../../lib/utils'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const html = await Astro.slots.render('default')		{{server_addr}}	{{server_port}}
+i  const excerpt = createExcerpt(html)		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <p>{excerpt}</p>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(The full component I actually use can be found at		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/master/src/components/fragments/PostExcerpt.astro	URL:https://github.com/xddxdd/blog/blob/master/src/components/fragments/PostExcerpt.astro	{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf we pass a child component to it:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  <PostExcerpt>		{{server_addr}}	{{server_port}}
+i   <p>A really really long post content...</p>		{{server_addr}}	{{server_port}}
+i  </PostExcerpt>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBy calling `await Astro.slots.render('default')` , the `PostExcerpt.astro`		{{server_addr}}	{{server_port}}
+icomponent can obtain the HTML render result of the child component `<p>A		{{server_addr}}	{{server_port}}
+ireally really long post content...</p>` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow, it can further make calls to the `createExcerpt` function to		{{server_addr}}	{{server_port}}
+iextract the excerpt from the post's full HTML.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(For more detailed information for the Slot feature, please check the		{{server_addr}}	{{server_port}}
+iofficial manual:		{{server_addr}}	{{server_port}}
+hhttps://docs.astro.build/en/basics/astro-components/#slots	URL:https://docs.astro.build/en/basics/astro-components/#slots	{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Pagination		{{server_addr}}	{{server_port}}
+iNext step is to implement pagination for the post list on home page.		{{server_addr}}	{{server_port}}
+iAstro's default blog template will display all posts on the same page.		{{server_addr}}	{{server_port}}
+iIf you have a lot of posts on your blog, the page will be very long		{{server_addr}}	{{server_port}}
+iand be hard to navigate. I first implemented a pagination function		{{server_addr}}	{{server_port}}
+ithat splits post list into small sections of 10 posts:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  const POSTS_PER_PAGE = 10		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // Pagination properties used by my template		{{server_addr}}	{{server_port}}
+i  export type PaginationProps = {		{{server_addr}}	{{server_port}}
+i    numPages: number    // Total number of pages		{{server_addr}}	{{server_port}}
+i    currentPage: number // Current page number		{{server_addr}}	{{server_port}}
+i    basePath: string    // Base path, final path will be ${basePath}/page/${currentPage}		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export type PaginatedProps = {		{{server_addr}}	{{server_port}}
+i    pagination: PaginationProps // Pagination properties for the current page		{{server_addr}}	{{server_port}}
+i    posts: Post[]               // Posts in the current page		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export function getStaticPathsForPaginate(		{{server_addr}}	{{server_port}}
+i    posts: Post[],		{{server_addr}}	{{server_port}}
+i    basePath: string,		{{server_addr}}	{{server_port}}
+i    additionalParams?: Record<string, string>,		{{server_addr}}	{{server_port}}
+i    additionalProps?: Record<string, any>		{{server_addr}}	{{server_port}}
+i  ) {		{{server_addr}}	{{server_port}}
+i    // Total number of pages		{{server_addr}}	{{server_port}}
+i    const numPages = Math.ceil(posts.length / POSTS_PER_PAGE)		{{server_addr}}	{{server_port}}
+i    return [...Array(numPages).keys()].map(i => ({		{{server_addr}}	{{server_port}}
+i      params: {		{{server_addr}}	{{server_port}}
+i        // Multi language support is omitted here		{{server_addr}}	{{server_port}}
+i        language: undefined,		{{server_addr}}	{{server_port}}
+i        // Add page numbers like page/2, page/3 in URL		{{server_addr}}	{{server_port}}
+i        // No need to add page/1 for the first page		{{server_addr}}	{{server_port}}
+i        page_prefix: i == 0 ? undefined : `page/${i + 1}`,		{{server_addr}}	{{server_port}}
+i        ...additionalParams,		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i      props: <PaginatedProps>{		{{server_addr}}	{{server_port}}
+i        pagination: <PaginationProps>{		{{server_addr}}	{{server_port}}
+i          numPages: numPages,		{{server_addr}}	{{server_port}}
+i          currentPage: i + 1,		{{server_addr}}	{{server_port}}
+i          basePath: basePath,		{{server_addr}}	{{server_port}}
+i        },		{{server_addr}}	{{server_port}}
+i        posts: postsForLanguage.slice(		{{server_addr}}	{{server_port}}
+i          i * POSTS_PER_PAGE,		{{server_addr}}	{{server_port}}
+i          (i + 1) * POSTS_PER_PAGE		{{server_addr}}	{{server_port}}
+i        ),=		{{server_addr}}	{{server_port}}
+i        ...additionalProps,		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i    }))		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(The full code I actually use can be found at		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/astro-dev/src/lib/posts.ts	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/lib/posts.ts	{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen call this pagination function from page templates. My home page's		{{server_addr}}	{{server_port}}
+itemplate is located at `src/pages/[...language]/[...page_prefix]/index.astro` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  import { getPosts, getStaticPathsForPaginate } from '../../../lib/posts'		{{server_addr}}	{{server_port}}
+i  import type { PaginatedProps } from '../../../lib/posts'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export async function getStaticPaths() {		{{server_addr}}	{{server_port}}
+i    const posts = await getPosts()		{{server_addr}}	{{server_port}}
+i    return getStaticPathsForPaginate(posts, '')		{{server_addr}}	{{server_port}}
+i    // On the first page, the page_prefix in the returned params is undefined, so no page number in URL		{{server_addr}}	{{server_port}}
+i    // Starting from second page, page_prefix is added to URL, creating routes like /page/2		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  type Props = PaginatedProps		{{server_addr}}	{{server_port}}
+i  const { posts } = Astro.props		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // Other logics are omitted		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow we have generated the path `/` for the first page, and additional		{{server_addr}}	{{server_port}}
+ipages like `/page/2` , `/page/3` , etc.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Matching Hexo URLs		{{server_addr}}	{{server_port}}
+iThe next step is to implement other pages that Hexo automatically		{{server_addr}}	{{server_port}}
+igenerates, including the categorization page `/category/[Category		{{server_addr}}	{{server_port}}
+iName]` , `/category/[Category Name]/page/[Page Number]` , and tag page `/tag/[Tag		{{server_addr}}	{{server_port}}
+iName]`，`/tag/[Tag Name]/page/[Page Number]` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOther than filtering posts based on their categorization, it is no		{{server_addr}}	{{server_port}}
+idifferent from the home page post list. Take the categorization page		{{server_addr}}	{{server_port}}
+ifor example. Let's create the template file `src/pages/[...language]/category/[category]/[...page_prefix]/index.as		{{server_addr}}	{{server_port}}
+itro` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  export async function getStaticPaths() {		{{server_addr}}	{{server_port}}
+i    const categories = [		{{server_addr}}	{{server_port}}
+i      ...new Set(Object.entries(CATEGORY_MAP).map(([_, v]) => v)),		{{server_addr}}	{{server_port}}
+i    ]		{{server_addr}}	{{server_port}}
+i    const posts = await getPosts()		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    return categories.flatMap(category => {		{{server_addr}}	{{server_port}}
+i      const postsForCategory = posts.filter(		{{server_addr}}	{{server_port}}
+i        post => post.category == category		{{server_addr}}	{{server_port}}
+i      )		{{server_addr}}	{{server_port}}
+i      return getStaticPathsForPaginate(		{{server_addr}}	{{server_port}}
+i        // All posts under the category		{{server_addr}}	{{server_port}}
+i        postsForCategory,		{{server_addr}}	{{server_port}}
+i        // Base path for the category, to be provided to pagination component		{{server_addr}}	{{server_port}}
+i        `/category/${categoryInUrl}`,		{{server_addr}}	{{server_port}}
+i        // additionalParams parameter, to add category into URL		{{server_addr}}	{{server_port}}
+i        { category: category },		{{server_addr}}	{{server_port}}
+i        // additionalProps parameter, to add category to Astro..props		{{server_addr}}	{{server_port}}
+i        { category: category }		{{server_addr}}	{{server_port}}
+i      )		{{server_addr}}	{{server_port}}
+i    })		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const { posts, category } = Astro.props		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // Other logics are omitted		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn this way, we can display all posts of this category under the pages `/category/[Category		{{server_addr}}	{{server_port}}
+iName]` or `/category/[Category Name]/page/[Page Number]` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## The Island Feature		{{server_addr}}	{{server_port}}
+iThe major feature of Astro.js, Island, can generate isolated areas in		{{server_addr}}	{{server_port}}
+ithe page for each `.astro` file. These isolations include:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- CSS isolation. Let's assume we have the following HTML/CSS code in `src/components/a.astro` :		{{server_addr}}	{{server_port}}
+i  <p class="my-class">Hello World</p>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <style>		{{server_addr}}	{{server_port}}
+i    .my-class {		{{server_addr}}	{{server_port}}
+i      font-size: 100px;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  </style>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAstro.js will process the HTML and CSS, and add a tag starting with `data-astro-cid` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <p class="my-class" data-astro-cid-123456>Hello World</p>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <style>		{{server_addr}}	{{server_port}}
+i    .my-class[data-astro-cid-123456] {		{{server_addr}}	{{server_port}}
+i      font-size: 100px;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  </style>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow the CSS only applies to the `p` tag above.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe `data-astro-cid` tag is the same for all HTML/CSS originating from `src/components/a.astro` ,		{{server_addr}}	{{server_port}}
+iso all CSS here will apply to all HTML from `a.astro` . But assume I		{{server_addr}}	{{server_port}}
+ihave another component `src/components/b.astro` . It will get a		{{server_addr}}	{{server_port}}
+idifferent tag, for example `data-astro-cid-654321` . Now the CSS from `a.astro`		{{server_addr}}	{{server_port}}
+iwill not apply to `b.astro` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis is a handy feature while writing CSS, since you no longer worry		{{server_addr}}	{{server_port}}
+iabout changing appearance of rest of the site while adjusting CSS for		{{server_addr}}	{{server_port}}
+ia specific part of the page.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Javascript Component Isolation		{{server_addr}}	{{server_port}}
+iSuppose I have Javascript code in my Astro template:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  <div id="test">Hello world</div>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <script>		{{server_addr}}	{{server_port}}
+i  document.getElementById("test").innerHTML = "Hi there";		{{server_addr}}	{{server_port}}
+i  </script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAstro.js will automatically generate an Island for this component, and		{{server_addr}}	{{server_port}}
+ionly run the Javascript of this Island after page load is complete.		{{server_addr}}	{{server_port}}
+iThis island is isolated from other parts of the web page, and will not		{{server_addr}}	{{server_port}}
+islow down loading time for other parts.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn addition to improving page load speed, this also simplifies using `window.onload` .		{{server_addr}}	{{server_port}}
+iThe old way of running a function after page is loaded is:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  window.onload = () => {		{{server_addr}}	{{server_port}}
+i    console.log('Hello World')		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut what if we have multiple functions to run? If we simply overwrite `window.onload` ,		{{server_addr}}	{{server_port}}
+ithe previous function will never be executed:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  window.onload = () => {		{{server_addr}}	{{server_port}}
+i    console.log('This function will never be executed')		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  window.onload = () => {		{{server_addr}}	{{server_port}}
+i    console.log('Hello World')		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo we need some more complex logic:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  function addLoadEvent(o) {		{{server_addr}}	{{server_port}}
+i    // Store the previous window.onload		{{server_addr}}	{{server_port}}
+i    var n = window.onload		{{server_addr}}	{{server_port}}
+i    'function' != typeof window.onload		{{server_addr}}	{{server_port}}
+i      ? (window.onload = o)		{{server_addr}}	{{server_port}}
+i      : (window.onload = function () {		{{server_addr}}	{{server_port}}
+i          // If window.onload was previously set, run that function as well		{{server_addr}}	{{server_port}}
+i          n && n(), o()		{{server_addr}}	{{server_port}}
+i        })		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  addLoadEvent(() => {		{{server_addr}}	{{server_port}}
+i    console.log('This function is now executed')		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i  addLoadEvent(() => {		{{server_addr}}	{{server_port}}
+i    console.log('Hello World')		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIt works, but is a bit of hassle. With Astro.js, however, all the		{{server_addr}}	{{server_port}}
+iabove are automated:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  <div id="test">Hello world</div>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <script>		{{server_addr}}	{{server_port}}
+i  // This code will be run after the entire page is loaded, with no additional config required		{{server_addr}}	{{server_port}}
+i  document.getElementById("test").innerHTML = "Hi there";		{{server_addr}}	{{server_port}}
+i  </script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere are two examples of running Javascript in Islands:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `WalineComment.astro` , for loading the comment box of Waline		{{server_addr}}	{{server_port}}
+i  comment system:		{{server_addr}}	{{server_port}}
+h  https://github.com/xddxdd/blog/blob/astro-dev/src/components/fragments/WalineComment.astro	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/components/fragments/WalineComment.astro	{{server_addr}}	{{server_port}}
+i- `WalineRecentComments.astro` , for showing recent comments from the		{{server_addr}}	{{server_port}}
+i  Waline comment system:		{{server_addr}}	{{server_port}}
+h  https://github.com/xddxdd/blog/blob/astro-dev/src/components/fragments/WalineRecentComments.astro	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/components/fragments/WalineRecentComments.astro	{{server_addr}}	{{server_port}}
+i## Postprocess Plugins (e.g. CSS Inline)		{{server_addr}}	{{server_port}}
+iA list of plugins (integrations) is available on the home page of		{{server_addr}}	{{server_port}}
+iAstro.js, which provides various plugins that offer additional		{{server_addr}}	{{server_port}}
+ifeatures:		{{server_addr}}	{{server_port}}
+hhttps://astro.build/integrations/	URL:https://astro.build/integrations/	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI will take an example of		{{server_addr}}	{{server_port}}
+hInline	URL:https://github.com/Playform/Inline	{{server_addr}}	{{server_port}}
+iplugin. It uses Google's		{{server_addr}}	{{server_port}}
+hcritters	URL:https://github.com/GoogleChromeLabs/critters	{{server_addr}}	{{server_port}}
+iproject to automatically inline CSS used in the current page, to		{{server_addr}}	{{server_port}}
+iimprove the loading speed of the web page.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFirst, install the Inline plugin from NPM:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  npm install --save @playform/inline		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen modify `astro.config.ts` , and add the plugin to `integrations`		{{server_addr}}	{{server_port}}
+iunder `defineConfig` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  import inline from '@playform/inline'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export default defineConfig({		{{server_addr}}	{{server_port}}
+i    integrations: [		{{server_addr}}	{{server_port}}
+i      // ...		{{server_addr}}	{{server_port}}
+i      critters({}),		{{server_addr}}	{{server_port}}
+i      // ...		{{server_addr}}	{{server_port}}
+i    ],		{{server_addr}}	{{server_port}}
+i    // ...		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter that, all pages generated with `astro build` will be		{{server_addr}}	{{server_port}}
+iautomatically optimized.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSimilarly, Astro provides quite a few frequently used plugins:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- MDX support:		{{server_addr}}	{{server_port}}
+h  https://docs.astro.build/en/guides/integrations-guide/mdx/	URL:https://docs.astro.build/en/guides/integrations-guide/mdx/	{{server_addr}}	{{server_port}}
+i- Generating Sitemap:		{{server_addr}}	{{server_port}}
+h  https://docs.astro.build/en/guides/integrations-guide/sitemap/	URL:https://docs.astro.build/en/guides/integrations-guide/sitemap/	{{server_addr}}	{{server_port}}
+i- React support:		{{server_addr}}	{{server_port}}
+h  https://docs.astro.build/en/guides/integrations-guide/react/	URL:https://docs.astro.build/en/guides/integrations-guide/react/	{{server_addr}}	{{server_port}}
+iYou can load these plugins in similar ways.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# Conclusions		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI have already migrated the entire blog system to Astro.js on March		{{server_addr}}	{{server_port}}
+i18, 2024. All page URLs remain the same during the migration, and my		{{server_addr}}	{{server_port}}
+iblog theme template is also migrated with the exact same look and		{{server_addr}}	{{server_port}}
+ifeel. From a visitor's perspective, there should be no change to the		{{server_addr}}	{{server_port}}
+iblog's content, style and functionality. But for me, a better		{{server_addr}}	{{server_port}}
+ideveloping experience will help me implement more complex logic on the		{{server_addr}}	{{server_port}}
+iwebsite, test latest frontend tools, and make additional performance		{{server_addr}}	{{server_port}}
+iimprovements.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAll commits from my development process can be found in		{{server_addr}}	{{server_port}}
+hthe astro-dev branch of my GitHub	URL:https://github.com/xddxdd/blog/tree/astro-dev	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

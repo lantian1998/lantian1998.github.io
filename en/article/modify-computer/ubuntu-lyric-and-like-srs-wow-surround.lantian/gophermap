@@ -1,0 +1,71 @@
+iMy ASUS laptop originally had a sound card driver in Windows 7 that		{{server_addr}}	{{server_port}}
+iincluded a technology called ASUS Sonic Focus. Its principle involves		{{server_addr}}	{{server_port}}
+iadjusting the audio equalizer to create a psychological Dolby surround		{{server_addr}}	{{server_port}}
+ieffect, making listeners perceive the sound as spatial. After enabling		{{server_addr}}	{{server_port}}
+iSonic Focus, I found the audio quality significantly improved. (I'm		{{server_addr}}	{{server_port}}
+inot an audiophile.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, on Ubuntu, there's naturally no Sonic Focus – ASUS wouldn't		{{server_addr}}	{{server_port}}
+ibother supporting such a rapidly evolving system. Dolby and SRS also		{{server_addr}}	{{server_port}}
+idon't provide Linux support, so the open-source community developed		{{server_addr}}	{{server_port}}
+iExtra Stereo to replicate these features. There's also Crystalizer,		{{server_addr}}	{{server_port}}
+iwhich enhances high-frequency loudness for clearer sound. Those who've		{{server_addr}}	{{server_port}}
+iused Creative Sound Blaster or X-Fi cards should be familiar with		{{server_addr}}	{{server_port}}
+ithis.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMeanwhile, the most frustrating aspect of listening to music on Ubuntu		{{server_addr}}	{{server_port}}
+iis the lack of lyrics. Rhythmbox claims to have automatic lyric		{{server_addr}}	{{server_port}}
+idownloading, but it simply didn't work for me... I had to search for		{{server_addr}}	{{server_port}}
+ialternatives myself.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThat's when I discovered OSD Lyrics.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> OSD Lyrics is a lyrics show compatible with various media players.		{{server_addr}}	{{server_port}}
+i> It is not a plugin but a standalone program. OSD Lyrics shows lyrics		{{server_addr}}	{{server_port}}
+i> on your desktop, in the style similar to KaraOK. It also provides		{{server_addr}}	{{server_port}}
+i> another displaying style, in which lyrics scroll from bottom to top.		{{server_addr}}	{{server_port}}
+i> OSD Lyrics can download lyrics from the network automatically.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis software displays desktop lyrics and supports Audacious, Banshee (pre-installed		{{server_addr}}	{{server_port}}
+iin Ubuntu 12.04 or 11.10, I forget which), Rhythmbox (pre-installed in		{{server_addr}}	{{server_port}}
+iUbuntu 12.10), and others. Its effects resemble Kuwo or similar		{{server_addr}}	{{server_port}}
+iplayers, and it can automatically search/download lyrics from the		{{server_addr}}	{{server_port}}
+iQianqian Jinting lyrics database. The official PPA repository allows		{{server_addr}}	{{server_port}}
+idirect installation:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo add-apt-repository ppa:osd-lyrics/ppa		{{server_addr}}	{{server_port}}
+i  sudo apt-get update		{{server_addr}}	{{server_port}}
+i  sudo apt-get install osdlyrics		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBy default, lyrics are stored in `~/.lyrics` , which is inconvenient.		{{server_addr}}	{{server_port}}
+iI prefer storing them with the music files. Open OSD Lyrics (it will		{{server_addr}}	{{server_port}}
+iprompt you to select a player), click the icon in the top-right corner		{{server_addr}}	{{server_port}}
+i→ Options → Lyrics Location. Clear the path field except for `%` , and		{{server_addr}}	{{server_port}}
+ithe filename field except for `%f` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i### 2. Enabling SRS WOW-like Sound Effects		{{server_addr}}	{{server_port}}
+iThis is trickier since Extra Stereo isn't a standalone install or		{{server_addr}}	{{server_port}}
+idriver-level feature. We need a compatible player. Currently supported		{{server_addr}}	{{server_port}}
+iplayers include MPlayer (SMPlayer) and Audacious. For music, we'll use		{{server_addr}}	{{server_port}}
+iAudacious.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo apt-get install audacious		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter installation, open Audacious. Go to the top menu: Output →		{{server_addr}}	{{server_port}}
+iEffects, where you'll find both Crystalizer and Extra Stereo.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**PS:** For standard computer speakers:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Extra Stereo: Set around 2.8 (values >3.5 cause distortion)		{{server_addr}}	{{server_port}}
+i- Crystalizer: Set around 2 (values >3 cause distortion)		{{server_addr}}	{{server_port}}
+i- Echo: Configure as 180, 28, 24 (top to bottom)		{{server_addr}}	{{server_port}}
+iFor SMPlayer, you can either adjust settings per video or add them to		{{server_addr}}	{{server_port}}
+iMPlayer's launch parameters. Go to Menu → Options → Preferences →		{{server_addr}}	{{server_port}}
+iAdvanced. In the "Execute the following actions each time a file is		{{server_addr}}	{{server_port}}
+iopened" field, add:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  extrastereo_filter true		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSave the settings. Alternatively, enable manually via Menu → Audio →		{{server_addr}}	{{server_port}}
+iFilters → Extra Stereo.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

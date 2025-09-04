@@ -1,0 +1,723 @@
+i# 前言		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i差不多四年半前，		{{server_addr}}	{{server_port}}
+h我把博客系统从 Typecho 迁移到了 Hexo	URL:https://lantian.pub/article/modify-website/switching-to-hexo-static-site-generator.lantian/	{{server_addr}}	{{server_port}}
+i。Hexo 是一款静态网页生成器（Static Site Generator），本身无需连接		{{server_addr}}	{{server_port}}
+iMySQL、PostgreSQL 等数据库动态生成网页，而是根据给定的 Markdown 文章文		{{server_addr}}	{{server_port}}
+i件一次性生成所有的 HTML 网页。相比于 WordPress、Typecho 等动态方案，预		{{server_addr}}	{{server_port}}
+i先生成静态网页不需要服务器支持 PHP 等动态语言，对服务器的性能压力更低。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是 Hexo 本身并不新，		{{server_addr}}	{{server_port}}
+h它的第一个版本发布于 2013 年 7 月	URL:https://github.com/hexojs/hexo/releases/tag/1.0.0	{{server_addr}}	{{server_port}}
+i。当时以 React 为首的单页应用框架刚刚发布（React：2013 年 5 月），		{{server_addr}}	{{server_port}}
+iWebpack 等现代前端流程必须的框架也还不存在（Webpack：2014 年 2 月），		{{server_addr}}	{{server_port}}
+i因此 Hexo 理所当然的没有用上这些工具，而是停留在拼接 HTML 字符串的时代。		{{server_addr}}	{{server_port}}
+iHexo 常用的几个主题模板系统 EJS，Pug 等都是基于字符串拼接的模板系统。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i没有了现代前端流程，就意味着：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 我需要手动处理拼接 HTML 的所有细节。每次修改模板都让我想起写 PHP 的		{{server_addr}}	{{server_port}}
+i  美好时光。		{{server_addr}}	{{server_port}}
+i- 我无法方便地使用 Sass，PostCSS 等 CSS 工具，Unified.js（		{{server_addr}}	{{server_port}}
+i  Remark/Rehype）等可扩展 Markdown 解析器。虽然有一些 Hexo 插件可以调		{{server_addr}}	{{server_port}}
+i  用这些功能，但它们大都停留在「能跑就行」的阶段，只支持原作者用到的几		{{server_addr}}	{{server_port}}
+i  个功能，而且依赖版本还停留在原作者编写插件的时代。		{{server_addr}}	{{server_port}}
+i  - 例如：		{{server_addr}}	{{server_port}}
+h    hexo-renderer-webpack	URL:https://github.com/nejj/hexo-renderer-webpack	{{server_addr}}	{{server_port}}
+i    的依赖版本停留在 5 年前。		{{server_addr}}	{{server_port}}
+h    hexo-renderer-sass	URL:https://github.com/knksmith57/hexo-renderer-sass	{{server_addr}}	{{server_port}}
+i    最后一次更新是 10 个月前。		{{server_addr}}	{{server_port}}
+h    hexo-renderer-unified	URL:https://github.com/LikaKavkasidze/hexo-renderer-unified	{{server_addr}}	{{server_port}}
+i    也停留在 5 年前。		{{server_addr}}	{{server_port}}
+i  - 不过我确实有办法使用 Webpack：我单独写了一套 Webpack 配置文件，在		{{server_addr}}	{{server_port}}
+i    CI 的构建脚本里加一步调用 Webpack，把生成的 JS、CSS 放进 Hexo 的主		{{server_addr}}	{{server_port}}
+i    题目录，然后在 Hexo 的模板里手写 HTML 调用。		{{server_addr}}	{{server_port}}
+i除此之外，还有另外几个原因促使我寻找新的静态网页生成器框架：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 即使是最新的 7.x 版本，Hexo 也还无法在主题、插件中使用 ESM Module，		{{server_addr}}	{{server_port}}
+i  也就意味着难以使用 Typescript。而众所周知，手写弱类型的 Javascript		{{server_addr}}	{{server_port}}
+i  很容易写出 Bug。		{{server_addr}}	{{server_port}}
+IJavascript Trinity	/usr/uploads/202404/the-javascript-trinity.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（图源		{{server_addr}}	{{server_port}}
+hhttps://javascriptwtf.com/	URL:https://javascriptwtf.com/	{{server_addr}}	{{server_port}}
+i）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Hexo 无法很好支持一些我的个人需求，例如多语言支持。这些都需要我写插		{{server_addr}}	{{server_port}}
+i  件对逻辑进行定制或者替换。随着定制进行，我发现整套系统成了忒修斯之船：		{{server_addr}}	{{server_port}}
+i  如果我换掉了 Hexo 的一堆功能，那我还用 Hexo 干什么？		{{server_addr}}	{{server_port}}
+i因此为了满足我的需求，我开始寻找新的静态网站生成方案。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# 方案选择		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我对新方案有以下要求：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 能够集成现代的前端工具链。		{{server_addr}}	{{server_port}}
+i- 做好将模板转换成 HTML/CSS/JS 这一步，而且模板格式最好接近 React JSX，		{{server_addr}}	{{server_port}}
+i  而非手动拼接字符串。		{{server_addr}}	{{server_port}}
+i  - 但是我不想要将整个网页放在浏览器端用 Javascript 渲染的笨重方案，我		{{server_addr}}	{{server_port}}
+i    的个人博客不是复杂的单页应用。我希望 Javascript 是博客网页的可选项，		{{server_addr}}	{{server_port}}
+i    而不是必须部分。		{{server_addr}}	{{server_port}}
+i- 有一个可定制的网页路由系统。我需要保持迁移前后每篇文章的 URL 不变。		{{server_addr}}	{{server_port}}
+i- 最好有一套简单的文章管理系统，可以加载我的 Markdown 文章并且读取它们		{{server_addr}}	{{server_port}}
+i  的 Frontmatter 中的信息。但因为手写一套文章管理系统也很简单，所以这		{{server_addr}}	{{server_port}}
+i  不是必须项。		{{server_addr}}	{{server_port}}
+i于是经过搜索，我考虑了以下几个方案：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## React、Vue、Svelte 等 SPA 单页应用方案		{{server_addr}}	{{server_port}}
+iReact 是现代单页应用框架的祖师爷，可以说完全改变了前端的开发方式。选择		{{server_addr}}	{{server_port}}
+iReact 自然不会在使用现代前端工具链时遇到问题，因为 React 就是现代前端		{{server_addr}}	{{server_port}}
+i本身，绝大多数前端工具开发初始就会考虑到对 React 的支持。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是 React 有一个很大的缺点：它的整个网页都是在浏览器上用 Javascript		{{server_addr}}	{{server_port}}
+i渲染的。这就意味着：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 用户浏览网页时需要加载一个很大的 Javascript 文件，然后消耗相当多的		{{server_addr}}	{{server_port}}
+i  CPU 资源渲染出 HTML DOM。		{{server_addr}}	{{server_port}}
+i- 如果用户难以 / 不想使用 JS，例如开了 NoScript 插件，或者网络连接很慢，		{{server_addr}}	{{server_port}}
+i  那么他们将完全无法查看网页内容，而不是像传统 HTML 一样，即使没有了		{{server_addr}}	{{server_port}}
+i  CSS/JS 也至少可以看到文字内容。		{{server_addr}}	{{server_port}}
+i简单的说，我希望禁用 JS 的浏览器也可以正常打开网页（可能丢失一些不重要		{{server_addr}}	{{server_port}}
+i的功能）。因此我排除了 React 框架，以及与其类似的 Vue、Svelte 等面向单		{{server_addr}}	{{server_port}}
+i页应用的网页框架。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Sukka 的 Hexo + Next.js 方案		{{server_addr}}	{{server_port}}
+h苏卡卡在 2022 年将自己的博客从纯 Hexo 迁移到了 Hexo + Next.js 方案	URL:https://blog.skk.moe/post/use-nextjs-and-hexo-to-rebuild-my-blog/	{{server_addr}}	{{server_port}}
+i。他保留了 Hexo 作为文章管理系统以及使用少量插件，而博客网页本身使用		{{server_addr}}	{{server_port}}
+iNext.js 框架生成。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i相比于 React，Next.js 会预先渲染出整个 HTML DOM，因此即使禁用		{{server_addr}}	{{server_port}}
+iJavascript 也可以看到网页的基本内容。网页加载完成后，Next.js 框架的		{{server_addr}}	{{server_port}}
+iJavascript 库再给浏览器端的静态组件加上单页应用的动态功能。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这种方案确实能满足我的「Javascript 必须可选」的要求，但是依然有一些问		{{server_addr}}	{{server_port}}
+i题：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Next.js 加载的额外 JS 代码我基本用不到。		{{server_addr}}	{{server_port}}
+i  - 单页应用主要用于与用户有大量交互的网站，但我的博客以文章内容为主，		{{server_addr}}	{{server_port}}
+i    并没有那么多交互控件。		{{server_addr}}	{{server_port}}
+i  - 单页应用的另一个主要优势是无缝加载，而我使用		{{server_addr}}	{{server_port}}
+h    Instant.page	URL:https://instant.page/	{{server_addr}}	{{server_port}}
+i    加浏览器缓存也可以做到很快的加载速度。		{{server_addr}}	{{server_port}}
+i- 苏卡卡选择 Hexo 是因为他是 Hexo 的核心开发者，Hexo 刚好可以满足他的		{{server_addr}}	{{server_port}}
+i  需求，而我不是。我不需要 Hexo 的复杂的文章管理逻辑，因为我不使用草稿，		{{server_addr}}	{{server_port}}
+i  不需要自动帮我生成文章模板，几乎不会使用 `hexo generate` 以外的任何		{{server_addr}}	{{server_port}}
+i  命令。而且我本身就会在 Hexo 的文章、页面列表上做二次过滤，来满足我的		{{server_addr}}	{{server_port}}
+i  多语言需求。		{{server_addr}}	{{server_port}}
+i因此我依然没有选择这种方案，而是选择了另一款框架：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# 最终方案：Astro.js		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+hAstro.js	URL:https://astro.build/	{{server_addr}}	{{server_port}}
+i宣称它是「为内容网站设计的网页框架」。它和 React、Next.js 等针对单页应		{{server_addr}}	{{server_port}}
+i用设计的网页框架有很大的不同：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Astro.js 不支持单页应用的复杂组件。但这也意味着它本身不需要在最终网		{{server_addr}}	{{server_port}}
+i  页中引入额外的 JS 代码。如果我不主动加入 JS，Astro.js 生成的网页就会		{{server_addr}}	{{server_port}}
+i  是一行 JS 代码都没有的纯静态网页。		{{server_addr}}	{{server_port}}
+i- 但是这也不意味着网站上一点复杂功能都不能有。Astro.js 的主打功能		{{server_addr}}	{{server_port}}
+i  Island（岛屿），可以在页面中生成一些互相隔离的区域，并在其中使用		{{server_addr}}	{{server_port}}
+i  React、Vue 等框架。由于岛屿间互相隔离，你甚至可以混用不同网页框架。		{{server_addr}}	{{server_port}}
+i除此以外，Astro.js 也满足了我的其它要求：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Astro.js 的模板是拼接类似 JSX 的组件，而不是拼接 HTML 字符串。如果你		{{server_addr}}	{{server_port}}
+i  有 React 开发经验，你会觉得模板语法很熟悉。		{{server_addr}}	{{server_port}}
+i- Astro.js 自带一套路由系统，可以完全自定义每个页面的地址，也可以用同		{{server_addr}}	{{server_port}}
+i  一模板为每篇文章批量生成页面。		{{server_addr}}	{{server_port}}
+i- Astro.js 自带一套很简单的文章管理系统（称为 Collection），支持		{{server_addr}}	{{server_port}}
+i  Markdown 和 MDX。而且它除了加载 Markdown Frontmatter 和渲染 Markdown		{{server_addr}}	{{server_port}}
+i  之外不做任何事，给用户最大的自由度。		{{server_addr}}	{{server_port}}
+i- Astro.js 基于现代前端工具链（Rollup.js，Vite.js，Unified.js 等）开发，		{{server_addr}}	{{server_port}}
+i  对各种插件有良好的支持。		{{server_addr}}	{{server_port}}
+i但是 Astro.js 不是一个开箱即用的博客系统，它只是一套框架，还需要做不少		{{server_addr}}	{{server_port}}
+i的开发。我在开发博客系统时，也遇到了 Astro.js 的一些限制：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Astro.js 缺失一个比较重要的功能：无法将 Astro 组件单独渲染成 HTML，		{{server_addr}}	{{server_port}}
+i  只能渲染整个网页。这导致获取文章摘要比较困难，但在整个网页渲染过程中		{{server_addr}}	{{server_port}}
+i  是可以获取组件 HTML 的，因此有技巧可以实现。		{{server_addr}}	{{server_port}}
+i- Astro.js 依然有少量用户无法操控的细节，例如它会自动将网页用到的 JS		{{server_addr}}	{{server_port}}
+i  和 CSS 插入 `<head>` 中，我无法在渲染中控制位置，只能在 HTML 生成完		{{server_addr}}	{{server_port}}
+i  毕后做后处理。		{{server_addr}}	{{server_port}}
+i# 博客系统架构		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i选定了方案，就可以开始开发博客系统了。我的整个过程的所有 commit 可以在		{{server_addr}}	{{server_port}}
+hGitHub 上的 astro-dev 分支	URL:https://github.com/xddxdd/blog/tree/astro-dev	{{server_addr}}	{{server_port}}
+i看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 生成基础模板		{{server_addr}}	{{server_port}}
+iAstro.js 本身提供了一个非常简单的博客模板，可以用 `npm create		{{server_addr}}	{{server_port}}
+iastro@latest` 生成：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Need to install the following packages:		{{server_addr}}	{{server_port}}
+i  create-astro@4.8.0		{{server_addr}}	{{server_port}}
+i  Ok to proceed? (y)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i   astro   Launch sequence initiated.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i     dir   Where should we create your new project?		{{server_addr}}	{{server_port}}
+i           ./blog		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    tmpl   How would you like to start your new project?		{{server_addr}}	{{server_port}}
+i           Use blog template		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      ts   Do you plan to write TypeScript?		{{server_addr}}	{{server_port}}
+i           Yes		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i     use   How strict should TypeScript be?		{{server_addr}}	{{server_port}}
+i           Strict		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    deps   Install dependencies?		{{server_addr}}	{{server_port}}
+i           Yes		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i     git   Initialize a new git repository?		{{server_addr}}	{{server_port}}
+i           Yes		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i        ✔  Project initialized!		{{server_addr}}	{{server_port}}
+i           ■ Template copied		{{server_addr}}	{{server_port}}
+i           ■ TypeScript customized		{{server_addr}}	{{server_port}}
+i           ■ Dependencies installed		{{server_addr}}	{{server_port}}
+i           ■ Git initialized		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    next   Liftoff confirmed. Explore your project!		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i           Enter your project directory using cd ./blog		{{server_addr}}	{{server_port}}
+i           Run npm run dev to start the dev server. CTRL+C to stop.		{{server_addr}}	{{server_port}}
+i           Add frameworks like react or tailwind using astro add.		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i           Stuck? Join us at https://astro.build/chat		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  ╭─────╮  Houston:		{{server_addr}}	{{server_port}}
+i  │ ◠ ◡ ◠  Good luck out there, astronaut! 🚀		{{server_addr}}	{{server_port}}
+i  ╰─────╯		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 文章显示		{{server_addr}}	{{server_port}}
+iAstro.js 自带一套很简单的文章管理系统（称为 Collection），可以自动加载		{{server_addr}}	{{server_port}}
+iMarkdown 文件，读取它们 Frontmatter 中的信息。在使用博客模板生成完项目		{{server_addr}}	{{server_port}}
+i后，可以找到 `src/content/config.ts` 这个文件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  import { defineCollection, z } from 'astro:content'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const blog = defineCollection({		{{server_addr}}	{{server_port}}
+i    type: 'content',		{{server_addr}}	{{server_port}}
+i    // Type-check frontmatter using a schema		{{server_addr}}	{{server_port}}
+i    schema: z.object({		{{server_addr}}	{{server_port}}
+i      title: z.string(),		{{server_addr}}	{{server_port}}
+i      description: z.string(),		{{server_addr}}	{{server_port}}
+i      // Transform string to Date object		{{server_addr}}	{{server_port}}
+i      pubDate: z.coerce.date(),		{{server_addr}}	{{server_port}}
+i      updatedDate: z.coerce.date().optional(),		{{server_addr}}	{{server_port}}
+i      heroImage: z.string().optional(),		{{server_addr}}	{{server_port}}
+i    }),		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // 注：在 Typescript 中 { blog } 等价于 { blog: blog }		{{server_addr}}	{{server_port}}
+i  export const collections = { blog }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个文件定义了一个名为 `blog` 的 Collection，并且设置了 `title`，`description`，`pubDate`，`updatedDate`，`heroImage`		{{server_addr}}	{{server_port}}
+i五项要从 Markdown Frontmatter 中读取的信息。这些参数和 Hexo 使用的不太		{{server_addr}}	{{server_port}}
+i一样，所以我们把它改成类似 Hexo 的格式：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  import { defineCollection, z } from 'astro:content'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const article = defineCollection({		{{server_addr}}	{{server_port}}
+i    type: 'content',		{{server_addr}}	{{server_port}}
+i    // Type-check frontmatter using a schema		{{server_addr}}	{{server_port}}
+i    schema: z.object({		{{server_addr}}	{{server_port}}
+i      title: z.string(),		{{server_addr}}	{{server_port}}
+i      categories: z.string(),		{{server_addr}}	{{server_port}}
+i      tags: z.array(z.string()).optional(),		{{server_addr}}	{{server_port}}
+i      date: z.coerce.date(),		{{server_addr}}	{{server_port}}
+i      image: z.string().optional(),		{{server_addr}}	{{server_port}}
+i    }),		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export const collections = {		{{server_addr}}	{{server_port}}
+i    article: article,		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（我实际使用的更复杂的 `config.ts` 可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/astro-dev/src/content/config.ts	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/content/config.ts	{{server_addr}}	{{server_port}}
+i看到）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下一步是把文章放进 `src/content/[Collection 名字 ]` 这个文件夹。因为我		{{server_addr}}	{{server_port}}
+i把文章的 Collection 改名成了 `article`，所以我把所有文章都复制到了 `src/content/article`		{{server_addr}}	{{server_port}}
+i这个文件夹下。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i有了这组 Collection，接下来就要读取 Collection 的文章列表并生成网页了。		{{server_addr}}	{{server_port}}
+iAstro 的博客模板在 `src/pages/blog/[...slug].astro` 提供了一个简单的例		{{server_addr}}	{{server_port}}
+i子：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  import { type CollectionEntry, getCollection } from 'astro:content';		{{server_addr}}	{{server_port}}
+i  import BlogPost from '../../layouts/BlogPost.astro';		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export async function getStaticPaths() {		{{server_addr}}	{{server_port}}
+i  	const posts = await getCollection('blog');		{{server_addr}}	{{server_port}}
+i  	return posts.map((post) => ({		{{server_addr}}	{{server_port}}
+i  		params: { slug: post.slug },		{{server_addr}}	{{server_port}}
+i  		props: post,		{{server_addr}}	{{server_port}}
+i  	}));		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  type Props = CollectionEntry<'blog'>;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const post = Astro.props;		{{server_addr}}	{{server_port}}
+i  const { Content } = await post.render();		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <BlogPost {...post.data}>		{{server_addr}}	{{server_port}}
+i  	<Content />		{{server_addr}}	{{server_port}}
+i  </BlogPost>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个模板在 `getStaticPaths()` 函数中使用 `getCollection('blog')` 读取 `blog`		{{server_addr}}	{{server_port}}
+iCollection 下的所有文章，并为每篇文章生成一个 `{params: ..., props: ...}`		{{server_addr}}	{{server_port}}
+i的对象。`params` 中的参数会用于生成 URL，例如 `slug` 参数就会替换掉文		{{server_addr}}	{{server_port}}
+i件路径中的 `[...slug]` 这一部分。而 `props` 的参数会被传递给 Astro 模		{{server_addr}}	{{server_port}}
+i板，可以用 `const post = Astro.props` 读取整个 `props` 对象。由于这里 `getStaticPaths()`		{{server_addr}}	{{server_port}}
+i返回的 `props` 参数是文章本身，所以 `Astro.props` 的返回值就是这篇文章。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因为我改了 Collection 的格式，所以模板也要相应修改，主要是把 `blog` 改		{{server_addr}}	{{server_port}}
+i成 `article`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  import { type CollectionEntry, getCollection } from 'astro:content';		{{server_addr}}	{{server_port}}
+i  import BlogPost from '../../../layouts/BlogPost.astro';		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export async function getStaticPaths() {		{{server_addr}}	{{server_port}}
+i    const posts = await getCollection('article');		{{server_addr}}	{{server_port}}
+i    return posts.map((post) => ({		{{server_addr}}	{{server_port}}
+i      params: { slug: post.slug, language: undefined },		{{server_addr}}	{{server_port}}
+i      props: post,		{{server_addr}}	{{server_port}}
+i    }));		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  type Props = CollectionEntry<'article'>;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const post = Astro.props;		{{server_addr}}	{{server_port}}
+i  const { Content } = await post.render();		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <BlogPost {...post.data}>		{{server_addr}}	{{server_port}}
+i    <Content />		{{server_addr}}	{{server_port}}
+i  </BlogPost>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（我实际使用的更复杂的模板可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/astro-dev/src/pages/%5B...language%5D/article/%5B...path%5D.lantian/index.astro	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/pages/[...language]/article/[...path].lantian/index.astro	{{server_addr}}	{{server_port}}
+i看到）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 多语言		{{server_addr}}	{{server_port}}
+i我下一个要实现的功能是多语言。我预先将中文文章放在了 `src/content/article/zh`，		{{server_addr}}	{{server_port}}
+i英文文章放在 `src/content/article/en`。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样我就可以根据文章的文件路径判断语言了：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  export class Post {		{{server_addr}}	{{server_port}}
+i    public readonly title: string		{{server_addr}}	{{server_port}}
+i    public readonly language: string		{{server_addr}}	{{server_port}}
+i    public readonly path: string		{{server_addr}}	{{server_port}}
+i    public readonly body: string		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    constructor(post: CollectionEntry<'article'>) {		{{server_addr}}	{{server_port}}
+i      this.collectionEntry = post		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      const [language, ...paths] = post.slug.split('/')		{{server_addr}}	{{server_port}}
+i      const path = paths.join('/')		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      this.title = post.data.title		{{server_addr}}	{{server_port}}
+i      this.language = language		{{server_addr}}	{{server_port}}
+i      this.path = path		{{server_addr}}	{{server_port}}
+i      this.body = post.body		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    public static fromCollectionEntry(post: CollectionEntry<'article'>): Post {		{{server_addr}}	{{server_port}}
+i      return new Post(post)		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export async function getPosts(): Promise<Post[]> {		{{server_addr}}	{{server_port}}
+i    return (await getCollection('article'))		{{server_addr}}	{{server_port}}
+i      .map(Post.fromCollectionEntry)		{{server_addr}}	{{server_port}}
+i      .sort((a, b) => b.date.valueOf() - a.date.valueOf())		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（我实际使用的完整代码可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/astro-dev/src/lib/posts.ts	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/lib/posts.ts	{{server_addr}}	{{server_port}}
+i看到）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这段代码从文章的 `post.slug` 参数获取文件在 `src/content/article` 下的		{{server_addr}}	{{server_port}}
+i路径，然后切出路径第一段的语言代码。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i有了语言代码，我们就可以在模板中根据语言生成网页路径了。我的模板在 `src/pages/[...language]/article/[...path].lantian/index.astro`		{{server_addr}}	{{server_port}}
+i路径下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  import PageLayout from '../../../../components/PageLayout.astro'		{{server_addr}}	{{server_port}}
+i  import PagePost from '../../../../components/PagePost.astro'		{{server_addr}}	{{server_port}}
+i  import { Post, getPosts } from '../../../../lib/posts'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export async function getStaticPaths() {		{{server_addr}}	{{server_port}}
+i    const posts = await getPosts()		{{server_addr}}	{{server_port}}
+i    return posts.map((post, index) => ({		{{server_addr}}	{{server_port}}
+i      params: {		{{server_addr}}	{{server_port}}
+i        // 遵循 src/content/article 下的原始路径，path 是我在前面的 Post 类中定义的		{{server_addr}}	{{server_port}}
+i        path: post.path,		{{server_addr}}	{{server_port}}
+i        // 路径以 [...language] 形式定义并且设置为 undefined 代表省略路径中这一项		{{server_addr}}	{{server_port}}
+i        // 我的英文文章在 /en/article 下，而中文文章在 /article 下，没有前缀		{{server_addr}}	{{server_port}}
+i        language: post.language == "zh"		{{server_addr}}	{{server_port}}
+i          ? undefined		{{server_addr}}	{{server_port}}
+i          : post.language,		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i      props: {		{{server_addr}}	{{server_port}}
+i        post: post,		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i    }))		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  type Props = {		{{server_addr}}	{{server_port}}
+i    post: Post		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  const { post } = Astro.props		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <PageLayout title={post.title} language={post.language} post={post}>		{{server_addr}}	{{server_port}}
+i    <PagePost		{{server_addr}}	{{server_port}}
+i      language={post.language}		{{server_addr}}	{{server_port}}
+i      post={post}		{{server_addr}}	{{server_port}}
+i    />		{{server_addr}}	{{server_port}}
+i  </PageLayout>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（我实际使用的更复杂的模板可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/astro-dev/src/pages/%5B...language%5D/article/%5B...path%5D.lantian/index.astro	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/pages/[...language]/article/[...path].lantian/index.astro	{{server_addr}}	{{server_port}}
+i看到）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于 Hexo 的 URL 也是根据 Markdown 文件的路径生成的，因此所有文章的		{{server_addr}}	{{server_port}}
+iURL 都不会变。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 文章摘要		{{server_addr}}	{{server_port}}
+i有了文章内容，接下来就要在文章列表中显示文章摘要。Astro 的默认博客模板		{{server_addr}}	{{server_port}}
+i没有提供这个功能，只会显示文章标题和图片。但是，我在实现摘要功能时遇到		{{server_addr}}	{{server_port}}
+i了一点困难。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我的第一反应是，Astro 会提供一个将组件渲染成 HTML 的接口，类似于：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  const component = PostContent(post)		{{server_addr}}	{{server_port}}
+i  const html = component.renderToHTML()		{{server_addr}}	{{server_port}}
+i  const excerpt = createExcerpt(html)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但是查找一圈后，发现 Astro.js 还没有实现这个功能：		{{server_addr}}	{{server_port}}
+hhttps://github.com/withastro/roadmap/issues/533	URL:https://github.com/withastro/roadmap/issues/533	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过 Astro.js 只是无法单独渲染某个组件，在渲染整个页面的过程中，还是可		{{server_addr}}	{{server_port}}
+i以用 Slot 功能获取组件的 HTML 的。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAstro.js 的 Slot 功能类似于 React 的 `props.children`，用于传递子组件。		{{server_addr}}	{{server_port}}
+i例如，我有一个组件 `PostExcerpt.astro`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  import { createExcerpt } from '../../lib/utils'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const html = await Astro.slots.render('default')		{{server_addr}}	{{server_port}}
+i  const excerpt = createExcerpt(html)		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <p>{excerpt}</p>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（我使用的完整组件可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/master/src/components/fragments/PostExcerpt.astro	URL:https://github.com/xddxdd/blog/blob/master/src/components/fragments/PostExcerpt.astro	{{server_addr}}	{{server_port}}
+i看到）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果我们向这个组件传递一个子组件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  <PostExcerpt>		{{server_addr}}	{{server_port}}
+i   <p>A really really long post content...</p>		{{server_addr}}	{{server_port}}
+i  </PostExcerpt>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i`PostExcerpt.astro` 组件就可以通过 `await		{{server_addr}}	{{server_port}}
+iAstro.slots.render('default')` 获取 `<p>A really really long post		{{server_addr}}	{{server_port}}
+icontent...</p>` 这个子组件的 HTML 渲染结果了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i接下来，它就可以进一步调用 `createExcerpt` 函数，从文章的完整 HTML 中		{{server_addr}}	{{server_port}}
+i提取摘要。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（更详细的 Slot 功能介绍请参阅官方文档：		{{server_addr}}	{{server_port}}
+hhttps://docs.astro.build/zh-cn/basics/astro-components/#slots	URL:https://docs.astro.build/zh-cn/basics/astro-components/#slots	{{server_addr}}	{{server_port}}
+i）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 分页		{{server_addr}}	{{server_port}}
+i下一步是实现主页文章列表的分页。Astro 的默认博客模板会将所有文章显示在		{{server_addr}}	{{server_port}}
+i同一页上，如果博客中文章较多，网页会非常长，难以导航。因此我先实现了一		{{server_addr}}	{{server_port}}
+i个分页函数，将文章列表拆分成 10 篇文章的小段：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  // 每页文章数		{{server_addr}}	{{server_port}}
+i  const POSTS_PER_PAGE = 10		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // 我的模板使用的分页参数		{{server_addr}}	{{server_port}}
+i  export type PaginationProps = {		{{server_addr}}	{{server_port}}
+i    numPages: number    // 总页数		{{server_addr}}	{{server_port}}
+i    currentPage: number // 当前页码		{{server_addr}}	{{server_port}}
+i    basePath: string    // 基础路径，最终路径是 ${basePath}/page/${currentPage}		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export type PaginatedProps = {		{{server_addr}}	{{server_port}}
+i    pagination: PaginationProps // 当前分页的参数		{{server_addr}}	{{server_port}}
+i    posts: Post[]               // 当前分页的文章列表		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export function getStaticPathsForPaginate(		{{server_addr}}	{{server_port}}
+i    posts: Post[],		{{server_addr}}	{{server_port}}
+i    basePath: string,		{{server_addr}}	{{server_port}}
+i    additionalParams?: Record<string, string>,		{{server_addr}}	{{server_port}}
+i    additionalProps?: Record<string, any>		{{server_addr}}	{{server_port}}
+i  ) {		{{server_addr}}	{{server_port}}
+i    // 总页数		{{server_addr}}	{{server_port}}
+i    const numPages = Math.ceil(posts.length / POSTS_PER_PAGE)		{{server_addr}}	{{server_port}}
+i    return [...Array(numPages).keys()].map(i => ({		{{server_addr}}	{{server_port}}
+i      params: {		{{server_addr}}	{{server_port}}
+i        // 多语言支持省略		{{server_addr}}	{{server_port}}
+i        language: undefined,		{{server_addr}}	{{server_port}}
+i        // 在路径中添加 page/2，page/3 这样的页码		{{server_addr}}	{{server_port}}
+i        // 如果是第一页，就不用加 page/1 了		{{server_addr}}	{{server_port}}
+i        page_prefix: i == 0 ? undefined : `page/${i + 1}`,		{{server_addr}}	{{server_port}}
+i        ...additionalParams,		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i      props: <PaginatedProps>{		{{server_addr}}	{{server_port}}
+i        pagination: <PaginationProps>{		{{server_addr}}	{{server_port}}
+i          numPages: numPages,		{{server_addr}}	{{server_port}}
+i          currentPage: i + 1,		{{server_addr}}	{{server_port}}
+i          basePath: basePath,		{{server_addr}}	{{server_port}}
+i        },		{{server_addr}}	{{server_port}}
+i        posts: postsForLanguage.slice(		{{server_addr}}	{{server_port}}
+i          i * POSTS_PER_PAGE,		{{server_addr}}	{{server_port}}
+i          (i + 1) * POSTS_PER_PAGE		{{server_addr}}	{{server_port}}
+i        ),=		{{server_addr}}	{{server_port}}
+i        ...additionalProps,		{{server_addr}}	{{server_port}}
+i      },		{{server_addr}}	{{server_port}}
+i    }))		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i（我实际使用的完整代码可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/blog/blob/astro-dev/src/lib/posts.ts	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/lib/posts.ts	{{server_addr}}	{{server_port}}
+i看到）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后从页面模板中调用这个分页函数。我的主页文章列表模板位于 `src/pages/[...language]/[...page_prefix]/index.astro`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  import { getPosts, getStaticPathsForPaginate } from '../../../lib/posts'		{{server_addr}}	{{server_port}}
+i  import type { PaginatedProps } from '../../../lib/posts'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export async function getStaticPaths() {		{{server_addr}}	{{server_port}}
+i    const posts = await getPosts()		{{server_addr}}	{{server_port}}
+i    return getStaticPathsForPaginate(posts, '')		{{server_addr}}	{{server_port}}
+i    // 第一页时，函数返回 params 中的 page_prefix 为 undefined，此时路径中没有页码		{{server_addr}}	{{server_port}}
+i    // 第二页开始，page_prefix会插入路径中，形成 /page/2 的路径		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  type Props = PaginatedProps		{{server_addr}}	{{server_port}}
+i  const { posts } = Astro.props		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // 其余逻辑省略		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样我们就生成了 `/` 这个第一页的路径，以及 `/page/2`，`/page/3` 等其		{{server_addr}}	{{server_port}}
+i余页码的路径。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 匹配 Hexo 的 URL		{{server_addr}}	{{server_port}}
+i下一步是实现 Hexo 自动生成的其它页面，例如分类页面 `/category/[ 分类名 ]`，`/category/[		{{server_addr}}	{{server_port}}
+i分类名 ]/page/[ 页码 ]`，以及标签页面 `/tag/[ 标签名 ]`，`/tag/[ 标签		{{server_addr}}	{{server_port}}
+i名 ]/page/[ 页码 ]`。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这些页面除了要根据分类过滤文章之外，其余实现和主页文章列表并无区别。以		{{server_addr}}	{{server_port}}
+i分类页面为例，我们创建 `src/pages/[...language]/category/[category]/[...page_prefix]/index.as		{{server_addr}}	{{server_port}}
+itro` 这个模板文件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  export async function getStaticPaths() {		{{server_addr}}	{{server_port}}
+i    const categories = [		{{server_addr}}	{{server_port}}
+i      ...new Set(Object.entries(CATEGORY_MAP).map(([_, v]) => v)),		{{server_addr}}	{{server_port}}
+i    ]		{{server_addr}}	{{server_port}}
+i    const posts = await getPosts()		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    return categories.flatMap(category => {		{{server_addr}}	{{server_port}}
+i      const postsForCategory = posts.filter(		{{server_addr}}	{{server_port}}
+i        post => post.category == category		{{server_addr}}	{{server_port}}
+i      )		{{server_addr}}	{{server_port}}
+i      return getStaticPathsForPaginate(		{{server_addr}}	{{server_port}}
+i        // 当前分类的所有文章		{{server_addr}}	{{server_port}}
+i        postsForCategory,		{{server_addr}}	{{server_port}}
+i        // 分类的基础路径，用于提供给分页选择组件		{{server_addr}}	{{server_port}}
+i        `/category/${categoryInUrl}`,		{{server_addr}}	{{server_port}}
+i        // additionalParams 参数，将分类加到 URL 中		{{server_addr}}	{{server_port}}
+i        { category: category },		{{server_addr}}	{{server_port}}
+i        // additionalProps 参数，将分类名加到 Astro.props.中		{{server_addr}}	{{server_port}}
+i        { category: category }		{{server_addr}}	{{server_port}}
+i      )		{{server_addr}}	{{server_port}}
+i    })		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  const { posts, category } = Astro.props		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  // 其余逻辑省略		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样，我们可以将所有该分类的文章显示在 `/category/[ 分类名 ]` 或者 `/category/[		{{server_addr}}	{{server_port}}
+i分类名 ]/page/[ 页码 ]` 这个路径上了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Island（岛屿）功能		{{server_addr}}	{{server_port}}
+iAstro.js 的主打功能 Island（岛屿），可以以 `.astro` 文件为单位，在页面		{{server_addr}}	{{server_port}}
+i中生成一些互相隔离的区域。这些隔离功能包括：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- CSS 隔离。假设我在 `src/components/a.astro` 中添加以下的 HTML/CSS 代		{{server_addr}}	{{server_port}}
+i  码：		{{server_addr}}	{{server_port}}
+i  <p class="my-class">Hello World</p>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <style>		{{server_addr}}	{{server_port}}
+i    .my-class {		{{server_addr}}	{{server_port}}
+i      font-size: 100px;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  </style>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAstro.js 会对上述 HTML 和 CSS 进行处理，并打上一个 `data-astro-cid` 开		{{server_addr}}	{{server_port}}
+i头的标签：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <p class="my-class" data-astro-cid-123456>Hello World</p>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <style>		{{server_addr}}	{{server_port}}
+i    .my-class[data-astro-cid-123456] {		{{server_addr}}	{{server_port}}
+i      font-size: 100px;		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  </style>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这样这个 CSS 就只对上面这个 `p` 标签生效了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个 `data-astro-cid` 标签对于所有来自 `src/components/a.astro` 的		{{server_addr}}	{{server_port}}
+iHTML/CSS 都是相同的，因此上面的 CSS 会应用到所有的来自 `a.astro` 的		{{server_addr}}	{{server_port}}
+iHTML。但是假设我有另一个组件 `src/components/b.astro`，它会有一个不同		{{server_addr}}	{{server_port}}
+i的标签，例如 `data-astro-cid-654321`，这样 `a.astro` 的 CSS 就不会对 `b.astro`		{{server_addr}}	{{server_port}}
+i生效了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这在写 CSS 时是一个非常好用的功能，调整网页一个部分的 CSS 时不用担心影		{{server_addr}}	{{server_port}}
+i响到其余部分的效果了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Javascript 组件隔离		{{server_addr}}	{{server_port}}
+i如果我的 Astro 模板中有 Javascript 代码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  <div id="test">Hello world</div>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <script>		{{server_addr}}	{{server_port}}
+i  document.getElementById("test").innerHTML = "Hi there";		{{server_addr}}	{{server_port}}
+i  </script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAstro.js 会自动为这个组件生成一个岛屿，并在网页加载完成后，再执行这个		{{server_addr}}	{{server_port}}
+i岛屿的 Javascript 代码。这个岛屿与网页的其余部分完全独立，因此不会拖慢		{{server_addr}}	{{server_port}}
+i其余部分的加载速度。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i除了提高加载速度，这个特性还简化了 `window.onload` 的使用。在传统前端		{{server_addr}}	{{server_port}}
+i上，如果我们想在网页加载时再执行代码，可以这样做：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  window.onload = () => {		{{server_addr}}	{{server_port}}
+i    console.log('Hello World')		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但如果我们有多个函数需要执行呢？如果简单地覆盖 `window.onload` 会导致		{{server_addr}}	{{server_port}}
+i前一个函数不被执行：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  window.onload = () => {		{{server_addr}}	{{server_port}}
+i    console.log('这个函数不会被执行')		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  window.onload = () => {		{{server_addr}}	{{server_port}}
+i    console.log('Hello World')		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i因此我们需要一些更复杂的处理：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  function addLoadEvent(o) {		{{server_addr}}	{{server_port}}
+i    // 记录先前的 window.onload		{{server_addr}}	{{server_port}}
+i    var n = window.onload		{{server_addr}}	{{server_port}}
+i    'function' != typeof window.onload		{{server_addr}}	{{server_port}}
+i      ? (window.onload = o)		{{server_addr}}	{{server_port}}
+i      : (window.onload = function () {		{{server_addr}}	{{server_port}}
+i          // 如果之前设置了 window.onload，就同时执行先前设置的函数		{{server_addr}}	{{server_port}}
+i          n && n(), o()		{{server_addr}}	{{server_port}}
+i        })		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  addLoadEvent(() => {		{{server_addr}}	{{server_port}}
+i    console.log('这个函数现在会被执行')		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i  addLoadEvent(() => {		{{server_addr}}	{{server_port}}
+i    console.log('Hello World')		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i可行，但有点麻烦。不过有了 Astro.js，上述这些流程都会被自动化：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  ---		{{server_addr}}	{{server_port}}
+i  <div id="test">Hello world</div>		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  <script>		{{server_addr}}	{{server_port}}
+i  // 这段代码会在整个网页加载完成后再执行，无需其余设置		{{server_addr}}	{{server_port}}
+i  document.getElementById("test").innerHTML = "Hi there";		{{server_addr}}	{{server_port}}
+i  </script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下面是我使用岛屿加载 Javascript 的两个例子：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- `WalineComment.astro`，用于加载 Waline 评论系统的评论框：		{{server_addr}}	{{server_port}}
+h  https://github.com/xddxdd/blog/blob/astro-dev/src/components/fragments/WalineComment.astro	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/components/fragments/WalineComment.astro	{{server_addr}}	{{server_port}}
+i- `WalineRecentComments.astro`，用于显示 Waline 评论系统的近期评论：		{{server_addr}}	{{server_port}}
+h  https://github.com/xddxdd/blog/blob/astro-dev/src/components/fragments/WalineRecentComments.astro	URL:https://github.com/xddxdd/blog/blob/astro-dev/src/components/fragments/WalineRecentComments.astro	{{server_addr}}	{{server_port}}
+i## 后处理插件（例：CSS 内联）		{{server_addr}}	{{server_port}}
+iAstro.js 主页上有一个插件（Integrations）列表，提供了很多可以提供额外		{{server_addr}}	{{server_port}}
+i功能的插件：		{{server_addr}}	{{server_port}}
+hhttps://astro.build/integrations/	URL:https://astro.build/integrations/	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这里我以一个插件		{{server_addr}}	{{server_port}}
+hInline	URL:https://github.com/Playform/Inline	{{server_addr}}	{{server_port}}
+i为例，它使用 Google 的		{{server_addr}}	{{server_port}}
+hcritters	URL:https://github.com/GoogleChromeLabs/critters	{{server_addr}}	{{server_port}}
+i项目，自动将当前页面用到的 CSS 内联到网页中，以提高网页加载速度。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i首先从 NPM 安装 Inline 插件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  npm install --save @playform/inline		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后修改 `astro.config.ts`，将插件添加到 `defineConfig` 的 `integrations`		{{server_addr}}	{{server_port}}
+i配置项中：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  import inline from '@playform/inline'		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  export default defineConfig({		{{server_addr}}	{{server_port}}
+i    integrations: [		{{server_addr}}	{{server_port}}
+i      // ...		{{server_addr}}	{{server_port}}
+i      critters({}),		{{server_addr}}	{{server_port}}
+i      // ...		{{server_addr}}	{{server_port}}
+i    ],		{{server_addr}}	{{server_port}}
+i    // ...		{{server_addr}}	{{server_port}}
+i  })		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i之后，你用 `astro build` 命令生成的网页都会自动被优化。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i类似的，Astro 还提供了很多常用的插件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- MDX 支持：		{{server_addr}}	{{server_port}}
+h  https://docs.astro.build/en/guides/integrations-guide/mdx/	URL:https://docs.astro.build/en/guides/integrations-guide/mdx/	{{server_addr}}	{{server_port}}
+i- 生成 Sitemap：		{{server_addr}}	{{server_port}}
+h  https://docs.astro.build/en/guides/integrations-guide/sitemap/	URL:https://docs.astro.build/en/guides/integrations-guide/sitemap/	{{server_addr}}	{{server_port}}
+i- React 支持：		{{server_addr}}	{{server_port}}
+h  https://docs.astro.build/en/guides/integrations-guide/react/	URL:https://docs.astro.build/en/guides/integrations-guide/react/	{{server_addr}}	{{server_port}}
+i你可以用类似的方法，非常简单地加载这些插件。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# 总结		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我已经在 2024 年 3 月 18 日将整个博客系统迁移到 Astro.js。整个迁移过程		{{server_addr}}	{{server_port}}
+i中，所有网页 URL 均保持不变，我的网页主题模板也原样迁移成功。对于访客		{{server_addr}}	{{server_port}}
+i来说，整个博客的内容、样式和功能应该没有任何变化。但是对于我来说，更好		{{server_addr}}	{{server_port}}
+i的开发体验有利于我方便地实现更复杂的功能，测试最新的前端工具，以及进行		{{server_addr}}	{{server_port}}
+i进一步的性能优化。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i整个过程的所有 commit 可以在		{{server_addr}}	{{server_port}}
+hGitHub 上的 astro-dev 分支	URL:https://github.com/xddxdd/blog/tree/astro-dev	{{server_addr}}	{{server_port}}
+i看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
