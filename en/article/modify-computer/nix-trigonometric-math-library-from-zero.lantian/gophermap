@@ -1,0 +1,407 @@
+i(Cover image from:		{{server_addr}}	{{server_port}}
+hWikipedia - Trigonometry	URL:https://en.wikipedia.org/wiki/Trigonometry	{{server_addr}}	{{server_port}}
+i)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Why		{{server_addr}}	{{server_port}}
+iI wanted to calculate the network latency between all my VPS nodes,		{{server_addr}}	{{server_port}}
+iand add the latency into the configuration file of Bird BGP daemon, so		{{server_addr}}	{{server_port}}
+ithe network packets are forwarded through the lowest latency route.		{{server_addr}}	{{server_port}}
+iHowever, I have 17 nodes as of today, and I didn't want to manually		{{server_addr}}	{{server_port}}
+irun a `ping` command between each pair.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSo I came up with a solution: I can mark the latitudes and longitudes		{{server_addr}}	{{server_port}}
+iof the physical locations of my nodes, calculate the physical		{{server_addr}}	{{server_port}}
+idistance, and divide that by half the light speed to get the		{{server_addr}}	{{server_port}}
+iapproximate latencies. I randomly sampled a few node pairs, and found		{{server_addr}}	{{server_port}}
+ithat the Internet routing between them are mostly straightforward,		{{server_addr}}	{{server_port}}
+iwith no significant detours. In this case, the physical distance is a		{{server_addr}}	{{server_port}}
+igood approximation that satisfies my requirements.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBecause I use NixOS across all my nodes, and manage all configs with		{{server_addr}}	{{server_port}}
+iNix, I need to find a way to calculate this distance with Nix. One		{{server_addr}}	{{server_port}}
+icommonly used method to calculate distance based on latitude/longitude		{{server_addr}}	{{server_port}}
+iis Haversine formula. It approximates the Earth as a sphere with a		{{server_addr}}	{{server_port}}
+iradius of 6371km, and then use the following formula to calculate the		{{server_addr}}	{{server_port}}
+idistance:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Reference:		{{server_addr}}	{{server_port}}
+h> Wikipedia - Haversine formula	URL:https://en.wikipedia.org/wiki/Haversine_formula	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> Note: there are a few variations of Haversine formula. I actually		{{server_addr}}	{{server_port}}
+i> used this arctan-based implementation from Stackoverflow:		{{server_addr}}	{{server_port}}
+h> https://stackoverflow.com/a/27943	URL:https://stackoverflow.com/a/27943	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNix however, as a language mainly focused on packaging and generating		{{server_addr}}	{{server_port}}
+iconfig files, naturally doesn't natively support trigonometric		{{server_addr}}	{{server_port}}
+ifunctions, and is only capable of some simple floating point		{{server_addr}}	{{server_port}}
+icomputations.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThus I went with another way, depending on Python's `geopy` module for		{{server_addr}}	{{server_port}}
+idistance computation:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    pkgs,		{{server_addr}}	{{server_port}}
+i    lib,		{{server_addr}}	{{server_port}}
+i    ...		{{server_addr}}	{{server_port}}
+i  }: let		{{server_addr}}	{{server_port}}
+i  in {		{{server_addr}}	{{server_port}}
+i    # Calculate distance between latitudes/longitudes in kilometers		{{server_addr}}	{{server_port}}
+i    distance = a: b: let		{{server_addr}}	{{server_port}}
+i      py = pkgs.python3.withPackages (p: with p; [geopy]);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      helper = a: b:		{{server_addr}}	{{server_port}}
+i        lib.toInt (builtins.readFile (pkgs.runCommandLocal		{{server_addr}}	{{server_port}}
+i          "geo-result.txt"		{{server_addr}}	{{server_port}}
+i          {nativeBuildInputs = [py];}		{{server_addr}}	{{server_port}}
+i          ''		{{server_addr}}	{{server_port}}
+i            python > $out <<EOF		{{server_addr}}	{{server_port}}
+i            import geopy.distance		{{server_addr}}	{{server_port}}
+i            print(int(geopy.distance.geodesic((${a.lat}, ${a.lng}), (${b.lat}, ${b.lng})).km))		{{server_addr}}	{{server_port}}
+i            EOF		{{server_addr}}	{{server_port}}
+i          ''));		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      if a.lat < b.lat || (a.lat == b.lat && a.lng < b.lng)		{{server_addr}}	{{server_port}}
+i      then helper a b		{{server_addr}}	{{server_port}}
+i      else helper b a;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIt works, but what it really did is creating a new "package" for each		{{server_addr}}	{{server_port}}
+ipair of latitudes/longitudes, and having Nix build it. In order to		{{server_addr}}	{{server_port}}
+iachieve reproducible packaging wherever possible, and prevent extra		{{server_addr}}	{{server_port}}
+ivariables from being introduced, Nix creates a sandbox isolated from		{{server_addr}}	{{server_port}}
+iInternet and restricted from arbitrary disk access, run Python in this		{{server_addr}}	{{server_port}}
+isandbox, have it load `geopy` , and do the calculation. This process		{{server_addr}}	{{server_port}}
+iis slow, taking around 0.5s for each package on my laptop (i7-11800H),		{{server_addr}}	{{server_port}}
+iand cannot be parallelized due to Nix's limitations. As of today, my		{{server_addr}}	{{server_port}}
+i17 nodes are distributed in 10 different cities around the world. This		{{server_addr}}	{{server_port}}
+imeans calculating all these distances alone will take		{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn addition, since the output of the packaging function `pkgs.runCommandLocal`		{{server_addr}}	{{server_port}}
+iis immediately consumed by `builtins.readFile` , the packages for		{{server_addr}}	{{server_port}}
+idistance calculation are not directly referenced by my Nix config.		{{server_addr}}	{{server_port}}
+iThis means that their reference count is 0, and will be immediately		{{server_addr}}	{{server_port}}
+igarbage collected with `nixos-collect-garbage -d` . Next time I want		{{server_addr}}	{{server_port}}
+ito build my config, it needs another 22.5s to calculate all of them		{{server_addr}}	{{server_port}}
+iagain.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIs it possible that I no longer rely on Python, but instead implement		{{server_addr}}	{{server_port}}
+ithe trigonometric functions sin, cos, tan, and finally implement the		{{server_addr}}	{{server_port}}
+iHaversine function?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnd here comes the project today: trigonometric math library		{{server_addr}}	{{server_port}}
+iimplemented in pure Nix.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## sin, cos, tan: Taylor Expansion		{{server_addr}}	{{server_port}}
+iThe trigonometric functions, sine and cosine, have a relatively easy		{{server_addr}}	{{server_port}}
+iway to compute: Taylor expansions. We all know that the sine function		{{server_addr}}	{{server_port}}
+ihas the following Taylor expansion:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWe can observe that each expanded item can be calculated with basic		{{server_addr}}	{{server_port}}
+iarithmetric operations. Therefore, we can implement the following		{{server_addr}}	{{server_port}}
+ifunctions in Nix:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    pi = 3.14159265358979323846264338327950288;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Helper functions to sum/multiply all items in the array		{{server_addr}}	{{server_port}}
+i    sum = builtins.foldl' builtins.add 0;		{{server_addr}}	{{server_port}}
+i    multiply = builtins.foldl' builtins.mul 1;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Modulos function, "a mod b". Used for limiting input to sin/cos to (-2pi, 2pi)		{{server_addr}}	{{server_port}}
+i    mod = a: b:		{{server_addr}}	{{server_port}}
+i      if a < 0		{{server_addr}}	{{server_port}}
+i      then mod (b - mod (0 - a) b) b		{{server_addr}}	{{server_port}}
+i      else a - b * (div a b);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Power function, calculates "x^times", where "times" is an integer		{{server_addr}}	{{server_port}}
+i    pow = x: times: multiply (lib.replicate times x);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Sine function		{{server_addr}}	{{server_port}}
+i    sin = x: let		{{server_addr}}	{{server_port}}
+i      # Convert x to floating point to avoid integer arithmetrics.		{{server_addr}}	{{server_port}}
+i      # Also modulos it by 2pi to limit input range and avoid precision loss		{{server_addr}}	{{server_port}}
+i      x' = mod (1.0 * x) (2 * pi);		{{server_addr}}	{{server_port}}
+i      # Calculate i-th item in the expansion, i starts from 1		{{server_addr}}	{{server_port}}
+i      step = i: (pow (0 - 1) (i - 1)) * multiply (lib.genList (j: x' / (j + 1)) (i * 2 - 1));		{{server_addr}}	{{server_port}}
+i      # Note: this lib.genList call is equal to for (j = 0; j < i*2-1; j++)		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      # TODO: Not completed yet!		{{server_addr}}	{{server_port}}
+i      0;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor the calculation of a single Taylor expansion item, to avoid		{{server_addr}}	{{server_port}}
+iprecision loss, I didn't calculate the numerator and denominator		{{server_addr}}	{{server_port}}
+iseparately before dividing them. Instead, I expanded		{{server_addr}}	{{server_port}}
+ito		{{server_addr}}	{{server_port}}
+i, and calculate them one by one, and multiply all these much smaller		{{server_addr}}	{{server_port}}
+iresults.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, we need to determine how many items we want to calculate. We		{{server_addr}}	{{server_port}}
+icould opt to a constant number of items, 10 for example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    sin = x: let		{{server_addr}}	{{server_port}}
+i      x' = mod (1.0 * x) (2 * pi);		{{server_addr}}	{{server_port}}
+i      step = i: (pow (0 - 1) (i - 1)) * multiply (lib.genList (j: x' / (j + 1)) (i * 2 - 1));		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      # Invert when x < 0 to reduce input range		{{server_addr}}	{{server_port}}
+i      if x < 0		{{server_addr}}	{{server_port}}
+i      then -sin (0 - x)		{{server_addr}}	{{server_port}}
+i      # Calculate 10 Taylor expansion items and add them up		{{server_addr}}	{{server_port}}
+i      else sum (lib.genList (i: step (i + 1)) 10);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut when a fixed number of items are used, the 10 Taylor expansion		{{server_addr}}	{{server_port}}
+iitems quickly diminish below floating point accuracy when the input is		{{server_addr}}	{{server_port}}
+ivery small, and further items are still not small enough to be ignored		{{server_addr}}	{{server_port}}
+iwith larger inputs. So I decided to have it make decisions based on		{{server_addr}}	{{server_port}}
+ithe value of Taylor expansion items, and stop computation when the		{{server_addr}}	{{server_port}}
+ivalue is below our accuracy target:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # Accuracy target, stop iterating when Taylor expansion item is below this		{{server_addr}}	{{server_port}}
+i    epsilon = pow (0.1) 10;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Absolute value function "abs" and its alias "fabs"		{{server_addr}}	{{server_port}}
+i    abs = x:		{{server_addr}}	{{server_port}}
+i      if x < 0		{{server_addr}}	{{server_port}}
+i      then 0 - x		{{server_addr}}	{{server_port}}
+i      else x;		{{server_addr}}	{{server_port}}
+i    fabs = abs;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    sin = x: let		{{server_addr}}	{{server_port}}
+i      x' = mod (1.0 * x) (2 * pi);		{{server_addr}}	{{server_port}}
+i      step = i: (pow (0 - 1) (i - 1)) * multiply (lib.genList (j: x' / (j + 1)) (i * 2 - 1));		{{server_addr}}	{{server_port}}
+i      # Stop if absolute value of current item is below epsilon, continue otherwise		{{server_addr}}	{{server_port}}
+i      # "tmp" is the accumulator, and "i" is the index for the Taylor expansion item		{{server_addr}}	{{server_port}}
+i      helper = tmp: i: let		{{server_addr}}	{{server_port}}
+i        value = step i;		{{server_addr}}	{{server_port}}
+i      in		{{server_addr}}	{{server_port}}
+i        if (fabs value) < epsilon		{{server_addr}}	{{server_port}}
+i        then tmp		{{server_addr}}	{{server_port}}
+i        else helper (tmp + value) (i + 1);		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      if x < 0		{{server_addr}}	{{server_port}}
+i      then -sin (0 - x)		{{server_addr}}	{{server_port}}
+i      # Accumulate from 0, index start from 1		{{server_addr}}	{{server_port}}
+i      else helper 0 1;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNow we have a sine function with sufficient accuracy. Scan its result		{{server_addr}}	{{server_port}}
+iwith input from 0 to 10 (above		{{server_addr}}	{{server_port}}
+i), with a step of 0.001:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # arange: generate an array from "min" (inclusive) to "max" (exclusive) every "step"		{{server_addr}}	{{server_port}}
+i    arange = min: max: step: let		{{server_addr}}	{{server_port}}
+i      count = floor ((max - min) / step);		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      lib.genList (i: min + step * i) count;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # arange: generate an array from "min" (inclusive) to "max" (inclusive) every "step"		{{server_addr}}	{{server_port}}
+i    arange2 = min: max: step: arange min (max + step) step;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Test function: calculate each value from array "inputs" with "fn", and generate an attrset for input -> output		{{server_addr}}	{{server_port}}
+i    testOnInputs = inputs: fn:		{{server_addr}}	{{server_port}}
+i      builtins.listToAttrs (builtins.map (v: {		{{server_addr}}	{{server_port}}
+i          name = builtins.toString v;		{{server_addr}}	{{server_port}}
+i          value = fn v;		{{server_addr}}	{{server_port}}
+i        })		{{server_addr}}	{{server_port}}
+i        inputs);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Test function: try all inputs from "min" (inclusive) to "max" (inclusive) every "step"		{{server_addr}}	{{server_port}}
+i    testRange = min: max: step: testOnInputs (math.arange2 min max step);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    testOutput = testRange (0 - 10) 10 0.001 math.sin;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCompare `testOutput` to the result of Python Numpy's `np.sin` , and		{{server_addr}}	{{server_port}}
+iall the results are within 0.0001% of true value. This satisfies our		{{server_addr}}	{{server_port}}
+iprecision requirements.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSimilarly, we can implement the cosine function:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # Convert cosine to sine		{{server_addr}}	{{server_port}}
+i    cos = x: sin (0.5 * pi - x);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYou really think I'm doing it from ground zero again? Really?		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSimilarly, the tangent function is also simple:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    tan = x: (sin x) / (cos x);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI also ran the test on `cos` and `tan` , and the error is also within		{{server_addr}}	{{server_port}}
+i0.0001%.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## arctan: Approximation. the Only Way		{{server_addr}}	{{server_port}}
+iThe arctangent function also has a Taylor expansion:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iYet it is easy to notice that arctan's Taylor expansion doesn't		{{server_addr}}	{{server_port}}
+iconverge nearly as fast as sine. Since its denominator increase		{{server_addr}}	{{server_port}}
+ilinearly, we need to calculate much more items before it's smaller		{{server_addr}}	{{server_port}}
+ithan epsilon, which may cause a stack overflow for Nix:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  error: stack overflow (possible infinite recursion)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTaylor expansion is no longer an option then, we need something that		{{server_addr}}	{{server_port}}
+icalculates much faster. Being inspired by		{{server_addr}}	{{server_port}}
+hhttps://stackoverflow.com/a/42542593	URL:https://stackoverflow.com/a/42542593	{{server_addr}}	{{server_port}}
+i, I decided to fit the arctangent curve on		{{server_addr}}	{{server_port}}
+iwith polynomial regression, and map the arctangent function in other		{{server_addr}}	{{server_port}}
+iranges using the following rules:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iStart Python and Numpy, and begin the fitting process:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  import numpy as np		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # Generate input to arctan, 1000 points on [0, 1]:		{{server_addr}}	{{server_port}}
+i  a = np.linspace(0, 1, 1000)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # Polynomial regression, I'm using 10th order polynomial (x^10)		{{server_addr}}	{{server_port}}
+i  fit = np.polyfit(a, np.arctan(a), 10)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # Output regression results		{{server_addr}}	{{server_port}}
+i  print('\n'.join(["{0:.7f}".format(i) for i in (fit[::-1])]))		{{server_addr}}	{{server_port}}
+i  # 0.0000000		{{server_addr}}	{{server_port}}
+i  # 0.9999991		{{server_addr}}	{{server_port}}
+i  # 0.0000361		{{server_addr}}	{{server_port}}
+i  # -0.3339481		{{server_addr}}	{{server_port}}
+i  # 0.0056166		{{server_addr}}	{{server_port}}
+i  # 0.1692346		{{server_addr}}	{{server_port}}
+i  # 0.1067547		{{server_addr}}	{{server_port}}
+i  # -0.3812212		{{server_addr}}	{{server_port}}
+i  # 0.3314050		{{server_addr}}	{{server_port}}
+i  # -0.1347016		{{server_addr}}	{{server_port}}
+i  # 0.0222228		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe output above means that the arctangent function on		{{server_addr}}	{{server_port}}
+ican be approximated with:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWe can replicate this polynomial function in Nix:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # Polynomial calculation, x^0*poly[0] + x^1*poly[1] + ... + x^n*poly[n]		{{server_addr}}	{{server_port}}
+i    polynomial = x: poly: let		{{server_addr}}	{{server_port}}
+i      step = i: (pow x i) * (builtins.elemAt poly i);		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      sum (lib.genList step (builtins.length poly));		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Arctangent function		{{server_addr}}	{{server_port}}
+i    atan = x: let		{{server_addr}}	{{server_port}}
+i      poly = [		{{server_addr}}	{{server_port}}
+i        0.0000000		{{server_addr}}	{{server_port}}
+i        0.9999991		{{server_addr}}	{{server_port}}
+i        0.0000366		{{server_addr}}	{{server_port}}
+i        (0 - 0.3339528)		{{server_addr}}	{{server_port}}
+i        0.0056430		{{server_addr}}	{{server_port}}
+i        0.1691462		{{server_addr}}	{{server_port}}
+i        0.1069422		{{server_addr}}	{{server_port}}
+i        (0 - 0.3814731)		{{server_addr}}	{{server_port}}
+i        0.3316130		{{server_addr}}	{{server_port}}
+i        (0 - 0.1347978)		{{server_addr}}	{{server_port}}
+i        0.0222419		{{server_addr}}	{{server_port}}
+i      ];		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      # Mapping when x < 0		{{server_addr}}	{{server_port}}
+i      if x < 0		{{server_addr}}	{{server_port}}
+i      then -atan (0 - x)		{{server_addr}}	{{server_port}}
+i      # Mapping when x > 1		{{server_addr}}	{{server_port}}
+i      else if x > 1		{{server_addr}}	{{server_port}}
+i      then pi / 2 - atan (1 / x)		{{server_addr}}	{{server_port}}
+i      # Polynomial calculation when 0 <= x <= 1		{{server_addr}}	{{server_port}}
+i      else polynomial x poly;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI ran the precision test, and all results are within 0.0001% of true		{{server_addr}}	{{server_port}}
+ivalue.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## sqrt: Newtonian Method		{{server_addr}}	{{server_port}}
+iFor the square root function, we can iterate with the famous Newtonian		{{server_addr}}	{{server_port}}
+imethod. The iteration formula I'm using is:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOf which		{{server_addr}}	{{server_port}}
+iis the input to the square root function.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWe can implement Newtonian square root calculation in Nix with the		{{server_addr}}	{{server_port}}
+ifollowing code, and iterate until the change in result is below		{{server_addr}}	{{server_port}}
+iepsilon:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # Square root function		{{server_addr}}	{{server_port}}
+i    sqrt = x: let		{{server_addr}}	{{server_port}}
+i      helper = tmp: let		{{server_addr}}	{{server_port}}
+i        value = (tmp + 1.0 * x / tmp) / 2;		{{server_addr}}	{{server_port}}
+i      in		{{server_addr}}	{{server_port}}
+i        if (fabs (value - tmp)) < epsilon		{{server_addr}}	{{server_port}}
+i        then value		{{server_addr}}	{{server_port}}
+i        else helper value;		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      if x < epsilon		{{server_addr}}	{{server_port}}
+i      then 0		{{server_addr}}	{{server_port}}
+i      else helper (1.0 * x);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe precision test shows all results are within		{{server_addr}}	{{server_port}}
+i(absolute value) of true value.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Haversine Formula		{{server_addr}}	{{server_port}}
+iWith the functions above ready, we can finally start implementing the		{{server_addr}}	{{server_port}}
+iHaversine formula. I'm using this implementation from Stackoverflow as		{{server_addr}}	{{server_port}}
+ia reference:		{{server_addr}}	{{server_port}}
+hhttps://stackoverflow.com/a/27943	URL:https://stackoverflow.com/a/27943	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # Convert degree to radian		{{server_addr}}	{{server_port}}
+i    deg2rad = x: x * pi / 180;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Haversine formula, input a pair of latitudes/longitudes, output surface distance on Earth		{{server_addr}}	{{server_port}}
+i    haversine = lat1: lon1: lat2: lon2: let		{{server_addr}}	{{server_port}}
+i      # Treat the Earth as a sphere with radius of 6371km		{{server_addr}}	{{server_port}}
+i      radius = 6371000;		{{server_addr}}	{{server_port}}
+i      # Radian of latitude difference		{{server_addr}}	{{server_port}}
+i      rad_lat = deg2rad ((1.0 * lat2) - (1.0 * lat1));		{{server_addr}}	{{server_port}}
+i      # Radian of longitude difference		{{server_addr}}	{{server_port}}
+i      rad_lon = deg2rad ((1.0 * lon2) - (1.0 * lon1));		{{server_addr}}	{{server_port}}
+i      # Calculate based on formula		{{server_addr}}	{{server_port}}
+i      a = (sin (rad_lat / 2)) * (sin (rad_lat / 2)) + (cos (deg2rad (1.0 * lat1))) * (cos (deg2rad (1.0 * lat2))) * (sin (rad_lon / 2)) * (sin (rad_lon / 2));		{{server_addr}}	{{server_port}}
+i      c = 2 * atan ((sqrt a) / (sqrt (1 - a)));		{{server_addr}}	{{server_port}}
+i    in		{{server_addr}}	{{server_port}}
+i      radius * c;		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, calculate the theoretical delay based on light speed:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    # 150000: distance light travels each millisecond, divided by 2 (for round trip)		{{server_addr}}	{{server_port}}
+i    rttMs = lat1: lon1: lat2: lon2: floor ((haversine lat1 lon1 lat2 lon2) / 150000);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Conclusion		{{server_addr}}	{{server_port}}
+iI finally reached the target I was aiming for: calculate the		{{server_addr}}	{{server_port}}
+itheoretical network latency between my nodes based on the light speed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAll these trigonometric functions (and some extra math functions) can		{{server_addr}}	{{server_port}}
+ibe obtained from my GitHub:		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-math	URL:https://github.com/xddxdd/nix-math	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf you're using Nix Flake, you can use the function as follows:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    inputs = {		{{server_addr}}	{{server_port}}
+i      nix-math.url = "github:xddxdd/nix-math";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    outputs = inputs: let		{{server_addr}}	{{server_port}}
+i      math = inputs.nix-math.lib.math;		{{server_addr}}	{{server_port}}
+i    in{		{{server_addr}}	{{server_port}}
+i      value = math.sin (math.deg2rad 45);		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

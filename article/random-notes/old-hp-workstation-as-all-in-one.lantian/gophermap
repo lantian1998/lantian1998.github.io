@@ -1,0 +1,198 @@
+i我买了一台 HP 的老款工作站，用作家里的 NAS+ 软路由。本文简单记录这台工		{{server_addr}}	{{server_port}}
+i作站的配置过程。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 硬件选择		{{server_addr}}	{{server_port}}
+iNAS 的硬件主要有这些选择：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 成品 NAS（如群晖）		{{server_addr}}	{{server_port}}
+i  - 优点：开箱即用。		{{server_addr}}	{{server_port}}
+i  - 缺点：		{{server_addr}}	{{server_port}}
+i    - 价格贵，到了「买系统送硬件」的程度。		{{server_addr}}	{{server_port}}
+i    - 而且与各种 Linux 发行版相比，NAS 的原厂系统难以定制。		{{server_addr}}	{{server_port}}
+i- 二手服务器		{{server_addr}}	{{server_port}}
+i  - 优点：		{{server_addr}}	{{server_port}}
+i    - 便宜，在保修期结束后 , 这些服务器大都被数据中心当作废品处理，然		{{server_addr}}	{{server_port}}
+i      后被以极低的成本回收，翻新后二次售卖。		{{server_addr}}	{{server_port}}
+i    - 稳定，这些服务器在设计时就考虑了长期运行，并且一直在温湿度稳定、		{{server_addr}}	{{server_port}}
+i      无尘的数据中心中运行。		{{server_addr}}	{{server_port}}
+i  - 缺点：		{{server_addr}}	{{server_port}}
+i    - 噪音大，需要自行修改系统配置降低风扇转速，更换静音风扇，或者加装		{{server_addr}}	{{server_port}}
+i      风扇减速线。		{{server_addr}}	{{server_port}}
+i    - 体积大（主要针对机架式服务器）。		{{server_addr}}	{{server_port}}
+i    - 专用配件，服务器厂商会定制各种配件供特定型号使用，如果你有扩展需		{{server_addr}}	{{server_port}}
+i      求，需要加价购买这些专用配件。		{{server_addr}}	{{server_port}}
+i- 二手工作站		{{server_addr}}	{{server_port}}
+i  - 优点：		{{server_addr}}	{{server_port}}
+i    - 便宜、稳定，与二手服务器相同。		{{server_addr}}	{{server_port}}
+i    - 噪音小，毕竟工作站是放在办公桌边，而不是在机房里使用的。		{{server_addr}}	{{server_port}}
+i  - 缺点：		{{server_addr}}	{{server_port}}
+i    - 专用配件，与二手服务器相同。		{{server_addr}}	{{server_port}}
+i- 自己购买电脑配件组装		{{server_addr}}	{{server_port}}
+i  - 优点：		{{server_addr}}	{{server_port}}
+i    - 可以完全根据自己的需求定制。		{{server_addr}}	{{server_port}}
+i  - 缺点：		{{server_addr}}	{{server_port}}
+i    - 性价比不如二手服务器和工作站。		{{server_addr}}	{{server_port}}
+i    - 家用配件的稳定性可能不及商用服务器和工作站。		{{server_addr}}	{{server_port}}
+i而我对于这台 NAS 有这些需求：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 需要能用 Jellyfin 视频转码，而且最好支持 H265 编码，这需要一块 6 代（		{{server_addr}}	{{server_port}}
+i  Skylake）以上、带核显的 Intel CPU，或者加装一块 NVIDIA 的显卡。		{{server_addr}}	{{server_port}}
+i- 除此之外，只要不是非常差的 CPU（例如 Intel Atom 系列），对性能几乎没		{{server_addr}}	{{server_port}}
+i  要求。		{{server_addr}}	{{server_port}}
+i- 低噪音，我目前住在单间公寓，这台 NAS 会和我的床放在同一个房间。		{{server_addr}}	{{server_port}}
+i- 我不喜欢成品 NAS 系统，希望自己安装 NixOS 然后自行配置。		{{server_addr}}	{{server_port}}
+i- 能省则省。		{{server_addr}}	{{server_port}}
+i综上考虑，我选择购买二手工作站。由于我目前人在美国，我在 eBay 上花 50		{{server_addr}}	{{server_port}}
+i刀购买了一台回收翻新的 HP 工作站。关键配置如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 型号：HP Z220 SFF		{{server_addr}}	{{server_port}}
+i- CPU：Intel E3-1225 v2		{{server_addr}}	{{server_port}}
+i- 内存：4GB DDR3		{{server_addr}}	{{server_port}}
+i- 硬盘：250GB 机械硬盘		{{server_addr}}	{{server_port}}
+i- 电源：240W		{{server_addr}}	{{server_port}}
+i- 三根 PCI-E 插槽，一根 x16，一根 x4，一根 x1。		{{server_addr}}	{{server_port}}
+i- 一根 PCI 插槽。		{{server_addr}}	{{server_port}}
+i## 存储		{{server_addr}}	{{server_port}}
+i作为一台 NAS，首先要考虑的就是数据存储。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这台工作站有 4 个 SATA 接口，两个 3.5 寸硬盘位，以及一个 5 寸光驱位（		{{server_addr}}	{{server_port}}
+i安装了光驱）。我拆掉了原装硬盘，加装了两块全新的 16TB 机械硬盘作为数据		{{server_addr}}	{{server_port}}
+i存储。我计划先将这两块硬盘组成 RAID-1 阵列，在未来容量不足时加装一块硬		{{server_addr}}	{{server_port}}
+i盘转换成 RAID-5。ZFS 不支持从 RAID-1 转换成 RAID-5，而且 ZFS 内核模块		{{server_addr}}	{{server_port}}
+i由于没有合入 Linux 主线，经常在升级内核版本时挂掉。而 Btrfs 本身的		{{server_addr}}	{{server_port}}
+iRAID-5 功能有严重的稳定性问题，容易造成数据丢失。因此我最终选择的方案		{{server_addr}}	{{server_port}}
+i是 Btrfs + LVM RAID-1，让配置更加灵活的 LVM 来处理 RAID。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我还加装了一块 180GB 容量的 Intel 520 固态硬盘作为启动盘。虽然这块固态		{{server_addr}}	{{server_port}}
+i硬盘很老，但它的价格仅 15 刀，接近 eBay 上所有固态硬盘的最低价，同时它		{{server_addr}}	{{server_port}}
+i用的是 MLC 颗粒，相比现在的 TLC 颗粒寿命更长。这块硬盘上只装 NixOS 的		{{server_addr}}	{{server_port}}
+i系统文件（`/nix` 文件夹），以及一些会被每日备份到云存储的配置文件，所		{{server_addr}}	{{server_port}}
+i以我不担心丢失这块硬盘上的数据。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另外，我配置了		{{server_addr}}	{{server_port}}
+hBees	URL:https://github.com/Zygo/bees	{{server_addr}}	{{server_port}}
+i软件用于 Btrfs 上的数据去重。我的两块硬盘 RAID-1 后有大约 14.6TB 的可		{{server_addr}}	{{server_port}}
+i用存储空间。Bees 要有效去重这些空间需要占用 2GB 内存创建一个硬盘内容的		{{server_addr}}	{{server_port}}
+i哈希表。再加上一些其它的服务，原装的 4GB 内存很快就不够用了。因此，我		{{server_addr}}	{{server_port}}
+i又花了 40 刀给这台工作站换上了 16GB 的 DDR3 ECC-UDIMM 内存。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 软路由		{{server_addr}}	{{server_port}}
+i这台工作站将直接接到运营商的光猫，作为我家的主路由。我不打算使用		{{server_addr}}	{{server_port}}
+iOpenWRT 等专为路由器设计的 Linux 发行版，而是直接在 NixOS 上配置数据包		{{server_addr}}	{{server_port}}
+i转发和 NAT。开启转发功能只需要几行 sysctl 配置：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    boot.kernel.sysctl = {		{{server_addr}}	{{server_port}}
+i      "net.ipv4.conf.all.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i      "net.ipv4.conf.default.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i      "net.ipv4.conf.*.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i      "net.ipv6.conf.all.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i      "net.ipv6.conf.default.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i      "net.ipv6.conf.*.forwarding" = lib.mkForce 1;		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i而 NAT 则需要配置防火墙。我使用的是 Nftables，简化后的配置如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  table inet lantian {		{{server_addr}}	{{server_port}}
+i    # 内网 IPv4 地址		{{server_addr}}	{{server_port}}
+i    set RESERVED_IPV4 {		{{server_addr}}	{{server_port}}
+i      type ipv4_addr		{{server_addr}}	{{server_port}}
+i      flags constant,interval		{{server_addr}}	{{server_port}}
+i      elements = { 10.0.0.0/8, 172.16.0.0/12,		{{server_addr}}	{{server_port}}
+i                   192.0.0.0/24, 192.0.2.0/24,		{{server_addr}}	{{server_port}}
+i                   192.168.0.0/16, 198.18.0.0/15,		{{server_addr}}	{{server_port}}
+i                   198.51.100.0/24, 203.0.113.0/24,		{{server_addr}}	{{server_port}}
+i                   233.252.0.0/24, 240.0.0.0/4 }		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 内网 IPv6 地址		{{server_addr}}	{{server_port}}
+i    set RESERVED_IPV6 {		{{server_addr}}	{{server_port}}
+i      type ipv6_addr		{{server_addr}}	{{server_port}}
+i      flags constant,interval		{{server_addr}}	{{server_port}}
+i      elements = { 64:ff9b::/96,		{{server_addr}}	{{server_port}}
+i                   64:ff9b:1::/48,		{{server_addr}}	{{server_port}}
+i                   2001:2::/48,		{{server_addr}}	{{server_port}}
+i                   2001:20::/28,		{{server_addr}}	{{server_port}}
+i                   2001:db8::/32,		{{server_addr}}	{{server_port}}
+i                   fc00::/7 }		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    chain NAT_POSTROUTING {		{{server_addr}}	{{server_port}}
+i      type nat hook postrouting priority srcnat + 5; policy accept;		{{server_addr}}	{{server_port}}
+i      # 对来自内网，去向公网网卡的 IPv4 数据包进行 NAT		{{server_addr}}	{{server_port}}
+i      ip saddr @RESERVED_IPV4 oifname @INTERFACE_WAN masquerade		{{server_addr}}	{{server_port}}
+i      # 对来自内网，去向公网网卡的 IPv6 数据包进行 NAT		{{server_addr}}	{{server_port}}
+i      # 这里只处理源地址是私有 IP 的情况，不影响直接分配了公网 IP 的设备		{{server_addr}}	{{server_port}}
+i      ip6 saddr @RESERVED_IPV6 oifname @INTERFACE_WAN masquerade		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后，启用 MiniUPnPd，让客户端上的软件可以按需配置端口转发：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    services.miniupnpd = {		{{server_addr}}	{{server_port}}
+i      enable = true;		{{server_addr}}	{{server_port}}
+i      upnp = true;		{{server_addr}}	{{server_port}}
+i      natpmp = true;		{{server_addr}}	{{server_port}}
+i      internalIPs = ["192.168.0.1"];		{{server_addr}}	{{server_port}}
+i      externalInterface = "eth-wan";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i最后在内网接口上配置好 IP 和 DHCP 服务器：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    systemd.network.networks.eth-lan = {		{{server_addr}}	{{server_port}}
+i      matchConfig.PermanentMACAddress = "12:34:56:12:34:56";		{{server_addr}}	{{server_port}}
+i      address = ["192.168.0.1/24"];		{{server_addr}}	{{server_port}}
+i      networkConfig = {		{{server_addr}}	{{server_port}}
+i        DHCP = "no";		{{server_addr}}	{{server_port}}
+i        DHCPServer = "yes";		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i      dhcpServerConfig = {		{{server_addr}}	{{server_port}}
+i        PoolOffset = 10;		{{server_addr}}	{{server_port}}
+i        PoolSize = 200;		{{server_addr}}	{{server_port}}
+i        EmitDNS = "yes";		{{server_addr}}	{{server_port}}
+i        DNS = ["8.8.8.8"];		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i应用配置，`networkctl reload` 后，客户端即可上网。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 视频转码		{{server_addr}}	{{server_port}}
+i作为一台小体积（Small Form Factor）工作站，HP Z220 SFF 只能使用矮尺寸		{{server_addr}}	{{server_port}}
+i的 PCI-E 扩展卡（高 8 厘米）而非标准尺寸的扩展卡（高 12 厘米）。同时，		{{server_addr}}	{{server_port}}
+i功率仅 240W 的电源也没有额外的显卡供电线，所以我也无法使用高性能高功率		{{server_addr}}	{{server_port}}
+i的显卡。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我最开始花 40 刀买了一块 NVIDIA Quadro P400 显卡，TDP 为 30W。这块显卡		{{server_addr}}	{{server_port}}
+i本身的性能非常差，约等于传说中的 NVIDIA GT 1010 显卡，连 1030 都不如。		{{server_addr}}	{{server_port}}
+i但是，它搭载了和 10 系列显卡相同的视频编解码电路，		{{server_addr}}	{{server_port}}
+h支持 H265 10-bit 视频编码	URL:https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new	{{server_addr}}	{{server_port}}
+i。除了 GPU 核心工作频率不同外，Quadro P400 的视频转码性能和其它 10 系		{{server_addr}}	{{server_port}}
+i列显卡完全相同。因此，Quadro P400 也是 Reddit 上很多 DIY NAS 玩家的选		{{server_addr}}	{{server_port}}
+i择。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我买到卡后进行测试，发现它确实可以转码 4K HEVC 的视频，速度能达到每秒		{{server_addr}}	{{server_port}}
+i60 帧。但如果我开启了 Jellyfin 的色彩空间映射（Tone-mapping），转码速		{{server_addr}}	{{server_port}}
+i度就会降到十几帧，导致视频无法流畅播放。Tone-mapping 的用途是将视频的		{{server_addr}}	{{server_port}}
+i特殊色彩空间（例如 HDR 或杜比视界）映射到标准的 SDR 色彩空间，让不支持		{{server_addr}}	{{server_port}}
+iHDR 的设备也可以正确地显示这些视频。Jellyfin Tone-mapping 用到了显卡的		{{server_addr}}	{{server_port}}
+i3D 处理单元，而 Quadro P400 的 3D 性能非常弱，导致了瓶颈的出现。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我后来把显卡换成了 NVIDIA Tesla P4，TDP 为 50W。虽然它是数据中心用的		{{server_addr}}	{{server_port}}
+iTesla 系列计算卡，但它也支持视频编解码，拥有和 10 系列显卡相同的编解码		{{server_addr}}	{{server_port}}
+i电路。这张卡本身在 eBay 上卖 100 刀左右，但它是被动散热卡，所以还需要		{{server_addr}}	{{server_port}}
+i加 20 刀加装风扇和导风罩，让它能在普通台式电脑中散热。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i经过测试，这张卡可以在开启 Tone-mapping 的情况下，以 60 帧左右的速度将		{{server_addr}}	{{server_port}}
+i视频转码到 4K 80Mbps，完全满足我的视频转码需求。唯一的缺点是，HP Z220		{{server_addr}}	{{server_port}}
+iSFF 的主板上没有标准的风扇接口，我只能使用 USB 5V 到 12V 的升压线给风		{{server_addr}}	{{server_port}}
+i扇供电，让风扇一直保持在满速状态。风扇噪音稍大，但对我来说可以接受。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另外，Tesla P4 还原生支持 NVIDIA GRID 功能，可以生成虚拟显卡给虚拟机使		{{server_addr}}	{{server_port}}
+i用。但 NVIDIA GRID 需要使用专门的宿主机驱动，不支持 3D、视频转码等功能，		{{server_addr}}	{{server_port}}
+i导致 Jellyfin 的视频转码无法使用。所以，我目前还是选择使用普通的驱动。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

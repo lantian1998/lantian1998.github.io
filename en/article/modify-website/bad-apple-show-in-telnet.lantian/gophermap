@@ -1,0 +1,88 @@
+iToday, after tinkering for half a day, I successfully ported Bad Apple		{{server_addr}}	{{server_port}}
+ito my VPS's Telnet service using the		{{server_addr}}	{{server_port}}
+1command-line animation version	/en/article/modify-computer/bad-apple-command-line-art.lantian	{{server_addr}}	{{server_port}}
+iI published earlier.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTo view it yourself:		{{server_addr}}	{{server_port}}
+i`telnet xuyh0120.tk` or `telnet 5.175.156.249`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i### Round 1. Porting to SSH		{{server_addr}}	{{server_port}}
+iSince I originally promised a classmate I'd implement this via SSH, I		{{server_addr}}	{{server_port}}
+istarted there. First, I uploaded Bad Apple to my VPS at `/opt/badapple` ,		{{server_addr}}	{{server_port}}
+iwhich contains two files: `badapple` and `badapple.in` (the resource		{{server_addr}}	{{server_port}}
+ifile with a modified extension).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  useradd badapple		{{server_addr}}	{{server_port}}
+i  passwd badapple		{{server_addr}}	{{server_port}}
+i  # 密码我设的badapple		{{server_addr}}	{{server_port}}
+i  su badapple		{{server_addr}}	{{server_port}}
+i  # 切换过去		{{server_addr}}	{{server_port}}
+i  chsh		{{server_addr}}	{{server_port}}
+i  # 输入/opt/badapple/badapple		{{server_addr}}	{{server_port}}
+i  exit		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWhen testing via SSH, I encountered Error 2 (resource file not found).		{{server_addr}}	{{server_port}}
+iI recompiled locally (the VPS lacks FPC), changed paths from relative		{{server_addr}}	{{server_port}}
+ito absolute, re-uploaded, and successfully displayed the animation		{{server_addr}}	{{server_port}}
+iupon reconnecting.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNext, I needed to automatically disconnect users after playback. A		{{server_addr}}	{{server_port}}
+iclassmate suggested `pkill -9 sshd` — effective but disruptive to		{{server_addr}}	{{server_port}}
+iconcurrent viewers. However, I discovered that OpenSSH automatically		{{server_addr}}	{{server_port}}
+iterminates the connection when my Pascal program exits.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSSH's powerful features posed security risks. For example, its		{{server_addr}}	{{server_port}}
+ibuilt-in SFTP bypasses the shell. I disabled it by commenting out the		{{server_addr}}	{{server_port}}
+irelevant line in `/etc/ssh/sshd_config` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  Subsystem sftp /usr/libexec/openssh/sftp-server```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI also disabled TCP/IP port forwarding by adding:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  AllowTcpForwarding no```		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iLater, I found SCP file transfer — deeply integrated with SSH and		{{server_addr}}	{{server_port}}
+iimpossible to disable — forcing me to abandon SSH and delete the		{{server_addr}}	{{server_port}}
+iuser.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i### Round 2. Porting to Telnet		{{server_addr}}	{{server_port}}
+iTry `telnet towel.blinkenlights.nl` on your machine (safe, but Vista+		{{server_addr}}	{{server_port}}
+iusers may not see effects). This inspired me to replicate the		{{server_addr}}	{{server_port}}
+iASCII-art experience via Telnet.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install telnet telnetd xinetd		{{server_addr}}	{{server_port}}
+i  cd /etc/xinetd.d		{{server_addr}}	{{server_port}}
+i  nano telnet		{{server_addr}}	{{server_port}}
+i  #输入：		{{server_addr}}	{{server_port}}
+i  #service telnet		{{server_addr}}	{{server_port}}
+i  #{		{{server_addr}}	{{server_port}}
+i  #        disable=no		{{server_addr}}	{{server_port}}
+i  #        flags=REUSE		{{server_addr}}	{{server_port}}
+i  #        socket_type=stream		{{server_addr}}	{{server_port}}
+i  #        wait=no		{{server_addr}}	{{server_port}}
+i  #        user=root		{{server_addr}}	{{server_port}}
+i  #        server=/usr/sbin/in.telnetd		{{server_addr}}	{{server_port}}
+i  #        log_in_failure+=USERID		{{server_addr}}	{{server_port}}
+i  #}		{{server_addr}}	{{server_port}}
+i  service xinetd restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iInitially, Telnet required authentication via the `badapple` user. To		{{server_addr}}	{{server_port}}
+iachieve password-free access like the Star Wars demo, I studied `telnetd`		{{server_addr}}	{{server_port}}
+iand discovered its `-L` parameter for custom login programs. After		{{server_addr}}	{{server_port}}
+iunsuccessful attempts via `xinetd` , I leveraged the default login		{{server_addr}}	{{server_port}}
+ipath:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  cd /usr/lib		{{server_addr}}	{{server_port}}
+i  mv telnetlogin telnetlogin_backup		{{server_addr}}	{{server_port}}
+i  ln -sf /opt/badapple/badapple telnetlogin		{{server_addr}}	{{server_port}}
+i  service xinetd restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThis replaces the login shell with Bad Apple, starting playback		{{server_addr}}	{{server_port}}
+iimmediately upon connection. Like SSH, Telnet disconnects		{{server_addr}}	{{server_port}}
+iautomatically after playback.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe result is impressive — despite a brief "Debian GNU Linux 6.0"		{{server_addr}}	{{server_port}}
+iheader, the core objective is achieved. Mission complete.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i**Demo** : `telnet xuyh0120.tk` or `telnet 5.175.156.249`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

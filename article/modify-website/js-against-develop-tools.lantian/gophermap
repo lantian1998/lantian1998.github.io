@@ -1,0 +1,94 @@
+i做网站最烦的就是辛辛苦苦做的模板被人用开发者工具扒去了，因为 Chrome		{{server_addr}}	{{server_port}}
+iDev Tool 和 Firebug 都有超级牛力。（不解释）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i开发者工具曾经是无敌的，直到这段 JS 出现。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+hhttp://publicdn.cdn.duapp.com/js/wqnmlgb.min.js	URL:http://publicdn.cdn.duapp.com/js/wqnmlgb.min.js	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i源代码 + 作者信息：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  /*		{{server_addr}}	{{server_port}}
+i      Plugin Name : WQNMLGB		{{server_addr}}	{{server_port}}
+i      Plugin Author : Xider		{{server_addr}}	{{server_port}}
+i      Plugin Version : 1.2 final		{{server_addr}}	{{server_port}}
+i      Plugin Site : http://lab.i-xider.com		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      Now Support : Chrome , Safari , FireFox ( NOT ALL ) , Opera ( NOT ALL ) , IE ( NOT ALL )		{{server_addr}}	{{server_port}}
+i                                   请原谅我把原生JS和JQuery混为一起写		{{server_addr}}	{{server_port}}
+i  */		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  function fuckyou() {		{{server_addr}}	{{server_port}}
+i    window.location = 'http://i-xider.com/#呵呵' //将当前窗口跳转置空白页		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  function ck() {		{{server_addr}}	{{server_port}}
+i    console.profile()		{{server_addr}}	{{server_port}}
+i    console.profileEnd()		{{server_addr}}	{{server_port}}
+i    //我们判断一下profiles里面有没有东西，如果有，肯定有人按F12了，没错！！		{{server_addr}}	{{server_port}}
+i    if (console.clear) {		{{server_addr}}	{{server_port}}
+i      console.clear()		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i    if (typeof console.profiles == 'object') {		{{server_addr}}	{{server_port}}
+i      return console.profiles.length > 0		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  ck() //节操亮出来		{{server_addr}}	{{server_port}}
+i  $('body').data('w', $(window).width())		{{server_addr}}	{{server_port}}
+i  $('body').data('h', $(window).height()) //将初始窗口的高度附加到body上，作为缓存，感谢@撸大师的指点		{{server_addr}}	{{server_port}}
+i  function hehe() {		{{server_addr}}	{{server_port}}
+i    if ($.browser.msie) {		{{server_addr}}	{{server_port}}
+i      if (		{{server_addr}}	{{server_port}}
+i        $('body').data('w') == $(window).width() &&		{{server_addr}}	{{server_port}}
+i        $('body').data('h') - $(window).height() > 50		{{server_addr}}	{{server_port}}
+i      ) {		{{server_addr}}	{{server_port}}
+i        fuckyou() // IE WQNMLGB		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i    } else if ($.browser.mozilla) {		{{server_addr}}	{{server_port}}
+i      if (		{{server_addr}}	{{server_port}}
+i        window.console &&		{{server_addr}}	{{server_port}}
+i        (console.firebug || (console.table && /firebug/i.test(console.table())))		{{server_addr}}	{{server_port}}
+i      ) {		{{server_addr}}	{{server_port}}
+i        fuckyou() // 火狐先森		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i    } else {		{{server_addr}}	{{server_port}}
+i      if (		{{server_addr}}	{{server_port}}
+i        ($('body').data('w') == $(window).width() &&		{{server_addr}}	{{server_port}}
+i          $('body').data('h') - $(window).height() > 50) ||		{{server_addr}}	{{server_port}}
+i        (typeof console.profiles == 'object' && console.profiles.length > 0)		{{server_addr}}	{{server_port}}
+i      ) {		{{server_addr}}	{{server_port}}
+i        fuckyou() // Chrome and Opera 先森		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i    }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  hehe() //我劝你们撸管吧		{{server_addr}}	{{server_port}}
+i  window.onresize = function () {		{{server_addr}}	{{server_port}}
+i    if (		{{server_addr}}	{{server_port}}
+i      $('body').data('w') == $(window).width() &&		{{server_addr}}	{{server_port}}
+i      $('body').data('h') - $(window).height() > 50		{{server_addr}}	{{server_port}}
+i    )		{{server_addr}}	{{server_port}}
+i      //判断当前窗口内页高度和窗口高度，如果差值大于50，那么呵呵		{{server_addr}}	{{server_port}}
+i      fuckyou()		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个 JS 会自动检测你的浏览器有没有调试工具打开（Firebug，Chrome Dev		{{server_addr}}	{{server_port}}
+iTool，etc），一旦打开会强行将你的网页跳到 about:blank，防止不怀好意的		{{server_addr}}	{{server_port}}
+i人扒你代码。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i调用方法：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 百度云 CDN		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <script		{{server_addr}}	{{server_port}}
+i    type="text/javascript"		{{server_addr}}	{{server_port}}
+i    src="//publicdn.cdn.duapp.com/js/wqnmlgb.min.js"		{{server_addr}}	{{server_port}}
+i  ></script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2.zntec.cn 站长提供		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <script		{{server_addr}}	{{server_port}}
+i    type="text/javascript"		{{server_addr}}	{{server_port}}
+i    src="http://bcs.duapp.com/babytomas/wqnmlgb.min.js"		{{server_addr}}	{{server_port}}
+i  ></script>		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i当然如果你的博客不怕被扒代码就不用加了，我的博客页面都可以正常打开开发		{{server_addr}}	{{server_port}}
+i者工具，欢迎扒代码 … …（其实还有个原因是我也要用）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,46 @@
+iW3 Total Cache 默认使用硬盘作为缓存，对于一些虚拟主机用户他们只能选择		{{server_addr}}	{{server_port}}
+i这个，但是对于 VPS 用户，他们的选择就大的多了，尤其是买到一些超售技术		{{server_addr}}	{{server_port}}
+i较好的 VPS 商（Host1Free？）硬盘速度稍微偏慢，就可以利用你多余的内存来		{{server_addr}}	{{server_port}}
+i做缓存了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我自己先后在 SAE、OpenShift、Host1Free VPS 上搭了 3 个 WP 测试站，在这		{{server_addr}}	{{server_port}}
+i三者中只有 VPS 可以 DIY，所以今天就对它开刀。（PS：SAE 的本地文件读写		{{server_addr}}	{{server_port}}
+i限制搞得 W3 Total Cache 连设置都保存不了）		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另外，一些 PHP Opcode 缓存软件（比如 Zend Optimizer（不是 Zend Guard），		{{server_addr}}	{{server_port}}
+ieAccelerator，XCache，APC 等）也被 W3TC 支持，可以作为另一种方式的内存		{{server_addr}}	{{server_port}}
+i缓存，当然速度会略慢。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. 安装 Memcache 服务端和 PHP 支持组件		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install memcached php5-memcached php5-memcache		{{server_addr}}	{{server_port}}
+i  # 如果你用LNMP或LLsMP（FastCGI）执行这一行		{{server_addr}}	{{server_port}}
+i  service php5-fpm restart		{{server_addr}}	{{server_port}}
+i  # 如果你用LAMP或LLsMP（LiteSpeed SAPI）执行这行		{{server_addr}}	{{server_port}}
+i  service apache2 restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i默认情况下 Memcache 占用内存是 64M，但是不是一直 64M，是个最大限制，平		{{server_addr}}	{{server_port}}
+i时你放了多少数据就占多少内存。所以你一般不用改，对于一个正常流量（		{{server_addr}}	{{server_port}}
+i1000IP）的站最大也就占 20M 左右。但是如果你的 VPS 是 64M 的，你可以到 /etc/memcached.conf，		{{server_addr}}	{{server_port}}
+i把 -m 64 改成 -m 16 之类的。改完别忘 service memcached restart。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2.W3TC 设置		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i进入 WP 控制台 /Performance/General Settings，把所有 Cache 的模式全部		{{server_addr}}	{{server_port}}
+i改成 Memcached，如果是灰色的，说明你的 Memcached 没有配置成功，你需要		{{server_addr}}	{{server_port}}
+i检查你的设置。全部选择 Memcached，然后保存配置，刷新缓存，就 OK 了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i3. 使用 Opcode 组件缓存		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i根据我的测试，W3TC 无法正常识别 eAccelerator，所以我安装了 XCache。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install php5-xcache		{{server_addr}}	{{server_port}}
+i  # 如果你用LNMP或LLsMP（FastCGI）执行这一行		{{server_addr}}	{{server_port}}
+i  service php5-fpm restart		{{server_addr}}	{{server_port}}
+i  # 如果你用LAMP或LLsMP（LiteSpeed SAPI）执行这行		{{server_addr}}	{{server_port}}
+i  service apache2 restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i进入 WP 控制台 /Performance/General Settings，把所有 Cache 的模式全部		{{server_addr}}	{{server_port}}
+i改成 Opcode:XCache，如果是灰色的，说明你的 XCache 没有配置成功，你需要		{{server_addr}}	{{server_port}}
+i检查你的设置。全部选择 XCache，然后保存配置，刷新缓存，就 OK 了。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

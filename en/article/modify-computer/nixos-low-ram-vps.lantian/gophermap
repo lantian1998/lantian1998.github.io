@@ -1,0 +1,621 @@
+iBlack friday has passed. Some readers, I believe, have perchased some		{{server_addr}}	{{server_port}}
+iVPSes or cloud servers on sale, and want to install NixOS on them.		{{server_addr}}	{{server_port}}
+iHowever, since NixOS is nowhere as famous as popular Linux distros,		{{server_addr}}	{{server_port}}
+isuch as CentOS, Debian and Ubuntu, almost no VPS provider will offer a		{{server_addr}}	{{server_port}}
+idisk image preinstalled with NixOS. This lefts the user one of the		{{server_addr}}	{{server_port}}
+ifollowing options to perform the installation manually:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Mounting NixOS's installer ISO, and then partition and install		{{server_addr}}	{{server_port}}
+i  manually.		{{server_addr}}	{{server_port}}
+iSince you can operate on the VPS's hard drive as you wish in NixOS's		{{server_addr}}	{{server_port}}
+iinstallation media, repartitioning the drive and specifying file		{{server_addr}}	{{server_port}}
+isystem types, this approach offers the maximum freedom. However,		{{server_addr}}	{{server_port}}
+ibefore you can use this approach, your provider must satisfy one of		{{server_addr}}	{{server_port}}
+ithe three prerequisites:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Provider provides a NixOS ISO (even if an older version) and allows		{{server_addr}}	{{server_port}}
+i   you to mount it;		{{server_addr}}	{{server_port}}
+i2. Provider allows user to upload custom ISO images, with which you		{{server_addr}}	{{server_port}}
+i   can upload a copy of NixOS installation media;		{{server_addr}}	{{server_port}}
+i3. Provider supports booting to		{{server_addr}}	{{server_port}}
+h   netboot.xyz	URL:https://netboot.xyz/	{{server_addr}}	{{server_port}}
+i   (an utility to install various Linux distros over the Internet),		{{server_addr}}	{{server_port}}
+i   and your VPS has more than 1GB RAM, so that netboot.xyz has enough		{{server_addr}}	{{server_port}}
+i   space to extract NixOS's installation image into RAM.		{{server_addr}}	{{server_port}}
+iIn my case, I purchased a VPS with exactly 1GB of RAM, not enough for		{{server_addr}}	{{server_port}}
+iextracting the image of NixOS 23.05. Therefore, I cannot boot into		{{server_addr}}	{{server_port}}
+iNixOS installation environment with netboot.xyz. In addition, my		{{server_addr}}	{{server_port}}
+iprovider doesn't support custom ISOs, so I cannot boot into NixOS		{{server_addr}}	{{server_port}}
+iinstaller with that either.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Replace the running operating system on VPS with		{{server_addr}}	{{server_port}}
+h  NixOS-Infect	URL:https://github.com/elitak/nixos-infect	{{server_addr}}	{{server_port}}
+i  or		{{server_addr}}	{{server_port}}
+h  NixOS-Anywhere	URL:https://github.com/nix-community/nixos-anywhere	{{server_addr}}	{{server_port}}
+i  , etc.		{{server_addr}}	{{server_port}}
+iNixOS-Infect works by installating a Nix daemon on the local OS, build		{{server_addr}}	{{server_port}}
+ia complete NixOS installation on it, and finally replace the		{{server_addr}}	{{server_port}}
+ibootloader entries with those for NixOS. Since this approach doesn't		{{server_addr}}	{{server_port}}
+irequire extracting the full installer image, it is more suitable for		{{server_addr}}	{{server_port}}
+iVPSes with low RAM. The downside of this approach though, is that you		{{server_addr}}	{{server_port}}
+icannot customize partitions and filesystem types. You are left with		{{server_addr}}	{{server_port}}
+ithe default partition schemes and filesystems configured by the		{{server_addr}}	{{server_port}}
+iprovider. For users who depends on non-standard partition or		{{server_addr}}	{{server_port}}
+ifilesystem schemes, including Btrfs/ZFS or		{{server_addr}}	{{server_port}}
+1Impermanence	/en/article/modify-computer/nixos-impermanence.lantian/	{{server_addr}}	{{server_port}}
+i, this approach is not suitable.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNixOS-Anywhere, on the other hand, works by replacing the current		{{server_addr}}	{{server_port}}
+irunning kernel with `kexec` , and booting straight into NixOS		{{server_addr}}	{{server_port}}
+iinstallation image stored in RAM. Since it works in almost the same		{{server_addr}}	{{server_port}}
+iway as netboot.xyz, it also requires a large chunk of RAM, just like		{{server_addr}}	{{server_port}}
+inetboot.xyz.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Use NixOS-Infect first, and then manually adjust partitions in		{{server_addr}}	{{server_port}}
+i  rescue environment		{{server_addr}}	{{server_port}}
+iI used to setup similar low RAM VPSes by setting up a normal NixOS		{{server_addr}}	{{server_port}}
+iwith NixOS-Infect first, and then deploy a configuration with Btrfs		{{server_addr}}	{{server_port}}
+iand Impermanence enabled, reboot into rescue environment, and finally		{{server_addr}}	{{server_port}}
+iadjust partitions and convert filesystems. It works, but takes many		{{server_addr}}	{{server_port}}
+isteps to complete. In addition, if I did any of the steps incorrectly,		{{server_addr}}	{{server_port}}
+iI'm left with an unfixable system, and will need to start over.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- ...Any other possibilities?		{{server_addr}}	{{server_port}}
+iRecently, the NixOS community released a tool,		{{server_addr}}	{{server_port}}
+hDisko	URL:https://github.com/nix-community/disko	{{server_addr}}	{{server_port}}
+i. It is originally used for automatically partitioning hard drives in		{{server_addr}}	{{server_port}}
+ithe NixOS installation environment, so that user can declaratively		{{server_addr}}	{{server_port}}
+ipartition the drive with a Nix config file. However, the tool also		{{server_addr}}	{{server_port}}
+isupports generating a disk image based on a given partition table and		{{server_addr}}	{{server_port}}
+iNixOS config. Therefore, we can set up Btrfs/ZFS/Impermanence,		{{server_addr}}	{{server_port}}
+igenerate the corresponding disk image, and `dd` the image into the		{{server_addr}}	{{server_port}}
+iVPS's hard drive, to easily install NixOS on there.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince this method requires next to nothing for the rescue environment		{{server_addr}}	{{server_port}}
+ion VPS (as long as there is network and `dd` command), we can boot		{{server_addr}}	{{server_port}}
+iinto Alpine Linux, a distro known for minimal RAM usage, and transfer		{{server_addr}}	{{server_port}}
+ithe disk image over the Internet into the hard drive of VPS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Prepare NixOS Configuration		{{server_addr}}	{{server_port}}
+iBefore using this method, we need to prepare a simple NixOS		{{server_addr}}	{{server_port}}
+iconfiguration, including the basic config for bootloader, networking,		{{server_addr}}	{{server_port}}
+iroot password and SSH keys, so that you can deploy the full		{{server_addr}}	{{server_port}}
+iconfiguration later. Of course, you can simply use your full NixOS		{{server_addr}}	{{server_port}}
+iconfiguration, at the cost of larger disk image.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHere is the configuration file I prepared, stored as `configuration.nix` :		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    config,		{{server_addr}}	{{server_port}}
+i    pkgs,		{{server_addr}}	{{server_port}}
+i    lib,		{{server_addr}}	{{server_port}}
+i    ...		{{server_addr}}	{{server_port}}
+i  }: {		{{server_addr}}	{{server_port}}
+i    # Kernel parameters I use		{{server_addr}}	{{server_port}}
+i    boot.kernelParams = [		{{server_addr}}	{{server_port}}
+i      # Disable auditing		{{server_addr}}	{{server_port}}
+i      "audit=0"		{{server_addr}}	{{server_port}}
+i      # Do not generate NIC names based on PCIe addresses (e.g. enp1s0, useless for VPS)		{{server_addr}}	{{server_port}}
+i      # Generate names based on orders (e.g. eth0)		{{server_addr}}	{{server_port}}
+i      "net.ifnames=0"		{{server_addr}}	{{server_port}}
+i    ];		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # My Initrd config, enable ZSTD compression and use systemd-based stage 1 boot		{{server_addr}}	{{server_port}}
+i    boot.initrd = {		{{server_addr}}	{{server_port}}
+i      compressor = "zstd";		{{server_addr}}	{{server_port}}
+i      compressorArgs = ["-19" "-T0"];		{{server_addr}}	{{server_port}}
+i      systemd.enable = true;		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Install Grub		{{server_addr}}	{{server_port}}
+i    boot.loader.grub = {		{{server_addr}}	{{server_port}}
+i      enable = !config.boot.isContainer;		{{server_addr}}	{{server_port}}
+i      default = "saved";		{{server_addr}}	{{server_port}}
+i      devices = ["/dev/vda"];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Timezone, change based on your location		{{server_addr}}	{{server_port}}
+i    time.timeZone = "America/Los_Angeles";		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Root password and SSH keys. If network config is incorrect, use this password		{{server_addr}}	{{server_port}}
+i    # to manually adjust network config on serial console/VNC.		{{server_addr}}	{{server_port}}
+i    users.mutableUsers = false;		{{server_addr}}	{{server_port}}
+i    users.users.root = {		{{server_addr}}	{{server_port}}
+i      hashedPassword = "$6$9iybgF./X/RNsRrQ$h7Zlk//loJDPg7yCCPT/9jVU0Tvep6vEA1FvPBT.kqJUA5qlzhDJEYnBFlpBZmTXuUXjF0qgmDWmGkXIMC9JD/";		{{server_addr}}	{{server_port}}
+i      openssh.authorizedKeys.keys = [		{{server_addr}}	{{server_port}}
+i        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMcWoEQ4Mh27AV3ixcn9CMaUK/R+y4y5TqHmn2wJoN6i lantian@lantian-lenovo-archlinux"		{{server_addr}}	{{server_port}}
+i        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCulLscvKjEeroKdPE207W10MbZ3+ZYzWn34EnVeIG0GzfZ3zkjQJVfXFahu97P68Tw++N6zIk7htGic9SouQuAH8+8kzTB8/55Yjwp7W3bmqL7heTmznRmKehtKg6RVgcpvFfciyxQXV/bzOkyO+xKdmEw+fs92JLUFjd/rbUfVnhJKmrfnohdvKBfgA27szHOzLlESeOJf3PuXV7BLge1B+cO8TJMJXv8iG8P5Uu8UCr857HnfDyrJS82K541Scph3j+NXFBcELb2JSZcWeNJRVacIH3RzgLvp5NuWPBCt6KET1CCJZLsrcajyonkA5TqNhzumIYtUimEnAPoH51hoUD1BaL4wh2DRxqCWOoXn0HMrRmwx65nvWae6+C/7l1rFkWLBir4ABQiKoUb/MrNvoXb+Qw/ZRo6hVCL5rvlvFd35UF0/9wNu1nzZRSs9os2WLBMt00A4qgaU2/ux7G6KApb7shz1TXxkN1k+/EKkxPj/sQuXNvO6Bfxww1xEWFywMNZ8nswpSq/4Ml6nniS2OpkZVM2SQV1q/VdLEKYPrObtp2NgneQ4lzHmAa5MGnUCckES+qOrXFZAcpI126nv1uDXqA2aytN6WHGfN50K05MZ+jA8OM9CWFWIcglnT+rr3l+TI/FLAjE13t6fMTYlBH0C8q+RnQDiIncNwyidQ== lantian@LandeMacBook-Pro.local"		{{server_addr}}	{{server_port}}
+i      ];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Manage networking with systemd-networkd		{{server_addr}}	{{server_port}}
+i    systemd.network.enable = true;		{{server_addr}}	{{server_port}}
+i    services.resolved.enable = false;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Configure network IP and DNS		{{server_addr}}	{{server_port}}
+i    systemd.network.networks.eth0 = {		{{server_addr}}	{{server_port}}
+i      address = ["123.45.678.90/24"];		{{server_addr}}	{{server_port}}
+i      gateway = ["123.45.678.1"];		{{server_addr}}	{{server_port}}
+i      matchConfig.Name = "eth0";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i    networking.nameservers = [		{{server_addr}}	{{server_port}}
+i      "8.8.8.8"		{{server_addr}}	{{server_port}}
+i    ];		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Enable SSH server and listen on port 2222		{{server_addr}}	{{server_port}}
+i    services.openssh = {		{{server_addr}}	{{server_port}}
+i      enable = true;		{{server_addr}}	{{server_port}}
+i      ports = [2222];		{{server_addr}}	{{server_port}}
+i      settings = {		{{server_addr}}	{{server_port}}
+i        PasswordAuthentication = false;		{{server_addr}}	{{server_port}}
+i        PermitRootLogin = lib.mkForce "prohibit-password";		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Disable NixOS's builtin firewall		{{server_addr}}	{{server_port}}
+i    networking.firewall.enable = false;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Disable DHCP and configure IP manually		{{server_addr}}	{{server_port}}
+i    networking.useDHCP = false;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Hostname, can be set as you wish		{{server_addr}}	{{server_port}}
+i    networking.hostName = "bootstrap";		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Latest NixOS version on your first install. Used to prevent backward		{{server_addr}}	{{server_port}}
+i    # incompatibilities on major upgrades		{{server_addr}}	{{server_port}}
+i    system.stateVersion = "23.05";		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Kernel modules required by QEMU (KVM) virtual machine		{{server_addr}}	{{server_port}}
+i    boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''		{{server_addr}}	{{server_port}}
+i      # Set the system time from the hardware clock to work around a		{{server_addr}}	{{server_port}}
+i      # bug in qemu-kvm > 1.5.2 (where the VM clock is initialised		{{server_addr}}	{{server_port}}
+i      # to the *boot time* of the host).		{{server_addr}}	{{server_port}}
+i      hwclock -s		{{server_addr}}	{{server_port}}
+i    '';		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    boot.initrd.availableKernelModules = [		{{server_addr}}	{{server_port}}
+i      "virtio_net"		{{server_addr}}	{{server_port}}
+i      "virtio_pci"		{{server_addr}}	{{server_port}}
+i      "virtio_mmio"		{{server_addr}}	{{server_port}}
+i      "virtio_blk"		{{server_addr}}	{{server_port}}
+i      "virtio_scsi"		{{server_addr}}	{{server_port}}
+i    ];		{{server_addr}}	{{server_port}}
+i    boot.initrd.kernelModules = [		{{server_addr}}	{{server_port}}
+i      "virtio_balloon"		{{server_addr}}	{{server_port}}
+i      "virtio_console"		{{server_addr}}	{{server_port}}
+i      "virtio_rng"		{{server_addr}}	{{server_port}}
+i    ];		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, prepare `flake.nix` to manage nixpkgs versions in the Flake way,		{{server_addr}}	{{server_port}}
+ias well as introduce other modules I use, such as Impermanence:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    description = "Lan Tian's NixOS Flake";		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    inputs = {		{{server_addr}}	{{server_port}}
+i      nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";		{{server_addr}}	{{server_port}}
+i      impermanence.url = "github:nix-community/impermanence";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    outputs = {		{{server_addr}}	{{server_port}}
+i      self,		{{server_addr}}	{{server_port}}
+i      nixpkgs,		{{server_addr}}	{{server_port}}
+i      ...		{{server_addr}}	{{server_port}}
+i    } @ inputs: let		{{server_addr}}	{{server_port}}
+i      lib = nixpkgs.lib;		{{server_addr}}	{{server_port}}
+i    in rec {		{{server_addr}}	{{server_port}}
+i      nixosConfigurations.bootstrap = lib.nixosSystem {		{{server_addr}}	{{server_port}}
+i        system = "x86_64-linux";		{{server_addr}}	{{server_port}}
+i        modules = [		{{server_addr}}	{{server_port}}
+i          inputs.impermanence.nixosModules.impermanence		{{server_addr}}	{{server_port}}
+i          ./configuration.nix		{{server_addr}}	{{server_port}}
+i        ];		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRight now, this system config will not build, as we haven't configured		{{server_addr}}	{{server_port}}
+ifilesystems yet. If you try to build it with `nixos-rebuild build --flake .#bootstrap`		{{server_addr}}	{{server_port}}
+inow, you will see the following errors:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  error:		{{server_addr}}	{{server_port}}
+i  Failed assertions:		{{server_addr}}	{{server_port}}
+i  - The 『fileSystems』 option does not specify your root file system.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTherefore, our next step is adding the Disko module, and the		{{server_addr}}	{{server_port}}
+iconfiguration for partition tables and filesystems.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Partitioning Disk Image (with Impermanence)		{{server_addr}}	{{server_port}}
+i> If you don't use Impermanence, or other mechanisms that use tmpfs as		{{server_addr}}	{{server_port}}
+i> the root partition, please skip to the next section.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iChange your `flake.nix` to add the Disko module:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    description = "Lan Tian's NixOS Flake";		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    inputs = {		{{server_addr}}	{{server_port}}
+i      nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";		{{server_addr}}	{{server_port}}
+i      impermanence.url = "github:nix-community/impermanence";		{{server_addr}}	{{server_port}}
+i      # Add the following lines		{{server_addr}}	{{server_port}}
+i      disko = {		{{server_addr}}	{{server_port}}
+i        url = "github:nix-community/disko";		{{server_addr}}	{{server_port}}
+i        inputs.nixpkgs.follows = "nixpkgs";		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    outputs = {		{{server_addr}}	{{server_port}}
+i      self,		{{server_addr}}	{{server_port}}
+i      nixpkgs,		{{server_addr}}	{{server_port}}
+i      ...		{{server_addr}}	{{server_port}}
+i    } @ inputs: let		{{server_addr}}	{{server_port}}
+i      lib = nixpkgs.lib;		{{server_addr}}	{{server_port}}
+i    in rec {		{{server_addr}}	{{server_port}}
+i      nixosConfigurations.bootstrap = lib.nixosSystem {		{{server_addr}}	{{server_port}}
+i        system = "x86_64-linux";		{{server_addr}}	{{server_port}}
+i        modules = [		{{server_addr}}	{{server_port}}
+i          inputs.impermanence.nixosModules.impermanence		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          # Add the next line		{{server_addr}}	{{server_port}}
+i          inputs.disko.nixosModules.disko		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          ./configuration.nix		{{server_addr}}	{{server_port}}
+i        ];		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, we need to set up partitioning in the disk image with options		{{server_addr}}	{{server_port}}
+iprovided by Disko. Modify `configuration.nix` and add the following		{{server_addr}}	{{server_port}}
+iconfig:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    config,		{{server_addr}}	{{server_port}}
+i    pkgs,		{{server_addr}}	{{server_port}}
+i    lib,		{{server_addr}}	{{server_port}}
+i    ...		{{server_addr}}	{{server_port}}
+i  }: {		{{server_addr}}	{{server_port}}
+i    # Other configurations omitted		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    disko = {		{{server_addr}}	{{server_port}}
+i      # Do not let Disko manage fileSystems.* config for NixOS.		{{server_addr}}	{{server_port}}
+i      # Reason is that Disko mounts partitions by GPT partition names, which are		{{server_addr}}	{{server_port}}
+i      # easily overwritten with tools like fdisk. When you fail to deploy a new		{{server_addr}}	{{server_port}}
+i      # config in this case, the old config that comes with the disk image will		{{server_addr}}	{{server_port}}
+i      # not boot either.		{{server_addr}}	{{server_port}}
+i      enableConfig = false;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      devices = {		{{server_addr}}	{{server_port}}
+i        # Define a disk		{{server_addr}}	{{server_port}}
+i        disk.main = {		{{server_addr}}	{{server_port}}
+i          # Size for generated disk image. 2GB is enough for me. Adjust per your need.		{{server_addr}}	{{server_port}}
+i          imageSize = "2G";		{{server_addr}}	{{server_port}}
+i          # Path to disk. When Disko generates disk images, it actually runs a QEMU		{{server_addr}}	{{server_port}}
+i          # virtual machine and runs the installation steps. Whether your VPS		{{server_addr}}	{{server_port}}
+i          # recognizes its hard disk as "sda" or "vda" doesn't matter. We abide to		{{server_addr}}	{{server_port}}
+i          # Disko's QEMU VM and use "vda" here.		{{server_addr}}	{{server_port}}
+i          device = "/dev/vda";		{{server_addr}}	{{server_port}}
+i          type = "disk";		{{server_addr}}	{{server_port}}
+i          # Parititon table for this disk		{{server_addr}}	{{server_port}}
+i          content = {		{{server_addr}}	{{server_port}}
+i            # Use GPT partition table. There seems to be some issues with MBR support		{{server_addr}}	{{server_port}}
+i            # from Disko.		{{server_addr}}	{{server_port}}
+i            type = "gpt";		{{server_addr}}	{{server_port}}
+i            # Partition list		{{server_addr}}	{{server_port}}
+i            partitions = {		{{server_addr}}	{{server_port}}
+i              # Compared to MBR, GPT partition table doesn't reserve space for MBR		{{server_addr}}	{{server_port}}
+i              # boot record. We need to reserve the first 1MB for MBR boot record,		{{server_addr}}	{{server_port}}
+i              # so Grub can be installed here.		{{server_addr}}	{{server_port}}
+i              boot = {		{{server_addr}}	{{server_port}}
+i                size = "1M";		{{server_addr}}	{{server_port}}
+i                type = "EF02"; # for grub MBR		{{server_addr}}	{{server_port}}
+i                # Use the highest priority to ensure it's at the beginning		{{server_addr}}	{{server_port}}
+i                priority = 0;		{{server_addr}}	{{server_port}}
+i              };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i              # ESP partition, or "boot" partition as you may call it. In theory,		{{server_addr}}	{{server_port}}
+i              # this config will support VPSes with both EFI and BIOS boot modes.		{{server_addr}}	{{server_port}}
+i              ESP = {		{{server_addr}}	{{server_port}}
+i                name = "ESP";		{{server_addr}}	{{server_port}}
+i                # Reserve 512MB of space per my own need. If you use more/less		{{server_addr}}	{{server_port}}
+i                # on your boot partition, adjust accordingly.		{{server_addr}}	{{server_port}}
+i                size = "512M";		{{server_addr}}	{{server_port}}
+i                type = "EF00";		{{server_addr}}	{{server_port}}
+i                # Use the second highest priority so it's before the remaining space		{{server_addr}}	{{server_port}}
+i                priority = 1;		{{server_addr}}	{{server_port}}
+i                # Format as FAT32		{{server_addr}}	{{server_port}}
+i                content = {		{{server_addr}}	{{server_port}}
+i                  type = "filesystem";		{{server_addr}}	{{server_port}}
+i                  format = "vfat";		{{server_addr}}	{{server_port}}
+i                  # Use as boot partition. Disko use the information here to mount		{{server_addr}}	{{server_port}}
+i                  # partitions on disk image generation. Use the same settings as		{{server_addr}}	{{server_port}}
+i                  # fileSystems.*		{{server_addr}}	{{server_port}}
+i                  mountpoint = "/boot";		{{server_addr}}	{{server_port}}
+i                  mountOptions = ["fmask=0077" "dmask=0077"];		{{server_addr}}	{{server_port}}
+i                };		{{server_addr}}	{{server_port}}
+i              };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i              # Parition to store the NixOS system, use all remaining space.		{{server_addr}}	{{server_port}}
+i              nix = {		{{server_addr}}	{{server_port}}
+i                size = "100%";		{{server_addr}}	{{server_port}}
+i                # Format as Btrfs. Change per your needs.		{{server_addr}}	{{server_port}}
+i                content = {		{{server_addr}}	{{server_port}}
+i                  type = "filesystem";		{{server_addr}}	{{server_port}}
+i                  format = "btrfs";		{{server_addr}}	{{server_port}}
+i                  # Use as the Nix partition. Disko use the information here to mount		{{server_addr}}	{{server_port}}
+i                  # partitions on disk image generation. Use the same settings as		{{server_addr}}	{{server_port}}
+i                  # fileSystems.*		{{server_addr}}	{{server_port}}
+i                  mountpoint = "/nix";		{{server_addr}}	{{server_port}}
+i                  mountOptions = ["compress-force=zstd" "nosuid" "nodev"];		{{server_addr}}	{{server_port}}
+i                };		{{server_addr}}	{{server_port}}
+i              };		{{server_addr}}	{{server_port}}
+i            };		{{server_addr}}	{{server_port}}
+i          };		{{server_addr}}	{{server_port}}
+i        };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i        # Since I enabled Impermanence, I need to declare the root partition as tmpfs,		{{server_addr}}	{{server_port}}
+i        # so Disko can mount the partitions when generating disk images		{{server_addr}}	{{server_port}}
+i        nodev."/" = {		{{server_addr}}	{{server_port}}
+i          fsType = "tmpfs";		{{server_addr}}	{{server_port}}
+i          mountOptions = ["relatime" "mode=755" "nosuid" "nodev"];		{{server_addr}}	{{server_port}}
+i        };		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Since we aren't letting Disko manage fileSystems.*, we need to configure it ourselves		{{server_addr}}	{{server_port}}
+i    # Root partition, is tmpfs because I enabled impermanence.		{{server_addr}}	{{server_port}}
+i    fileSystems."/" = {		{{server_addr}}	{{server_port}}
+i      device = "tmpfs";		{{server_addr}}	{{server_port}}
+i      fsType = "tmpfs";		{{server_addr}}	{{server_port}}
+i      options = ["relatime" "mode=755" "nosuid" "nodev"];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # /nix partition, third partition on the disk image. Since my VPS recognizes		{{server_addr}}	{{server_port}}
+i    # hard drive as "sda", I specify "sda3" here. If your VPS recognizes the drive		{{server_addr}}	{{server_port}}
+i    # differently, change accordingly		{{server_addr}}	{{server_port}}
+i    fileSystems."/nix" = {		{{server_addr}}	{{server_port}}
+i      device = "/dev/sda3";		{{server_addr}}	{{server_port}}
+i      fsType = "btrfs";		{{server_addr}}	{{server_port}}
+i      options = ["compress-force=zstd" "nosuid" "nodev"];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # /boot partition, second partition on the disk image. Since my VPS recognizes		{{server_addr}}	{{server_port}}
+i    # hard drive as "sda", I specify "sda2" here. If your VPS recognizes the drive		{{server_addr}}	{{server_port}}
+i    # differently, change accordingly		{{server_addr}}	{{server_port}}
+i    fileSystems."/boot" = {		{{server_addr}}	{{server_port}}
+i      device = "/dev/sda2";		{{server_addr}}	{{server_port}}
+i      fsType = "vfat";		{{server_addr}}	{{server_port}}
+i      options = ["fmask=0077" "dmask=0077"];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Partitioning Disk Image (Regular Install)		{{server_addr}}	{{server_port}}
+i> If you use Impermanence, or other mechanisms that use tmpfs as the		{{server_addr}}	{{server_port}}
+i> root partition, read the last section and skip this section.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSame as the last section, change your `flake.nix` to add the Disko		{{server_addr}}	{{server_port}}
+imodule:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    description = "Lan Tian's NixOS Flake";		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    inputs = {		{{server_addr}}	{{server_port}}
+i      nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";		{{server_addr}}	{{server_port}}
+i      impermanence.url = "github:nix-community/impermanence";		{{server_addr}}	{{server_port}}
+i      # Add the following lines		{{server_addr}}	{{server_port}}
+i      disko = {		{{server_addr}}	{{server_port}}
+i        url = "github:nix-community/disko";		{{server_addr}}	{{server_port}}
+i        inputs.nixpkgs.follows = "nixpkgs";		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    outputs = {		{{server_addr}}	{{server_port}}
+i      self,		{{server_addr}}	{{server_port}}
+i      nixpkgs,		{{server_addr}}	{{server_port}}
+i      ...		{{server_addr}}	{{server_port}}
+i    } @ inputs: let		{{server_addr}}	{{server_port}}
+i      lib = nixpkgs.lib;		{{server_addr}}	{{server_port}}
+i    in rec {		{{server_addr}}	{{server_port}}
+i      nixosConfigurations.bootstrap = lib.nixosSystem {		{{server_addr}}	{{server_port}}
+i        system = "x86_64-linux";		{{server_addr}}	{{server_port}}
+i        modules = [		{{server_addr}}	{{server_port}}
+i          inputs.impermanence.nixosModules.impermanence		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          # Add the next line		{{server_addr}}	{{server_port}}
+i          inputs.disko.nixosModules.disko		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i          ./configuration.nix		{{server_addr}}	{{server_port}}
+i        ];		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, we need to set up partitioning in the disk image with options		{{server_addr}}	{{server_port}}
+iprovided by Disko. Modify `configuration.nix` and add the following		{{server_addr}}	{{server_port}}
+iconfig:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    config,		{{server_addr}}	{{server_port}}
+i    pkgs,		{{server_addr}}	{{server_port}}
+i    lib,		{{server_addr}}	{{server_port}}
+i    ...		{{server_addr}}	{{server_port}}
+i  }: {		{{server_addr}}	{{server_port}}
+i    # Other configurations omitted		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    disko = {		{{server_addr}}	{{server_port}}
+i      # Do not let Disko manage fileSystems.* config for NixOS.		{{server_addr}}	{{server_port}}
+i      # Reason is that Disko mounts partitions by GPT partition names, which are		{{server_addr}}	{{server_port}}
+i      # easily overwritten with tools like fdisk. When you fail to deploy a new		{{server_addr}}	{{server_port}}
+i      # config in this case, the old config that comes with the disk image will		{{server_addr}}	{{server_port}}
+i      # not boot either.		{{server_addr}}	{{server_port}}
+i      enableConfig = false;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      devices = {		{{server_addr}}	{{server_port}}
+i        # Define a disk		{{server_addr}}	{{server_port}}
+i        disk.main = {		{{server_addr}}	{{server_port}}
+i          # Size for generated disk image. 2GB is enough for me. Adjust per your need.		{{server_addr}}	{{server_port}}
+i          imageSize = "2G";		{{server_addr}}	{{server_port}}
+i          # Path to disk. When Disko generates disk images, it actually runs a QEMU		{{server_addr}}	{{server_port}}
+i          # virtual machine and runs the installation steps. Whether your VPS		{{server_addr}}	{{server_port}}
+i          # recognizes its hard disk as "sda" or "vda" doesn't matter. We abide to		{{server_addr}}	{{server_port}}
+i          # Disko's QEMU VM and use "vda" here.		{{server_addr}}	{{server_port}}
+i          device = "/dev/vda";		{{server_addr}}	{{server_port}}
+i          type = "disk";		{{server_addr}}	{{server_port}}
+i          # Parititon table for this disk		{{server_addr}}	{{server_port}}
+i          content = {		{{server_addr}}	{{server_port}}
+i            # Use GPT partition table. There seems to be some issues with MBR support		{{server_addr}}	{{server_port}}
+i            # from Disko.		{{server_addr}}	{{server_port}}
+i            type = "gpt";		{{server_addr}}	{{server_port}}
+i            # Partition list		{{server_addr}}	{{server_port}}
+i            partitions = {		{{server_addr}}	{{server_port}}
+i              # Compared to MBR, GPT partition table doesn't reserve space for MBR		{{server_addr}}	{{server_port}}
+i              # boot record. We need to reserve the first 1MB for MBR boot record,		{{server_addr}}	{{server_port}}
+i              # so Grub can be installed here.		{{server_addr}}	{{server_port}}
+i              boot = {		{{server_addr}}	{{server_port}}
+i                size = "1M";		{{server_addr}}	{{server_port}}
+i                type = "EF02"; # for grub MBR		{{server_addr}}	{{server_port}}
+i                # Use the highest priority to ensure it's at the beginning		{{server_addr}}	{{server_port}}
+i                priority = 0;		{{server_addr}}	{{server_port}}
+i              };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i              # ESP partition, or "boot" partition as you may call it. In theory,		{{server_addr}}	{{server_port}}
+i              # this config will support VPSes with both EFI and BIOS boot modes.		{{server_addr}}	{{server_port}}
+i              ESP = {		{{server_addr}}	{{server_port}}
+i                name = "ESP";		{{server_addr}}	{{server_port}}
+i                # Reserve 512MB of space per my own need. If you use more/less		{{server_addr}}	{{server_port}}
+i                # on your boot partition, adjust accordingly.		{{server_addr}}	{{server_port}}
+i                size = "512M";		{{server_addr}}	{{server_port}}
+i                type = "EF00";		{{server_addr}}	{{server_port}}
+i                # Use the second highest priority so it's before the remaining space		{{server_addr}}	{{server_port}}
+i                priority = 1;		{{server_addr}}	{{server_port}}
+i                # Format as FAT32		{{server_addr}}	{{server_port}}
+i                content = {		{{server_addr}}	{{server_port}}
+i                  type = "filesystem";		{{server_addr}}	{{server_port}}
+i                  format = "vfat";		{{server_addr}}	{{server_port}}
+i                  # Use as boot partition. Disko use the information here to mount		{{server_addr}}	{{server_port}}
+i                  # partitions on disk image generation. Use the same settings as		{{server_addr}}	{{server_port}}
+i                  # fileSystems.*		{{server_addr}}	{{server_port}}
+i                  mountpoint = "/boot";		{{server_addr}}	{{server_port}}
+i                  mountOptions = ["fmask=0077" "dmask=0077"];		{{server_addr}}	{{server_port}}
+i                };		{{server_addr}}	{{server_port}}
+i              };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i              # Parition to store the NixOS system, use all remaining space.		{{server_addr}}	{{server_port}}
+i              nix = {		{{server_addr}}	{{server_port}}
+i                size = "100%";		{{server_addr}}	{{server_port}}
+i                # Format as Btrfs. Change per your needs.		{{server_addr}}	{{server_port}}
+i                content = {		{{server_addr}}	{{server_port}}
+i                  type = "filesystem";		{{server_addr}}	{{server_port}}
+i                  format = "btrfs";		{{server_addr}}	{{server_port}}
+i                  # Use as the root partition. Disko use the information here to mount		{{server_addr}}	{{server_port}}
+i                  # partitions on disk image generation. Use the same settings as		{{server_addr}}	{{server_port}}
+i                  # fileSystems.*		{{server_addr}}	{{server_port}}
+i                  mountpoint = "/";		{{server_addr}}	{{server_port}}
+i                  mountOptions = ["compress-force=zstd" "nosuid" "nodev"];		{{server_addr}}	{{server_port}}
+i                };		{{server_addr}}	{{server_port}}
+i              };		{{server_addr}}	{{server_port}}
+i            };		{{server_addr}}	{{server_port}}
+i          };		{{server_addr}}	{{server_port}}
+i        };		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # Since we aren't letting Disko manage fileSystems.*, we need to configure it ourselves		{{server_addr}}	{{server_port}}
+i    # Root partition, third partition on the disk image. Since my VPS recognizes		{{server_addr}}	{{server_port}}
+i    # hard drive as "sda", I specify "sda3" here. If your VPS recognizes the drive		{{server_addr}}	{{server_port}}
+i    # differently, change accordingly		{{server_addr}}	{{server_port}}
+i    fileSystems."/" = {		{{server_addr}}	{{server_port}}
+i      device = "/dev/sda3";		{{server_addr}}	{{server_port}}
+i      fsType = "btrfs";		{{server_addr}}	{{server_port}}
+i      options = ["compress-force=zstd" "nosuid" "nodev"];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # /boot partition, second partition on the disk image. Since my VPS recognizes		{{server_addr}}	{{server_port}}
+i    # hard drive as "sda", I specify "sda2" here. If your VPS recognizes the drive		{{server_addr}}	{{server_port}}
+i    # differently, change accordingly		{{server_addr}}	{{server_port}}
+i    fileSystems."/boot" = {		{{server_addr}}	{{server_port}}
+i      device = "/dev/sda2";		{{server_addr}}	{{server_port}}
+i      fsType = "vfat";		{{server_addr}}	{{server_port}}
+i      options = ["fmask=0077" "dmask=0077"];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Generate Disk Image		{{server_addr}}	{{server_port}}
+iChange `flake.nix` to add a "package" that calls the generate disk		{{server_addr}}	{{server_port}}
+iimage function from Disko:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    description = "Lan Tian's NixOS Flake";		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    inputs = {		{{server_addr}}	{{server_port}}
+i      nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";		{{server_addr}}	{{server_port}}
+i      impermanence.url = "github:nix-community/impermanence";		{{server_addr}}	{{server_port}}
+i      disko = {		{{server_addr}}	{{server_port}}
+i        url = "github:nix-community/disko";		{{server_addr}}	{{server_port}}
+i        inputs.nixpkgs.follows = "nixpkgs";		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    outputs = {		{{server_addr}}	{{server_port}}
+i      self,		{{server_addr}}	{{server_port}}
+i      nixpkgs,		{{server_addr}}	{{server_port}}
+i      ...		{{server_addr}}	{{server_port}}
+i    } @ inputs: let		{{server_addr}}	{{server_port}}
+i      lib = nixpkgs.lib;		{{server_addr}}	{{server_port}}
+i    in rec {		{{server_addr}}	{{server_port}}
+i      nixosConfigurations.bootstrap = lib.nixosSystem {		{{server_addr}}	{{server_port}}
+i        system = "x86_64-linux";		{{server_addr}}	{{server_port}}
+i        modules = [		{{server_addr}}	{{server_port}}
+i          inputs.impermanence.nixosModules.impermanence		{{server_addr}}	{{server_port}}
+i          inputs.disko.nixosModules.disko		{{server_addr}}	{{server_port}}
+i          ./configuration.nix		{{server_addr}}	{{server_port}}
+i        ];		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # Add the following lines		{{server_addr}}	{{server_port}}
+i      packages.x86_64-linux = {		{{server_addr}}	{{server_port}}
+i        image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, run `nix build .#image` . After a short while, you will see		{{server_addr}}	{{server_port}}
+ithe generated disk image at `result/main.raw` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Upload Disk Image to VPS		{{server_addr}}	{{server_port}}
+iBoot into rescue environment, or a lightweight Linux distro like		{{server_addr}}	{{server_port}}
+iAlpine Linux, on your VPS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf your rescue environment has a SSH server, use the following command		{{server_addr}}	{{server_port}}
+ito upload your image:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Change to sda/vda based on how your VPS recognizes its hard drive		{{server_addr}}	{{server_port}}
+i  cat result/main.raw | ssh root@123.45.678.90 "dd of=/dev/sda"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf your rescue environment doesn't have SSH, use the following		{{server_addr}}	{{server_port}}
+icommand: **(ATTENTION: NO ENCRYPTION!)**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # Change to sda/vda based on how your VPS recognizes its hard drive		{{server_addr}}	{{server_port}}
+i  # Run this on VPS		{{server_addr}}	{{server_port}}
+i  nc -l 1234 | dd of=/dev/sda		{{server_addr}}	{{server_port}}
+i  # Run this on local computer		{{server_addr}}	{{server_port}}
+i  cat result/main.raw | nc 123.45.678.89 1234		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iReboot your VPS after the command finishes. Now you should be booting		{{server_addr}}	{{server_port}}
+iinto the freshly installed NixOS.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Expand Partition Size		{{server_addr}}	{{server_port}}
+iSince the disk image we created is only 2GB large, the image written		{{server_addr}}	{{server_port}}
+iinto VPS's hard drive doesn't consume all spaces on the hard drive.		{{server_addr}}	{{server_port}}
+iYou will need to manually expand the partition.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRun `fdisk /dev/sda` , remove the third partition for `/nix` (or `/` ),		{{server_addr}}	{{server_port}}
+iand recreate the partition with the same start position, and extend		{{server_addr}}	{{server_port}}
+ithe end position to the end of the hard drive. Do not erase the		{{server_addr}}	{{server_port}}
+ifilesystem header when prompted!		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFinally, run the filesystem resize command for your filesystem. For		{{server_addr}}	{{server_port}}
+iext4 partitions, use `resize2fs /dev/sda3` . For Btrfs, use `btrfs		{{server_addr}}	{{server_port}}
+ifilesystem resize max /nix` (or '/').		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

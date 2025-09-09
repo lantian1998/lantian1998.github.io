@@ -1,0 +1,63 @@
+i## 什么是 BIRD？什么是 Bird-lg？		{{server_addr}}	{{server_port}}
+iBIRD 是 Linux 上常用的一款 BGP 路由软件。我主要		{{server_addr}}	{{server_port}}
+i在 DN42 网络内使用 Bird		{{server_addr}}	{{server_port}}
+i，与其它用户建立连接。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBird-lg		{{server_addr}}	{{server_port}}
+i是 GitHub 用户 sileht 开发的一款基于 Python 2 的程序。它提供了一个网页		{{server_addr}}	{{server_port}}
+i面板，可以显示各个服务器上的 BIRD 路由软件的状态，以及查询到指定 IP 的		{{server_addr}}	{{server_port}}
+i路由。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 为什么我要用 Go 语言重写？		{{server_addr}}	{{server_port}}
+i- Bird-lg 基于 Python 2 以及 Flask，因此占用内存较大（20-30 MB）。		{{server_addr}}	{{server_port}}
+i  Bird-lgproxy 内存占用量也差不多 20 MB，并且每台服务器上都要运行一个。		{{server_addr}}	{{server_port}}
+i  本站所在的 512 MB 内存的 VPS 已经出现过多次由于内存耗尽外加 SWAP 所		{{server_addr}}	{{server_port}}
+i  在硬盘读写缓慢，导致 Docker、nginx、MySQL、PHP 轮流崩的情况，只能重		{{server_addr}}	{{server_port}}
+i  启解决。		{{server_addr}}	{{server_port}}
+i- Go 重写版本只消耗 6 MB 内存。		{{server_addr}}	{{server_port}}
+i- Bird-lg 读取多个服务器的状态是 ** 按顺序 ** 进行的，而非并行进行。有		{{server_addr}}	{{server_port}}
+i  时某台服务器网络状态不好，或者 ZeroTier One 抽风，会导致读取时卡较长		{{server_addr}}	{{server_port}}
+i  时间。		{{server_addr}}	{{server_port}}
+i- Go 重写版本使用 Goroutine ** 并行 ** 请求多台服务器，在服务器多、网		{{server_addr}}	{{server_port}}
+i  络差的情况下成倍地加快页面加载速度。		{{server_addr}}	{{server_port}}
+i- 这也是我学 Go 语言的一个练手作。		{{server_addr}}	{{server_port}}
+i## 实现了什么功能？		{{server_addr}}	{{server_port}}
+i对于 Bird-lgproxy，实现了以下功能：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 向 Bird 发送指令		{{server_addr}}	{{server_port}}
+i- 执行 Traceroute 并返回结果		{{server_addr}}	{{server_port}}
+i对于 Bird-lg，实现了以下功能：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 基本的状态显示，如图：		{{server_addr}}	{{server_port}}
+i- 查询到指定 IP 的路由信息：		{{server_addr}}	{{server_port}}
+i- 查询信息内 IP 及 ASN 的高亮，以及相应的 WHOIS 查询：		{{server_addr}}	{{server_port}}
+i- Traceroute（下图中可见我的网络到 DN42 DNS 的路由出现了问题）：		{{server_addr}}	{{server_port}}
+i## 什么没实现？		{{server_addr}}	{{server_port}}
+i相比		{{server_addr}}	{{server_port}}
+iPython 版的 Bird-lg		{{server_addr}}	{{server_port}}
+i，Bird-lgproxy 缺少如下功能：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- IP 来源限制		{{server_addr}}	{{server_port}}
+iBird-lg 缺少如下功能：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 网页右侧的查询历史记录		{{server_addr}}	{{server_port}}
+i缺少这些功能完全是因为我用不到，例如我通过将 Bird-lgproxy 绑定到指定网		{{server_addr}}	{{server_port}}
+i卡来起到 IP 限制的作用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 演示地址		{{server_addr}}	{{server_port}}
+i项目地址及源代码：		{{server_addr}}	{{server_port}}
+ihttps://github.com/xddxdd/bird-lg-go		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i直接进入相应文件夹 `go build` 获得可执行文件。用 `-h` 参数来查看可用参		{{server_addr}}	{{server_port}}
+i数。程序没有配置文件，所有设置通过参数完成。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i演示地址：		{{server_addr}}	{{server_port}}
+ihttps://lg.lantian.pub		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我还自己修改了 Python 的 bird-lg，用 `grequests` 加上了并行请求功能，		{{server_addr}}	{{server_port}}
+i项目地址在此：		{{server_addr}}	{{server_port}}
+ihttps://github.com/xddxdd/bird-lg		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i另外 Go 版本的 Bird-lgproxy 可以直接代替 Python 版的 Bird-lgproxy，可		{{server_addr}}	{{server_port}}
+i以和 Python 版的 Bird-lg 配合使用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,50 @@
+iA few words first.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Moved to a new place.		{{server_addr}}	{{server_port}}
+i2. Just had internet installed, with the interface in the living room.		{{server_addr}}	{{server_port}}
+i3. No air conditioning in the living room.		{{server_addr}}	{{server_port}}
+iDevice situation: Two laptops (Macbook and Win7), one phone (seems		{{server_addr}}	{{server_port}}
+iuseless). Requirement:		{{server_addr}}	{{server_port}}
+iUse the Win7 laptop to broadcast a wireless network.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTried with Macbook, but it could only create an Adhoc hotspot, which		{{server_addr}}	{{server_port}}
+imy Android phone didn't recognize. Tried Win7's built-in network		{{server_addr}}	{{server_port}}
+icreation — also Adhoc. Phone didn't recognize it, and although		{{server_addr}}	{{server_port}}
+iMacbook detected it, connection failed.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBackground introduction complete. Main text begins.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Start Menu → Programs → Accessories. Right-click and open Command		{{server_addr}}	{{server_port}}
+i   Prompt as Administrator. Enter the command:		{{server_addr}}	{{server_port}}
+i  netsh wlan set hostednetwork mode=allow ssid=lantian key=lantian.pub		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iChange "lantian" to your desired network name and "lantian.pub" to		{{server_addr}}	{{server_port}}
+iyour password (minimum 8 characters).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Open Network and Sharing Center. Find the newly appeared wireless		{{server_addr}}	{{server_port}}
+i   network (should include "Microsoft Virtual WiFi Miniport Adapter").		{{server_addr}}	{{server_port}}
+i   Rename it, e.g., "WiFi Hotspot" (optional, but keep it		{{server_addr}}	{{server_port}}
+i   identifiable).		{{server_addr}}	{{server_port}}
+i   If disabled, enable it. If it doesn't appear, see PS at the end.		{{server_addr}}	{{server_port}}
+i2. Check all network connections. Set all IP configurations to		{{server_addr}}	{{server_port}}
+i   automatic assignment.		{{server_addr}}	{{server_port}}
+i   (Can skip initially, but errors may occur later if omitted)		{{server_addr}}	{{server_port}}
+i3. Right-click your external connection (for ADSL: "Broadband		{{server_addr}}	{{server_port}}
+i   Connection"; for LAN: "Local Area Connection").		{{server_addr}}	{{server_port}}
+i   Properties → Sharing → Check "Allow other network users to connect		{{server_addr}}	{{server_port}}
+i   through this computer』s Internet connection".		{{server_addr}}	{{server_port}}
+i   Under "Home networking connection", select "WiFi Hotspot" (the		{{server_addr}}	{{server_port}}
+i   newly created network).		{{server_addr}}	{{server_port}}
+iIf you see the English prompt "Internet Connection Sharing cannot be		{{server_addr}}	{{server_port}}
+ienabled...", execute Step 3.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. In Command Prompt, enter:		{{server_addr}}	{{server_port}}
+i  netsh wlan start hostednetwork		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSetup complete. All devices can now connect to the internet.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iPS: If the wireless network doesn』t appear, update your wireless card		{{server_addr}}	{{server_port}}
+idriver to the latest using tools like Driver Genius or Driver Life. If		{{server_addr}}	{{server_port}}
+istill unsuccessful, your network card doesn』t support this feature —		{{server_addr}}	{{server_port}}
+igive up.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

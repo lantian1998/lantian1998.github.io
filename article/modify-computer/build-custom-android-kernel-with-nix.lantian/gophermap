@@ -1,0 +1,546 @@
+i# 前言		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我现在使用的手机是 Motorola Edge+ 2023，一台 Android 手机。为了更好的		{{server_addr}}	{{server_port}}
+i自定义手机的功能，我解锁了手机的 Bootloader，并且获取了 Root 权限，以		{{server_addr}}	{{server_port}}
+i便安装 LSPosed 以及基于 LSPosed 的各种插件。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我使用的 Root 方案是		{{server_addr}}	{{server_port}}
+hKernelSU	URL:https://kernelsu.org/	{{server_addr}}	{{server_port}}
+i，通过修改 Linux 内核，从而允许且只允许指定程序获取 Root 权限。虽然		{{server_addr}}	{{server_port}}
+iKernelSU 官方提供了适配大部分手机的		{{server_addr}}	{{server_port}}
+hGKI	URL:https://source.android.com/docs/core/architecture/kernel/generic-kernel-image	{{server_addr}}	{{server_port}}
+i内核镜像，但我给手机刷了不兼容 GKI 的 LineageOS，所以只能自己编译内核。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于直接修改内核镜像的难度较大，我们一般是从手机厂商获取以 GPLv2 协议		{{server_addr}}	{{server_port}}
+i开源的内核源码，按照		{{server_addr}}	{{server_port}}
+hKernelSU 的官方教程	URL:https://kernelsu.org/zh_CN/guide/how-to-integrate-for-non-gki.html	{{server_addr}}	{{server_port}}
+i进行修改后，再编译成完整的内核。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> 注：现在有一种新的 Root 方案		{{server_addr}}	{{server_port}}
+h> APatch	URL:https://apatch.dev/	{{server_addr}}	{{server_port}}
+i> ，通过直接修改内核镜像来实现类似 KernelSU 的功能。我没试过 APatch，		{{server_addr}}	{{server_port}}
+i> 但如果你不想自己编译内核，可以尝试一下。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i由于 KernelSU 使用广泛，有一些开发者编写了 GitHub Actions 的 Workflow，		{{server_addr}}	{{server_port}}
+i例如		{{server_addr}}	{{server_port}}
+hhttps://github.com/xiaoleGun/KernelSU_Action	URL:https://github.com/xiaoleGun/KernelSU_Action	{{server_addr}}	{{server_port}}
+i，可以自动给内核源码打补丁并进行编译。但我在尝试这些 Workflow 时发现了		{{server_addr}}	{{server_port}}
+i一些问题：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 这些 Workflow 会同时安装多种编译器，包括 GitHub Actions 环境自带的		{{server_addr}}	{{server_port}}
+i  GCC，Google 专门为 Android 提供的		{{server_addr}}	{{server_port}}
+h  ARM32 GCC	URL:https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/	{{server_addr}}	{{server_port}}
+i  和		{{server_addr}}	{{server_port}}
+h  ARM64 GCC	URL:https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9	{{server_addr}}	{{server_port}}
+i  ，以及		{{server_addr}}	{{server_port}}
+h  Clang	URL:https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/	{{server_addr}}	{{server_port}}
+i  。如果编译参数设置错误，编译 Android 内核时会混用多种编译器进行编译，		{{server_addr}}	{{server_port}}
+i  导致最终生成的内核运行不稳定，甚至无法启动。		{{server_addr}}	{{server_port}}
+i- 这些 Workflow 都只能在 GitHub Actions 上运行，难以在本地进行调试。		{{server_addr}}	{{server_port}}
+i- 这些 Workflow 一般都是定时运行，或者由用户手动触发。如果采用定时运行，		{{server_addr}}	{{server_port}}
+i  即使内核源码和 KernelSU 源码都没有更新，Workflow 也会反复重新编译内		{{server_addr}}	{{server_port}}
+i  核，浪费计算资源。如果由用户手动触发，可能无法及时获取到最新的内核更		{{server_addr}}	{{server_port}}
+i  新。		{{server_addr}}	{{server_port}}
+i因为我最近一直在用 NixOS 作为操作系统，我自然想到了用 Nix 包管理器解决		{{server_addr}}	{{server_port}}
+i上面的问题：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- Nix 在构建软件包时会创建一个隔离环境，其中只含有我指定的编译器。这就		{{server_addr}}	{{server_port}}
+i  避免了混用编译器导致的问题。		{{server_addr}}	{{server_port}}
+i- Nix 包管理器既可以在本地的 Linux 系统上运行，也可以在 GitHub Actions		{{server_addr}}	{{server_port}}
+i  上运行，并且创建的隔离环境都是一样的。因此我可以在本地调试完流程，然		{{server_addr}}	{{server_port}}
+i  后放心地上传到 GitHub 上让 Actions 去自动编译更新后的内核。		{{server_addr}}	{{server_port}}
+i- Nix 在构建软件包时同样会记录所有源代码的版本（实际上是记录源码的		{{server_addr}}	{{server_port}}
+i  SHA256）和编译命令。如果源代码版本和编译命令都和之前的相同，Nix 可以		{{server_addr}}	{{server_port}}
+i  直接调出上次的编译结果，不用重复编译。		{{server_addr}}	{{server_port}}
+i于是，我就写了一套 Nix 的编译脚本（Nix Derivation），用来给我的手机编		{{server_addr}}	{{server_port}}
+i译内核。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# 使用		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我把这套编译脚本上传到了 GitHub：		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder	URL:https://github.com/xddxdd/nix-kernelsu-builder	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这套脚本可以自动给你的内核源码打上 KernelSU 和 SusFS 补丁，然后编译内		{{server_addr}}	{{server_port}}
+i核并生成基于 AnyKernel 的刷机包，供在 Recovery 中刷入。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在安装 Nix 包管理器后，你可以 Fork 仓库，修改 `kernels.nix` 加入你的手		{{server_addr}}	{{server_port}}
+i机的内核信息，然后通过 `nix build .#[ 内核名称 ]` 来编译内核。具体的配		{{server_addr}}	{{server_port}}
+i置参数已经列出在仓库的 README 中。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果你使用		{{server_addr}}	{{server_port}}
+hFlake.parts	URL:https://flake.parts/	{{server_addr}}	{{server_port}}
+i，你也可以把我的仓库当成 Flake.parts 的模块使用：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    inputs = {		{{server_addr}}	{{server_port}}
+i      flake-parts.url = "github:hercules-ci/flake-parts";		{{server_addr}}	{{server_port}}
+i      nix-kernelsu-builder.url = "github:xddxdd/nix-kernelsu-builder";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i    outputs =		{{server_addr}}	{{server_port}}
+i      { flake-parts, ... }@inputs:		{{server_addr}}	{{server_port}}
+i      flake-parts.lib.mkFlake { inherit inputs; } {		{{server_addr}}	{{server_port}}
+i        imports = [		{{server_addr}}	{{server_port}}
+i          inputs.nix-kernelsu-builder.flakeModules.default		{{server_addr}}	{{server_port}}
+i        ];		{{server_addr}}	{{server_port}}
+i        systems = [ "x86_64-linux" ];		{{server_addr}}	{{server_port}}
+i        perSystem =		{{server_addr}}	{{server_port}}
+i          { pkgs, ... }:		{{server_addr}}	{{server_port}}
+i          {		{{server_addr}}	{{server_port}}
+i            kernelsu = {		{{server_addr}}	{{server_port}}
+i              # 在此处添加你的内核配置		{{server_addr}}	{{server_port}}
+i              example-kernel = {		{{server_addr}}	{{server_port}}
+i                anyKernelVariant = "kernelsu";		{{server_addr}}	{{server_port}}
+i                clangVersion = "latest";		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i                kernelSU.variant = "next";		{{server_addr}}	{{server_port}}
+i                susfs = {		{{server_addr}}	{{server_port}}
+i                  enable = true;		{{server_addr}}	{{server_port}}
+i                  src = path/to/sufs/source;		{{server_addr}}	{{server_port}}
+i                  kernelsuPatch = ./patches/susfs-for-kernelsu-next.patch;		{{server_addr}}	{{server_port}}
+i                };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i                kernelDefconfigs = [		{{server_addr}}	{{server_port}}
+i                  "gki_defconfig"		{{server_addr}}	{{server_port}}
+i                  "vendor/kalama_GKI.config"		{{server_addr}}	{{server_port}}
+i                  "vendor/ext_config/moto-kalama.config"		{{server_addr}}	{{server_port}}
+i                  "vendor/ext_config/moto-kalama-gki.config"		{{server_addr}}	{{server_port}}
+i                  "vendor/ext_config/moto-kalama-rtwo.config"		{{server_addr}}	{{server_port}}
+i                ];		{{server_addr}}	{{server_port}}
+i                kernelImageName = "Image";		{{server_addr}}	{{server_port}}
+i                kernelMakeFlags = [		{{server_addr}}	{{server_port}}
+i                  "KCFLAGS=\"-w\""		{{server_addr}}	{{server_port}}
+i                  "KCPPFLAGS=\"-w\""		{{server_addr}}	{{server_port}}
+i                ];		{{server_addr}}	{{server_port}}
+i                kernelSrc = path/to/kernel/source;		{{server_addr}}	{{server_port}}
+i              };		{{server_addr}}	{{server_port}}
+i            };		{{server_addr}}	{{server_port}}
+i          };		{{server_addr}}	{{server_port}}
+i      };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i# 关键部分		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i下文将介绍这套脚本中的一些关键部分。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 准备编译器		{{server_addr}}	{{server_port}}
+i要编译内核，首先要准备好的就是编译器。编译 Android 内核时常用的编译器		{{server_addr}}	{{server_port}}
+i是 Clang，但一些老旧设备的内核可能太老，不支持 Clang，此时就需要使用		{{server_addr}}	{{server_port}}
+iGCC 编译器。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iClang 编译器很好解决，Nixpkgs 里就有 Clang 的软件包，可以用 `nix run		{{server_addr}}	{{server_port}}
+inixpkgs#clang -- --version` 看到最新的 Clang 版本：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # nix run nixpkgs#clang -- --version		{{server_addr}}	{{server_port}}
+i  clang version 19.1.6		{{server_addr}}	{{server_port}}
+i  Target: x86_64-unknown-linux-gnu		{{server_addr}}	{{server_port}}
+i  Thread model: posix		{{server_addr}}	{{server_port}}
+i  InstalledDir: /nix/store/2d1r5kvz7plg24bwb316972knqmiyf2p-clang-19.1.6/bin		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iClang 编译器本身支持交叉编译，可以直接在 x86_64 的电脑上编译 ARM32、		{{server_addr}}	{{server_port}}
+iARM64 的程序，不需要额外的工具链，因此 Nixpkgs 里的 Clang 可以直接使用。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i老旧内核的 GCC 就有点麻烦了，Nixpkgs 里早已删除了老旧的 GCC 版本，目前（		{{server_addr}}	{{server_port}}
+i2025 年 2 月）Nixpkgs 里最旧的 GCC 版本是 9.5.0。而且，默认的 GCC 只能		{{server_addr}}	{{server_port}}
+i编译同平台的程序，要交叉编译 ARM32/ARM64 的内核需要特殊的 GCC 和工具链。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在这里我选择了取巧的方法：我直接把 Google 提供的 GCC 编译器打包成 Nix		{{server_addr}}	{{server_port}}
+i的软件包，提供给编译环境。虽然 Google 已经从服务器上删除了较老的 GCC		{{server_addr}}	{{server_port}}
+i编译器，但 GitHub 上有人提供了备份。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iARM32 GCC 的打包结果如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    stdenv,		{{server_addr}}	{{server_port}}
+i    lib,		{{server_addr}}	{{server_port}}
+i    fetchFromGitHub,		{{server_addr}}	{{server_port}}
+i    autoPatchelfHook,		{{server_addr}}	{{server_port}}
+i    python3,		{{server_addr}}	{{server_port}}
+i  }:		{{server_addr}}	{{server_port}}
+i  stdenv.mkDerivation rec {		{{server_addr}}	{{server_port}}
+i    pname = "gcc-arm-linux-androideabi";		{{server_addr}}	{{server_port}}
+i    version = "3ecb542702c2ca0e502533c3f6d02f0f06f584f1";		{{server_addr}}	{{server_port}}
+i    src = fetchFromGitHub {		{{server_addr}}	{{server_port}}
+i      owner = "KudProject";		{{server_addr}}	{{server_port}}
+i      repo = "arm-linux-androideabi-4.9";		{{server_addr}}	{{server_port}}
+i      rev = "3ecb542702c2ca0e502533c3f6d02f0f06f584f1";		{{server_addr}}	{{server_port}}
+i      fetchSubmodules = false;		{{server_addr}}	{{server_port}}
+i      sha256 = "sha256-5aF2Pl+h6J8/5TfQf2ojp3FCnoKakWH6KBCkWdy5ho8=";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    nativeBuildInputs = [ autoPatchelfHook ];		{{server_addr}}	{{server_port}}
+i    buildInputs = [ python3 ];		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    installPhase = ''		{{server_addr}}	{{server_port}}
+i      mkdir -p $out		{{server_addr}}	{{server_port}}
+i      cp -r * $out/		{{server_addr}}	{{server_port}}
+i    '';		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    meta = {		{{server_addr}}	{{server_port}}
+i      maintainers = with lib.maintainers; [ xddxdd ];		{{server_addr}}	{{server_port}}
+i      license = lib.licenses.gpl3Plus;		{{server_addr}}	{{server_port}}
+i      description = "ARM32 GCC for building Android kernels";		{{server_addr}}	{{server_port}}
+i      platforms = [ "x86_64-linux" ];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i而 ARM64 GCC 的打包结果如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  {		{{server_addr}}	{{server_port}}
+i    stdenv,		{{server_addr}}	{{server_port}}
+i    lib,		{{server_addr}}	{{server_port}}
+i    fetchFromGitHub,		{{server_addr}}	{{server_port}}
+i    autoPatchelfHook,		{{server_addr}}	{{server_port}}
+i    python3,		{{server_addr}}	{{server_port}}
+i  }:		{{server_addr}}	{{server_port}}
+i  stdenv.mkDerivation rec {		{{server_addr}}	{{server_port}}
+i    pname = "gcc-aarch64-linux-android";		{{server_addr}}	{{server_port}}
+i    version = "5797d7f622321e734558bd3372a9ab5ad6e6a48e";		{{server_addr}}	{{server_port}}
+i    src = fetchFromGitHub {		{{server_addr}}	{{server_port}}
+i      owner = "kindle4jerry";		{{server_addr}}	{{server_port}}
+i      repo = "aarch64-linux-android-4.9-bakup";		{{server_addr}}	{{server_port}}
+i      rev = "5797d7f622321e734558bd3372a9ab5ad6e6a48e";		{{server_addr}}	{{server_port}}
+i      fetchSubmodules = false;		{{server_addr}}	{{server_port}}
+i      sha256 = "sha256-ZrQmFyiDOKg+qcgdpZqtz+LgDDaao2W27kdZZ2As8XU=";		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    nativeBuildInputs = [ autoPatchelfHook ];		{{server_addr}}	{{server_port}}
+i    buildInputs = [ python3 ];		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    installPhase = ''		{{server_addr}}	{{server_port}}
+i      mkdir -p $out		{{server_addr}}	{{server_port}}
+i      cp -r * $out/		{{server_addr}}	{{server_port}}
+i    '';		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    meta = {		{{server_addr}}	{{server_port}}
+i      maintainers = with lib.maintainers; [ xddxdd ];		{{server_addr}}	{{server_port}}
+i      license = lib.licenses.gpl3Plus;		{{server_addr}}	{{server_port}}
+i      description = "ARM64 GCC for building Android kernels";		{{server_addr}}	{{server_port}}
+i      platforms = [ "x86_64-linux" ];		{{server_addr}}	{{server_port}}
+i    };		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 获取内核和 KernelSU 源码		{{server_addr}}	{{server_port}}
+i有了编译器，下一步就是要获取内核和 KernelSU 的源代码。因为我用的是		{{server_addr}}	{{server_port}}
+iLineageOS，我可以直接从 LineageOS 的 GitHub 仓库里下载到内核源码：		{{server_addr}}	{{server_port}}
+hhttps://github.com/LineageOS/android_kernel_motorola_sm8550	URL:https://github.com/LineageOS/android_kernel_motorola_sm8550	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i> 你也可以去手机厂商的官网上找内核代码。由于 Linux 内核的授权协议是		{{server_addr}}	{{server_port}}
+i> GPLv2，所有手机厂商都必须把他们修改后的内核代码开源。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在 Nix 包管理器中，你可以用 `fetchFromGitHub` 函数从 GitHub 上下载内核		{{server_addr}}	{{server_port}}
+i源码：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  fetchFromGitHub {		{{server_addr}}	{{server_port}}
+i    owner = "LineageOS";		{{server_addr}}	{{server_port}}
+i    repo = "android_kernel_motorola_sm8550";		{{server_addr}}	{{server_port}}
+i    rev = "1bdeb4f5c8d2b98ef5f2bedaa5d704032dffd676";		{{server_addr}}	{{server_port}}
+i    fetchSubmodules = false;		{{server_addr}}	{{server_port}}
+i    sha256 = "sha256-ZK/DH5N5LdkLe48cANESjw1x74aXoZLFoMAwEDvzEk4=";		{{server_addr}}	{{server_port}}
+i  };		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i但这样下载的是 `rev` 参数指定的 Commit 的内核源码，不会自动更新。要解		{{server_addr}}	{{server_port}}
+i决这个问题，我们可以用		{{server_addr}}	{{server_port}}
+hNvfetcher	URL:https://github.com/berberman/nvfetcher	{{server_addr}}	{{server_port}}
+i工具，自动获取最新 Commit。首先创建一个 `nvfetcher.toml` 文件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [linux-moto-rtwo-lineageos-22_1]		{{server_addr}}	{{server_port}}
+i  src.git = "https://github.com/LineageOS/android_kernel_motorola_sm8550.git"		{{server_addr}}	{{server_port}}
+i  src.branch = "lineage-22.1"		{{server_addr}}	{{server_port}}
+i  fetch.github = "LineageOS/android_kernel_motorola_sm8550"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i然后运行 Nvfetcher：`nix run github:berberman/nvfetcher`		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iNvfetcher 会根据你的配置自动下载最新的 Commit，并写入 `_sources/generated.nix`		{{server_addr}}	{{server_port}}
+i文件中。然后你就可以调用这个文件里配置好的内核源码了：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  let		{{server_addr}}	{{server_port}}
+i    sources = callPackage ../_sources/generated.nix { };		{{server_addr}}	{{server_port}}
+i  in		{{server_addr}}	{{server_port}}
+i    sources.linux-moto-rtwo-lineageos-22_1.src		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我们可以用同样的方法获取 KernelSU 的版本，但由于 KernelSU 从 1.0 开始		{{server_addr}}	{{server_port}}
+i的版本只支持 GKI 内核，我们只能使用最后一个支持其它内核的 0.9.5 版本：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # nvfetcher.toml		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  [kernelsu-stable]		{{server_addr}}	{{server_port}}
+i  src.manual = "v0.9.5"		{{server_addr}}	{{server_port}}
+i  fetch.git = "https://github.com/tiann/KernelSU.git"		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 我们还需要获取 KernelSU 的 Revision Code（即 Commit 数量）。对于 0.9.5 版本可以直接写死		{{server_addr}}	{{server_port}}
+i  [kernelsu-stable-revision-code]		{{server_addr}}	{{server_port}}
+i  src.manual = "11872"		{{server_addr}}	{{server_port}}
+i  # 下载地址无所谓，我们只用版本号		{{server_addr}}	{{server_port}}
+i  fetch.url = "https://example.com"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i不过现在有一个 KernelSU 的 Fork		{{server_addr}}	{{server_port}}
+hKernelSU-Next	URL:https://github.com/rifsxd/KernelSU-Next	{{server_addr}}	{{server_port}}
+i，其最新版本同时支持 GKI 和非 GKI 内核，因此我们可以用它获取最新功能：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # nvfetcher.toml		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  [kernelsu-next]		{{server_addr}}	{{server_port}}
+i  src.github = "rifsxd/KernelSU-Next"		{{server_addr}}	{{server_port}}
+i  fetch.git = "https://github.com/rifsxd/KernelSU-Next.git"		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 从 KernelSU-Next 官方发布的管理器 APK 文件名提取 Commit 数量		{{server_addr}}	{{server_port}}
+i  [kernelsu-next-revision-code]		{{server_addr}}	{{server_port}}
+i  src.webpage = "https://api.github.com/repos/rifsxd/KernelSU-Next/releases?per_page=1"		{{server_addr}}	{{server_port}}
+i  src.regex = "download\\/v[0-9\\._]+\\/KernelSU[^\"]*_([0-9]+)-release\\.apk"		{{server_addr}}	{{server_port}}
+i  # 下载地址无所谓，我们只用版本号		{{server_addr}}	{{server_port}}
+i  fetch.url = "https://example.com"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 给内核源码打补丁		{{server_addr}}	{{server_port}}
+i有了内核源码和 KernelSU，下一步就是按照		{{server_addr}}	{{server_port}}
+hKernelSU 的官方教程	URL:https://kernelsu.org/zh_CN/guide/how-to-integrate-for-non-gki.html	{{server_addr}}	{{server_port}}
+i修改内核。这一步我只是将官方教程的步骤转写成 Bash 脚本放入 Nix 编译脚		{{server_addr}}	{{server_port}}
+i本中。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i唯一需要注意的是，KernelSU 会尝试通过 Git 获取 Commit 数量，也就是你在		{{server_addr}}	{{server_port}}
+iKernelSU 管理器里看到的版本号。由于 Nix 包管理器的限制，获取的源码中没		{{server_addr}}	{{server_port}}
+i有 Git 仓库信息，因此我们需要修改 KernelSU 的脚本，使用我们预先获取的		{{server_addr}}	{{server_port}}
+iCommit 数量：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  let		{{server_addr}}	{{server_port}}
+i    # 创建一个假的 git 命令，防止找不到命令出错		{{server_addr}}	{{server_port}}
+i    fakeGit = writeShellScriptBin "git" ''		{{server_addr}}	{{server_port}}
+i      exit 0		{{server_addr}}	{{server_port}}
+i    '';		{{server_addr}}	{{server_port}}
+i  in		{{server_addr}}	{{server_port}}
+i  stdenv.mkDerivation {		{{server_addr}}	{{server_port}}
+i    # ...		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    nativeBuildInputs = [		{{server_addr}}	{{server_port}}
+i      fakeGit		{{server_addr}}	{{server_port}}
+i    ];		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    postPatch = ''		{{server_addr}}	{{server_port}}
+i      export HOME=$(pwd)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 把 KernelSU 复制到内核源码文件夹下		{{server_addr}}	{{server_port}}
+i      cp -r ${kernelSU.src} ${kernelSU.subdirectory}		{{server_addr}}	{{server_port}}
+i      chmod -R +w ${kernelSU.subdirectory}		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 强制设置 KernelSU 版本，不让它从 Git 获取版本号		{{server_addr}}	{{server_port}}
+i      sed -i "/ version:/d" ${kernelSU.subdirectory}/kernel/Makefile		{{server_addr}}	{{server_port}}
+i      sed -i "/KSU_GIT_VERSION not defined/d" ${kernelSU.subdirectory}/kernel/Makefile		{{server_addr}}	{{server_port}}
+i      sed -i "s|ccflags-y += -DKSU_VERSION=|ccflags-y += -DKSU_VERSION=\"${kernelSU.revision}\"\n#|g" ${kernelSU.subdirectory}/kernel/Makefile		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 将内核编译脚本的 #!/bin/sh 等 Shebang 替换成隔离环境中的路径		{{server_addr}}	{{server_port}}
+i      patchShebangs .		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 调用 KernelSU 的脚本打补丁		{{server_addr}}	{{server_port}}
+i      bash ${kernelSU.subdirectory}/kernel/setup.sh		{{server_addr}}	{{server_port}}
+i    '';		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # ...		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i完整的代码可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/patch-kernel-src.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/patch-kernel-src.nix	{{server_addr}}	{{server_port}}
+i看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## （可选）SusFS 补丁		{{server_addr}}	{{server_port}}
+hSusFS	URL:https://gitlab.com/simonpunk/susfs4ksu	{{server_addr}}	{{server_port}}
+i是一组额外的内核补丁，它可以隐藏 Root 后对系统的一些文件修改，让他们只		{{server_addr}}	{{server_port}}
+i对获取了 Root 权限的软件以及系统本身可见，从而防止软件检测 Root 并拒绝		{{server_addr}}	{{server_port}}
+i启动。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这里也是根据		{{server_addr}}	{{server_port}}
+hSusFS 的 README	URL:https://gitlab.com/simonpunk/susfs4ksu	{{server_addr}}	{{server_port}}
+i一步一步走就好：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  stdenv.mkDerivation {		{{server_addr}}	{{server_port}}
+i    # ...		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    postPatch = ''		{{server_addr}}	{{server_port}}
+i      export HOME=$(pwd)		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 把 KernelSU 复制到内核源码文件夹下		{{server_addr}}	{{server_port}}
+i      cp -r ${kernelSU.src} ${kernelSU.subdirectory}		{{server_addr}}	{{server_port}}
+i      chmod -R +w ${kernelSU.subdirectory}		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 强制设置 KernelSU 版本，不让它从 Git 获取版本号		{{server_addr}}	{{server_port}}
+i      sed -i "/ version:/d" ${kernelSU.subdirectory}/kernel/Makefile		{{server_addr}}	{{server_port}}
+i      sed -i "/KSU_GIT_VERSION not defined/d" ${kernelSU.subdirectory}/kernel/Makefile		{{server_addr}}	{{server_port}}
+i      sed -i "s|ccflags-y += -DKSU_VERSION=|ccflags-y += -DKSU_VERSION=\"${kernelSU.revision}\"\n#|g" ${kernelSU.subdirectory}/kernel/Makefile		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 把 SusFS 复制到内核源码文件夹下		{{server_addr}}	{{server_port}}
+i      cp -r ${susfs.src}/kernel_patches/fs/* fs/		{{server_addr}}	{{server_port}}
+i      cp -r ${susfs.src}/kernel_patches/include/linux/* include/linux/		{{server_addr}}	{{server_port}}
+i      chmod -R +w fs include/linux		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 对内核本身应用 SusFS 的补丁		{{server_addr}}	{{server_port}}
+i      patch -p1 < ${susfs.kernelPatch}		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 对 KernelSU 应用 SusFS 的补丁		{{server_addr}}	{{server_port}}
+i      pushd ${kernelSU.subdirectory}		{{server_addr}}	{{server_port}}
+i      patch -p1 < ${susfs.kernelsuPatch}		{{server_addr}}	{{server_port}}
+i      popd		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 将内核编译脚本的 #!/bin/sh 等 Shebang 替换成隔离环境中的路径		{{server_addr}}	{{server_port}}
+i      patchShebangs .		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      # 调用 KernelSU 的脚本打补丁		{{server_addr}}	{{server_port}}
+i      bash ${kernelSU.subdirectory}/kernel/setup.sh		{{server_addr}}	{{server_port}}
+i    '';		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # ...		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i完整的代码可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/patch-kernel-src.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/patch-kernel-src.nix	{{server_addr}}	{{server_port}}
+i看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 开启 KernelSU 相关编译选项		{{server_addr}}	{{server_port}}
+i添加 KernelSU 补丁后，还需要在内核的 `defconfig` 中开启相关的选项，保		{{server_addr}}	{{server_port}}
+i证 KernelSU 功能被加入到编译出的内核中：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # 指定 defconfig 的路径		{{server_addr}}	{{server_port}}
+i  export CFG_PATH=arch/${arch}/configs/${defconfig}		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 如果启用了 KernelSU		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_MODULES=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KPROBES=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_HAVE_KPROBES=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KPROBE_EVENTS=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_OVERLAY_FS=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 如果启用了 SusFS		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_SUS_PATH=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_SUS_MOUNT=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_SUS_KSTAT=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_SUS_OVERLAYFS=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_TRY_UMOUNT=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_SPOOF_UNAME=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_ENABLE_LOG=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_KSU_SUSFS_SUS_SU=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i  echo "CONFIG_TMPFS_XATTR=y" >> $CFG_PATH		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i完整命令可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/kernel-config-cmd.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/kernel-config-cmd.nix	{{server_addr}}	{{server_port}}
+i看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 编译内核		{{server_addr}}	{{server_port}}
+i下一步就是用打过补丁的内核源码编译出内核镜像。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果使用 GCC 作为编译器，需要将 Google 提供的编译器加入编译环境，并在		{{server_addr}}	{{server_port}}
+i编译参数中指定编译器命令前缀即可：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  let		{{server_addr}}	{{server_port}}
+i    gcc-aarch64-linux-android = pkgs.callPackage ../pkgs/gcc-aarch64-linux-android.nix { };		{{server_addr}}	{{server_port}}
+i    gcc-arm-linux-androideabi = pkgs.callPackage ../pkgs/gcc-arm-linux-androideabi.nix { };		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 稍后传给 make 命令		{{server_addr}}	{{server_port}}
+i    finalMakeFlags = [		{{server_addr}}	{{server_port}}
+i      "ARCH=${arch}"		{{server_addr}}	{{server_port}}
+i      "CROSS_COMPILE=aarch64-linux-android-"		{{server_addr}}	{{server_port}}
+i      "CROSS_COMPILE_ARM32=arm-linux-androideabi-"		{{server_addr}}	{{server_port}}
+i      "O=$out"		{{server_addr}}	{{server_port}}
+i    ];		{{server_addr}}	{{server_port}}
+i  in		{{server_addr}}	{{server_port}}
+i  stdenv.mkDerivation {		{{server_addr}}	{{server_port}}
+i    # ...		{{server_addr}}	{{server_port}}
+i    nativeBuildInputs = [		{{server_addr}}	{{server_port}}
+i      gcc-aarch64-linux-android		{{server_addr}}	{{server_port}}
+i      gcc-arm-linux-androideabi		{{server_addr}}	{{server_port}}
+i    ];		{{server_addr}}	{{server_port}}
+i    # ...		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i完整命令可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-kernel-gcc.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-kernel-gcc.nix	{{server_addr}}	{{server_port}}
+i看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i如果使用 Clang 作为编译器，可以直接使用 Nixpkgs 提供的 Clang stdenv，		{{server_addr}}	{{server_port}}
+i并在编译参数中指定使用 LLVM 和 `lld`：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  let		{{server_addr}}	{{server_port}}
+i    # 稍后传给 make 命令		{{server_addr}}	{{server_port}}
+i    finalMakeFlags = [		{{server_addr}}	{{server_port}}
+i      "ARCH=${arch}"		{{server_addr}}	{{server_port}}
+i      "CC=clang"		{{server_addr}}	{{server_port}}
+i      "O=$out"		{{server_addr}}	{{server_port}}
+i      "LD=ld.lld"		{{server_addr}}	{{server_port}}
+i      "LLVM=1"		{{server_addr}}	{{server_port}}
+i      "LLVM_IAS=1"		{{server_addr}}	{{server_port}}
+i      "CLANG_TRIPLE=aarch64-linux-gnu-"		{{server_addr}}	{{server_port}}
+i    ] ++ makeFlags;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i    # 使用用户指定的 Clang/LLVM 版本		{{server_addr}}	{{server_port}}
+i    usedLLVMPackages = pkgs."llvmPackages_${builtins.toString clangVersion}";		{{server_addr}}	{{server_port}}
+i  in		{{server_addr}}	{{server_port}}
+i  # 使用 Clang/LLVM 的 stdenv，自带了 Clang/LLVM 工具链		{{server_addr}}	{{server_port}}
+i  usedLLVMPackages.stdenv.mkDerivation {		{{server_addr}}	{{server_port}}
+i    # ...		{{server_addr}}	{{server_port}}
+i    nativeBuildInputs = [		{{server_addr}}	{{server_port}}
+i      # 添加 ld.lld 命令		{{server_addr}}	{{server_port}}
+i      usedLLVMPackages.bintools		{{server_addr}}	{{server_port}}
+i    ];		{{server_addr}}	{{server_port}}
+i    # ...		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i完整命令可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-kernel-clang.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-kernel-clang.nix	{{server_addr}}	{{server_port}}
+i看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## 生成 AnyKernel 刷机包		{{server_addr}}	{{server_port}}
+hAnyKernel	URL:https://github.com/osm0sis/AnyKernel3	{{server_addr}}	{{server_port}}
+i是一个 Android 刷机包模板，可以将给定的内核镜像刷入手机中。AnyKernel		{{server_addr}}	{{server_port}}
+i的一大优势是它可以只刷内核镜像，不修改 Initramfs 中的其它启动命令，包		{{server_addr}}	{{server_port}}
+i括 Android 系统的启动命令和 Magisk 的命令（如果安装了的话）。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAnyKernel 本身的使用非常简单：只需要根据手机的情况修改 `anykernel.sh`		{{server_addr}}	{{server_port}}
+i中的几个参数，然后把内核文件和 AnyKernel 的其它文件放在一起打成 `zip`		{{server_addr}}	{{server_port}}
+i压缩包即可。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i唯一需要注意的是，原版的 AnyKernel 只支持非 GKI 的设备，在支持 GKI 的		{{server_addr}}	{{server_port}}
+i设备上会报错。KernelSU 团队提供了一个		{{server_addr}}	{{server_port}}
+h修改的 AnyKernel	URL:https://github.com/Kernel-SU/AnyKernel3	{{server_addr}}	{{server_port}}
+i，它和原版正相反，只支持 GKI 设备，在非 GKI 设备上会报错。根据你的设备		{{server_addr}}	{{server_port}}
+i选择即可。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我把两个版本的 AnyKernel 都放入了 `nvfetcher.toml` 以供调用：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  [anykernel-kernelsu]		{{server_addr}}	{{server_port}}
+i  src.git = "https://github.com/Kernel-SU/AnyKernel3.git"		{{server_addr}}	{{server_port}}
+i  fetch.github = "Kernel-SU/AnyKernel3"		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  [anykernel-osm0sis]		{{server_addr}}	{{server_port}}
+i  src.git = "https://github.com/osm0sis/AnyKernel3.git"		{{server_addr}}	{{server_port}}
+i  fetch.github = "osm0sis/AnyKernel3"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i完整的打包代码可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-anykernel-zip.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-anykernel-zip.nix	{{server_addr}}	{{server_port}}
+i看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## （可选）生成 boot.img 镜像		{{server_addr}}	{{server_port}}
+i如果你不想 / 不能使用 AnyKernel，例如你的设备没有第三方 Recovery 可用，		{{server_addr}}	{{server_port}}
+i你可以找一份你的设备的 `boot.img` 镜像。只要把镜像中的内核替换掉，并保		{{server_addr}}	{{server_port}}
+i持其它部分不变，也可以达成和 AnyKernel 一样的效果。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  # 记录原设备 boot.img 镜像的参数		{{server_addr}}	{{server_port}}
+i  IMG_FORMAT=$(unpack_bootimg --boot_img ${bootImg} --format mkbootimg)		{{server_addr}}	{{server_port}}
+i  echo "Image format: \"$IMG_FORMAT\""		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 解压 boot.img		{{server_addr}}	{{server_port}}
+i  unpack_bootimg --boot_img ${bootImg}		{{server_addr}}	{{server_port}}
+i  # 用新编译出的内核替换原始内核		{{server_addr}}	{{server_port}}
+i  cp ${kernel}/arch/${arch}/boot/${kernelImageName} out/kernel		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  # 用原参数重新打包一份带新内核的 boot.img		{{server_addr}}	{{server_port}}
+i  eval "mkbootimg $IMG_FORMAT -o $out/boot.img"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i完整的打包代码可以在		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-boot-img.nix	URL:https://github.com/xddxdd/nix-kernelsu-builder/blob/main/pipeline/build-boot-img.nix	{{server_addr}}	{{server_port}}
+i看到。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

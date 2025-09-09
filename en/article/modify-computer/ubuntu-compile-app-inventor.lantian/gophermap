@@ -1,0 +1,67 @@
+iApp Inventor is a simple Android programming tool developed by MIT. By		{{server_addr}}	{{server_port}}
+idragging and dropping objects on a webpage and setting up code in a		{{server_addr}}	{{server_port}}
+iflowchart-like manner, you can generate your own Android applications.		{{server_addr}}	{{server_port}}
+iIf you install App Inventor's companion software on your Android phone		{{server_addr}}	{{server_port}}
+ior tablet, you can modify the interface on your computer and see		{{server_addr}}	{{server_port}}
+ichanges reflected instantly on your mobile device.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iMIT provides an online version of App Inventor accessible through		{{server_addr}}	{{server_port}}
+iemail registration. However, their website runs on Google App Engine.		{{server_addr}}	{{server_port}}
+iAs we all know, Google's services have poor accessibility in China.		{{server_addr}}	{{server_port}}
+iTherefore, it's best to install it locally for uninterrupted		{{server_addr}}	{{server_port}}
+iprogramming.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Download the source code		{{server_addr}}	{{server_port}}
+iFirst, you'll need a GitHub account. Visit		{{server_addr}}	{{server_port}}
+hhttps://github.com/mit-cml/appinventor-sources	URL:https://github.com/mit-cml/appinventor-sources	{{server_addr}}	{{server_port}}
+iand click "Fork" in the top-right corner.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThen, open a terminal in Ubuntu and enter:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  sudo apt-get install git openjdk-7-jdk ant		{{server_addr}}	{{server_port}}
+i  git clone https://github.com/(your GitHub username)/appinventor-sources.git		{{server_addr}}	{{server_port}}
+i  # 由于 GitHub 到天朝访问同样悲摧，上面这句可能要执行1h以上		{{server_addr}}	{{server_port}}
+i  cd appinventor-sources		{{server_addr}}	{{server_port}}
+i  git remote add upstream https://github.com/mit-cml/appinventor-sources.git		{{server_addr}}	{{server_port}}
+i  cp sample-.gitignore .gitignore		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iVisit		{{server_addr}}	{{server_port}}
+hhttps://cloud.google.com/appengine/downloads	URL:https://cloud.google.com/appengine/downloads	{{server_addr}}	{{server_port}}
+ito download Google App Engine SDK for Java. Extract it, rename the		{{server_addr}}	{{server_port}}
+ifolder to `appengine-java-sdk` , and copy it to the `appinventor-sources`		{{server_addr}}	{{server_port}}
+idirectory created earlier.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Start compiling		{{server_addr}}	{{server_port}}
+i  cd appinventor-sources		{{server_addr}}	{{server_port}}
+i  ant		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCompilation takes 2-10 minutes. On my 3rd-gen i5 CPU, it took 3		{{server_addr}}	{{server_port}}
+iminutes.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Launch on Linux		{{server_addr}}	{{server_port}}
+iCreate `start.sh` with the following content:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #!/bin/sh		{{server_addr}}	{{server_port}}
+i  appengine-java-sdk/bin/dev_appserver.sh --port=8888 --address=0.0.0.0 appinventor/appengine/build/war/ &		{{server_addr}}	{{server_port}}
+i  cd appinventor/buildserver		{{server_addr}}	{{server_port}}
+i  ant RunLocalBuildServer &		{{server_addr}}	{{server_port}}
+i  cd ../..		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRun in terminal:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  ./start.sh		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iWait about 1 minute for startup, then access App Inventor at		{{server_addr}}	{{server_port}}
+hhttp://127.0.0.1:8888	URL:http://127.0.0.1:8888	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Launch on Windows (interface only, no APK build server)		{{server_addr}}	{{server_port}}
+iInstall JRE on Windows. Create `start.bat` in the `appinventor-sources`		{{server_addr}}	{{server_port}}
+ifolder with:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  appengine-java-sdk/bin/dev_appserver.cmd --port=8888 --address=0.0.0.0 appinventor/appengine/build/war/		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDouble-click to run. After 1 minute, access		{{server_addr}}	{{server_port}}
+hhttp://127.0.0.1:8888	URL:http://127.0.0.1:8888	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,68 @@
+iApple laptops' overheating sensors don't seem very sensitive. Even		{{server_addr}}	{{server_port}}
+iwhen I could feel the exhaust vent scalding hot, the fan stubbornly		{{server_addr}}	{{server_port}}
+ikept spinning at a leisurely 2000 rpm. The temperature at that moment		{{server_addr}}	{{server_port}}
+iwas 90 degrees.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor CPU temperatures measured in laptops:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- 70°C indicates a minor issue,		{{server_addr}}	{{server_port}}
+i- 80°C warrants attention,		{{server_addr}}	{{server_port}}
+i- 90°C... immediately check your machine for problems.		{{server_addr}}	{{server_port}}
+i  Excessively high CPU temperatures shorten your CPU's lifespan, ruin		{{server_addr}}	{{server_port}}
+i  your computing experience, and might even burn your legs if placed		{{server_addr}}	{{server_port}}
+i  on your lap. If you jump up in surprise, your $1,500 Macbook could		{{server_addr}}	{{server_port}}
+i  crash to the floor.		{{server_addr}}	{{server_port}}
+iDuring an extreme "devil-level test" conducted overseas, testers		{{server_addr}}	{{server_port}}
+iinstalled specialized software to push a Macbook to full load, easily		{{server_addr}}	{{server_port}}
+ihitting 100°C. Afterward, they had to leave the Macbook cooling		{{server_addr}}	{{server_port}}
+iovernight to return to room temperature. During testing, this poor		{{server_addr}}	{{server_port}}
+iMacbook Pro had to stand in this position:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+IMacbook Pro	/usr/uploads/2013/07/2453648692.jpg	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTherefore, CPU temperature issues demand serious attention.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i### 1) Monitoring CPU Temperature		{{server_addr}}	{{server_port}}
+i- **Windows** : Countless tools exist. If you don't mind 360, try 360		{{server_addr}}	{{server_port}}
+i  Hardware Master (Lu Da Shi); alternatively, use Driver Genius; for		{{server_addr}}	{{server_port}}
+i  advanced options, Everest works.		{{server_addr}}	{{server_port}}
+i- **Linux** : Use `lm_sensors` :		{{server_addr}}	{{server_port}}
+i    sudo apt-get install lm-sensors		{{server_addr}}	{{server_port}}
+i    lm_sensors		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  (I forget if the last command needs `sudo` — I think not.)		{{server_addr}}	{{server_port}}
+i- **Mac** :		{{server_addr}}	{{server_port}}
+1  smcFanControl	/en/article/modify-computer/macbook-manual-config-cpu-fan-speed.lantian	{{server_addr}}	{{server_port}}
+i  handles everything.		{{server_addr}}	{{server_port}}
+i### 2) Controlling CPU Temperature		{{server_addr}}	{{server_port}}
+i1. **Adjust Fan Speed**		{{server_addr}}	{{server_port}}
+i   - Mac:		{{server_addr}}	{{server_port}}
+1     smcFanControl	/en/article/modify-computer/macbook-manual-config-cpu-fan-speed.lantian	{{server_addr}}	{{server_port}}
+i     handles it.		{{server_addr}}	{{server_port}}
+i   - Windows: Search for "LubbosFanControl".		{{server_addr}}	{{server_port}}
+i   - Linux: Unknown.		{{server_addr}}	{{server_port}}
+i2. **Choose the Right OS**		{{server_addr}}	{{server_port}}
+i   macOS is optimized for Apple hardware; Windows isn't. Tests show		{{server_addr}}	{{server_port}}
+i   Macbook CPU temperatures run 5°C higher in Windows than Linux when		{{server_addr}}	{{server_port}}
+i   idle (only desktop + temperature tool running).		{{server_addr}}	{{server_port}}
+i   However, Windows may be better for Flash content — macOS has poor		{{server_addr}}	{{server_port}}
+i   Flash support, causing high CPU usage and extra heat.		{{server_addr}}	{{server_port}}
+i3. **Reduce Background Processes**		{{server_addr}}	{{server_port}}
+i   Background apps like Dropbox or idle Xunlei consume CPU resources,		{{server_addr}}	{{server_port}}
+i   generating heat. Close them when unused; launch only when needed.		{{server_addr}}	{{server_port}}
+i4. **Lower Ambient Temperature**		{{server_addr}}	{{server_port}}
+i   Server rooms blast AC to 20°C in summer because powerhouse CPUs		{{server_addr}}	{{server_port}}
+i   like Xeon E3/E5/E7 generate extreme heat. Poor cooling leads to		{{server_addr}}	{{server_port}}
+i   reduced lifespan, crashes, or worse... egg-frying scenarios.		{{server_addr}}	{{server_port}}
+i   At home, using your Macbook in an AC-cooled room typically lowers		{{server_addr}}	{{server_port}}
+i   temperatures by 5 – 10°C vs. non-AC environments.		{{server_addr}}	{{server_port}}
+i   (Winter heating doesn』t count here.)		{{server_addr}}	{{server_port}}
+i   **Summary** : Go where it』s cooler.		{{server_addr}}	{{server_port}}
+i5. **Use Lightweight Software + Ad Blocking**		{{server_addr}}	{{server_port}}
+i   Replace memory-hungry Chrome with Safari or Opera.		{{server_addr}}	{{server_port}}
+i   Disable unused Chrome extensions to reduce background processes.		{{server_addr}}	{{server_port}}
+i   Install Adblock Plus and FlashControl to block ads/Flash, lowering		{{server_addr}}	{{server_port}}
+i   CPU load.		{{server_addr}}	{{server_port}}
+iFollow these tips, and you won』t need to worry about your computer		{{server_addr}}	{{server_port}}
+ifrying eggs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,79 @@
+iThe Huawei C8815 smartphone comes with 4GB of internal storage, but		{{server_addr}}	{{server_port}}
+inot all of this space is available for user data - it also includes		{{server_addr}}	{{server_port}}
+isystem files and other miscellaneous content.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAndroid device storage is generally divided into the following		{{server_addr}}	{{server_port}}
+ipartitions:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- **Cache partition** : Stores temporary files for Android system		{{server_addr}}	{{server_port}}
+i  operations, typically less than 10MB in total		{{server_addr}}	{{server_port}}
+i- **System partition** : Contains Android OS files modified during		{{server_addr}}	{{server_port}}
+i  flashing		{{server_addr}}	{{server_port}}
+i- **Data partition** : Stores installed apps and their data		{{server_addr}}	{{server_port}}
+i- **Internal storage (sdcard)** : The "built-in storage" visible in		{{server_addr}}	{{server_port}}
+i  file managers		{{server_addr}}	{{server_port}}
+iCarrier-customized devices like the C8815 also include a **cust		{{server_addr}}	{{server_port}}
+ipartition** for carrier-specific modifications.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iThe factory partition layout isn't always optimal. The C8815's default		{{server_addr}}	{{server_port}}
+ipartitioning is:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- **Cache** : ~190MB (excessive for actual needs of ~5MB usage)		{{server_addr}}	{{server_port}}
+i- **Cust** : 80MB (carrier bloatware, removable)		{{server_addr}}	{{server_port}}
+i- **System** : 1.1GB (oversized for typical custom ROMs)		{{server_addr}}	{{server_port}}
+i- **Data** : 1.1GB (often needs expansion)		{{server_addr}}	{{server_port}}
+i- **Internal storage** : 1GB (could be reduced with external SD card		{{server_addr}}	{{server_port}}
+i  usage)		{{server_addr}}	{{server_port}}
+iRecommended partitioning scheme:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- **Cache** : 10MB		{{server_addr}}	{{server_port}}
+i- **Cust** : 10MB (required minimum)		{{server_addr}}	{{server_port}}
+i- **System** : 500MB (adjust based on ROM size + 20MB buffer)		{{server_addr}}	{{server_port}}
+i- **Internal storage** : 100MB (with external SD) or 800MB-1.5GB (without)		{{server_addr}}	{{server_port}}
+i- **Remaining space** allocated to Data partition		{{server_addr}}	{{server_port}}
+i### Partitioning Steps		{{server_addr}}	{{server_port}}
+i1. Download		{{server_addr}}	{{server_port}}
+1   Aroma File Manager	/en/article/modify-computer/aroma-file-manager-recovery-mode.lantian	{{server_addr}}	{{server_port}}
+i   and boot into recovery mode		{{server_addr}}	{{server_port}}
+i2. Access terminal via Menu > Terminal		{{server_addr}}	{{server_port}}
+i3. Check current partitions:		{{server_addr}}	{{server_port}}
+i  fdisk -l /dev/block/mmcblk0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSample output:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  /dev/block/mmcblk0p16    50177    60416    81920		{{server_addr}}	{{server_port}}
+i  /dev/block/mmcblk0p17    60417    191488    1048576		{{server_addr}}	{{server_port}}
+i  /dev/block/mmcblk0p18    191489    338944    1179648		{{server_addr}}	{{server_port}}
+i  /dev/block/mmcblk0p19    338945    473088    1073152		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i(Partition numbers 15=cache, 16=cust, 17=system, 18=data, 19=sdcard)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Calculate new partition boundaries (1MB = 128 blocks):		{{server_addr}}	{{server_port}}
+i  Example conversion:		{{server_addr}}	{{server_port}}
+i  New 16th partition (10MB):		{{server_addr}}	{{server_port}}
+i  End = 50177 + (10*128) = 51457		{{server_addr}}	{{server_port}}
+i  Next partition starts at 51459		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Modify partitions:		{{server_addr}}	{{server_port}}
+i  fdisk /dev/block/mmcblk0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCommand sequence example:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  d 19		{{server_addr}}	{{server_port}}
+i  d 18		{{server_addr}}	{{server_port}}
+i  d 17		{{server_addr}}	{{server_port}}
+i  d 16		{{server_addr}}	{{server_port}}
+i  n 50177 51457		{{server_addr}}	{{server_port}}
+i  n 51459 115459		{{server_addr}}	{{server_port}}
+i  n 115461 460286		{{server_addr}}	{{server_port}}
+i  n 460288 473088		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Verify with `p` command, then write changes with `w`		{{server_addr}}	{{server_port}}
+i2. Reboot to recovery, perform factory reset, format storage		{{server_addr}}	{{server_port}}
+i3. Reflash ROM		{{server_addr}}	{{server_port}}
+i**WARNING:**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- DO NOT modify partitions 14 and earlier		{{server_addr}}	{{server_port}}
+i- Double-check calculations before writing changes		{{server_addr}}	{{server_port}}
+i- Original partition table can be restored using Huawei's official		{{server_addr}}	{{server_port}}
+i  firmware (hold Volume Up+Down during power-on to flash)		{{server_addr}}	{{server_port}}

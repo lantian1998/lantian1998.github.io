@@ -1,0 +1,27 @@
+iThis is something I came across on Arefly's blog. Original URL:		{{server_addr}}	{{server_port}}
+hhttp://www.arefly.com/zh-cn/wordpress-js-check/	URL:http://www.arefly.com/zh-cn/wordpress-js-check/	{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iUsage:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Bookmark any webpage.		{{server_addr}}	{{server_port}}
+i2. Find the bookmark you just created, right-click to edit it. Change		{{server_addr}}	{{server_port}}
+i   the name to "One-Click Check-in" or whatever you prefer, and		{{server_addr}}	{{server_port}}
+i   replace the address with the following code:		{{server_addr}}	{{server_port}}
+i  javascript: document.getElementById('author').value = 'Your Nickname'		{{server_addr}}	{{server_port}}
+i  document.getElementById('email').value = 'Your Email'		{{server_addr}}	{{server_port}}
+i  document.getElementById('url').value = 'Your Website'		{{server_addr}}	{{server_port}}
+i  var myDate = new Date()		{{server_addr}}	{{server_port}}
+i  var mytime = myDate.toLocaleTimeString()		{{server_addr}}	{{server_port}}
+i  document.getElementById('comment').value = 'Checked in today! Time: ' + mytime		{{server_addr}}	{{server_port}}
+i  submit.click()		{{server_addr}}	{{server_port}}
+i  void 0		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iRemember to modify the nickname, email, and website in the code.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Open the webpage where you want to check in, click this bookmark,		{{server_addr}}	{{server_port}}
+i   and you're done.		{{server_addr}}	{{server_port}}
+iPut on your thinking cap — you could use this code to post spam		{{server_addr}}	{{server_port}}
+icomments, but don't say I taught you. Also, don't even think about		{{server_addr}}	{{server_port}}
+iusing this to check in on my site; I use Typecho with YouYan for		{{server_addr}}	{{server_port}}
+icomments. Figure it out yourself.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

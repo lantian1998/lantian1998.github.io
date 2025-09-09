@@ -1,0 +1,51 @@
+iW3 Total Cache uses disk-based caching by default. For shared hosting		{{server_addr}}	{{server_port}}
+iusers, this may be the only option available. However, VPS users have		{{server_addr}}	{{server_port}}
+isignificantly more flexibility, especially when using VPS providers		{{server_addr}}	{{server_port}}
+iwith efficient overselling techniques (Host1Free?) where disk speeds		{{server_addr}}	{{server_port}}
+iare relatively slow. In such cases, you can leverage your surplus		{{server_addr}}	{{server_port}}
+imemory for caching.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI've set up three WordPress test sites on SAE, OpenShift, and		{{server_addr}}	{{server_port}}
+iHost1Free VPS respectively. Among these, only the VPS allows for full		{{server_addr}}	{{server_port}}
+icustomization, making it our focus today. (Note: SAE's file read/write		{{server_addr}}	{{server_port}}
+irestrictions prevent W3 Total Cache from even saving configurations.)		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdditionally, W3TC supports PHP Opcode caching solutions (such as Zend		{{server_addr}}	{{server_port}}
+iOptimizer (not Zend Guard), eAccelerator, XCache, APC, etc.) as an		{{server_addr}}	{{server_port}}
+ialternative memory caching method, though with slightly reduced		{{server_addr}}	{{server_port}}
+iperformance.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Installing Memcache Server and PHP Components		{{server_addr}}	{{server_port}}
+i  apt-get install memcached php5-memcached php5-memcache		{{server_addr}}	{{server_port}}
+i  # For LNMP or LLsMP (FastCGI) users, run this		{{server_addr}}	{{server_port}}
+i  service php5-fpm restart		{{server_addr}}	{{server_port}}
+i  # For LAMP or LLsMP (LiteSpeed SAPI) users, run this		{{server_addr}}	{{server_port}}
+i  service apache2 restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBy default, Memcache allocates up to 64MB memory (not constantly used -		{{server_addr}}	{{server_port}}
+ithis is a maximum limit). Actual usage depends on stored data. For		{{server_addr}}	{{server_port}}
+itypical traffic (~1000 IPs), it rarely exceeds 20MB. If your VPS has		{{server_addr}}	{{server_port}}
+ionly 64MB RAM, edit `/etc/memcached.conf` and change `-m 64` to `-m		{{server_addr}}	{{server_port}}
+i16` or similar. Remember to restart with `service memcached restart` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Configuring W3TC		{{server_addr}}	{{server_port}}
+iNavigate to **WP Admin > Performance > General Settings** . Change all		{{server_addr}}	{{server_port}}
+icache methods to **Memcached** . If options appear grayed out, your		{{server_addr}}	{{server_port}}
+iMemcache setup requires verification. After selecting Memcached for		{{server_addr}}	{{server_port}}
+iall sections, save settings and purge caches.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Using Opcode Component Caching		{{server_addr}}	{{server_port}}
+iDuring testing, W3TC failed to recognize eAccelerator properly, so I		{{server_addr}}	{{server_port}}
+iinstalled XCache:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  apt-get install php5-xcache		{{server_addr}}	{{server_port}}
+i  # For LNMP or LLsMP (FastCGI) users, run this		{{server_addr}}	{{server_port}}
+i  service php5-fpm restart		{{server_addr}}	{{server_port}}
+i  # For LAMP or LLsMP (LiteSpeed SAPI) users, run this		{{server_addr}}	{{server_port}}
+i  service apache2 restart		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIn **WP Admin > Performance > General Settings** , switch all cache		{{server_addr}}	{{server_port}}
+imethods to **Opcode: XCache** . Grayed-out options indicate XCache		{{server_addr}}	{{server_port}}
+imisconfiguration. Select XCache for all sections, save settings, and		{{server_addr}}	{{server_port}}
+ipurge caches to complete.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

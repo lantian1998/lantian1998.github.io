@@ -1,0 +1,60 @@
+iBad Apple is an animation produced by Touhou Project in Japan. The		{{server_addr}}	{{server_port}}
+ientire animation uses a method similar to shadow play, featuring only		{{server_addr}}	{{server_port}}
+iblack and white colors, yet achieves 3D visuals through entirely		{{server_addr}}	{{server_port}}
+ihand-drawn frames! The effect is excellent with no frame skipping or		{{server_addr}}	{{server_port}}
+idropping.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDue to its monochromatic nature, many enthusiasts have ported it to		{{server_addr}}	{{server_port}}
+ivarious platforms. I've seen versions running on calculators,		{{server_addr}}	{{server_port}}
+iRaspberry Pi, and even JavaScript implementations. I also wrote a		{{server_addr}}	{{server_port}}
+iPascal program to play Bad Apple, though it operates entirely in the		{{server_addr}}	{{server_port}}
+icommand line.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI'm too lazy to provide the compiled binary. Since I use Linux, it		{{server_addr}}	{{server_port}}
+iwould be useless for Windows users anyway. Therefore, I'm sharing the		{{server_addr}}	{{server_port}}
+isource code below — compile it yourself using FPC.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  uses crt;		{{server_addr}}	{{server_port}}
+i  var		{{server_addr}}	{{server_port}}
+i      fin:text;		{{server_addr}}	{{server_port}}
+i      i:longint;		{{server_addr}}	{{server_port}}
+i      s:string;		{{server_addr}}	{{server_port}}
+i  begin		{{server_addr}}	{{server_port}}
+i      // 链接源文件并准备读取		{{server_addr}}	{{server_port}}
+i      assign(fin,'badapple.txt');		{{server_addr}}	{{server_port}}
+i      reset(fin);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 读入第一幅画面并输出版权		{{server_addr}}	{{server_port}}
+i      for i:=1 to 24 do begin		{{server_addr}}	{{server_port}}
+i          readln(fin,s);		{{server_addr}}	{{server_port}}
+i          writeln(s);		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i      write('Bad Apple ASCII Art by Lan Tian - https://lantian.pub');		{{server_addr}}	{{server_port}}
+i      delay(50);		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 输出之后画面，不覆盖版权		{{server_addr}}	{{server_port}}
+i      while(not(eof(fin)))do begin		{{server_addr}}	{{server_port}}
+i          gotoxy(1,1);		{{server_addr}}	{{server_port}}
+i          for i:=1 to 24 do begin		{{server_addr}}	{{server_port}}
+i              readln(fin,s);		{{server_addr}}	{{server_port}}
+i              writeln(s);		{{server_addr}}	{{server_port}}
+i          end;		{{server_addr}}	{{server_port}}
+i          //write('Bad Apple ASCII Art by Lan Tian - https://lantian.pub');		{{server_addr}}	{{server_port}}
+i          delay(50);		{{server_addr}}	{{server_port}}
+i      end;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 清屏		{{server_addr}}	{{server_port}}
+i      //gotoxy(1,1);		{{server_addr}}	{{server_port}}
+i      //for i:=1 to 25 do writeln;		{{server_addr}}	{{server_port}}
+i      clrscr;		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i      // 保持良好编程习惯		{{server_addr}}	{{server_port}}
+i      close(fin);		{{server_addr}}	{{server_port}}
+i  end.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOf course, the main program alone is useless. You'll also need the		{{server_addr}}	{{server_port}}
+ioriginal graphics file (the `badapple.txt` I reference). Download it		{{server_addr}}	{{server_port}}
+ihere:		{{server_addr}}	{{server_port}}
+1/usr/uploads/2013/03/badapple.7z	/usr/uploads/2013/03/badapple.7z	{{server_addr}}	{{server_port}}
+i. Place it in the same directory as the executable.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

@@ -1,0 +1,46 @@
+iOn Ubuntu 12.10, I dislike using the default ibus. Neither fcitx nor		{{server_addr}}	{{server_port}}
+iscim in the software repositories include a Pinyin package, so I		{{server_addr}}	{{server_port}}
+idownloaded the Google Pinyin module for scim, compiled and installed		{{server_addr}}	{{server_port}}
+iit myself.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, during use, scim frequently malfunctions. The symptom is that		{{server_addr}}	{{server_port}}
+ino matter which input field I click, scim fails to recognize it and		{{server_addr}}	{{server_port}}
+ithinks Chinese input isn't possible there. This forces me to type in		{{server_addr}}	{{server_port}}
+iEnglish.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDuring one such malfunction, I was chatting with a classmate via		{{server_addr}}	{{server_port}}
+ipywebqq. When scim crashed, the subsequent conversation was conducted		{{server_addr}}	{{server_port}}
+ientirely in Pinyin. It wasn't until the other party stopped responding		{{server_addr}}	{{server_port}}
+ithat I took the chance to log out and log back in, restoring scim.		{{server_addr}}	{{server_port}}
+iToday, while writing an essay on my computer, scim malfunctioned		{{server_addr}}	{{server_port}}
+iagain.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI really didn't want to log out, so I opened the terminal to check		{{server_addr}}	{{server_port}}
+iscim's commands.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  xdd@xdd-asus:~$ scim --help		{{server_addr}}	{{server_port}}
+i  Smart Common Input Method 1.4.14		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  Usage: scim [option]...		{{server_addr}}	{{server_port}}
+i  		{{server_addr}}	{{server_port}}
+i  The options are:		{{server_addr}}	{{server_port}}
+i    -l, --list              List all of available modules.		{{server_addr}}	{{server_port}}
+i    -f, --frontend name     Use specified FrontEnd module.		{{server_addr}}	{{server_port}}
+i    -c, --config name       Use specified Config module.		{{server_addr}}	{{server_port}}
+i    -e, --engines name      Load specified set of IMEngines.		{{server_addr}}	{{server_port}}
+i    -ne,--no-engines name   Do not load those set of IMEngines.		{{server_addr}}	{{server_port}}
+i    -d, --daemon            Run scim as a daemon.		{{server_addr}}	{{server_port}}
+i    --no-socket             Do not try to start a SCIM SocketFrontEnd daemon.		{{server_addr}}	{{server_port}}
+i    -h, --help              Show this help message.		{{server_addr}}	{{server_port}}
+i  xdd@xdd-asus:~$		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI discovered the `-d` command-line option, which I guessed was for		{{server_addr}}	{{server_port}}
+ilaunching scim. Then it occurred to me: if scim has crashed, why not		{{server_addr}}	{{server_port}}
+ikill it and restart? So I entered the following command:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  pkill -9 scim & scim -d		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter execution, scim disappeared. When I pressed Ctrl+Space, scim		{{server_addr}}	{{server_port}}
+ireappeared. Clicking in LibreOffice, all language and symbol options		{{server_addr}}	{{server_port}}
+ibecame available. The problem was solved.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

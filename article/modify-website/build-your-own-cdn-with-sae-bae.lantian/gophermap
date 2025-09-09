@@ -1,0 +1,109 @@
+i** 警告：由于我疏忽，把 SAE CDN 的 index.php 代码打错了一行，请参照下		{{server_addr}}	{{server_port}}
+i面代码中的注释修改代码，否则将造成远程图片不能获取的问题。**		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i大多数人的博客都放在国外，原因我不说了。但是 SAE 和 BAE 的服务器放在国		{{server_addr}}	{{server_port}}
+i内，速度很快（SAE 由于是电信通机房，抽风有点严重），因此我们可以利用它		{{server_addr}}	{{server_port}}
+i们为自己的博客加速。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1.SAE 搭建 CDN		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个方法要用到 SaeLayerCDN，在 SAE 的应用商店里也有，可以一键安装，然		{{server_addr}}	{{server_port}}
+i后修改几个简单的设置就完成运行。不过让我百思不得其解的是，为什么一个能		{{server_addr}}	{{server_port}}
+i在一个 php 文件里完成的东西愣是要弄成 5 个，还要搞面向对象的编程？		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我把里面的无用代码删除了一大堆，并且合并到了一个 php 里。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i安装方法：SAE 里创建应用，创建一个 storage 名为 cache，代码管理里创建		{{server_addr}}	{{server_port}}
+i代码库，在编辑代码里创建以下文件：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1）config.yaml 内容：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  name: 你的appid		{{server_addr}}	{{server_port}}
+i  version: 你的版本号，一般是1		{{server_addr}}	{{server_port}}
+i  handle:		{{server_addr}}	{{server_port}}
+i    - compress:compress		{{server_addr}}	{{server_port}}
+i    - rewrite:goto "index.php?q=$1"		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2）index.php 内容：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <?php		{{server_addr}}	{{server_port}}
+i  define('STATIC_URL','你的网站url，含http和末尾斜杠');		{{server_addr}}	{{server_port}}
+i  define('DOMAIN','你的storage名字，默认是cache');		{{server_addr}}	{{server_port}}
+i  $content_type = 'application/force-download';		{{server_addr}}	{{server_port}}
+i  $request = ltrim($_GET['q'],'/');		{{server_addr}}	{{server_port}}
+i  $temp = array();		{{server_addr}}	{{server_port}}
+i  if(preg_match('/\.(jpg|jpeg|png|gif|css|js)$/i', $request,$temp)===1){		{{server_addr}}	{{server_port}}
+i      switch($temp[1]){		{{server_addr}}	{{server_port}}
+i          case 'jpg':{$content_type="image/jpeg";}break;		{{server_addr}}	{{server_port}}
+i          case 'jpeg':{$content_type="image/jpeg";}break;		{{server_addr}}	{{server_port}}
+i          case 'png':{$content_type="image/png";}break;		{{server_addr}}	{{server_port}}
+i          case 'gif':{$content_type="image/gif";}break;		{{server_addr}}	{{server_port}}
+i          case 'css':{$content_type="text/css";}break;		{{server_addr}}	{{server_port}}
+i          case 'js':{$content_type="text/javascript";}break;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  $instance = new SaeStorage(SAE_ACCESSKEY,SAE_SECRETKEY);		{{server_addr}}	{{server_port}}
+i  if($instance->fileExists(DOMAIN,$request)){		{{server_addr}}	{{server_port}}
+i      $content = $instance->read(DOMAIN,$request);		{{server_addr}}	{{server_port}}
+i  }else{		{{server_addr}}	{{server_port}}
+i  //    $content = @file_get_contents(BASE_URL.$request);		{{server_addr}}	{{server_port}}
+i  // 原先我把上面一行打错了，请改成下面一行		{{server_addr}}	{{server_port}}
+i      $content = @file_get_contents(STATIC_URL.$request);		{{server_addr}}	{{server_port}}
+i      $instance->write(DOMAIN,$request,$content);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  header("Expires:".date("D, j M Y H:i:s GMT",time()+315360000));		{{server_addr}}	{{server_port}}
+i  header("Last-Modified:Sat,26 Jul 1997 05:00:00 GMT");		{{server_addr}}	{{server_port}}
+i  header('Content-type:'.$content_type);		{{server_addr}}	{{server_port}}
+i  header('Cache-control:public');		{{server_addr}}	{{server_port}}
+i  echo $content;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i保存，然后把你原网站里所有的图片、视频等你希望走 SAE 的内容的 URL 从你		{{server_addr}}	{{server_port}}
+i的网站改成 SAE 给你的二级域名。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i2.BAE 搭建 CDN		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i这个可就没有现成代码了，我就照着上面的那个改了一下。要命的是 BAE 官方		{{server_addr}}	{{server_port}}
+i的开发文档有问题，搞得我折腾半天。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBAE 创建应用，类型为 PC Iframe，然后打开 BAE 托管。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在云存储里创建一个 bucket，名字自定。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在应用配置里增加一条 url 类型规则，规则为「/(.*)」（不含引号），执行		{{server_addr}}	{{server_port}}
+iindex.php。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i在代码管理里面创建一个文件，名为 index.php，内容如下：		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  <?php		{{server_addr}}	{{server_port}}
+i  define('STATIC_URL','你的网站URL，含http和末尾斜杠');		{{server_addr}}	{{server_port}}
+i  define('DOMAIN','你的BAE Bucket名字');		{{server_addr}}	{{server_port}}
+i  $content_type = 'application/force-download';		{{server_addr}}	{{server_port}}
+i  $request = ltrim($_SERVER['REQUEST_URI'],'/');		{{server_addr}}	{{server_port}}
+i  $temp = array();		{{server_addr}}	{{server_port}}
+i  if(preg_match('/\.(jpg|jpeg|png|gif|css|js)$/i', $request,$temp)===1){		{{server_addr}}	{{server_port}}
+i      switch($temp[1]){		{{server_addr}}	{{server_port}}
+i          case 'jpg':{$content_type="image/jpeg";}break;		{{server_addr}}	{{server_port}}
+i          case 'jpeg':{$content_type="image/jpeg";}break;		{{server_addr}}	{{server_port}}
+i          case 'png':{$content_type="image/png";}break;		{{server_addr}}	{{server_port}}
+i          case 'gif':{$content_type="image/gif";}break;		{{server_addr}}	{{server_port}}
+i          case 'css':{$content_type="text/css";}break;		{{server_addr}}	{{server_port}}
+i          case 'js':{$content_type="text/javascript";}break;		{{server_addr}}	{{server_port}}
+i      }		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  $instance = new BaiduBCS();		{{server_addr}}	{{server_port}}
+i  if($instance->is_object_exist(DOMAIN,'/'.$request)){		{{server_addr}}	{{server_port}}
+i    $content = $instance->get_object(DOMAIN,'/'.$request)->body;		{{server_addr}}	{{server_port}}
+i  }else{		{{server_addr}}	{{server_port}}
+i    $content = @file_get_contents(STATIC_URL.'/'.$request);		{{server_addr}}	{{server_port}}
+i    $instance->create_object_by_content(DOMAIN,'/'.$request,$content);		{{server_addr}}	{{server_port}}
+i  }		{{server_addr}}	{{server_port}}
+i  header("Expires:".date("D, j M Y H:i:s GMT",time()+315360000));		{{server_addr}}	{{server_port}}
+i  header("Last-Modified:Sat,26 Jul 1997 05:00:00 GMT");		{{server_addr}}	{{server_port}}
+i  header('Content-type:'.$content_type);		{{server_addr}}	{{server_port}}
+i  header('Cache-control:public');		{{server_addr}}	{{server_port}}
+i  echo $content;		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i存盘即可。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i我已经把这个部署完毕了，等会上传数据。		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

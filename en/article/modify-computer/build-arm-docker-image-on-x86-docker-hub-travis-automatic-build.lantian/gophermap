@@ -1,0 +1,148 @@
+iTypically, Docker images are created by running specified commands		{{server_addr}}	{{server_port}}
+istep-by-step within an existing image. This process poses no issues		{{server_addr}}	{{server_port}}
+ifor most users on x86 architecture computers, as the architectures are		{{server_addr}}	{{server_port}}
+icompatible. Images built on one machine can usually run directly on		{{server_addr}}	{{server_port}}
+iothers, unless the programs within the image use newer instruction		{{server_addr}}	{{server_port}}
+isets like AVX.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iHowever, there are ARM-based hosts that can run Docker and execute		{{server_addr}}	{{server_port}}
+ispecially compiled ARM architecture images. These include Raspberry Pi		{{server_addr}}	{{server_port}}
+iseries and similar boards like Cubieboard, Orange Pi, Asus Tinker		{{server_addr}}	{{server_port}}
+iBoard, etc. Additionally, hosting providers like Scaleway offer		{{server_addr}}	{{server_port}}
+iARM-based dedicated servers.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSince ARM architecture systems cannot run on x86 computers, you can't		{{server_addr}}	{{server_port}}
+idirectly generate ARM architecture images via Dockerfile on x86		{{server_addr}}	{{server_port}}
+imachines. The common solution is to use an ARM host for `docker build` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iBut when I created a Docker image for nginx on my Raspberry Pi, I		{{server_addr}}	{{server_port}}
+ifound this approach suboptimal. With only 1GB RAM on the Pi, enabling		{{server_addr}}	{{server_port}}
+imulti-threaded compilation ( `make -j4` or `make -j2` ) causes memory		{{server_addr}}	{{server_port}}
+iexhaustion and kills gcc; while single-threaded compilation ( `make` )		{{server_addr}}	{{server_port}}
+itakes excessively long (several hours).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter research, an alternative solution emerged: simulating an ARM		{{server_addr}}	{{server_port}}
+ienvironment on x86 architecture through "virtualization." Although x86		{{server_addr}}	{{server_port}}
+iemulation of ARM lacks hardware acceleration (VT-x, AMD-V, etc.) and		{{server_addr}}	{{server_port}}
+iis inefficient, the overall performance still surpasses native		{{server_addr}}	{{server_port}}
+icompilation on Raspberry Pi due to the high performance of x86 CPUs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## qemu-user-static		{{server_addr}}	{{server_port}}
+iThe first step is to emulate an ARM environment. While we could run a		{{server_addr}}	{{server_port}}
+ifull ARM Linux VM using QEMU and perform Docker builds inside it, this		{{server_addr}}	{{server_port}}
+iintroduces challenges: managing an additional Docker instance,		{{server_addr}}	{{server_port}}
+iinflexible resource allocation between host and VM, and difficulty		{{server_addr}}	{{server_port}}
+iautomating scripts for CI/CD integration.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iA superior solution is qemu-user-static, a userspace implementation of		{{server_addr}}	{{server_port}}
+iQEMU. It dynamically translates ARM/MIPS instructions to x86, allowing		{{server_addr}}	{{server_port}}
+iARM Linux programs to run directly on amd64 systems. This creates a		{{server_addr}}	{{server_port}}
+i1:1 mapping between ARM processes and host system processes, enabling		{{server_addr}}	{{server_port}}
+iflexible resource allocation and script automation.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iOne caveat: When an ARM process spawns a child process,		{{server_addr}}	{{server_port}}
+iqemu-user-static doesn't automatically handle it. If the new process		{{server_addr}}	{{server_port}}
+iis ARM-based, the Linux kernel can't execute it. This requires		{{server_addr}}	{{server_port}}
+ienabling Linux's binfmt feature, which automatically invokes		{{server_addr}}	{{server_port}}
+iqemu-user-static when detecting ARM/MIPS binaries. Once enabled and		{{server_addr}}	{{server_port}}
+iregistered, running ARM programs becomes indistinguishable from		{{server_addr}}	{{server_port}}
+irunning native x86 programs.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Running ARM Images in x86 Docker		{{server_addr}}	{{server_port}}
+iTo run ARM images in Docker, first register the qemu-user-static		{{server_addr}}	{{server_port}}
+iemulator:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  docker run --rm --privileged multiarch/qemu-user-static:register --reset		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAdditionally, the Docker image itself must contain the corresponding		{{server_addr}}	{{server_port}}
+iqemu-user-static binaries. Pre-configured system images are available		{{server_addr}}	{{server_port}}
+ion Docker Hub at		{{server_addr}}	{{server_port}}
+ihttps://hub.docker.com/u/multiarch/		{{server_addr}}	{{server_port}}
+i:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFor example, the multiarch/alpine image provides aarch64 (armv8),		{{server_addr}}	{{server_port}}
+iarmhf, amd64, and i386 variants under different tags:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter registering the emulator, you can directly run ARM images:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  docker run -it --rm multiarch/alpine:armhf-edge /bin/sh		{{server_addr}}	{{server_port}}
+i  docker run -it --rm multiarch/alpine:aarch64-edge /bin/sh		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Modifying Dockerfile		{{server_addr}}	{{server_port}}
+iNext, we'll call ARM architecture images in the Dockerfile. For armv7l (armhf)		{{server_addr}}	{{server_port}}
+ihosts (Raspberry Pi (default), Tinker Board, etc.), replace the first		{{server_addr}}	{{server_port}}
+iline of your Dockerfile with the corresponding armhf image from		{{server_addr}}	{{server_port}}
+ihttps://hub.docker.com/u/multiarch/		{{server_addr}}	{{server_port}}
+i. Mapping examples:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- alpine → multiarch/alpine:armhf-edge		{{server_addr}}	{{server_port}}
+i- ubuntu:bionic → multiarch/ubuntu-debootstrap:armhf-bionic		{{server_addr}}	{{server_port}}
+i- debian:stretch → multiarch/debian-debootstrap:armhf-stretch		{{server_addr}}	{{server_port}}
+iFor aarch64 (armv8) hosts (supported by Raspberry Pi 3+ with		{{server_addr}}	{{server_port}}
+ispecialized OS):		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i- alpine → multiarch/alpine:aarch64-edge		{{server_addr}}	{{server_port}}
+i- ubuntu:bionic → multiarch/ubuntu-debootstrap:arm64-bionic		{{server_addr}}	{{server_port}}
+i- debian:stretch → multiarch/debian-debootstrap:arm64-stretch		{{server_addr}}	{{server_port}}
+iAfter modification, rebuild the image to generate ARM architecture		{{server_addr}}	{{server_port}}
+iimages locally.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Docker Hub Automated Builds		{{server_addr}}	{{server_port}}
+iDocker Hub provides not only image storage but also automated build		{{server_addr}}	{{server_port}}
+iservices. The build environment offers a 2GB RAM, 1-core CPU, 30GB		{{server_addr}}	{{server_port}}
+idisk VM with root access running for 2 hours (source:		{{server_addr}}	{{server_port}}
+iDocker Forum		{{server_addr}}	{{server_port}}
+i).		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDefault automated builds execute the equivalent of `docker build` ,		{{server_addr}}	{{server_port}}
+ibut we need to register qemu-user-static beforehand. Docker's hooks		{{server_addr}}	{{server_port}}
+iallow running custom commands before building (source:		{{server_addr}}	{{server_port}}
+iDocker Cloud Docs		{{server_addr}}	{{server_port}}
+i). Since we have root access, we can register the emulator in a hook.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iCreate a `hooks` folder in your Dockerfile directory, then add a `pre_build`		{{server_addr}}	{{server_port}}
+ifile with:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i  #!/bin/sh		{{server_addr}}	{{server_port}}
+i  docker run --rm --privileged multiarch/qemu-user-static:register --reset		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iSee		{{server_addr}}	{{server_port}}
+ithis commit		{{server_addr}}	{{server_port}}
+ifor a hook example.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iDocker Hub will execute this script before building. The resulting		{{server_addr}}	{{server_port}}
+iimage will be ARM architecture.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iIf your build involves no compilation, it should complete quickly. For		{{server_addr}}	{{server_port}}
+iheavy compilation tasks (e.g., nginx), the 2-hour limit may be		{{server_addr}}	{{server_port}}
+iexceeded. In such cases, switch to time-unlimited services like Travis		{{server_addr}}	{{server_port}}
+iCI.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i## Travis CI Automated Builds		{{server_addr}}	{{server_port}}
+iTravis CI offers free automated builds for open-source projects. If		{{server_addr}}	{{server_port}}
+iyour Dockerfile is in a public GitHub repository, you can use it		{{server_addr}}	{{server_port}}
+idirectly.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iTravis provides 7.5GB RAM, 2-core CPU, 18GB disk, and 50-minute		{{server_addr}}	{{server_port}}
+iexecution limits. This allows faster compilation with `make -j4` .		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Log in at		{{server_addr}}	{{server_port}}
+i   https://travis-ci.org/		{{server_addr}}	{{server_port}}
+i   with GitHub and enable builds for your repository.		{{server_addr}}	{{server_port}}
+i2. Add your Docker Hub credentials as environment variables in		{{server_addr}}	{{server_port}}
+i   Settings to avoid hardcoding passwords.		{{server_addr}}	{{server_port}}
+i3. Create a `.travis.yml` file in your repository root (Travis's		{{server_addr}}	{{server_port}}
+i   configuration file). Modify		{{server_addr}}	{{server_port}}
+i   my .travis.yml		{{server_addr}}	{{server_port}}
+i   as a template, available at:		{{server_addr}}	{{server_port}}
+i   https://github.com/xddxdd/dockerfiles/blob/master/.travis.yml		{{server_addr}}	{{server_port}}
+iFor advanced customization, refer to Travis		{{server_addr}}	{{server_port}}
+iofficial documentation		{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iAfter committing `.travis.yml` to GitHub, Travis will automatically		{{server_addr}}	{{server_port}}
+ibuild your images, push them to Docker Hub, and email build results.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}

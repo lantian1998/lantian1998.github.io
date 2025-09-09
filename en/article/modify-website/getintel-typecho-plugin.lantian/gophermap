@@ -1,0 +1,18 @@
+iAn introduction to GetIPIntel can be found in		{{server_addr}}	{{server_port}}
+1this recent article	/en/article/modify-website/getipintel-anti-fraud.lantian	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iI've developed a Typecho plugin that blocks visitors using proxies		{{server_addr}}	{{server_port}}
+ifrom commenting or sends their comments directly to the spam bin.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+iFeatures:		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
+i1. Multiple mode options (Blacklist only, Quick Check, Full Check)		{{server_addr}}	{{server_port}}
+i2. Various handling measures (Manual review, Send to spam bin,		{{server_addr}}	{{server_port}}
+i   Submission failure)		{{server_addr}}	{{server_port}}
+i3. Custom threshold		{{server_addr}}	{{server_port}}
+iThe plugin can be downloaded at		{{server_addr}}	{{server_port}}
+hhttps://github.com/xddxdd/typecho-getipintel	URL:https://github.com/xddxdd/typecho-getipintel	{{server_addr}}	{{server_port}}
+i.		{{server_addr}}	{{server_port}}
+iSimply place the GetIPIntel folder into the usr/plugins directory.		{{server_addr}}	{{server_port}}
+i		{{server_addr}}	{{server_port}}
