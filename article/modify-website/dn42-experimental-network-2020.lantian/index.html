@@ -1,0 +1,1261 @@
+<!DOCTYPE html><html lang="zh-CN" itemscope="" itemtype="https://schema.org/Article" data-astro-cid-porej7z2=""> <head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>DN42 实验网络介绍及注册教程（2022-12 更新） - Lan Tian @ Blog</title><script>
+  ;(() => {
+    try {
+      const mode = localStorage.getItem('user-color-scheme')
+      if (mode == 'dark' || mode == 'light') {
+        document.documentElement.setAttribute('data-user-color-scheme', mode)
+      }
+    } catch {
+      // Ignore errors
+    }
+  })()
+  ;(() => {
+    window.lantianImageFallback = (img, src) => {
+      img.onerror = null
+      img.srcset = src
+      img.src = src
+      if (img.parentNode.nodeName.toLowerCase() === 'picture') {
+        const picture = img.parentNode
+        picture.innerHTML = ''
+        picture.appendChild(img)
+      }
+    }
+  })()
+</script><link rel="stylesheet" href="/assets/index.CN3CN3hr.css"><style>.post-image-wrap[data-astro-cid-potdituc]{margin:0 -5px}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{height:150px;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center}@media(min-width:768px){.post-image-wrap[data-astro-cid-potdituc]{padding:5px;float:right}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:200px}}@media(max-width:767.98px){.post-image-wrap[data-astro-cid-potdituc]{text-align:center}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:100%}}#post-navi[data-astro-cid-gfbmwgei]{padding:5px;border-top:1px solid var(--lt-border-weak);border-bottom:1px solid var(--lt-border-weak)}
+</style><link rel="stylesheet" href="/assets/index.DC6W6NZY.css"><script type="module" src="/assets/PageLayout.astro_astro_type_script_index_0_lang.Co1i7321.js"></script><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><meta name="title" content="DN42 实验网络介绍及注册教程（2022-12 更新） - Lan Tian @ Blog"><meta name="keywords" content=""><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/article/modify-website/dn42-experimental-network-2020.lantian/"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-website/dn42-experimental-network-2020.lantian/" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-website/dn42-experimental-network-2020.lantian/" hreflang="en"><meta name="copyright" content="Copyright 2012-2026 Lan Tian @ Blog"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="manifest" href="/manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#03a9f4"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#212121"><meta name="application-name" content="Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167x167.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="apple-touch-icon" sizes="1024x1024" href="/apple-touch-icon-1024x1024.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-precomposed.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-640x1136.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1136x640.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-750x1334.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1334x750.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1125x2436.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2436x1125.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1170x2532.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2532x1170.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1179x2556.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2556x1179.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-828x1792.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1792x828.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2688.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2688x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2208.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2208x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1284x2778.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2778x1284.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1290x2796.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2796x1290.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1488x2266.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2266x1488.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1536x2048.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2048x1536.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1620x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1620.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1640x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1640.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2388.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2388x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2224.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2224x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-2048x2732.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2732x2048.png"><meta name="msapplication-TileColor" content="#bbdefb"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-config" content="/browserconfig.xml"><link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json"><meta property="og:url" content="https://lantian.pub/article/modify-website/dn42-experimental-network-2020.lantian/"><meta property="og:type" content="website"><meta property="og:title" content="DN42 实验网络介绍及注册教程（2022-12 更新） - Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/apple-touch-icon.png"><meta content="DN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型、去中心化的 VPN 网络。但是与其它传统 VPN 不同的是，DN42 本身不提供 VPN 出口服务，即不提供规避网络审查、流媒体解锁等类似服务。相反，DN42 的目的是模拟一个互联网。它使用了大量在目前互联网骨干上应用的技术（例如 BGP 和递归 DNS），可以很好地模拟一个真实的网络环境。 简而言之，DN42： 不适合单纯想要保护隐私、规避网络审查的用户 不适合在网内消耗大量流量，例如用于解锁流媒体服务的用户 适合想要研究网络技术，练习服务器、路由器等网络设备配置，甚至后续在真实互联网建立 AS 的用户 适合拥有真实 AS，但担心自己 配置错误广播出错误路由、干掉半个互联网 ，希望有个地方测试的用户。 正因为此，使用 DN42 的门槛比较高。就像在真实互联网中一样，你要扮演一个 ISP（互联网服务提供商），注册自己的个人信息，ASN 号码，IPv4 和 IPv6 的地址池，..."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="zh"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/article/modify-website/dn42-experimental-network-2020.lantian/"><meta name="twitter:title" content="DN42 实验网络介绍及注册教程（2022-12 更新） - Lan Tian @ Blog"><meta property="twitter:image" content="https://lantian.pub/apple-touch-icon.png"><meta content="DN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型、去中心化的 VPN 网络。但是与其它传统 VPN 不同的是，DN42 本身不提供 VPN 出口服务，即不提供规避网络审查、流媒体解锁等类似服务。相反，DN42 的目的是模拟一个互联网。它使用了大量在目前互联网骨干上应用的技术（例如 BGP 和递归 DNS），可以很好地模拟一个真实的网络环境。 简而言之，DN42： 不适合单纯想要保护隐私、规避网络审查的用户 不适合在网内消耗大量流量，例如用于解锁流媒体服务的用户 适合想要研究网络技术，练习服务器、路由器等网络设备配置，甚至后续在真实互联网建立 AS 的用户 适合拥有真实 AS，但担心自己 配置错误广播出错误路由、干掉半个互联网 ，希望有个地方测试的用户。 正因为此，使用 DN42 的门槛比较高。就像在真实互联网中一样，你要扮演一个 ISP（互联网服务提供商），注册自己的个人信息，ASN 号码，IPv4 和 IPv6 的地址池，..."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="DN42 实验网络介绍及注册教程（2022-12 更新） - Lan Tian @ Blog"><meta property="image" content="https://lantian.pub/apple-touch-icon.png"><meta content="DN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型、去中心化的 VPN 网络。但是与其它传统 VPN 不同的是，DN42 本身不提供 VPN 出口服务，即不提供规避网络审查、流媒体解锁等类似服务。相反，DN42 的目的是模拟一个互联网。它使用了大量在目前互联网骨干上应用的技术（例如 BGP 和递归 DNS），可以很好地模拟一个真实的网络环境。 简而言之，DN42： 不适合单纯想要保护隐私、规避网络审查的用户 不适合在网内消耗大量流量，例如用于解锁流媒体服务的用户 适合想要研究网络技术，练习服务器、路由器等网络设备配置，甚至后续在真实互联网建立 AS 的用户 适合拥有真实 AS，但担心自己 配置错误广播出错误路由、干掉半个互联网 ，希望有个地方测试的用户。 正因为此，使用 DN42 的门槛比较高。就像在真实互联网中一样，你要扮演一个 ISP（互联网服务提供商），注册自己的个人信息，ASN 号码，IPv4 和 IPv6 的地址池，..."><meta content="DN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型、去中心化的 VPN 网络。但是与其它传统 VPN 不同的是，DN42 本身不提供 VPN 出口服务，即不提供规避网络审查、流媒体解锁等类似服务。相反，DN42 的目的是模拟一个互联网。它使用了大量在目前互联网骨干上应用的技术（例如 BGP 和递归 DNS），可以很好地模拟一个真实的网络环境。 简而言之，DN42： 不适合单纯想要保护隐私、规避网络审查的用户 不适合在网内消耗大量流量，例如用于解锁流媒体服务的用户 适合想要研究网络技术，练习服务器、路由器等网络设备配置，甚至后续在真实互联网建立 AS 的用户 适合拥有真实 AS，但担心自己 配置错误广播出错误路由、干掉半个互联网 ，希望有个地方测试的用户。 正因为此，使用 DN42 的门槛比较高。就像在真实互联网中一样，你要扮演一个 ISP（互联网服务提供商），注册自己的个人信息，ASN 号码，IPv4 和 IPv6 的地址池，..."><link rel="me" href="https://mastodon.social/@lantian"></head> <body data-astro-cid-porej7z2=""> <div id="bg" data-astro-cid-j6vmxtef=""></div>   <div id="container" class="container" data-astro-cid-porej7z2=""> <nav class="lantian navbar navbar-expand-lg" data-astro-cid-wu5dj4rx=""> <div class="container-fluid" data-astro-cid-wu5dj4rx=""> <a class="navbar-brand" href="/" data-astro-cid-wu5dj4rx="">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation" data-astro-cid-wu5dj4rx=""> <span class="navbar-toggler-icon" data-astro-cid-wu5dj4rx=""></span> </button> <div class="collapse navbar-collapse" id="lantian-navbar" data-astro-cid-wu5dj4rx=""> <ul class="navbar-nav" data-astro-cid-wu5dj4rx=""> <li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/page/archive/index.html" data-astro-cid-wu5dj4rx=""> 文章们 </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> 俯瞰地球 </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> <li class="nav-item dropdown d-block d-lg-none" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="pages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-file" data-astro-cid-wu5dj4rx=""></i> 页面  <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="pages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/page/archive/index.html" data-astro-cid-wu5dj4rx=""> 文章们 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> 俯瞰地球 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> </ul> </li> </ul> <ul class="navbar-nav ms-auto" data-astro-cid-wu5dj4rx=""> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="languages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-language" data-astro-cid-wu5dj4rx=""></i> Language <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="languages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item active" href="/article/modify-website/dn42-experimental-network-2020.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-cn" data-astro-cid-wu5dj4rx=""></span> Chinese Simplified / 简体中文 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/article/modify-website/dn42-experimental-network-2020.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-us" data-astro-cid-wu5dj4rx=""></span> English </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">Not all pages have translations.</a> </li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">You may see 404 - this is normal.</a> </li> </ul> </li> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="color-scheme-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> 夜间模式 </a> <ul class="dropdown-menu" aria-labelledby="color-scheme-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-auto" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> 自动 </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-light" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-sun" data-astro-cid-wu5dj4rx=""></i> 浅色</a> </li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-dark" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-moon" data-astro-cid-wu5dj4rx=""></i> 深色</a> </li> </ul> </li> </ul> </div> </div> </nav> <script type="module">const m="user-color-scheme",s="data-user-color-scheme",u=(e,t)=>{try{localStorage.setItem(e,t)}catch{}},i=e=>{try{return localStorage.getItem(e)}catch{return null}},c=e=>{const t={dark:!0,light:!0,auto:!0},o=e===null||!Object.keys(t).includes(e)?"auto":e;u(m,o);for(const l in t){const n=document.getElementById("color-scheme-"+l);n&&(l==o?n.classList.add("active"):n.classList.remove("active"))}o!="auto"?document.documentElement.setAttribute(s,o):document.documentElement.removeAttribute(s)};c(i(m));const r=document.getElementById("color-scheme-auto");r&&r.addEventListener("click",()=>c("auto"));const a=document.getElementById("color-scheme-light");a&&a.addEventListener("click",()=>c("light"));const d=document.getElementById("color-scheme-dark");d&&d.addEventListener("click",()=>c("dark"));</script>  <div class="d-flex" data-astro-cid-porej7z2=""> <div id="content" data-astro-cid-porej7z2="">  <article> <div class="d-flex"> <div class="post-info-wrap" data-astro-cid-dckccua4=""> <div class="post-info" data-astro-cid-dckccua4=""> <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-clock" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">05-02</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> 发布于<span class="badge badge-tag" data-astro-cid-dckccua4=""> 2021-05-02 12:21 </span>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-file-alt" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">网站与服务端</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> 分类 <a class="badge badge-tag" href="/category/modify-website" data-astro-cid-dckccua4=""> 网站与服务端 </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-tag" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">2 标签</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> 标签  <a class="badge badge-tag" href="/tag/DN42" data-astro-cid-dckccua4=""> DN42 </a>  <a class="badge badge-tag" href="/tag/BGP" data-astro-cid-dckccua4=""> BGP </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-list" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">目录</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu="">  <ol data-astro-cid-nj3qel45=""> <li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#本文更新日志" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">本文更新日志</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#能力需求" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">能力需求</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#注册过程" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">注册过程</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#寻找-peer-的节点" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">寻找 Peer 的节点</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#非常重要的系统配置" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">非常重要的系统配置</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#选择你的隧道软件" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">选择你的隧道软件</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#选择你的-bgp-软件" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">选择你的 BGP 软件</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#搭建你自己的内网" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">搭建你自己的内网</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#1xrtt-peering更快速的对接" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">「1xRTT Peering」：更快速的对接</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#隧道搭建wireguard" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">隧道搭建：WireGuard</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#隧道搭建openvpn" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">隧道搭建：OpenVPN</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#限制-dn42-相关网卡上的流量" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">限制 DN42 相关网卡上的流量</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#bgp-会话配置bird-v1-和-v2" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">BGP 会话配置：BIRD v1 和 v2</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#网络测试及几个加分项" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">网络测试及几个加分项</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#需要帮助" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">需要帮助？</span> </a> </li> </ol>   </div> </div> </div>   </div>  </div>  <div class="post-wrap">  <h1 class="post-title"> <a href="/article/modify-website/dn42-experimental-network-2020.lantian/" rel="bookmark" title="DN42 实验网络介绍及注册教程（2022-12 更新）">DN42 实验网络介绍及注册教程（2022-12 更新）</a> </h1> <div class="post-text">   <p>DN42 全称 Decentralized Network 42（42 号去中心网络），是一个大型、去中心化的
+VPN 网络。但是与其它传统 VPN 不同的是，DN42 本身不提供 VPN 出口服务，即不提供规避网络审查、流媒体解锁等类似服务。相反，DN42 的目的是模拟一个互联网。它使用了大量在目前互联网骨干上应用的技术（例如 BGP 和递归 DNS），可以很好地模拟一个真实的网络环境。</p>
+<p>简而言之，DN42：</p>
+<ul>
+<li>不适合单纯想要保护隐私、规避网络审查的用户</li>
+<li>不适合在网内消耗大量流量，例如用于解锁流媒体服务的用户</li>
+<li>适合想要研究网络技术，练习服务器、路由器等网络设备配置，甚至后续在真实互联网建立 AS 的用户</li>
+<li>适合拥有真实 AS，但担心自己<a href="https://blog.cloudflare.com/how-verizon-and-a-bgp-optimizer-knocked-large-parts-of-the-internet-offline-today/" rel="noopener noreferrer" target="_blank">配置错误广播出错误路由、干掉半个互联网</a>，希望有个地方测试的用户。</li>
+</ul>
+<p>正因为此，使用 DN42 的门槛比较高。就像在真实互联网中一样，你要扮演一个 ISP（互联网服务提供商），注册自己的个人信息，ASN 号码，IPv4 和 IPv6 的地址池，并且使用
+BGP 在自己的服务器上广播它们。你还要和其它的用户联系，和他们做 Peering（对接），一步步进入完整的 DN42 网络。</p>
+<blockquote>
+<p>请注意：建立中国大陆到中国大陆以外的跨境 VPN 连接可能违反法律。请自行衡量其中的风险。</p>
+<p>我的所有 DN42 节点都在中国大陆以外。因此，我不与中国大陆的服务器 Peer，以避免可能的法律问题。</p>
+</blockquote>
+<p>DN42 在 172.20.0.0/14 和 fd00::/8 上运行，而这两个 IP 段都是分配给内网使用的。换句话说，你在 DN42 上怎么折腾，都不会影响到服务器其它的互联网连接。</p>
+<h2 id="本文更新日志">本文更新日志</h2>
+<ul>
+<li>2022-12：添加使用空闲 IPv4 地址块查找工具的内容。</li>
+<li>2022-06：更新最新的注册流程。</li>
+<li>2022-02：更新 <code>rp_filter</code> 相关内容，不要使用 <code>rp_filter=2</code>！</li>
+<li>2021-06：提升一些配置文件的易读性，区分 <code>contact</code> 和 <code>e-mail</code>。</li>
+<li>2021-05：添加《能力需求》一节；添加 iptables 防火墙配置。</li>
+<li>2020-12：修正 BIRDv2 Peer 配置文件的路径。</li>
+<li>2020-10：不再推荐添加 Debian Unstable 软件源安装 WireGuard（有更好的方法了）；推荐在 Windows 上使用 WSL 完成操作。</li>
+<li>2020-09：更新最新的注册流程。</li>
+<li>2020-08：由于 Burble 修改了他的 Peer 标准，不再向新用户推荐与他 Peer。</li>
+<li>2020-07：DN42 Git 服务器地址从 <code>git.dn42.us</code> 更换成 <code>git.dn42.dev</code>。</li>
+<li>2020-05：更新 <code>rp_filter</code> 相关内容，添加「关闭 UFW」的建议。</li>
+<li>2020-04：添加内网配置的建议，「不要占用太多资源」的请求；更详细地解释一些配置选项。</li>
+<li>2020-03：解释自选 IPv6 ULA 地址的风险；添加《非常重要的系统配置》一节；添加生成 GPG 密钥，签名 Git Commit 的相关内容。</li>
+</ul>
+<h2 id="能力需求">能力需求</h2>
+<p>本文假定你已经学会以下内容：</p>
+<ol>
+<li>你有一个 Linux 环境（双系统/虚拟机/VPS 都可以）。</li>
+<li>你知道如何使用常见的 Linux 命令（例如 <code>cd</code>，<code>ls</code> 等），知道在你的 Linux 上安装软件包（<code>apt</code>，<code>yum</code> 等），以及会使用至少一个编辑器（图形化的
+<code>gedit</code>、<code>vscode</code>，或者命令行的 <code>vim</code>、<code>nano</code> 都可以）。如果你不会，建议先阅读<a href="https://www.runoob.com/linux/linux-tutorial.html" rel="noopener noreferrer" target="_blank">这份教程</a>。</li>
+<li>你知道 Git 版本管理工具的基本命令，例如 push/pull/commit。如果你不会，建议先阅读<a href="https://www.liaoxuefeng.com/wiki/896043488029600" rel="noopener noreferrer" target="_blank">这份教程</a>。</li>
+<li>你有一定程度的网络知识，知道 IP、MAC 地址是什么，知道交换机、路由器的工作原理，会在 Linux 下进行基本的网络调试（<code>ping</code>，<code>traceroute</code> 等），听说过
+BGP/OSPF 等动态路由协议。如果你不会，建议先阅读<a href="https://www.cnblogs.com/whenyd/p/8440843.html" rel="noopener noreferrer" target="_blank">这份大纲</a>，并搜索大纲中提到的关键词学习相关知识。</li>
+<li>你有基本的英语阅读能力（用翻译软件也可以）。</li>
+</ol>
+<p>如果你不具备这些知识，你很有可能无法理解教程中的重要内容，从而在配置过程中出现错误，给 DN42 内的其他用户造成麻烦。</p>
+<h2 id="注册过程">注册过程</h2>
+<p>在我写下原先（2017 年）的《<a href="/article/modify-website/join-dn42-experimental-network.lantian">加入 DN42 实验网络</a>》时，DN42 的账户、ASN、IP 等信息均由一个名为 Monotone 的系统完成。但是在 2018
+年，DN42 放弃了 Monotone 系统，改用 Git 管理所有的信息。</p>
+<p>**预先警告：**DN42 的注册流程比较繁琐，需要花费较多的时间。这是因为真实互联网中申请 ASN 和 IP 的流程也是相似的，而 DN42 的目标就是对真实互联网的尽可能真实的模拟。</p>
+<p><strong>请注意：</strong></p>
+<ul>
+<li>这里的注册流程随时可能因 DN42 的流程变动而过时。请优先参照 DN42 的官方注册流程，并将以下流程当作参考。</li>
+<li><a href="https://dn42.dev/howto/Getting-Started" rel="noopener noreferrer" target="_blank">DN42 官方 Wiki 的注册流程</a></li>
+<li><a href="https://git.dn42.dev/dn42/registry/src/branch/master/README.md" rel="noopener noreferrer" target="_blank">DN42 官方 Wiki 的 Git 操作流程（创建 Pull Request）</a></li>
+</ul>
+<p>另外，由于注册流程中需要用到大量的 UNIX 工具，例如 Git、GnuPG 等：</p>
+<ul>
+<li>最好使用 Linux 或 macOS 完成整个流程。</li>
+<li>如果你使用 Windows，建议使用
+<a href="https://docs.microsoft.com/zh-cn/windows/wsl/install-win10" rel="noopener noreferrer" target="_blank">Windows 的 Linux 子系统（WSL）</a>。</li>
+</ul>
+<p>大致注册流程如下：</p>
+<ol>
+<li>
+<p>首先去 <a href="https://git.dn42.dev" rel="noopener noreferrer" target="_blank">https://git.dn42.dev</a> 注册一个账户，这相当于
+DN42 内的 GitHub，账户信息就存放在其中的一个仓库里。</p>
+</li>
+<li>
+<p>打开 <a href="https://git.dn42.dev/dn42/registry" rel="noopener noreferrer" target="_blank">dn42/registry</a> 这个账户信息仓库，点右上角的 Fork，把仓库复制一份到你自己的账户。</p>
+<ul>
+<li>以前你可以直接在这个仓库里直接建一个分支，但现在你需要把仓库 Fork 一份，就像在 GitHub 等网站上提交变更一样。</li>
+</ul>
+</li>
+<li>
+<p>此时你应该已经进入了你自己账户里的那份复制，把它 Clone 下来。</p>
+</li>
+<li>
+<p>在 Clone 下的仓库里创建一系列的文件，包括：</p>
+<ol>
+<li>
+<p>在 <code>data/mntner</code> 文件夹下创建一个名为 <code>[昵称]-MNT</code> 的文件，这个文件代表你的账户，用来认证你以后的操作。例如我的 mntner 文件如下（也可以在
+<code>data/mntner/LANTIAN-MNT</code> 看到）：</p>
+<p></p><div class="btn-group btn-group-vertical" role="group" id="lti-g2797564">  <input type="radio" name="lti-g2797564" id="lti-2797564-0" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop1"> <label class="btn btn-outline-primary" for="lti-2797564-0"> 以下代码是我的注册信息，仅供参考。 </label>  <input type="radio" name="lti-g2797564" id="lti-2797564-1" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop2"> <label class="btn btn-outline-primary" for="lti-2797564-1"> 请仔细阅读文档，并将代码中的全部信息替换成你的信息。 </label>  <input type="radio" name="lti-g2797564" id="lti-2797564-2" class="btn-check lti-option" autocomplete="off" data-lti-tag="code1"> <label class="btn btn-outline-primary" for="lti-2797564-2"> 我确认我已阅读以上内容，查看代码。 </label>  </div> 
+<div id="lti-content-code1" class="lti-content"><pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">mntner:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-MNT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">admin-c:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            LANTIAN-DN42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">tech-c:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-DN42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">mnt-by:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-MNT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">source</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             DN42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">auth:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">               pgp-fingerprint</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 23067C13B6AEBDD7C0BB567327F31700E751EC22</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">auth:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">               ssh-rsa</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> AAAAB3NzaC1yc2EAAAADAQABAAACAQCulLscvKjEeroKdPE207W10MbZ3+ZYzWn34EnVeIG0GzfZ3zkjQJVfXFahu97P68Tw++N6zIk7htGic9SouQuAH8+8kzTB8/55Yjwp7W3bmqL7heTmznRmKehtKg6RVgcpvFfciyxQXV/bzOkyO+xKdmEw+fs92JLUFjd/rbUfVnhJKmrfnohdvKBfgA27szHOzLlESeOJf3PuXV7BLge1B+cO8TJMJXv8iG8P5Uu8UCr857HnfDyrJS82K541Scph3j+NXFBcELb2JSZcWeNJRVacIH3RzgLvp5NuWPBCt6KET1CCJZLsrcajyonkA5TqNhzumIYtUimEnAPoH51hoUD1BaL4wh2DRxqCWOoXn0HMrRmwx65nvWae6+C/7l1rFkWLBir4ABQiKoUb/MrNvoXb+Qw/ZRo6hVCL5rvlvFd35UF0/9wNu1nzZRSs9os2WLBMt00A4qgaU2/ux7G6KApb7shz1TXxkN1k+/EKkxPj/sQuXNvO6Bfxww1xEWFywMNZ8nswpSq/4Ml6nniS2OpkZVM2SQV1q/VdLEKYPrObtp2NgneQ4lzHmAa5MGnUCckES+qOrXFZAcpI126nv1uDXqA2aytN6WHGfN50K05MZ+jA8OM9CWFWIcglnT+rr3l+TI/FLAjE13t6fMTYlBH0C8q+RnQDiIncNwyidQ==</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">remarks:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            pin-sha256:o1lfYvcdcYy81UIuZMZO1CkCLX+vJOdD5GLw1cmeStU=</span></span></code></pre></div>
+<ul>
+<li>
+<p>其中各项的含义如下：</p>
+<ul>
+<li>
+<p><code>mntner</code>：即 <code>maintainer（维护者）</code>，说明这个账户的名称，与文件名相同。</p>
+</li>
+<li>
+<p><code>admin-c</code>：即 <code>admin contact（管理员联系信息）</code>，需要指向后续创建的
+person 文件，一般为 <code>[昵称]-DN42</code>。</p>
+</li>
+<li>
+<p><code>tech-c</code>：即 <code>tech contact（技术员联系信息）</code>，需要指向后续创建的
+person 文件，一般也为 <code>[昵称]-DN42</code>。</p>
+</li>
+<li>
+<p><code>mnt-by</code>：即 <code>maintain by（由谁维护）</code>，指向这个账户本身，一般为
+<code>[昵称]-MNT</code>。</p>
+</li>
+<li>
+<p><code>source</code>：固定为 <code>DN42</code>。</p>
+</li>
+<li>
+<p><code>auth</code>：你的个人认证信息。一般接受两种类型：GPG 公钥和 SSH 公钥。</p>
+<ul>
+<li>
+<p>你<strong>必须</strong>在 GPG 公钥和 SSH 公钥中添加至少一种。</p>
+</li>
+<li>
+<p>如果你准备添加 GPG 公钥，首先你需要创建一个（如果你之前没有的话），例如参照
+<a href="https://docs.github.com/cn/free-pro-team@latest/github/authenticating-to-github/generating-a-new-gpg-key" rel="noopener noreferrer" target="_blank">GitHub 的这份教程</a>操作。后续提交过程也会用到这个公钥。</p>
+<ul>
+<li>
+<p>你还需要将你的 GPG 公钥上传到公共查询服务器，称为 Keyserver。</p>
+</li>
+<li>
+<p>上传步骤请参考<a href="https://www.ruanyifeng.com/blog/2013/07/gpg.html" rel="noopener noreferrer" target="_blank">阮一峰的这份教程</a>，并将 <code>keyserver</code> 参数替换成 <code>hkp://keyserver.ubuntu.com</code>，例如：</p>
+<ul>
+<li><code>gpg --keyserver hkp://keyserver.ubuntu.com --send-key [密钥ID]</code></li>
+</ul>
+</li>
+<li>
+<p>然后将密钥 ID 填写到 <code>auth</code> 项中，格式如
+<code>pgp-fingerprint [密钥 ID]</code>，例如上面例子中的 <code>pgp-fingerprint</code>
+项。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>如果你准备添加 SSH 公钥，首先你需要创建一个（如果你之前没有的话）。</p>
+<ul>
+<li>Mac 和 Linux 一般运行 <code>ssh-keygen -t ed25519</code> 即可，但如果你的 SSH
+版本特别老不支持 ED25519 密钥，也可以使用
+RSA，<code>ssh-keygen -t rsa</code>。</li>
+<li>Windows 可以<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" rel="noopener noreferrer" target="_blank">下载 PuTTY</a>，使用其中的 puttygen 工具生成。</li>
+<li>生成完成后，将公钥（Mac 和 Linux 一般在 <code>~/.ssh</code> 目录下，名为
+<code>id_ed25519.pub</code> 或者 <code>id_rsa.pub</code>；Windows 下 puttygen 会直接在窗口上显示公钥）以 <code>ssh-ed25519 [公钥]</code> 或者 <code>ssh-rsa [公钥]</code> 格式添加到 <code>auth</code> 项中。</li>
+<li>此外，DN42 上有些服务会以此处的 SSH 公钥来验证你的身份。</li>
+</ul>
+</li>
+<li>
+<p>可以阅读 DN42 官方的<a href="https://dn42.dev/howto/Registry-Authentication" rel="noopener noreferrer" target="_blank">身份认证 Wiki 页面</a>获取更多信息。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>remarks</code>：备注信息，随便填写，也可以没有。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>注意：<strong>各个项目的名称和值之间有一长串空格。这段空格的长度</strong>不是自己可以随意修改的，也不能替换成 Tab</strong>。名称 + 冒号 + 空格的长度<strong>必须是 20 个字符</strong>。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>在 <code>data/person</code> 文件夹下创建一个 <code>[昵称]-DN42</code> 的文件，代表你的个人信息。说是个人信息，但其实只需要一个邮箱。例如我的 person 文件如下（<code>data/person/LANTIAN-DN42</code>）：</p>
+<p></p><div class="btn-group btn-group-vertical" role="group" id="lti-g7069260">  <input type="radio" name="lti-g7069260" id="lti-7069260-0" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop1"> <label class="btn btn-outline-primary" for="lti-7069260-0"> 以下代码是我的注册信息，仅供参考。 </label>  <input type="radio" name="lti-g7069260" id="lti-7069260-1" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop2"> <label class="btn btn-outline-primary" for="lti-7069260-1"> 请仔细阅读文档，并将代码中的全部信息替换成你的信息。 </label>  <input type="radio" name="lti-g7069260" id="lti-7069260-2" class="btn-check lti-option" autocomplete="off" data-lti-tag="code2"> <label class="btn btn-outline-primary" for="lti-7069260-2"> 我确认我已阅读以上内容，查看代码。 </label>  </div> 
+<div id="lti-content-code2" class="lti-content"><pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">person:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             Lan</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> Tian</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">e-mail:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             dn42@lantian.pub</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">contact:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            telegram:lantian1998</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">nic-hdl:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            LANTIAN-DN42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">mnt-by:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-MNT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">source</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             DN42</span></span></code></pre></div>
+<ul>
+<li>各项含义如下：
+<ul>
+<li><code>person</code>：你的昵称。</li>
+<li><code>e-mail</code>：你的邮箱。</li>
+<li><code>contact</code>：可选，你的其它联系方式，例如 IRC、Telegram 等。</li>
+<li><code>nic-hdl</code>：<code>NIC handle</code>，指向文件本身，与文件名相同，<code>[昵称]-DN42</code>。</li>
+<li><code>mnt-by</code>：<code>maintain by（由谁维护）</code>，由谁维护，指向你之前的 mntner 文件，<code>[昵称]-MNT</code>。</li>
+<li><code>source</code>：固定为 <code>DN42</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>接下来你要给自己选择一个 AS 编号，即 ASN。在国际互联网上，ASN 范围
+4200000000 - 4294967294 是被保留作私下使用（private use）的，DN42 占用的就是其中的一块，424242<strong>0000</strong> - 424242<strong>3999</strong>。<strong>（注意范围是 4000 个，不是 10000 个，剩下 6000 个暂未开放注册）</strong> 在这 4000 个号码中挑选一个你喜欢的，并且没有被占用的，然后进入 <code>data/aut-num</code> 文件夹，创建文件。例如我是
+AS4242422547, 文件就是 <code>data/aut-num/AS4242422547</code>：</p>
+<p></p><div class="btn-group btn-group-vertical" role="group" id="lti-g4617503">  <input type="radio" name="lti-g4617503" id="lti-4617503-0" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop1"> <label class="btn btn-outline-primary" for="lti-4617503-0"> 以下代码是我的注册信息，仅供参考。 </label>  <input type="radio" name="lti-g4617503" id="lti-4617503-1" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop2"> <label class="btn btn-outline-primary" for="lti-4617503-1"> 请仔细阅读文档，并将代码中的全部信息替换成你的信息。 </label>  <input type="radio" name="lti-g4617503" id="lti-4617503-2" class="btn-check lti-option" autocomplete="off" data-lti-tag="code3"> <label class="btn btn-outline-primary" for="lti-4617503-2"> 我确认我已阅读以上内容，查看代码。 </label>  </div> 
+<div id="lti-content-code3" class="lti-content"><pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">aut-num:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            AS4242422547</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">as-name:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            LANTIAN-AS</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">descr:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">              Peer</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> with</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> me</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> at</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42@lantian.pub</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">admin-c:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            LANTIAN-DN42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">tech-c:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-DN42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">mnt-by:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-MNT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">source</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             DN42</span></span></code></pre></div>
+<ul>
+<li>各项含义如下：
+<ul>
+<li><code>aut-num</code>：AS 号。</li>
+<li><code>as-name</code>：AS 的名称，一般只在 DN42 的一些网络结构示意图中看到。可以设置为 <code>[昵称]-AS</code>。</li>
+<li><code>descr</code>：AS 简介，一般只在结构图中看到，随意填写。</li>
+<li><code>admin-c</code>：<code>admin contact（管理员联系信息）</code>，指向你的 person 文件，<code>[昵称]-DN42</code>。</li>
+<li><code>tech-c</code>：<code>tech contact（技术员联系信息）</code>，指向你的 person 文件，<code>[昵称]-DN42</code>。</li>
+<li><code>mnt-by</code>：<code>maintain by（由谁维护）</code>，由谁维护，指向你之前的 mntner 文件，<code>[昵称]-MNT</code>。</li>
+<li><code>source</code>：固定为 <code>DN42</code>。</li>
+</ul>
+</li>
+<li>如果你在真实互联网拥有自己的 ASN：
+<ul>
+<li>首先大佬受我一拜；</li>
+<li>然后你<strong>可以选择在 DN42 内使用自己的真实 ASN</strong>，填入你自己的 ASN 即可。</li>
+<li>如果你这样做，你可能会在与其它人 Peer 的时候遇到一点小麻烦：
+<ul>
+<li>在建立 VPN 隧道时，DN42 中很多人会使用 ASN 的后五位作为端口号。你的公网 ASN 就有可能和 DN42 的内部 ASN 产生端口冲突。</li>
+<li>此时你就需要和对方协商换个端口了。</li>
+</ul>
+</li>
+<li>同时注册时可能会检查 AS 邮箱是否一致等。
+<ul>
+<li>我没经历过这个过程，上述是我的猜测。可能还需要更麻烦的验证流程。</li>
+</ul>
+</li>
+<li>因此我一般建议<strong>再在 DN42 注册一个 ASN 算了</strong>，减少麻烦。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>接下来就进入 IP 选择环节了。进入 <code>data/inetnum</code> 文件夹，里面是所有已被注册的 IPv4 地址块信息。你需要在其中挑选一块空闲的地址块占为己用。</p>
+<ul>
+<li>
+<p>DN42 的 IPv4 地址在 <code>172.20.0.0/14</code> 范围，即
+<code>172.20.0.0 - 172.23.255.255</code>。</p>
+<ul>
+<li>但是，有很多 IPv4 地址块是被保留作其它用途的，你不能申请使用。因此，</li>
+<li><strong>请使用下列工具选择地址块，而非手动在 <code>data/inetnum</code> 文件夹中挑选</strong>。</li>
+<li><strong>请使用下列工具选择地址块，而非手动在 <code>data/inetnum</code> 文件夹中挑选</strong>。</li>
+<li><strong>请使用下列工具选择地址块，而非手动在 <code>data/inetnum</code> 文件夹中挑选</strong>。
+<ul>
+<li><a href="https://explorer.burble.com/free#/4" rel="noopener noreferrer" target="_blank">https://explorer.burble.com/free#/4</a></li>
+<li><a href="https://dn42.us/peers/free" rel="noopener noreferrer" target="_blank">https://dn42.us/peers/free</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>你在 DN42 内能申请的最小地址块是 <code>/29</code>，即 8 个 IP，其中除去第一个 IP 标记地址块，最后一个 IP 作为地址块内广播（broadcast）不可用以外，可以分给
+6 个服务器和设备。</p>
+<ul>
+<li>对于「只想简单玩玩」的用户，<code>/29</code> 已经够了。</li>
+</ul>
+</li>
+<li>
+<p>如果你满足下列一项，那么 <code>/29</code> 不够你用，需要申请更大的地址块：</p>
+<ul>
+<li>服务器、设备多，超过了 6 个</li>
+<li>你准备自己配置些 Anycast 之类的，需要占用更多的 IP</li>
+<li>你使用的一些设备（例如 Mikrotik 路由器），在 Peering（对接）阶段建立隧道时，只能使用 <code>/30</code> 地址块。
+<ul>
+<li>在后续 Peering（对接）阶段，Linux 服务器可以配置单个 IP 到单个 IP 的隧道，例如 <code>172.22.76.185/32</code> 到 <code>172.21.2.3/32</code>。同时，我这端的地址
+<code>172.22.76.185/32</code> 可以同时用在多个隧道中，意味着我可以同时设置
+<code>172.22.76.185/32</code> 到 <code>172.21.2.3/32</code> 的隧道，以及<code>172.22.76.185/32</code>
+到 <code>172.22.3.4/32</code> 的隧道，以及任意多的隧道，与任意多的人 Peer，而不需要额外的 IP。</li>
+<li>但如果你的设备要求使用 <code>/30</code> 地址，意味着一个隧道就需要占用 4 个 IP
+地址，并且你这端的地址无法重复使用，比较浪费。</li>
+<li>此时你需要预留较多的地址，因为 DN42 内物理路由器较少见，与你对接的另一位一般也没有预留这么多地址，这个 <code>/30</code> 地址块需要由你出。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>DN42 一般建议申请 <code>/27</code>，你能直接申请的最大地址块是 <code>/26</code>。</p>
+</li>
+<li>
+<p>如果你的服务器<strong>非常多（指超过 62 台）</strong>，连 <code>/26</code> 都不够用，那么：</p>
+<ul>
+<li>首先大佬受我一拜；</li>
+<li>然后你的注册申请不会立即被同意。此时你需要去以下任何一个地方，告诉大家你需要更大地址块的理由，请求大家投票同意：
+<ul>
+<li>DN42 的 IRC 频道（服务器地址在<a href="https://wiki.dn42.us/services/IRC" rel="noopener noreferrer" target="_blank">这个页面</a>可以看到，其中的
+public internet 项）</li>
+<li>DN42 的邮件列表（地址在<a href="https://wiki.dn42.us/contact#contact_mailing-list" rel="noopener noreferrer" target="_blank">这个页面</a>的
+Mailing list 项）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>千万不要一上来就申请 <code>/24</code> 等巨大的地址块！</strong></p>
+</li>
+<li>
+<p><strong>千万不要一上来就申请 <code>/24</code> 等巨大的地址块！</strong></p>
+</li>
+<li>
+<p><strong>千万不要一上来就申请 <code>/24</code> 等巨大的地址块！</strong></p>
+<ul>
+<li>可以先找一块空闲的 <code>/24</code> 等较大的地址块，然后取其中的 <code>/27</code> 一小块。后续有需要时再将地址块扩大。</li>
+</ul>
+</li>
+<li>
+<p><strong>尤其是千万不要占着 <code>/24</code> 不用！</strong></p>
+</li>
+<li>
+<p><strong>尤其是千万不要占着 <code>/24</code> 不用！</strong></p>
+</li>
+<li>
+<p><strong>尤其是千万不要占着 <code>/24</code> 不用！</strong></p>
+<ul>
+<li>DN42 内的 IPv4 地址与公网的 IPv4 地址同样珍贵。</li>
+</ul>
+</li>
+<li>
+<p>选好地址块之后，在 <code>data/inetnum</code> 文件夹创建 IPv4 地址对应的文件。例如我的其中一个地址块是 <code>172.22.76.184/29</code>，对应的文件就是
+<code>data/inetnum/172.22.76.184_29</code>：</p>
+<p></p><div class="btn-group btn-group-vertical" role="group" id="lti-g5984">  <input type="radio" name="lti-g5984" id="lti-5984-0" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop1"> <label class="btn btn-outline-primary" for="lti-5984-0"> 以下代码是我的注册信息，仅供参考。 </label>  <input type="radio" name="lti-g5984" id="lti-5984-1" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop2"> <label class="btn btn-outline-primary" for="lti-5984-1"> 请仔细阅读文档，并将代码中的全部信息替换成你的信息。 </label>  <input type="radio" name="lti-g5984" id="lti-5984-2" class="btn-check lti-option" autocomplete="off" data-lti-tag="code4"> <label class="btn btn-outline-primary" for="lti-5984-2"> 我确认我已阅读以上内容，查看代码。 </label>  </div> 
+<div id="lti-content-code4" class="lti-content"><pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">inetnum:</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">            172.22.76.184</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> -</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 172.22.76.191</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">netname:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            LANTIAN-IPV4</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">remarks:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            Peer</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> with</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> me</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> at</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42@lantian.pub</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">descr:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">              Peer</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> with</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> me</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> at</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42@lantian.pub</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">country:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            CN</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">admin-c:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            LANTIAN-DN42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">tech-c:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-DN42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">mnt-by:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-MNT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">nserver:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            ns1.lantian.dn42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">nserver:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            ns2.lantian.dn42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">status:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             ASSIGNED</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">cidr:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">               172.22.76.184/29</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">source</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             DN42</span></span></code></pre></div>
+</li>
+<li>
+<p>各项含义如下：</p>
+<ul>
+<li><code>inetnum</code>：你的这个地址块的范围，如果你不会算，那么可以根据你的地址块前后的用户推出，或者直接用 <a href="https://ipjisuanqi.com/" rel="noopener noreferrer" target="_blank">IP 地址计算器</a>。</li>
+<li><code>netname</code>：你的这个地址块的名称，没什么用，随便取（但一般建议保持
+<code>[昵称]-IPV4</code> 格式）。</li>
+<li><code>remarks</code>：简介，随意填写。</li>
+<li><code>descr</code>：简介，随意填写。</li>
+<li><code>country</code>：你的国家代号，填 CN 代表中国大陆。</li>
+<li><code>admin-c</code>：<code>admin contact（管理员联系信息）</code>，指向你的 person 文件，<code>[昵称]-DN42</code>。</li>
+<li><code>tech-c</code>：<code>tech contact（技术员联系信息）</code>，指向你的 person 文件，<code>[昵称]-DN42</code>。</li>
+<li><code>mnt-by</code>：<code>maintain by（由谁维护）</code>，由谁维护，指向你之前的 mntner 文件，<code>[昵称]-MNT</code>。</li>
+<li><code>nserver</code>：IP 地址反向解析的 DNS 服务器。如果你不知道这个是什么，或者不需要这个，可以去掉。</li>
+<li><code>status</code>：固定为 <code>ASSIGNED</code>。</li>
+<li><code>cidr</code>：你的地址块的范围，与 <code>inetnum</code> 相同，只是以 CIDR 方式表示。</li>
+<li><code>source</code>：固定为 <code>DN42</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>注册 IP 的过程还没结束，你还需要创建一个 route 对象，授权某个 AS 使用这个地址。在 <code>data/route</code> 文件夹创建对应文件，例如我的是
+<code>data/route/172.22.76.184_29</code>：</p>
+<p></p><div class="btn-group btn-group-vertical" role="group" id="lti-g8315658">  <input type="radio" name="lti-g8315658" id="lti-8315658-0" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop1"> <label class="btn btn-outline-primary" for="lti-8315658-0"> 以下代码是我的注册信息，仅供参考。 </label>  <input type="radio" name="lti-g8315658" id="lti-8315658-1" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop2"> <label class="btn btn-outline-primary" for="lti-8315658-1"> 请仔细阅读文档，并将代码中的全部信息替换成你的信息。 </label>  <input type="radio" name="lti-g8315658" id="lti-8315658-2" class="btn-check lti-option" autocomplete="off" data-lti-tag="code5"> <label class="btn btn-outline-primary" for="lti-8315658-2"> 我确认我已阅读以上内容，查看代码。 </label>  </div> 
+<div id="lti-content-code5" class="lti-content"><pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">route:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">              172.22.76.184/29</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">descr:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">              Peer</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> with</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> me</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> at</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42@lantian.pub</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">origin:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             AS4242422547</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">mnt-by:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-MNT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">source</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             DN42</span></span></code></pre></div>
+<ul>
+<li>各项含义如下：
+<ul>
+<li><code>route</code>：你的这个地址块的范围。</li>
+<li><code>descr</code>：简介，随意填写。</li>
+<li><code>origin</code>：你授权哪个 AS 使用这个地址块，填写你的 AS 编号。</li>
+<li><code>mnt-by</code>：<code>maintain by（由谁维护）</code>，由谁维护，指向你之前的 mntner 文件，<code>[昵称]-MNT</code>。</li>
+<li><code>source</code>：固定为 <code>DN42</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>鉴于今年是 2020 年，你最好再注册一个 IPv6 的地址块，在 <code>data/inet6num</code> 中创建文件。</p>
+<ul>
+<li>
+<p>DN42 的 IPv6 地址在 <code>fd00::/8</code> 范围，位于私有 IPv6 地址段。</p>
+</li>
+<li>
+<p>DN42 内 IPv6 地址块一般只以 <code>/48</code> 的大小存在，足够任何人使用。</p>
+<ul>
+<li>即使你的路由器要求 IPv6 隧道以 <code>/64</code> 的单位存在，一个 <code>/48</code> 内还可以划出 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>16</mn></msup><mo>=</mo><mn>65536</mn></mrow><annotation encoding="application/x-tex">2^{16} = 65536</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em"><span style="top:-3.063em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">16</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">65536</span></span></span></span> 个 <code>/64</code>，足够你对接完 DN42 内的所有人。</li>
+</ul>
+</li>
+<li>
+<p>你可能想自定义你的地址块的前缀，写一些 19260817 之类的内容进去。</p>
+<ul>
+<li>首先明确：我<strong>非常不推荐你这样做</strong>！</li>
+<li>首先明确：我<strong>非常不推荐你这样做</strong>！</li>
+<li>首先明确：我<strong>非常不推荐你这样做</strong>！
+<ul>
+<li>与其找一个好记的 IPv6 地址，不如<a href="/article/modify-website/register-own-domain-in-dn42.lantian/#%E5%9C%A8-dn42-%E6%B3%A8%E5%86%8C%E5%9F%9F%E5%90%8D">在 DN42 中注册一个好记的域名</a>。</li>
+</ul>
+</li>
+<li>RFC4193 规定，IPv6 ULA 地址原则上应该全部随机生成，以做到<strong>全球唯一</strong>。
+<ul>
+<li>假如你自定义了地址块，另一名用户在加入 DN42 时就可能会产生地址块冲突，给双方都增加麻烦。</li>
+</ul>
+</li>
+<li>此外，DN42 与一些性质类似的网络形成了相互 Peer（对接）的关系，与它们公用 IPv6 ULA 的地址段。
+<ul>
+<li>由于 DN42 <strong>拿不到其它网络的完整地址分配信息</strong>，即使你找的 IPv6 地址块在 DN42 Registry 中还未被注册，仍然可能与其它网络产生冲突。</li>
+</ul>
+</li>
+<li>注意一旦产生冲突，<strong>你有可能需要修改整个网络的 IPv6 地址</strong>。</li>
+<li>此外，DN42 各个管理员对自定义 IPv6 地址块的态度不一。有些人成功注册了自定义的地址块，但有些人被拒绝了。
+<ul>
+<li>所以如果你自定义了地址块，然后申请被拒绝了，<strong>不要太惊讶，乖乖改好</strong>。</li>
+</ul>
+</li>
+<li>当你<strong>非常 一定 肯定 确定</strong>你要自定义地址而非随机生成，提交时 DN42 的管理员会回复类似这样的一条信息：</li>
+<li>
+<blockquote>
+<p>Your inet6num violates RFC4193 section 3.2. Are you fully aware of
+the consequences and do you really want to continue? Being forced to
+renumber your whole network really isn&#39;t fun.</p>
+<p>你的 IPv6 地址违反了 RFC4193 规范的第 3.2 条。你是否理解这样做的后果，并且真的想要继续？被迫给整个网络重新编排地址真的不好玩。</p>
+</blockquote>
+</li>
+<li>如果你<strong>非常 一定 肯定 确定</strong>你想这样做，那就回复 <code>Yes, I&#39;m sure</code>。</li>
+<li>但注意，我个人以及 DN42 的一些管理员<strong>比较反感这种行为</strong>。</li>
+</ul>
+</li>
+<li>
+<p>最好的选择是随机生成一个地址块。你可以使用一些<a href="https://simpledns.plus/private-ipv6" rel="noopener noreferrer" target="_blank">随机生成前缀的工具</a>。</p>
+</li>
+<li>
+<p>生成完地址块后，类似的在 <code>data/inet6num</code> 中创建文件，例如我的地址块是
+<code>fdbc:f9dc:67ad::/48</code>，文件名就是 <code>data/inet6num/fdbc:f9dc:67ad::_48</code>：</p>
+<p></p><div class="btn-group btn-group-vertical" role="group" id="lti-g3918623">  <input type="radio" name="lti-g3918623" id="lti-3918623-0" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop1"> <label class="btn btn-outline-primary" for="lti-3918623-0"> 以下代码是我的注册信息，仅供参考。 </label>  <input type="radio" name="lti-g3918623" id="lti-3918623-1" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop2"> <label class="btn btn-outline-primary" for="lti-3918623-1"> 请仔细阅读文档，并将代码中的全部信息替换成你的信息。 </label>  <input type="radio" name="lti-g3918623" id="lti-3918623-2" class="btn-check lti-option" autocomplete="off" data-lti-tag="code6"> <label class="btn btn-outline-primary" for="lti-3918623-2"> 我确认我已阅读以上内容，查看代码。 </label>  </div> 
+<div id="lti-content-code6" class="lti-content"><pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">inet6num:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">           fdbc:f9dc:67ad:0000:0000:0000:0000:0000</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> -</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fdbc:f9dc:67ad:ffff:ffff:ffff:ffff:ffff</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">netname:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            LANTIAN-IPV6</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">descr:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">              Peer</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> with</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> me</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> at</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42@lantian.pub</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">country:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            CN</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">admin-c:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            LANTIAN-DN42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">tech-c:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-DN42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">mnt-by:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-MNT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">nserver:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            ns1.lantian.dn42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">nserver:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">            ns2.lantian.dn42</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">status:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             ASSIGNED</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">cidr:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">               fdbc:f9dc:67ad::/48</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">source</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             DN42</span></span></code></pre></div>
+</li>
+<li>
+<p>各项含义如下：</p>
+<ul>
+<li><code>inet6num</code>：你的这个地址块的范围。IPv6 的范围算起来很简单，从全 0 到全
+f。</li>
+<li><code>netname</code>：你的这个地址块的名称，没什么用，随便取（但一般建议保持
+<code>[昵称]-IPV6</code> 格式）。</li>
+<li><code>remarks</code>：简介，随意填写。</li>
+<li><code>descr</code>：简介，随意填写。</li>
+<li><code>country</code>：你的国家代号，填 CN 代表中国大陆。</li>
+<li><code>admin-c</code>：<code>admin contact（管理员联系信息）</code>，指向你的 person 文件，<code>[昵称]-DN42</code>。</li>
+<li><code>tech-c</code>：<code>tech contact（技术员联系信息）</code>，指向你的 person 文件，<code>[昵称]-DN42</code>。</li>
+<li><code>mnt-by</code>：<code>maintain by（由谁维护）</code>，由谁维护，指向你之前的 mntner 文件，<code>[昵称]-MNT</code>。</li>
+<li><code>nserver</code>：IP 地址反向解析的 DNS 服务器。如果你不知道这个是什么，或者不需要这个，可以去掉。</li>
+<li><code>status</code>：固定为 <code>ASSIGNED</code>。</li>
+<li><code>cidr</code>：你的地址块的范围，与 <code>inetnum</code> 相同，只是以 CIDR 方式表示。</li>
+<li><code>source</code>：固定为 <code>DN42</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>然后在 <code>data/route6</code> 创建一个 route6 对象，授权你自己的 AS 使用这个 IP
+段，例如我的是 <code>data/route6/fdbc:f9dc:67ad::_48</code>：</p>
+<p></p><div class="btn-group btn-group-vertical" role="group" id="lti-g8380399">  <input type="radio" name="lti-g8380399" id="lti-8380399-0" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop1"> <label class="btn btn-outline-primary" for="lti-8380399-0"> 以下代码是我的注册信息，仅供参考。 </label>  <input type="radio" name="lti-g8380399" id="lti-8380399-1" class="btn-check lti-option" autocomplete="off" data-lti-tag="noop2"> <label class="btn btn-outline-primary" for="lti-8380399-1"> 请仔细阅读文档，并将代码中的全部信息替换成你的信息。 </label>  <input type="radio" name="lti-g8380399" id="lti-8380399-2" class="btn-check lti-option" autocomplete="off" data-lti-tag="code7"> <label class="btn btn-outline-primary" for="lti-8380399-2"> 我确认我已阅读以上内容，查看代码。 </label>  </div> 
+<div id="lti-content-code7" class="lti-content"><pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">route6:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             fdbc:f9dc:67ad::/48</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">descr:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">              Peer</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> with</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> me</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> at</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42@lantian.pub</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">origin:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             AS4242422547</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">mnt-by:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             LANTIAN-MNT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">source</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">             DN42</span></span></code></pre></div>
+<ul>
+<li>各项含义如下：
+<ul>
+<li><code>route6</code>：你的这个地址块的范围。</li>
+<li><code>descr</code>：简介，随意填写。</li>
+<li><code>origin</code>：你授权哪个 AS 使用这个地址块，填写你的 AS 编号。</li>
+<li><code>mnt-by</code>：<code>maintain by（由谁维护）</code>，由谁维护，指向你之前的 mntner 文件，<code>[昵称]-MNT</code>。</li>
+<li><code>source</code>：固定为 <code>DN42</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>恭喜你创建完了所有需要的文件，接下来 <code>cd</code> 到 Git 仓库的根目录，执行一次
+<code>git add .</code>，然后执行 <code>git commit -S</code>，使用你先前创建的 GPG 密钥，创建一份<strong>带 GPG 签名的 commit</strong>。</p>
+<ul>
+<li>
+<p>如果你操作快已经 commit 完了，你可以执行 <code>git commit --amend -S</code> 修改之前的
+commit，将其签名。</p>
+<ul>
+<li>如果你没有 GPG 密钥，把 -S 参数删掉，此时你需要使用 SSH 公钥验证，见后续步骤。</li>
+</ul>
+</li>
+<li>
+<p>根据反馈，在 Windows 下使用 Git Bash 时，此处 GPG 签名时会出问题。</p>
+<ul>
+<li>
+<p>你可以尝试
+<a href="https://docs.microsoft.com/zh-cn/windows/wsl/install-win10" rel="noopener noreferrer" target="_blank">Windows 的 Linux 子系统（WSL）</a>。</p>
+</li>
+<li>
+<p>你也可以尝试评论区提供的方法。运行这条命令，然后重试：</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">export</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> GPG_TTY</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">=$(</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">tty</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">)</span></span></code></pre>
+</li>
+<li>
+<p>你也可以选择不用 GPG，而用 SSH 公钥验证你的身份。见后续步骤。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>如果你先前 commit 了多次，你需要把所有变更合并到一次 commit 里，直接运行
+Registry 根目录下的 <code>./squash-my-commits</code> 脚本即可。</p>
+</li>
+<li>
+<p>由于你操作期间 Registry 可能有来自其他人的变更，你需要获取一下 Registry 的更新：</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 获取更新</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">git</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fetch</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> origin</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> master</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 切换到你自己的分支</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">git</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> checkout</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> lantian-20200901/register</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># Rebase 你的分支，实际上就是将你的修改在最新的 Registry 上重新应用一遍</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 输入这行命令后会出现一个编辑器，你需要保留第一行的 pick，</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 并将第二行开始（如果有的话）的 pick 全部改成 squash，然后保存并退出编辑器就可以了</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">#</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 如果你没有 GPG 密钥，把 -S 参数删掉</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">git</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> rebase</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -i</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -S</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> origin/master</span></span></code></pre>
+</li>
+<li>
+<p>执行 <code>git push -f</code> 将修改上传到 Git 服务器。</p>
+</li>
+<li>
+<p>回到 <a href="https://git.dn42.dev/dn42/registry" rel="noopener noreferrer" target="_blank">dn42/registry</a>，发起 Pull Request，等待你的信息被合并。</p>
+<ul>
+<li>如果你使用 SSH 公钥来验证，首先 <code>git log</code> 查看你的 commit 的 hash，然后运行以下命令，把结果附在 Pull Request 里：
+<ul>
+<li><code>echo [commit hash] | ssh-keygen -Y sign -f ~/.ssh/id_ed25519 -n dn42</code></li>
+<li>注意替换你的 commit hash 和私钥位置。</li>
+</ul>
+</li>
+<li>如果你的操作或者填写的内容有问题，管理员会回复你的 Pull Request，根据他们的要求修改即可。</li>
+<li>但注意，按照要求修改完成后，**不用关闭原先的 Pull Request 再重新开一个。**你只需要照常 <code>git commit</code> 和 <code>git push</code>，你后续的变更会被自动添加到原先这个 Pull Request 里。
+<ul>
+<li>一次注册/修改信息行为只需要发一个 Pull Request 就够了。</li>
+</ul>
+</li>
+<li>发 Pull Request <strong>请用英文！</strong></li>
+</ul>
+</li>
+</ol>
+<p>在你的信息被合并之后，你就正式获得了自己的地址块，接下来就可以开始找人 Peer 了。</p>
+<h2 id="寻找-peer-的节点">寻找 Peer 的节点</h2>
+<p>由于 DN42 是一个去中心化的网络，并没有一个官方服务器供你直接接入。你需要去联系其它和你一样在 DN42 注册的用户，建立隧道连接和 BGP 会话，从而建立 Peering。</p>
+<p>以下推荐几个找到其它用户的方法：</p>
+<ol>
+<li>使用 <a href="https://dn42.us/peers" rel="noopener noreferrer" target="_blank">DN42 PingFinder</a>。在这里提交你的 IP 地址，其它在
+PingFinder 上注册的用户的服务器会测试与你的延迟。这些用户也会留下自己的邮箱，或者自己的 DN42 AS 信息的介绍页面，后续可以根据这些信息去联系他们。</li>
+<li>去 DN42 的 <a href="https://wiki.dn42.us/services/IRC" rel="noopener noreferrer" target="_blank">IRC 频道</a></li>
+<li>去这个<a href="https://t.me/Dn42Chat" rel="noopener noreferrer" target="_blank">非官方 Telegram 群组</a>找人 Peer。</li>
+<li><del>直接去找 Burble。Burble 是 DN42 网络中一个非常活跃的用户，同时在全球各地都有节点。打开<a href="https://dn42.burble.com/peering" rel="noopener noreferrer" target="_blank">他的 Peering 信息页面</a>，就可以看到他的服务器信息和联系方式。</del>
+<ul>
+<li>为了降低网络中心度、避免单点故障，Burble 目前只接受已有至少两个 Peer 的用户。</li>
+</ul>
+</li>
+<li>直接找我。点击<a href="/page/dn42/index.html">这个地方</a>或者点击顶部导航栏的 DN42 项目，就可以看到我的服务器信息和联系方式。</li>
+</ol>
+<p>注意你可以同时找很多个人 Peer，这可以增加你网络的稳定性，避免某个节点临时故障导致你和 DN42 完全失联。</p>
+<p>选择几个离你的服务器近、延迟低的节点，然后继续往下看。</p>
+<h1 id="非常重要的系统配置">非常重要的系统配置</h1>
+<ul>
+<li>
+<p>首先，<strong>千万 一定 绝对</strong> 要打开 Linux 内核的数据包转发功能，即
+<code>ip_forwarding</code>。</p>
+<ul>
+<li>
+<p>在 DN42 内，没有绝对意义上的客户端，每个人的服务器都是其它人的路由器，都可能需要转发数据包。具体步骤如下：</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">echo</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> &quot;net.ipv4.ip_forward=1&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> &gt;&gt; </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">/etc/sysctl.conf</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">echo</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> &quot;net.ipv6.conf.default.forwarding=1&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> &gt;&gt; </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">/etc/sysctl.conf</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">echo</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> &quot;net.ipv6.conf.all.forwarding=1&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> &gt;&gt; </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">/etc/sysctl.conf</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">sysctl</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -p</span></span></code></pre>
+</li>
+<li>
+<p>同时，如果你配置过 <code>iptables</code> 等防火墙软件，请检查相关配置，确保放行数据包的转发。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>然后，<strong>千万 一定 绝对</strong> 要关闭 Linux 内核 <code>rp_filter</code> 的严格模式，具体步骤如下：</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">echo</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> &quot;net.ipv4.conf.default.rp_filter=0&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> &gt;&gt; </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">/etc/sysctl.conf</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">echo</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> &quot;net.ipv4.conf.all.rp_filter=0&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> &gt;&gt; </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">/etc/sysctl.conf</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">sysctl</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -p</span></span></code></pre>
+<ul>
+<li><code>rp_filter</code> 是 Linux 内核针对网络的一项网络安全保护功能，对于数据包的来源地址和来源网络界面（网卡）进行检查：
+<ul>
+<li>如果设置为 0（即禁用），放行所有数据包。
+<ul>
+<li>但是有些无法正常回复（路由表内没有对应项目）的数据包也会被发给应用程序处理，消耗额外的系统资源。</li>
+<li>不过额外消耗应该很小，因此上述两项设置为 0 也没问题。</li>
+</ul>
+</li>
+<li>如果设置为 1（严格模式），如果数据包来源网卡不是发送这个数据包的最优网卡（也就是如果你本机要回复这个地址的话，会选择一张不同的网卡），就把这个数据包<strong>丢掉</strong>。
+<ul>
+<li>来源和回复在不同网卡是 DN42 内<strong>非常常见的情况</strong>，因此 <strong>千万 一定 绝对</strong> 不能把 <code>rp_filter</code> 设置成 1！</li>
+</ul>
+</li>
+<li>如果设置为 2（宽松模式），<strong>从理论上来说</strong>，如果数据包来源地址不在路由表内（也就是本机不知道要怎么回复这个地址），就把这个数据包丢掉。
+<ul>
+<li>但是理论归理论，在新版本（5.0+）的内核中，实际使用中依然会有大量来源地址正确的正常数据包被丢弃。因此不要使用这个模式，请统一使用0。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>然后，<strong>千万 一定 绝对</strong> 关掉你的 UFW 等帮你简单配置 iptables 防火墙的工具。</p>
+<ul>
+<li>这些简单配置防火墙的工具可能会使用一些适合个人用户，但是不适合 DN42 场景的功能，比如 Conntrack。
+<ul>
+<li>Conntrack 会过滤掉它没见过的链接的数据包，造成和开了 <code>rp_filter</code> 严格模式一样的效果。</li>
+</ul>
+</li>
+<li>我个人建议你手动配置 iptables。</li>
+</ul>
+</li>
+</ul>
+<h2 id="选择你的隧道软件">选择你的隧道软件</h2>
+<p>DN42 中几乎每个 Peering 都是建立在隧道软件（即 VPN）之上的，原因如下：</p>
+<ul>
+<li>DN42 各个用户的节点分布在世界各地，隧道软件可以对数据进行基本的加密和保护；</li>
+<li>DN42 使用的是私有地址，如果直接在互联网上传输，会被防火墙直接丢弃，甚至可能会被主机商认为你在 <code>IP Spoofing</code>（伪造来源 IP 地址），违反服务条款，造成严重后果。</li>
+</ul>
+<p>但有一部分例外情况存在，例如：</p>
+<ul>
+<li>两个节点处在同一个内网中，可以直接通过内网联通。
+<ul>
+<li>典型例子是经典网络的阿里云服务器，或者一些 NAT VPS。</li>
+</ul>
+</li>
+</ul>
+<p>对于隧道软件的推荐如下：</p>
+<ol>
+<li>
+<p>如果你用的是 Linux 系统的 VPS 或独立服务器，并且你的 VPS 不是 OpenVZ 或者 LXC
+虚拟化的，那么推荐使用 WireGuard。</p>
+<ul>
+<li>
+<p>WireGuard 的优点在于：</p>
+<ul>
+<li>配置极其简单</li>
+<li>占用资源少</li>
+<li>安全性不错</li>
+</ul>
+</li>
+<li>
+<p>WireGuard 的缺点：</p>
+<ul>
+<li>功能少，只能点对点连接</li>
+<li>需要内核驱动支持</li>
+<li>是 L3 层隧道，难以进行桥接等操作</li>
+</ul>
+</li>
+<li>
+<p>如果你用的是 OpenVZ 或者 LXC 的 VPS，不建议使用 <code>wireguard-go</code> 代替内核驱动，该软件更新较慢且据其它用户称有稳定性问题。</p>
+</li>
+<li>
+<p>安装方式，以 Debian 10 (Buster) 为例：</p>
+<ul>
+<li>
+<p>首先加入 Debian Backports 软件源：</p>
+<ul>
+<li>
+<p>编辑 <code>/etc/apt/sources.list</code>，添加：</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">deb</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> http://deb.debian.org/debian</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> buster-backports</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> main</span></span></code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>然后使用 DKMS 安装 WireGuard 的内核驱动和管理工具：</p>
+<ul>
+<li><code>sudo apt update</code></li>
+<li><code>sudo apt install wireguard-tools wireguard-dkms</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>如果你用的是 OpenVZ 或者 LXC 的 VPS，推荐使用 OpenVPN。</p>
+<ul>
+<li>OpenVPN 的优点：
+<ul>
+<li>极其广泛的使用</li>
+<li>配置教程一大堆</li>
+<li>无需内核驱动支持</li>
+<li>L2、L3 层可选</li>
+</ul>
+</li>
+<li>OpenVPN 的缺点：
+<ul>
+<li>配置有点复杂</li>
+<li>安全性不如 WireGuard</li>
+</ul>
+</li>
+<li>安装方式：<code>sudo apt install openvpn supervisor</code></li>
+<li>此处 Supervisor 用于进程管理。</li>
+</ul>
+</li>
+<li>
+<p>如果你用的是 Cisco、Mikrotik 等公司的硬件路由器，你一般只能使用 GRE/IPSec：</p>
+<ul>
+<li>GRE/IPSec 的优点：
+<ul>
+<li>在硬件路由器上使用广泛</li>
+</ul>
+</li>
+<li>GRE/IPSec 的缺点：
+<ul>
+<li>配置复杂，往往需要双方反复交流才能配置完成</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>或者你也可以使用纯 GRE：</p>
+<ul>
+<li>GRE 的优点：
+<ul>
+<li>硬件路由器上可用</li>
+<li>配置相对简便</li>
+</ul>
+</li>
+<li>GRE 的缺点：
+<ul>
+<li><strong>完全没有加密！数据明文可读！</strong></li>
+<li><strong>完全没有加密！数据明文可读！</strong></li>
+<li><strong>完全没有加密！数据明文可读！</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>如果你用的是 Linux 服务器，也可以选择 ZeroTier One，用于你自己的 AS 内部的互联，或者用于与他人 Peer。</p>
+<ul>
+<li>ZeroTier One 的优点：
+<ul>
+<li>直观的网页管理面板</li>
+<li>全自动的 IP 地址分配</li>
+</ul>
+</li>
+<li>ZeroTier One 的缺点：
+<ul>
+<li>有时会占用大量 CPU 和内存</li>
+<li>DN42 内接受程度不高</li>
+</ul>
+</li>
+<li>安装方式：<code>curl -s https://install.zerotier.com | sudo bash</code></li>
+</ul>
+</li>
+</ol>
+<h2 id="选择你的-bgp-软件">选择你的 BGP 软件</h2>
+<p>DN42 中的用户之间使用 BGP 协议来交换路由信息。以下是常用的、支持 BGP 协议的路由软件：</p>
+<ol>
+<li>
+<p>BIRD Internet Routing Daemon <strong>(v2)</strong></p>
+<ul>
+<li>
+<p>支持 BGP、OSPF、RIP 等多种路由协议</p>
+</li>
+<li>
+<p>同时支持 IPv4 和 IPv6</p>
+</li>
+<li>
+<p>配置清晰明了，功能强大</p>
+</li>
+<li>
+<p>注意：此处指 BIRD2，即第二版本；与第一版本不兼容。</p>
+</li>
+<li>
+<p>由于 BIRD 配置较复杂，请直接参见
+<a href="https://wiki.dn42.us/howto/Bird2" rel="noopener noreferrer" target="_blank">DN42 Wiki 上的 Bird2 配置教程</a>，有现成的配置可以直接复制粘贴。</p>
+</li>
+<li>
+<p>在 Debian 中可以添加 BIRD 官方软件源安装：</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">wget</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -O</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> -</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> http://bird.network.cz/debian/apt.key</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> | </span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">apt-key</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> add</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> -</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">apt-get</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> install</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> lsb-release</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">echo</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> &quot;deb http://bird.network.cz/debian/ $(</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">lsb_release</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -sc</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">) main&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> &gt; </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">/etc/apt/sources.list.d/bird.list</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">apt-get</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> update</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">apt-get</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> install</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> bird2</span></span></code></pre>
+<p>可以参考
+<a href="https://bird.network.cz/?download&tdir=debian/" rel="noopener noreferrer" target="_blank">BIRD 的下载页面</a>。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>BIRD Internet Routing Daemon <strong>(v1)</strong></p>
+<ul>
+<li>
+<p>相比 v2，将 IPv4 与 IPv6 分到了两个进程</p>
+</li>
+<li>
+<p>同时缺少一些功能，包括 Multiprotocol BGP（多协议 BGP，在一个 BGP 连接上同时传输 IPv4 和 IPv6 的路由信息），OSPFv3 等</p>
+<ul>
+<li>但不影响基础的 Peering 等操作</li>
+</ul>
+</li>
+<li>
+<p>参见 <a href="https://wiki.dn42.us/howto/Bird" rel="noopener noreferrer" target="_blank">DN42 Wiki 上的 Bird1 配置教程</a>，有现成的配置可以直接复制粘贴。</p>
+</li>
+<li>
+<p>在 Debian 中可以添加 BIRD 官方软件源安装：</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">wget</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -O</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> -</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> http://bird.network.cz/debian/apt.key</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> | </span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">apt-key</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> add</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> -</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">apt-get</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> install</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> lsb-release</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">echo</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> &quot;deb http://bird.network.cz/debian/ $(</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">lsb_release</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -sc</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">) main&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> &gt; </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">/etc/apt/sources.list.d/bird.list</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">apt-get</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> update</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">apt-get</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> install</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> bird</span></span></code></pre>
+<p>可以参考
+<a href="https://bird.network.cz/?download&tdir=debian/" rel="noopener noreferrer" target="_blank">BIRD 的下载页面</a>。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Quagga / FRRouting</p>
+<ul>
+<li>配置语法接近 Cisco 路由器，如果你用过硬件路由器可能会喜欢</li>
+<li>某些软路由系统（例如 pfSense）只有 FRRouting 可选</li>
+<li>参见 <a href="https://wiki.dn42.us/howto/Quagga" rel="noopener noreferrer" target="_blank">DN42 Wiki 上的 Quagga 配置教程</a></li>
+</ul>
+</li>
+<li>
+<p>硬件路由器自带的 BGP 功能</p>
+<ul>
+<li>由路由器厂商提供技术支持，一般非常稳定</li>
+<li>但是 BGP 的一些扩展功能可能受到厂商限制</li>
+<li>同时每台路由器的配置方式都不同，你很可能得自己研究了</li>
+</ul>
+</li>
+</ol>
+<h2 id="搭建你自己的内网">搭建你自己的内网</h2>
+<blockquote>
+<p>「打扫干净屋子再请客。」</p>
+<p>—— 毛泽东</p>
+</blockquote>
+<p>如果你有多台服务器同时加入 DN42，你需要先配置好自己的内网。内网需要满足以下条件才能保证正常工作：</p>
+<ol>
+<li>任何两台服务器都可以互相沟通，即可以 Ping 通。
+<ul>
+<li>这样做的原因是你的 AS 外部的路由只负责把数据包发送进你的 AS，数据包可能从任何一个节点进入。你自己的节点需要负责在内部将数据包转发给目标节点。</li>
+<li>你可以使用这些方案：
+<ol>
+<li>使用 Tinc，ZeroTier One 之类的软件建立 Full-Mesh VPN，使得每两台服务器之间都能直接连通。</li>
+<li>使用 OpenVPN，WireGuard 等软件建立 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{n (n-1)}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em"><span style="top:-2.655em"><span class="pstrut" style="height:3em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em"><span class="pstrut" style="height:3em"></span><span class="frac-line" style="border-bottom-width:0.04em"></span></span><span style="top:-3.485em"><span class="pstrut" style="height:3em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span> 条点对点隧道连接，使得每两台服务器之间都能直接连通。</li>
+<li><strong>（相对危险）</strong> 使用 OpenVPN，WireGuard 等建立少于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{n (n-1)}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em"><span style="top:-2.655em"><span class="pstrut" style="height:3em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em"><span class="pstrut" style="height:3em"></span><span class="frac-line" style="border-bottom-width:0.04em"></span></span><span style="top:-3.485em"><span class="pstrut" style="height:3em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>
+条点对点隧道连接，但需要保证每两台服务器之间能连通（可以间接连通），然后使用 Babel、OSPF、RIP 等协议在内部寻路。</li>
+</ol>
+<ul>
+<li>这种方案很容易配置出错，并造成严重后果。
+<ul>
+<li>一些实例详见《<a href="/article/modify-website/how-to-kill-the-dn42-network.lantian/">如何引爆 DN42 网络</a>》。</li>
+</ul>
+</li>
+<li>Babel、OSPF、RIP 等路由协议可以自动识别整个网络的拓扑结构，并设置好相应的路由。</li>
+<li>但注意，Babel、OSPF、RIP 等只应该处理你内部的路由，<strong>不能用于转发由 BGP
+从外部收到的路由！</strong>
+<ul>
+<li>当 BGP 路由信息被 Babel、OSPF、RIP 等转发时，包括来源、路径长度、Community 等信息都会丢失。</li>
+<li>因此其它节点从 Babel、OSPF、RIP 收到路由时，会<strong>认为它们来自你的网络</strong>，并将你的 AS 作为源头，向外再次广播路由信息。</li>
+<li>简单的说：你会<strong>劫持整个 DN42 的路由</strong>。</li>
+</ul>
+</li>
+<li>Babel、OSPF、RIP 等应被严格限制，它们只应处理你自己拥有的 IP 段内，各个
+IP 之间的连接关系。<strong>来自外部的路由必须且只能由 BGP 处理</strong>。</li>
+<li>如果有问题，请去<a href="https://t.me/Dn42Chat" rel="noopener noreferrer" target="_blank">非官方 Telegram 群组</a>寻求帮助。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>BGP 配置满足下列条件之一：
+<ol>
+<li>服务器两两之间建立了 BGP 连接。
+<ul>
+<li>由于 BGP 的特性，在同一个 AS 内，一个 BGP 节点只会向其它节点广播<strong>自己收到的路由信息</strong>，而<strong>不会转发</strong>从 AS 内其它节点收到的路由信息，这样做是为了防止产生环路。因此，每台服务器都要与其它所有服务器建立 BGP，以保证自己收到完整的路由表。</li>
+<li>如果你服务器多，手动配置会非常麻烦。此时你可以考虑写个脚本，或者采取下面的方法。</li>
+</ul>
+</li>
+<li>将一台服务器设置为 <code>BGP Route Reflector</code>，其它服务器均与它建立 BGP 连接。
+<ul>
+<li>Route Reflector 服务器将管理并下发 AS 内所有的路由信息。</li>
+<li>相对于上一种方案，优点是配置量大大减少，而缺点是一旦 Route Reflector 服务器出现故障，整个网络都会挂掉。</li>
+<li>注意我没有尝试过这种配置，因此无法为此提供任何技术支持。但<a href="https://t.me/Dn42Chat" rel="noopener noreferrer" target="_blank">非官方 Telegram 群组</a>内有人使用这种方案，你可以在那里寻求帮助。</li>
+</ul>
+</li>
+<li>在每个节点配置一个不同的私有 ASN，并设置 Confederation。
+<ul>
+<li>ASN 需要在 4200000000 - 4294967294 的私有 ASN 范围内选择，但不要选择
+4242420000 - 4242429999 这个范围，以防止与其它 DN42 用户重复。</li>
+<li>Confederation 使得多个服务器「抱团」，对外展示为同一个 AS。</li>
+<li>这种配置方法详见《<a href="/article/modify-website/bird-confederation.lantian">Bird 配置 BGP Confederation，及模拟 Confederation</a>》。</li>
+<li>另外<a href="https://t.me/Dn42Chat" rel="noopener noreferrer" target="_blank">非官方 Telegram 群组</a>内也有人使用这种方案，你可以在那里寻求帮助。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><strong>所有服务器完成上一节的「非常重要的系统配置」。</strong></li>
+</ol>
+<h2 id="1xrtt-peering更快速的对接">「1xRTT Peering」：更快速的对接</h2>
+<p>DN42 中多数用户处在美国或者欧洲，当我们从中国与他们联系时，受时差影响双方一轮通信时间可能会很长。因此，我们应根据对方在自己网站上公开的信息尽可能完整地配置自己一侧，方便对方的调试，也减少反复通信的时间消耗。</p>
+<p>我在我的 <a href="/page/dn42/index.html">DN42 信息页面</a>提供了一个列表，包括了我在配置与你的隧道和 BGP 会话时，你应该执行哪些步骤，我需要哪些信息。</p>
+<p>我的配置没有什么特异之处，当你与其他用户建立隧道与 BGP 时，其他用户也需要同样的信息。因此，我建议你完整地按照以下步骤操作，提供完整的信息。</p>
+<p>在此，我将步骤列表复制一遍，以供参考：</p>
+
+<ol>
+<li>从下面的列表中选择一个服务器。一般你应该选择到你那边延迟（Ping）最低的服务器。
+<ul>
+<li>如果你有多台服务器加入 DN42，并且愿意的话，我可以同时建立多个 Peering。</li>
+</ul>
+</li>
+<li>选择一种 VPN 建立隧道。
+<ul>
+<li>我偏好使用 WireGuard 和 OpenVPN，但明文 GRE 和 ZeroTier One 也可以。
+<ul>
+<li>由于 GRE/IPSec 配置非常复杂，而且不同的 IPSec 实现之间常常有严重的兼容性问题，需要耗费几天甚至几周来调试，<strong>我不再接受 GRE/IPSec 隧道</strong>，已有隧道也可能随时中断。</li>
+</ul>
+</li>
+<li><strong>注意：我不与中国大陆的服务器 Peer，以避免可能的法律问题。</strong></li>
+<li>我也愿意尝试其它种类的 VPN，只要你询问就可以了。</li>
+</ul>
+</li>
+<li>在你那边配置好 VPN 隧道和 BGP 客户端。你可以假设我会使用以下的配置：
+<ul>
+<li>基础信息：
+<ul>
+<li>ASN：<strong>4242422547</strong></li>
+<li>公网 IP：见以下列表</li>
+<li>DN42 IPv4（隧道我这端的地址）：见以下列表
+<ul>
+<li>如果你需要为隧道设置一个地址块（例如 /30），这个地址块将来自你的地址池（由你分配给我）。</li>
+<li>以上设置常见于 Mikrotik 等硬件路由器。</li>
+</ul>
+</li>
+<li>DN42 IPv6：<strong>fe80::2547</strong>，用于本地链路（Link-local）连接
+<ul>
+<li>如果你需要为隧道设置一个地址块（例如 /64），这个地址块将来自你的地址池（由你分配给我）。</li>
+</ul>
+</li>
+<li>Multiprotocol BGP（MP-BGP）：
+<ul>
+<li>虽然我支持 MP-BGP，但我默认仍会同时配置 v4、v6 两条 BGP 会话。</li>
+<li>如果你也支持 MP-BGP，只需要一条会话，直接告诉我就行。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>建立 VPN 隧道：
+<ul>
+<li>WireGuard/OpenVPN 我这端的端口号：<strong>你的 ASN 的后五位</strong>
+<ul>
+<li>例如 4242420001 意味着我会使用 20001 端口</li>
+</ul>
+</li>
+<li>OpenVPN 预共享密钥：你来生成，之后发送给我</li>
+<li>OpenVPN 默认设置：见下
+<ul>
+<li>如果你无法使用我的默认参数，请设置好你可以接受的参数，然后发送给我。</li>
+</ul>
+</li>
+<li>ZeroTier One：我会申请加入你的网络
+<ul>
+<li>如果可以的话，你可以尝试发送加入网络的邀请。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>将以下信息发邮件给 <strong><a href="mailto:dn42@lantian.pub">dn42@lantian.pub</a></strong>:
+<ul>
+<li>基础信息：
+<ul>
+<li>ASN</li>
+<li>公网 IP
+<ul>
+<li>我偏好 IPv4 地址，因为在我的一些服务器上，IPv6 是由隧道提供的（即
+HE.NET Tunnelbroker）</li>
+</ul>
+</li>
+<li>DN42 IPv4 and IPv6（隧道你那端的地址）
+<ul>
+<li>或者地址块，如果你需要的话</li>
+<li>对于 IPv6 Peering，需要包括本地链路（Link-local）地址</li>
+</ul>
+</li>
+<li>你想和哪台服务器连接</li>
+</ul>
+</li>
+<li>建立 VPN 隧道：
+<ul>
+<li>WireGuard/OpenVPN 你那端的端口号
+<ul>
+<li>如果你不写明，我会假设你使用 22547 端口</li>
+</ul>
+</li>
+<li>OpenVPN 预共享密钥：由你生成</li>
+<li>ZeroTier One：你的网络 ID（我会申请加入）</li>
+<li>OpenVPN 设置参数（如果你无法使用我的默认参数）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>等我设置好 VPN 隧道和 Peering，然后回复邮件。一般这时 Peering 就已经成功了。
+<ul>
+<li>你可以使用<a href="https://lg.lantian.pub/" rel="noopener noreferrer" target="_blank">我的 Looking Glass</a> 来调试连接。</li>
+</ul>
+</li>
+</ol>
+<h2 id="隧道搭建wireguard">隧道搭建：WireGuard</h2>
+<p>DN42 Wiki 有 WireGuard 的配置步骤，我在此进行少许修改以使其简单明了。</p>
+<p>首先运行 <code>wg genkey | tee privatekey | wg pubkey &gt; publickey</code> 产生一对公钥和私钥，这是 WireGuard 隧道中双方的唯一认证方式，务必保管好不要泄漏。</p>
+<p>然后创建一个配置文件 <code>[PEER_NAME].conf</code>：</p>
+
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">[Interface]</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 你的 WireGuard 私钥</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">PrivateKey</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFA=</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 你的端口号</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ListenPort</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 22547</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">Table</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> off</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 添加你的 Link-local IPv6（例如 fe80::1234）</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">PostUp</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ip</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> addr</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> add</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fe80::1234/64</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dev</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> %i</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 添加你的 DN42 IPv6 地址（例如 fd12:3456:7890::1）</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">PostUp</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ip</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> addr</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> add</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fd12:3456:7890::1/128</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dev</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> %i</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 第一个是你的 DN42 内的 IP，第二个是我的（或者你的 Peer 的）</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">PostUp</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ip</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> addr</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> add</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 172.21.2.3</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> peer</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 172.22.76.185</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dev</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> %i</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">PostUp</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> sysctl</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -w</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> net.ipv6.conf.%i.autoconf=</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">0</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">[Peer]</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 我的（或者你的 Peer 的）公钥</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">PublicKey</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> zyATu8FW392WFFNAz7ZH6+4TUutEYEooPPirwcoIiXo=</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 我的（或者你的 Peer 的）服务器地址和端口号，端口号一般为你的 ASN 的后五位</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">Endpoint</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> hostdare.lantian.pub:21234</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">AllowedIPs</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 10.0.0.0/8,</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 172.20.0.0/14,</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 172.31.0.0/16,</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fd00::/8,</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fe80::/64</span></span></code></pre>
+<p>然后运行 <code>wg-quick up [PEER_NAME].conf</code> 启动隧道。</p>
+<h2 id="隧道搭建openvpn">隧道搭建：OpenVPN</h2>
+<p>DN42 Wiki 同样提供了 OpenVPN 的配置模板，我在此进行少许修改以使其简单明了，如下：</p>
+
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">proto</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">         udp</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">mode</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">          p2p</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 我的（或者你的 Peer 的）服务器 IP</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">remote</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">        185.186.147.110</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 我的（或者你的 Peer 的）隧道端口，一般是你的 ASN 的后五位</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">rport</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">         21234</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 你的服务器 IP</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">local</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">         12</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">34</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">56</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">78</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 你的隧道端口，一般是 22547（或者你的 Peer 的 ASN 的后五位）</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">lport</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">         22547</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">dev-type</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">      tun</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">resolv-retry</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">  infinite</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">dev</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">           dn42-lantian</span><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # 随意修改</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">comp-lzo</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">persist-key</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">persist-tun</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">tun-ipv6</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">cipher</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        aes-256-cbc</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 第一个是你的 DN42 内的 IP，第二个是我的（或者你的 Peer 的）</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ifconfig</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">      172.21.2.3</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 172.22.76.185</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 第一个是你的 Link-local IPv6，第二个是我的（或者你的 Peer 的）</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ifconfig-ipv6</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fe80::1234</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fe80::2547</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 隧道启动后运行的脚本：</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 1. 删除 Stable-privacy IPv6</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 2. 设置优先使用的对外连接的 IPv6 地址（例如 fd12:3456:7890::1）</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">script-security</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 2</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">up</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> "/bin/sh -c '/sbin/sysctl -w net.ipv6.conf.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$dev</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">.autoconf=0 &#x26;&#x26; /sbin/sysctl -w net.ipv6.conf.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$dev</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">.accept_ra=0 &#x26;&#x26; /sbin/sysctl -w net.ipv6.conf.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$dev</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">.addr_gen_mode=1 &#x26;&#x26; /sbin/ip addr add fd12:3456:7890::1/128 dev </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$dev</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'"</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 设置成我们的隧道的静态密钥</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 可以用 openvpn --genkey --secret static.key 生成</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">&#x3C;secret></span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">-----BEGIN</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> OpenVPN</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> Static</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> key</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> V1-----</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">0123456789abcdef0123456789abcdef</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># ...</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 密钥内容</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># ...</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">0123456789abcdef0123456789abcdef</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">-----END</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> OpenVPN</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> Static</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> key</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> V1-----</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">&#x3C;/secret></span></span></code></pre>
+<h2 id="限制-dn42-相关网卡上的流量">限制 DN42 相关网卡上的流量</h2>
+<p>一般而言，进行 DN42 Peering 时双方建立的隧道可以承载任何 IP 的流量（除非你配置了
+WireGuard 的 AllowedIPs），这就造成了风险：你的 Peer 可以向你的隧道传入目标地址是公网 IP 的数据包，此时你的节点会把数据包以你的名义转发到公网。如果你的 Peer 利用此进行网络攻击，你就有大麻烦了。</p>
+<p>因此，建议你设置 iptables 防火墙规则，来拒绝转发 Peer 向公网发送的数据。</p>
+<blockquote>
+<p>注：如果你只用 WireGuard 隧道就不用配置这些了，WireGuard 自带了 IP 限制功能。</p>
+</blockquote>
+<p>下面的规则会在所有以 <code>dn42-</code> 开头的网卡上，只允许已有的 DN42 IP 段的流量：</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -N</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -s</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 172.20.0.0/14</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -s</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 172.31.0.0/16</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -s</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 10.0.0.0/8</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -s</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 224.0.0.0/4</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> REJECT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -i</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42+</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -N</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -d</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 172.20.0.0/14</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -d</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 172.31.0.0/16</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -d</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 10.0.0.0/8</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -d</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 224.0.0.0/4</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> REJECT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -o</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42+</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -N</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -s</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fd00::/8</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -s</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fe80::/10</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -s</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ff00::/8</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> REJECT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> INPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -i</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42+</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -N</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -d</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fd00::/8</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -d</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fe80::/10</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -d</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ff00::/8</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ACCEPT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> REJECT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> OUTPUT</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -o</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42+</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> FORWARD</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -i</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42+</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iptables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> FORWARD</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -o</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42+</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> FORWARD</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -i</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42+</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_INPUT</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">ip6tables</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -A</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> FORWARD</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -o</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42+</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -j</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> DN42_OUTPUT</span></span></code></pre>
+<h2 id="bgp-会话配置bird-v1-和-v2">BGP 会话配置：BIRD v1 和 v2</h2>
+<p>我这里只介绍 BIRD v1 和 v2 的配置，因为它们是使用最广泛的。我假设你已经按照 Wiki
+上的步骤完成了基本的配置，只是还没接入任何 Peer。</p>
+<ul>
+<li><a href="https://wiki.dn42.us/howto/Bird2" rel="noopener noreferrer" target="_blank">DN42 Wiki 上的 Bird2 配置教程</a></li>
+<li><a href="https://wiki.dn42.us/howto/Bird" rel="noopener noreferrer" target="_blank">DN42 Wiki 上的 Bird1 配置教程</a></li>
+</ul>
+<p>对于 BIRD v1，需要的配置如下：</p>
+
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 在 /etc/bird/peers4/dn42_lantian.conf 中填写：</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># dn42_lantian 可以被改为任意名字</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">protocol</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> bgp</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42_lantian</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> from</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dnpeers</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> {</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # 设置成我的（或者你的 Peer 的）DN42 IPv4 地址以及 ASN</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    neighbor</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 172.22.76.185</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> as</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 4242421234</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    direct</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 在 /etc/bird/peers6/dn42_lantian.conf 中填写：</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># dn42_lantian 可以被改为任意名字</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">protocol</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> bgp</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42_lantian</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> from</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dnpeers</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> {</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # 设置成我的（或者你的 Peer 的）Link-local IPv6，隧道名称，以及 ASN</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    neighbor</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fe80::1234</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> %</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 'dn42-lantian'</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> as</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 4242421234</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    direct</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">};</span></span></code></pre>
+<p>对于 BIRD v2，配置如下：</p>
+
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># 在 /etc/bird/peers/dn42_lantian.conf 中填写</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># lantian 可以被改为任意名字</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">protocol</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> bgp</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42_lantian_v4</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> from</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dnpeers</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> {</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # 设置成我的（或者你的 Peer 的）DN42 IPv4 地址以及 ASN</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    neighbor</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 172.22.76.185</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> as</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 4242421234</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    direct</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # 在 IPv4 BGP 中禁用 IPv6 路由传递，强烈推荐保留</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    ipv6</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> {</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">        import</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> none</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">        export</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> none</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># lantian 可以被改为任意名字</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">protocol</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> bgp</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dn42_lantian_v6</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> from</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> dnpeers</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> {</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # 设置成我的（或者你的 Peer 的）Link-local IPv6，隧道名称，以及 ASN</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    neighbor</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> fe80::1234</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> %</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 'dn42-lantian'</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> as</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 4242421234</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    direct</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # 在 IPv6 BGP 中禁用 IPv4 路由传递</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # 如果你想用 Multiprotocol BGP（MP-BGP），可以删除</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    ipv4</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> {</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">        import</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> none</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">        export</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> none</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">};</span></span></code></pre>
+<h2 id="网络测试及几个加分项">网络测试及几个加分项</h2>
+<p>上述配置完后，你就已经成功接入了 DN42 网络。此时，你可以进行一些测试：</p>
+<ul>
+<li><code>ping 172.20.0.53</code> 或者 <code>ping 172.23.0.53</code>，这个地址是 DN42 网络内的 Anycast
+DNS。</li>
+<li><code>ping 172.23.0.80</code>，这是 DN42 Wiki 在内部的 IP 地址。</li>
+<li>尝试
+<a href="https://wiki.dn42.us/internal/Internal-Services" rel="noopener noreferrer" target="_blank">DN42 Wiki 上的内部服务</a>，或者 <a href="https://dn42.burble.com/home/burble-dn42-services" rel="noopener noreferrer" target="_blank">Burble 的服务</a>。</li>
+</ul>
+<p>你也可以挑战自己，继续修改你的隧道和 BGP 配置，添加更多功能，提高性能和/或安全性：</p>
+<ul>
+<li>ROA，即 Route Origin Authorization，指检查某条路由信息是否来自于该来的 AS，例如我的 <code>172.22.76.184/29</code> 就应当来自 <code>4242422547</code>，并拒绝不符合的路由信息。
+<ul>
+<li>DN42 Wiki 中有 BIRD 的 ROA 配置教程：见
+<a href="https://wiki.dn42.us/howto/Bird2" rel="noopener noreferrer" target="_blank">Bird2</a> 或者
+<a href="https://wiki.dn42.us/howto/Bird" rel="noopener noreferrer" target="_blank">Bird1</a></li>
+</ul>
+</li>
+<li>Community Filter，将 DN42 中的隧道链路按延迟、带宽、加密分成不同等级，优先选择更快速的路由
+<ul>
+<li>Bird1 参见
+<a href="https://wiki.dn42.us/howto/Bird-communities" rel="noopener noreferrer" target="_blank">DN42 Wiki 的 Bird Communities 页面</a>。Bird2
+需要对这个配置做较大幅度的修改，可以自己尝试</li>
+</ul>
+</li>
+<li>Anycast，指多台服务器同时广播一个 IP，外界访问会被导到最近的服务器上
+<ul>
+<li>在真实互联网一般用于 DNS。在 DN42 内，Wiki（172.23.0.80）也是 Anycast 的。</li>
+<li>我在去年和今年各就此写过一篇文章：参见《<a href="/article/modify-website/dn42-docker-anycast-dns.lantian">在 DN42 中使用 Docker 建立 Anycast DNS 服务</a>》和
+《<a href="/article/modify-website/docker-share-network-namespace-bird-high-availability.lantian">Docker 容器共享网络命名空间，集成 Bird 实现 Anycast 高可用</a>》。</li>
+</ul>
+</li>
+<li>建立自己的递归和权威 DNS 服务器
+<ul>
+<li>你甚至可以申请加入 DN42 的 DNS Anycast，成为官方 DNS 中的一分子。</li>
+</ul>
+</li>
+<li>注册一个域名，建立网站
+<ul>
+<li>参见我在 2018 年写的文章：《<a href="/article/modify-website/register-own-domain-in-dn42.lantian/#%E5%9C%A8-dn42-%E6%B3%A8%E5%86%8C%E5%9F%9F%E5%90%8D">在 DN42 中注册自己的域名</a>》</li>
+</ul>
+</li>
+<li>或者直接在真实互联网中，找 RIPE 注册真实的 AS，租用公网的 IPv4 和 IPv6 地址池，开始玩真的。</li>
+</ul>
+<h2 id="需要帮助">需要帮助？</h2>
+<p>记住：DN42 是一个<strong>测试网络</strong>，所有人都在帮助所有人。即使你不小心搞砸了，也没有人会指责你。你可以在 DN42 的
+<a href="https://wiki.dn42.us/services/IRC" rel="noopener noreferrer" target="_blank">IRC 频道</a>，<a href="https://wiki.dn42.us/contact#contact_mailing-list" rel="noopener noreferrer" target="_blank">邮件列表</a>或者<a href="https://t.me/Dn42Chat" rel="noopener noreferrer" target="_blank">非官方 Telegram 群组</a>寻求帮助。</p>  </div>  <script type="module" src="/assets/WalineComment.astro_astro_type_script_index_0_lang.Cd-Au78J.js"></script> <div class="clearfix" id="post-navi" data-astro-cid-gfbmwgei=""> <div class="float-end text-end" data-astro-cid-gfbmwgei=""> <a href="/article/modify-website/serve-dn42-whois-with-nginx.lantian/" title="将 nginx 用作 DN42 WHOIS 服务器" data-astro-cid-gfbmwgei=""> 将 nginx 用作 DN42 WHOIS 服务器 </a> <br data-astro-cid-gfbmwgei=""> 下一篇文章 »
+</div> <div class="float-start text-start position-absolute" data-astro-cid-gfbmwgei="">
+« 上一篇文章 <br data-astro-cid-gfbmwgei=""> <a href="/article/modify-website/lookup-any-whois-with-nginx.lantian/" title="用 nginx 搭建能查询任意公网 WHOIS 的服务器" data-astro-cid-gfbmwgei=""> 用 nginx 搭建能查询任意公网 WHOIS 的服务器 </a> </div> </div>  <div id="waline" data-waline-language="zh-CN" data-waline-path="/article/modify-website/dn42-experimental-network-2020.lantian"></div>   </div> </div> </article>  </div> <aside class="d-none d-xl-block" data-astro-cid-porej7z2=""> <section class="widget"> <h3>最新文章</h3> <ul class="list-unstyled"> <li> 12-07  <a href="/article/modify-website/dn42-flapalerted-reduce-flapping.lantian/">在 DN42 中使用 FlapAlerted 抑制 Flapping</a> </li><li> 07-20  <a href="/article/modify-computer/legal-lte-network-at-home-with-open5gs.lantian/">用 Open5GS 搭建合法的 LTE 网络</a> </li><li> 06-27  <a href="/article/modify-computer/sidestore-without-stosvpn-across-lan.lantian/">在内网中免 StosVPN 使用 SideStore</a> </li><li> 05-19  <a href="/article/modify-computer/nix-logarithmetic-math-library-from-zero.lantian/">从零开始实现 Nix 对数函数库</a> </li><li> 04-06  <a href="/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/">$100，DIY 搭建合法的 LTE 网络</a> </li><li> 02-10  <a href="/article/modify-computer/build-custom-android-kernel-with-nix.lantian/">用 Nix 编译自定义 Android 内核</a> </li><li> 04-20  <a href="/article/modify-website/migrate-blog-to-astro-js.lantian/">使用 Astro.js 重构我的博客</a> </li><li> 12-16  <a href="/article/modify-computer/nixos-low-ram-vps.lantian/">NixOS 系列（五）：制作小内存 VPS 的 DD 磁盘镜像</a> </li><li> 09-20  <a href="/article/modify-computer/nix-trigonometric-math-library-from-zero.lantian/">从零开始实现 Nix 三角函数库</a> </li><li> 05-29  <a href="/article/random-notes/pipewire-sigkill-fix.lantian/">解决 Pipewire 被 SIGKILL 的问题</a> </li><li> 05-12  <a href="/article/modify-website/how-to-kill-the-dn42-network.lantian/">如何引爆 DN42 网络（2023-05-12 更新）</a> </li><li> 05-08  <a href="/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian/">Optimus MUXed 笔记本上的 NVIDIA 虚拟机显卡直通（2023-05 更新）</a> </li><li> 04-17  <a href="/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian/">修改 APN 解决 AOSP ROM 上中国电信无法 4G 漫游问题</a> </li><li> 03-26  <a href="/article/random-notes/old-hp-workstation-as-all-in-one.lantian/">老款 HP 工作站配置 NAS+软路由笔记</a> </li><li> 01-14  <a href="/article/modify-computer/nixos-impermanence.lantian/">NixOS 系列（四）：“无状态”操作系统</a> </li> </ul> </section>  <section class="widget"> <h3>最新评论</h3> <ul class="list-unstyled" id="recent-comments">  <li><a href="#">Loading...</a></li>  </ul> </section>  <script type="module" src="/assets/WalineRecentComments.astro_astro_type_script_index_0_lang.Cu-GBWyK.js"></script> <section class="widget"> <h3>其它功能</h3> <ul class="list-unstyled">  <li> <i class="fas fa-fw fa-rss"></i>  <a href="/rss2.xml" target="_blank">RSS 订阅</a> |  <a href="/feed.xml" target="_blank">Atom</a> |  <a href="/feed.json" target="_blank">JSON</a> </li> <li> <i class="fas fa-fw fa-globe"></i>  <a href="https://stats.uptimerobot.com/NLYPbrSal6" target="_blank"> 服务器状态 </a> </li> <li> <i class="fas fa-fw fa-sitemap"></i>  <a href="https://lg.lantian.pub" target="_blank">DN42 节点状态</a> </li> <li> <i class="fas fa-fw fa-link"></i>  <a href="gopher://lantian.pub" target="_blank">使用 Gopher 协议访问</a> </li>  </ul> </section>  <section class="widget"> <h3>友情链接</h3> <ul class="list-unstyled"> <li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://0x7f.cc"> 0x7f Blog 🐑 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://alanyhq.com"> Alanyhq </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.cas7.moe"> Blog of Moecast </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://jerryxiao.cc"> JerryXiao </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://snli.org"> Shucheng Li </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://sangsir.com"> SangSir | 艺术界的一朵奇葩 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://yuetau.net"> YuetAu&#39;s Spot </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.baoshuo.ren/?utm_source=friends"> 宝硕博客 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="http://foreverblog.cn"> 十年之约 </a> </li> </ul> </section>  </aside> </div> <footer class="clearfix" data-astro-cid-w3csb3e3="">  <div id="copyright" class="float-end text-end" data-astro-cid-w3csb3e3=""> <i class="fas fa-copyright" data-astro-cid-w3csb3e3=""></i> 2012-2026 Lan Tian @ Blog<br data-astro-cid-w3csb3e3=""> <small data-astro-cid-w3csb3e3=""> 基于 Astro v5.17.1 构建 @ 2026-02-12 02:27:04 </small> </div> <script type="module" src="/assets/PlausibleAnalytics.astro_astro_type_script_index_0_lang.C6V0cCkY.js"></script> </footer>  </div>  </body> </html>

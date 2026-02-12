@@ -1,0 +1,618 @@
+<!DOCTYPE html><html lang="en-US" itemscope="" itemtype="https://schema.org/Article" data-astro-cid-porej7z2=""> <head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy - Lan Tian @ Blog</title><script>
+  ;(() => {
+    try {
+      const mode = localStorage.getItem('user-color-scheme')
+      if (mode == 'dark' || mode == 'light') {
+        document.documentElement.setAttribute('data-user-color-scheme', mode)
+      }
+    } catch {
+      // Ignore errors
+    }
+  })()
+  ;(() => {
+    window.lantianImageFallback = (img, src) => {
+      img.onerror = null
+      img.srcset = src
+      img.src = src
+      if (img.parentNode.nodeName.toLowerCase() === 'picture') {
+        const picture = img.parentNode
+        picture.innerHTML = ''
+        picture.appendChild(img)
+      }
+    }
+  })()
+</script><link rel="stylesheet" href="/assets/index.CN3CN3hr.css"><style>.post-image-wrap[data-astro-cid-potdituc]{margin:0 -5px}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{height:150px;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center}@media(min-width:768px){.post-image-wrap[data-astro-cid-potdituc]{padding:5px;float:right}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:200px}}@media(max-width:767.98px){.post-image-wrap[data-astro-cid-potdituc]{text-align:center}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:100%}}#post-navi[data-astro-cid-gfbmwgei]{padding:5px;border-top:1px solid var(--lt-border-weak);border-bottom:1px solid var(--lt-border-weak)}
+</style><link rel="stylesheet" href="/assets/index.DC6W6NZY.css"><script type="module" src="/assets/PageLayout.astro_astro_type_script_index_0_lang.Co1i7321.js"></script><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><meta name="title" content="NixOS Series 2: Basic Config, Nix Flake &#38; Batch Deploy - Lan Tian @ Blog"><meta name="keywords" content=""><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/en/article/modify-website/nixos-initial-config-flake-deploy.lantian/"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-website/nixos-initial-config-flake-deploy.lantian/" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-website/nixos-initial-config-flake-deploy.lantian/" hreflang="en"><meta name="copyright" content="Copyright 2012-2026 Lan Tian @ Blog"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="manifest" href="/manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#03a9f4"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#212121"><meta name="application-name" content="Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167x167.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="apple-touch-icon" sizes="1024x1024" href="/apple-touch-icon-1024x1024.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-precomposed.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-640x1136.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1136x640.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-750x1334.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1334x750.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1125x2436.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2436x1125.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1170x2532.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2532x1170.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1179x2556.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2556x1179.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-828x1792.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1792x828.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2688.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2688x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2208.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2208x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1284x2778.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2778x1284.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1290x2796.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2796x1290.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1488x2266.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2266x1488.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1536x2048.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2048x1536.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1620x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1620.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1640x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1640.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2388.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2388x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2224.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2224x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-2048x2732.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2732x2048.png"><meta name="msapplication-TileColor" content="#bbdefb"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-config" content="/browserconfig.xml"><link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json"><meta property="og:url" content="https://lantian.pub/en/article/modify-website/nixos-initial-config-flake-deploy.lantian/"><meta property="og:type" content="website"><meta property="og:title" content="NixOS Series 2: Basic Config, Nix Flake &#38; Batch Deploy - Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/usr/uploads/202110/nixos-social-preview.png"><meta content="This is the second post in my NixOS series and mainly focuses on: Basic format of NixOS config files and how to edit them Flake functionality of Nix package manager Deploy-RS deployment tool This post assumes that you&#38;#39;ve installed NixOS with NixOS&#38;#39;s official installation manual . Changelog 2023-05-10: Add a recommended post: NixOS &#38;amp; Nix Flakes - A Guide for Beginners by Ryan Yin. 2021-12-18: NixOS 21.11 still doesn&#38;#39;t come with Flake functionality by default. Relevant information is updated. Basic config During NixOS&#38;#39;s installation process, the nixos-generate-config tool should have generated an initial config file for you under /etc/nixos , with two files configuration.nix and hardware-configuration.nix . Ignore hardware-configuration.nix for the moment,..."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="en"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/en/article/modify-website/nixos-initial-config-flake-deploy.lantian/"><meta name="twitter:title" content="NixOS Series 2: Basic Config, Nix Flake &#38; Batch Deploy - Lan Tian @ Blog"><meta property="twitter:image" content="https://lantian.pub/usr/uploads/202110/nixos-social-preview.png"><meta content="This is the second post in my NixOS series and mainly focuses on: Basic format of NixOS config files and how to edit them Flake functionality of Nix package manager Deploy-RS deployment tool This post assumes that you&#38;#39;ve installed NixOS with NixOS&#38;#39;s official installation manual . Changelog 2023-05-10: Add a recommended post: NixOS &#38;amp; Nix Flakes - A Guide for Beginners by Ryan Yin. 2021-12-18: NixOS 21.11 still doesn&#38;#39;t come with Flake functionality by default. Relevant information is updated. Basic config During NixOS&#38;#39;s installation process, the nixos-generate-config tool should have generated an initial config file for you under /etc/nixos , with two files configuration.nix and hardware-configuration.nix . Ignore hardware-configuration.nix for the moment,..."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="NixOS Series 2: Basic Config, Nix Flake &#38; Batch Deploy - Lan Tian @ Blog"><meta property="image" content="https://lantian.pub/usr/uploads/202110/nixos-social-preview.png"><meta content="This is the second post in my NixOS series and mainly focuses on: Basic format of NixOS config files and how to edit them Flake functionality of Nix package manager Deploy-RS deployment tool This post assumes that you&#38;#39;ve installed NixOS with NixOS&#38;#39;s official installation manual . Changelog 2023-05-10: Add a recommended post: NixOS &#38;amp; Nix Flakes - A Guide for Beginners by Ryan Yin. 2021-12-18: NixOS 21.11 still doesn&#38;#39;t come with Flake functionality by default. Relevant information is updated. Basic config During NixOS&#38;#39;s installation process, the nixos-generate-config tool should have generated an initial config file for you under /etc/nixos , with two files configuration.nix and hardware-configuration.nix . Ignore hardware-configuration.nix for the moment,..."><meta content="This is the second post in my NixOS series and mainly focuses on: Basic format of NixOS config files and how to edit them Flake functionality of Nix package manager Deploy-RS deployment tool This post assumes that you&#38;#39;ve installed NixOS with NixOS&#38;#39;s official installation manual . Changelog 2023-05-10: Add a recommended post: NixOS &#38;amp; Nix Flakes - A Guide for Beginners by Ryan Yin. 2021-12-18: NixOS 21.11 still doesn&#38;#39;t come with Flake functionality by default. Relevant information is updated. Basic config During NixOS&#38;#39;s installation process, the nixos-generate-config tool should have generated an initial config file for you under /etc/nixos , with two files configuration.nix and hardware-configuration.nix . Ignore hardware-configuration.nix for the moment,..."><link rel="me" href="https://mastodon.social/@lantian"></head> <body data-astro-cid-porej7z2=""> <div id="bg" data-astro-cid-j6vmxtef=""></div>   <div id="container" class="container" data-astro-cid-porej7z2=""> <nav class="lantian navbar navbar-expand-lg" data-astro-cid-wu5dj4rx=""> <div class="container-fluid" data-astro-cid-wu5dj4rx=""> <a class="navbar-brand" href="/en/" data-astro-cid-wu5dj4rx="">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation" data-astro-cid-wu5dj4rx=""> <span class="navbar-toggler-icon" data-astro-cid-wu5dj4rx=""></span> </button> <div class="collapse navbar-collapse" id="lantian-navbar" data-astro-cid-wu5dj4rx=""> <ul class="navbar-nav" data-astro-cid-wu5dj4rx=""> <li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/en/page/archive/index.html" data-astro-cid-wu5dj4rx=""> Posts </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/en/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> Himawari </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/en/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> <li class="nav-item dropdown d-block d-lg-none" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="pages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-file" data-astro-cid-wu5dj4rx=""></i> Page  <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="pages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/page/archive/index.html" data-astro-cid-wu5dj4rx=""> Posts </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> Himawari </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> </ul> </li> </ul> <ul class="navbar-nav ms-auto" data-astro-cid-wu5dj4rx=""> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="languages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-language" data-astro-cid-wu5dj4rx=""></i> Language <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="languages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/article/modify-website/nixos-initial-config-flake-deploy.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-cn" data-astro-cid-wu5dj4rx=""></span> Chinese Simplified / 简体中文 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item active" href="/en/article/modify-website/nixos-initial-config-flake-deploy.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-us" data-astro-cid-wu5dj4rx=""></span> English </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">Not all pages have translations.</a> </li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">You may see 404 - this is normal.</a> </li> </ul> </li> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="color-scheme-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> Night Mode </a> <ul class="dropdown-menu" aria-labelledby="color-scheme-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-auto" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> Auto </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-light" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-sun" data-astro-cid-wu5dj4rx=""></i> Light</a> </li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-dark" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-moon" data-astro-cid-wu5dj4rx=""></i> Dark</a> </li> </ul> </li> </ul> </div> </div> </nav> <script type="module">const m="user-color-scheme",s="data-user-color-scheme",u=(e,t)=>{try{localStorage.setItem(e,t)}catch{}},i=e=>{try{return localStorage.getItem(e)}catch{return null}},c=e=>{const t={dark:!0,light:!0,auto:!0},o=e===null||!Object.keys(t).includes(e)?"auto":e;u(m,o);for(const l in t){const n=document.getElementById("color-scheme-"+l);n&&(l==o?n.classList.add("active"):n.classList.remove("active"))}o!="auto"?document.documentElement.setAttribute(s,o):document.documentElement.removeAttribute(s)};c(i(m));const r=document.getElementById("color-scheme-auto");r&&r.addEventListener("click",()=>c("auto"));const a=document.getElementById("color-scheme-light");a&&a.addEventListener("click",()=>c("light"));const d=document.getElementById("color-scheme-dark");d&&d.addEventListener("click",()=>c("dark"));</script>  <div class="d-flex" data-astro-cid-porej7z2=""> <div id="content" data-astro-cid-porej7z2="">  <article> <div class="d-flex"> <div class="post-info-wrap" data-astro-cid-dckccua4=""> <div class="post-info" data-astro-cid-dckccua4=""> <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-clock" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">11-13</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> Published on<span class="badge badge-tag" data-astro-cid-dckccua4=""> 2021-11-13 00:48 </span>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-file-alt" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">Website and Servers</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> Category <a class="badge badge-tag" href="/en/category/modify-website" data-astro-cid-dckccua4=""> Website and Servers </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-tag" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">1 tags</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> Tags  <a class="badge badge-tag" href="/en/tag/NixOS" data-astro-cid-dckccua4=""> NixOS </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-list" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">ToC</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu="">  <ol data-astro-cid-nj3qel45=""> <li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#changelog" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Changelog</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#basic-config" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Basic config</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#that-config-is-a-function" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">That Config is a Function</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#splitting-config-to-many-files" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Splitting Config to Many Files</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#nix-flake" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Nix Flake</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#batch-deployment-with-deploy-rs" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Batch Deployment with Deploy-RS</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#appendix-nixos-on-oracle-arm-server" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Appendix: NixOS on Oracle ARM Server</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#appendix-further-reading" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Appendix: Further Reading</span> </a> </li> </ol>   </div> </div> </div>   </div>  </div>  <div class="post-wrap"> <div class="post-image-wrap" data-astro-cid-potdituc=""><picture data-astro-cid-potdituc=""><source srcset="/usr/uploads/202110/nixos-social-preview.png.thumb.png.webp" type="image/webp" data-astro-cid-potdituc=""><source srcset="/usr/uploads/202110/nixos-social-preview.png.thumb.png.avif" type="image/avif" data-astro-cid-potdituc=""><source srcset="/usr/uploads/202110/nixos-social-preview.png.thumb.png.jxl" type="image/jxl" data-astro-cid-potdituc=""><img src="/usr/uploads/202110/nixos-social-preview.png.thumb.png" alt="Illustration for NixOS Series 2: Basic Config, Nix Flake &#38; Batch Deploy" height="150" onerror="window.lantianImageFallback(this, '/usr/uploads/202110/nixos-social-preview.png.thumb.png')" data-astro-cid-potdituc=""></picture></div> <h1 class="post-title"> <a href="/en/article/modify-website/nixos-initial-config-flake-deploy.lantian/" rel="bookmark" title="NixOS Series 2: Basic Config, Nix Flake &#38; Batch Deploy">NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy</a> </h1> <div class="post-text">  <blockquote><p>List of NixOS series posts:</p><ul><li><a href="/en/article/modify-website/nixos-why.lantian/">NixOS Series 1: Why I fell in love</a> </li><li><a href="/en/article/modify-website/nixos-initial-config-flake-deploy.lantian/">NixOS Series 2: Basic Config, Nix Flake &amp; Batch Deploy</a> (current post)</li><li><a href="/en/article/modify-computer/nixos-packaging.lantian/">NixOS Series 3: Software Packaging 101</a> </li><li><a href="/en/article/modify-computer/nixos-impermanence.lantian/">NixOS Series 4: &quot;Stateless&quot; Operating System</a> </li><li><a href="/en/article/modify-computer/nixos-low-ram-vps.lantian/">NixOS Series 5: Creating Disk Image for Low RAM VPS</a> </li></ul></blockquote> <p>This is the second post in my NixOS series and mainly focuses on:</p>
+<ul>
+<li>Basic format of NixOS config files and how to edit them</li>
+<li>Flake functionality of Nix package manager</li>
+<li>Deploy-RS deployment tool</li>
+</ul>
+<p>This post assumes that you&#39;ve installed NixOS with
+<a href="https://nixos.org/manual/nixos/stable/index.html#sec-installation" rel="noopener noreferrer" target="_blank">NixOS&#39;s official installation manual</a>.</p>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li>2023-05-10: Add a recommended post:
+<a href="https://thiscute.world/en/posts/nixos-and-flake-basics/" rel="noopener noreferrer" target="_blank">NixOS &amp; Nix Flakes - A Guide for Beginners</a>
+by Ryan Yin.</li>
+<li>2021-12-18: NixOS 21.11 still doesn&#39;t come with Flake functionality by
+default. Relevant information is updated.</li>
+</ul>
+<h2 id="basic-config">Basic config</h2>
+<p>During NixOS&#39;s installation process, the <code>nixos-generate-config</code> tool should
+have generated an initial config file for you under <code>/etc/nixos</code>, with two files
+<code>configuration.nix</code> and <code>hardware-configuration.nix</code>. Ignore
+<code>hardware-configuration.nix</code> for the moment, as it&#39;s automatically generated
+based on your hardware and disk partition scheme. Let&#39;s open
+<code>configuration.nix</code>:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># I removed all comments in the file to shorten stuff</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">config</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }:</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  imports</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> =</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    [</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">      ./hardware-configuration.nix</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    ];</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  boot</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">loader</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">grub</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">enable</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  boot</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">loader</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">grub</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">version</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">2</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  boot</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">loader</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">grub</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">device</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;/dev/sda&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  networking</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">useDHCP</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">false</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  networking</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">interfaces</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">enp0s3</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">useDHCP</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  networking</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">interfaces</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">enp0s8</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">useDHCP</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  system</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">stateVersion</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;21.05&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>This file defines your whole NixOS operating system, including all software
+packages and their config. This file is in Nix format, a &quot;functional
+programming&quot; language created by NixOS&#39;s Nix package manager. But since we&#39;re
+doing basic config, we don&#39;t need its programming functionalities yet. Let&#39;s
+ignore the first line <code>{ config, pkgs, ... }:</code> for the moment and <strong>treat the
+rest part as a JSON file</strong>.</p>
+<p>The Nix language has the same 6 data types as JSON: number, boolean, string,
+object, array, and null. Their format is also quite similar. In addition, the
+Nix language has a &quot;path&quot; data type:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Number</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  number</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">123456</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Boolean</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  boolean_value</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # String</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  string</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;lantian.pub&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Object</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  object</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">1</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    b</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">2</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  };</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # The object can also be defined as this, they&#39;re equivalent:</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  object</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">1</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  object</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">b</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">2</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Array</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  array</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = [</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">    &quot;first element&quot;</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">    &quot;second element&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # Array can store objects:</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    ({</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">1</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      b</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">2</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    })</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  ];</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # A Path, doesn&#39;t have double quotes like a string</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  #</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Note:</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  #</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # - A file pointed by a path will be copied to /nix/store when parsing the config,</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  #   and that copy will be used instead. A path usually points to a file managed</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  #   along with this config, like your handwritten config file for some program.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  #</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # - A file pointed by a string won&#39;t be copied, but its contents aren&#39;t part of</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  #   the config. They aren&#39;t managed by Nix and cannot be read by Nix, but the</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  #   path itself can be copied to the program&#39;s config file and be read by the</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  #   program. Usually, for files independent from the config, like the code of</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  #   your website.</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  file</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">./somefile.txt</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;    </span><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># Will be copied to /nix/store/[hash]-somefile.txt</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  file2</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;./somefile.txt&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">; </span><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># Won&#39;t be read or processed by Nix</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>Now suppose we want to install an SSH server for remote login. We can add these
+two lines of config:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">config</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }:</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # ...</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Add these two lines</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  services</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">openssh</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">enable</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  services</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">openssh</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">permitRootLogin</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;yes&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Or equivalent to this, using the feature of Nix objects</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  services</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">openssh</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    enable</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    permitRootLogin</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;yes&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  };</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Or equivalent to this</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  services</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    openssh</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      enable</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      permitRootLogin</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;yes&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  };</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # ...</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<blockquote>
+<p>The line <code>services.openssh.permitRootLogin = &quot;yes&quot;;</code> allows password login to
+the <code>root</code> account. Since I&#39;m using a VM isolated from the Internet, I care
+more about convenience rather than security. <strong>Don&#39;t add this line if your
+machine is exposed to the Internet!</strong></p>
+</blockquote>
+<p>After you&#39;ve done editing the config, run <code>nixos-rebuild switch</code> to reconfigure
+the system. NixOS will read your config file, automatically download OpenSSH,
+generate its config file and start it, so you can login with SSH on port 22.</p>
+<p>Here&#39;s another example where I want to install the <code>nyancat</code> command:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">config</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }:</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # ...</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Add these lines</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  environment</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">systemPackages</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = [</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # This is a package definition, is an object instead of a string</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">    pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nyancat</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  ];</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Or equivalent to this. The &quot;with&quot; command means definitions in &quot;pkgs&quot;</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # are directly referenced, so your config file can be shorter if you</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # install a lot of packages.</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  environment</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">systemPackages</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">with</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">; [</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">    nyancat</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  ];</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # ...</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>Run <code>nixos-rebuild switch</code> and <code>nyancat</code> command will be ready:</p>
+<p><picture><source srcset="/usr/uploads/202111/nixos-nyancat.png.webp" type="image/webp"><source srcset="/usr/uploads/202111/nixos-nyancat.png.avif" type="image/avif"><source srcset="/usr/uploads/202111/nixos-nyancat.png.jxl" type="image/jxl"><img src="/usr/uploads/202111/nixos-nyancat.png" alt="NixOS nyancat command"></picture></p>
+<p><a href="https://nixos.org/manual/nixos/unstable/options.html" rel="noopener noreferrer" target="_blank">This document</a> from NixOS
+official lists all possible options in <code>configuration.nix</code>. Since it lists ALL
+options, the page is very long, and it&#39;s normal for your browser to freeze for a
+couple of seconds. Instead, you can use
+<a href="https://search.nixos.org/options" rel="noopener noreferrer" target="_blank">the Options page of NixOS&#39;s official search tool</a>
+to lookup options:</p>
+<p><picture><source srcset="/usr/uploads/202111/nixos-search-options.png.webp" type="image/webp"><source srcset="/usr/uploads/202111/nixos-search-options.png.avif" type="image/avif"><source srcset="/usr/uploads/202111/nixos-search-options.png.jxl" type="image/jxl"><img src="/usr/uploads/202111/nixos-search-options.png" alt="NixOS Official Search: Options"></picture></p>
+<p>Or search for packages at
+<a href="https://search.nixos.org/packages" rel="noopener noreferrer" target="_blank">the Packages page</a>:</p>
+<p><picture><source srcset="/usr/uploads/202111/nixos-search-packages.png.webp" type="image/webp"><source srcset="/usr/uploads/202111/nixos-search-packages.png.avif" type="image/avif"><source srcset="/usr/uploads/202111/nixos-search-packages.png.jxl" type="image/jxl"><img src="/usr/uploads/202111/nixos-search-packages.png" alt="NixOS Official Search: Packages"></picture></p>
+<h2 id="that-config-is-a-function">That Config is a Function</h2>
+<p>Until now, we&#39;ve ignored the first line <code>{ config, pkgs, ... }:</code>. In fact, the
+whole <code>configuration.nix</code> is a Nix function, and <code>config</code> and <code>pkgs</code> are input
+parameters.</p>
+<p>Here&#39;s how NixOS defines functions:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># This is a function, with one input &quot;a&quot; and returns (a+1)</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">+</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">1</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># This is a function, with one input &quot;a&quot; and returns an object.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># The object has two keys &quot;a&quot; and &quot;b&quot;</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># Note that there&#39;s no variables in the Nix language!</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># Assuming input is a = 1, the return value will be { a = 2; b = 3; }</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">#                                        instead of { a = 2; b = 4; }</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> + </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">1</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  b</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> + </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">2</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># This is a function.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># The input is an object with keys &quot;a&quot; and &quot;b&quot;.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># The return value is an object with keys &quot;a&quot; and &quot;b&quot;.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># Assuming input is { a = 1; b = 2; }, the return value will be { a = 2; b = 1; }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">b</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> }: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">b</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  b</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># This is the same function as the last one,</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># just with &quot;...&quot; added to the parameter list,</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># so, it accepts (and ignores) unknown parameters.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">#</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># Assuming input is { a = 1; b = 2; c = 3; },</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># the last function will error out since it doesn&#39;t recognize &quot;c&quot;,</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># but this function will ignore &quot;c&quot; proceed normally</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">b</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">b</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  b</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">a</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>Back to the config to install <code>nyancat</code>:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">config</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }:</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  environment</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">systemPackages</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = [</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">    pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nyancat</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  ];</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>It adds the subobject <code>nyancat</code> of parameter <code>pkgs</code> (also an object) to the list
+of <code>environment.systemPackages</code>. <code>pkgs</code> is the collection of all packages in the
+NixOS package repository, defined at
+<a href="https://github.com/NixOS/nixpkgs" rel="noopener noreferrer" target="_blank">https://github.com/NixOS/nixpkgs</a>. Similarly,
+<code>config</code> is the collection of all config parameters. If you want the list of all
+installed packages, you can use <code>config.environment.systemPackages</code>.</p>
+<blockquote>
+<p>Nix language uses lazy evaluation. NixOS won&#39;t do anything right after loading
+the config file. A config item (e.g. <code>environment.systemPackages</code>) will only
+have its value parsed (the array, as well as the object <code>pkgs.nyancat</code>) when
+it&#39;s referenced.</p>
+<p>By the way, the Nix language doesn&#39;t support circular references. Config like
+<code>{ a = config.b; b = config.a; }</code> won&#39;t work and will error out with
+<code>infinite recursion encountered</code>.</p>
+</blockquote>
+<h2 id="splitting-config-to-many-files">Splitting Config to Many Files</h2>
+<p>After you&#39;ve used NixOS for a while, you may have installed a lot of packages
+and have a very long, hard-to-read config file. NixOS supports importing a
+config file from another, so you can put a subset the configuration (like the
+desktop environment, or the Nginx + PHP + MySQL stack, etc.) to a separate file
+for easier lookup.</p>
+<p>Suppose I want to put the SSH config to another file. First create
+<code>/etc/nixos/ssh.nix</code>:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">config</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }:</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  services</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">openssh</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">enable</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  services</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">openssh</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">permitRootLogin</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;yes&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>The add <code>ssh.nix</code> to <code>imports</code> in <code>/etc/nixos/configuration.nix</code>, and remove
+previous SSH config statements:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">config</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }:</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # ...</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  imports</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> =</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    [</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">      ./hardware-configuration.nix</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">      ./ssh.nix</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    ];</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # ...</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>Then run <code>nixos-rebuild switch</code>. Note that this rebuild neither generated any
+new stuff nor started/stopped any service, as all we did was move some SSH
+config statements to another file, with no actual config change.</p>
+<p><picture><source srcset="/usr/uploads/202111/nixos-rebuild-noop.png.webp" type="image/webp"><source srcset="/usr/uploads/202111/nixos-rebuild-noop.png.avif" type="image/avif"><source srcset="/usr/uploads/202111/nixos-rebuild-noop.png.jxl" type="image/jxl"><img src="/usr/uploads/202111/nixos-rebuild-noop.png" alt="NixOS Rebuild"></picture></p>
+<p>Here I&#39;ll give a brief explanation of how <code>imports</code> works. The function
+<code>configuration.nix</code> has parameters <code>config</code>, <code>pkgs</code>, and some more we ignored
+with <code>...</code>. NixOS will use the same parameters (including both used ones and
+ignored ones) to call every file in <code>imports</code>, and combine the result with the
+current config file.</p>
+<p>Back to <code>ssh.nix</code>, notice that it never used <code>config</code> nor <code>pkgs</code>, so we can
+remove even that:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># We can remove &quot;config&quot; and &quot;pkgs&quot;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ ... }:</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  services</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">openssh</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">enable</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  services</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">openssh</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">permitRootLogin</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;yes&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># Or even remove all parameters, &quot;imports&quot; is smart enough to handle this</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  services</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">openssh</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">enable</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  services</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">openssh</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">permitRootLogin</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;yes&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<h2 id="nix-flake">Nix Flake</h2>
+<p>Since all NixOS configurations are defined by <code>configuration.nix</code>, we can copy
+the files to another machine, run <code>nixos-rebuild switch</code> and get an exactly same
+system. I also stated in
+<a href="/en/article/modify-website/nixos-why.lantian/">the first post of this series</a>:</p>
+<blockquote>
+<p>(...) one important feature of NixOS is managing each and every package and
+config with a set of Nix config files. Therefore, we can use any tools we
+like, for example, Ansible, Rsync, or even Git, to manage the config at
+<code>/etc/nixos</code>. Since this is the only config file we care about, we no longer
+need a bunch of complicated Ansible playbooks or dozens of Rsync commands. We
+only need to overwrite <code>/etc/nixos</code>, run <code>nixos-rebuild switch</code>, and call it a
+day.</p>
+</blockquote>
+<p>Now I&#39;m gonna tell you that <strong>what I said just now was all wrong.</strong></p>
+<p>Up until now I introduced the ways to change your system config and install
+packages, but I never talked about how to upgrade stuff. This is because NixOS
+package repositories are managed with another command, <code>nix-channel</code>:</p>
+<p><picture><source srcset="/usr/uploads/202111/nixos-channels.png.webp" type="image/webp"><source srcset="/usr/uploads/202111/nixos-channels.png.avif" type="image/avif"><source srcset="/usr/uploads/202111/nixos-channels.png.jxl" type="image/jxl"><img src="/usr/uploads/202111/nixos-channels.png" alt="NixOS nix-channel command"></picture></p>
+<p>Here the <code>nix-channel --list</code> command lists all configured repositories, and
+<code>nix-channel --update</code> updates them to the latest version. However,
+<code>nix-channel</code> is not managed with <code>configuration.nix</code>, and there&#39;s no way for
+<code>configuration.nix</code> to define the URLs and revisions of the package repos. Since
+package repos are constantly updated, this means that two systems installed one
+month apart may have software version differences, even with the same config.
+This is contrary to NixOS&#39;s &quot;one config for everything&quot; promise.</p>
+<p>To solve this issue, Nix introduced the Flake functionality, which allows
+defining repo URLs and revisions. First, let&#39;s edit <code>configuration.nix</code> followed
+by <code>nixos-rebuild switch</code> to upgrade the Nix package manager to a beta version
+supporting Flake:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">config</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }:</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # ...</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  nix</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    package</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">pkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixUnstable</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    extraOptions</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&#39;&#39;</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">      experimental-features = nix-command flakes</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">    &#39;&#39;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  };</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # ...</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<blockquote>
+<p>At the time of writing, NixOS 21.05 is the latest stable version, and its Nix
+package manager (version 2.3) doesn&#39;t enable Flake functionality by default
+yet. <del>NixOS 21.11 and future versions will have Flake enabled by default, and
+by then, these config changes will no longer be needed.</del> Due to concerns
+about significant changes in Nix 2.4, especially about those behaviors
+incompatible with previous versions, NixOS 21.11 still uses Nix 2.3, which
+disables Flake by default. See
+<a href="https://discourse.nixos.org/t/nix-2-4-and-what-s-next/16257" rel="noopener noreferrer" target="_blank">https://discourse.nixos.org/t/nix-2-4-and-what-s-next/16257</a>
+and
+<a href="https://github.com/NixOS/nixpkgs/pull/147511" rel="noopener noreferrer" target="_blank">https://github.com/NixOS/nixpkgs/pull/147511</a>
+for the relevant discussion.</p>
+</blockquote>
+<p>Then create a <code>flake.nix</code> file in <code>/etc/nixos</code>. This <code>flake.nix</code> defines a
+package repo (<code>input</code>), the <code>unstable</code> branch (equivalent to <code>master</code> branch) of
+<a href="https://github.com/NixOS/nixpkgs" rel="noopener noreferrer" target="_blank">https://github.com/NixOS/nixpkgs</a>.</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Description, write anything or even nothing</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  description</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;Lan Tian&#39;s NixOS Flake&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Input config, or package repos</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  inputs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # Nixpkgs, NixOS&#39;s official repo</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    nixpkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">url</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;github:NixOS/nixpkgs/nixos-unstable&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  };</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # Output config, or config for NixOS system</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  outputs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = { </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">self</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixpkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }@</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">inputs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # Define a system called &quot;nixos&quot;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    nixosConfigurations</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;nixos&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixpkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">lib</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixosSystem</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      system</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;x86_64-linux&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      modules</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = [</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        ./configuration.nix</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      ];</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    };</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # You can define many systems in one Flake file.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # NixOS will choose one based on your hostname.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    #</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # nixosConfigurations.&quot;nixos2&quot; = nixpkgs.lib.nixosSystem {</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    #   system = &quot;x86_64-linux&quot;;</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    #   modules = [</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    #     ./configuration2.nix</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    #   ];</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>Then run <code>nix flake update</code>:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">[root@nixos:/etc/nixos]# nix flake update</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">warning:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> creating</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> lock</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> file</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> &#39;/etc/nixos/flake.lock&#39;</span></span></code></pre>
+<p>A <code>flake.lock</code> JSON file is generated:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">  &quot;nodes&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">    &quot;nixpkgs&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">      &quot;locked&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;lastModified&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">1636623366</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;narHash&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;sha256-jOQMlv9qFSj0U66HB+ujZoapty0UbewmSNbX8+3ujUQ=&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;owner&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;NixOS&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;repo&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;nixpkgs&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;rev&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;c5ed8beb478a8ca035f033f659b60c89500a3034&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;type&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;github&quot;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      },</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">      &quot;original&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;owner&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;NixOS&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;ref&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;nixos-unstable&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;repo&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;nixpkgs&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;type&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;github&quot;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    },</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">    &quot;root&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">      &quot;inputs&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">        &quot;nixpkgs&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;nixpkgs&quot;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  },</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">  &quot;root&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;root&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">  &quot;version&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">7</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p><code>flake.lock</code> defines the commit ID and SHA256 checksum for <code>nixpkgs</code>, so even if
+the config file is copied to another machine, the Nix package manager there will
+download this specific revision of <code>nixpkgs</code> and install software accordingly,
+so you&#39;ll have exactly the same versions of software.</p>
+<p>Finally, run <code>nixos-rebuild switch</code>. NixOS will automatically prefer <code>flake.nix</code>
+to <code>configuration.nix</code>, and upgrade (or downgrade) all packages to this specific
+version. But since we added the <code>configuration.nix</code> file to the <code>modules</code> array
+in <code>flake.nix</code>, the system configuration will remain unchanged.</p>
+<blockquote>
+<p>If you enabled Flake and manage your files with Git, note that NixOS will
+ignore files not managed by Git and only read those files previously staged or
+committed. If you created a new file, remember to stage it, or NixOS will
+report that the file cannot be found.</p>
+</blockquote>
+<h2 id="batch-deployment-with-deploy-rs">Batch Deployment with Deploy-RS</h2>
+<p>Now we have one machine configured, but as I mentioned in
+<a href="/en/article/modify-website/nixos-why.lantian/">the first post of this series</a>,
+I have 10 machines. Of course, I can write an Ansible script to copy the config
+to <code>/etc/nixos</code> of all nodes and run <code>nixos-rebuild switch</code>, but that approach
+will have a few problems:</p>
+<ol>
+<li>
+<p>If a package in the repo doesn&#39;t have prebuilt binary files, I&#39;ll have to run
+the compilation on each and every machine. But since I use cheap VPSes
+without many resources available, I can easily run out of RAM or get
+suspended for excessive CPU usage.</p>
+<p>The package repo of NixOS is somewhat similar to Gentoo. Unlike other Linux
+distributions, a package being in the repo doesn&#39;t equate to it having binary
+download available. A NixOS &quot;package&quot; is a set of Nix language definitions
+describing the whole process of download, compilation, and packaging.</p>
+<p>Usually, official NixOS will build software for us and upload them to a
+Binary Cache. But if we ever change the compilation process (usually some
+compilation parameters) or create a new package on our own (the process will
+be explained in a future post), we&#39;re on our own.</p>
+</li>
+<li>
+<p>The Nix package manager itself also takes a considerable amount of RAM and
+CPU resources when parsing config files, especially when the config is
+complicated.</p>
+</li>
+</ol>
+<p>In an ideal world, I will be able to parse the config on a high-performance
+machine (like my personal computer or a dedicated server), download or compile
+all packages and config, and copy them to all machines, so they don&#39;t need to
+spare resources for that... Oh wait, this is what
+<a href="https://github.com/serokell/deploy-rs" rel="noopener noreferrer" target="_blank">Deploy-RS</a> exactly does.</p>
+<p>To use Deploy-RS, we need a machine with a Nix installation. Note that I didn&#39;t
+ask you to reinstall your machine into NixOS because the Nix package manager can
+be installed on another Linux distribution. For example, as I run Arch Linux on
+my computer, I set up Nix according to the guide on
+<a href="https://wiki.archlinux.org/title/Nix" rel="noopener noreferrer" target="_blank">Arch Linux Wiki</a>. Users of other
+distributions can use Nix&#39;s official quick installation script:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># Copied from https://nixos.org/download.html</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">curl</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -L</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> https://nixos.org/nix/install</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> | </span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">sudo</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> sh</span></span></code></pre>
+<p>Then we need to enable Flake on this machine:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">nix-env</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> -iA</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> nixpkgs.nixFlakes</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">echo</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> &quot;experimental-features = nix-command flakes&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> &gt;&gt; </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">/etc/nix/nix.conf</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">systemctl</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> restart</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> nix-daemon</span></span></code></pre>
+<p>Back to <code>flake.nix</code> created in the last part, we need to add the repository of
+Deploy-RS, as well as SSH connection definitions in <code>outputs</code>:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  description</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;Lan Tian&#39;s NixOS Flake&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  inputs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    nixpkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">url</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;github:NixOS/nixpkgs/nixos-unstable&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # Add these lines</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    deploy-rs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      url</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;github:serokell/deploy-rs&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      inputs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">nixpkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">follows</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;nixpkgs&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  };</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  outputs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = { </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">self</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixpkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }@</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">inputs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    nixosConfigurations</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;nixos&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixpkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">lib</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixosSystem</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      system</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;x86_64-linux&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      modules</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = [</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        ./configuration.nix</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      ];</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    };</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">    # Add these lines</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    deploy</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      sshUser</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;root&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;           </span><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># SSH login username</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      user</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;root&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;              </span><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># Remote username</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      sshOpts</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = [ </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;-p&quot;</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> &quot;2222&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> ];  </span><span style="--shiki-dark:#6A9955;--shiki-light:#008000"># SSH parameters, here I specify port 2222</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      # Auto rollback on deployment failure, recommended off.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      #</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      # NixOS deployment can be a bit flaky (especially on unstable)</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      # and you may need to deploy twice to succeed, but auto rollback</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      # works against that and make your deployments constantly fail.</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      autoRollback</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">false</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      # Auto rollback on Internet disconnection, recommended off.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      #</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      # Rollback when your new config killed the Internet connection,</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      # so you don&#39;t have to use VNC or IPMI from your service provider.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      # But if you&#39;re adjusting firewall or IP settings, chances are</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      # although the Internet is down atm, a simple reboot will make everything work.</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">      # Magic rollback works against that, so you should keep that off.</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      magicRollback</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">false</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      nodes</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        &quot;nixos&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">          # Target node&#39;s address, either IP, domain, or .ssh/config alias</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">          hostname</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;192.168.56.105&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">          profiles</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">system</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">            # Use nixosConfigurations.&quot;nixos&quot; defined above</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">            path</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">deploy-rs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">lib</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">x86_64-linux</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">activate</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixos</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> self</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixosConfigurations</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;nixos&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">          };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>Finally, run <code>nix run github:serokell/deploy-rs -- -s .</code> to execute Deploy-RS
+and voila.</p>
+<h2 id="appendix-nixos-on-oracle-arm-server">Appendix: NixOS on Oracle ARM Server</h2>
+<p>NixOS also supports the ARM64v8 architecture, the one used by Oracle&#39;s ARM cloud
+servers. Since Oracle ARM cloud servers are basically KVM virtual machines with
+no special hardware, you can simply use
+<a href="https://github.com/elitak/nixos-infect" rel="noopener noreferrer" target="_blank">NixOS-Infect</a> to replace the operating
+system with NixOS.</p>
+<p>Compared to x86 servers, you simply need to change <code>system</code> to <code>aarch64-linux</code>
+in <code>flake.nix</code></p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # ...</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">  outputs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = { </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">self</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixpkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, ... }@</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">inputs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">    nixosConfigurations</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;oracle-vm-arm&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixpkgs</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">lib</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">nixosSystem</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      system</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&quot;aarch64-linux&quot;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000">      modules</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = [</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        ./configuration-oracle-vm-arm.nix</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      ];</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    };</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  };</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">  # ...</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>All other config stays the same as x86 servers. But if you&#39;re trying to generate
+a config locally with Deploy-RS, you&#39;ll encounter an error saying your current
+machine doesn&#39;t support the ARM architecture. To fix this, we can install
+<code>qemu-user-static</code> and relevant <code>binfmt</code> config, so the local system can emulate
+ARM architecture programs.</p>
+<p>For Arch Linux, you need to install
+<a href="https://aur.archlinux.org/packages/qemu-user-static/" rel="noopener noreferrer" target="_blank">qemu-user-static</a> and
+<a href="https://aur.archlinux.org/packages/binfmt-qemu-static-all-arch/" rel="noopener noreferrer" target="_blank">binfmt-qemu-static-all-arch</a>
+from AUR.</p>
+<p>For Debian, you need to install
+<a href="https://packages.debian.org/sid/qemu-user-static" rel="noopener noreferrer" target="_blank">qemu-user-static</a>.</p>
+<p>After that, you need to edit <code>/etc/nix/nix.conf</code> and add this line of config, to
+tell Nix package manager that this machine is capable of running ARM programs:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">extra-platforms</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> =</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> aarch64-linux</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> arm-linux</span></span></code></pre>
+<p>Finally, restart Nix Daemon <code>systemctl restart nix-daemon</code>, and Deploy-RS will
+work.</p>
+<h2 id="appendix-further-reading">Appendix: Further Reading</h2>
+<p>In this post, we&#39;ve configured a basic NixOS installation with almost zero extra
+software. For installing and configuring software, I recommend you to read Ryan
+Yin&#39;s
+<a href="https://thiscute.world/en/posts/nixos-and-flake-basics/" rel="noopener noreferrer" target="_blank">NixOS &amp; Nix Flakes - A Guide for Beginners</a>.
+His post provides some example configurations for commonly used software.</p>
+<p>You can also read these documents to have a better understanding of NixOS&#39;s
+config syntax, the Flake functionality, and Deploy-RS.</p>
+<ul>
+<li>NixOS Syntax
+<ul>
+<li><a href="https://nixos.wiki/wiki/Nix_Expression_Language" rel="noopener noreferrer" target="_blank">NixOS.Wiki: Nix Expression Language</a></li>
+<li><a href="https://medium.com/@MrJamesFisher/nix-by-example-a0063a1a4c55" rel="noopener noreferrer" target="_blank">Nix By Example</a></li>
+</ul>
+</li>
+<li>Flake Functionality
+<ul>
+<li><a href="https://nixos.wiki/wiki/Flakes" rel="noopener noreferrer" target="_blank">NixOS.Wiki: Flakes</a></li>
+</ul>
+</li>
+<li>Deploy-RS
+<ul>
+<li><a href="https://github.com/serokell/deploy-rs" rel="noopener noreferrer" target="_blank">GitHub: Deploy-RS</a></li>
+</ul>
+</li>
+</ul>
+<p>You can also refer to my config files released on GitHub:</p>
+<ul>
+<li><a href="https://github.com/xddxdd/nixos-config/tree/9ed2eff8e4e6054151558f3d5909f3ef2af9b288" rel="noopener noreferrer" target="_blank">Initial commit</a>
+<ul>
+<li>Finished the basic config and Nix Flake parts.</li>
+</ul>
+</li>
+<li><a href="https://github.com/xddxdd/nixos-config/tree/79c6f5b45d7ff574ecefb594ed76715715906cec" rel="noopener noreferrer" target="_blank">general: add deploy-rs script, change SSH port to 2222</a>
+<ul>
+<li>Finished configuration of Deploy-RS.</li>
+</ul>
+</li>
+</ul>  </div>  <script type="module" src="/assets/WalineComment.astro_astro_type_script_index_0_lang.Cd-Au78J.js"></script> <div class="clearfix" id="post-navi" data-astro-cid-gfbmwgei=""> <div class="float-end text-end" data-astro-cid-gfbmwgei=""> <a href="/en/article/modify-website/nixos-why.lantian/" title="NixOS Series 1: Why I fell in love" data-astro-cid-gfbmwgei=""> NixOS Series 1: Why I fell in love </a> <br data-astro-cid-gfbmwgei=""> Next post »
+</div> <div class="float-start text-start position-absolute" data-astro-cid-gfbmwgei="">
+« Previous post <br data-astro-cid-gfbmwgei=""> <a href="/en/article/chat/how-i-nuked-my-btrfs-partition.lantian/" title="I Moved My SSD to My New Laptop. This is What Happened To My Btrfs Data" data-astro-cid-gfbmwgei=""> I Moved My SSD to My New Laptop. This is What Happened To My Btrfs Data </a> </div> </div>  <div id="waline" data-waline-language="en-US" data-waline-path="/en/article/modify-website/nixos-initial-config-flake-deploy.lantian"></div>   </div> </div> </article>  </div> <aside class="d-none d-xl-block" data-astro-cid-porej7z2=""> <section class="widget"> <h3>Latest posts</h3> <ul class="list-unstyled"> <li> 12-07  <a href="/en/article/modify-website/dn42-flapalerted-reduce-flapping.lantian/">Using FlapAlerted to Suppress flapping in DN42</a> </li><li> 07-20  <a href="/en/article/modify-computer/legal-lte-network-at-home-with-open5gs.lantian/">Legal LTE Network at Home with Open5GS</a> </li><li> 06-27  <a href="/en/article/modify-computer/sidestore-without-stosvpn-across-lan.lantian/">Using SideStore without StosVPN across your LAN</a> </li><li> 05-19  <a href="/en/article/modify-computer/nix-logarithmetic-math-library-from-zero.lantian/">Nix Logarithmic Math Library from Ground Zero</a> </li><li> 04-06  <a href="/en/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/">Legal LTE Network at Home for $100</a> </li><li> 02-10  <a href="/en/article/modify-computer/build-custom-android-kernel-with-nix.lantian/">Building Custom Android Kernel with Nix</a> </li><li> 04-20  <a href="/en/article/modify-website/migrate-blog-to-astro-js.lantian/">Migrating My Blog to Astro.js</a> </li><li> 12-16  <a href="/en/article/modify-computer/nixos-low-ram-vps.lantian/">NixOS Series 5: Creating Disk Image for Low RAM VPS</a> </li><li> 09-20  <a href="/en/article/modify-computer/nix-trigonometric-math-library-from-zero.lantian/">Nix Trigonometric Math Library from Ground Zero</a> </li><li> 05-29  <a href="/en/article/random-notes/pipewire-sigkill-fix.lantian/">Preventing Pipewire from being SIGKILLed</a> </li><li> 05-12  <a href="/en/article/modify-website/how-to-kill-the-dn42-network.lantian/">How to Kill the DN42 Network (Updated 2023-05-12)</a> </li><li> 05-08  <a href="/en/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian/">NVIDIA GPU Passthrough on an Optimus MUXed Laptop (Updated 2023-05)</a> </li><li> 04-17  <a href="/en/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian/">Fix China Telecom 4G Roaming on AOSP ROM by Changing APN</a> </li><li> 03-26  <a href="/en/article/random-notes/old-hp-workstation-as-all-in-one.lantian/">Notes on Setting Up NAS+Router on Old HP Workstation</a> </li><li> 01-14  <a href="/en/article/modify-computer/nixos-impermanence.lantian/">NixOS Series 4: &quot;Stateless&quot; Operating System</a> </li> </ul> </section>  <section class="widget"> <h3>Latest comments</h3> <ul class="list-unstyled" id="recent-comments">  <li><a href="#">Loading...</a></li>  </ul> </section>  <script type="module" src="/assets/WalineRecentComments.astro_astro_type_script_index_0_lang.Cu-GBWyK.js"></script> <section class="widget"> <h3>Others</h3> <ul class="list-unstyled">  <li> <i class="fas fa-fw fa-rss"></i>  <a href="/rss2.xml" target="_blank">RSS Feed</a> |  <a href="/feed.xml" target="_blank">Atom</a> |  <a href="/feed.json" target="_blank">JSON</a> </li> <li> <i class="fas fa-fw fa-globe"></i>  <a href="https://stats.uptimerobot.com/NLYPbrSal6" target="_blank"> Sever Status </a> </li> <li> <i class="fas fa-fw fa-sitemap"></i>  <a href="https://lg.lantian.pub" target="_blank">DN42 Looking Glass</a> </li> <li> <i class="fas fa-fw fa-link"></i>  <a href="gopher://lantian.pub" target="_blank">Access with Gopher protocol</a> </li>  </ul> </section>  <section class="widget"> <h3>Links</h3> <ul class="list-unstyled"> <li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://0x7f.cc"> 0x7f Blog 🐑 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="http://foreverblog.cn"> 10 Year&#39;s Promise (Forever Blog) </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://alanyhq.com"> Alanyhq </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.baoshuo.ren/?utm_source=friends"> Baoshuo&#39;s Blog </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.cas7.moe"> Blog of Moecast </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://jerryxiao.cc"> JerryXiao </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://sangsir.com"> SangSir </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://snli.org"> Shucheng Li </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://yuetau.net"> YuetAu&#39;s Spot </a> </li> </ul> </section>  </aside> </div> <footer class="clearfix" data-astro-cid-w3csb3e3="">  <div id="copyright" class="float-end text-end" data-astro-cid-w3csb3e3=""> <i class="fas fa-copyright" data-astro-cid-w3csb3e3=""></i> 2012-2026 Lan Tian @ Blog<br data-astro-cid-w3csb3e3=""> <small data-astro-cid-w3csb3e3=""> Powered by Astro v5.17.1 @ 2026-02-12 02:27:09 </small> </div> <script type="module" src="/assets/PlausibleAnalytics.astro_astro_type_script_index_0_lang.C6V0cCkY.js"></script> </footer>  </div>  </body> </html>

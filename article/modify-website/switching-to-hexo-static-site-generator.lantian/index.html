@@ -1,0 +1,310 @@
+<!DOCTYPE html><html lang="zh-CN" itemscope="" itemtype="https://schema.org/Article" data-astro-cid-porej7z2=""> <head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>开始使用 Hexo 静态网站生成器 - Lan Tian @ Blog</title><script>
+  ;(() => {
+    try {
+      const mode = localStorage.getItem('user-color-scheme')
+      if (mode == 'dark' || mode == 'light') {
+        document.documentElement.setAttribute('data-user-color-scheme', mode)
+      }
+    } catch {
+      // Ignore errors
+    }
+  })()
+  ;(() => {
+    window.lantianImageFallback = (img, src) => {
+      img.onerror = null
+      img.srcset = src
+      img.src = src
+      if (img.parentNode.nodeName.toLowerCase() === 'picture') {
+        const picture = img.parentNode
+        picture.innerHTML = ''
+        picture.appendChild(img)
+      }
+    }
+  })()
+</script><link rel="stylesheet" href="/assets/index.CN3CN3hr.css"><style>.post-image-wrap[data-astro-cid-potdituc]{margin:0 -5px}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{height:150px;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center}@media(min-width:768px){.post-image-wrap[data-astro-cid-potdituc]{padding:5px;float:right}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:200px}}@media(max-width:767.98px){.post-image-wrap[data-astro-cid-potdituc]{text-align:center}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:100%}}#post-navi[data-astro-cid-gfbmwgei]{padding:5px;border-top:1px solid var(--lt-border-weak);border-bottom:1px solid var(--lt-border-weak)}
+</style><link rel="stylesheet" href="/assets/index.DC6W6NZY.css"><script type="module" src="/assets/PageLayout.astro_astro_type_script_index_0_lang.Co1i7321.js"></script><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><meta name="title" content="开始使用 Hexo 静态网站生成器 - Lan Tian @ Blog"><meta name="keywords" content=""><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/article/modify-website/switching-to-hexo-static-site-generator.lantian/"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-website/switching-to-hexo-static-site-generator.lantian/" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-website/switching-to-hexo-static-site-generator.lantian/" hreflang="en"><meta name="copyright" content="Copyright 2012-2026 Lan Tian @ Blog"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="manifest" href="/manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#03a9f4"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#212121"><meta name="application-name" content="Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167x167.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="apple-touch-icon" sizes="1024x1024" href="/apple-touch-icon-1024x1024.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-precomposed.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-640x1136.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1136x640.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-750x1334.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1334x750.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1125x2436.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2436x1125.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1170x2532.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2532x1170.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1179x2556.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2556x1179.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-828x1792.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1792x828.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2688.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2688x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2208.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2208x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1284x2778.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2778x1284.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1290x2796.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2796x1290.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1488x2266.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2266x1488.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1536x2048.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2048x1536.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1620x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1620.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1640x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1640.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2388.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2388x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2224.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2224x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-2048x2732.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2732x2048.png"><meta name="msapplication-TileColor" content="#bbdefb"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-config" content="/browserconfig.xml"><link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json"><meta property="og:url" content="https://lantian.pub/article/modify-website/switching-to-hexo-static-site-generator.lantian/"><meta property="og:type" content="website"><meta property="og:title" content="开始使用 Hexo 静态网站生成器 - Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/apple-touch-icon.png"><meta content="什么是静态网站生成器 我们常用的 WordPress、Typecho 等 CMS（内容管理系统）都是动态网站。当用户访问网页时，服务端运行使用 PHP、Python、Node.js 等语言的程序，根据用户的请求 实时 产生网页，将其返回给用户。 而 Jekyll、Hexo、Hugo 等静态网站生成器采取的是另一种方法： 提前 预测用户的请求，一次性产生对应的 HTML 文件。 这两种方式的主要优缺点如下： 谁更占优 动态网站 静态网站 动 可以实现复杂的交互，根据用户的输入随时改变内容 只能响应预定的输入，灵活性差 动 大多数 CMS 都会提供易用的管理后台，方便用户随时更新内容 没有在线后台，需要在本地安装额外软件更新网站内容 静 安装脚本运行环境需要较复杂的配置 服务端无需脚本运行环境，几乎无需服务端任何配置 静 实时产生网页需要较大的运算量（包括脚本运行、数据库查询），对服务器造成较大的压力 服务端几乎无需计算，响应速度极快 静 如果需要迁移服务器，..."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="zh"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/article/modify-website/switching-to-hexo-static-site-generator.lantian/"><meta name="twitter:title" content="开始使用 Hexo 静态网站生成器 - Lan Tian @ Blog"><meta property="twitter:image" content="https://lantian.pub/apple-touch-icon.png"><meta content="什么是静态网站生成器 我们常用的 WordPress、Typecho 等 CMS（内容管理系统）都是动态网站。当用户访问网页时，服务端运行使用 PHP、Python、Node.js 等语言的程序，根据用户的请求 实时 产生网页，将其返回给用户。 而 Jekyll、Hexo、Hugo 等静态网站生成器采取的是另一种方法： 提前 预测用户的请求，一次性产生对应的 HTML 文件。 这两种方式的主要优缺点如下： 谁更占优 动态网站 静态网站 动 可以实现复杂的交互，根据用户的输入随时改变内容 只能响应预定的输入，灵活性差 动 大多数 CMS 都会提供易用的管理后台，方便用户随时更新内容 没有在线后台，需要在本地安装额外软件更新网站内容 静 安装脚本运行环境需要较复杂的配置 服务端无需脚本运行环境，几乎无需服务端任何配置 静 实时产生网页需要较大的运算量（包括脚本运行、数据库查询），对服务器造成较大的压力 服务端几乎无需计算，响应速度极快 静 如果需要迁移服务器，..."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="开始使用 Hexo 静态网站生成器 - Lan Tian @ Blog"><meta property="image" content="https://lantian.pub/apple-touch-icon.png"><meta content="什么是静态网站生成器 我们常用的 WordPress、Typecho 等 CMS（内容管理系统）都是动态网站。当用户访问网页时，服务端运行使用 PHP、Python、Node.js 等语言的程序，根据用户的请求 实时 产生网页，将其返回给用户。 而 Jekyll、Hexo、Hugo 等静态网站生成器采取的是另一种方法： 提前 预测用户的请求，一次性产生对应的 HTML 文件。 这两种方式的主要优缺点如下： 谁更占优 动态网站 静态网站 动 可以实现复杂的交互，根据用户的输入随时改变内容 只能响应预定的输入，灵活性差 动 大多数 CMS 都会提供易用的管理后台，方便用户随时更新内容 没有在线后台，需要在本地安装额外软件更新网站内容 静 安装脚本运行环境需要较复杂的配置 服务端无需脚本运行环境，几乎无需服务端任何配置 静 实时产生网页需要较大的运算量（包括脚本运行、数据库查询），对服务器造成较大的压力 服务端几乎无需计算，响应速度极快 静 如果需要迁移服务器，..."><meta content="什么是静态网站生成器 我们常用的 WordPress、Typecho 等 CMS（内容管理系统）都是动态网站。当用户访问网页时，服务端运行使用 PHP、Python、Node.js 等语言的程序，根据用户的请求 实时 产生网页，将其返回给用户。 而 Jekyll、Hexo、Hugo 等静态网站生成器采取的是另一种方法： 提前 预测用户的请求，一次性产生对应的 HTML 文件。 这两种方式的主要优缺点如下： 谁更占优 动态网站 静态网站 动 可以实现复杂的交互，根据用户的输入随时改变内容 只能响应预定的输入，灵活性差 动 大多数 CMS 都会提供易用的管理后台，方便用户随时更新内容 没有在线后台，需要在本地安装额外软件更新网站内容 静 安装脚本运行环境需要较复杂的配置 服务端无需脚本运行环境，几乎无需服务端任何配置 静 实时产生网页需要较大的运算量（包括脚本运行、数据库查询），对服务器造成较大的压力 服务端几乎无需计算，响应速度极快 静 如果需要迁移服务器，..."><link rel="me" href="https://mastodon.social/@lantian"></head> <body data-astro-cid-porej7z2=""> <div id="bg" data-astro-cid-j6vmxtef=""></div>   <div id="container" class="container" data-astro-cid-porej7z2=""> <nav class="lantian navbar navbar-expand-lg" data-astro-cid-wu5dj4rx=""> <div class="container-fluid" data-astro-cid-wu5dj4rx=""> <a class="navbar-brand" href="/" data-astro-cid-wu5dj4rx="">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation" data-astro-cid-wu5dj4rx=""> <span class="navbar-toggler-icon" data-astro-cid-wu5dj4rx=""></span> </button> <div class="collapse navbar-collapse" id="lantian-navbar" data-astro-cid-wu5dj4rx=""> <ul class="navbar-nav" data-astro-cid-wu5dj4rx=""> <li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/page/archive/index.html" data-astro-cid-wu5dj4rx=""> 文章们 </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> 俯瞰地球 </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> <li class="nav-item dropdown d-block d-lg-none" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="pages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-file" data-astro-cid-wu5dj4rx=""></i> 页面  <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="pages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/page/archive/index.html" data-astro-cid-wu5dj4rx=""> 文章们 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> 俯瞰地球 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> </ul> </li> </ul> <ul class="navbar-nav ms-auto" data-astro-cid-wu5dj4rx=""> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="languages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-language" data-astro-cid-wu5dj4rx=""></i> Language <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="languages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item active" href="/article/modify-website/switching-to-hexo-static-site-generator.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-cn" data-astro-cid-wu5dj4rx=""></span> Chinese Simplified / 简体中文 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/article/modify-website/switching-to-hexo-static-site-generator.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-us" data-astro-cid-wu5dj4rx=""></span> English </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">Not all pages have translations.</a> </li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">You may see 404 - this is normal.</a> </li> </ul> </li> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="color-scheme-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> 夜间模式 </a> <ul class="dropdown-menu" aria-labelledby="color-scheme-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-auto" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> 自动 </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-light" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-sun" data-astro-cid-wu5dj4rx=""></i> 浅色</a> </li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-dark" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-moon" data-astro-cid-wu5dj4rx=""></i> 深色</a> </li> </ul> </li> </ul> </div> </div> </nav> <script type="module">const m="user-color-scheme",s="data-user-color-scheme",u=(e,t)=>{try{localStorage.setItem(e,t)}catch{}},i=e=>{try{return localStorage.getItem(e)}catch{return null}},c=e=>{const t={dark:!0,light:!0,auto:!0},o=e===null||!Object.keys(t).includes(e)?"auto":e;u(m,o);for(const l in t){const n=document.getElementById("color-scheme-"+l);n&&(l==o?n.classList.add("active"):n.classList.remove("active"))}o!="auto"?document.documentElement.setAttribute(s,o):document.documentElement.removeAttribute(s)};c(i(m));const r=document.getElementById("color-scheme-auto");r&&r.addEventListener("click",()=>c("auto"));const a=document.getElementById("color-scheme-light");a&&a.addEventListener("click",()=>c("light"));const d=document.getElementById("color-scheme-dark");d&&d.addEventListener("click",()=>c("dark"));</script>  <div class="d-flex" data-astro-cid-porej7z2=""> <div id="content" data-astro-cid-porej7z2="">  <article> <div class="d-flex"> <div class="post-info-wrap" data-astro-cid-dckccua4=""> <div class="post-info" data-astro-cid-dckccua4=""> <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-clock" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">09-25</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> 发布于<span class="badge badge-tag" data-astro-cid-dckccua4=""> 2019-09-25 22:17 </span>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-file-alt" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">网站与服务端</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> 分类 <a class="badge badge-tag" href="/category/modify-website" data-astro-cid-dckccua4=""> 网站与服务端 </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-tag" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">2 标签</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> 标签  <a class="badge badge-tag" href="/tag/Hexo" data-astro-cid-dckccua4=""> Hexo </a>  <a class="badge badge-tag" href="/tag/静态网站" data-astro-cid-dckccua4=""> 静态网站 </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-list" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">目录</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu="">  <ol data-astro-cid-nj3qel45=""> <li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#什么是静态网站生成器" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">什么是静态网站生成器</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#我为什么从-typecho-转向静态网站" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">我为什么从 Typecho 转向静态网站</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#预先准备架构选择" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">预先准备：架构选择</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#typecho-文章内容转-hexo" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Typecho 文章内容转 Hexo</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#typecho-评论转-disqus" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Typecho 评论转 Disqus</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#解决大陆无法访问-disqus" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">解决大陆无法访问 Disqus</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#hexo-的一些插件配置" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Hexo 的一些插件配置</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#完成后效果" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">完成后效果</span> </a> </li> </ol>   </div> </div> </div>   </div>  </div>  <div class="post-wrap">  <h1 class="post-title"> <a href="/article/modify-website/switching-to-hexo-static-site-generator.lantian/" rel="bookmark" title="开始使用 Hexo 静态网站生成器">开始使用 Hexo 静态网站生成器</a> </h1> <div class="post-text">   <h2 id="什么是静态网站生成器">什么是静态网站生成器</h2>
+<p>我们常用的 WordPress、Typecho 等 CMS（内容管理系统）都是动态网站。当用户访问网页时，服务端运行使用 PHP、Python、Node.js 等语言的程序，根据用户的请求<strong>实时</strong>产生网页，将其返回给用户。</p>
+<p>而 Jekyll、Hexo、Hugo 等静态网站生成器采取的是另一种方法：<strong>提前</strong>预测用户的请求，一次性产生对应的 HTML 文件。</p>
+<p>这两种方式的主要优缺点如下：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>谁更占优</th><th>动态网站</th><th>静态网站</th></tr></thead><tbody><tr><td>动</td><td>可以实现复杂的交互，根据用户的输入随时改变内容</td><td>只能响应预定的输入，灵活性差</td></tr><tr><td>动</td><td>大多数 CMS 都会提供易用的管理后台，方便用户随时更新内容</td><td>没有在线后台，需要在本地安装额外软件更新网站内容</td></tr><tr><td>静</td><td>安装脚本运行环境需要较复杂的配置</td><td>服务端无需脚本运行环境，几乎无需服务端任何配置</td></tr><tr><td>静</td><td>实时产生网页需要较大的运算量（包括脚本运行、数据库查询），对服务器造成较大的压力</td><td>服务端几乎无需计算，响应速度极快</td></tr><tr><td>静</td><td>如果需要迁移服务器，需要同时迁移脚本、数据库，还常常需要修改脚本配置</td><td>迁移难度极低，只需要直接复制 HTML 文件即可</td></tr></tbody></table>
+<h2 id="我为什么从-typecho-转向静态网站">我为什么从 Typecho 转向静态网站</h2>
+<ol>
+<li>随着我向 VPS 上安装更多的程序，服务器资源已经捉襟见肘，导致 Typecho（尤其是
+MySQL 数据库）响应变慢
+<ul>
+<li>在我没有修改任何配置的情况下，LT-Latency HTTP 头反馈的数值从 0.02 再次提升到了 0.1，相当于<a href="/article/modify-website/typecho-performance-optimization.lantian/">之前的优化</a>白做了</li>
+<li>我的 VPS 是特价购买，无法升级更高配置</li>
+<li>香港的同配置 VPS 新购价格比我现在 VPS 的价格高 3-4 倍，如果要加资源那就更高了</li>
+</ul>
+</li>
+<li>由于历史原因，我有过多种文章格式，需要复杂的后处理脚本来保持兼容
+<ul>
+<li>我之前用过 WordPress，Typecho 的百度 UEditor，Typecho Markdown 等作为编辑器</li>
+<li>后处理脚本运行时间长且难以优化</li>
+<li>无法自动将先前文章转为 Markdown，手动转 Markdown 过于麻烦</li>
+</ul>
+</li>
+<li>近期（2019 年 9 月）国际网络极其不稳定，我需要随时迁移
+<ul>
+<li>本月我已经有 5 台 VPS 的 IP 无法从大陆访问了，包括我放网站这台</li>
+<li>目前我暂时使用另一台特价香港
+VPS（<a href="/article/modify-website/got-50kvm-99off-vps.lantian/">0.1 折的 50KVM VPS</a>）中转来保持网站正常访问</li>
+<li>但这台 VPS 带宽仅 5Mbps，难以主用（数据备份等都是大问题）</li>
+</ul>
+</li>
+<li>静态网站可以更加方便地负载均衡，保持高可用
+<ul>
+<li>动态网站不仅需要同步网站系统，还要同步数据库
+<ul>
+<li>MySQL 传统主从复制难以满足实时性要求
+<ul>
+<li>其它节点网站系统写数据库必须回主节点，延迟高且跨大洲网络不能保证稳定</li>
+</ul>
+</li>
+<li>MySQL Galera 多主复制在跨大洲情况下也不稳定
+<ul>
+<li>我曾经花了 2 个整天尝试配置 Galera，还是失败了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="预先准备架构选择">预先准备：架构选择</h2>
+<p>我这次转换的目标：</p>
+<ul>
+<li>文章全部转移且 URL 保持不变
+<ul>
+<li>尤其是我的 URL 不是以传统的 HTML 结尾的，是早期我自己设置的扩展名 lantian，因此需要静态网站生成器支持自定义 URL</li>
+</ul>
+</li>
+<li>评论全部转移，内容不变，且仍有评论系统可用
+<ul>
+<li>目标评论系统需要有现成的从 Typecho 或者 WordPress 转换的轮子</li>
+<li>目标评论系统需要能在国内访问</li>
+<li>目标评论系统需要能够接受匿名评论</li>
+<li>目标评论系统需要可以指定文章 ID，保证评论的正常显示
+<ul>
+<li>在迁移过程中 URL 可能有小改变</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>静态网站生成器扩展性尽量强，速度不是很重要
+<ul>
+<li>我希望能通过添加插件、修改代码等方式尽可能自定义网站内容</li>
+<li>我可以接受每次花几分钟重新生成一遍网站
+<ul>
+<li>我甚至可以把生成过程放到另一台 VPS 的 Jenkins 上去做</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>最终我的选择如下：</p>
+<ul>
+<li>静态网站生成器选择 Hexo
+<ul>
+<li>Hexo 使用 Node.js 写成，可以直接用 Javascript 扩展主题、插件</li>
+<li>用户多，插件多，资料多</li>
+<li>与其它选择相比：
+<ul>
+<li>Hugo 虽然速度非常快，但是它没有插件系统，主题系统也无法实现复杂逻辑</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>评论系统选择 Disqus
+<ul>
+<li>可以直接导入 WordPress 评论，而 Typecho 有现成转换到 WordPress 的轮子</li>
+<li>老牌评论系统，多年稳定服务，大量网站使用</li>
+<li>可以指定评论区对应的 URL 和 ID，保证评论内容不变</li>
+<li>虽然大陆无法访问，但是有解决方案，见后文</li>
+<li>与其它选择相比：
+<ul>
+<li>Valine 使用 LeanCloud 保存评论数据，没找到现成轮子，且 LeanCloud 免费应用限制较多</li>
+<li>Isso 仅支持 SQLite 数据库，且似乎无法指定文章 ID</li>
+<li>HashOver 不支持指定文章 ID</li>
+<li>其它基于 GitHub 的评论系统一律不考虑，因为难以支持匿名评论</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="typecho-文章内容转-hexo">Typecho 文章内容转 Hexo</h2>
+<p>我用的是 Newbmiao
+的<a href="https://github.com/NewbMiao/typecho2Hexo/blob/master/converter.php" rel="noopener noreferrer" target="_blank">这个 PHP 文件</a>，修改数据库密码后直接在服务器上运行，就可以将文章全部导出为 Hexo 需要的 Markdown
+文件。</p>
+<p>不过我对上述 PHP 做了一些修改，以支持：</p>
+<ul>
+<li>以 slug（缩略名，网址上的英文标题）命名导出的 Markdown 文件</li>
+<li>将文件按分类保存到不同文件夹</li>
+</ul>
+<p>以下是我的代码：</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">&#x3C;?php</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">// 运行 php converter.php</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$db</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">new</span><span style="--shiki-dark:#4EC9B0;--shiki-light:#267F99"> mysqli</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">();</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">// 根据实际情况更改</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$db</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">connect</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'127.0.0.1'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'root'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'password'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'typecho'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">);</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$prefix</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'typecho_'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$sql</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&#x3C;&#x3C;&#x3C;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">TEXT</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">select title,text,created,category,tags,slug from {</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$prefix</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">}contents c,</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> (select cid,group_concat(m.name) tags from {</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$prefix</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">}metas m,{</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$prefix</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">}relationships r where m.mid=r.mid and m.type='tag' group by cid ) t1,</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">(select cid,m.slug category from {</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$prefix</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">}metas m,{</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$prefix</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">}relationships r where m.mid=r.mid and m.type='category') t2</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">where t1.cid=t2.cid and c.cid=t1.cid</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">TEXT</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$res</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$db</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">query</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$sql</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">);</span></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">if</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> (</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$res</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">) {</span></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">    if</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> (</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$res</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">num_rows</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> > </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">0</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">) {</span></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">        while</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> (</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$r</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$res</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">fetch_object</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">()) {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">            $_c</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = @</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">date</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'Y-m-d H:i:s'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$r</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">created</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">);</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">            $_t</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">str_replace</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'&#x3C;!--markdown-->'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">''</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$r</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">text</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">);</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">            $_tmp</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">&#x3C;&#x3C;&#x3C;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">TMP</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">---</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">title: '{</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$r</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">title</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">}'</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">categories: {</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$r</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">category</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">}</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">tags: [{</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$r</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">tags</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">}]</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">date: {</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$_c</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">}</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">---</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">{</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$_t</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">}</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">TMP</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">            $name</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$r</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">slug</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">            if</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> (</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">strpos</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(PHP_OS, </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"WIN"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">) !== </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">false</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">) {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">                $name</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">iconv</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"UTF-8"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"GBK//IGNORE"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$r</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">slug</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">);</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">            }</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">            $name</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">str_replace</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">array</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">" "</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"?"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\\</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"/"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">":"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"|"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"*"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">), </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'-'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$name</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">);</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">            echo</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> $name</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">;</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">            mkdir</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$r</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">category</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">);</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">            file_put_contents</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$r</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">category</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> .</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> '/'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> .</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> $name</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> .</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> ".md"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$_tmp</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">);</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    }</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">    $res</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">free</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">();</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">$db</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">-></span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">close</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">();</span></span></code></pre>
+<h2 id="typecho-评论转-disqus">Typecho 评论转 Disqus</h2>
+<p>如果直接将 TypExport 这个插件生成的 WordPress XML 导入到 Disqus，会出现评论区的
+URL 和文章 URL 对应不上的问题。</p>
+<p>我的解决方法极其简单粗暴：装一个 WordPress，导入一遍，再导出一遍，就正常了。</p>
+<h2 id="解决大陆无法访问-disqus">解决大陆无法访问 Disqus</h2>
+<p>GitHub 用户 fooleap 开源了一个 PHP 程序，代理了 Disqus 的 API，并提供了一个简版评论框，让大陆用户可以通过这个代理进行评论。</p>
+<p>这个程序可以在
+<a href="https://github.com/fooleap/disqus-php-api" rel="noopener noreferrer" target="_blank">https://github.com/fooleap/disqus-php-api</a>
+得到，按照说明配置即可。</p>
+<p>由于我只是将主站静态化，没有完全卸载 PHP 的计划，因此我可以接受再安装一套 PHP 的代码。而且，即使后续服务器资源再不足，也只会对评论区产生较大的影响，主站依然能保持快速的响应。</p>
+<p>在 Hexo 的模版中插入以下代码开启评论区：</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#808080;--shiki-light:#800000">&#x3C;</span><span style="--shiki-dark:#569CD6;--shiki-light:#800000">div</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#E50000"> id</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">=</span><span style="--shiki-dark:#CE9178;--shiki-light:#0000FF">"comments"</span><span style="--shiki-dark:#808080;--shiki-light:#800000">>&#x3C;/</span><span style="--shiki-dark:#569CD6;--shiki-light:#800000">div</span><span style="--shiki-dark:#808080;--shiki-light:#800000">></span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#F44747;--shiki-light:#CD3131">&#x3C;</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">% var removeTrailingSlash = function(s) { if(s[s.length - 1] == '/') { return</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">s.substring(0, s.length - 1); } else if(s.substring(s.length - 11) ==</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">'/index.html') { return s.substring(0, s.length - 11); } else { return s; } } %></span></span>
+<span class="line"><span style="--shiki-dark:#808080;--shiki-light:#800000">&#x3C;</span><span style="--shiki-dark:#569CD6;--shiki-light:#800000">script</span><span style="--shiki-dark:#808080;--shiki-light:#800000">></span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">  addLoadEvent</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">(</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">function</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF"> () {</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">    var</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> disq</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> =</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> new</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26"> iDisqus</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">(</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'comments'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">, {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      forum:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 'lantian'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      api:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 'https://comments.lantian.pub'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      site:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 'https://lantian.pub'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      identifier:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> '/&#x3C;%= removeTrailingSlash(page.path) %>'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      url:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> '&#x3C;%= removeTrailingSlash(page.permalink) %>'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      mode:</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 1</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      timeout:</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 1000</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      init:</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      emojiPreview:</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      autoCreate:</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> true</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">    })</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000FF">  })</span></span>
+<span class="line"><span style="--shiki-dark:#808080;--shiki-light:#800000">&#x3C;/</span><span style="--shiki-dark:#569CD6;--shiki-light:#800000">script</span><span style="--shiki-dark:#808080;--shiki-light:#800000">></span></span></code></pre>
+<p>我在此次迁移中，部分页面的 URL 还是发生了变化：</p>
+<ul>
+<li>文章的 <code>.lantian</code> 后面加了一个斜杠：如果直接生成 <code>.lantian</code> 文件，浏览器会直接提示下载。虽然我可以修改 nginx 配置内的 MIME 类型解决问题，但为了保持与其它空间商的兼容性，我选择让 Hexo 生成 <code>.lantian/index.html</code>。这样浏览器可以直接访问
+<code>.lantian/</code> 这个路径而不出问题。</li>
+<li>独立页面的 URL 后面被 Hexo 加上了 <code>/index.html</code>，例如
+<code>/page/archive/index.html</code> 而不是 <code>/page/archive/</code>。</li>
+</ul>
+<p>虽然用原来的 URL 仍然可以访问现在的内容，但是 Disqus 拿到的 URL 就不一样了，会造成一篇文章对应多个评论区。因此此处我对传进 Disqus 的 URL 做了处理，去掉了最后的斜杠和 <code>/index.html</code>，来保持与先前 URL 的兼容。</p>
+<h2 id="hexo-的一些插件配置">Hexo 的一些插件配置</h2>
+<p>此次配置我启用了 Hexo 的一些插件来进一步优化网站的表现：</p>
+<ul>
+<li><a href="https://github.com/hexojs/hexo-generator-feed.git" rel="noopener noreferrer" target="_blank">hexo-generator-feed</a>，产生
+RSS 订阅的 XML 文件
+<ul>
+<li>对 nginx 进行了一点配置，将原来的 <code>/feed</code> 跳转到现在的 <code>/feed.xml</code> 上</li>
+</ul>
+</li>
+<li><a href="https://github.com/hexojs/hexo-generator-sitemap" rel="noopener noreferrer" target="_blank">hexo-generator-sitemap</a>，产生 Sitemap</li>
+<li><a href="https://github.com/CHENXCHEN/hexo-renderer-markdown-it-plus" rel="noopener noreferrer" target="_blank">hexo-renderer-markdown-it-plus</a>，带语法高亮、Katex 数学公式渲染等功能的 Markdown 渲染器</li>
+<li><a href="https://github.com/curbengh/hexo-yam" rel="noopener noreferrer" target="_blank">hexo-yam</a>
+<ul>
+<li>可以去除 CSS、JS、HTML 文件中的空格等，缩小文件体积（即 Minifier）
+<ul>
+<li>如果在 PHP 实时处理，或者用 nginx 的 PageSpeed 模块，都会造成较大的处理延时</li>
+<li>但对静态网站生成器来说这都不是事</li>
+</ul>
+</li>
+<li>可以提前产生 GZip 和 Brotli 压缩好的文件（例如 <code>index.html.gz</code> 和
+<code>index.html.br</code>）
+<ul>
+<li>开启 <code>gzip_static on</code> 和 <code>brotli_static on</code> 选项后，nginx 不再需要实时压缩文件了，性能更强</li>
+<li>提前产生时可以使用更耗时的最高压缩级别，相比实时压缩时使用的级别更高，压缩文件更小</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="完成后效果">完成后效果</h2>
+<p>现在本站已经迁移完成，原有数据完全保留。目前效果如下：</p>
+<ul>
+<li>响应速度大幅上升（LT-Latency 头已经是 0.000 了，代表基本没有后端处理流程）</li>
+<li>大部分前端功能保留
+<ul>
+<li>文章显示、导航栏、底部分页等效果完全相同</li>
+</ul>
+</li>
+<li>只有小部分改变
+<ul>
+<li>侧边栏删除了最新评论（因为使用了 Disqus，暂时获取不到最新评论）</li>
+<li>删除了顶部的 HTTPS 信息显示（因为静态页面无法动态产生这些内容）</li>
+<li>评论区换成了 Disqus</li>
+<li>右下角加入了 Powered by Hexo 以及当前页面的产生时间</li>
+</ul>
+</li>
+</ul>
+<p>关于生成速度，我现在大约 150 篇文章，生成一次需要大概 1 分钟时间。相比 Hugo 来说慢到不知哪里去了（Hugo 只要几秒），但为了扩展性，我都可以接受。</p>
+<p>也许有一天我会从头 DIY 一个自己的静态网站生成器。</p>  </div>  <script type="module" src="/assets/WalineComment.astro_astro_type_script_index_0_lang.Cd-Au78J.js"></script> <div class="clearfix" id="post-navi" data-astro-cid-gfbmwgei=""> <div class="float-end text-end" data-astro-cid-gfbmwgei=""> <a href="/article/modify-website/diy-ntp-pps-on-tinker-board.lantian/" title="（自建 NTP）在 Tinker Board 上使用 PPS" data-astro-cid-gfbmwgei=""> （自建 NTP）在 Tinker Board 上使用 PPS </a> <br data-astro-cid-gfbmwgei=""> 下一篇文章 »
+</div> <div class="float-start text-start position-absolute" data-astro-cid-gfbmwgei="">
+« 上一篇文章 <br data-astro-cid-gfbmwgei=""> <a href="/article/modify-website/sass-webpack-with-hexo.lantian/" title="与 Hexo 配合使用 Sass 和 Webpack" data-astro-cid-gfbmwgei=""> 与 Hexo 配合使用 Sass 和 Webpack </a> </div> </div>  <div id="waline" data-waline-language="zh-CN" data-waline-path="/article/modify-website/switching-to-hexo-static-site-generator.lantian"></div>   </div> </div> </article>  </div> <aside class="d-none d-xl-block" data-astro-cid-porej7z2=""> <section class="widget"> <h3>最新文章</h3> <ul class="list-unstyled"> <li> 12-07  <a href="/article/modify-website/dn42-flapalerted-reduce-flapping.lantian/">在 DN42 中使用 FlapAlerted 抑制 Flapping</a> </li><li> 07-20  <a href="/article/modify-computer/legal-lte-network-at-home-with-open5gs.lantian/">用 Open5GS 搭建合法的 LTE 网络</a> </li><li> 06-27  <a href="/article/modify-computer/sidestore-without-stosvpn-across-lan.lantian/">在内网中免 StosVPN 使用 SideStore</a> </li><li> 05-19  <a href="/article/modify-computer/nix-logarithmetic-math-library-from-zero.lantian/">从零开始实现 Nix 对数函数库</a> </li><li> 04-06  <a href="/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/">$100，DIY 搭建合法的 LTE 网络</a> </li><li> 02-10  <a href="/article/modify-computer/build-custom-android-kernel-with-nix.lantian/">用 Nix 编译自定义 Android 内核</a> </li><li> 04-20  <a href="/article/modify-website/migrate-blog-to-astro-js.lantian/">使用 Astro.js 重构我的博客</a> </li><li> 12-16  <a href="/article/modify-computer/nixos-low-ram-vps.lantian/">NixOS 系列（五）：制作小内存 VPS 的 DD 磁盘镜像</a> </li><li> 09-20  <a href="/article/modify-computer/nix-trigonometric-math-library-from-zero.lantian/">从零开始实现 Nix 三角函数库</a> </li><li> 05-29  <a href="/article/random-notes/pipewire-sigkill-fix.lantian/">解决 Pipewire 被 SIGKILL 的问题</a> </li><li> 05-12  <a href="/article/modify-website/how-to-kill-the-dn42-network.lantian/">如何引爆 DN42 网络（2023-05-12 更新）</a> </li><li> 05-08  <a href="/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian/">Optimus MUXed 笔记本上的 NVIDIA 虚拟机显卡直通（2023-05 更新）</a> </li><li> 04-17  <a href="/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian/">修改 APN 解决 AOSP ROM 上中国电信无法 4G 漫游问题</a> </li><li> 03-26  <a href="/article/random-notes/old-hp-workstation-as-all-in-one.lantian/">老款 HP 工作站配置 NAS+软路由笔记</a> </li><li> 01-14  <a href="/article/modify-computer/nixos-impermanence.lantian/">NixOS 系列（四）：“无状态”操作系统</a> </li> </ul> </section>  <section class="widget"> <h3>最新评论</h3> <ul class="list-unstyled" id="recent-comments">  <li><a href="#">Loading...</a></li>  </ul> </section>  <script type="module" src="/assets/WalineRecentComments.astro_astro_type_script_index_0_lang.Cu-GBWyK.js"></script> <section class="widget"> <h3>其它功能</h3> <ul class="list-unstyled">  <li> <i class="fas fa-fw fa-rss"></i>  <a href="/rss2.xml" target="_blank">RSS 订阅</a> |  <a href="/feed.xml" target="_blank">Atom</a> |  <a href="/feed.json" target="_blank">JSON</a> </li> <li> <i class="fas fa-fw fa-globe"></i>  <a href="https://stats.uptimerobot.com/NLYPbrSal6" target="_blank"> 服务器状态 </a> </li> <li> <i class="fas fa-fw fa-sitemap"></i>  <a href="https://lg.lantian.pub" target="_blank">DN42 节点状态</a> </li> <li> <i class="fas fa-fw fa-link"></i>  <a href="gopher://lantian.pub" target="_blank">使用 Gopher 协议访问</a> </li>  </ul> </section>  <section class="widget"> <h3>友情链接</h3> <ul class="list-unstyled"> <li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://0x7f.cc"> 0x7f Blog 🐑 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://alanyhq.com"> Alanyhq </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.cas7.moe"> Blog of Moecast </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://jerryxiao.cc"> JerryXiao </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://snli.org"> Shucheng Li </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://sangsir.com"> SangSir | 艺术界的一朵奇葩 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://yuetau.net"> YuetAu&#39;s Spot </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.baoshuo.ren/?utm_source=friends"> 宝硕博客 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="http://foreverblog.cn"> 十年之约 </a> </li> </ul> </section>  </aside> </div> <footer class="clearfix" data-astro-cid-w3csb3e3="">  <div id="copyright" class="float-end text-end" data-astro-cid-w3csb3e3=""> <i class="fas fa-copyright" data-astro-cid-w3csb3e3=""></i> 2012-2026 Lan Tian @ Blog<br data-astro-cid-w3csb3e3=""> <small data-astro-cid-w3csb3e3=""> 基于 Astro v5.17.1 构建 @ 2026-02-12 02:27:05 </small> </div> <script type="module" src="/assets/PlausibleAnalytics.astro_astro_type_script_index_0_lang.C6V0cCkY.js"></script> </footer>  </div>  </body> </html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="zh-CN" itemscope="" itemtype="https://schema.org/Article" data-astro-cid-porej7z2=""> <head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>自建基于 GPS 的 NTP 服务端 - Lan Tian @ Blog</title><script>
+  ;(() => {
+    try {
+      const mode = localStorage.getItem('user-color-scheme')
+      if (mode == 'dark' || mode == 'light') {
+        document.documentElement.setAttribute('data-user-color-scheme', mode)
+      }
+    } catch {
+      // Ignore errors
+    }
+  })()
+  ;(() => {
+    window.lantianImageFallback = (img, src) => {
+      img.onerror = null
+      img.srcset = src
+      img.src = src
+      if (img.parentNode.nodeName.toLowerCase() === 'picture') {
+        const picture = img.parentNode
+        picture.innerHTML = ''
+        picture.appendChild(img)
+      }
+    }
+  })()
+</script><link rel="stylesheet" href="/assets/index.CN3CN3hr.css"><style>.post-image-wrap[data-astro-cid-potdituc]{margin:0 -5px}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{height:150px;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center}@media(min-width:768px){.post-image-wrap[data-astro-cid-potdituc]{padding:5px;float:right}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:200px}}@media(max-width:767.98px){.post-image-wrap[data-astro-cid-potdituc]{text-align:center}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:100%}}#post-navi[data-astro-cid-gfbmwgei]{padding:5px;border-top:1px solid var(--lt-border-weak);border-bottom:1px solid var(--lt-border-weak)}
+</style><link rel="stylesheet" href="/assets/index.DC6W6NZY.css"><script type="module" src="/assets/PageLayout.astro_astro_type_script_index_0_lang.Co1i7321.js"></script><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><meta name="title" content="自建基于 GPS 的 NTP 服务端 - Lan Tian @ Blog"><meta name="keywords" content=""><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/article/modify-website/diy-gps-based-ntp-server.lantian/"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-website/diy-gps-based-ntp-server.lantian/" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-website/diy-gps-based-ntp-server.lantian/" hreflang="en"><meta name="copyright" content="Copyright 2012-2026 Lan Tian @ Blog"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="manifest" href="/manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#03a9f4"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#212121"><meta name="application-name" content="Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167x167.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="apple-touch-icon" sizes="1024x1024" href="/apple-touch-icon-1024x1024.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-precomposed.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-640x1136.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1136x640.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-750x1334.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1334x750.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1125x2436.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2436x1125.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1170x2532.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2532x1170.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1179x2556.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2556x1179.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-828x1792.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1792x828.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2688.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2688x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2208.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2208x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1284x2778.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2778x1284.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1290x2796.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2796x1290.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1488x2266.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2266x1488.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1536x2048.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2048x1536.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1620x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1620.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1640x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1640.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2388.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2388x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2224.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2224x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-2048x2732.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2732x2048.png"><meta name="msapplication-TileColor" content="#bbdefb"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-config" content="/browserconfig.xml"><link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json"><meta property="og:url" content="https://lantian.pub/article/modify-website/diy-gps-based-ntp-server.lantian/"><meta property="og:type" content="website"><meta property="og:title" content="自建基于 GPS 的 NTP 服务端 - Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/usr/uploads/2019/09/61107773.png"><meta content="NTP 是什么 NTP（Network Time Protocol）是目前使用最广泛的互联网时间同步协议。我们常用的 Windows、macOS、Linux 等都自带了 NTP 客户端，可以连接远程服务器获取当前的时间。例如，Windows 的 Internet 时间同步功能就是基于 NTP： （图片来自网络） Windows 默认会连接到 time.windows.com 这台由微软维护的 NTP 服务器同步时间。但是，默认的这台服务器在国内并不好用。这台服务器位于美国，到国内的延迟很大并且容易波动，因此 NTP 客户端也很难得出准确的时间。 那么中国大陆有没有 NTP 服务器呢？有，但是不多： cn.pool.ntp.org 由 www.pool.ntp.org 维护的 NTP 服务器池项目，所有服务器由志愿者提供，在各个地区通过 DNS 负载均衡到不同的服务器上。 现在（2019 年 9 月 16 日）共有 63 台服务器位于 CN 池内（但不是所有的服务器都在国内） 可以通过 0.cn.pool.ntp.org，1.cn.pool.ntp.org 等方式获得更多的服务器 cn.ntp.org...."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="zh"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/article/modify-website/diy-gps-based-ntp-server.lantian/"><meta name="twitter:title" content="自建基于 GPS 的 NTP 服务端 - Lan Tian @ Blog"><meta property="twitter:image" content="https://lantian.pub/usr/uploads/2019/09/61107773.png"><meta content="NTP 是什么 NTP（Network Time Protocol）是目前使用最广泛的互联网时间同步协议。我们常用的 Windows、macOS、Linux 等都自带了 NTP 客户端，可以连接远程服务器获取当前的时间。例如，Windows 的 Internet 时间同步功能就是基于 NTP： （图片来自网络） Windows 默认会连接到 time.windows.com 这台由微软维护的 NTP 服务器同步时间。但是，默认的这台服务器在国内并不好用。这台服务器位于美国，到国内的延迟很大并且容易波动，因此 NTP 客户端也很难得出准确的时间。 那么中国大陆有没有 NTP 服务器呢？有，但是不多： cn.pool.ntp.org 由 www.pool.ntp.org 维护的 NTP 服务器池项目，所有服务器由志愿者提供，在各个地区通过 DNS 负载均衡到不同的服务器上。 现在（2019 年 9 月 16 日）共有 63 台服务器位于 CN 池内（但不是所有的服务器都在国内） 可以通过 0.cn.pool.ntp.org，1.cn.pool.ntp.org 等方式获得更多的服务器 cn.ntp.org...."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="自建基于 GPS 的 NTP 服务端 - Lan Tian @ Blog"><meta property="image" content="https://lantian.pub/usr/uploads/2019/09/61107773.png"><meta content="NTP 是什么 NTP（Network Time Protocol）是目前使用最广泛的互联网时间同步协议。我们常用的 Windows、macOS、Linux 等都自带了 NTP 客户端，可以连接远程服务器获取当前的时间。例如，Windows 的 Internet 时间同步功能就是基于 NTP： （图片来自网络） Windows 默认会连接到 time.windows.com 这台由微软维护的 NTP 服务器同步时间。但是，默认的这台服务器在国内并不好用。这台服务器位于美国，到国内的延迟很大并且容易波动，因此 NTP 客户端也很难得出准确的时间。 那么中国大陆有没有 NTP 服务器呢？有，但是不多： cn.pool.ntp.org 由 www.pool.ntp.org 维护的 NTP 服务器池项目，所有服务器由志愿者提供，在各个地区通过 DNS 负载均衡到不同的服务器上。 现在（2019 年 9 月 16 日）共有 63 台服务器位于 CN 池内（但不是所有的服务器都在国内） 可以通过 0.cn.pool.ntp.org，1.cn.pool.ntp.org 等方式获得更多的服务器 cn.ntp.org...."><meta content="NTP 是什么 NTP（Network Time Protocol）是目前使用最广泛的互联网时间同步协议。我们常用的 Windows、macOS、Linux 等都自带了 NTP 客户端，可以连接远程服务器获取当前的时间。例如，Windows 的 Internet 时间同步功能就是基于 NTP： （图片来自网络） Windows 默认会连接到 time.windows.com 这台由微软维护的 NTP 服务器同步时间。但是，默认的这台服务器在国内并不好用。这台服务器位于美国，到国内的延迟很大并且容易波动，因此 NTP 客户端也很难得出准确的时间。 那么中国大陆有没有 NTP 服务器呢？有，但是不多： cn.pool.ntp.org 由 www.pool.ntp.org 维护的 NTP 服务器池项目，所有服务器由志愿者提供，在各个地区通过 DNS 负载均衡到不同的服务器上。 现在（2019 年 9 月 16 日）共有 63 台服务器位于 CN 池内（但不是所有的服务器都在国内） 可以通过 0.cn.pool.ntp.org，1.cn.pool.ntp.org 等方式获得更多的服务器 cn.ntp.org...."><link rel="me" href="https://mastodon.social/@lantian"></head> <body data-astro-cid-porej7z2=""> <div id="bg" data-astro-cid-j6vmxtef=""></div>   <div id="container" class="container" data-astro-cid-porej7z2=""> <nav class="lantian navbar navbar-expand-lg" data-astro-cid-wu5dj4rx=""> <div class="container-fluid" data-astro-cid-wu5dj4rx=""> <a class="navbar-brand" href="/" data-astro-cid-wu5dj4rx="">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation" data-astro-cid-wu5dj4rx=""> <span class="navbar-toggler-icon" data-astro-cid-wu5dj4rx=""></span> </button> <div class="collapse navbar-collapse" id="lantian-navbar" data-astro-cid-wu5dj4rx=""> <ul class="navbar-nav" data-astro-cid-wu5dj4rx=""> <li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/page/archive/index.html" data-astro-cid-wu5dj4rx=""> 文章们 </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> 俯瞰地球 </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> <li class="nav-item dropdown d-block d-lg-none" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="pages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-file" data-astro-cid-wu5dj4rx=""></i> 页面  <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="pages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/page/archive/index.html" data-astro-cid-wu5dj4rx=""> 文章们 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> 俯瞰地球 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> </ul> </li> </ul> <ul class="navbar-nav ms-auto" data-astro-cid-wu5dj4rx=""> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="languages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-language" data-astro-cid-wu5dj4rx=""></i> Language <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="languages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item active" href="/article/modify-website/diy-gps-based-ntp-server.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-cn" data-astro-cid-wu5dj4rx=""></span> Chinese Simplified / 简体中文 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/article/modify-website/diy-gps-based-ntp-server.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-us" data-astro-cid-wu5dj4rx=""></span> English </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">Not all pages have translations.</a> </li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">You may see 404 - this is normal.</a> </li> </ul> </li> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="color-scheme-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> 夜间模式 </a> <ul class="dropdown-menu" aria-labelledby="color-scheme-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-auto" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> 自动 </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-light" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-sun" data-astro-cid-wu5dj4rx=""></i> 浅色</a> </li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-dark" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-moon" data-astro-cid-wu5dj4rx=""></i> 深色</a> </li> </ul> </li> </ul> </div> </div> </nav> <script type="module">const m="user-color-scheme",s="data-user-color-scheme",u=(e,t)=>{try{localStorage.setItem(e,t)}catch{}},i=e=>{try{return localStorage.getItem(e)}catch{return null}},c=e=>{const t={dark:!0,light:!0,auto:!0},o=e===null||!Object.keys(t).includes(e)?"auto":e;u(m,o);for(const l in t){const n=document.getElementById("color-scheme-"+l);n&&(l==o?n.classList.add("active"):n.classList.remove("active"))}o!="auto"?document.documentElement.setAttribute(s,o):document.documentElement.removeAttribute(s)};c(i(m));const r=document.getElementById("color-scheme-auto");r&&r.addEventListener("click",()=>c("auto"));const a=document.getElementById("color-scheme-light");a&&a.addEventListener("click",()=>c("light"));const d=document.getElementById("color-scheme-dark");d&&d.addEventListener("click",()=>c("dark"));</script>  <div class="d-flex" data-astro-cid-porej7z2=""> <div id="content" data-astro-cid-porej7z2="">  <article> <div class="d-flex"> <div class="post-info-wrap" data-astro-cid-dckccua4=""> <div class="post-info" data-astro-cid-dckccua4=""> <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-clock" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">09-16</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> 发布于<span class="badge badge-tag" data-astro-cid-dckccua4=""> 2019-09-16 21:01 </span>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-file-alt" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">网站与服务端</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> 分类 <a class="badge badge-tag" href="/category/modify-website" data-astro-cid-dckccua4=""> 网站与服务端 </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-tag" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">2 标签</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> 标签  <a class="badge badge-tag" href="/tag/NTP" data-astro-cid-dckccua4=""> NTP </a>  <a class="badge badge-tag" href="/tag/GPS" data-astro-cid-dckccua4=""> GPS </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-list" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">目录</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu="">  <ol data-astro-cid-nj3qel45=""> <li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#ntp-是什么" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">NTP 是什么</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#自建-ntp-服务器的用途" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">自建 NTP 服务器的用途</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#需要的设备材料" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">需要的设备、材料</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#gps-模块安装及配置" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">GPS 模块安装及配置</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#ntp-服务器配置" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">NTP 服务器配置</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#还需改进的地方" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">还需改进的地方</span> </a> </li> </ol>   </div> </div> </div>   </div>  </div>  <div class="post-wrap"> <div class="post-image-wrap" data-astro-cid-potdituc=""><picture data-astro-cid-potdituc=""><source srcset="/usr/uploads/2019/09/61107773.png.thumb.png.webp" type="image/webp" data-astro-cid-potdituc=""><source srcset="/usr/uploads/2019/09/61107773.png.thumb.png.avif" type="image/avif" data-astro-cid-potdituc=""><source srcset="/usr/uploads/2019/09/61107773.png.thumb.png.jxl" type="image/jxl" data-astro-cid-potdituc=""><img src="/usr/uploads/2019/09/61107773.png.thumb.png" alt="自建基于 GPS 的 NTP 服务端 的插图" height="150" onerror="window.lantianImageFallback(this, '/usr/uploads/2019/09/61107773.png.thumb.png')" data-astro-cid-potdituc=""></picture></div> <h1 class="post-title"> <a href="/article/modify-website/diy-gps-based-ntp-server.lantian/" rel="bookmark" title="自建基于 GPS 的 NTP 服务端">自建基于 GPS 的 NTP 服务端</a> </h1> <div class="post-text">   <h2 id="ntp-是什么">NTP 是什么</h2>
+<p>NTP（Network Time Protocol）是目前使用最广泛的互联网时间同步协议。我们常用的
+Windows、macOS、Linux 等都自带了 NTP 客户端，可以连接远程服务器获取当前的时间。例如，Windows 的 Internet 时间同步功能就是基于 NTP：</p>
+<p><picture><source srcset="/usr/uploads/2019/09/51126337.jpg.webp" type="image/webp"><source srcset="/usr/uploads/2019/09/51126337.jpg.avif" type="image/avif"><source srcset="/usr/uploads/2019/09/51126337.jpg.jxl" type="image/jxl"><img src="/usr/uploads/2019/09/51126337.jpg" alt="Windows Internet 时间同步"></picture></p>
+<p>（图片来自网络）</p>
+<p>Windows 默认会连接到 time.windows.com 这台由微软维护的 NTP 服务器同步时间。但是，默认的这台服务器在国内并不好用。这台服务器位于美国，到国内的延迟很大并且容易波动，因此 NTP 客户端也很难得出准确的时间。</p>
+<p>那么中国大陆有没有 NTP 服务器呢？有，但是不多：</p>
+<ul>
+<li>cn.pool.ntp.org
+<ul>
+<li>由 <a href="http://www.pool.ntp.org" rel="noopener noreferrer" target="_blank">www.pool.ntp.org</a> 维护的 NTP 服务器池项目，所有服务器由志愿者提供，在各个地区通过 DNS 负载均衡到不同的服务器上。</li>
+<li>现在（2019 年 9 月 16 日）共有 63 台服务器位于 CN 池内（但不是所有的服务器都在国内）</li>
+<li>可以通过 0.cn.pool.ntp.org，1.cn.pool.ntp.org 等方式获得更多的服务器</li>
+</ul>
+</li>
+<li>cn.ntp.org.cn
+<ul>
+<li>V2EX 网友 qiuai 维护的 NTP 服务器池，似乎部分服务器是自行维护的，部分是志愿者提供</li>
+<li>目前网站 <a href="http://www.ntp.org.cn" rel="noopener noreferrer" target="_blank">www.ntp.org.cn</a> 正在备案，但 NTP 仍然可用</li>
+</ul>
+</li>
+<li>ntp.ntsc.ac.cn
+<ul>
+<li>中科院国家授时中心的 NTP 服务器</li>
+</ul>
+</li>
+<li>ntp[1-7].aliyun.com
+<ul>
+<li>阿里云的 NTP 服务器，共有 7 台服务器</li>
+<li>之前的域名是 time.pool.aliyun.com 以及 time[1-7].aliyun.com，似乎现在还可以使用</li>
+</ul>
+</li>
+<li>time[1-5].cloud.tencent.com
+<ul>
+<li>腾讯云的 NTP 服务器，共有 5 台服务器</li>
+</ul>
+</li>
+</ul>
+<h2 id="自建-ntp-服务器的用途">自建 NTP 服务器的用途</h2>
+<ol>
+<li>特殊环境对时间精度有极高要求：
+<ul>
+<li>金融（高频交易？）</li>
+<li>航空航天</li>
+<li>科研</li>
+<li>跨地区数据同步</li>
+</ul>
+</li>
+<li>保证时间服务的可用性：
+<ul>
+<li>比起依赖志愿者的 NTP 服务器，自建更加可靠</li>
+<li>避免单台服务器由于故障、受攻击等下线</li>
+<li>在互联网中断时仍然可以保持各设备时间同步</li>
+</ul>
+</li>
+<li>这很有趣，不是吗？</li>
+</ol>
+<h2 id="需要的设备材料">需要的设备、材料</h2>
+<ul>
+<li>
+<p>一台运行 Linux 系统的电脑，要求带有串口</p>
+<ul>
+<li>树莓派就是个不错的选择，如果你只是为了 NTP 服务器，树莓派 0 就不错（淘宝上大概 60 块钱一个）</li>
+<li>或者一台台式电脑，加上一个 USB 转串口模块（淘宝上 5 块钱一个，关键词 CH340）</li>
+<li>我是连接 Tinker Board 使用，但为了配置 GPS 模块（非必须）也用到了串口模块，是下图这个</li>
+<li><picture><source srcset="/usr/uploads/2019/09/4242908871.jpg.webp" type="image/webp"><source srcset="/usr/uploads/2019/09/4242908871.jpg.avif" type="image/avif"><source srcset="/usr/uploads/2019/09/4242908871.jpg.jxl" type="image/jxl"><img src="/usr/uploads/2019/09/4242908871.jpg" alt="CH340 USB 转串口模块"></picture></li>
+</ul>
+</li>
+<li>
+<p>一个 GPS 模块</p>
+<ul>
+<li>如果你在大概 10 年前用过当时的智能手机（诺基亚塞班系统）或者导航仪（Windows
+CE）进行导航，你可能会有一个 USB 或者蓝牙的 GPS 接收器，你可以直接拿来用</li>
+<li>如果没有，那就淘宝搜索 ATGM336H（GPS/北斗/GLONASS 三模模块，大概 30 块钱一个）
+<ul>
+<li>我用的就是这个，目前（2019 年 9 月 16 日）淘宝上能找到的最便宜的三模 GPS
+模块</li>
+<li>部分商家会标成 GPS/北斗 双模模块，但如果需要的话 GLONASS 可以通过配置软件自行打开</li>
+<li>我买的是下图这个</li>
+<li><picture><source srcset="/usr/uploads/2019/09/2614025970.jpg.webp" type="image/webp"><source srcset="/usr/uploads/2019/09/2614025970.jpg.avif" type="image/avif"><source srcset="/usr/uploads/2019/09/2614025970.jpg.jxl" type="image/jxl"><img src="/usr/uploads/2019/09/2614025970.jpg" alt="ATGM336H 模块"></picture></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>一根带较高增益的有源 GPS 天线</p>
+<ul>
+<li>如果你家住楼顶，或者准备把 GPS 模块放阳台等无遮挡处，可以不需要</li>
+<li>如果你家不在楼顶，并且你准备把模块放在窗边甚至室内，<strong>强烈建议</strong>购买一根天线，否则会很难搜到星</li>
+<li>需要的是看起来比较大个的天线，不是某些模块附送的迷你陶瓷天线，那种天线没什么用</li>
+<li>天线淘宝上大概 10 块钱一根，我买的是下图这个</li>
+<li><picture><source srcset="/usr/uploads/2019/09/354608019.jpg.webp" type="image/webp"><source srcset="/usr/uploads/2019/09/354608019.jpg.avif" type="image/avif"><source srcset="/usr/uploads/2019/09/354608019.jpg.jxl" type="image/jxl"><img src="/usr/uploads/2019/09/354608019.jpg" alt="GPS 天线"></picture></li>
+<li>如果你买的是类似上图的 SMA 接头天线，由于 ATGM336H 使用 IPX 接头，你还需要买一根 SMA 转 IPX 的转换线</li>
+</ul>
+</li>
+<li>
+<p>一些母对母杜邦线，用于连接 GPS 模块与电脑</p>
+<ul>
+<li>淘宝上几块钱就能买一大堆</li>
+</ul>
+</li>
+</ul>
+<h2 id="gps-模块安装及配置">GPS 模块安装及配置</h2>
+<p>第一步是把 GPS 的串口连接上。ATGM336H 模块的电压是 3.3V，因此可以直接连接 Tinker
+Board：</p>
+<ul>
+<li>模块 VCC 连接 17 针 3.3V 供电</li>
+<li>模块 GND 连接 20 针地线</li>
+<li>模块 RX 连接 8 针串口 1 的 TX</li>
+<li>模块 TX 连接 10 针串口 1 的 RX</li>
+<li>模块 PPS 连接 22 针</li>
+</ul>
+<p><picture><source srcset="/usr/uploads/2019/09/2308734009.png.webp" type="image/webp"><source srcset="/usr/uploads/2019/09/2308734009.png.avif" type="image/avif"><source srcset="/usr/uploads/2019/09/2308734009.png.jxl" type="image/jxl"><img src="/usr/uploads/2019/09/2308734009.png" alt="Tinker Board 针脚图"></picture></p>
+<p>然后登录 Tinker Board 开始安装软件，我用的是 Armbian 系统。</p>
+<p>首先运行 <code>armbian-config</code>，在 System - Hardware 中开启 uart 开头的所有选项（所有串口），然后重启。</p>
+<p>然后安装 gpsd，负责接收 GPS 模块的定位信息</p>
+<pre><code>apt-get install gpsd gpsd-clients
+</code></pre>
+<p>然后编辑 <code>/etc/default/gpsd</code>，按如下所示修改配置：</p>
+<pre><code>START_DAEMON="true"
+USBAUTO="false"
+DEVICES="/dev/ttyS1"
+GPSD_OPTIONS="-n -b"
+</code></pre>
+<p>上述配置启用了 gpsd，指定了 GPS 所在的串口（ttyS1），让 gpsd 一启动就立即开始定位，并且禁止 gpsd 修改模块设置。</p>
+<p>启动 gpsd：</p>
+<pre><code>systemctl enable gpsd
+systemctl start gpsd
+</code></pre>
+<p>然后运行 cgps，可以看到位置与搜星情况：</p>
+<p><picture><source srcset="/usr/uploads/2019/09/32557744.png.webp" type="image/webp"><source srcset="/usr/uploads/2019/09/32557744.png.avif" type="image/avif"><source srcset="/usr/uploads/2019/09/32557744.png.jxl" type="image/jxl"><img src="/usr/uploads/2019/09/32557744.png" alt="GPS 搜星情况"></picture></p>
+<h2 id="ntp-服务器配置">NTP 服务器配置</h2>
+<p>首先禁用 systemd-timesyncd，系统自带的功能比较简单的 NTP 客户端：</p>
+<pre><code>systemctl disable systemd-timesyncd
+systemctl stop systemd-timesyncd
+</code></pre>
+<p>然后安装全功能的 ntp 服务端：</p>
+<pre><code>apt-get install ntp
+</code></pre>
+<p>在 <code>/etc/ntp.conf</code> 中添加 GPS 相关的配置：</p>
+<pre><code># GPS Serial data reference
+server 127.127.28.0 minpoll 4 maxpoll 4
+fudge 127.127.28.0 time1 0.0 refid GPS
+</code></pre>
+<p>最后启动 NTP 服务端：</p>
+<pre><code>systemctl enable ntp
+systemctl start ntp
+</code></pre>
+<p>运行 <code>ntpq -pn</code> 查看状态：</p>
+<p><picture><source srcset="/usr/uploads/2019/09/61107773.png.webp" type="image/webp"><source srcset="/usr/uploads/2019/09/61107773.png.avif" type="image/avif"><source srcset="/usr/uploads/2019/09/61107773.png.jxl" type="image/jxl"><img src="/usr/uploads/2019/09/61107773.png" alt="NTP 状态"></picture></p>
+<h2 id="还需改进的地方">还需改进的地方</h2>
+<ol>
+<li>没有利用上高精度的 PPS 信号
+<ul>
+<li>Tinker Board 的 Armbian 内核没有 PPS 对应的配置，</li>
+<li>需要重新编译内核，或者用用户态的程序处理</li>
+</ul>
+</li>
+</ol>
+<p>更新：以上问题已经在后续文章中解决，点击链接进入：<a href="/article/modify-website/diy-ntp-pps-on-tinker-board.lantian">/article/modify-website/diy-ntp-pps-on-tinker-board.lantian</a></p>  </div>  <script type="module" src="/assets/WalineComment.astro_astro_type_script_index_0_lang.Cd-Au78J.js"></script> <div class="clearfix" id="post-navi" data-astro-cid-gfbmwgei=""> <div class="float-end text-end" data-astro-cid-gfbmwgei=""> <a href="/article/modify-website/gpp-preprocess-dockerfile-include-if.lantian/" title="使用 GPP 预处理 Dockerfile，实现 #include、#if 等功能" data-astro-cid-gfbmwgei=""> 使用 GPP 预处理 Dockerfile，实现 #include、#if 等功能 </a> <br data-astro-cid-gfbmwgei=""> 下一篇文章 »
+</div> <div class="float-start text-start position-absolute" data-astro-cid-gfbmwgei="">
+« 上一篇文章 <br data-astro-cid-gfbmwgei=""> <a href="/article/modify-website/diy-ntp-pps-on-tinker-board.lantian/" title="（自建 NTP）在 Tinker Board 上使用 PPS" data-astro-cid-gfbmwgei=""> （自建 NTP）在 Tinker Board 上使用 PPS </a> </div> </div>  <div id="waline" data-waline-language="zh-CN" data-waline-path="/article/modify-website/diy-gps-based-ntp-server.lantian"></div>   </div> </div> </article>  </div> <aside class="d-none d-xl-block" data-astro-cid-porej7z2=""> <section class="widget"> <h3>最新文章</h3> <ul class="list-unstyled"> <li> 12-07  <a href="/article/modify-website/dn42-flapalerted-reduce-flapping.lantian/">在 DN42 中使用 FlapAlerted 抑制 Flapping</a> </li><li> 07-20  <a href="/article/modify-computer/legal-lte-network-at-home-with-open5gs.lantian/">用 Open5GS 搭建合法的 LTE 网络</a> </li><li> 06-27  <a href="/article/modify-computer/sidestore-without-stosvpn-across-lan.lantian/">在内网中免 StosVPN 使用 SideStore</a> </li><li> 05-19  <a href="/article/modify-computer/nix-logarithmetic-math-library-from-zero.lantian/">从零开始实现 Nix 对数函数库</a> </li><li> 04-06  <a href="/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/">$100，DIY 搭建合法的 LTE 网络</a> </li><li> 02-10  <a href="/article/modify-computer/build-custom-android-kernel-with-nix.lantian/">用 Nix 编译自定义 Android 内核</a> </li><li> 04-20  <a href="/article/modify-website/migrate-blog-to-astro-js.lantian/">使用 Astro.js 重构我的博客</a> </li><li> 12-16  <a href="/article/modify-computer/nixos-low-ram-vps.lantian/">NixOS 系列（五）：制作小内存 VPS 的 DD 磁盘镜像</a> </li><li> 09-20  <a href="/article/modify-computer/nix-trigonometric-math-library-from-zero.lantian/">从零开始实现 Nix 三角函数库</a> </li><li> 05-29  <a href="/article/random-notes/pipewire-sigkill-fix.lantian/">解决 Pipewire 被 SIGKILL 的问题</a> </li><li> 05-12  <a href="/article/modify-website/how-to-kill-the-dn42-network.lantian/">如何引爆 DN42 网络（2023-05-12 更新）</a> </li><li> 05-08  <a href="/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian/">Optimus MUXed 笔记本上的 NVIDIA 虚拟机显卡直通（2023-05 更新）</a> </li><li> 04-17  <a href="/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian/">修改 APN 解决 AOSP ROM 上中国电信无法 4G 漫游问题</a> </li><li> 03-26  <a href="/article/random-notes/old-hp-workstation-as-all-in-one.lantian/">老款 HP 工作站配置 NAS+软路由笔记</a> </li><li> 01-14  <a href="/article/modify-computer/nixos-impermanence.lantian/">NixOS 系列（四）：“无状态”操作系统</a> </li> </ul> </section>  <section class="widget"> <h3>最新评论</h3> <ul class="list-unstyled" id="recent-comments">  <li><a href="#">Loading...</a></li>  </ul> </section>  <script type="module" src="/assets/WalineRecentComments.astro_astro_type_script_index_0_lang.Cu-GBWyK.js"></script> <section class="widget"> <h3>其它功能</h3> <ul class="list-unstyled">  <li> <i class="fas fa-fw fa-rss"></i>  <a href="/rss2.xml" target="_blank">RSS 订阅</a> |  <a href="/feed.xml" target="_blank">Atom</a> |  <a href="/feed.json" target="_blank">JSON</a> </li> <li> <i class="fas fa-fw fa-globe"></i>  <a href="https://stats.uptimerobot.com/NLYPbrSal6" target="_blank"> 服务器状态 </a> </li> <li> <i class="fas fa-fw fa-sitemap"></i>  <a href="https://lg.lantian.pub" target="_blank">DN42 节点状态</a> </li> <li> <i class="fas fa-fw fa-link"></i>  <a href="gopher://lantian.pub" target="_blank">使用 Gopher 协议访问</a> </li>  </ul> </section>  <section class="widget"> <h3>友情链接</h3> <ul class="list-unstyled"> <li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://0x7f.cc"> 0x7f Blog 🐑 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://alanyhq.com"> Alanyhq </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.cas7.moe"> Blog of Moecast </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://jerryxiao.cc"> JerryXiao </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://snli.org"> Shucheng Li </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://sangsir.com"> SangSir | 艺术界的一朵奇葩 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://yuetau.net"> YuetAu&#39;s Spot </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.baoshuo.ren/?utm_source=friends"> 宝硕博客 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="http://foreverblog.cn"> 十年之约 </a> </li> </ul> </section>  </aside> </div> <footer class="clearfix" data-astro-cid-w3csb3e3="">  <div id="copyright" class="float-end text-end" data-astro-cid-w3csb3e3=""> <i class="fas fa-copyright" data-astro-cid-w3csb3e3=""></i> 2012-2026 Lan Tian @ Blog<br data-astro-cid-w3csb3e3=""> <small data-astro-cid-w3csb3e3=""> 基于 Astro v5.17.1 构建 @ 2026-02-12 02:27:05 </small> </div> <script type="module" src="/assets/PlausibleAnalytics.astro_astro_type_script_index_0_lang.C6V0cCkY.js"></script> </footer>  </div>  </body> </html>

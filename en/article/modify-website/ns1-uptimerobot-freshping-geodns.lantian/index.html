@@ -1,0 +1,528 @@
+<!DOCTYPE html><html lang="en-US" itemscope="" itemtype="https://schema.org/Article" data-astro-cid-porej7z2=""> <head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Low-cost GeoDNS with NS1 and UptimeRobot/Freshping - Lan Tian @ Blog</title><script>
+  ;(() => {
+    try {
+      const mode = localStorage.getItem('user-color-scheme')
+      if (mode == 'dark' || mode == 'light') {
+        document.documentElement.setAttribute('data-user-color-scheme', mode)
+      }
+    } catch {
+      // Ignore errors
+    }
+  })()
+  ;(() => {
+    window.lantianImageFallback = (img, src) => {
+      img.onerror = null
+      img.srcset = src
+      img.src = src
+      if (img.parentNode.nodeName.toLowerCase() === 'picture') {
+        const picture = img.parentNode
+        picture.innerHTML = ''
+        picture.appendChild(img)
+      }
+    }
+  })()
+</script><link rel="stylesheet" href="/assets/index.CN3CN3hr.css"><style>.post-image-wrap[data-astro-cid-potdituc]{margin:0 -5px}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{height:150px;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center}@media(min-width:768px){.post-image-wrap[data-astro-cid-potdituc]{padding:5px;float:right}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:200px}}@media(max-width:767.98px){.post-image-wrap[data-astro-cid-potdituc]{text-align:center}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:100%}}#post-navi[data-astro-cid-gfbmwgei]{padding:5px;border-top:1px solid var(--lt-border-weak);border-bottom:1px solid var(--lt-border-weak)}
+</style><link rel="stylesheet" href="/assets/index.DC6W6NZY.css"><script type="module" src="/assets/PageLayout.astro_astro_type_script_index_0_lang.Co1i7321.js"></script><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><meta name="title" content="Low-cost GeoDNS with NS1 and UptimeRobot/Freshping - Lan Tian @ Blog"><meta name="keywords" content=""><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/en/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian/"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian/" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian/" hreflang="en"><meta name="copyright" content="Copyright 2012-2026 Lan Tian @ Blog"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="manifest" href="/manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#03a9f4"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#212121"><meta name="application-name" content="Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167x167.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="apple-touch-icon" sizes="1024x1024" href="/apple-touch-icon-1024x1024.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-precomposed.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-640x1136.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1136x640.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-750x1334.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1334x750.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1125x2436.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2436x1125.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1170x2532.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2532x1170.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1179x2556.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2556x1179.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-828x1792.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1792x828.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2688.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2688x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2208.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2208x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1284x2778.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2778x1284.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1290x2796.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2796x1290.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1488x2266.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2266x1488.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1536x2048.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2048x1536.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1620x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1620.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1640x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1640.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2388.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2388x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2224.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2224x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-2048x2732.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2732x2048.png"><meta name="msapplication-TileColor" content="#bbdefb"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-config" content="/browserconfig.xml"><link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json"><meta property="og:url" content="https://lantian.pub/en/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian/"><meta property="og:type" content="website"><meta property="og:title" content="Low-cost GeoDNS with NS1 and UptimeRobot/Freshping - Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/apple-touch-icon.png"><meta content="Some parts of the content come from https://hostedtalk.net/t/connecting-uptime-robot-with-ns1-dns-api/3883 。 Goal I have quite a few VPSes around the world, but my website had been served by a single VPS in Los Angeles for a long time. Because I purchase VPSes from small providers for their specific routing configuration or low price, the network of this VPS can be unstable from time to time. Although it's rare, I had to manually point the DNS to another VPS in case of an outage and switch back after it's back up. Therefore, I want to serve my website with all my VPSes, and automatically reroute traffic to other VPSes if one VPS is down. Synchronizing website data is of no difficulty since I use Hexo, a static site generator...."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="en"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/en/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian/"><meta name="twitter:title" content="Low-cost GeoDNS with NS1 and UptimeRobot/Freshping - Lan Tian @ Blog"><meta property="twitter:image" content="https://lantian.pub/apple-touch-icon.png"><meta content="Some parts of the content come from https://hostedtalk.net/t/connecting-uptime-robot-with-ns1-dns-api/3883 。 Goal I have quite a few VPSes around the world, but my website had been served by a single VPS in Los Angeles for a long time. Because I purchase VPSes from small providers for their specific routing configuration or low price, the network of this VPS can be unstable from time to time. Although it's rare, I had to manually point the DNS to another VPS in case of an outage and switch back after it's back up. Therefore, I want to serve my website with all my VPSes, and automatically reroute traffic to other VPSes if one VPS is down. Synchronizing website data is of no difficulty since I use Hexo, a static site generator...."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="Low-cost GeoDNS with NS1 and UptimeRobot/Freshping - Lan Tian @ Blog"><meta property="image" content="https://lantian.pub/apple-touch-icon.png"><meta content="Some parts of the content come from https://hostedtalk.net/t/connecting-uptime-robot-with-ns1-dns-api/3883 。 Goal I have quite a few VPSes around the world, but my website had been served by a single VPS in Los Angeles for a long time. Because I purchase VPSes from small providers for their specific routing configuration or low price, the network of this VPS can be unstable from time to time. Although it's rare, I had to manually point the DNS to another VPS in case of an outage and switch back after it's back up. Therefore, I want to serve my website with all my VPSes, and automatically reroute traffic to other VPSes if one VPS is down. Synchronizing website data is of no difficulty since I use Hexo, a static site generator...."><meta content="Some parts of the content come from https://hostedtalk.net/t/connecting-uptime-robot-with-ns1-dns-api/3883 。 Goal I have quite a few VPSes around the world, but my website had been served by a single VPS in Los Angeles for a long time. Because I purchase VPSes from small providers for their specific routing configuration or low price, the network of this VPS can be unstable from time to time. Although it's rare, I had to manually point the DNS to another VPS in case of an outage and switch back after it's back up. Therefore, I want to serve my website with all my VPSes, and automatically reroute traffic to other VPSes if one VPS is down. Synchronizing website data is of no difficulty since I use Hexo, a static site generator...."><link rel="me" href="https://mastodon.social/@lantian"></head> <body data-astro-cid-porej7z2=""> <div id="bg" data-astro-cid-j6vmxtef=""></div>   <div id="container" class="container" data-astro-cid-porej7z2=""> <nav class="lantian navbar navbar-expand-lg" data-astro-cid-wu5dj4rx=""> <div class="container-fluid" data-astro-cid-wu5dj4rx=""> <a class="navbar-brand" href="/en/" data-astro-cid-wu5dj4rx="">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation" data-astro-cid-wu5dj4rx=""> <span class="navbar-toggler-icon" data-astro-cid-wu5dj4rx=""></span> </button> <div class="collapse navbar-collapse" id="lantian-navbar" data-astro-cid-wu5dj4rx=""> <ul class="navbar-nav" data-astro-cid-wu5dj4rx=""> <li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/en/page/archive/index.html" data-astro-cid-wu5dj4rx=""> Posts </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/en/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> Himawari </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/en/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> <li class="nav-item dropdown d-block d-lg-none" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="pages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-file" data-astro-cid-wu5dj4rx=""></i> Page  <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="pages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/page/archive/index.html" data-astro-cid-wu5dj4rx=""> Posts </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> Himawari </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> </ul> </li> </ul> <ul class="navbar-nav ms-auto" data-astro-cid-wu5dj4rx=""> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="languages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-language" data-astro-cid-wu5dj4rx=""></i> Language <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="languages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-cn" data-astro-cid-wu5dj4rx=""></span> Chinese Simplified / 简体中文 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item active" href="/en/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-us" data-astro-cid-wu5dj4rx=""></span> English </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">Not all pages have translations.</a> </li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">You may see 404 - this is normal.</a> </li> </ul> </li> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="color-scheme-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> Night Mode </a> <ul class="dropdown-menu" aria-labelledby="color-scheme-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-auto" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> Auto </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-light" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-sun" data-astro-cid-wu5dj4rx=""></i> Light</a> </li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-dark" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-moon" data-astro-cid-wu5dj4rx=""></i> Dark</a> </li> </ul> </li> </ul> </div> </div> </nav> <script type="module">const m="user-color-scheme",s="data-user-color-scheme",u=(e,t)=>{try{localStorage.setItem(e,t)}catch{}},i=e=>{try{return localStorage.getItem(e)}catch{return null}},c=e=>{const t={dark:!0,light:!0,auto:!0},o=e===null||!Object.keys(t).includes(e)?"auto":e;u(m,o);for(const l in t){const n=document.getElementById("color-scheme-"+l);n&&(l==o?n.classList.add("active"):n.classList.remove("active"))}o!="auto"?document.documentElement.setAttribute(s,o):document.documentElement.removeAttribute(s)};c(i(m));const r=document.getElementById("color-scheme-auto");r&&r.addEventListener("click",()=>c("auto"));const a=document.getElementById("color-scheme-light");a&&a.addEventListener("click",()=>c("light"));const d=document.getElementById("color-scheme-dark");d&&d.addEventListener("click",()=>c("dark"));</script>  <div class="d-flex" data-astro-cid-porej7z2=""> <div id="content" data-astro-cid-porej7z2="">  <article> <div class="d-flex"> <div class="post-info-wrap" data-astro-cid-dckccua4=""> <div class="post-info" data-astro-cid-dckccua4=""> <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-clock" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">02-06</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> Published on<span class="badge badge-tag" data-astro-cid-dckccua4=""> 2022-02-06 14:29 </span>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-file-alt" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">Website and Servers</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> Category <a class="badge badge-tag" href="/en/category/modify-website" data-astro-cid-dckccua4=""> Website and Servers </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-tag" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">4 tags</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> Tags  <a class="badge badge-tag" href="/en/tag/NS1" data-astro-cid-dckccua4=""> NS1 </a>  <a class="badge badge-tag" href="/en/tag/UptimeRobot" data-astro-cid-dckccua4=""> UptimeRobot </a>  <a class="badge badge-tag" href="/en/tag/Freshping" data-astro-cid-dckccua4=""> Freshping </a>  <a class="badge badge-tag" href="/en/tag/GeoDNS" data-astro-cid-dckccua4=""> GeoDNS </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-list" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">ToC</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu="">  <ol data-astro-cid-nj3qel45=""> <li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#goal" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Goal</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#why-not-self-host" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Why not Self-host</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#preparation" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Preparation</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#why-aws-lambda-and-aws-sns" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Why AWS Lambda and AWS SNS</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#connecting-ns1-to-aws-sns" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Connecting NS1 to AWS SNS</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#create-aws-lambda-functions-for-webhook" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Create AWS Lambda Functions for Webhook</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#create-aws-api-gateway-for-accepting-http-requests" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Create AWS API Gateway for Accepting HTTP Requests</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#connect-uptimerobotfreshping-to-webhook" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Connect UptimeRobot/Freshping to Webhook</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#configure-geodns-and-failover-on-ns1" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Configure GeoDNS and Failover on NS1</span> </a> </li> </ol>   </div> </div> </div>   </div>  </div>  <div class="post-wrap">  <h1 class="post-title"> <a href="/en/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian/" rel="bookmark" title="Low-cost GeoDNS with NS1 and UptimeRobot/Freshping">Low-cost GeoDNS with NS1 and UptimeRobot/Freshping</a> </h1> <div class="post-text">   <blockquote>
+<p>Some parts of the content come from
+<a href="https://hostedtalk.net/t/connecting-uptime-robot-with-ns1-dns-api/3883" rel="noopener noreferrer" target="_blank">https://hostedtalk.net/t/connecting-uptime-robot-with-ns1-dns-api/3883</a>。</p>
+</blockquote>
+<h1 id="goal">Goal</h1>
+<p>I have quite a few VPSes around the world, but my website had been served by a
+single VPS in Los Angeles for a long time. Because I purchase VPSes from small
+providers for their specific routing configuration or low price, the network of
+this VPS can be unstable from time to time. Although it's rare, I had to
+manually point the DNS to another VPS in case of an outage and switch back after
+it's back up. Therefore, I want to serve my website with all my VPSes, and
+automatically reroute traffic to other VPSes if one VPS is down.</p>
+<p>Synchronizing website data is of no difficulty since I use Hexo, a static site
+generator. Simply generate the files on one VPS and copy them to others with
+Ansible. The bigger problem is DNS. I want to route users to the nearest VPS
+with GeoDNS. For example, Asian users can be routed to my Hong Kong node, and
+United States users can access my Los Angeles node.</p>
+<p>However, most GeoDNS services on the market are kind of expensive. For a single
+domain:</p>
+<ul>
+<li><a href="https://www.cloudns.net/geodns/" rel="noopener noreferrer" target="_blank">CloudNS costs $9.95/m</a>;</li>
+<li><a href="https://constellix.com/pricing/products" rel="noopener noreferrer" target="_blank">Constellix costs $10/m</a>;</li>
+<li><a href="https://aws.amazon.com/route53/pricing/" rel="noopener noreferrer" target="_blank">AWS Route 53 costs $0.5/m, plus $0.7/million queries and $0.75/node for monitoring</a>;</li>
+<li><a href="https://perfops.net/pricing" rel="noopener noreferrer" target="_blank">PerfOps provides a GeoDNS-enabled subdomain for CNAMEs, and is free for 100k queries, but monitoring costs $5/node</a>。</li>
+<li>Cloudflare Load Balancing costs $15/m (with 2 backends and Traffic Steering)
+and $5 per extra node.</li>
+</ul>
+<p>The good news is that <a href="https://ns1.com/plans" rel="noopener noreferrer" target="_blank">NS1 provides GeoDNS for free</a>.
+Although it can only monitor one node, it supports setting node status over API
+or over <a href="https://aws.amazon.com/sns/" rel="noopener noreferrer" target="_blank">AWS SNS</a> for switching nodes
+automatically.</p>
+<h2 id="why-not-self-host">Why not Self-host</h2>
+<p>I tried
+<a href="/en/article/modify-website/powerdns-lua-diy-geodns.lantian/">GeoDNS on PowerDNS as an authoritative DNS server</a>
+before, but it didn't work well. The main reason is that DNS recursors will not
+choose the nearest authoritative server automatically. Instead, they randomly
+select one from the nameserver list of the domain. If one recursor ends up with
+an authoritative server on the other side of the planet or even a server that's
+down at the moment, DNS resolution will be slow or even fail and, in turn, harms
+the website's loading speed.</p>
+<p>Most commercial DNS services fix the problem with Anycast, where the same IP is
+announced from multiple datacenters, and the DNS requests will be routed to the
+nearest datacenter automatically. But in order to announce an IP, you need an
+ASN ($50-100 one time) and an IPv4 range ($100/m), which costs more than a
+commercial DNS!</p>
+<h1 id="preparation">Preparation</h1>
+<p>You need to prepare:</p>
+<ol>
+<li>An AWS account with your credit card on file. You may need to pay a few cents
+per month. We will use:
+<ul>
+<li><a href="https://aws.amazon.com/lambda/pricing/" rel="noopener noreferrer" target="_blank">Lambda FaaS</a> (Free for first 1
+million requests per month);</li>
+<li><a href="https://aws.amazon.com/api-gateway/pricing/" rel="noopener noreferrer" target="_blank">API Gateway</a> (To expose
+Lambda functions to the Internet, free for first 1 million requests for the
+first 12 months, then $1.17 per million requests);</li>
+<li><a href="https://aws.amazon.com/sns/pricing/" rel="noopener noreferrer" target="_blank">SNS messaging service</a> (To send
+up/down state messages to NS1, free for first 1 million requests per
+month).</li>
+</ul>
+</li>
+<li>A <a href="https://ns1.com/signup" rel="noopener noreferrer" target="_blank">NS1 account</a>. You need to verify your credit card,
+but it's free otherwise.</li>
+<li>A domain with less than 50 DNS records to be used with NS1. The free version
+of NS1 limits you to 50 DNS records.
+<ul>
+<li>You can register a 6-9 digits xyz domain
+<a href="https://gen.xyz/1111b" rel="noopener noreferrer" target="_blank">that costs $0.99 per year</a> for NS1 and CNAME your
+primary domain over.</li>
+</ul>
+</li>
+<li>Add A/AAAA records for each node on your primary DNS, like
+<code>hostdare.lantian.pub -> 185.186.147.110</code>. Later we will point CNAMEs and
+monitors here.</li>
+<li>An UptimeRobot or Freshping account, with monitoring configured for all your
+nodes.
+<ul>
+<li>Use the domains from step 4 as the monitored URL. Take
+<code>hostdare.lantian.pub -> 185.186.147.110</code> as example: use
+<code>https://hostdare.lantian.pub</code> rather than <code>https://185.186.147.110</code> as the
+monitored URL.</li>
+<li>UptimeRobot supports a minimum monitoring interval of 5 minutes.
+Freshping's interval is 1 minute, but it doesn't support IPv6. Make your
+own choice.</li>
+</ul>
+</li>
+</ol>
+<p>Usually, the number of up/down notifications is limited, so your cost on AWS
+will be less than 1 cent per month, almost completely free.</p>
+<p>The flow of all messages will be:</p>
+<p><!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><!-- Generated by graphviz version 14.1.2 (0)
+ --><!-- Pages: 1 -->
+<svg width="195pt" height="310pt" viewBox="0.00 0.00 195.00 310.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 306.4)">
+<polygon fill="white" stroke="none" points="-4,4 -4,-306.4 191.06,-306.4 191.06,4 -4,4"></polygon><!-- UptimeRobot -->
+<g id="node1" class="node">
+<title>UptimeRobot</title>
+<polygon fill="none" stroke="black" points="92.22,-302.4 0,-302.4 0,-266.4 92.22,-266.4 92.22,-302.4"></polygon>
+<text xml:space="preserve" text-anchor="middle" x="46.11" y="-280.2" font-family="Times,serif" font-size="14.00">UptimeRobot</text>
+</g><!-- AWS Lambda -->
+<g id="node2" class="node">
+<title>AWS Lambda</title>
+<polygon fill="none" stroke="black" points="144.35,-213.6 47.87,-213.6 47.87,-177.6 144.35,-177.6 144.35,-213.6"></polygon>
+<text xml:space="preserve" text-anchor="middle" x="96.11" y="-191.4" font-family="Times,serif" font-size="14.00">AWS Lambda</text>
+</g><!-- UptimeRobot&#45;&gt;AWS Lambda -->
+<g id="edge1" class="edge">
+<title>UptimeRobot->AWS Lambda</title>
+<path fill="none" stroke="black" d="M52.85,-266.13C57.14,-255.82 63.11,-242.64 69.68,-231.6 71.36,-228.78 73.23,-225.91 75.16,-223.1"></path>
+<polygon fill="black" stroke="black" points="77.93,-225.25 80.99,-215.1 72.27,-221.12 77.93,-225.25"></polygon>
+<text xml:space="preserve" text-anchor="middle" x="96.9" y="-235.8" font-family="Times,serif" font-size="14.00">Webhook</text>
+</g><!-- AWS SNS -->
+<g id="node4" class="node">
+<title>AWS SNS</title>
+<polygon fill="none" stroke="black" points="134.26,-124.8 57.96,-124.8 57.96,-88.8 134.26,-88.8 134.26,-124.8"></polygon>
+<text xml:space="preserve" text-anchor="middle" x="96.11" y="-102.6" font-family="Times,serif" font-size="14.00">AWS SNS</text>
+</g><!-- AWS Lambda&#45;&gt;AWS SNS -->
+<g id="edge3" class="edge">
+<title>AWS Lambda->AWS SNS</title>
+<path fill="none" stroke="black" d="M96.11,-177.45C96.11,-165.76 96.11,-149.99 96.11,-136.42"></path>
+<polygon fill="black" stroke="black" points="99.61,-136.72 96.11,-126.72 92.61,-136.72 99.61,-136.72"></polygon>
+<text xml:space="preserve" text-anchor="middle" x="130.91" y="-147" font-family="Times,serif" font-size="14.00">Internal API</text>
+</g><!-- Freshping -->
+<g id="node3" class="node">
+<title>Freshping</title>
+<polygon fill="none" stroke="black" points="182.11,-302.4 110.11,-302.4 110.11,-266.4 182.11,-266.4 182.11,-302.4"></polygon>
+<text xml:space="preserve" text-anchor="middle" x="146.11" y="-280.2" font-family="Times,serif" font-size="14.00">Freshping</text>
+</g><!-- Freshping&#45;&gt;AWS Lambda -->
+<g id="edge2" class="edge">
+<title>Freshping->AWS Lambda</title>
+<path fill="none" stroke="black" d="M140.1,-266.03C136.19,-255.69 130.62,-242.51 124.11,-231.6 122.43,-228.78 120.54,-225.94 118.56,-223.16"></path>
+<polygon fill="black" stroke="black" points="121.4,-221.11 112.55,-215.28 115.83,-225.36 121.4,-221.11"></polygon>
+<text xml:space="preserve" text-anchor="middle" x="159.85" y="-235.8" font-family="Times,serif" font-size="14.00">Webhook</text>
+</g><!-- NS1 API -->
+<g id="node5" class="node">
+<title>NS1 API</title>
+<polygon fill="none" stroke="black" points="129.59,-36 62.63,-36 62.63,0 129.59,0 129.59,-36"></polygon>
+<text xml:space="preserve" text-anchor="middle" x="96.11" y="-13.8" font-family="Times,serif" font-size="14.00">NS1 API</text>
+</g><!-- AWS SNS&#45;&gt;NS1 API -->
+<g id="edge4" class="edge">
+<title>AWS SNS->NS1 API</title>
+<path fill="none" stroke="black" d="M96.11,-88.65C96.11,-76.96 96.11,-61.19 96.11,-47.62"></path>
+<polygon fill="black" stroke="black" points="99.61,-47.92 96.11,-37.92 92.61,-47.92 99.61,-47.92"></polygon>
+<text xml:space="preserve" text-anchor="middle" x="123.32" y="-58.2" font-family="Times,serif" font-size="14.00">Webhook</text>
+</g>
+</g>
+</svg>
+</p>
+<h2 id="why-aws-lambda-and-aws-sns">Why AWS Lambda and AWS SNS</h2>
+<p>Because NS1's Webhook API isn't quite stable, and AWS SNS supports automatic
+retrying.</p>
+<p>I used Cloudflare Workers in my initial testing, but I frequently encountered
+Bad Requests errors with NS1's API. Retrying immediately didn't fix the problem.
+Because Cloudflare Workers is only triggered by inbound requests and have
+limitations on execution time, there's no way for me to retry every few seconds
+in the background.</p>
+<p>Yet AWS SNS can retry automatically whenever the API is unstable, and AWS Lambda
+can conveniently send messages to SNS. Hence why I ended up with the combination
+of AWS.</p>
+<h1 id="connecting-ns1-to-aws-sns">Connecting NS1 to AWS SNS</h1>
+<ol>
+<li>
+<p>On the <a href="https://my.nsone.net/#/integrations" rel="noopener noreferrer" target="_blank">Integrations page at NS1</a>, click
+<code>Add a Data Source</code> and select AWS CloudWatch. Name it whatever you want.</p>
+<ul>
+<li>We're not going to use AWS CloudWatch. Instead, we're going to send up/down
+events to NS1 in the format of CloudWatch.</li>
+</ul>
+</li>
+<li>
+<p>On the Incoming Feeds tab, click the CloudWatch icon and add a data feed. The
+<code>Alarm Name</code> should be the domain configured on UptimeRobot/Freshping.
+<code>Name (for internal reference)</code> can be whatever you want, but I just set it
+to the same value as <code>Alarm Name</code>.</p>
+<ul>
+<li>Take <code>hostdare.lantian.pub -> 185.186.147.110</code> for example, the
+<code>Alarm Name</code> should be <code>hostdare.lantian.pub</code>.</li>
+</ul>
+<p><picture><source srcset="/usr/uploads/202202/ns1-alarm.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/ns1-alarm.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/ns1-alarm.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/ns1-alarm.png" alt="NS1 Add Alarm"></picture></p>
+</li>
+<li>
+<p>Repeat step 2 until you've added data feeds for all nodes.</p>
+</li>
+<li>
+<p>Now a CloudWatch <code>Feeds URL</code> will appear on the Incoming Feeds tab. Make a
+note of it, which will be added to AWS SNS later.</p>
+<p><picture><source srcset="/usr/uploads/202202/ns1-feed.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/ns1-feed.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/ns1-feed.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/ns1-feed.png" alt="NS1 Feeds URL"></picture></p>
+</li>
+<li>
+<p>Visit the
+<a href="https://us-west-1.console.aws.amazon.com/sns/v3/home?region=us-west-1#/topics" rel="noopener noreferrer" target="_blank">management page of AWS SNS</a>
+and create a Topic (a message queue). Select <code>Standard</code> as the type and leave
+everything as default.</p>
+<ul>
+<li>Note that all my AWS links are for region <code>us-west-1</code>. Switch regions if
+you want to create resources in other regions! The AWS SNS must be in the
+same zone as the Lambda functions created later!</li>
+</ul>
+<p><picture><source srcset="/usr/uploads/202202/aws-create-topic.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-create-topic.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-create-topic.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-create-topic.png" alt="AWS Create Topic"></picture></p>
+</li>
+<li>
+<p>An ARN (resource ID) will appear on the Topic's page. Make a note of it,
+which will be used when creating the Lambda function.</p>
+</li>
+<li>
+<p>Click the <code>Create subscription</code> button on the bottom to create a data
+subscription. Set <code>Protocol</code> to <code>HTTPS</code>, <code>Endpoint</code> to the feeds URL in step
+4, and leave everything else at default.</p>
+<p><picture><source srcset="/usr/uploads/202202/aws-create-subscription.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-create-subscription.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-create-subscription.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-create-subscription.png" alt="AWS Create Subscription"></picture></p>
+</li>
+</ol>
+<p>Now all messages sent to this Topic on AWS SNS will be forwarded to NS1's API,
+so the states of the nodes can be synchronized to NS1.</p>
+<h1 id="create-aws-lambda-functions-for-webhook">Create AWS Lambda Functions for Webhook</h1>
+<p>The next step is to create a function on AWS Lambda, which converts Webhook
+messages from UptimeRobot or Freshping to AWS SNS messages.</p>
+<ol>
+<li>
+<p>Visit the
+<a href="https://us-west-1.console.aws.amazon.com/lambda/home?region=us-west-1#/functions" rel="noopener noreferrer" target="_blank">management page of AWS Lambda</a>,
+and create a function.</p>
+<ul>
+<li>Note that all my AWS links are for region <code>us-west-1</code>. Switch regions if
+you want to create resources in other regions! The AWS SNS must be in the
+same zone as the Lambda functions!</li>
+<li>Choose <code>Auto from scratch</code>, and then <code>Node.js 14.x</code> as Runtime. Leave
+everything else at default.</li>
+</ul>
+<p><picture><source srcset="/usr/uploads/202202/aws-create-lambda.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-create-lambda.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-create-lambda.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-create-lambda.png" alt="AWS Create Lambda Function"></picture></p>
+</li>
+<li>
+<p>You'll be automatically taken to the edit page of that function. If you want
+to use UptimeRobot, copy &#x26; paste this piece of code:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">var</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> AWS</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">require</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'aws-sdk'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">const</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> SECRET_KEY</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'**Change to a random string as password**'</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">const</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> SNS_ARN</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'**Change to ARN for the AWS SNS earlier'</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#4EC9B0;--shiki-light:#267F99">exports</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">handler</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">async</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> event</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> =></span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">  if</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> (</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">event</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">queryStringParameters</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">key</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> != </span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1">SECRET_KEY</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">) {</span></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">    return</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> { </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">statusCode:</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 403</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">body:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 'Forbidden'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">  let</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> json</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1">JSON</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">parse</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">event</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">body</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">)</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">  let</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> ns1Object</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">    AlarmName:</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> new</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26"> URL</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">json</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">url</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">).</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">hostname</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">    NewStateValue:</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> json</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">state</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> == </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">2</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> ? </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'OK'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> : </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'ALARM'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">  try</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">    let</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> sns</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">new</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> AWS</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">SNS</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">({ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">apiVersion:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> '2010-03-31'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> })</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">    let</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> result</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">await</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> sns</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      .</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">publish</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">({</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">        TopicArn:</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> SNS_ARN</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">        Message:</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> JSON</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">stringify</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">ns1Object</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">),</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      })</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      .</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">promise</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">    return</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      statusCode:</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 200</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      headers:</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> { </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'Content-Type'</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 'application/json'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> },</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      body:</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> JSON</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">stringify</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">result</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">),</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  } </span><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">catch</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> (</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">e</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">) {</span></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">    return</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      statusCode:</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 500</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      body:</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> e</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">stack</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>Use this piece of code if you want to use Freshping:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">var</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> AWS</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">require</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'aws-sdk'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">const</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> SECRET_KEY</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'**Change to a random string as password**'</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">const</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> SNS_ARN</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'**Change to ARN for the AWS SNS earlier'</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#4EC9B0;--shiki-light:#267F99">exports</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">handler</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">async</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> event</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> =></span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">  if</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> (</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">event</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">queryStringParameters</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">key</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> != </span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1">SECRET_KEY</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">) {</span></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">    return</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> { </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">statusCode:</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 403</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">body:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 'Forbidden'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">  let</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> json</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1">JSON</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">parse</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">event</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">body</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">)</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">  let</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> ns1Object</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">    AlarmName:</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> new</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26"> URL</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">json</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">check_url</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">).</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">hostname</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">    NewStateValue:</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> json</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">response_status_code</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> === </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'200'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> ? </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'OK'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> : </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'ALARM'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">  try</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">    let</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> sns</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">new</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> AWS</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">SNS</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">({ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">apiVersion:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> '2010-03-31'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> })</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">    let</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> result</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> = </span><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">await</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> sns</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      .</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">publish</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">({</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">        TopicArn:</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> SNS_ARN</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">        Message:</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> JSON</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">stringify</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">ns1Object</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">),</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      })</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">      .</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">promise</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">    return</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      statusCode:</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 200</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      headers:</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> { </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">'Content-Type'</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> 'application/json'</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> },</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      body:</span><span style="--shiki-dark:#4FC1FF;--shiki-light:#0070C1"> JSON</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">stringify</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">result</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">),</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  } </span><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">catch</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> (</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">e</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">) {</span></span>
+<span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">    return</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      statusCode:</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 500</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">      body:</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> e</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">stack</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>Click Deploy.</p>
+</li>
+<li>
+<p>On the Configuration tab of the function, select Permissions on the left, and
+then click the link in Execution Role. This takes you to the permission
+management page.</p>
+<p><picture><source srcset="/usr/uploads/202202/aws-lambda-permissions.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-lambda-permissions.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-lambda-permissions.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-lambda-permissions.png" alt="AWS Lambda Permissions Settings"></picture></p>
+</li>
+<li>
+<p>On the new page, click Add permissions - Create inline policy.</p>
+</li>
+<li>
+<p>On the Create Policy page, set Service to SNS:</p>
+<p><picture><source srcset="/usr/uploads/202202/aws-permission-service.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-permission-service.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-permission-service.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-permission-service.png" alt="AWS Policy - Setting Service"></picture></p>
+</li>
+<li>
+<p>Set Actions to Publish under Write section:</p>
+<p><picture><source srcset="/usr/uploads/202202/aws-permission-actions.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-permission-actions.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-permission-actions.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-permission-actions.png" alt="AWS Policy - Setting Actions"></picture></p>
+</li>
+<li>
+<p>Click Add ARN under then Resources section, and fill in the ARN for the AWS
+SNS created earlier:</p>
+<p><picture><source srcset="/usr/uploads/202202/aws-permission-resources.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-permission-resources.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-permission-resources.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-permission-resources.png" alt="AWS Policy - Setting Resources"></picture></p>
+</li>
+<li>
+<p>Click Review Policy on the bottom right, give it a name, and click Create
+Policy.</p>
+</li>
+</ol>
+<p>Now we have a Lambda function that parses messages from UptimeRobot or
+Freshping, and gave it the permissions to send messages to SNS. However, there's
+no way to send HTTP calls to that function yet. We will create an API Gateway to
+accept HTTP requests and invoke the function.</p>
+<h1 id="create-aws-api-gateway-for-accepting-http-requests">Create AWS API Gateway for Accepting HTTP Requests</h1>
+<ol>
+<li>
+<p>On the
+<a href="https://us-west-1.console.aws.amazon.com/apigateway/main/apis?region=us-west-1" rel="noopener noreferrer" target="_blank">AWS API Gateway management page</a>,
+create an API of type HTTP.</p>
+<ul>
+<li>Note that all my AWS links are for region <code>us-west-1</code>. Switch regions if
+you want to create resources in other regions!</li>
+</ul>
+<p><picture><source srcset="/usr/uploads/202202/aws-api-type.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-api-type.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-api-type.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-api-type.png" alt="AWS API Gateway Select Type"></picture></p>
+</li>
+<li>
+<p>Click Add integration, set Type to Lambda, and choose the Lambda function you
+created earlier. Give the API a name and click Next:</p>
+<p><picture><source srcset="/usr/uploads/202202/aws-api-integrations.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-api-integrations.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-api-integrations.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-api-integrations.png" alt="AWS API Gateway Choose Lambda Function"></picture></p>
+</li>
+<li>
+<p>On the Configure routes page, make a note of the path to your Lambda
+function. My path is <code>/ns1-uptime</code> for example:</p>
+<p><picture><source srcset="/usr/uploads/202202/aws-api-routes.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-api-routes.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-api-routes.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-api-routes.png" alt="AWS API Gateway Configure Routes"></picture></p>
+</li>
+<li>
+<p>Click Next until the API Gateway is created. Its URL is shown on the Stages
+section at the center of the page.</p>
+<p><picture><source srcset="/usr/uploads/202202/aws-api-url.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/aws-api-url.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/aws-api-url.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/aws-api-url.png" alt="AWS API Gateway URL"></picture></p>
+<p>Concatenate that to the path from step 3, and you have the URL for the
+function. Assuming my API Gateway URL is
+<code>https://1234567890.execute-api.us-west-1.amazonaws.com/</code>, my Lambda function
+URL will be
+<code>https://1234567890.execute-api.us-west-1.amazonaws.com/ns1-uptime</code>. If you
+visit it directly, you should get <code>Internal Server Error</code>.</p>
+</li>
+</ol>
+<h1 id="connect-uptimerobotfreshping-to-webhook">Connect UptimeRobot/Freshping to Webhook</h1>
+<ol>
+<li>
+<p>As we have a password (<code>SECRET_KEY</code>) in the function, we need to add it to
+the function URL. Assuming the password is <code>123456</code>, add <code>?key=123456</code> to the
+end of the URL. The whole URL looks like
+<code>https://1234567890.execute-api.us-west-1.amazonaws.com/ns1-uptime?key=123456</code>.</p>
+</li>
+<li>
+<p>If you use UptimeRobot, visit the
+<a href="https://uptimerobot.com/dashboard#mySettings" rel="noopener noreferrer" target="_blank">My Settings page</a>, and click
+Add Alert Contact:</p>
+<ul>
+<li>
+<p>Set <code>Type</code> to <code>Webhook</code>;</p>
+</li>
+<li>
+<p>Set <code>URL to Notify</code> to the full function URL with passwords;</p>
+</li>
+<li>
+<p>For <code>POST Value</code>, enter:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{ </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">"url"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"*monitorURL*"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">"state"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"*alertType*"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> }</span></span></code></pre>
+</li>
+<li>
+<p>Tick <code>Send as JSON</code>;</p>
+</li>
+<li>
+<p>Set <code>Enable notification for</code> to <code>Up &#x26; down events</code>;</p>
+</li>
+<li>
+<p>Save.</p>
+</li>
+</ul>
+<p><picture><source srcset="/usr/uploads/202202/uptimerobot-webhook.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/uptimerobot-webhook.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/uptimerobot-webhook.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/uptimerobot-webhook.png" alt="UptimeRobot Webhook Config"></picture></p>
+<ul>
+<li>Modify all monitoring jobs, and select the new Webhook in the Alert
+Contacts section.</li>
+</ul>
+</li>
+<li>
+<p>If you use Freshping, on your management page, click the gear icon on the
+left, followed by Integrations page. Click Create Integration in the Webhook
+section:</p>
+<ul>
+<li>Set <code>Event Type</code> to <code>Up/Down</code>;</li>
+<li>Set <code>Trigger the Webhook</code> to the full function URL with passwords;</li>
+<li>Leave everything else at defaults and save.</li>
+</ul>
+</li>
+</ol>
+<h1 id="configure-geodns-and-failover-on-ns1">Configure GeoDNS and Failover on NS1</h1>
+<p>As the last step, we're going to add the records for each region in the NS1
+control panel, and connect them to their data feeds.</p>
+<ol>
+<li>
+<p>Back to the <a href="https://my.nsone.net/#/zones" rel="noopener noreferrer" target="_blank">Zones page on NS1 control panel</a>,
+enter your zone settings.</p>
+</li>
+<li>
+<p>Create a CNAME record without any Answers. Just fill out the name and save.</p>
+</li>
+<li>
+<p>Click Edit Filter Chain on the left, and drag in these filters from the right
+in order:</p>
+<ol>
+<li>Up</li>
+<li>Geotarget Country</li>
+<li>Select First Group</li>
+<li>Shuffle</li>
+<li>Select First N</li>
+</ol>
+</li>
+<li>
+<p>Tick <code>Enable Client Subnet</code> and save.</p>
+<p><picture><source srcset="/usr/uploads/202202/ns1-filter-chain.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/ns1-filter-chain.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/ns1-filter-chain.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/ns1-filter-chain.png" alt="NS1 Filter Chain"></picture></p>
+</li>
+<li>
+<p>Add an Answer Group on the right. Here we will have each group corresponding
+to a region. Click the menu icon on the right of that Answer Group, and
+select <code>Edit Group Metadata</code>. Add its <code>Country</code> and <code>Subdivisions</code>
+information. Take Los Angeles for example:</p>
+<ul>
+<li>Set <code>Country/countries</code> to <code>Americas / Northern America / United States</code>;</li>
+<li>Set <code>Subdivisions</code> to
+<code>North America / United States of America / California</code>;</li>
+<li>Set <code>US States</code> to <code>Western US / California</code>;</li>
+<li>Save.</li>
+</ul>
+<p><picture><source srcset="/usr/uploads/202202/ns1-answer-group.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/ns1-answer-group.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/ns1-answer-group.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/ns1-answer-group.png" alt="NS1 Answer Group"></picture></p>
+</li>
+<li>
+<p>Click <code>Add Answer to Group</code> in that Answer Group, and enter the domain for
+the node, created in step 4 in preparation. Click the menu icon on the right
+and select <code>Edit Answer Metadata</code>:</p>
+<ul>
+<li>Click the icon on the right of <code>Up/down</code>, select the data feed for that
+node, and save.</li>
+</ul>
+<p><picture><source srcset="/usr/uploads/202202/ns1-answer-meta.png.webp" type="image/webp"><source srcset="/usr/uploads/202202/ns1-answer-meta.png.avif" type="image/avif"><source srcset="/usr/uploads/202202/ns1-answer-meta.png.jxl" type="image/jxl"><img src="/usr/uploads/202202/ns1-answer-meta.png" alt="NS1 Answer Metadata"></picture></p>
+</li>
+<li>
+<p>Repeat step 5 and 6 to add all regions and nodes. Now GeoDNS and failover are
+enabled for this record on its domain.</p>
+</li>
+<li>
+<p>CNAME your primary domain to this (sub-)domain on NS1.</p>
+</li>
+</ol>
+<blockquote>
+<p>Note that current DNS standards don't allow CNAMEing the root domain (the <code>@</code>
+record of your primary domain) to another domain. If you want to CNAME your
+root domain, you can opt for the CNAME Flattening functionality of your
+primary DNS provider. Some provide this as <code>ALIAS</code> or <code>ANAME</code> records, and
+some (including Cloudflare) enable it automatically whenever a CNAME record is
+created for the root domain.</p>
+<p>But there's a catch. Now the client IP obtained by NS1 will be the IP for your
+primary authoritative DNS. This isn't a problem for providers with a large
+number of DNS servers globally, like Cloudflare, as your users will generally
+be close to the DNS servers. But this will be a problem if your provider has a
+limited number of nodes, as the GeoDNS results may be far from your users.</p>
+</blockquote>
+<p>Now with everything set up, you can manually shut down a server to see the
+system in action. By the time you received an alert from UptimeRobot or
+Freshping, the state for that node in NS1 control panel will change to <code>Down</code>,
+and that node won't be included in DNS responses; when the node is up again, its
+state will change back to <code>Up</code> and start serving users again.</p>  </div>  <script type="module" src="/assets/WalineComment.astro_astro_type_script_index_0_lang.Cd-Au78J.js"></script> <div class="clearfix" id="post-navi" data-astro-cid-gfbmwgei=""> <div class="float-end text-end" data-astro-cid-gfbmwgei=""> <a href="/en/article/chat/how-i-nuked-my-btrfs-partition.lantian/" title="I Moved My SSD to My New Laptop. This is What Happened To My Btrfs Data" data-astro-cid-gfbmwgei=""> I Moved My SSD to My New Laptop. This is What Happened To My Btrfs Data </a> <br data-astro-cid-gfbmwgei=""> Next post »
+</div> <div class="float-start text-start position-absolute" data-astro-cid-gfbmwgei="">
+« Previous post <br data-astro-cid-gfbmwgei=""> <a href="/en/article/modify-computer/reverse-engineered-linux-driver-for-hp-omen-macro-keys.lantian/" title="Reverse Engineered Linux Driver for HP OMEN Macro Keys" data-astro-cid-gfbmwgei=""> Reverse Engineered Linux Driver for HP OMEN Macro Keys </a> </div> </div>  <div id="waline" data-waline-language="en-US" data-waline-path="/en/article/modify-website/ns1-uptimerobot-freshping-geodns.lantian"></div>   </div> </div> </article>  </div> <aside class="d-none d-xl-block" data-astro-cid-porej7z2=""> <section class="widget"> <h3>Latest posts</h3> <ul class="list-unstyled"> <li> 12-07  <a href="/en/article/modify-website/dn42-flapalerted-reduce-flapping.lantian/">Using FlapAlerted to Suppress flapping in DN42</a> </li><li> 07-20  <a href="/en/article/modify-computer/legal-lte-network-at-home-with-open5gs.lantian/">Legal LTE Network at Home with Open5GS</a> </li><li> 06-27  <a href="/en/article/modify-computer/sidestore-without-stosvpn-across-lan.lantian/">Using SideStore without StosVPN across your LAN</a> </li><li> 05-19  <a href="/en/article/modify-computer/nix-logarithmetic-math-library-from-zero.lantian/">Nix Logarithmic Math Library from Ground Zero</a> </li><li> 04-06  <a href="/en/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/">Legal LTE Network at Home for $100</a> </li><li> 02-10  <a href="/en/article/modify-computer/build-custom-android-kernel-with-nix.lantian/">Building Custom Android Kernel with Nix</a> </li><li> 04-20  <a href="/en/article/modify-website/migrate-blog-to-astro-js.lantian/">Migrating My Blog to Astro.js</a> </li><li> 12-16  <a href="/en/article/modify-computer/nixos-low-ram-vps.lantian/">NixOS Series 5: Creating Disk Image for Low RAM VPS</a> </li><li> 09-20  <a href="/en/article/modify-computer/nix-trigonometric-math-library-from-zero.lantian/">Nix Trigonometric Math Library from Ground Zero</a> </li><li> 05-29  <a href="/en/article/random-notes/pipewire-sigkill-fix.lantian/">Preventing Pipewire from being SIGKILLed</a> </li><li> 05-12  <a href="/en/article/modify-website/how-to-kill-the-dn42-network.lantian/">How to Kill the DN42 Network (Updated 2023-05-12)</a> </li><li> 05-08  <a href="/en/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian/">NVIDIA GPU Passthrough on an Optimus MUXed Laptop (Updated 2023-05)</a> </li><li> 04-17  <a href="/en/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian/">Fix China Telecom 4G Roaming on AOSP ROM by Changing APN</a> </li><li> 03-26  <a href="/en/article/random-notes/old-hp-workstation-as-all-in-one.lantian/">Notes on Setting Up NAS+Router on Old HP Workstation</a> </li><li> 01-14  <a href="/en/article/modify-computer/nixos-impermanence.lantian/">NixOS Series 4: &quot;Stateless&quot; Operating System</a> </li> </ul> </section>  <section class="widget"> <h3>Latest comments</h3> <ul class="list-unstyled" id="recent-comments">  <li><a href="#">Loading...</a></li>  </ul> </section>  <script type="module" src="/assets/WalineRecentComments.astro_astro_type_script_index_0_lang.Cu-GBWyK.js"></script> <section class="widget"> <h3>Others</h3> <ul class="list-unstyled">  <li> <i class="fas fa-fw fa-rss"></i>  <a href="/rss2.xml" target="_blank">RSS Feed</a> |  <a href="/feed.xml" target="_blank">Atom</a> |  <a href="/feed.json" target="_blank">JSON</a> </li> <li> <i class="fas fa-fw fa-globe"></i>  <a href="https://stats.uptimerobot.com/NLYPbrSal6" target="_blank"> Sever Status </a> </li> <li> <i class="fas fa-fw fa-sitemap"></i>  <a href="https://lg.lantian.pub" target="_blank">DN42 Looking Glass</a> </li> <li> <i class="fas fa-fw fa-link"></i>  <a href="gopher://lantian.pub" target="_blank">Access with Gopher protocol</a> </li>  </ul> </section>  <section class="widget"> <h3>Links</h3> <ul class="list-unstyled"> <li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://0x7f.cc"> 0x7f Blog 🐑 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="http://foreverblog.cn"> 10 Year&#39;s Promise (Forever Blog) </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://alanyhq.com"> Alanyhq </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.baoshuo.ren/?utm_source=friends"> Baoshuo&#39;s Blog </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.cas7.moe"> Blog of Moecast </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://jerryxiao.cc"> JerryXiao </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://sangsir.com"> SangSir </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://snli.org"> Shucheng Li </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://yuetau.net"> YuetAu&#39;s Spot </a> </li> </ul> </section>  </aside> </div> <footer class="clearfix" data-astro-cid-w3csb3e3="">  <div id="copyright" class="float-end text-end" data-astro-cid-w3csb3e3=""> <i class="fas fa-copyright" data-astro-cid-w3csb3e3=""></i> 2012-2026 Lan Tian @ Blog<br data-astro-cid-w3csb3e3=""> <small data-astro-cid-w3csb3e3=""> Powered by Astro v5.17.1 @ 2026-02-12 02:27:09 </small> </div> <script type="module" src="/assets/PlausibleAnalytics.astro_astro_type_script_index_0_lang.C6V0cCkY.js"></script> </footer>  </div>  </body> </html>

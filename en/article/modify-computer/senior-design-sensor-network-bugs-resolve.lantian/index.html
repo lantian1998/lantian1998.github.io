@@ -1,0 +1,663 @@
+<!DOCTYPE html><html lang="en-US" itemscope="" itemtype="https://schema.org/Article" data-astro-cid-porej7z2=""> <head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Graduation Design - Sensor Network Development Log - Lan Tian @ Blog</title><script>
+  ;(() => {
+    try {
+      const mode = localStorage.getItem('user-color-scheme')
+      if (mode == 'dark' || mode == 'light') {
+        document.documentElement.setAttribute('data-user-color-scheme', mode)
+      }
+    } catch {
+      // Ignore errors
+    }
+  })()
+  ;(() => {
+    window.lantianImageFallback = (img, src) => {
+      img.onerror = null
+      img.srcset = src
+      img.src = src
+      if (img.parentNode.nodeName.toLowerCase() === 'picture') {
+        const picture = img.parentNode
+        picture.innerHTML = ''
+        picture.appendChild(img)
+      }
+    }
+  })()
+</script><link rel="stylesheet" href="/assets/index.CN3CN3hr.css"><style>.post-image-wrap[data-astro-cid-potdituc]{margin:0 -5px}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{height:150px;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center}@media(min-width:768px){.post-image-wrap[data-astro-cid-potdituc]{padding:5px;float:right}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:200px}}@media(max-width:767.98px){.post-image-wrap[data-astro-cid-potdituc]{text-align:center}.post-image-wrap[data-astro-cid-potdituc] img[data-astro-cid-potdituc]{max-width:100%}}#post-navi[data-astro-cid-gfbmwgei]{padding:5px;border-top:1px solid var(--lt-border-weak);border-bottom:1px solid var(--lt-border-weak)}
+</style><link rel="stylesheet" href="/assets/index.DC6W6NZY.css"><script type="module" src="/assets/PageLayout.astro_astro_type_script_index_0_lang.Co1i7321.js"></script><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin"><meta name="renderer" content="webkit|ie-comp|ie-stand"><meta name="imagemode" content="force"><meta name="nightmode" content="disable"><meta name="wap-font-scale" content="no"><meta name="title" content="Graduation Design - Sensor Network Development Log - Lan Tian @ Blog"><meta name="keywords" content=""><meta name="author" content="Lan Tian"><link rel="canonical" href="https://lantian.pub/en/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian/"><link rel="alternate" type="application/rss+xml" title="Lan Tian @ Blog" href="https://lantian.pub/rss2.xml"><link rel="alternate" type="application/atom+xml" title="Lan Tian @ Blog" href="https://lantian.pub/feed.xml"><link rel="alternate" href="https://lantian.pub/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian/" hreflang="zh"><link rel="alternate" href="https://lantian.pub/en/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian/" hreflang="en"><meta name="copyright" content="Copyright 2012-2026 Lan Tian @ Blog"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="manifest" href="/manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#03a9f4"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#212121"><meta name="application-name" content="Lan Tian @ Blog"><link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167x167.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"><link rel="apple-touch-icon" sizes="1024x1024" href="/apple-touch-icon-1024x1024.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-precomposed.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#03a9f4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Lan Tian @ Blog"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-640x1136.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1136x640.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-750x1334.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1334x750.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1125x2436.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2436x1125.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1170x2532.png"><link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2532x1170.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1179x2556.png"><link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2556x1179.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-828x1792.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-1792x828.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2688.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2688x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1242x2208.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2208x1242.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1284x2778.png"><link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2778x1284.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/apple-touch-startup-image-1290x2796.png"><link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="/apple-touch-startup-image-2796x1290.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1488x2266.png"><link rel="apple-touch-startup-image" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2266x1488.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1536x2048.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2048x1536.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1620x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1620.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1640x2160.png"><link rel="apple-touch-startup-image" media="(device-width: 820px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2160x1640.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2388.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2388x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-1668x2224.png"><link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2224x1668.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/apple-touch-startup-image-2048x2732.png"><link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/apple-touch-startup-image-2732x2048.png"><meta name="msapplication-TileColor" content="#bbdefb"><meta name="msapplication-TileImage" content="/mstile-144x144.png"><meta name="msapplication-config" content="/browserconfig.xml"><link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json"><meta property="og:url" content="https://lantian.pub/en/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian/"><meta property="og:type" content="website"><meta property="og:title" content="Graduation Design - Sensor Network Development Log - Lan Tian @ Blog"><meta property="og:image" content="https://lantian.pub/usr/uploads/202006/stm32cubemx.png"><meta content="Welcome to my third development log. In the two previous logs, I discussed the pitfalls I met in the RoboMaster competition and FPGA course final project . This time I will be talking about my graduate design project, an air quality sensor network built by a 3-person group. The whole project is structured as follow: Obtain data from installed sensor modules and upload them to InfluxDB running on a server Sensors we used: MiCS6814, measures NO2, CO, and NH3 Analog output BME680, measures temperature, humidity, atmospheric pressure, and TVOC I2C interface PMS5003, measures particle matters UART serial output Extra modules: ATGM336H, global positioning module with GPS+BeiDou support UART serial output ESP8266, a widely used Wi-Fi module UART serial output MH-CD42,..."><meta property="og:site_name" content="Lan Tian @ Blog"><meta property="og:locale" content="en"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="https://lantian.pub/en/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian/"><meta name="twitter:title" content="Graduation Design - Sensor Network Development Log - Lan Tian @ Blog"><meta property="twitter:image" content="https://lantian.pub/usr/uploads/202006/stm32cubemx.png"><meta content="Welcome to my third development log. In the two previous logs, I discussed the pitfalls I met in the RoboMaster competition and FPGA course final project . This time I will be talking about my graduate design project, an air quality sensor network built by a 3-person group. The whole project is structured as follow: Obtain data from installed sensor modules and upload them to InfluxDB running on a server Sensors we used: MiCS6814, measures NO2, CO, and NH3 Analog output BME680, measures temperature, humidity, atmospheric pressure, and TVOC I2C interface PMS5003, measures particle matters UART serial output Extra modules: ATGM336H, global positioning module with GPS+BeiDou support UART serial output ESP8266, a widely used Wi-Fi module UART serial output MH-CD42,..."><meta name="twitter:dnt" content="on"><meta itemprop="name" content="Graduation Design - Sensor Network Development Log - Lan Tian @ Blog"><meta property="image" content="https://lantian.pub/usr/uploads/202006/stm32cubemx.png"><meta content="Welcome to my third development log. In the two previous logs, I discussed the pitfalls I met in the RoboMaster competition and FPGA course final project . This time I will be talking about my graduate design project, an air quality sensor network built by a 3-person group. The whole project is structured as follow: Obtain data from installed sensor modules and upload them to InfluxDB running on a server Sensors we used: MiCS6814, measures NO2, CO, and NH3 Analog output BME680, measures temperature, humidity, atmospheric pressure, and TVOC I2C interface PMS5003, measures particle matters UART serial output Extra modules: ATGM336H, global positioning module with GPS+BeiDou support UART serial output ESP8266, a widely used Wi-Fi module UART serial output MH-CD42,..."><meta content="Welcome to my third development log. In the two previous logs, I discussed the pitfalls I met in the RoboMaster competition and FPGA course final project . This time I will be talking about my graduate design project, an air quality sensor network built by a 3-person group. The whole project is structured as follow: Obtain data from installed sensor modules and upload them to InfluxDB running on a server Sensors we used: MiCS6814, measures NO2, CO, and NH3 Analog output BME680, measures temperature, humidity, atmospheric pressure, and TVOC I2C interface PMS5003, measures particle matters UART serial output Extra modules: ATGM336H, global positioning module with GPS+BeiDou support UART serial output ESP8266, a widely used Wi-Fi module UART serial output MH-CD42,..."><link rel="me" href="https://mastodon.social/@lantian"></head> <body data-astro-cid-porej7z2=""> <div id="bg" data-astro-cid-j6vmxtef=""></div>   <div id="container" class="container" data-astro-cid-porej7z2=""> <nav class="lantian navbar navbar-expand-lg" data-astro-cid-wu5dj4rx=""> <div class="container-fluid" data-astro-cid-wu5dj4rx=""> <a class="navbar-brand" href="/en/" data-astro-cid-wu5dj4rx="">Lan Tian @ Blog</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#lantian-navbar" aria-controls="lantian-navbar" aria-expanded="false" aria-label="Toggle navigation" data-astro-cid-wu5dj4rx=""> <span class="navbar-toggler-icon" data-astro-cid-wu5dj4rx=""></span> </button> <div class="collapse navbar-collapse" id="lantian-navbar" data-astro-cid-wu5dj4rx=""> <ul class="navbar-nav" data-astro-cid-wu5dj4rx=""> <li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/en/page/archive/index.html" data-astro-cid-wu5dj4rx=""> Posts </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/en/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> Himawari </a> </li><li class="nav-item d-none d-lg-block" data-astro-cid-wu5dj4rx=""> <a class="nav-link" href="/en/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> <li class="nav-item dropdown d-block d-lg-none" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="pages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-file" data-astro-cid-wu5dj4rx=""></i> Page  <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="pages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/page/archive/index.html" data-astro-cid-wu5dj4rx=""> Posts </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/page/himawari/index.html" data-astro-cid-wu5dj4rx=""> Himawari </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/en/page/dn42/index.html" data-astro-cid-wu5dj4rx=""> DN42 </a> </li> </ul> </li> </ul> <ul class="navbar-nav ms-auto" data-astro-cid-wu5dj4rx=""> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="languages-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-language" data-astro-cid-wu5dj4rx=""></i> Language <span class="caret" data-astro-cid-wu5dj4rx=""></span> </a> <ul class="dropdown-menu" aria-labelledby="languages-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item" href="/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-cn" data-astro-cid-wu5dj4rx=""></span> Chinese Simplified / 简体中文 </a> </li><li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item active" href="/en/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian/" data-astro-cid-wu5dj4rx=""> <span class="flag-icon flag-icon-us" data-astro-cid-wu5dj4rx=""></span> English </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">Not all pages have translations.</a> </li> <li data-astro-cid-wu5dj4rx=""> <a class="dropdown-item disabled" href="#" data-astro-cid-wu5dj4rx="">You may see 404 - this is normal.</a> </li> </ul> </li> <li class="nav-item dropdown" data-astro-cid-wu5dj4rx=""> <a href="#" class="nav-link dropdown-toggle" id="color-scheme-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-astro-cid-wu5dj4rx=""> <i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> Night Mode </a> <ul class="dropdown-menu" aria-labelledby="color-scheme-dropdown" data-astro-cid-wu5dj4rx=""> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-auto" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-adjust" data-astro-cid-wu5dj4rx=""></i> Auto </a> </li> <li data-astro-cid-wu5dj4rx=""><hr class="dropdown-divider" data-astro-cid-wu5dj4rx=""></li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-light" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-sun" data-astro-cid-wu5dj4rx=""></i> Light</a> </li> <li data-astro-cid-wu5dj4rx=""> <a id="color-scheme-dark" class="dropdown-item" href="#" data-astro-cid-wu5dj4rx=""><i class="fas fa-fw fa-moon" data-astro-cid-wu5dj4rx=""></i> Dark</a> </li> </ul> </li> </ul> </div> </div> </nav> <script type="module">const m="user-color-scheme",s="data-user-color-scheme",u=(e,t)=>{try{localStorage.setItem(e,t)}catch{}},i=e=>{try{return localStorage.getItem(e)}catch{return null}},c=e=>{const t={dark:!0,light:!0,auto:!0},o=e===null||!Object.keys(t).includes(e)?"auto":e;u(m,o);for(const l in t){const n=document.getElementById("color-scheme-"+l);n&&(l==o?n.classList.add("active"):n.classList.remove("active"))}o!="auto"?document.documentElement.setAttribute(s,o):document.documentElement.removeAttribute(s)};c(i(m));const r=document.getElementById("color-scheme-auto");r&&r.addEventListener("click",()=>c("auto"));const a=document.getElementById("color-scheme-light");a&&a.addEventListener("click",()=>c("light"));const d=document.getElementById("color-scheme-dark");d&&d.addEventListener("click",()=>c("dark"));</script>  <div class="d-flex" data-astro-cid-porej7z2=""> <div id="content" data-astro-cid-porej7z2="">  <article> <div class="d-flex"> <div class="post-info-wrap" data-astro-cid-dckccua4=""> <div class="post-info" data-astro-cid-dckccua4=""> <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-clock" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">06-08</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> Published on<span class="badge badge-tag" data-astro-cid-dckccua4=""> 2020-06-08 04:06 </span>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-file-alt" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">Computers and Clients</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> Category <a class="badge badge-tag" href="/en/category/modify-computer" data-astro-cid-dckccua4=""> Computers and Clients </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-tag" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">3 tags</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu=""> Tags  <a class="badge badge-tag" href="/en/tag/STM32" data-astro-cid-dckccua4=""> STM32 </a>  <a class="badge badge-tag" href="/en/tag/Sensors" data-astro-cid-dckccua4=""> Sensors </a>  <a class="badge badge-tag" href="/en/tag/Development-Log" data-astro-cid-dckccua4=""> Development Log </a>  </div> </div> </div>   <div class="post-meta-wrap" data-astro-cid-tde7heiu=""> <div class="post-meta" data-astro-cid-tde7heiu=""> <p data-astro-cid-tde7heiu=""> <span class="fas fa-list" data-astro-cid-tde7heiu=""></span> <br data-astro-cid-tde7heiu=""> <small data-astro-cid-tde7heiu="">ToC</small> </p> <div class="post-meta-value" data-astro-cid-tde7heiu="">  <ol data-astro-cid-nj3qel45=""> <li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#choosing-appropriate-mcu" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Choosing Appropriate MCU</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#why-not-arduino" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Why Not Arduino</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#when-we-dont-have-enough-rom" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">When We Don&#39;t Have Enough ROM</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#logging-on-to-school-wi-fi" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Logging on to School Wi-Fi</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#sensors-need-to-connect-to-school-wi-fi" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Sensors Need to Connect to School Wi-Fi</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#weather-station-needs-to-connect-to-school-wi-fi" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Weather Station Needs to Connect to School Wi-Fi</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#obtaining-sensor-data" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Obtaining Sensor Data</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#bme680" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">BME680</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#pms5003" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">PMS5003</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#mics6814" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">MiCS6814</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#battery-status-and-voltage" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Battery Status and Voltage</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#one-more-thing-on-stm32-adc" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">One More Thing on STM32 ADC</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#one-week-battery-life" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">One Week Battery Life</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#stm32-low-power-consumption-mode" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">STM32 Low Power Consumption Mode</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#turning-off-external-modules" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Turning Off External Modules</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#keeping-power-supply-on" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Keeping Power Supply On</span> </a> </li><li class="toc-item toc-level-1" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#uploading-to-influxdb" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Uploading to InfluxDB</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#generating-http-requests" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Generating HTTP Requests</span> </a> </li><li class="toc-item toc-level-2" data-astro-cid-nj3qel45=""> <a class="toc-link" href="#communicating-with-esp8266" data-astro-cid-nj3qel45=""> <span class="toc-text" data-astro-cid-nj3qel45="">Communicating with ESP8266</span> </a> </li> </ol>   </div> </div> </div>   </div>  </div>  <div class="post-wrap"> <div class="post-image-wrap" data-astro-cid-potdituc=""><picture data-astro-cid-potdituc=""><source srcset="/usr/uploads/202006/stm32cubemx.png.thumb.png.webp" type="image/webp" data-astro-cid-potdituc=""><source srcset="/usr/uploads/202006/stm32cubemx.png.thumb.png.avif" type="image/avif" data-astro-cid-potdituc=""><source srcset="/usr/uploads/202006/stm32cubemx.png.thumb.png.jxl" type="image/jxl" data-astro-cid-potdituc=""><img src="/usr/uploads/202006/stm32cubemx.png.thumb.png" alt="Illustration for Graduation Design - Sensor Network Development Log" height="150" onerror="window.lantianImageFallback(this, '/usr/uploads/202006/stm32cubemx.png.thumb.png')" data-astro-cid-potdituc=""></picture></div> <h1 class="post-title"> <a href="/en/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian/" rel="bookmark" title="Graduation Design - Sensor Network Development Log">Graduation Design - Sensor Network Development Log</a> </h1> <div class="post-text">   <p>Welcome to my third development log. In the two previous logs, I discussed the
+pitfalls I met in the
+<a href="/en/article/modify-computer/robomaster-bugs-in-development.lantian">RoboMaster competition</a>
+and
+<a href="/en/article/modify-computer/cyclone-iv-fpga-development-bugs-resolve.lantian">FPGA course final project</a>.</p>
+<p>This time I will be talking about my graduate design project, an air quality
+sensor network built by a 3-person group. The whole project is structured as
+follow:</p>
+<ul>
+<li>Obtain data from installed sensor modules and upload them to InfluxDB running
+on a server
+<ul>
+<li>Sensors we used:
+<ol>
+<li>MiCS6814, measures NO2, CO, and NH3
+<ul>
+<li>Analog output</li>
+</ul>
+</li>
+<li>BME680, measures temperature, humidity, atmospheric pressure, and TVOC
+<ul>
+<li>I2C interface</li>
+</ul>
+</li>
+<li>PMS5003, measures particle matters
+<ul>
+<li>UART serial output</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>Extra modules:
+<ol>
+<li>ATGM336H, global positioning module with GPS+BeiDou support
+<ul>
+<li>UART serial output</li>
+</ul>
+</li>
+<li>ESP8266, a widely used Wi-Fi module
+<ul>
+<li>UART serial output</li>
+</ul>
+</li>
+<li>MH-CD42, power &#x26; battery management module
+<ul>
+<li>Purely power output, no control signal</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>Need to consume little energy, enough to run for around a week with the
+battery power
+<ul>
+<li>And battery life and voltage needs to be monitored</li>
+</ul>
+</li>
+<li>Waterproof in rain conditions (to some extent)</li>
+<li>Display data and short predictions on a web page
+<ul>
+<li>Professor already has a weather station device that measures wind conditions</li>
+</ul>
+</li>
+</ul>
+<p>This post is a record of pitfalls we've met during the development.</p>
+<h1 id="choosing-appropriate-mcu">Choosing Appropriate MCU</h1>
+<h2 id="why-not-arduino">Why Not Arduino</h2>
+<p>In the beginning, I simply got myself a random Arduino Nano from my pile of
+electronic modules, but soon I found problems:</p>
+<ol>
+<li>Arduino Nano has only one hardware serial port, but 3 serial ports are needed
+to talk to all of the above modules.
+<ul>
+<li>Yes, I know SoftwareSerial (a software emulated serial port), but it is
+quite unstable in testing, especially in the (relatively) high-speed
+communication with ESP8266 at 115200 baud rate, where signals are
+frequently garbled.</li>
+</ul>
+</li>
+<li>Arduino Nano's clock frequency is fixed at 16 MHz. We know we can adjust it,
+but it's too much of a hassle.
+<ul>
+<li>We don't need that much performance and would rather reduce the frequency
+to save some battery juice.</li>
+</ul>
+</li>
+<li><del>The Arduino IDE is horrible.</del></li>
+</ol>
+<p>So I bought an STM32 development board from Taobao with the following specs:</p>
+<ul>
+<li>STM32F103C8T6 chip
+<ul>
+<li>64 KB ROM, 20 KB RAM
+<ul>
+<li>ROM is a bit too small</li>
+</ul>
+</li>
+<li>3 hardware UART serial ports, just enough</li>
+<li>2 I2Cs
+<ul>
+<li>But since one I2C can talk to multiple peripherals with different IDs, one
+is enough</li>
+</ul>
+</li>
+<li>Up to 72 MHz clock frequency, freely adjustable
+<ul>
+<li>Since we don't run astronomic calculations on the MCU, we clocked it as
+low as 4 MHz</li>
+</ul>
+</li>
+<li>1 RTC that allows timed sleep and wakeup</li>
+<li>A lot of ADC (Analog-Digital Converter)
+<ul>
+<li>Can also measure input voltage and MCU chip temperature</li>
+</ul>
+</li>
+<li>1 CAN, 2 SPI, etc. Stuff we don't need</li>
+</ul>
+</li>
+<li>External 8 MHz crystal oscillator and 32.768KHz crystal oscillator
+<ul>
+<li>STM32 does have integrated oscillators, but guides online show that they may
+be affected by chip temperature and provide imprecise output, so external
+oscillators are definitely helpful</li>
+</ul>
+</li>
+<li>For just CNY 10
+<ul>
+<li><del>Pay less to get better performance</del></li>
+<li>In fact, the performance to cost ratio of Arduino is not high, but its
+ecosystem is awesome</li>
+</ul>
+</li>
+</ul>
+<p>Speaking of STM32 development, a lot of people may have the first impression
+that it involves direct register manipulations, and you need to spend a lot of
+time reading documentation, such as datasheets. But STMicroelectronics has
+released some STM32CubeMX software years ago, which allows visualized
+configuration of on-chip components, one-key code template generation, and a
+fully-featured set of library functions that hide register operations. Thanks to
+this, STM32 development is not much more difficult than Arduino.</p>
+<p><picture><source srcset="/usr/uploads/202006/stm32cubemx.png.webp" type="image/webp"><source srcset="/usr/uploads/202006/stm32cubemx.png.avif" type="image/avif"><source srcset="/usr/uploads/202006/stm32cubemx.png.jxl" type="image/jxl"><img src="/usr/uploads/202006/stm32cubemx.png" alt="STM32CubeMX User Interface"></picture></p>
+<h2 id="when-we-dont-have-enough-rom">When We Don't Have Enough ROM</h2>
+<p>But in the later stage of the project, we found that the 64 KB ROM of
+STM32F103C8T6 is no longer enough for us. The ROM space is mainly occupied by
+the following parts:</p>
+<ul>
+<li>BME680's closed source BSEC library
+<ul>
+<li>BSEC is the only source of BME680's TVOC reading. The sensor only provides a
+resistor value, and there is no simple formula to convert resistor value to
+actual TVOC readings.</li>
+</ul>
+</li>
+<li>Floating-point logic of <code>printf</code> and <code>scanf</code>
+<ul>
+<li>InfluxDB, what we use, accepts only ASCII-formatted upload data, so the IEEE
+754 floating-point readings from sensors must be converted to ASCII text.</li>
+<li>For the same reason, the latitude and longitude information must be
+extracted from the GPS module's NMEA0183 statements and converted to IEEE
+754 floating-point numbers.</li>
+</ul>
+</li>
+<li>STM32's library functions
+<ul>
+<li>Those responsible for register operations.</li>
+</ul>
+</li>
+</ul>
+<p>Therefore we tried to shrink the code size in these places:</p>
+<ul>
+<li>For BME680, while we cannot modify the closed source library itself, we
+greatly reduced the size of the logic that calls the library.</li>
+<li>For GPS, instead of conversion to/from floating-point numbers, we chose to
+simply copy the latitude/longitude text from NMEA0183 statements.
+<ul>
+<li>A NMEA0183 statement that involves latitude and longitude is formatted as
+follow:
+<ul>
+<li><code>$GNGGA,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh</code></li>
+<li><code>$GNGGA,074023.000,1234.56789,N,12345.67891,E,1,13,0.9,32.3,M,0.0,M,,*46</code></li>
+</ul>
+</li>
+<li>Separated by comma, each field represents (from left to right):
+<ul>
+<li><code>$GNGGA</code> means that this statement contains latitude and longitude
+information</li>
+<li>2nd column is the current time
+<ul>
+<li>The time above is AM 07:40:23, in UTC timezone</li>
+</ul>
+</li>
+<li>3rd column is latitude, in format <code>degree * 100 + minute</code>
+<ul>
+<li>The latitude above is 12 degrees, 34.56789 minutes</li>
+</ul>
+</li>
+<li>4th column represents north/south of the equator
+<ul>
+<li>The number in the third column is always positive, no matter north/south
+of the equator</li>
+</ul>
+</li>
+<li>5th column is longitude, still in format <code>degree * 100 + minute</code>
+<ul>
+<li>The longitude above is 123 degrees, 45.67891 minutes</li>
+</ul>
+</li>
+<li>6th column is east/west of the prime meridian
+<ul>
+<li>The number in the fifth column is also always positive, no matter
+east/west of the prime meridian</li>
+</ul>
+</li>
+<li>We don't care about the rest information</li>
+</ul>
+</li>
+<li>Here is our logic:
+<ul>
+<li>Copy the third column to the latitude character array, <strong>starting from the
+second character of the array</strong></li>
+<li>If the 4th column is N (north of the equator), set the first character of
+the array to <code>0</code>
+<ul>
+<li>Result has format 01234.56789, can be recognized by InfluxDB</li>
+</ul>
+</li>
+<li>If the 4th column is S (south of the equator), set the first character of
+the array to <code>-</code> (minus sign)
+<ul>
+<li>Result has format -1234.56789, can also be recognized by InfluxDB</li>
+</ul>
+</li>
+<li>Do the same to longitude data in columns 5 and 6</li>
+<li>For conversion from <code>degree * 100 + minute</code> to more commonly used
+<code>degree</code>, we choose to do it on the more powerful server</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>For STM32 library functions, we can switch to LL library for the parts we
+don't need to directly operate on (ex. frequency setup done automatically by
+STM32CubeMX)
+<ul>
+<li>STM32 provide 2 different sets of library functions for each component, HAL
+and LL
+<ul>
+<li>HAL is more abstracted and easier to use but takes more space</li>
+<li>LL is closer to register manipulations, small yet difficult to use</li>
+</ul>
+</li>
+<li>In <code>Project Manager - Advanced Settings</code>, switching RCC (frequency setup) to
+LL saves a few kilobytes</li>
+</ul>
+</li>
+<li>For standard library functions, if multiple functions are doing similar
+things, try to use only one of them
+<ul>
+<li>Ex. if you use <code>printf</code> and <code>sprintf</code> together, you may replace <code>printf</code>
+with a combination of <code>sprintf</code> and <code>HAL_UART_Transmit</code>; saves quite some
+space</li>
+</ul>
+</li>
+<li>Remember to turn on compiler optimizations and disable debugging
+<ul>
+<li>Set <code>DEBUG = 0</code> and <code>OPT = -Os</code> in Makefile</li>
+<li>By the way, for STM32's <code>printf</code> to support floating-point numbers, you need
+to add <code>-u _printf_float</code> in <code>LDFLAGS</code> in Makefile to enable that support</li>
+</ul>
+</li>
+</ul>
+<h1 id="logging-on-to-school-wi-fi">Logging on to School Wi-Fi</h1>
+<h2 id="sensors-need-to-connect-to-school-wi-fi">Sensors Need to Connect to School Wi-Fi</h2>
+<p>My school provides 2 Wi-Fi networks:</p>
+<ol>
+<li>One is an open network (no password), and a login page with HTTPS encryption
+will pop up after connecting to it, where you enter your username and
+password to log in.</li>
+<li>The other is eduroam that authenticates with WPA2 enterprise mode.</li>
+</ol>
+<p>After research on the capabilities of ESP8266 Wi-Fi module, I concluded that:</p>
+<ol>
+<li>ESP8266 comes with an AT firmware by default, where we connect to Wi-Fi
+networks via serial port commands.
+<ul>
+<li>In this case, it only supports open networks and WPA2 personal networks,
+but not eduroam, which uses WPA2 enterprise.</li>
+<li>But there is no room left in STM32 for HTTPS encryption libraries, which
+means we cannot submit credentials to log in.</li>
+</ul>
+</li>
+<li>ESP8266 can be reprogrammed with custom code.
+<ul>
+<li>But finding the official SDK of ESP8266 along with documentation is a bit
+hard.</li>
+<li>Although ESP8266 supports the Arduino platform, it still doesn't include an
+SSL encryption library.</li>
+<li>In addition, ESP8266 only supports PAP-encrypted WPA2 enterprise networks,
+while my school uses MSCHAPv2.</li>
+</ul>
+</li>
+</ol>
+<p>The solution is kind of a cheat: I went through the code on my Raspberry Pi and
+found a login script to the school network. Back when I wrote that script, the
+login page wasn't using HTTPS, and what I was sending was a plain HTTP request.
+I tested it and found out surprisingly that it still works!</p>
+<p>The final solution is: STM32 instructs ESP8266 to connect to that open network
+via AT commands, and also sends HTTP request via AT commands to simulate a login
+attempt. In this case, one less program needs to be coded.</p>
+<blockquote>
+<p>Can't you set up a Wi-Fi access point with a router?</p>
+<p>Well, you can't put a router around every sensor, can you?</p>
+</blockquote>
+<h2 id="weather-station-needs-to-connect-to-school-wi-fi">Weather Station Needs to Connect to School Wi-Fi</h2>
+<p>Professor's weather station device also needs to connect to school Wi-Fi, so it
+can upload data to its cloud service. Unlike our ESP8266, we cannot modify its
+program, which means we cannot ask it to send another HTTP request to log on to
+the network.</p>
+<p>The solution is to use a computer to spoof the MAC address of the weather
+station, log on to the school network, and then disconnect. The device will not
+be kicked out from logged-on status during short disconnections, and when the
+weather station is powered on at this time, it will be able to connect to the
+Internet without logging on itself.</p>
+<p>Another problem is that the school Wi-Fi restricts to 4 devices per user
+account, and previously connected devices will be kicked out when that number is
+exceeded. Our sensor network consists of 10 devices; although they can log on
+again when they are kicked out, the weather station cannot do so.</p>
+<p>The solution is again simple: since we're a 3-person group, we connected the
+weather station with another student's account.</p>
+<h1 id="obtaining-sensor-data">Obtaining Sensor Data</h1>
+<h2 id="bme680">BME680</h2>
+<p>In our program, BME680 is solely controlled by its closed source BSEC library.
+However, BSEC only supports measurements every 30 seconds or 300 seconds; if
+that interval is incorrect, BSEC will neither perform measurements nor return
+valid data.</p>
+<p>But since BSEC relies on us to provide timing and communication functions, we
+made a dangerous move: decoupling the BSEC timing from the actual system time.
+Specifically, when we run BSEC every 15 minutes, instead of telling it 15
+minutes has passed, we tell it that only 300 seconds has passed, or it's exactly
+the time for the next measurement, to force BSEC to do its job.</p>
+<h2 id="pms5003">PMS5003</h2>
+<p>PMS5003 is quite simple to use. Simply pull the enable signal high to turn on
+its fan - wait 30 seconds - and read data from the serial port.</p>
+<p>PMS5003 sends 32 bytes of data each time, with a fixed packet header and a
+checksum of the whole packet. To avoid reading only half of a packet, thanks to
+the characteristic of PMS5003 sending data every second, we did the following:</p>
+<ol>
+<li>First, try to read 32 bytes from the serial port within 100 ms. If it
+succeeds, it means the PMS5003 happens to be sending data right now.</li>
+<li>If the data read the first time is not full 32 bytes, try to read again, but
+with a time limit of 2 seconds. We are effectively waiting for PMS5003 to
+send its next packet of data.</li>
+<li>Then verify the data with checksumming and parse it.</li>
+</ol>
+<h2 id="mics6814">MiCS6814</h2>
+<p>MiCS6814 is the most difficult sensor to be used in our project. Since it is
+manufactured with micro-nano fabrication and represents pollutant gas
+concentration with resistance, every individual sensor module behaves
+differently to gases, has different resistance under the same concentration of
+gas, and has different slopes of resistance when concentration changes.</p>
+<p>Due to the limitation of available devices, we had to assume that there wouldn't
+be major changes in gas concentrations and ignore the difference of slope of
+resistance. For resistance differences under the same condition, we swapped the
+fixed value voltage divider resistor to a potentiometer (variable resistor). Now
+instead of calculating absolute resistance values, the program computes the
+resistance ratio to the reference value (resistance of the potentiometer). Then,
+put all devices in the same environment, and adjust the potentiometers (and
+their readings in turn) with reference to weather reports and professional
+devices, so that they have the same reading.</p>
+<h2 id="battery-status-and-voltage">Battery Status and Voltage</h2>
+<p>18650 lithium batteries usually have a voltage range of around 3.0-4.5V (not
+exact), which is above the 3.3V input voltage limit of STM32. Therefore two
+resistors are needed to divide the voltage, and the result is connected to
+STM32's ADC.</p>
+<p>STM32 can also monitor the input voltage to the chip since it has an internal
+stable 1.2V power source connected to ADC. Since ADC readings are relative to
+the chip input voltage, the input voltage can be calculated back from the
+reading on this power source.</p>
+<p>STM32 also has a built-in temperature sensor, which represents values with ADC
+readings. However, the temperature sensor on STM32F103C8T6 is not calibrated and
+is vastly different from the actual temperature, and as we already have BME680,
+this sensor is kind of useless for us.</p>
+<h2 id="one-more-thing-on-stm32-adc">One More Thing on STM32 ADC</h2>
+<p>Another thing about STM32F103C8T6's ADC is that if it needs to read in multiple
+inputs at the same time, a plain <code>HAL_ADC_Start</code> won't work, and DMA is a must.</p>
+<p>DMA, or direct memory access, tells peripherals to write data directly to a
+specified position in memory, with no help from the CPU. DMA can be used to
+reduce CPU usage or implement continuous sampling. Corresponding DMA channels
+need to be added in the DMA Settings tab on the ADC page of STM32CubeMX to be
+used.</p>
+<p>But since we don't need continuous sampling, we can set a "sample complete" flag
+after receiving the interrupt in the DMA's interrupt handler (usually in
+<code>stm32f1xx_it.c</code>). Now when the program is running, it first calls
+<code>HAL_ADC_Start_DMA</code> to start sampling, and then repeatedly checks the flag until
+the task is complete, and call <code>HAL_ADC_Stop_DMA</code> to stop. If you're brave
+enough, you may live without that flag and simply do a delay.</p>
+<h1 id="one-week-battery-life">One Week Battery Life</h1>
+<h2 id="stm32-low-power-consumption-mode">STM32 Low Power Consumption Mode</h2>
+<p>Our device needs to sample data every 15 minutes with the battery as the power
+source and continuously run for a week. This poses a high requirement for its
+power consumption in sleep mode.</p>
+<p>To reach that goal, we need to switch STM32 and sensors to either low power
+consumption mode or off position.</p>
+<ul>
+<li>According to
+<a href="https://www.st.com/resource/en/datasheet/stm32f103c8.pdf" rel="noopener noreferrer" target="_blank">Datasheet</a>,
+STM32F103C8T6 has 3 different low power modes:
+<ul>
+<li>SLEEP mode, where only CPU is switched off, peripherals such as ADC, I2C,
+and UART are still running.
+<ul>
+<li>5.5 mA at 8 MHz, obviously too high</li>
+</ul>
+</li>
+<li>STOP mode, where CPU and most of the peripherals are off, but RAM and
+registers are retained and can be woken up via RTC or external interrupt.
+<ul>
+<li>13.5 uA, acceptable moderate power consumption (little enough compared to
+other modules)</li>
+<li>Easy programming with almost no special handling</li>
+</ul>
+</li>
+<li>STANDBY mode, where CPU and peripherals are off, RAM and registers are
+cleared.
+<ul>
+<li>Program runs from the beginning every time, so status has to be recorded
+in ROM</li>
+<li>2.4 uA, lowest, but difficult to code for</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>We chose STOP mode at last, with a few notes:
+<ul>
+<li>Enable RTC's <code>Clock Source</code> (turn on its functionality).</li>
+<li>Set <code>RTC OUT</code> to <code>No RTC Output</code>, or turn on its output without pin mapping.
+<ul>
+<li>In this case, the RTC output is connected to an interrupt controller, so
+when a specific time is reached, an interrupt will be triggered, and the
+CPU will be turned back on.</li>
+<li>If you don't do this (set to <code>Disable</code>), STM32's CPU will never wake up
+again.</li>
+</ul>
+</li>
+<li>Enable <code>RTC alarm interrupt through EXTI line</code> in <code>NVIC Settings</code> below.
+<ul>
+<li>Let the CPU accept RTC interrupts, or the CPU will also sleep forever.</li>
+</ul>
+</li>
+<li>When calling such functionality, first reset the time of RTC (out of
+safety), then set the alarm, and finally enter low power mode.</li>
+<li>RTC only has a precision of 1 second.</li>
+</ul>
+</li>
+</ul>
+<p>Here is an example code snippet of sleep and timed wake up:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">void</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26"> deep_sleep</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">uint32_t</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> seconds</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">) {</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    RTC_TimeTypeDef rtc_time = {</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">0</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">0</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">, </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">0</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">};</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    RTC_AlarmTypeDef rtc_alarm = {</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        {</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">            seconds / </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">3600</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">            (seconds % </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">3600</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">) / </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">60</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">            seconds % </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">60</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        },</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        RTC_ALARM_A</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    };</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    HAL_RTC_SetTime</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(&#x26;hrtc, &#x26;rtc_time, RTC_FORMAT_BIN);</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    HAL_RTC_SetAlarm_IT</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(&#x26;hrtc, &#x26;rtc_alarm, RTC_FORMAT_BIN);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    __HAL_PWR_CLEAR_FLAG</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(PWR_FLAG_WU);</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    HAL_PWR_EnterSTOPMode</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<h2 id="turning-off-external-modules">Turning Off External Modules</h2>
+<p>Turning off PMS5003 and ESP8266 is easy since they both have a pin to control
+power status. When that pin is pulled low, they will both automatically enter
+the hibernate mode, with a few microamps of power consumption.</p>
+<p>Turning of BME680 is also easy, which is done by BSEC.</p>
+<p>But neither ATGM336H nor MiCS6814 has built-in power control, and they will
+continuously run and consume a lot of power. Therefore an external switch is
+needed to cut their power.</p>
+<p>Initially, we planned to use an N-channel MOSFET to cut the power:</p>
+<p><picture><source srcset="/usr/uploads/202006/circuit-mosfet.png.webp" type="image/webp"><source srcset="/usr/uploads/202006/circuit-mosfet.png.avif" type="image/avif"><source srcset="/usr/uploads/202006/circuit-mosfet.png.jxl" type="image/jxl"><img src="/usr/uploads/202006/circuit-mosfet.png" alt="MOSFET Power Switching Circuit"></picture></p>
+<p>CTL in the schematic represents the digital output of STM32, and R1 is the
+corresponding module. When CTL outputs 0, MOSFET M1 will cut the circuit to turn
+off R1 and vice versa.</p>
+<p>But in our testing, when the STM32 outputs 1, its output voltage 3.3V is not
+enough for the MOSFET to turn on completely. The MOSFET still has a resistance
+of around 30Ω, which divides too much voltage away, and the module cannot obtain
+enough power to work normally.</p>
+<p>So we added a BJT triode to pull the digital output to 5V:</p>
+<p><picture><source srcset="/usr/uploads/202006/circuit-bjt.png.webp" type="image/webp"><source srcset="/usr/uploads/202006/circuit-bjt.png.avif" type="image/avif"><source srcset="/usr/uploads/202006/circuit-bjt.png.jxl" type="image/jxl"><img src="/usr/uploads/202006/circuit-bjt.png" alt="Power Switching Circuit with BJT Triode"></picture></p>
+<p>When STM32 outputs 1, triode Q1 lets current through and pulls low the control
+voltage of MOSFET, turning off the modules; when STM32 outputs 0, Q1 cuts power,
+the control voltage of MOSFET is pulled high to 5V by R2, and the module is
+turned on normally. Note that the STM32 output is inverted from the module's
+power state.</p>
+<p>Some stores on Taobao sell power level shifters that uses 2 levels of resistors
+and triodes to correct the inversion; but we don't care about this, as it's a
+simple modification of the program.</p>
+<p>But in our testing, the circuit consumed a lot of power, up to 50 mA when power
+is cut off. Closer inspection reveals that the BJT triode pulls the STM32 output
+to as low as 0.8V, and the output is almost in a "shorted" state, outputting a
+large current.</p>
+<p>The solution is an additional resistor for limiting current, R3, in the
+following schematic:</p>
+<p><picture><source srcset="/usr/uploads/202006/circuit-bjt-resistor.png.webp" type="image/webp"><source srcset="/usr/uploads/202006/circuit-bjt-resistor.png.avif" type="image/avif"><source srcset="/usr/uploads/202006/circuit-bjt-resistor.png.jxl" type="image/jxl"><img src="/usr/uploads/202006/circuit-bjt-resistor.png" alt="Power Switching Circuit with BJT Triode and Resistor"></picture></p>
+<blockquote>
+<p>So STM32 can work normally while outputting 50 mA...</p>
+</blockquote>
+<h2 id="keeping-power-supply-on">Keeping Power Supply On</h2>
+<p>The MH-CD42 power module is originally designed as a battery management module
+for power banks. One of its functionality is to turn off the power output when
+no devices are connected. MH-CD42 measures the output current, and when the
+current is below 45 mA for around 30 seconds, it turns off automatically.</p>
+<p>For power bank users, this is a useful feature, but for us with a sleep mode
+current of a few mA, this functionality greatly interferes with normal
+operation. What's more complicated is that, since MH-CD42 is a highly integrated
+module, there is no power pin we can forcefully pull up to keep the power on.</p>
+<p>We first searched for the datasheet of MH-CD42 but almost found no useful
+information. But we did find
+<a href="https://techobsessed.net/tag/mh-cd42/" rel="noopener noreferrer" target="_blank">a post on MH-CD42</a>, in which the author
+found that the MH-CD42 module has the same external circuit as another IP5306
+chip and confirmed that they have equivalent functionality.</p>
+<p><a href="https://www.jianshu.com/p/25fa6ec89953" rel="noopener noreferrer" target="_blank">This post (Chinese)</a> introduces a way
+to keep the output of IP5306 on, specifically to connect an output of the MCU to
+the button of the power module, and send a low signal every ten seconds. It
+simulates pressing the power button every few seconds and keeps the power on.</p>
+<p>So we soldered a wire from STM32 to the soldering pad on the power module, and
+wrote some code:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#C586C0;--shiki-light:#AF00DB">for</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">size_t</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> i = </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">0</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">; i &#x3C; </span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">85</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">; i++) {</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    deep_sleep</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">10</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">);</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    HAL_GPIO_WritePin</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    HAL_Delay</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">500</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">);</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">    HAL_GPIO_WritePin</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>Each loop takes 10.5 seconds, and at 85 loops the total time is around 15
+minutes or 900 seconds. In each loop, STM32 stays in low power STOP mode for 10
+seconds, and wakes up in the other 500 ms.</p>
+<h1 id="uploading-to-influxdb">Uploading to InfluxDB</h1>
+<h2 id="generating-http-requests">Generating HTTP Requests</h2>
+<p>All SQL queries on InfluxDB are done over HTTP requests, so our STM32 only needs
+to send a simple HTTP request. We can even disregard whatever data from the
+server.</p>
+<blockquote>
+<p>The main reason is that we are out of space on STM32's ROM, and cannot afford
+to add code to parse HTTP replies.</p>
+</blockquote>
+<p>Here is an example request:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">POST</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> /write?u=INFLUXUSER</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">&#x26;</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">p</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">=</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">INFLUXPASS</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">&#x26;</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">db</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">=</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">INFLUXDB</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26"> HTTP/1.1\r\n</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">Host:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> influxdb.lantian.pub:8086</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">User-Agent:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> lantian/2.3.3</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">Content-Type:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> application/x-www-form-urlencoded</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">Connection:</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> close</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">Content-Length:</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658"> 26</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">\r\n</span></span>
+<span class="line"><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">stm32_vref,id</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">=1</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> value=</span><span style="--shiki-dark:#B5CEA8;--shiki-light:#098658">3.5</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\n</span></span></code></pre>
+<p>This request creates a datapoint called <code>stm32_vref</code> in database <code>INFLUXDB</code> with
+an extra tag <code>id=1</code> for device identification and a value of 3.5. Actually, one
+request may contain multiple data points separated by Linux line feed <code>\n</code>. Note
+that you cannot use <code>\r\n</code> instead; this will cause an error.</p>
+<p>Here we have our code (simplified) to generate the HTTP request:</p>
+<pre class="shiki shiki-themes dark-plus light-plus" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0"><code><span class="line"></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">void</span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26"> loop_print</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">() {</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">    char</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> tcp_content_buf</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">[TCP_BUF_SIZE];</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">    uint32_t</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> tcp_content_len;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    tcp_content_len = </span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">snprintf</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        tcp_content_buf,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        TCP_BUF_SIZE,</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "stm32_tmp,id=</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%lu</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> value=</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%f</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "stm32_vref,id=</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%lu</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> value=</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%f</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "stm32_vbat,id=</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%lu</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> value=</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%f</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "gps_lat,id=</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%lu</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> value=</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%s</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "gps_lon,id=</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%lu</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515"> value=</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%s</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">        // Add more data points from sensors here</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        ,</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        id, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">measure_value</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">stm32</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">temp</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        id, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">measure_value</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">stm32</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">vrefint</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        id, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">measure_value</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">stm32</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">vbat</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        id, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">measure_value</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">gps</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">latitude</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        id, </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">measure_value</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">gps</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">.</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">longitude</span></span>
+<span class="line"><span style="--shiki-dark:#6A9955;--shiki-light:#008000">        // Add more data points from sensors here</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    );</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">    extern</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> char</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080"> tcp_send_buf</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">[TCP_BUF_SIZE];</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">    extern</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> uint32_t</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> tcp_send_len;</span></span>
+<span class="line"><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">    const</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF"> char</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> template</span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">[]</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> =</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "POST /write?u="</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> HTTP_INFLUXDB_USER </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"&#x26;p="</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> HTTP_INFLUXDB_PASS </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"&#x26;db="</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> HTTP_INFLUXDB_DB </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">" HTTP/1.1</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "Host: "</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> HTTP_INFLUXDB_IP </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">":"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000"> HTTP_INFLUXDB_PORT </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "User-Agent: lantian/2.3.3</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "Content-Type: application/x-www-form-urlencoded</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "Connection: close</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "Content-Length: </span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%lu</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "</span><span style="--shiki-dark:#D7BA7D;--shiki-light:#EE0000">\r\n</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">        "</span><span style="--shiki-dark:#9CDCFE;--shiki-light:#001080">%s</span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    ;</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    tcp_send_len = </span><span style="--shiki-dark:#DCDCAA;--shiki-light:#795E26">snprintf</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">(</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        tcp_send_buf,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        TCP_BUF_SIZE,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        template,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        tcp_content_len,</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">        tcp_content_buf</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">    );</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span></code></pre>
+<p>Variables <code>tcp_send_buf</code> and <code>tcp_send_len</code> will be used by the code that
+interacts with ESP8266, where the HTTP request is actually sent.</p>
+<h2 id="communicating-with-esp8266">Communicating with ESP8266</h2>
+<p>The AT instruction manual of ESP8266 is a bit difficult to find, but
+<a href="https://www.itead.cc/wiki/images/5/53/Esp8266_at_instruction_set_en_v1.5.4_0.pdf" rel="noopener noreferrer" target="_blank">we did it finally</a>.
+We need a few instructions:</p>
+<ul>
+<li><code>ATE0</code> turns off echoing of commands. This simplifies parsing of results and
+reduces the amount of data transferred (thus reducing latency)</li>
+<li><code>AT+CWMODE=1</code> sets ESP8266 to Wi-Fi client mode</li>
+<li><code>AT+CWJAP_CUR="SchoolWiFi",""</code> connects ESP8266 to open Wi-Fi network without
+password</li>
+<li><code>AT+CIPSTART="TCP","influxdb.lantian.pub",8086</code> creates a TCP connection to
+specified host and port</li>
+<li><code>AT+CIPSEND=123</code> sends 123 bytes of data</li>
+<li><code>AT+CIPCLOSE</code> closes connection</li>
+<li><code>AT+GSLP=2147483647</code> enter a long sleep (until the next "enable" signal)</li>
+</ul>
+<p>A few points to remember:</p>
+<ul>
+<li>ESP8266 commands end with Windows CRLF <code>\r\n</code>, but some serial communication
+software in Linux sends <code>\n</code> when pressing enter. In this case, the command
+will not be executed correctly.</li>
+<li>All the commands above need ESP8266 to respond with OK to work, so you cannot
+simply send two commands together. In this case, the second command may be
+ignored.</li>
+<li>Sometimes, one attempt of command may fail (such as connecting to Wi-Fi), you
+may retry for a few times.</li>
+</ul>  </div>  <script type="module" src="/assets/WalineComment.astro_astro_type_script_index_0_lang.Cd-Au78J.js"></script> <div class="clearfix" id="post-navi" data-astro-cid-gfbmwgei=""> <div class="float-end text-end" data-astro-cid-gfbmwgei=""> <a href="/en/article/modify-website/bird-confederation.lantian/" title="Configure BGP Confederation &#38; Fake Confederation in Bird (Updated 2020-06-07)" data-astro-cid-gfbmwgei=""> Configure BGP Confederation &amp; Fake Confederation in Bird (Updated 2020-06-07) </a> <br data-astro-cid-gfbmwgei=""> Next post »
+</div> <div class="float-start text-start position-absolute" data-astro-cid-gfbmwgei="">
+« Previous post <br data-astro-cid-gfbmwgei=""> <a href="/en/article/one-pic/if-you-wanna-take-the-bite.lantian/" title="Willing to Take the Bait (Referring to US Visa)" data-astro-cid-gfbmwgei=""> Willing to Take the Bait (Referring to US Visa) </a> </div> </div>  <div id="waline" data-waline-language="en-US" data-waline-path="/en/article/modify-computer/senior-design-sensor-network-bugs-resolve.lantian"></div>   </div> </div> </article>  </div> <aside class="d-none d-xl-block" data-astro-cid-porej7z2=""> <section class="widget"> <h3>Latest posts</h3> <ul class="list-unstyled"> <li> 12-07  <a href="/en/article/modify-website/dn42-flapalerted-reduce-flapping.lantian/">Using FlapAlerted to Suppress flapping in DN42</a> </li><li> 07-20  <a href="/en/article/modify-computer/legal-lte-network-at-home-with-open5gs.lantian/">Legal LTE Network at Home with Open5GS</a> </li><li> 06-27  <a href="/en/article/modify-computer/sidestore-without-stosvpn-across-lan.lantian/">Using SideStore without StosVPN across your LAN</a> </li><li> 05-19  <a href="/en/article/modify-computer/nix-logarithmetic-math-library-from-zero.lantian/">Nix Logarithmic Math Library from Ground Zero</a> </li><li> 04-06  <a href="/en/article/modify-computer/legal-lte-network-at-home-for-100-bucks.lantian/">Legal LTE Network at Home for $100</a> </li><li> 02-10  <a href="/en/article/modify-computer/build-custom-android-kernel-with-nix.lantian/">Building Custom Android Kernel with Nix</a> </li><li> 04-20  <a href="/en/article/modify-website/migrate-blog-to-astro-js.lantian/">Migrating My Blog to Astro.js</a> </li><li> 12-16  <a href="/en/article/modify-computer/nixos-low-ram-vps.lantian/">NixOS Series 5: Creating Disk Image for Low RAM VPS</a> </li><li> 09-20  <a href="/en/article/modify-computer/nix-trigonometric-math-library-from-zero.lantian/">Nix Trigonometric Math Library from Ground Zero</a> </li><li> 05-29  <a href="/en/article/random-notes/pipewire-sigkill-fix.lantian/">Preventing Pipewire from being SIGKILLed</a> </li><li> 05-12  <a href="/en/article/modify-website/how-to-kill-the-dn42-network.lantian/">How to Kill the DN42 Network (Updated 2023-05-12)</a> </li><li> 05-08  <a href="/en/article/modify-computer/laptop-muxed-nvidia-passthrough.lantian/">NVIDIA GPU Passthrough on an Optimus MUXed Laptop (Updated 2023-05)</a> </li><li> 04-17  <a href="/en/article/random-notes/fix-china-telecom-roaming-no-4g-on-aosp-rom.lantian/">Fix China Telecom 4G Roaming on AOSP ROM by Changing APN</a> </li><li> 03-26  <a href="/en/article/random-notes/old-hp-workstation-as-all-in-one.lantian/">Notes on Setting Up NAS+Router on Old HP Workstation</a> </li><li> 01-14  <a href="/en/article/modify-computer/nixos-impermanence.lantian/">NixOS Series 4: &quot;Stateless&quot; Operating System</a> </li> </ul> </section>  <section class="widget"> <h3>Latest comments</h3> <ul class="list-unstyled" id="recent-comments">  <li><a href="#">Loading...</a></li>  </ul> </section>  <script type="module" src="/assets/WalineRecentComments.astro_astro_type_script_index_0_lang.Cu-GBWyK.js"></script> <section class="widget"> <h3>Others</h3> <ul class="list-unstyled">  <li> <i class="fas fa-fw fa-rss"></i>  <a href="/rss2.xml" target="_blank">RSS Feed</a> |  <a href="/feed.xml" target="_blank">Atom</a> |  <a href="/feed.json" target="_blank">JSON</a> </li> <li> <i class="fas fa-fw fa-globe"></i>  <a href="https://stats.uptimerobot.com/NLYPbrSal6" target="_blank"> Sever Status </a> </li> <li> <i class="fas fa-fw fa-sitemap"></i>  <a href="https://lg.lantian.pub" target="_blank">DN42 Looking Glass</a> </li> <li> <i class="fas fa-fw fa-link"></i>  <a href="gopher://lantian.pub" target="_blank">Access with Gopher protocol</a> </li>  </ul> </section>  <section class="widget"> <h3>Links</h3> <ul class="list-unstyled"> <li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://0x7f.cc"> 0x7f Blog 🐑 </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="http://foreverblog.cn"> 10 Year&#39;s Promise (Forever Blog) </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://alanyhq.com"> Alanyhq </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.baoshuo.ren/?utm_source=friends"> Baoshuo&#39;s Blog </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://blog.cas7.moe"> Blog of Moecast </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://jerryxiao.cc"> JerryXiao </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://sangsir.com"> SangSir </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://snli.org"> Shucheng Li </a> </li><li> <i class="fas fa-fw fa-link"></i>  <a target="_blank" href="https://yuetau.net"> YuetAu&#39;s Spot </a> </li> </ul> </section>  </aside> </div> <footer class="clearfix" data-astro-cid-w3csb3e3="">  <div id="copyright" class="float-end text-end" data-astro-cid-w3csb3e3=""> <i class="fas fa-copyright" data-astro-cid-w3csb3e3=""></i> 2012-2026 Lan Tian @ Blog<br data-astro-cid-w3csb3e3=""> <small data-astro-cid-w3csb3e3=""> Powered by Astro v5.17.1 @ 2026-02-12 02:27:09 </small> </div> <script type="module" src="/assets/PlausibleAnalytics.astro_astro_type_script_index_0_lang.C6V0cCkY.js"></script> </footer>  </div>  </body> </html>
