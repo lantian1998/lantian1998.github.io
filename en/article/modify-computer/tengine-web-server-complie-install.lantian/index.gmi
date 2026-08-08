@@ -1,0 +1,34 @@
+# Compilation and Installation of Tengine Web Server
+Category: Computers and Clients
+Published on: 2013-07-31 16:19:50.000Z
+
+Tengine is a high-performance web server developed by Alibaba based on
+nginx. In addition to retaining nginx's original high-performance
+features, it adds the following capabilities:
+
+While ordinary users may not notice a difference, it's still great for
+experimentation. I've heard sites like Tudou or 56.com have already
+adopted Tengine.
+
+Below are the compilation steps.
+
+```bash
+./configure --prefix=/usr --enable-mods-shared=all --with-rtsig_module --with-select_module --with-poll_module --with-file-aio --with-ipv6 --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_geoip_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_slice_module --with-http_mp4_module --with-http_gzip_static_module --with-http_concat_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_sysguard_module --with-http_lua_module --with-http_tfs_module --with-mail --with-mail_ssl_module --with-google_perftools_module --with-cpp_test_module --with-backtrace_module --with-pcre --with-pcre-jit --with-md5-asm --with-sha1-asm --with-libatomic --with-jemalloc
+```
+
+Note: Since Tengine is modular, we're enabling extra modules for
+flexibility (they load dynamically). Remove any `--with-...` option
+for modules you don't need.
+
+If `configure` fails, it's usually due to missing `libxxx`
+dependencies. Search for them in Synaptic Package Manager. Remember to
+install `-dev` packages (base packages install automatically).
+
+```bash
+make -j4
+sudo make install
+```
+
+Installation complete. Start with `nginx` in the terminal. Tengine
+configuration is similar to nginx – refer to nginx documentation for
+guidance.

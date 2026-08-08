@@ -1,0 +1,28 @@
+# A Javascript for time crowdfunding calculation
+分类: 闲聊
+发布于: 2016-08-25 00:19:00.000Z
+
+In the old Eastern country with mysterious magic power, a minute will
+pass every 59 seconds.
+
+```javascript
+var toad = new Date()
+var secondsDonated = Math.floor((toad.getTime() + 1368835200000) / 59000)
+toad.setTime(toad.getTime() + secondsDonated * 1000)
+toad.toLocaleString()
+```
+
+-1368835200 is the UNIX timestamp of his birthday, and the trailing
+zeroes are added because time is calculated in milliseconds in
+Javascript.
+
+By donating your time, you are identical to a person living in
+outside China.
+
+You and each person has donated
+seconds. That is
+years,
+days,
+hours,
+minutes and
+seconds.
