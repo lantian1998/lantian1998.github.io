@@ -1,0 +1,93 @@
+# Snagged a 0.1-Discount VPS from 50KVM
+Category: Website and Servers
+Published on: 2018-04-03 22:01:00.000Z
+
+The largest hosting provider on TG, 50KVM, has gone bankrupt! VPSs
+originally priced at over 100 or 200 yuan are now all 2 yuan! All for
+2 yuan! (Not really)
+
+## The Beginning
+
+*   On Sunday, April 1st around midnight, lying in bed watching the
+    latest episode of "National Team"
+*   Telegram notification pops up: 50KVM released an April Fools'
+    discount:
+
+
+
+*   Since I finished watching "National Team," might as well try
+    entering these emojis
+
+## First Attempt
+
+*   Tried inputting emojis using macOS input method – turned out
+    impractical since I couldn't recognize what these emojis were
+*   Googled "emoji list"
+*   Found an emoji reference site
+    Emoji List
+*   Wait, macOS emojis look completely different from those in the image
+*   Took some guesses
+*   (After 5 attempts)
+*   Still need to identify the emoji font. Though it's 2 AM with few
+    people online, any delay might let other experts snatch it
+
+## Second Attempt
+
+*   Considered what system Diaoji (50KVM owner) might use
+*   macOS (and iOS) already ruled out
+*   Picked up nearby Android phone: emojis looked different – eliminated
+*   Besides, hosting providers wouldn't post discount codes via mobile
+    screenshots, right?
+*   Scrolled through TG group and found 50VZ's discount code image (same
+    owner for both companies)
+
+
+*   ClearType artifacts visible – must be Windows 10
+*   Got out of bed and opened Windows 10 gaming laptop, checked emoji
+    reference site – perfect match
+*   Entered each corresponding emoji, submitted code
+*   "The discount code you entered does not exist"
+*   Closely examined code input field vs. previous screenshots –
+    something felt off?
+*   (Input field screenshot taken later on macOS – mentally replace the
+    font)
+
+
+
+*   Why such wide spacing between emojis in 50KVM's screenshot?
+*   Added spaces?
+*   Entered "⛵️ ⛴ ⛅️ ⛈ ⛱ ⛄️ ⚽️ ⚾️ ⛳️ ⛸ ⛏ ⛓ ⛔️ ⭕️"
+*   Added spaces between each emoji pair, submitted
+*   "Discount code applied"
+
+
+## Bragging on Telegram
+
+*   Submitted order, logged in, checked out, took screenshot, opened TG
+    – saw experts still trying
+*   "I've already claimed 50kvm's 99off discount"
+
+
+*   An expert: "Post it! Post it!"
+
+
+*   Scrolled through chat history
+
+
+*   "Earlier an expert entered all emojis correctly but didn't notice
+    the spaces between them"
+
+
+## Afterword
+
+*   The VPS got activated today, so I'm posting this now – no regrets
+    (wink
+*   Originally chose Hong Kong Shatin traffic type Tier 3: 4GB RAM, 6
+    cores, original price 217.6 RMB/month, discounted to 2.18 yuan
+*   Owner said Tier 3 was OOS, downgraded me to Tier 2: 2GB RAM, 4
+    cores, original price 108.8/month
+*   Price unchanged (still 2.18/month) – still insanely good value
+    (practically free)
+*   Topped up account with 100 yuan and renewed for 32 months until 2021
+    New Year
+*   Heirloom server acquired✓
