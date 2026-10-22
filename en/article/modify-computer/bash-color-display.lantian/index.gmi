@@ -1,0 +1,11 @@
+# Enabling Color Display in Bash
+Category: Computers and Clients
+Published on: 2016-07-18 10:41:00.000Z
+
+The default Bash command line in Linux is always black text on a white
+background, which can appear somewhat monotonous. However, we can add
+a few lines of commands to make Bash display information in color.
+This not only enhances visual appeal but also helps highlight
+important content.
+
+Edit the `.profile` file in your home directory:
