@@ -1,0 +1,73 @@
+# North Korea's Self-Developed Android Phone: My Friends and I Are Astonished
+Category: Reposts
+Published on: 2013-08-23 18:00:00.000Z
+
+North Korea remains a mysterious nation.
+
+When North Korea developed Red Star Linux, people exclaimed: "They
+have this capability?"
+
+When North Korea established its 3G network, people marveled: "They
+actually possess 3G technology?"
+
+Although North Korea's feature phones are all imported from China, and
+all Android phones in the country are still Chinese-made to date,
+North Korea suddenly announced its self-developed Android phone... My
+friends and I are utterly astonished.
+
+This phone is named Arirang, after a local folk song.
+
+=> /usr/uploads/2013/08/2002816947.jpg Arirang Smartphone
+
+Considering North Korean phones can't be too advanced, I'll compare it
+with several budget Android phones.
+
+Comparison participants: Huawei G520 Mobile Edition, Lenovo A288t
+Mobile Edition, Redmi Mobile Edition, HTC Desire V联通版.
+
+Regarding network standards, price differences between different
+standards in domestic phones are generally minimal.
+
+*   Price & Appearance
+
+The Arirang's size appears reasonably competitive.
+
+*   Network
+
+Reliable sources indicate North Korea uses CDMA for 2G and has
+deployed WCDMA 3G networks. While Arirang aligns with national
+conditions, the CDMA+WCDMA combination is unprecedented.
+
+*   Features
+
+First note: Kim Jong-un praised the Arirang's camera for its "high
+pixel count".
+
+Yes, you read that right - Arirang's camera is 1.05 megapixels!
+Consequently, Chinese山寨 manufacturers have abandoned plans to clone
+it, as they simply can't produce phones with such "high" pixel counts.
+This demonstrates North Korea's world-leading intellectual property
+protection awareness...
+
+It's said Kim Jong-un uses an HTC Butterfly with an 8MP camera. By
+comparison, Arirang's pixel count is truly "impressive"! So
+"impressive"!
+
+Meanwhile, Nokia's marketing team should reflect - their latest Lumia
+1020 boasts 41MP, 19 times Arirang's resolution, yet failed to inform
+Kim Jong-un!
+
+*   Performance
+
+Despite national backwardness, Arirang breaks the mold with a
+quad-core processor! Quad-core! Quad-core! Quad-core!
+
+As Qualcomm is American (trade-prohibited), Arirang's CPU must be
+Taiwan-made MediaTek. Given the quad-core spec, likely MT6589.
+
+Thus, we mustn't underestimate North Korea! While their computers just
+entered dual-core era, phones leapfrog to quad-core! How embarrassing
+for us!
+
+If Arirang were sold in China, estimated price would be around 600
+RMB.
