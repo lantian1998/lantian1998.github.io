@@ -1,0 +1,49 @@
+# 【In My Lifetime】Typecho 0.9 Alpha Finally Released
+Category: Website and Servers
+Published on: 2013-10-26 09:51:26.000Z
+
+Yesterday afternoon, I got home and opened Feedly, and saw an article
+about Typecho 0.9 on
+=> http://www.zntec.cn/archives/typecho-0-9.html Jiang's Blog
+.
+
+What? Typecho actually updated in my lifetime!? I immediately opened
+the
+=> http://typecho.org Typecho Official Website
+and saw that clean default theme of TE. I remember the official site
+didn't look like this before.
+
+=> /usr/uploads/2013/10/2214168162.png Typecho Official Website
+
+The post started with just one sentence: "Yes, you haven't entered the
+wrong website. This simple place is indeed the official website of
+Typecho."...
+
+So I immediately downloaded, updated, and installed.
+
+The update method is simple: log in to FTP, delete the `admin` and
+`var` directories and `index.php`, upload these files from version
+0.9, and then update the database in the backend.
+
+When I opened the login page, I instantly felt it was high-end, grand,
+and classy.
+
+=> /usr/uploads/2013/10/1883541722.png Login Interface
+
+It's said that TE 0.9 added a Markdown editor, which can be enabled in
+the personal panel. Even though I won't use it, I still took a look.
+The personal panel is also high-end, grand, and classy.
+
+=> /usr/uploads/2013/10/467160611.png Personal Panel
+
+Article editing interface. It somewhat resembles WordPress.
+
+=> /usr/uploads/2013/10/1758541712.png Article Editing Interface
+
+HTML5 image upload, finally saying goodbye to Flash. It even supports
+drag and drop.
+
+=> /usr/uploads/2013/10/1274762080.png Image Upload
+
+Anyway, after a year, TE finally made a move. Next, we just wait for
+TE to be perfected.

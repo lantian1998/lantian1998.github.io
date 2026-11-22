@@ -1,0 +1,1 @@
+function e(){return[`localhost`,`0.0.0.0`,`127.0.0.1`].includes(window.location.hostname)}export{e as t};
